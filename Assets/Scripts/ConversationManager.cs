@@ -25,11 +25,6 @@ public class ConversationManager : MonoBehaviour
 		{
 			conversations = new List<Conversation>();
 		}
-
-		for (int i = 0; i < conversations.Count; i++)
-		{
-			DefineConversation(conversations[i]);
-		}
 	}
 
 	void Update()
@@ -38,17 +33,6 @@ public class ConversationManager : MonoBehaviour
 		{
 			Application.Quit();
 		}
-	}
-
-	public void DefineConversation(Conversation conversation)
-	{
-		if (conversation.partner1 != null && conversation.partner2 != null)
-		{
-			conversation.initiateDistance = Mathf.Max(conversation.partner1.converseDistance, conversation.partner2.converseDistance);
-			conversation.warningDistance = Mathf.Max(conversation.partner1.converseDistance * conversation.partner1.warningThreshold, conversation.partner2.converseDistance * conversation.partner2.warningThreshold);
-			conversation.breakingDistance = Mathf.Max(conversation.partner1.converseDistance * conversation.partner1.breakingThreshold, conversation.partner2.converseDistance * conversation.partner2.breakingThreshold);
-		}
-
 	}
 
 	public bool StartConversation(PartnerLink partner1, PartnerLink partner2)
@@ -65,16 +49,6 @@ public class ConversationManager : MonoBehaviour
 
 		partner1.SetPartner(partner2);
 		partner2.SetPartner(partner1);
-		if (startedConversation.partner1Leads)
-		{
-			startedConversation.partner1.SetLeading(true);
-			startedConversation.partner2.SetLeading(false);
-		}
-		else
-		{
-			startedConversation.partner1.SetLeading(false);
-			startedConversation.partner2.SetLeading(true);
-		}
 
 		return true;
 	}
@@ -90,9 +64,7 @@ public class ConversationManager : MonoBehaviour
 
 		endedConversation.inProgress = false;
 		endedConversation.partner1.SetPartner(null);
-		endedConversation.partner1.SetLeading(false);
 		endedConversation.partner2.SetPartner(null);
-		endedConversation.partner2.SetLeading(false);
 
 		return true;
 	}

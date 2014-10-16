@@ -5,7 +5,6 @@ public class SimpleSeek : MonoBehaviour {
 	public SimpleMover mover;
 	public PartnerLink partnerLink;
 	public Tracer tracer;
-	public Tail tail;
 	protected Collider tailTrigger;
 
 	protected virtual void Start()
@@ -21,10 +20,6 @@ public class SimpleSeek : MonoBehaviour {
 		if (partnerLink == null)
 		{
 			partnerLink = GetComponent<PartnerLink>();
-		}
-		if (tail != null)
-		{
-			tailTrigger = tail.trigger;
 		}
 	}
 
