@@ -25,9 +25,9 @@ public class SimpleSeek : MonoBehaviour {
 
 	public virtual void SeekPartner()
 	{
-		if (partnerLink != null && partnerLink.Partner != null)
+		if (partnerLink != null && partnerLink.partner != null)
 		{
-			Vector3 toPartner = partnerLink.Partner.transform.position - transform.position;
+			Vector3 toPartner = partnerLink.partner.transform.position - transform.position;
 			mover.Accelerate(toPartner);
 		}
 	}

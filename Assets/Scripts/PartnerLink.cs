@@ -3,26 +3,17 @@ using System.Collections;
 
 public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
-	private PartnerLink partner;
-	public PartnerLink Partner
-	{
-		get { return partner; }
-	}
-	private Conversation conversation;
-	public Conversation Conversation
-	{
-		get { return conversation; }
-	}
+	public PartnerLink partner;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
-	private LineRenderer partnerLine;
+	public LineRenderer partnerLine;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
 	[HideInInspector]
 	public Tracer tracer;
-	[HideInInspector]
-	public ConversingSpeed conversingSpeed;
+	public SimpleConnection connection;
+	public bool empty;
 
 	void Awake()
 	{
@@ -34,16 +25,17 @@ public class PartnerLink : MonoBehaviour {
 		{
 			tracer = GetComponent<Tracer>();
 		}
-		if (conversingSpeed == null)
+		if (partnerLine == null)
 		{
-			conversingSpeed = GetComponent<ConversingSpeed>();
+			partnerLine = GetComponent<LineRenderer>();
 		}
-
-		partnerLine = GetComponent<LineRenderer>();
 	}
 	
 	void Update()
 	{
+		float fillScale = Mathf.Clamp(1 - ((transform.position - partner.transform.position).magnitude / connection.maxDistance), 0, 1);
+		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
+		empty = (fillScale <= 0);
 		// Handle partners seperating.
 		/*if (partner != null && conversation != null)
 		{
@@ -87,7 +79,7 @@ public class PartnerLink : MonoBehaviour {
 					}
 				}
 			}
-		}*/
+		}*/	
 
 	} //End of Update
 
@@ -97,12 +89,10 @@ public class PartnerLink : MonoBehaviour {
 		
 		if (partner != null)
 		{
-			conversation = ConversationManager.Instance.FindConversation(this, partner);
 			SendMessage("LinkPartner", SendMessageOptions.DontRequireReceiver);
 		}
 		else
 		{
-			conversation = null;
 			SendMessage("UnlinkPartner", SendMessageOptions.DontRequireReceiver);
 		}
 	}

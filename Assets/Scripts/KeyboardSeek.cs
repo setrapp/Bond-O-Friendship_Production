@@ -7,21 +7,31 @@ public class KeyboardSeek : SimpleSeek {
 
 	void Update () {
 		Vector3 acceleration = Vector3.zero;
-		if ((useWASD && Input.GetKey("w")) || Input.GetKey(KeyCode.UpArrow))
+		if ((useWASD && Input.GetKey("w")) || (!useWASD && Input.GetKey(KeyCode.UpArrow)))
 		{
 			acceleration += Vector3.up;
 		}
-		if ((useWASD && Input.GetKey("a")) || Input.GetKey(KeyCode.LeftArrow))
+		if ((useWASD && Input.GetKey("a")) || (!useWASD && Input.GetKey(KeyCode.LeftArrow)))
 		{
 			acceleration -= Vector3.right;
 		}
-		if ((useWASD && Input.GetKey("s")) || Input.GetKey(KeyCode.DownArrow))
+		if ((useWASD && Input.GetKey("s")) || (!useWASD && Input.GetKey(KeyCode.DownArrow)))
 		{
 			acceleration -= Vector3.up;
 		}
-		if ((useWASD && Input.GetKey("d")) || Input.GetKey(KeyCode.RightArrow))
+		if ((useWASD && Input.GetKey("d")) || (!useWASD && Input.GetKey(KeyCode.RightArrow)))
 		{
 			acceleration += Vector3.right;
+		}
+
+		if (partnerLink.empty)
+		{
+			Vector3 toPartner = partnerLink.partner.transform.position - transform.position;
+			if (Vector3.Dot(toPartner, acceleration) < 0)
+			{
+				acceleration = Helper.ProjectVector(Vector3.Cross(toPartner, Vector3.forward), acceleration);
+			}
+			mover.velocity = Helper.ProjectVector(Vector3.Cross(toPartner, Vector3.forward), mover.velocity);
 		}
 
 		if (acceleration.sqrMagnitude > 0)
