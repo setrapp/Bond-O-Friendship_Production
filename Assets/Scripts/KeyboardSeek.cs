@@ -24,20 +24,6 @@ public class KeyboardSeek : SimpleSeek {
 			acceleration += Vector3.right;
 		}
 
-		if (partnerLink.empty)
-		{
-			/*Vector3 toPartner = partnerLink.partner.transform.position - transform.position;
-			if (Vector3.Dot(toPartner, acceleration) < 0)
-			{
-				acceleration = Helper.ProjectVector(Vector3.Cross(toPartner, Vector3.forward), acceleration);
-				if (useWASD)
-				{
-					acceleration *= -1;
-				}
-			}
-			mover.velocity = Helper.ProjectVector(Vector3.Cross(toPartner, Vector3.forward), mover.velocity);*/
-		}
-
 		if (acceleration.sqrMagnitude > 0)
 		{
 			mover.Accelerate(acceleration);
