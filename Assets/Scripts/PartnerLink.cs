@@ -29,11 +29,16 @@ public class PartnerLink : MonoBehaviour {
 		{
 			partnerLine = GetComponent<LineRenderer>();
 		}
+
+		fillRenderer.material.color = headRenderer.material.color;
 	}
 	
 	void Update()
 	{
-		float fillScale = Mathf.Clamp(1 - ((transform.position - partner.transform.position).magnitude / connection.maxDistance), 0, 1);
+		//float fillScale = Mathf.Clamp(1 - ((transform.position - partner.transform.position).magnitude / connection.maxDistance), 0, 1);
+		//float maxDistance = (connection.distancePerDrain) * transform.localScale.magnitude;
+		//float fillScale = Mathf.Clamp(1 - ((transform.position - partner.transform.position).magnitude / maxDistance), 0, 1);
+		float fillScale = 1 - connection.drained;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 		empty = (fillScale <= 0);
 		// Handle partners seperating.
