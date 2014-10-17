@@ -14,6 +14,7 @@ public class PartnerLink : MonoBehaviour {
 	public Tracer tracer;
 	public SimpleConnection connection;
 	public bool empty;
+	public GameObject attachPoint;
 
 	void Awake()
 	{
@@ -39,6 +40,9 @@ public class PartnerLink : MonoBehaviour {
 		float fillScale = 1 - connection.drained;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 		empty = (fillScale <= 0);
+
+		// Move attach point to edge near partner.
+		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
 	}
 
 	public void SetPartner(PartnerLink partner)

@@ -7,6 +7,7 @@ public class SimpleConnection : MonoBehaviour {
 	public LineRenderer lineRenderer2;
 	public GameObject attachPoint1;
 	public GameObject attachPoint2;
+	public float minDistanceToDrain;
 	public float distancePerDrain;
 	public float drained = 0;
 	public float endsWidth;
@@ -21,7 +22,7 @@ public class SimpleConnection : MonoBehaviour {
 		{
 			// Determine how much has been drained from the partners.
 			float maxDistance = (distancePerDrain) * ((attachPoint1.transform.localScale + attachPoint2.transform.localScale) / 2).magnitude;
-			float actualDrain = (attachPoint2.transform.position - attachPoint1.transform.position).magnitude / maxDistance;
+			float actualDrain = ((attachPoint2.transform.position - attachPoint1.transform.position).magnitude - minDistanceToDrain) / maxDistance;
 			drained = Mathf.Clamp(actualDrain, 0, 1);
 
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
