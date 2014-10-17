@@ -29,59 +29,17 @@ public class PartnerLink : MonoBehaviour {
 		{
 			partnerLine = GetComponent<LineRenderer>();
 		}
+
+		fillRenderer.material.color = headRenderer.material.color;
 	}
 	
 	void Update()
 	{
-		float fillScale = Mathf.Clamp(1 - ((transform.position - partner.transform.position).magnitude / connection.maxDistance), 0, 1);
+		// Fill based on the amount drained by connection
+		float fillScale = 1 - connection.drained;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 		empty = (fillScale <= 0);
-		// Handle partners seperating.
-		/*if (partner != null && conversation != null)
-		{
-			// Show that partners are close to separating.
-			float sqrDist = (transform.position - partner.transform.position).sqrMagnitude;
-			if (sqrDist > Mathf.Pow(conversation.breakingDistance, 2))
-			{
-				if (partnerLine != null)
-				{
-					partnerLine.SetVertexCount(0);
-				}
-				if (partner.partnerLine != null)
-				{
-					partner.partnerLine.SetVertexCount(0);
-				}
-				ConversationManager.Instance.EndConversation(this, partner);
-			}
-			else if (sqrDist > Mathf.Pow(conversation.warningDistance, 2))
-			{
-				if (partnerLine != null)
-				{
-					partnerLine.SetWidth(partnerLineSize, partnerLineSize);
-					partnerLineAlteredSize = partnerLineSize;
-					partnerLine.SetVertexCount(2);
-					partnerLine.SetPosition(0, transform.position);
-					partnerLine.SetPosition(1, partner.transform.position);
-				}
-			}
-			else
-			{
-				if (partnerLine != null)
-				{
-					partnerLineAlteredSize *= partnerLineShrink;
-					partnerLine.SetWidth(partnerLineAlteredSize, partnerLineAlteredSize);
-					partnerLine.SetVertexCount(2);
-					partnerLine.SetPosition(0, transform.position);
-					partnerLine.SetPosition(1, partner.transform.position);
-					if (partnerLineAlteredSize / partnerLineSize < (1 - partnerLineShrink))
-					{
-						partnerLine.SetVertexCount(0);
-					}
-				}
-			}
-		}*/	
-
-	} //End of Update
+	}
 
 	public void SetPartner(PartnerLink partner)
 	{
@@ -94,6 +52,15 @@ public class PartnerLink : MonoBehaviour {
 		else
 		{
 			SendMessage("UnlinkPartner", SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		// If colliding with partner, reconnect.
+		if (!connection.connected && other.gameObject == partner.gameObject)
+		{
+			connection.connected = true;
 		}
 	}
 }
