@@ -119,10 +119,10 @@ MonoBehaviour:
   connected: 1
   lineRenderer1: {fileID: 1279677693}
   lineRenderer2: {fileID: 1794752909}
-  attachPoint1: {fileID: 1958472009}
-  attachPoint2: {fileID: 1931528288}
+  partner1: {fileID: 1524186645}
+  partner2: {fileID: 615922741}
   minDistanceToDrain: 2
-  distancePerDrain: 5
+  distancePerDrain: 30
   drained: 0
   endsWidth: .300000012
   midWidth: .5
@@ -1373,7 +1373,7 @@ Transform:
   m_PrefabInternal: {fileID: 1314614612}
   m_GameObject: {fileID: 615922737}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 953779810}
@@ -1420,6 +1420,7 @@ MonoBehaviour:
   mover: {fileID: 0}
   tracer: {fileID: 0}
   connection: {fileID: 46707682}
+  fillScale: 1
   empty: 0
   attachPoint: {fileID: 1931528288}
 --- !u!54 &615922742
@@ -1450,7 +1451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b0f58affdedc74185d1be54789c64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 15
+  maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 100
   handling: 100
@@ -1604,6 +1605,18 @@ Prefab:
       propertyPath: midWidth
       value: .5
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
+      propertyPath: partner1
+      value: 
+      objectReference: {fileID: 1524186645}
+    - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
+      propertyPath: partner2
+      value: 
+      objectReference: {fileID: 615922741}
+    - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
+      propertyPath: distancePerDrain
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
   m_RootGameObject: {fileID: 46707680}
@@ -1676,7 +1689,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1799,7 +1812,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3111,7 +3124,7 @@ Transform:
   m_PrefabInternal: {fileID: 1264106710}
   m_GameObject: {fileID: 1524186637}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: -8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1459950463}
@@ -3158,6 +3171,7 @@ MonoBehaviour:
   mover: {fileID: 0}
   tracer: {fileID: 0}
   connection: {fileID: 46707682}
+  fillScale: 1
   empty: 0
   attachPoint: {fileID: 1958472009}
 --- !u!54 &1524186646
@@ -3188,7 +3202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b0f58affdedc74185d1be54789c64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 15
+  maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 100
   handling: 100
@@ -3652,7 +3666,7 @@ Transform:
   m_PrefabInternal: {fileID: 1314614612}
   m_GameObject: {fileID: 1931528288}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: .5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 615922738}
