@@ -36,7 +36,12 @@ public class SimpleConnection : MonoBehaviour {
 			for (int i = 0; i < pulsePoints.Count; i++)
 			{
 				pulsePoints[i].position += (pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].position).normalized * pulseSpeed;
+				pulsePoints[i].partner1SqrDist = (pulsePoints[i].position - partner1.transform.position).sqrMagnitude;	
+			}
+			pulsePoints.Sort(new PulsePointComparer());
 
+			for (int i = 0; i < pulsePoints.Count; i++)
+			{
 				if (Vector3.Dot(pulsePoints[i].position - pulsePoints[i].target.attachPoint.transform.position, pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].target.transform.position) < 0)
 				{
 					pulsePoints.RemoveAt(i);
@@ -101,6 +106,7 @@ public class SimpleConnection : MonoBehaviour {
 		// Create new pulse moving from start to target.
 		PulsePoint newPulse = new PulsePoint();
 		newPulse.position = start.attachPoint.transform.position;
+		newPulse.partner1SqrDist = (newPulse.position - partner1.transform.position).sqrMagnitude;
 		newPulse.target = target;
 		newPulse.fluctuationDirection = nextFluctuationDirection;
 		nextFluctuationDirection *= -1;
@@ -117,18 +123,6 @@ public class SimpleConnection : MonoBehaviour {
 
 		return true;
 	}
-
-	/*public SortPulsePoints()
-	{
-		for (int i = 0; i < pulsePoints.Count; i++)
-		{
-			bool iSorted = false;
-			for (int j = i  + 1; i < pulsePoints.Count && !iSorted; j++)
-			{
-				//pulsePoints.
-			}
-		}
-	}*/
 }
 
 public class PulsePoint
@@ -139,7 +133,30 @@ public class PulsePoint
 	public int fluctuationDirection;
 }
 
-/*public class PulsePointComparer : IComparer<PulsePoint>
+public class PulsePointComparer : IComparer<PulsePoint>
 {
-	//public int Compare()
-}*/
+	public int Compare(PulsePoint a, PulsePoint b)
+	{
+		if (a == null && b == null)
+		{
+			return 0;
+		}
+		else if (a == null)
+		{
+			return -1;
+		}
+		else if (b == null)
+		{
+			return 1;
+		}
+		else if (a.partner1SqrDist < b.partner1SqrDist)
+		{
+			return -1;
+		}
+		else if (b.partner1SqrDist < a.partner1SqrDist)
+		{
+			return 1;
+		}
+		return 0;
+	}
+}
