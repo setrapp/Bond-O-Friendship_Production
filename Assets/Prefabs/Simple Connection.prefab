@@ -100,12 +100,17 @@ MonoBehaviour:
   connected: 1
   lineRenderer1: {fileID: 12000002}
   lineRenderer2: {fileID: 12000000}
-  attachPoint1: {fileID: 0}
-  attachPoint2: {fileID: 0}
-  distancePerDrain: 5
+  partner1: {fileID: 0}
+  partner2: {fileID: 0}
+  minDistanceToDrain: 2
+  distancePerDrain: 20
+  scalePerPulse: 0
   drained: 0
   endsWidth: .300000012
-  midWidth: 1
+  midWidth: .5
+  pulseSpeed: 12
+  pulseAmplitude: .5
+  nextFluctuationDirection: 1
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -134,10 +139,10 @@ LineRenderer:
     endWidth: 1
     m_StartColor:
       serializedVersion: 2
-      rgba: 4281269814
+      rgba: 4294967040
     m_EndColor:
       serializedVersion: 2
-      rgba: 4294967040
+      rgba: 4281269558
   m_UseWorldSpace: 1
 --- !u!120 &12000002
 LineRenderer:
