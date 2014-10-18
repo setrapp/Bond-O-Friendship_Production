@@ -36,8 +36,13 @@ public class SimpleConnection : MonoBehaviour {
 			Vector3 fluctuation = Vector3.Cross((partner2.transform.position - partner1.transform.position).normalized, Vector3.forward) * pulseAmplitude;
 			for (int i = 0; i < pulsePoints.Count; i++)
 			{
+				// Move based on pulse speed.
 				pulsePoints[i].position += (pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].position).normalized * pulseSpeed * Time.deltaTime;
-				pulsePoints[i].partner1SqrDist = (pulsePoints[i].position - partner1.transform.position).sqrMagnitude;	
+				// Prevent pulses from lagging behind partners moving, but positioning relative to partner1.
+				Vector3 relativePosition = Helper.ProjectVector(partner2.transform.position - partner1.transform.position, pulsePoints[i].position - partner1.transform.position);
+				pulsePoints[i].position = partner1.transform.position + relativePosition;
+				// Update tracked square distance from partner1.
+				pulsePoints[i].partner1SqrDist = relativePosition.sqrMagnitude;	
 			}
 
 			// Sort pulse points on based how far they are from partner1.
