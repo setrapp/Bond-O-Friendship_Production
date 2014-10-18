@@ -123,13 +123,14 @@ MonoBehaviour:
   partner2: {fileID: 615922741}
   minDistanceToDrain: 2
   distancePerDrain: 15
-  scalePerPulse: .100000001
+  scalePerPulse: .0199999996
   drained: 0
   endsWidth: .300000012
   midWidth: .5
   pulseSpeed: 12
   pulseAmplitude: .5
   nextFluctuationDirection: 1
+  bouncePulseOnReject: 1
 --- !u!1 &65823700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1426,9 @@ MonoBehaviour:
   empty: 0
   attachPoint: {fileID: 1931528288}
   minScale: .25
+  maxScale: 1
+  scaleRestoreRate: .00499999989
+  preparingPulse: 0
 --- !u!54 &615922742
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1548,11 +1552,15 @@ Prefab:
       objectReference: {fileID: 615922741}
     - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
       propertyPath: scalePerPulse
-      value: .100000001
+      value: .0199999996
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
       propertyPath: distancePerDrain
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
+      propertyPath: bouncePulseOnReject
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
@@ -2066,6 +2074,9 @@ MonoBehaviour:
   empty: 0
   attachPoint: {fileID: 1958472009}
   minScale: .25
+  maxScale: 1
+  scaleRestoreRate: .00499999989
+  preparingPulse: 0
 --- !u!54 &1524186646
 Rigidbody:
   m_ObjectHideFlags: 0

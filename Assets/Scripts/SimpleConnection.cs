@@ -18,6 +18,7 @@ public class SimpleConnection : MonoBehaviour {
 	public float pulseAmplitude;
 	public List<PulsePoint> pulsePoints;
 	public int nextFluctuationDirection = 1;
+	public bool bouncePulseOnReject = false;
 
 	void Start()
 	{
@@ -54,9 +55,25 @@ public class SimpleConnection : MonoBehaviour {
 				if (Vector3.Dot(pulsePoints[i].position - pulsePoints[i].target.attachPoint.transform.position, pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].target.transform.position) < 0)
 				{
 					// Remove pulse when it reaches target.
-					AcceptPulse(pulsePoints[i].target);
-					pulsePoints.RemoveAt(i);
-					i--;
+					bool accepted = AcceptPulse(pulsePoints[i].target, pulsePoints[i].bounced, !pulsePoints[i].bounced);
+					if (!accepted && bouncePulseOnReject && !pulsePoints[i].bounced)
+					{
+						pulsePoints[i].bounced = true;
+						pulsePoints[i].fluctuationDirection *= -1;
+						if (pulsePoints[i].target = partner1)
+						{
+							pulsePoints[i].target = partner2;
+						}
+						else
+						{
+							pulsePoints[i].target = partner1;
+						}
+					}
+					else
+					{
+						pulsePoints.RemoveAt(i);
+						i--;
+					}
 				}
 				else
 				{
@@ -115,7 +132,7 @@ public class SimpleConnection : MonoBehaviour {
 
 		// Only allow pulse when start can afford it and the link will not become breakable.
 		float newMaxDistance = distancePerDrain * start.transform.localScale.x;
-		if (start.transform.localScale.x <= start.minScale || Mathf.Pow(newMaxDistance, 2) < (start.attachPoint.transform.position - target.attachPoint.transform.position).sqrMagnitude)
+		if (start.transform.localScale.x - scalePerPulse < start.minScale || Mathf.Pow(newMaxDistance, 2) < (start.attachPoint.transform.position - target.attachPoint.transform.position).sqrMagnitude)
 		{
 			return false;
 		}
@@ -151,7 +168,7 @@ public class SimpleConnection : MonoBehaviour {
 		return true;
 	}
 
-	private bool AcceptPulse(PartnerLink target)
+	private bool AcceptPulse(PartnerLink target, bool forceAccept, bool exceedMax)
 	{
 		// Only accept if the target is connected.
 		if (target != partner1 && target != partner2)
@@ -159,9 +176,20 @@ public class SimpleConnection : MonoBehaviour {
 			return false;
 		}
 
+		// Only accept if the target is prepared to accept or acceptance is forced.
+		if (!target.preparingPulse && !forceAccept)
+		{
+			return false;
+		}
+
 		// Scale target up.
 		Vector3 localScale = target.transform.localScale;
 		target.transform.localScale = new Vector3(localScale.x + scalePerPulse, localScale.y + scalePerPulse, localScale.z + scalePerPulse);
+
+		if (!exceedMax)
+		{
+			target.transform.localScale = new Vector3(Mathf.Min(target.transform.localScale.x, target.maxScale), Mathf.Min(target.transform.localScale.y, target.maxScale), Mathf.Min(target.transform.localScale.z, target.maxScale));
+		}
 
 		return true;
 	}
@@ -173,6 +201,7 @@ public class PulsePoint
 	public float partner1SqrDist;
 	public PartnerLink target;
 	public int fluctuationDirection;
+	public bool bounced;
 }
 
 public class PulsePointComparer : IComparer<PulsePoint>

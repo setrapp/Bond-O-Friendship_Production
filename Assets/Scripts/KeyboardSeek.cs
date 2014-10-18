@@ -31,7 +31,14 @@ public class KeyboardSeek : SimpleSeek {
 		{
 			partnerLink.connection.SendPulse(partnerLink, partnerLink.partner);
 		}
-		
+		if ((useWASD && Input.GetKey(KeyCode.Space)) || (!useWASD && Input.GetKey("[0]")))
+		{
+			partnerLink.preparingPulse = true;
+		}
+		if ((useWASD && Input.GetKeyUp(KeyCode.Space)) || (!useWASD && Input.GetKeyUp("[0]")))
+		{
+			partnerLink.preparingPulse = false;
+		}
 
 		if (acceleration.sqrMagnitude > 0)
 		{

@@ -18,6 +18,9 @@ public class PartnerLink : MonoBehaviour {
 	public bool empty;
 	public GameObject attachPoint;
 	public float minScale;
+	public float maxScale;
+	public float scaleRestoreRate;
+	public bool preparingPulse = false;
 
 	void Awake()
 	{
@@ -44,6 +47,12 @@ public class PartnerLink : MonoBehaviour {
 
 		// Move attach point to edge near partner.
 		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
+
+		// Restore scale up to max, if below it.
+		if (transform.localScale.x < maxScale)
+		{
+			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, maxScale));
+		}
 
 		// Stay above minScale.
 		if (transform.localScale.x < minScale)
