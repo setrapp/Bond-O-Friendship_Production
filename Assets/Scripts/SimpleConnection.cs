@@ -10,6 +10,7 @@ public class SimpleConnection : MonoBehaviour {
 	public PartnerLink partner2;
 	public float minDistanceToDrain;
 	public float distancePerDrain;
+	public float scalePerPulse;
 	public float drained = 0;
 	public float endsWidth;
 	public float midWidth;
@@ -35,20 +36,26 @@ public class SimpleConnection : MonoBehaviour {
 			Vector3 fluctuation = Vector3.Cross((partner2.transform.position - partner1.transform.position).normalized, Vector3.forward) * pulseAmplitude;
 			for (int i = 0; i < pulsePoints.Count; i++)
 			{
-				pulsePoints[i].position += (pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].position).normalized * pulseSpeed;
+				pulsePoints[i].position += (pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].position).normalized * pulseSpeed * Time.deltaTime;
 				pulsePoints[i].partner1SqrDist = (pulsePoints[i].position - partner1.transform.position).sqrMagnitude;	
 			}
+
+			// Sort pulse points on based how far they are from partner1.
 			pulsePoints.Sort(new PulsePointComparer());
 
+			// Added points to line renderers.
 			for (int i = 0; i < pulsePoints.Count; i++)
 			{
 				if (Vector3.Dot(pulsePoints[i].position - pulsePoints[i].target.attachPoint.transform.position, pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].target.transform.position) < 0)
 				{
+					// Remove pulse when it reaches target.
+					AcceptPulse(pulsePoints[i].target);
 					pulsePoints.RemoveAt(i);
 					i--;
 				}
 				else
 				{
+					// Move pulse through the line it is nearest to.
 					if ((pulsePoints[i].position - partner1.transform.position).sqrMagnitude < (pulsePoints[i].position - partner2.transform.position).sqrMagnitude)
 					{
 						vertexCount1++;
@@ -63,13 +70,15 @@ public class SimpleConnection : MonoBehaviour {
 					}
 				}
 			}
+
+			// Add vertex space for end vertex.
 			vertexCount1++;
 			lineRenderer1.SetVertexCount(vertexCount1);
 			vertexCount2++;
 			lineRenderer2.SetVertexCount(vertexCount2);
 
 			// Determine how much has been drained from the partners.
-			float maxDistance = (distancePerDrain) * ((partner1.attachPoint.transform.localScale + partner2.attachPoint.transform.localScale) / 2).magnitude;
+			float maxDistance = (distancePerDrain) * (Mathf.Min(partner1.transform.localScale.x, partner2.transform.localScale.x));
 			float actualDrain = ((partner2.attachPoint.transform.position - partner1.attachPoint.transform.position).magnitude - minDistanceToDrain) / maxDistance;
 			partner1.fillScale = Mathf.Clamp(partner1.fillScale - (actualDrain - drained), 0, 1);
 			partner2.fillScale = Mathf.Clamp(partner2.fillScale - (actualDrain - drained), 0, 1);
@@ -97,6 +106,15 @@ public class SimpleConnection : MonoBehaviour {
 
 	public bool SendPulse(PartnerLink start, PartnerLink target)
 	{
+		float maxDistance = (distancePerDrain) * (Mathf.Min(partner1.transform.localScale.x, partner2.transform.localScale.x));
+
+		// Only allow pulse when start can afford it and the link will not become breakable.
+		float newMaxDistance = distancePerDrain * start.transform.localScale.x;
+		if (start.transform.localScale.x <= start.minScale || Mathf.Pow(newMaxDistance, 2) < (start.attachPoint.transform.position - target.attachPoint.transform.position).sqrMagnitude)
+		{
+			return false;
+		}
+
 		// Only allow pulse between partners sharing this connection.
 		if ((start != partner1 || target != partner2) && (start != partner2 || target != partner1))
 		{
@@ -120,6 +138,25 @@ public class SimpleConnection : MonoBehaviour {
 		{
 			pulsePoints.Add(newPulse);
 		}
+
+		// Scale the sender down.
+		Vector3 localScale = start.transform.localScale;
+		start.transform.localScale = new Vector3(localScale.x - scalePerPulse, localScale.y - scalePerPulse, localScale.z - scalePerPulse);
+		
+		return true;
+	}
+
+	private bool AcceptPulse(PartnerLink target)
+	{
+		// Only accept if the target is connected.
+		if (target != partner1 && target != partner2)
+		{
+			return false;
+		}
+
+		// Scale target up.
+		Vector3 localScale = target.transform.localScale;
+		target.transform.localScale = new Vector3(localScale.x + scalePerPulse, localScale.y + scalePerPulse, localScale.z + scalePerPulse);
 
 		return true;
 	}

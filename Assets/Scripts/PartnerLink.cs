@@ -17,6 +17,7 @@ public class PartnerLink : MonoBehaviour {
 	public float fillScale = 1;
 	public bool empty;
 	public GameObject attachPoint;
+	public float minScale;
 
 	void Awake()
 	{
@@ -39,12 +40,16 @@ public class PartnerLink : MonoBehaviour {
 	void Update()
 	{
 		// Fill based on the amount drained by connection
-		//fillScale = 1 - connection.drained;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-		//empty = (fillScale <= 0);
 
 		// Move attach point to edge near partner.
 		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
+
+		// Stay above minScale.
+		if (transform.localScale.x < minScale)
+		{
+			transform.localScale = new Vector3(minScale, minScale, minScale);
+		}
 	}
 
 	public void SetPartner(PartnerLink partner)
