@@ -117,11 +117,29 @@ public class SimpleConnection : MonoBehaviour {
 
 		return true;
 	}
+
+	/*public SortPulsePoints()
+	{
+		for (int i = 0; i < pulsePoints.Count; i++)
+		{
+			bool iSorted = false;
+			for (int j = i  + 1; i < pulsePoints.Count && !iSorted; j++)
+			{
+				//pulsePoints.
+			}
+		}
+	}*/
 }
 
 public class PulsePoint
 {
 	public Vector3 position;
+	public float partner1SqrDist;
 	public PartnerLink target;
 	public int fluctuationDirection;
 }
+
+/*public class PulsePointComparer : IComparer<PulsePoint>
+{
+	//public int Compare()
+}*/
