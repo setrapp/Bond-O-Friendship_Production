@@ -6,6 +6,8 @@ public class KeyboardSeek : SimpleSeek {
 	public GameObject geometry;
 
 	void Update () {
+		
+		// Movement.
 		Vector3 acceleration = Vector3.zero;
 		if ((useWASD && Input.GetKey("w")) || (!useWASD && Input.GetKey(KeyCode.UpArrow)))
 		{
@@ -22,6 +24,20 @@ public class KeyboardSeek : SimpleSeek {
 		if ((useWASD && Input.GetKey("d")) || (!useWASD && Input.GetKey(KeyCode.RightArrow)))
 		{
 			acceleration += Vector3.right;
+		}
+
+		// Sharing.
+		if((useWASD && Input.GetKeyDown(KeyCode.LeftControl)) || (!useWASD && Input.GetKeyDown(KeyCode.RightControl)))
+		{
+			partnerLink.connection.SendPulse(partnerLink, partnerLink.partner);
+		}
+		if ((useWASD && Input.GetKey(KeyCode.Space)) || (!useWASD && Input.GetKey("[0]")))
+		{
+			partnerLink.preparingPulse = true;
+		}
+		if ((useWASD && Input.GetKeyUp(KeyCode.Space)) || (!useWASD && Input.GetKeyUp("[0]")))
+		{
+			partnerLink.preparingPulse = false;
 		}
 
 		if (acceleration.sqrMagnitude > 0)

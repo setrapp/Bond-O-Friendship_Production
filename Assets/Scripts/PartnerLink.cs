@@ -13,7 +13,14 @@ public class PartnerLink : MonoBehaviour {
 	[HideInInspector]
 	public Tracer tracer;
 	public SimpleConnection connection;
+	[HideInInspector]
+	public float fillScale = 1;
 	public bool empty;
+	public GameObject attachPoint;
+	public float minScale;
+	public float maxScale;
+	public float scaleRestoreRate;
+	public bool preparingPulse = false;
 
 	void Awake()
 	{
@@ -36,9 +43,22 @@ public class PartnerLink : MonoBehaviour {
 	void Update()
 	{
 		// Fill based on the amount drained by connection
-		float fillScale = 1 - connection.drained;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-		empty = (fillScale <= 0);
+
+		// Move attach point to edge near partner.
+		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
+
+		// Restore scale up to max, if below it.
+		if (transform.localScale.x < maxScale)
+		{
+			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, maxScale));
+		}
+
+		// Stay above minScale.
+		if (transform.localScale.x < minScale)
+		{
+			transform.localScale = new Vector3(minScale, minScale, minScale);
+		}
 	}
 
 	public void SetPartner(PartnerLink partner)
@@ -55,7 +75,7 @@ public class PartnerLink : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider other)
+	private void OnTriggerEnter(Collider other)
 	{
 		// If colliding with partner, reconnect.
 		if (!connection.connected && other.gameObject == partner.gameObject)
