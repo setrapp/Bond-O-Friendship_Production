@@ -31,14 +31,8 @@ public class CursorSeek : SimpleSeek {
 
 		if (tracer != null)
 		{
-			if (tail != null)
-			{
-				tracer.AddVertex(tail.transform.position);
-			}
-			else
-			{
-				tracer.AddVertex(transform.position);
-			}
+			
+			tracer.AddVertex(transform.position);
 		}
 	}
 
@@ -47,10 +41,7 @@ public class CursorSeek : SimpleSeek {
 		if (Input.GetMouseButtonDown(0))
 		{
 			seeking = !(toggleSeek && seeking);
-			if (tail == null)
-			{
 				tracer.StartLine();
-			}
 		}
 		else if ((!toggleSeek && Input.GetMouseButton(0)) || (toggleSeek && seeking))
 		{
@@ -60,29 +51,19 @@ public class CursorSeek : SimpleSeek {
 		{
 			seeking = false;
 			mover.SlowDown();
-			if (tail == null)
-			{
-				tracer.DestroyLine();
-			}
-			if (tailTrigger != null)
-			{
-				tail.trigger.enabled = true;
-			}
+			tracer.DestroyLine();
 		}
 	}
 
 
 	private void FollowCursor()
 	{
-		if (cursor.GetComponent<ControllerSeek>().active)
+		if (cursor.GetComponent<ControllerSeek>().enabled)
 		{
 			if (!seeking)
 			{
 				seeking = true;
-				if (tail == null)
-				{
-					tracer.StartLine();
-				}
+				tracer.StartLine();
 			}
 			else
 			{
@@ -93,14 +74,7 @@ public class CursorSeek : SimpleSeek {
 		{
 			mover.SlowDown();
 			seeking = false;
-			if (tail == null)
-			{
-				tracer.DestroyLine();
-			}
-			if (tailTrigger != null)
-			{
-				tail.trigger.enabled = true;
-			}
+			tracer.DestroyLine();
 		}
 	}
 
@@ -112,9 +86,6 @@ public class CursorSeek : SimpleSeek {
 			dragForward = cursor.GetComponent<ControllerSeek>().forward;
 		}
 
-		/*float tempZ = dragForward.z;
-		dragForward.z = dragForward.y;
-		dragForward.y = tempZ;*/
 		if (directVelocity)
 		{
 			mover.Move(dragForward, mover.maxSpeed, true);
@@ -135,14 +106,7 @@ public class CursorSeek : SimpleSeek {
 
 	private void TailStartFollow()
 	{
-		if (tracer != null)
-		{
-			tracer.StartLine();
-		}
-		if (tailTrigger != null)
-		{
-			tail.trigger.enabled = false;
-		}
+		tracer.StartLine();
 	}
 
 	private void TailEndFollow()
