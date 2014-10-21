@@ -7,8 +7,8 @@ public class Tracer : MonoBehaviour {
 	public int maxVertices = -1;
 	private List<Vector3> vertices;
 	public GameObject lineMakerPrefab = null;
-	private Vector3 lastVertex = Vector3.zero;
-	private Vector3 lastDirection = Vector3.zero;
+	//private Vector3 lastVertex = Vector3.zero;
+	//private Vector3 lastDirection = Vector3.zero;
 	public float trailNearWidth = 1;
 	public float trailFarWidth = 1;
 	public float zOffset = 10;
@@ -48,8 +48,8 @@ public class Tracer : MonoBehaviour {
 			vertices.Add(position);
 			lineRenderer.SetVertexCount(vertices.Count);
 			lineRenderer.SetPosition(vertices.Count - 1, position);
-			lastDirection = (position - lastVertex).normalized;
-			lastVertex = position;
+			//lastDirection = (position - lastVertex).normalized;
+			//lastVertex = position;
 
 			// Keep vertex count within limits.
 			if (maxVertices >= 0 && vertices.Count > maxVertices)
