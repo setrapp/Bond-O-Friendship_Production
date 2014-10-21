@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class CursorSeek : SimpleSeek {
-	public bool useController = false;
 	public Camera gameCamera = null;
 	public GameObject geometry;
 	public bool directVelocity;
@@ -20,14 +19,8 @@ public class CursorSeek : SimpleSeek {
 	}
 	
 	void Update () {
-		if (useController)
-		{ 
-			FollowCursor(); 
-		}
-		else
-		{
 			HandleTouches();
-		}
+
 
 		if (tracer != null)
 		{
@@ -56,35 +49,11 @@ public class CursorSeek : SimpleSeek {
 	}
 
 
-	private void FollowCursor()
-	{
-		if (cursor.GetComponent<ControllerSeek>().enabled)
-		{
-			if (!seeking)
-			{
-				seeking = true;
-				tracer.StartLine();
-			}
-			else
-			{
-				Drag();
-			}
-		}
-		else
-		{
-			mover.SlowDown();
-			seeking = false;
-			tracer.DestroyLine();
-		}
-	}
 
 	private void Drag(bool criticalLine = true)
 	{
 		Vector3 dragForward = MousePointInWorld() - transform.position;
-		if (useController)
-		{
-			dragForward = cursor.GetComponent<ControllerSeek>().forward;
-		}
+	
 
 		if (directVelocity)
 		{
