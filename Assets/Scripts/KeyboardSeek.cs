@@ -6,6 +6,7 @@ public class KeyboardSeek : SimpleSeek {
 	public GameObject pulse;
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
+	public ParticleSystem pulseParticlePrefab;
 
 	public bool useKeyboard = false;
 
@@ -15,6 +16,9 @@ public class KeyboardSeek : SimpleSeek {
 	private bool firePulse = true;
 	private bool chargingPulse = false;
 	private float startChargingPulse = 0f;
+	private ParticleSystem pulseParticle;
+	private Vector3 particleRotation;
+	private GameObject go;
 
 	void Update () {
 
@@ -74,6 +78,10 @@ public class KeyboardSeek : SimpleSeek {
 		}
 
 		geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
+		if(pulseParticle != null && go != null)
+		{
+			pulseParticle.transform.position = go.transform.position;
+		}
 	}
 
 	private Vector3 PlayerJoystickMovement()
@@ -129,8 +137,13 @@ public class KeyboardSeek : SimpleSeek {
 
 	void FirePulse(Vector3 pulseTarget)
 	{
-		GameObject go = Instantiate(pulse,transform.position, Quaternion.identity) as GameObject;
+		go = Instantiate(pulse,transform.position, Quaternion.identity) as GameObject;
 		go.GetComponent<MovePulse>().target = pulseTarget;
+		go.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
+
+		particleRotation = go.GetComponent<MovePulse>().moveVector;
+	//	pulseParticle.transform.rotation = new Quaternion(particleRotation.x, particleRotation.y, particleRotation.z, 0);
 	}
 
 

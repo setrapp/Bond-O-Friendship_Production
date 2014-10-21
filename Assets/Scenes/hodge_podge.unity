@@ -1314,6 +1314,8 @@ MonoBehaviour:
   tracer: {fileID: 615922744}
   pulse: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   playerNumber: 1
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
   useKeyboard: 0
   geometry: {fileID: 2009587432}
   deadZone: .75
@@ -1329,10 +1331,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
-  scaleRate: .200000003
-  ringDuration: 3
-  ringMaterial: {fileID: 2100000, guid: 1b08aa68311373d41a61e2b9f8cd9bf8, type: 2}
 --- !u!114 &615922741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,7 +1470,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
       propertyPath: partner1
@@ -1587,7 +1585,13 @@ Prefab:
       propertyPath: deadZone
       value: .75
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 11400006, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: pulseParticlePrefab
+      value: 
+      objectReference: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+        type: 2}
+    m_RemovedComponents:
+    - {fileID: 11400000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
   m_RootGameObject: {fileID: 1524186637}
   m_IsPrefabParent: 0
@@ -1803,6 +1807,11 @@ Prefab:
       propertyPath: deadZone
       value: .75
       objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: pulseParticlePrefab
+      value: 
+      objectReference: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
@@ -1823,7 +1832,6 @@ GameObject:
   - 54: {fileID: 1524186646}
   - 114: {fileID: 1524186645}
   - 114: {fileID: 1524186639}
-  - 114: {fileID: 1524186640}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Converser
@@ -1862,25 +1870,11 @@ MonoBehaviour:
   tracer: {fileID: 1524186649}
   pulse: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   playerNumber: 0
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
   useKeyboard: 0
   geometry: {fileID: 948571339}
   deadZone: .75
---- !u!114 &1524186640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
-    type: 2}
-  m_PrefabInternal: {fileID: 1044851209}
-  m_GameObject: {fileID: 1524186637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
-  scaleRate: .200000003
-  ringDuration: 3
-  ringMaterial: {fileID: 2100000, guid: 1b08aa68311373d41a61e2b9f8cd9bf8, type: 2}
 --- !u!114 &1524186645
 MonoBehaviour:
   m_ObjectHideFlags: 0
