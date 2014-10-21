@@ -128,7 +128,7 @@ public class SimpleConnection : MonoBehaviour {
 
 	public bool SendPulse(PartnerLink start, PartnerLink target)
 	{
-		float maxDistance = (distancePerDrain) * (Mathf.Min(partner1.transform.localScale.x, partner2.transform.localScale.x));
+		//float maxDistance = (distancePerDrain) * (Mathf.Min(partner1.transform.localScale.x, partner2.transform.localScale.x));
 
 		// Only allow pulse when start can afford it and the link will not become breakable.
 		float newMaxDistance = distancePerDrain * start.transform.localScale.x;
@@ -177,10 +177,10 @@ public class SimpleConnection : MonoBehaviour {
 		}
 
 		// Only accept if the target is prepared to accept or acceptance is forced.
-		if (!target.preparingPulse && !forceAccept)
+		/*if (!target.preparingPulse && !forceAccept)
 		{
 			return false;
-		}
+		}*/
 
 		// Scale target up.
 		Vector3 localScale = target.transform.localScale;
