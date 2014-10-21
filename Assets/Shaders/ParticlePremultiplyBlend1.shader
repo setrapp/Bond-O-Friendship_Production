@@ -1,4 +1,4 @@
-﻿Shader "Player View Stencil/Particle Alpha Blended PreMultiply" {
+﻿Shader "Player View Stencil/Particle Alpha Blended PreMultiply1" {
 Properties {
 	_MainTex ("Particle Texture", 2D) = "white" {}
 	_InvFade ("Soft Particles Factor", Range(0.01,3.0)) = 1.0
@@ -16,7 +16,7 @@ Category {
 				Ref 1
 				Comp equal
 				Pass keep
-				Fail decrWrap 
+				Fail keep
 				ZFail keep
 			}
 		

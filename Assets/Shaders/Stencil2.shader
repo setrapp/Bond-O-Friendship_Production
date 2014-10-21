@@ -1,9 +1,9 @@
-﻿Shader "Player View Stencil/Stencil" {
+﻿Shader "Player View Stencil/Stencil2" {
 	SubShader {
-		Tags { "RenderType"="Opaque" "Queue"="Geometry"}
+		Tags { "RenderType"="Opaque" "Queue"="Geometry-1s"}
 		Pass {
 			Stencil {
-				Ref 1
+				Ref 2
 				Comp always
 				Pass replace
 				ZFail decrWrap

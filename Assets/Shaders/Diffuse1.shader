@@ -1,16 +1,16 @@
-﻿Shader "Player View Stencil/Diffuse" {
+﻿Shader "Player View Stencil/Diffuse1" {
 	Properties {
 		_Color ("Main Color", Color) = (1, 1, 1, 1)
 	}
 	SubShader {
-		Tags { "RenderType" = "Opaque" "Queue"="Geometry+1"}
+		Tags { "RenderType" = "Opaque" "Queue"="Geometry"}
 		//
 		Pass {
 			Stencil {
 				Ref 1
 				Comp equal
 				Pass keep
-				Fail decrWrap 
+				Fail keep
 				ZFail keep
 			}
 
