@@ -156,7 +156,9 @@ public class KeyboardSeek : SimpleSeek {
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 
 		particleRotation = pulse.GetComponent<MovePulse>().moveVector;
-	//	pulseParticle.transform.rotation = new Quaternion(particleRotation.x, particleRotation.y, particleRotation.z, 0);
+		pulseParticle.transform.forward = particleRotation;
+		pulseParticle.startColor = pulse.renderer.material.color;
+		pulseParticle.startSpeed = particleRotation.magnitude;
 	}
 
 	bool CanFire(float costToFire)
