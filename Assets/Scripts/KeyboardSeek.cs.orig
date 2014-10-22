@@ -126,7 +126,6 @@ public class KeyboardSeek : SimpleSeek {
 				{
 					var chargeTime = Time.time - startChargingPulse;
 					joystickPos *= basePulsePower + timedPulsePower * chargeTime;
-					joystickPos *= basePulsePower + timedPulsePower * chargeTime;
 					FirePulse(transform.position + mover.velocity + joystickPos);
 					firePulse = false;
 					chargingPulse = false;
