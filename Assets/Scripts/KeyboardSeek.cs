@@ -15,9 +15,9 @@ public class KeyboardSeek : SimpleSeek {
 	public float deadZone = .75f;
 
 	private bool firePulse = true;
-	private bool chargingPulse = false;
 	private float startChargingPulse = 0f;
 	private Vector3 velocityChange;
+	public float basePulseSize = 0.5f;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
 	public float basePulseDrain = 0.1f;
@@ -46,19 +46,6 @@ public class KeyboardSeek : SimpleSeek {
 			velocityChange += Vector3.right;
 		}
 		transform.LookAt(transform.position + velocityChange, transform.up);
-		// Sharing.
-		/*if((playerNumber == Player.Player1 && Input.GetKeyDown(KeyCode.LeftControl)) || (playerNumber == Player.Player2 && Input.GetKeyDown(KeyCode.RightControl)))
-		{
-			partnerLink.connection.SendPulse(partnerLink, partnerLink.partner);
-		}
-		if ((playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKey("[0]")))
-		{
-			partnerLink.preparingPulse = true;
-		}
-		if ((playerNumber == Player.Player1 && Input.GetKeyUp(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKeyUp("[0]")))
-		{
-			partnerLink.preparingPulse = false;
-		}*/
 
 		PlayerLookAt(useKeyboard);
 
@@ -97,15 +84,25 @@ public class KeyboardSeek : SimpleSeek {
 		{
 			lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
 		}
-		else if (velocityChange.sqrMagnitude == 0 || !chargingPulse || GetButtonFirePulse())
+		else if (velocityChange.sqrMagnitude == 0 || !partnerLink.chargingPulse || GetButtonFirePulse())
 		{
 			lookAt = new Vector2();
 		}
 
-		if(GetButtonFirePulse() && !chargingPulse)
+		var chargeTime = Time.time - startChargingPulse;
+
+		if (GetButtonFirePulse() && !partnerLink.chargingPulse)
 		{
-			chargingPulse = true;
+			partnerLink.chargingPulse = true;
 			startChargingPulse = Time.time;
+		}
+
+		if (partnerLink.chargingPulse)
+		{
+			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
+			{
+				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+			}
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
@@ -116,20 +113,22 @@ public class KeyboardSeek : SimpleSeek {
 				transform.LookAt(target, transform.up);
 				Vector3 joystickPos = new Vector3(lookAt.x, lookAt.y, 0);
 
-				if(!chargingPulse && !useKeyboard)
+				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					joystickPos *= basePulsePower;
-					FirePulse(transform.position + mover.velocity + joystickPos);
+					FirePulse(transform.position + mover.velocity + joystickPos, basePulseDrain);
+					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					partnerLink.preChargeScale = transform.localScale.x;
 					firePulse = false;
 				}
 				else if(!GetButtonFirePulse() && startChargingPulse > 0)
 				{
-					var chargeTime = Time.time - startChargingPulse;
-					joystickPos *= basePulsePower + timedPulsePower * chargeTime;
-					joystickPos *= basePulsePower + timedPulsePower * chargeTime;
-					FirePulse(transform.position + mover.velocity + joystickPos);
+					joystickPos *= basePulsePower +timedPulsePower * chargeTime;
+					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					FirePulse(transform.position + mover.velocity + joystickPos, basePulseDrain + timedPulseDrain * Time.deltaTime);
 					firePulse = false;
-					chargingPulse = false;
+					partnerLink.chargingPulse = false;
+					partnerLink.preChargeScale = transform.localScale.x;
 					startChargingPulse = 0f;
 				}
 			}
@@ -137,18 +136,22 @@ public class KeyboardSeek : SimpleSeek {
 		else
 		{
 			firePulse = true;
-			if(!GetButtonFirePulse() && chargingPulse)
+			if (!GetButtonFirePulse() && partnerLink.chargingPulse)
 			{
-				chargingPulse = false;
+				partnerLink.chargingPulse = false;
 				startChargingPulse = 0f;
 			}
 		}
 	}
 
-	void FirePulse(Vector3 pulseTarget)
+	void FirePulse(Vector3 pulseTarget, float pulseCapacity)
 	{
 		pulse = Instantiate(pulsePrefab, transform.position, Quaternion.identity) as GameObject;
-		pulse.GetComponent<MovePulse>().target = pulseTarget;
+		MovePulse movePulse = pulse.GetComponent<MovePulse>();
+		movePulse.target = pulseTarget;
+		movePulse.creator = gameObject;
+		movePulse.capacity = pulseCapacity;
+		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
 		pulse.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 
@@ -156,7 +159,10 @@ public class KeyboardSeek : SimpleSeek {
 	//	pulseParticle.transform.rotation = new Quaternion(particleRotation.x, particleRotation.y, particleRotation.z, 0);
 	}
 
-
+	bool CanFire(float costToFire)
+	{
+		return transform.localScale.x - costToFire >= partnerLink.minScale;
+	}
 	
 	
 	

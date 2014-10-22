@@ -4714,7 +4714,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 410071269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.80310011, y: -3.83739996, z: 1}
+  m_LocalPosition: {x: -7.80310011, y: -3.83739996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1279444797}
@@ -5846,7 +5846,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 475263587}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.65039992, y: -3.83739996, z: 1}
+  m_LocalPosition: {x: -2.65039992, y: -3.83739996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1524953687}
@@ -5971,7 +5971,7 @@ MonoBehaviour:
   basePulsePower: 10
   timedPulsePower: 10
   basePulseDrain: .100000001
-  timedPulseDrain: .100000001
+  timedPulseDrain: .400000006
 --- !u!114 &615922741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5997,9 +5997,12 @@ MonoBehaviour:
   empty: 0
   attachPoint: {fileID: 1931528288}
   minScale: .25
-  maxScale: 1
-  scaleRestoreRate: .00499999989
-  preparingPulse: 0
+  maxScale: 2
+  normalScale: 1
+  preChargeScale: 1
+  scaleRestoreRate: .200000003
+  endChargeRestoreRate: 1
+  chargingPulse: 0
 --- !u!54 &615922742
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15347,6 +15350,10 @@ Prefab:
       propertyPath: connection
       value: 
       objectReference: {fileID: 46707682}
+    - target: {fileID: 11400006, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: useKeyboard
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
   m_RootGameObject: {fileID: 1524186637}
@@ -18019,7 +18026,7 @@ MonoBehaviour:
   basePulsePower: 10
   timedPulsePower: 10
   basePulseDrain: .100000001
-  timedPulseDrain: .100000001
+  timedPulseDrain: .400000006
 --- !u!114 &1524186645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18045,9 +18052,12 @@ MonoBehaviour:
   empty: 0
   attachPoint: {fileID: 1958472009}
   minScale: .25
-  maxScale: 1
-  scaleRestoreRate: .00499999989
-  preparingPulse: 0
+  maxScale: 2
+  normalScale: 1
+  preChargeScale: 1
+  scaleRestoreRate: .200000003
+  endChargeRestoreRate: 1
+  chargingPulse: 0
 --- !u!54 &1524186646
 Rigidbody:
   m_ObjectHideFlags: 0
