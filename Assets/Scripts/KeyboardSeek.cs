@@ -23,7 +23,6 @@ public class KeyboardSeek : SimpleSeek {
 	public float basePulseDrain = 0.1f;
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem pulseParticle;
-	private Vector3 particleRotation;
 
 	void Update () {
 
@@ -152,13 +151,14 @@ public class KeyboardSeek : SimpleSeek {
 		movePulse.creator = gameObject;
 		movePulse.capacity = pulseCapacity;
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
-		pulse.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 
-		particleRotation = pulse.GetComponent<MovePulse>().moveVector;
-		pulseParticle.transform.forward = particleRotation;
-		pulseParticle.startColor = pulse.renderer.material.color;
-		pulseParticle.startSpeed = particleRotation.magnitude;
+		pulseParticle.transform.forward = transform.position-pulseTarget;
+		pulseParticle.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
+		pulseParticle.startSpeed = pulseTarget.magnitude;
+		Destroy (pulseParticle.gameObject, 2.0f);
+		Destroy(pulse, 10.0f);
 	}
 
 	bool CanFire(float costToFire)
