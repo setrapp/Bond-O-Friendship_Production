@@ -19,8 +19,11 @@ public class PartnerLink : MonoBehaviour {
 	public GameObject attachPoint;
 	public float minScale;
 	public float maxScale;
+	public float normalScale;
+	public float preChargeScale;
 	public float scaleRestoreRate;
-	public bool preparingPulse = false;
+	public float endChargeRestoreRate;
+	public bool chargingPulse = false;
 
 	void Awake()
 	{
@@ -48,16 +51,34 @@ public class PartnerLink : MonoBehaviour {
 		// Move attach point to edge near partner.
 		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
 
-		// Restore scale up to max, if below it.
-		if (transform.localScale.x < maxScale)
+		// Record scale before starting charge.
+		if (!chargingPulse && preChargeScale < transform.localScale.x)
 		{
-			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, maxScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, maxScale));
+			preChargeScale = transform.localScale.x;
 		}
 
-		// Stay above minScale.
+		// Restore scale up to normal, if below it and not charging.
+		if (transform.localScale.x < normalScale && !chargingPulse)
+		{
+			// If scale is less than the scale before starting charge, scale up to that first.
+			if (transform.localScale.x < preChargeScale)
+			{
+				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + endChargeRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + endChargeRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + endChargeRestoreRate * Time.deltaTime, normalScale));
+			}
+			else
+			{
+				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, normalScale));
+			}
+		}
+
+		// Stay within scale bounds.
 		if (transform.localScale.x < minScale)
 		{
 			transform.localScale = new Vector3(minScale, minScale, minScale);
+		}
+		else if (transform.localScale.x > maxScale)
+		{
+			transform.localScale = new Vector3(maxScale, maxScale, maxScale);
 		}
 	}
 
@@ -81,6 +102,18 @@ public class PartnerLink : MonoBehaviour {
 		if (!connection.connected && other.gameObject == partner.gameObject)
 		{
 			connection.connected = true;
+		}
+
+		// If colliding with a pulse, accept it.
+		if (other.gameObject.tag == "Pulse")
+		{
+			
+			MovePulse pulse = other.GetComponent<MovePulse>();
+			if (pulse != null && pulse.creator != gameObject)
+			{
+				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				Destroy(pulse.gameObject);
+			}
 		}
 	}
 }
