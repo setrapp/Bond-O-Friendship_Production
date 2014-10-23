@@ -169,6 +169,7 @@ MonoBehaviour:
   timedPulsePower: 10
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
+  absorbStrength: 20
 --- !u!54 &81696740
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -780,7 +781,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 638922814}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: .5
@@ -845,6 +846,7 @@ GameObject:
   - 54: {fileID: 855247979}
   - 114: {fileID: 855247976}
   - 114: {fileID: 855247978}
+  - 114: {fileID: 855247984}
   - 143: {fileID: 855247983}
   m_Layer: 0
   m_Name: Player 2
@@ -926,6 +928,7 @@ MonoBehaviour:
   timedPulsePower: 10
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
+  absorbStrength: 20
 --- !u!54 &855247979
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1010,6 +1013,23 @@ CharacterController:
   m_SkinWidth: .0799999982
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &855247984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 231960455}
+  m_GameObject: {fileID: 855247975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
+  scaleRate: .200000003
+  ringDuration: 3
+  ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
+    type: 2}
 --- !u!1 &1001829916
 GameObject:
   m_ObjectHideFlags: 0
