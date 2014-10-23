@@ -8,6 +8,7 @@ public class KeyboardSeek : SimpleSeek {
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
 	public ParticleSystem pulseParticlePrefab;
+	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
 
@@ -23,6 +24,7 @@ public class KeyboardSeek : SimpleSeek {
 	public float basePulseDrain = 0.1f;
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem pulseParticle;
+	private ParticleSystem absorb;
 
 	void Update () {
 
@@ -101,7 +103,19 @@ public class KeyboardSeek : SimpleSeek {
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
 				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				if(absorb == null)
+				{
+					absorb = (ParticleSystem)Instantiate(absorbPrefab);
+					absorb.transform.position = transform.position;
+					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
+					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
+				}
 			}
+		}
+		else if(absorb != null)
+		{
+			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
+			Destroy(absorb.gameObject, 1.0f);
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
