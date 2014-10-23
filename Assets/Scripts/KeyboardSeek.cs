@@ -8,7 +8,6 @@ public class KeyboardSeek : SimpleSeek {
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
 	public ParticleSystem pulseParticlePrefab;
-	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
 
@@ -29,6 +28,9 @@ public class KeyboardSeek : SimpleSeek {
 	public float absorbStrength = 20.0f;
 
 	private bool paused = false;
+	private Vector3 particleRotation;
+	private Color pOneCol;
+	private Color pTwoCol;
 
 	void Update () {
 
@@ -98,6 +100,10 @@ public class KeyboardSeek : SimpleSeek {
 				absorb.transform.position = transform.position;
 			}
 		}
+
+		pOneCol = new Color(0,Random.Range(0.0f,0.5f),Random.Range(0.5f,1.0f));
+		pTwoCol = new Color(0,Random.Range(0.5f,1.0f),Random.Range(0.0f,0.5f));
+
 	}
 
 	private Vector3 PlayerJoystickMovement()
@@ -131,13 +137,6 @@ public class KeyboardSeek : SimpleSeek {
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
 				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
-				if(absorb == null)
-				{
-					absorb = (ParticleSystem)Instantiate(absorbPrefab);
-					absorb.transform.position = transform.position;
-					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
-					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
-				}
 				if(pulse != null)
 				{
 					GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
@@ -147,11 +146,6 @@ public class KeyboardSeek : SimpleSeek {
 				}
 
 			}
-		}
-		else if(absorb != null)
-		{
-			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
-			Destroy(absorb.gameObject, 1.0f);
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
@@ -201,14 +195,22 @@ public class KeyboardSeek : SimpleSeek {
 		movePulse.creator = gameObject;
 		movePulse.capacity = pulseCapacity;
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
-		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+		//pulse.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 
-		pulseParticle.transform.forward = transform.position-pulseTarget;
-		pulseParticle.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
-		pulseParticle.startSpeed = pulseTarget.magnitude;
-		Destroy (pulseParticle.gameObject, 2.0f);
-		Destroy(pulse, 10.0f);
+		if(gameObject.name == "Player 1")
+		{
+			pulse.renderer.material.color = pOneCol;
+		}
+		if(gameObject.name == "Player 2")
+		{
+			pulse.renderer.material.color = pTwoCol;
+		}
+
+		//particleRotation = pulse.GetComponent<MovePulse>().moveVector;
+		pulseParticle.transform.forward = particleRotation;
+		pulseParticle.startColor = pulse.renderer.material.color;
+		pulseParticle.startSpeed = particleRotation.magnitude;
 	}
 
 	bool CanFire(float costToFire)
