@@ -24,6 +24,8 @@ public class KeyboardSeek : SimpleSeek {
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem pulseParticle;
 	private Vector3 particleRotation;
+	private Color pOneCol;
+	private Color pTwoCol;
 
 	void Update () {
 
@@ -69,6 +71,10 @@ public class KeyboardSeek : SimpleSeek {
 		{
 			pulseParticle.transform.position = pulse.transform.position;
 		}
+
+		pOneCol = new Color(0,Random.Range(0.0f,0.5f),Random.Range(0.5f,1.0f));
+		pTwoCol = new Color(0,Random.Range(0.5f,1.0f),Random.Range(0.0f,0.5f));
+
 	}
 
 	private Vector3 PlayerJoystickMovement()
@@ -152,8 +158,17 @@ public class KeyboardSeek : SimpleSeek {
 		movePulse.creator = gameObject;
 		movePulse.capacity = pulseCapacity;
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
-		pulse.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+		//pulse.renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
+
+		if(gameObject.name == "Player 1")
+		{
+			pulse.renderer.material.color = pOneCol;
+		}
+		if(gameObject.name == "Player 2")
+		{
+			pulse.renderer.material.color = pTwoCol;
+		}
 
 		particleRotation = pulse.GetComponent<MovePulse>().moveVector;
 		pulseParticle.transform.forward = particleRotation;
