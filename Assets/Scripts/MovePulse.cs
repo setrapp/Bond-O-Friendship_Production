@@ -7,7 +7,6 @@ public class MovePulse : MonoBehaviour {
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;
-	public Vector3 moveVector;
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,7 +22,7 @@ public class MovePulse : MonoBehaviour {
 			
 			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
 
-			moveVector = direction.normalized * Time.deltaTime * speed;
+			Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 			transform.position += moveVector;
 
 	
