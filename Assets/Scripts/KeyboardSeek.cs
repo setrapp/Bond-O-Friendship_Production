@@ -170,7 +170,7 @@ public class KeyboardSeek : SimpleSeek {
 			pulse.renderer.material.color = pTwoCol;
 		}
 
-		particleRotation = pulse.GetComponent<MovePulse>().moveVector;
+		//particleRotation = pulse.GetComponent<MovePulse>().moveVector;
 		pulseParticle.transform.forward = particleRotation;
 		pulseParticle.startColor = pulse.renderer.material.color;
 		pulseParticle.startSpeed = particleRotation.magnitude;
