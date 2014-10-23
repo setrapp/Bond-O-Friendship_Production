@@ -3,6 +3,7 @@ using System.Collections;
 
 public class RingCollision : MonoBehaviour {
 
+    public GameObject creator;
 	public ParticleSystem ringCollisionParticle;
 	private ParticleSystem collidedParticle;
 	private Color p1Color;
@@ -29,11 +30,14 @@ public class RingCollision : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider col) {
-			collidedParticle = (ParticleSystem)Instantiate(ringCollisionParticle);
-			collidedParticle.transform.position = col.transform.position;
-			if(col.name == "Player 1")
-				collidedParticle.startColor = p1Color;
-			if(col.name == "Player 2")
-				collidedParticle.startColor = p2Color;
+        if (col.gameObject != creator)
+        {
+            collidedParticle = (ParticleSystem)Instantiate(ringCollisionParticle);
+            collidedParticle.transform.position = col.transform.position;
+            if (col.name == "Player 1")
+                collidedParticle.startColor = p1Color;
+            if (col.name == "Player 2")
+                collidedParticle.startColor = p2Color;
+        }
 	}
 }

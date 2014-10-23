@@ -23,7 +23,7 @@ public class EmitRing : MonoBehaviour {
 			ring = (GameObject)Instantiate(ringPrefab);
 			ring.collider.isTrigger = true;
 			ring.transform.position = transform.position;
-			ring.AddComponent<RingCollision>();
+			ring.GetComponent<RingCollision>().creator = gameObject;
 		}
 
 		if(Input.GetKeyDown(KeyCode.Keypad1) && ring == null && gameObject.name == "Player 2")
@@ -31,7 +31,7 @@ public class EmitRing : MonoBehaviour {
 			ring = (GameObject)Instantiate(ringPrefab);
 			ring.collider.isTrigger = true;
 			ring.transform.position = transform.position;
-			ring.AddComponent<RingCollision>();
+			ring.GetComponent<RingCollision>().creator = gameObject;
 		}
 
 		if(ring != null)
