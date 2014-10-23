@@ -50,7 +50,7 @@ public class SimpleConnection : MonoBehaviour {
 			pulsePoints.Sort(new PulsePointComparer());
 
 			// Added points to line renderers.
-			for (int i = 0; i < pulsePoints.Count; i++)
+			/*for (int i = 0; i < pulsePoints.Count; i++)
 			{
 				if (Vector3.Dot(pulsePoints[i].position - pulsePoints[i].target.attachPoint.transform.position, pulsePoints[i].target.attachPoint.transform.position - pulsePoints[i].target.transform.position) < 0)
 				{
@@ -91,7 +91,7 @@ public class SimpleConnection : MonoBehaviour {
 						lineRenderer2.SetPosition(vertexCount2 - 1, pulsePoints[i].position + (fluctuation * pulsePoints[i].fluctuationDirection));
 					}
 				}
-			}
+			}*/
 
 			// Add vertex space for end vertex.
 			vertexCount1++;
@@ -126,7 +126,7 @@ public class SimpleConnection : MonoBehaviour {
 		}
 	}
 
-	public bool SendPulse(PartnerLink start, PartnerLink target)
+	/*public bool SendPulse(PartnerLink start, PartnerLink target)
 	{
 		//float maxDistance = (distancePerDrain) * (Mathf.Min(partner1.transform.localScale.x, partner2.transform.localScale.x));
 
@@ -177,10 +177,10 @@ public class SimpleConnection : MonoBehaviour {
 		}
 
 		// Only accept if the target is prepared to accept or acceptance is forced.
-		/*if (!target.preparingPulse && !forceAccept)
-		{
-			return false;
-		}*/
+		//if (!target.preparingPulse && !forceAccept)
+		//{
+		//	return false;
+		//}
 
 		// Scale target up.
 		Vector3 localScale = target.transform.localScale;
@@ -188,11 +188,11 @@ public class SimpleConnection : MonoBehaviour {
 
 		if (!exceedMax)
 		{
-			target.transform.localScale = new Vector3(Mathf.Min(target.transform.localScale.x, target.maxScale), Mathf.Min(target.transform.localScale.y, target.maxScale), Mathf.Min(target.transform.localScale.z, target.maxScale));
+			target.transform.localScale = new Vector3(Mathf.Min(target.transform.localScale.x, target.normalScale), Mathf.Min(target.transform.localScale.y, target.normalScale), Mathf.Min(target.transform.localScale.z, target.normalScale));
 		}
 
 		return true;
-	}
+	}*/
 }
 
 public class PulsePoint

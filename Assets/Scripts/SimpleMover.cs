@@ -15,6 +15,12 @@ public class SimpleMover : MonoBehaviour {
 	{
 		get { return moving; }
 	}
+	private CharacterController controller;
+
+	void Start()
+	{
+		controller = GetComponent<CharacterController>();
+	}
 
 	void Update() {
 		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
@@ -25,7 +31,14 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		ApplyFreezes();
-		transform.position += velocity * Time.deltaTime;
+		if (controller != null)
+		{
+			controller.Move(velocity * Time.deltaTime);
+		}
+		else
+		{
+			transform.position += velocity * Time.deltaTime;
+		}
 
 		if (velocity.sqrMagnitude < Mathf.Pow(dampeningThreshold, 2)) {
 			velocity = Vector3.zero;
@@ -80,7 +93,14 @@ public class SimpleMover : MonoBehaviour {
 		}
 		velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
 		ApplyFreezes();
-		transform.position += velocity * Time.deltaTime;
+		if (controller != null)
+		{
+			controller.Move(velocity * Time.deltaTime);
+		}
+		else
+		{
+			transform.position += velocity * Time.deltaTime;
+		}
 	}
 
 	public void MoveTo(Vector3 position, bool updateVelocity = false)
@@ -90,7 +110,15 @@ public class SimpleMover : MonoBehaviour {
 			velocity = (position - transform.position) / Time.deltaTime;
 			ApplyFreezes();
 		}
-		transform.position = position;
+		if (controller != null)
+		{
+			controller.Move(position - transform.position);
+		}
+		else
+		{
+			transform.position = position;
+		}
+
 	}
 
 	public void SlowDown()
