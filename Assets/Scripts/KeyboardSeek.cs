@@ -25,6 +25,8 @@ public class KeyboardSeek : SimpleSeek {
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem pulseParticle;
 	private ParticleSystem absorb;
+	private Vector3 target;
+	public float absorbStrength = 20.0f;
 
 	void Update () {
 
@@ -70,6 +72,10 @@ public class KeyboardSeek : SimpleSeek {
 		{
 			pulseParticle.transform.position = pulse.transform.position;
 		}
+		if(absorb != null)
+		{
+			absorb.transform.position = transform.position;
+		}
 	}
 
 	private Vector3 PlayerJoystickMovement()
@@ -110,6 +116,14 @@ public class KeyboardSeek : SimpleSeek {
 					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
 					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 				}
+				if(pulse != null)
+				{
+					GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
+					foreach(GameObject livePulse in pulseArray)
+						if(Vector3.Distance(livePulse.transform.position, transform.position) < 10.0f)
+							livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
+				}
+
 			}
 		}
 		else if(absorb != null)
