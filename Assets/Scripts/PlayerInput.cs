@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class KeyboardSeek : SimpleSeek {
-
+public class PlayerInput : MonoBehaviour {
+	public SimpleMover mover;
+	public PartnerLink partnerLink;
+	public Tracer tracer;
+	protected Collider tailTrigger;
 	public GameObject pulsePrefab;
 	private GameObject pulse;
 	public enum Player{Player1, Player2};
