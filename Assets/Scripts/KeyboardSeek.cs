@@ -31,9 +31,17 @@ public class KeyboardSeek : SimpleSeek {
 	private Vector3 particleRotation;
 	private Color pOneCol;
 	private Color pTwoCol;
+	private Vector3 zeroZ;
+
+	void Start ()
+	{
+
+	}
 
 	void Update () {
-
+		zeroZ = transform.position;
+		zeroZ.z = 0;
+		transform.position = zeroZ;
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
