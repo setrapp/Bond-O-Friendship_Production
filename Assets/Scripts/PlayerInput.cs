@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class KeyboardSeek : SimpleSeek {
-
+public class PlayerInput : MonoBehaviour {
+	public SimpleMover mover;
+	public PartnerLink partnerLink;
+	public Tracer tracer;
+	protected Collider tailTrigger;
 	public GameObject pulsePrefab;
 	private GameObject pulse;
 	public enum Player{Player1, Player2};
@@ -28,53 +31,75 @@ public class KeyboardSeek : SimpleSeek {
 	private Vector3 target;
 	public float absorbStrength = 20.0f;
 
+	private bool paused = false;
+
 	void Update () {
 
-		velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
-		// Movement
-		if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
-		{
-			velocityChange += Vector3.up;
-		}
-		if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
-		{
-			velocityChange -= Vector3.right;
-		}
-		if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
-		{
-			velocityChange -= Vector3.up;
-		}
-		if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
-		{
-			velocityChange += Vector3.right;
-		}
-		transform.LookAt(transform.position + velocityChange, transform.up);
 
-		PlayerLookAt(useKeyboard);
+		var gamepads = Input.GetJoystickNames();
+		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
 
-		//Draw the line
-		if (velocityChange.sqrMagnitude > 0)
+		if(Input.GetButtonDown("Pause"))
 		{
-			mover.Accelerate(velocityChange);
-			if (tracer.lineRenderer == null)
-				tracer.StartLine();
+			if(paused)
+				Time.timeScale = 1;
 			else
-				tracer.AddVertex(transform.position);
-		}
-		else
-		{
-			mover.SlowDown();
-			tracer.DestroyLine();
+				Time.timeScale = 0;
+
+			paused = !paused;
 		}
 
-		geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
-		if(pulseParticle != null && pulse != null)
+		if(!paused)
 		{
-			pulseParticle.transform.position = pulse.transform.position;
-		}
-		if(absorb != null)
-		{
-			absorb.transform.position = transform.position;
+			velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
+			// Movement
+			if(useKeyboard)
+			{
+				if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
+				{
+					velocityChange += Vector3.up;
+				}
+				if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
+				{
+					velocityChange -= Vector3.right;
+				}
+				if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
+				{
+					velocityChange -= Vector3.up;
+				}
+				if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
+				{
+					velocityChange += Vector3.right;
+				}
+				transform.LookAt(transform.position + velocityChange, transform.up);
+			}
+
+			PlayerLookAt(useKeyboard);
+
+			//Draw the line
+			if (velocityChange.sqrMagnitude > 0)
+			{
+				mover.Accelerate(velocityChange);
+				if (tracer.lineRenderer == null)
+					tracer.StartLine();
+				else
+					tracer.AddVertex(transform.position);
+			}
+			else
+			{
+				mover.SlowDown();
+				tracer.DestroyLine();
+			}
+
+			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
+			if(pulseParticle != null && pulse != null)
+			{
+				pulseParticle.transform.position = pulse.transform.position;
+			}
+			if(absorb != null)
+			{
+				absorb.transform.position = transform.position;
+			}
 		}
 	}
 
@@ -116,13 +141,10 @@ public class KeyboardSeek : SimpleSeek {
 					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
 					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 				}
-				if(pulse != null)
-				{
-					GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
-					foreach(GameObject livePulse in pulseArray)
-						if(Vector3.Distance(livePulse.transform.position, transform.position) < 10.0f)
-							livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
-				}
+				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
+				foreach(GameObject livePulse in pulseArray)
+					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != gameObject)
+						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
 
 			}
 		}
@@ -202,8 +224,6 @@ public class KeyboardSeek : SimpleSeek {
 	private float GetAxisMoveVertical(){return Input.GetAxis("MoveVertical" + playerNumber.ToString());}
 	private float GetAxisAimHorizontal(){return Input.GetAxis("AimHorizontal" + playerNumber.ToString());}
 	private float GetAxisAimVertical(){return Input.GetAxis("AimVertical" + playerNumber.ToString());}
-	private float GetAxisGive(){return Input.GetAxis("Give" + playerNumber.ToString());}
-	private float GetAxisTake(){return Input.GetAxis("Take" + playerNumber.ToString());}
 
 	private bool GetButtonFirePulse()
 	{
