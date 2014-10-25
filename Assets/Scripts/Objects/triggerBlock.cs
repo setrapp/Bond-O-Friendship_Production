@@ -10,6 +10,7 @@ public class triggerBlock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		renderer.material.color = Color.cyan;
 		myColor = renderer.material.color;
 		triggerTime = 0.0f;
 	}
