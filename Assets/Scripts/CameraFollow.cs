@@ -3,19 +3,13 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
-    public Transform climber1;
-    public Transform climber2;
-    public float smoothness;
+    public Transform player1;
+    public Transform player2;
+    public float smoothness = 20;
     private Vector3 targetPosition;
 
-	// Use this for initialization
-	void Start () {
-        smoothness = 20;
-	}
-	
-	// Update is called once per frame
 	void Update () {
-        targetPosition = new Vector3((climber1.position.x + climber2.position.x) / 2, (climber1.position.y + climber2.position.y) / 2, -10);
+        targetPosition = new Vector3((player1.position.x + player2.position.x) / 2, (player1.position.y + player2.position.y) / 2, -10);
         transform.position = Vector3.Lerp(transform.position, targetPosition, 1/smoothness);
         //transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1 / smoothness);
 	}
