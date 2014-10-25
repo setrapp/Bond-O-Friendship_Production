@@ -11,7 +11,7 @@ public class PulseLife : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Invoke("DestroyPulse", 4.0f);
+		Invoke("DestroyPulse", 2.0f);
 	
 	}
 
@@ -19,4 +19,13 @@ public class PulseLife : MonoBehaviour {
 	{
 		Destroy(gameObject);
 	}
+	void OnTriggerEnter(Collider collide)
+	{
+		if(collide.gameObject.tag == "Object")
+		{
+			Destroy(gameObject);
+		}
+
+	}
+
 }
