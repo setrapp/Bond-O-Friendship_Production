@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SteeredCharacter : MonoBehaviour {
 	public Vector3 target;
+	public float slowDistance;
 	public bool seeking;
 	public SteeringBehaviors steering;
 	
@@ -20,6 +21,7 @@ public class SteeredCharacter : MonoBehaviour {
 		{
 			if (seeking)
 			{
+				//steering.Arrive(target, slowDistance);
 				steering.Seek(target);
 			}
 			else
@@ -27,5 +29,11 @@ public class SteeredCharacter : MonoBehaviour {
 				steering.Flee(target);
 			}
 		}
+	}
+
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.white;
+		Gizmos.DrawLine(transform.position, transform.position + steering.mover.velocity);
 	}
 }
