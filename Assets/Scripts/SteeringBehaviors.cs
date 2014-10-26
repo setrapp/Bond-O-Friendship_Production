@@ -14,9 +14,14 @@ public class SteeringBehaviors : MonoBehaviour {
 	}
 
 
-	public void Seek(Vector3 seekTarget, bool forceFullAcceleration = true)
+	public void Seek(Vector3 seekTarget, bool arrive = false)
 	{
-		mover.Accelerate((seekTarget - transform.position) - mover.velocity, forceFullAcceleration);
+		Vector3 desiredVelocity = seekTarget - transform.position;
+		if (!arrive)
+		{
+			desiredVelocity = desiredVelocity.normalized * mover.maxSpeed;
+		}
+		mover.Accelerate(desiredVelocity - mover.velocity, !arrive);
 	}
 
 	public void Flee(Vector3 fleeTarget)
@@ -29,27 +34,5 @@ public class SteeringBehaviors : MonoBehaviour {
 		{
 			Seek(transform.position + ((transform.position - fleeTarget) * 2));
 		}
-	}
-
-	public void Arrive(Vector3 target, float slowDistance)
-	{
-		if ((transform.position - target).sqrMagnitude > Mathf.Pow(slowDistance, 2))
-		{
-			Seek(target);
-		}
-		else// if ((transform.position - target).sqrMagnitude > Mathf.Pow(mover.dampeningThreshold, 2))
-		{
-			Vector3 toTarget = target - transform.position;
-			float toTargetMagnitude = toTarget.magnitude;
-			Vector3 desiredVelocity = (toTarget / toTargetMagnitude) * mover.maxSpeed * (toTargetMagnitude / slowDistance);
-			Vector3 velocityChange = desiredVelocity - mover.velocity;
-			//Seek(velocityChange);
-			mover.Accelerate(velocityChange, false);
-		}
-		//else
-		//{
-		//	mover.Stop();
-		//}
-		//Debug.Log(mover.velocity.magnitude);
 	}
 }

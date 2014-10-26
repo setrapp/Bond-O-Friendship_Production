@@ -22,7 +22,7 @@ public class SteeredCharacter : MonoBehaviour {
 			if (seeking)
 			{
 				//steering.Arrive(target, slowDistance);
-				steering.Seek(target);
+				steering.Seek(target, true);
 			}
 			else
 			{
