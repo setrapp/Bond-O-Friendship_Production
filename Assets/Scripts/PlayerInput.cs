@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class KeyboardSeek : SimpleSeek {
-
+public class PlayerInput : MonoBehaviour {
+	public SimpleMover mover;
+	public PartnerLink partnerLink;
+	public Tracer tracer;
+	protected Collider tailTrigger;
 	public GameObject pulsePrefab;
 	private GameObject pulse;
 	public enum Player{Player1, Player2};
@@ -26,6 +29,7 @@ public class KeyboardSeek : SimpleSeek {
 	private ParticleSystem pulseParticle;
 	private ParticleSystem absorb;
 	private Vector3 target;
+	private float pulseScale;
 	public float absorbStrength = 20.0f;
 
 	private bool paused = false;
@@ -131,6 +135,7 @@ public class KeyboardSeek : SimpleSeek {
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
 				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				pulseScale += Time.deltaTime;
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -138,13 +143,10 @@ public class KeyboardSeek : SimpleSeek {
 					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
 					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 				}
-				if(pulse != null)
-				{
-					GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
-					foreach(GameObject livePulse in pulseArray)
-						if(Vector3.Distance(livePulse.transform.position, transform.position) < 10.0f)
-							livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
-				}
+				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
+				foreach(GameObject livePulse in pulseArray)
+					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != gameObject)
+						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
 
 			}
 		}
@@ -152,6 +154,7 @@ public class KeyboardSeek : SimpleSeek {
 		{
 			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
 			Destroy(absorb.gameObject, 1.0f);
+			pulseScale = 0;
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
@@ -196,11 +199,14 @@ public class KeyboardSeek : SimpleSeek {
 	void FirePulse(Vector3 pulseTarget, float pulseCapacity)
 	{
 		pulse = Instantiate(pulsePrefab, transform.position, Quaternion.identity) as GameObject;
+		//pulse.transform.localScale += new Vector3(pulseScale, pulseScale, pulseScale);
+
 		MovePulse movePulse = pulse.GetComponent<MovePulse>();
 		movePulse.target = pulseTarget;
 		movePulse.creator = gameObject;
 		movePulse.capacity = pulseCapacity;
-		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
+		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
+		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 

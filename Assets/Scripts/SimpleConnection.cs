@@ -19,6 +19,9 @@ public class SimpleConnection : MonoBehaviour {
 	public List<PulsePoint> pulsePoints;
 	public int nextFluctuationDirection = 1;
 	public bool bouncePulseOnReject = false;
+	public float partnerDist;
+	public GameObject Shield;
+
 
 	void Start()
 	{
@@ -27,6 +30,8 @@ public class SimpleConnection : MonoBehaviour {
 
 	void Update()
 	{
+		partnerDist = Vector3.Distance(partner1.transform.position,partner2.transform.position);
+		Shield.transform.position = (partner1.transform.position + partner2.transform.position) * 0.5f;
 		// Only enable line renderers while connected;
 		lineRenderer1.enabled = lineRenderer2.enabled = connected;
 
@@ -123,6 +128,21 @@ public class SimpleConnection : MonoBehaviour {
 			{
 				connected = false;
 			}
+
+			if(partnerDist < 1.5f)
+			{
+				Shield.SendMessage("Activate", SendMessageOptions.DontRequireReceiver);
+			}
+			else
+				Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
+		
+
+		}
+
+
+		if(partnerDist > 1)
+		{
+
 		}
 	}
 
