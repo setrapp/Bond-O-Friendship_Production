@@ -33,7 +33,10 @@ public class SteeredCharacter : MonoBehaviour {
 
 	void OnDrawGizmos()
 	{
-		Gizmos.color = Color.white;
-		Gizmos.DrawLine(transform.position, transform.position + steering.mover.velocity);
+		if (steering != null && steering.mover != null)
+		{
+			Gizmos.color = Color.white;
+			Gizmos.DrawLine(transform.position, transform.position + steering.mover.velocity);
+		}
 	}
 }
