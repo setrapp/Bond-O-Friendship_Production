@@ -173,7 +173,7 @@ Transform:
   - {fileID: 1279677694}
   - {fileID: 1794752910}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!114 &46707682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5900,7 +5900,7 @@ Transform:
   - {fileID: 1279444797}
   - {fileID: 15457273}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
 --- !u!1 &425087293
 GameObject:
   m_ObjectHideFlags: 0
@@ -7033,7 +7033,7 @@ Transform:
   m_Children:
   - {fileID: 1524953687}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
 --- !u!1 &539418083
 GameObject:
   m_ObjectHideFlags: 0
@@ -7102,6 +7102,7 @@ MonoBehaviour:
   headRenderer: {fileID: 1639980968}
   fillRenderer: {fileID: 943335719}
   partnerLine: {fileID: 0}
+  pulseShot: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
   tracer: {fileID: 0}
@@ -7398,6 +7399,7 @@ GameObject:
   - 114: {fileID: 615922741}
   - 114: {fileID: 615922739}
   - 114: {fileID: 615922740}
+  - 114: {fileID: 615922746}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Converser
@@ -7443,7 +7445,6 @@ MonoBehaviour:
   useKeyboard: 1
   geometry: {fileID: 2009587432}
   deadZone: .75
-  basePulseSize: .5
   basePulsePower: 10
   timedPulsePower: 10
   basePulseDrain: .100000001
@@ -7483,6 +7484,7 @@ MonoBehaviour:
   headRenderer: {fileID: 1710023682}
   fillRenderer: {fileID: 1203932189}
   partnerLine: {fileID: 0}
+  pulseShot: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
   tracer: {fileID: 0}
@@ -7567,6 +7569,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &615922746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 1314614612}
+  m_GameObject: {fileID: 615922737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1467802f8cf8f549ad1891a667d2444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
+  basePulseSize: .5
 --- !u!1 &650336325
 GameObject:
   m_ObjectHideFlags: 0
@@ -9938,7 +9956,7 @@ Transform:
   - {fileID: 409887339}
   - {fileID: 543883158}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!114 &697231241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11403,6 +11421,64 @@ MeshFilter:
   m_PrefabInternal: {fileID: 548766186}
   m_GameObject: {fileID: 943335718}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &947874389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 947874391}
+  - 12: {fileID: 947874390}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!12 &947874390
+ParticleAnimator:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 947874389}
+  Does Animate Color?: 1
+  colorAnimation[0]:
+    serializedVersion: 2
+    rgba: 184549375
+  colorAnimation[1]:
+    serializedVersion: 2
+    rgba: 3036676095
+  colorAnimation[2]:
+    serializedVersion: 2
+    rgba: 4294967295
+  colorAnimation[3]:
+    serializedVersion: 2
+    rgba: 3036676095
+  colorAnimation[4]:
+    serializedVersion: 2
+    rgba: 184549375
+  worldRotationAxis: {x: 0, y: 0, z: 0}
+  localRotationAxis: {x: 0, y: 0, z: 0}
+  sizeGrow: 0
+  rndForce: {x: 0, y: 0, z: 0}
+  force: {x: 0, y: 0, z: 0}
+  damping: 1
+  stopSimulation: 0
+  autodestruct: 0
+--- !u!4 &947874391
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 947874389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.85680008, y: -.416799992, z: -2.1875}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
 --- !u!1 &948571339
 GameObject:
   m_ObjectHideFlags: 0
@@ -19883,6 +19959,7 @@ GameObject:
   - 114: {fileID: 1524186645}
   - 114: {fileID: 1524186639}
   - 114: {fileID: 1524186640}
+  - 114: {fileID: 1524186641}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Converser
@@ -19928,7 +20005,6 @@ MonoBehaviour:
   useKeyboard: 1
   geometry: {fileID: 948571339}
   deadZone: .75
-  basePulseSize: .5
   basePulsePower: 10
   timedPulsePower: 10
   basePulseDrain: .100000001
@@ -19951,6 +20027,22 @@ MonoBehaviour:
   ringDuration: 3
   ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
     type: 2}
+--- !u!114 &1524186641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 1161265615}
+  m_GameObject: {fileID: 1524186637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1467802f8cf8f549ad1891a667d2444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
+  basePulseSize: .5
 --- !u!114 &1524186645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19968,6 +20060,7 @@ MonoBehaviour:
   headRenderer: {fileID: 1591188692}
   fillRenderer: {fileID: 1907184596}
   partnerLine: {fileID: 0}
+  pulseShot: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
   tracer: {fileID: 0}

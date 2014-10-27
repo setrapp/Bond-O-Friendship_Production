@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MovePulse : MonoBehaviour {
 
-	public GameObject creator;
+	public PulseShot creator;
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;

@@ -7,6 +7,7 @@ public class PartnerLink : MonoBehaviour {
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
 	public LineRenderer partnerLine;
+	public PulseShot pulseShot;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
@@ -38,6 +39,10 @@ public class PartnerLink : MonoBehaviour {
 		if (partnerLine == null)
 		{
 			partnerLine = GetComponent<LineRenderer>();
+		}
+		if (pulseShot == null)
+		{
+			pulseShot = GetComponent<PulseShot>();
 		}
 
 		fillRenderer.material.color = headRenderer.material.color;
@@ -109,7 +114,7 @@ public class PartnerLink : MonoBehaviour {
 		{
 			
 			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && pulse.creator != gameObject)
+			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
 				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
 				Destroy(pulse.gameObject);
