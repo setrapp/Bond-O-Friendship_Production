@@ -29,6 +29,7 @@ public class PlayerInput : MonoBehaviour {
 	private ParticleSystem pulseParticle;
 	private ParticleSystem absorb;
 	private Vector3 target;
+	private float pulseScale;
 	public float absorbStrength = 20.0f;
 
 	private bool paused = false;
@@ -134,6 +135,7 @@ public class PlayerInput : MonoBehaviour {
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
 				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				pulseScale += Time.deltaTime;
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -152,6 +154,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
 			Destroy(absorb.gameObject, 1.0f);
+			pulseScale = 0;
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
@@ -196,11 +199,14 @@ public class PlayerInput : MonoBehaviour {
 	void FirePulse(Vector3 pulseTarget, float pulseCapacity)
 	{
 		pulse = Instantiate(pulsePrefab, transform.position, Quaternion.identity) as GameObject;
+		//pulse.transform.localScale += new Vector3(pulseScale, pulseScale, pulseScale);
+
 		MovePulse movePulse = pulse.GetComponent<MovePulse>();
 		movePulse.target = pulseTarget;
 		movePulse.creator = gameObject;
 		movePulse.capacity = pulseCapacity;
-		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
+		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
+		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
 
