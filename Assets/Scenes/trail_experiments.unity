@@ -3585,9 +3585,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1524186637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91bc19b9bcd54dd469b91718fea42483, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
+  scaleRate: .200000003
+  ringDuration: 3
+  ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
+    type: 2}
 --- !u!1 &342514634
 GameObject:
   m_ObjectHideFlags: 0
@@ -5270,39 +5275,29 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: 2.98023224e-08
+          value: -.242424175
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: .146341443
-          value: 1
+        - time: .199999958
+          value: .530303121
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: .336585283
-          value: -1
+        - time: .429268181
+          value: -.772727251
           inSlope: 0
           outSlope: 0
-          tangentMode: 0
-        - time: .502439022
+          tangentMode: 1
+        - time: .668292701
           value: 1
           inSlope: -.0705925226
           outSlope: -.0705925226
           tangentMode: 0
-        - time: .692682803
+        - time: .912194967
           value: -1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-        - time: .863414466
-          value: .969696999
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-        - time: .985365689
-          value: .030303061
-          inSlope: 0
-          outSlope: 0
+          inSlope: -0
+          outSlope: -0
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -5327,20 +5322,15 @@ ParticleSystem:
       maxCurve:
         serializedVersion: 2
         m_Curve:
-        - time: .00487804879
-          value: -.0151515156
-          inSlope: 4.80938387
-          outSlope: 4.80938387
-          tangentMode: 0
-        - time: .465396792
-          value: .071181953
-          inSlope: -1.2919172
-          outSlope: -1.2919172
+        - time: 0
+          value: .0454545617
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
         - time: 1
-          value: .818181813
-          inSlope: .43340373
-          outSlope: .43340373
+          value: .0454545617
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -8353,7 +8343,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 552371372}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -6.24749994, y: -11.5349998, z: 3.35509992}
+  m_LocalPosition: {x: -6.61339998, y: -11.5349998, z: 6.75489998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 172733312}
@@ -9649,12 +9639,19 @@ MonoBehaviour:
   mover: {fileID: 615922743}
   partnerLink: {fileID: 615922741}
   tracer: {fileID: 615922744}
-  pulse: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  pulsePrefab: {fileID: 0}
   playerNumber: 1
   pulseParticlePrefab: {fileID: 0}
+  absorbPrefab: {fileID: 0}
   useKeyboard: 1
   geometry: {fileID: 2009587432}
   deadZone: .75
+  basePulseSize: .5
+  basePulsePower: 10
+  timedPulsePower: 10
+  basePulseDrain: .100000001
+  timedPulseDrain: .100000001
+  absorbStrength: 20
 --- !u!96 &615922740
 TrailRenderer:
   m_ObjectHideFlags: 0
@@ -9722,8 +9719,11 @@ MonoBehaviour:
   attachPoint: {fileID: 1931528288}
   minScale: .25
   maxScale: 1
+  normalScale: 0
+  preChargeScale: 0
   scaleRestoreRate: .00499999989
-  preparingPulse: 0
+  endChargeRestoreRate: 0
+  chargingPulse: 0
 --- !u!54 &615922742
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20390,6 +20390,64 @@ Prefab:
   m_RootGameObject: {fileID: 68200333}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1084821825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100002, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+  m_PrefabInternal: {fileID: 541275122}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1084821828}
+  - 33: {fileID: 1084821827}
+  - 23: {fileID: 1084821826}
+  m_Layer: 9
+  m_Name: Mask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1084821826
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300004, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 541275122}
+  m_GameObject: {fileID: 1084821825}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 3c4cc1696145bcf40be854f63268ea99, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1084821827
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300004, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 541275122}
+  m_GameObject: {fileID: 1084821825}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1084821828
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400002, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+  m_PrefabInternal: {fileID: 541275122}
+  m_GameObject: {fileID: 1084821825}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: .5}
+  m_Children: []
+  m_Father: {fileID: 1524186638}
+  m_RootOrder: 2
 --- !u!1 &1122107408
 GameObject:
   m_ObjectHideFlags: 0
@@ -26436,6 +26494,7 @@ Transform:
   m_Children:
   - {fileID: 948571340}
   - {fileID: 1958472010}
+  - {fileID: 1084821828}
   m_Father: {fileID: 0}
   m_RootOrder: 5
 --- !u!114 &1524186639
@@ -26453,12 +26512,20 @@ MonoBehaviour:
   mover: {fileID: 1524186648}
   partnerLink: {fileID: 1524186645}
   tracer: {fileID: 1524186649}
-  pulse: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   playerNumber: 0
-  pulseParticlePrefab: {fileID: 0}
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
+  absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 1
   geometry: {fileID: 948571339}
   deadZone: .75
+  basePulseSize: .5
+  basePulsePower: 10
+  timedPulsePower: 10
+  basePulseDrain: .100000001
+  timedPulseDrain: .400000006
+  absorbStrength: 20
 --- !u!96 &1524186640
 TrailRenderer:
   m_ObjectHideFlags: 0
@@ -26525,9 +26592,12 @@ MonoBehaviour:
   empty: 0
   attachPoint: {fileID: 1958472009}
   minScale: .25
-  maxScale: 1
-  scaleRestoreRate: .00499999989
-  preparingPulse: 0
+  maxScale: 2
+  normalScale: 1
+  preChargeScale: 1
+  scaleRestoreRate: .200000003
+  endChargeRestoreRate: 1
+  chargingPulse: 0
 --- !u!54 &1524186646
 Rigidbody:
   m_ObjectHideFlags: 0
