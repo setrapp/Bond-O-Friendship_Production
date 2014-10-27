@@ -131,6 +131,8 @@ MonoBehaviour:
   pulseAmplitude: .5
   nextFluctuationDirection: 1
   bouncePulseOnReject: 0
+  partnerDist: 0
+  Shield: {fileID: 100000, guid: fcfa2ea6dc9fca4448217ca3c29830b4, type: 2}
 --- !u!1 &65823700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,6 +1335,7 @@ GameObject:
   - 54: {fileID: 615922742}
   - 114: {fileID: 615922741}
   - 114: {fileID: 615922739}
+  - 114: {fileID: 615922740}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Converser
@@ -1383,6 +1386,24 @@ MonoBehaviour:
   timedPulsePower: 10
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
+  absorbStrength: 20
+--- !u!114 &615922740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 1314614612}
+  m_GameObject: {fileID: 615922737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
+  scaleRate: .200000003
+  ringDuration: 3
+  ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
+    type: 2}
 --- !u!114 &615922741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1547,6 +1568,10 @@ Prefab:
       propertyPath: bouncePulseOnReject
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
+      propertyPath: Shield
+      value: 
+      objectReference: {fileID: 100000, guid: fcfa2ea6dc9fca4448217ca3c29830b4, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
   m_RootGameObject: {fileID: 46707680}
@@ -1959,6 +1984,7 @@ MonoBehaviour:
   timedPulsePower: 10
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
+  absorbStrength: 20
 --- !u!114 &1524186645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2514,8 +2540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climber1: {fileID: 1524186638}
-  climber2: {fileID: 615922738}
+  player1: {fileID: 1524186638}
+  player2: {fileID: 615922738}
   smoothness: 0
 --- !u!1 &1931528288
 GameObject:

@@ -24,6 +24,7 @@ public class EmitRing : MonoBehaviour {
 			ring.collider.isTrigger = true;
 			ring.transform.position = transform.position;
 			ring.GetComponent<RingCollision>().creator = gameObject;
+			ring.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		}
 
 		if(Input.GetKeyDown(KeyCode.Keypad1) && ring == null && gameObject.name == "Player 2")
@@ -32,6 +33,7 @@ public class EmitRing : MonoBehaviour {
 			ring.collider.isTrigger = true;
 			ring.transform.position = transform.position;
 			ring.GetComponent<RingCollision>().creator = gameObject;
+			ring.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		}
 
 		if(ring != null)
