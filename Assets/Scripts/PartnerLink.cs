@@ -25,6 +25,7 @@ public class PartnerLink : MonoBehaviour {
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
 	public bool chargingPulse = false;
+	public int volleysToConnect = 2;
 
 	void Awake()
 	{
@@ -103,12 +104,6 @@ public class PartnerLink : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other)
 	{
-		// If colliding with partner, reconnect.
-		if (!connection.connected && other.gameObject == partner.gameObject)
-		{
-			connection.connected = true;
-		}
-
 		// If colliding with a pulse, accept it.
 		if (other.gameObject.tag == "Pulse")
 		{
@@ -117,6 +112,16 @@ public class PartnerLink : MonoBehaviour {
 			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
 				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				pulseShot.volleys = 1;
+				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				{
+					pulseShot.volleys = pulse.volleys;
+				}
+				if (pulseShot.volleys >= volleysToConnect && !connection.connected)
+				{
+					connection.connected = true;
+				}
+				pulseShot.lastPulseAccepted = pulse.creator;
 				Destroy(pulse.gameObject);
 			}
 		}
