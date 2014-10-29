@@ -18,6 +18,7 @@ public class SimpleConnection : MonoBehaviour {
 	public float partnerDist;
 	public GameObject Shield;
 	public float attachPointDistance = 0.2f;
+	private GameObject bondCollider;
 
 	void Update()
 	{
@@ -43,7 +44,7 @@ public class SimpleConnection : MonoBehaviour {
 
 			// Set connection points.
 			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
-			//transform.position = midpoint;
+			transform.position = midpoint;
 			attachment1.lineRenderer.SetPosition(0, attachment1.position);
 			attachment1.lineRenderer.SetPosition(1, midpoint);
 			attachment2.lineRenderer.SetPosition(0, midpoint);
@@ -68,7 +69,25 @@ public class SimpleConnection : MonoBehaviour {
 			{
 				Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
 			}
+		
+			if(bondCollider == null)
+			{
+				bondCollider = new GameObject();
+				bondCollider.name = "Bond Collider";
+				bondCollider.AddComponent<BoxCollider>();
+			}
+			bondCollider.transform.position = (attachment1.partner.transform.position + attachment2.partner.transform.position)/2;
+			bondCollider.transform.localScale = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position), 0.5f, 10.0f);
+			bondCollider.transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
 		}
+
+		//if(!connected && bondCollider != null)
+		//	Destroy(bondCollider);
+
+		//if(partnerDist > 1)
+		//{
+
+		//}
 	}
 
 	public void AttachPartners(PartnerLink partner1, PartnerLink partner2)
