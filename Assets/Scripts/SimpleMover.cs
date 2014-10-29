@@ -33,7 +33,22 @@ public class SimpleMover : MonoBehaviour {
 		ApplyFreezes();
 		if (controller != null)
 		{
+			Vector3 beforeFreeze = transform.position;
 			controller.Move(velocity * Time.deltaTime);
+			Vector3 afterFreeze = transform.position;
+			if (freeze.velocityX)
+			{
+				afterFreeze.x = beforeFreeze.x;
+			}
+			if (freeze.velocityY)
+			{
+				afterFreeze.y = beforeFreeze.y;
+			}
+			if (freeze.velocityZ)
+			{
+				afterFreeze.z = beforeFreeze.z;
+			}
+			transform.position = afterFreeze;
 		}
 		else
 		{
