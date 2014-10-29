@@ -34,6 +34,7 @@ public class PulseShot : MonoBehaviour {
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
 		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+        pulse.transform.LookAt(pulseTarget, -Vector3.forward);
 
 		// Create particle trail behind pulse.
 		/*pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab, pulse.transform.position, Quaternion.identity);
