@@ -3,10 +3,13 @@ using System.Collections;
 
 public class MovePulse : MonoBehaviour {
 
-	public GameObject creator;
+	public PulseShot creator;
+	public PartnerLink volleyTarget;
+	public int volleys;
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;
+	public PulseShot volleyPartner;
 	
 	// Update is called once per frame
 	void Update () {

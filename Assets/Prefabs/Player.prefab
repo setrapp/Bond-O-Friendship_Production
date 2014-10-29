@@ -81,6 +81,7 @@ GameObject:
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: Player
   m_TagString: Converser
@@ -320,6 +321,25 @@ MonoBehaviour:
   ringDuration: 3
   ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
     type: 2}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1467802f8cf8f549ad1891a667d2444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partnerLink: {fileID: 0}
+  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
+    type: 2}
+  basePulseSize: .5
+  lastPulseAccepted: {fileID: 0}
+  volleyOnlyFirst: 1
+  volleys: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -332,17 +352,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 1
-  partner: {fileID: 0}
   headRenderer: {fileID: 2300002}
   fillRenderer: {fileID: 2300000}
-  partnerLine: {fileID: 0}
+  pulseShot: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
   tracer: {fileID: 0}
+  connectionPrefab: {fileID: 100004, guid: 75e0e37f567480d40bdb8497ad9735be, type: 2}
   connection: {fileID: 0}
   fillScale: 1
   empty: 0
-  attachPoint: {fileID: 100014}
   minScale: .25
   maxScale: 2
   normalScale: 1
@@ -350,6 +369,7 @@ MonoBehaviour:
   scaleRestoreRate: .200000003
   endChargeRestoreRate: 1
   chargingPulse: 0
+  volleysToConnect: 2
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -364,15 +384,11 @@ MonoBehaviour:
   mover: {fileID: 11400012}
   partnerLink: {fileID: 11400004}
   tracer: {fileID: 11400014}
-  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   playerNumber: 0
-  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
-    type: 2}
   absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 1
   geometry: {fileID: 100006}
   deadZone: .75
-  basePulseSize: .5
   basePulsePower: 10
   timedPulsePower: 10
   basePulseDrain: .100000001
