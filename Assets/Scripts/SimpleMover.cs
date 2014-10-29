@@ -7,7 +7,7 @@ public class SimpleMover : MonoBehaviour {
 	public float acceleration;
 	public float handling;
 	public float dampening = 0.9f;
-	public float dampeningThreshold;
+	public float dampeningThreshold = 0.005f;
 	public float externalSpeedMultiplier = 1;
 	public SimpleFreeze freeze;
 	private bool moving;
@@ -55,22 +55,51 @@ public class SimpleMover : MonoBehaviour {
 		velocity = Vector3.zero;
 	}
 
-	public void Accelerate(Vector3 direction) {
-		if (direction.sqrMagnitude != 1)
+	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true)
+	{
+		if (forceFullAcceleration && velocityChange.sqrMagnitude != 1)
 		{
-			direction.Normalize();
+			velocityChange.Normalize();
 		}
 
-		if (velocity.sqrMagnitude <= 0) 
+		if (velocity.sqrMagnitude <= 0)
 		{
-			velocity += direction * acceleration * Time.deltaTime;
+			if (forceFullAcceleration)
+			{
+				velocity += velocityChange * acceleration * Time.deltaTime;
+			}
+			else if (velocityChange.sqrMagnitude > Mathf.Pow(acceleration, 2))
+			{
+				velocity += velocityChange.normalized * acceleration * Time.deltaTime;
+			}
+			else
+			{
+				velocity += velocityChange * Time.deltaTime;
+			}
 		}
 		else 
 		{
-			Vector3 parallel = Helper.ProjectVector(velocity, direction);
-			Vector3 perpendicular = direction - parallel;
+			Vector3 parallel = Helper.ProjectVector(velocity, velocityChange);
+			Vector3 perpendicular = velocityChange - parallel;
 
-			velocity += ((parallel * acceleration) + (perpendicular * handling)) * Time.deltaTime;
+			if (forceFullAcceleration)
+			{
+				parallel *= acceleration * Time.deltaTime;
+				perpendicular *= handling * Time.deltaTime;
+			}
+			else
+			{
+				if (parallel.sqrMagnitude > Mathf.Pow(acceleration, 2))
+				{
+					parallel = parallel.normalized * acceleration * Time.deltaTime;
+				}
+				if (perpendicular.sqrMagnitude > Mathf.Pow(handling, 2))
+				{
+					perpendicular = perpendicular.normalized * handling * Time.deltaTime;
+				}
+			}
+
+			velocity += (parallel + perpendicular);
 		}
 
 		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
