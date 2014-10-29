@@ -18,17 +18,17 @@ public class RingCollision : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider col) {
-        if (col.gameObject != creator)
-        {
-            collidedParticle = (ParticleSystem)Instantiate(ringCollisionParticle);
-            collidedParticle.transform.position = col.transform.position;
-            if (col.name == "Player 1")
-                collidedParticle.startColor = col.GetComponent<PartnerLink>().headRenderer.material.color;
-            else if (col.name == "Player 2")
+		if (col.gameObject != creator)
+		{
+			collidedParticle = (ParticleSystem)Instantiate(ringCollisionParticle);
+			collidedParticle.transform.position = col.transform.position;
+			if (col.name == "Player 1")
+				collidedParticle.startColor = col.GetComponent<PartnerLink>().headRenderer.material.color;
+			else if (col.name == "Player 2")
 				collidedParticle.startColor = col.GetComponent<PartnerLink>().headRenderer.material.color;
 			else
 				collidedParticle.startColor = col.renderer.material.color;
 			Destroy(collidedParticle.gameObject, 1.0f);
-        }
+		}
 	}
 }

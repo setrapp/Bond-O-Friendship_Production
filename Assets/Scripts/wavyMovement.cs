@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyPulse : MonoBehaviour {
+public class wavyMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
