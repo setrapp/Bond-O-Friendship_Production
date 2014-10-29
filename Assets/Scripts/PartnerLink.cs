@@ -100,7 +100,10 @@ public class PartnerLink : MonoBehaviour {
 			MovePulse pulse = other.GetComponent<MovePulse>();
 			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
-				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				if (contacts.Count < 1)
+				{
+					transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				}
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 				{
@@ -132,8 +135,15 @@ public class PartnerLink : MonoBehaviour {
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		
-		if (collision.collider.gameObject != gameObject)
+		bool collidingConnection = false;
+		for (int i = 0; i < connections.Count; i++)
+		{
+			if (connections[i].bondCollider.gameObject == collision.collider.gameObject)
+			{
+				collidingConnection = true;
+			}
+		}
+		if (collision.collider.gameObject != gameObject && !collidingConnection)
 		{
 			
 			for (int i = 0; i < collision.contacts.Length; i++)

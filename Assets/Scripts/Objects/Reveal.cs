@@ -12,15 +12,15 @@ public class Reveal : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		moveSpeed = 0.5f;
-		returnSpeed = 0.1f;
-		originalPos = transform.position;
+		moveSpeed = 0.6f;
+		returnSpeed = 0.5f;
+		originalPos = transform.localPosition;
 		pushPos = originalPos;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = pushPos;
+		transform.localPosition = pushPos;
 	if(trigger1.GetComponent<triggerBlock>().triggered)
 		{
 			if(pushPos.x > originalPos.x - 0.8)
@@ -37,7 +37,7 @@ public class Reveal : MonoBehaviour {
 		}
 	if(trigger2.GetComponent<triggerBlock>().triggered)
 		{
-			pushPos = transform.position;
+			pushPos = transform.localPosition;
 			returnSpeed = 0;
 			trigger1.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
 			trigger2.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
