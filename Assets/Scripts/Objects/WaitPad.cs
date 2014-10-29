@@ -38,12 +38,12 @@ public class WaitPad : MonoBehaviour {
 		if(collide.gameObject.name == "Player 1")
 		{
 			pOonPad = true;
-			print("1");
+			//print("1");
 		}
 		if(collide.gameObject.name == "Player 2")
 		{
 			pTonPad = true;
-			print ("2");
+			//print ("2");
 		}
 	}
 	void OnTriggerExit(Collider collide)
