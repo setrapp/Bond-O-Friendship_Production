@@ -161,7 +161,7 @@ public class PlayerInput : MonoBehaviour {
 					partnerLink.preChargeScale = transform.localScale.x;
 					firePulse = false;
 				}
-				else if(!GetButtonFirePulse() && startChargingPulse > 0)
+				else if (!GetButtonFirePulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
 					joystickPos *= basePulsePower +timedPulsePower * chargeTime;
 					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
