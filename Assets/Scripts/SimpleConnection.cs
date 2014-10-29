@@ -21,6 +21,7 @@ public class SimpleConnection : MonoBehaviour {
 	public bool bouncePulseOnReject = false;
 	public float partnerDist;
 	public GameObject Shield;
+	private GameObject bondCollider;
 
 
 	void Start()
@@ -136,9 +137,19 @@ public class SimpleConnection : MonoBehaviour {
 			else
 				Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
 		
-
+			if(bondCollider == null)
+			{
+				bondCollider = new GameObject();
+				bondCollider.name = "Bond Collider";
+				bondCollider.AddComponent<BoxCollider>();
+			}
+			bondCollider.transform.position = (partner1.transform.position + partner2.transform.position)/2;
+			bondCollider.transform.localScale = new Vector3(Vector3.Distance(partner1.transform.position, partner2.transform.position), 0.5f, 10.0f);
+			bondCollider.transform.up = Vector3.Cross(partner1.transform.position - partner2.transform.position, Vector3.forward);
 		}
 
+		if(!connected && bondCollider != null)
+			Destroy(bondCollider);
 
 		if(partnerDist > 1)
 		{
