@@ -26,6 +26,8 @@ public class PartnerLink : MonoBehaviour {
 	public float endChargeRestoreRate;
 	public bool chargingPulse = false;
 	public int volleysToConnect = 2;
+	[SerializeField]
+	public List<ContactPoint> contacts;
 
 	void Awake()
 	{
@@ -43,6 +45,8 @@ public class PartnerLink : MonoBehaviour {
 		}
 
 		fillRenderer.material.color = headRenderer.material.color;
+
+		contacts = new List<ContactPoint>();
 	}
 	
 	void Update()
@@ -60,28 +64,31 @@ public class PartnerLink : MonoBehaviour {
 			preChargeScale = transform.localScale.x;
 		}
 
-		// Restore scale up to normal, if below it and not charging.
-		if (transform.localScale.x < normalScale && !chargingPulse)
+		if (contacts.Count < 1)
 		{
-			// If scale is less than the scale before starting charge, scale up to that first.
-			if (transform.localScale.x < preChargeScale)
+			// Restore scale up to normal, if below it and not charging.
+			if (transform.localScale.x < normalScale && !chargingPulse)
 			{
-				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + endChargeRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + endChargeRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + endChargeRestoreRate * Time.deltaTime, normalScale));
+				// If scale is less than the scale before starting charge, scale up to that first.
+				if (transform.localScale.x < preChargeScale)
+				{
+					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + endChargeRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + endChargeRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + endChargeRestoreRate * Time.deltaTime, normalScale));
+				}
+				else
+				{
+					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, normalScale));
+				}
 			}
-			else
-			{
-				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + scaleRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + scaleRestoreRate * Time.deltaTime, normalScale));
-			}
-		}
 
-		// Stay within scale bounds.
-		if (transform.localScale.x < minScale)
-		{
-			transform.localScale = new Vector3(minScale, minScale, minScale);
-		}
-		else if (transform.localScale.x > maxScale)
-		{
-			transform.localScale = new Vector3(maxScale, maxScale, maxScale);
+			// Stay within scale bounds.
+			if (transform.localScale.x < minScale)
+			{
+				transform.localScale = new Vector3(minScale, minScale, minScale);
+			}
+			else if (transform.localScale.x > maxScale)
+			{
+				transform.localScale = new Vector3(maxScale, maxScale, maxScale);
+			}
 		}
 	}
 
@@ -93,7 +100,10 @@ public class PartnerLink : MonoBehaviour {
 			MovePulse pulse = other.GetComponent<MovePulse>();
 			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
-				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				if (contacts.Count < 1)
+				{
+					transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				}
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 				{
@@ -121,10 +131,44 @@ public class PartnerLink : MonoBehaviour {
 				Destroy(pulse.gameObject);
 			}
 		}
-		/*if(other.gameObject.tag == "enemyPulse")
+	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		bool collidingConnection = false;
+		for (int i = 0; i < connections.Count; i++)
 		{
-			print("pulse");
-			connection.connected = false;
-		}*/
+			if (connections[i].bondCollider.gameObject == collision.collider.gameObject)
+			{
+				collidingConnection = true;
+			}
+		}
+		if (collision.collider.gameObject != gameObject && !collidingConnection)
+		{
+			
+			for (int i = 0; i < collision.contacts.Length; i++)
+			{
+				contacts.Add(collision.contacts[i]);
+			}
+		}
+	}
+
+	private void OnCollisionExit(Collision collision)
+	{
+
+		if (collision.collider.gameObject != gameObject)
+		{
+			
+			for (int i = 0; i < collision.contacts.Length; i++)
+			{
+				for (int j = 0; j < contacts.Count; j++)
+				{
+					if (contacts[j].otherCollider == collision.contacts[i].otherCollider)
+					{
+						contacts.RemoveAt(j);
+					}
+				}
+			}
+		}
 	}
 }

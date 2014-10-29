@@ -38,30 +38,34 @@ public class MovePulse : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "Pulse")
 		{
-			if(creator != null && creator.name == "Player 1")
+			MovePulse otherPulse = collide.GetComponent<MovePulse>();
+			if (otherPulse != null && otherPulse.creator != creator)
 			{
-				PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
-				pulseCombo.pulseOne = true;
-				pulseCombo.pulseOnePos = transform.position;
-				pulseCombo.p1Cap = capacity;
-				pulseCombo.p1Quat = Quaternion.identity;
-				pulseCombo.p1For = Vector3.forward;
-				pulseCombo.p1scale = transform.localScale;
-				pulseCombo.p1Targ = target;
-			}
-			if (creator != null && creator.name == "Player 2")
-			{
-				PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
-				pulseCombo.pulseTwo = true;
-				pulseCombo.pulseTwoPos = transform.position;
-				pulseCombo.p2Cap = capacity;
-				pulseCombo.p2Quat = Quaternion.identity;
-				pulseCombo.p2For = Vector3.forward;
-				pulseCombo.p2scale = transform.localScale;
-				pulseCombo.p2Targ = target;
-			}
+				if (creator != null && creator.name == "Player 1")
+				{
+					PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
+					pulseCombo.pulseOne = true;
+					pulseCombo.pulseOnePos = transform.position;
+					pulseCombo.p1Cap = capacity;
+					pulseCombo.p1Quat = Quaternion.identity;
+					pulseCombo.p1For = Vector3.forward;
+					pulseCombo.p1scale = transform.localScale;
+					pulseCombo.p1Targ = target;
+				}
+				if (creator != null && creator.name == "Player 2")
+				{
+					PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
+					pulseCombo.pulseTwo = true;
+					pulseCombo.pulseTwoPos = transform.position;
+					pulseCombo.p2Cap = capacity;
+					pulseCombo.p2Quat = Quaternion.identity;
+					pulseCombo.p2For = Vector3.forward;
+					pulseCombo.p2scale = transform.localScale;
+					pulseCombo.p2Targ = target;
+				}
 
-			Destroy(gameObject);
+				Destroy(gameObject);
+			}
 		}
 	}
 }
