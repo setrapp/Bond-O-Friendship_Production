@@ -38,7 +38,7 @@ public class MovePulse : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "Pulse")
 		{
-			if(creator.name == "Player 1")
+			if(creator != null && creator.name == "Player 1")
 			{
 				PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
 				pulseCombo.pulseOne = true;
@@ -49,7 +49,7 @@ public class MovePulse : MonoBehaviour {
 				pulseCombo.p1scale = transform.localScale;
 				pulseCombo.p1Targ = target;
 			}
-			if(creator.name == "Player 2")
+			if (creator != null && creator.name == "Player 2")
 			{
 				PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
 				pulseCombo.pulseTwo = true;
@@ -60,7 +60,7 @@ public class MovePulse : MonoBehaviour {
 				pulseCombo.p2scale = transform.localScale;
 				pulseCombo.p2Targ = target;
 			}
-			//print("collide");
+
 			Destroy(gameObject);
 		}
 	}

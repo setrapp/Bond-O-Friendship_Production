@@ -36,7 +36,6 @@ public class PulseCombo : MonoBehaviour {
 	void Update () {
 		if(pulseOne == true && pulseTwo == true)
 		{
-			print ("combo");
 			newPos = (pulseOnePos + pulseTwoPos)*0.5f;
 			forAv = (p1For+p2For)*0.5f;
 			forQuat = Quaternion.LookRotation(forAv);
