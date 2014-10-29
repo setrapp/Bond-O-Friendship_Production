@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Testing : MonoBehaviour {
+public class SplitMaskController : MonoBehaviour {
 
 	public GameObject player1;
 	public GameObject player2;
 
 	public bool splitScreen = false;
+	public GameObject camera1;
+	public GameObject camera2;
 	public GameObject splitScreenCam;
 
 	public GameObject pivot;
@@ -36,7 +38,7 @@ public class Testing : MonoBehaviour {
 		if(splitScreen == false)
 		{
 			mainPivot.SetActive(false);
-			if(testPlayerOne.x < -0.1f || testPlayerOne.x > 1.1f || testPlayerOne.y < -0.1f || testPlayerOne.y > 1.1f || testPlayerTwo.x < -0.1f || testPlayerTwo.x > 1.1f || testPlayerTwo.y < -0.1f || testPlayerTwo.y > 1.1f)
+			/*if(testPlayerOne.x < -0.1f || testPlayerOne.x > 1.1f || testPlayerOne.y < -0.1f || testPlayerOne.y > 1.1f || testPlayerTwo.x < -0.1f || testPlayerTwo.x > 1.1f || testPlayerTwo.y < -0.1f || testPlayerTwo.y > 1.1f)
 			{
 				splitScreen = true;
 				if(!splitScreenCam.activeSelf)
@@ -46,7 +48,7 @@ public class Testing : MonoBehaviour {
 				Camera.main.GetComponent<CameraFollow>().splitScreen = true;
 
 				//Debug.Log("Here");
-			}
+			}*/
 		}
 
 		if(splitScreen)
@@ -64,7 +66,7 @@ public class Testing : MonoBehaviour {
 				splitScreen = false;
 				splitScreenCam.SetActive(false);
 				//splitScreenCam.transform.position += new Vector3(100f, 100f, -10f);
-				Camera.main.GetComponent<CameraFollow>().splitScreen = false;
+				//Camera.main.GetComponent<CameraFollow>().splitScreen = false;
 			}
 
 			pivot.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));

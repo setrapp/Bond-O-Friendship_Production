@@ -28,10 +28,12 @@ public class CameraSplitter : MonoBehaviour {
 		if ((player1CameraSystem.transform.position - player2CameraSystem.transform.position).sqrMagnitude < Mathf.Pow(combineDistance, 2))
 		{
 			split = false;
+			//Debug.Log("unsplit");
 		}
 		else if ((player1CameraSystem.transform.position - player2CameraSystem.transform.position).sqrMagnitude > Mathf.Pow(splitDistance, 2))
 		{
 			split = true;
+			//Debug.Log("split");
 		}
 
 		if (split != wasSplit)
