@@ -6,27 +6,22 @@ public class PlayerInput : MonoBehaviour {
 	public PartnerLink partnerLink;
 	public Tracer tracer;
 	protected Collider tailTrigger;
-	public GameObject pulsePrefab;
-	private GameObject pulse;
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
-	public ParticleSystem pulseParticlePrefab;
 	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
 
-	public GameObject geometry;	
+	public GameObject geometry;
 	public float deadZone = .75f;
 
 	private bool firePulse = true;
 	private float startChargingPulse = 0f;
 	private Vector3 velocityChange;
-	public float basePulseSize = 0.5f;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
 	public float basePulseDrain = 0.1f;
 	public float timedPulseDrain = 0.1f;
-	private ParticleSystem pulseParticle;
 	private ParticleSystem absorb;
 	private Vector3 target;
 	public float absorbStrength = 20.0f;
@@ -92,10 +87,6 @@ public class PlayerInput : MonoBehaviour {
 			}
 
 			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
-			if(pulseParticle != null && pulse != null)
-			{
-				pulseParticle.transform.position = pulse.transform.position;
-			}
 			if(absorb != null)
 			{
 				absorb.transform.position = transform.position;
@@ -143,7 +134,7 @@ public class PlayerInput : MonoBehaviour {
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != gameObject)
+					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
 						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
 
 			}
@@ -165,16 +156,16 @@ public class PlayerInput : MonoBehaviour {
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					joystickPos *= basePulsePower;
-					FirePulse(transform.position + mover.velocity + joystickPos, basePulseDrain);
+					partnerLink.pulseShot.Shoot(transform.position + mover.velocity + joystickPos, basePulseDrain);
 					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.preChargeScale = transform.localScale.x;
 					firePulse = false;
 				}
-				else if(!GetButtonFirePulse() && startChargingPulse > 0)
+				else if (!GetButtonFirePulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
 					joystickPos *= basePulsePower +timedPulsePower * chargeTime;
 					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					FirePulse(transform.position + mover.velocity + joystickPos, basePulseDrain + timedPulseDrain * Time.deltaTime);
+					partnerLink.pulseShot.Shoot(transform.position + mover.velocity + joystickPos, basePulseDrain + timedPulseDrain * Time.deltaTime);
 					firePulse = false;
 					partnerLink.chargingPulse = false;
 					partnerLink.preChargeScale = transform.localScale.x;
@@ -191,24 +182,6 @@ public class PlayerInput : MonoBehaviour {
 				startChargingPulse = 0f;
 			}
 		}
-	}
-
-	void FirePulse(Vector3 pulseTarget, float pulseCapacity)
-	{
-		pulse = Instantiate(pulsePrefab, transform.position, Quaternion.identity) as GameObject;
-		MovePulse movePulse = pulse.GetComponent<MovePulse>();
-		movePulse.target = pulseTarget;
-		movePulse.creator = gameObject;
-		movePulse.capacity = pulseCapacity;
-		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity, basePulseSize + pulseCapacity, basePulseSize + pulseCapacity);
-		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
-		pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab);
-
-		pulseParticle.transform.forward = transform.position-pulseTarget;
-		pulseParticle.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
-		pulseParticle.startSpeed = pulseTarget.magnitude;
-		Destroy (pulseParticle.gameObject, 2.0f);
-		Destroy(pulse, 10.0f);
 	}
 
 	bool CanFire(float costToFire)

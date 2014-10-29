@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Steering : MonoBehaviour {
+public class wavyMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
