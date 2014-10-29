@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PulseShot : MonoBehaviour {
+	public PartnerLink partnerLink;
 	public GameObject pulsePrefab;
 	private GameObject pulse;
 	public ParticleSystem pulseParticlePrefab;
@@ -11,6 +12,14 @@ public class PulseShot : MonoBehaviour {
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
+
+	void Start()
+	{
+		if (partnerLink == null)
+		{
+			partnerLink = GetComponent<PartnerLink>();
+		}
+	}
 
 	public void Shoot(Vector3 pulseTarget, float pulseCapacity)
 	{

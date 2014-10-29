@@ -79,7 +79,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.7030001, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -98,22 +98,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connected: 1
-  lineRenderer1: {fileID: 12000002}
-  lineRenderer2: {fileID: 12000000}
-  partner1: {fileID: 0}
-  partner2: {fileID: 0}
+  attachment1:
+    partner: {fileID: 0}
+    position: {x: 0, y: 0, z: 0}
+    lineRenderer: {fileID: 12000002}
+  attachment2:
+    partner: {fileID: 0}
+    position: {x: 0, y: 0, z: 0}
+    lineRenderer: {fileID: 12000000}
   minDistanceToDrain: 2
-  distancePerDrain: 20
-  scalePerPulse: 0
+  distancePerDrain: 15
+  scalePerPulse: .0199999996
   drained: 0
   endsWidth: .300000012
   midWidth: .5
   pulseSpeed: 12
   pulseAmplitude: .5
   nextFluctuationDirection: 1
-  bouncePulseOnReject: 0
+  bouncePulseOnReject: 1
   partnerDist: 0
   Shield: {fileID: 100000, guid: fcfa2ea6dc9fca4448217ca3c29830b4, type: 2}
+  attachPointDistance: .200000003
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1

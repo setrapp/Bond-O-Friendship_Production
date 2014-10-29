@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
-	public PartnerLink partner;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
-	public LineRenderer partnerLine;
 	public PulseShot pulseShot;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
 	[HideInInspector]
 	public Tracer tracer;
-	public SimpleConnection connection;
+	public GameObject connectionPrefab;
+	[SerializeField]
+	public List<SimpleConnection> connections;
 	[HideInInspector]
 	public float fillScale = 1;
 	public bool empty;
-	public GameObject attachPoint;
 	public float minScale;
 	public float maxScale;
 	public float normalScale;
@@ -37,10 +37,6 @@ public class PartnerLink : MonoBehaviour {
 		{
 			tracer = GetComponent<Tracer>();
 		}
-		if (partnerLine == null)
-		{
-			partnerLine = GetComponent<LineRenderer>();
-		}
 		if (pulseShot == null)
 		{
 			pulseShot = GetComponent<PulseShot>();
@@ -52,10 +48,11 @@ public class PartnerLink : MonoBehaviour {
 	void Update()
 	{
 		// Fill based on the amount drained by connection
+		if (connections == null || connections.Count < 1)
+		{
+			fillScale = 0;
+		}
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-
-		// Move attach point to edge near partner.
-		attachPoint.transform.position = transform.position + (partner.transform.position - transform.position).normalized * transform.localScale.magnitude * 0.2f;
 
 		// Record scale before starting charge.
 		if (!chargingPulse && preChargeScale < transform.localScale.x)
@@ -88,26 +85,11 @@ public class PartnerLink : MonoBehaviour {
 		}
 	}
 
-	public void SetPartner(PartnerLink partner)
-	{
-		this.partner = partner;
-		
-		if (partner != null)
-		{
-			SendMessage("LinkPartner", SendMessageOptions.DontRequireReceiver);
-		}
-		else
-		{
-			SendMessage("UnlinkPartner", SendMessageOptions.DontRequireReceiver);
-		}
-	}
-
 	private void OnTriggerEnter(Collider other)
 	{
 		// If colliding with a pulse, accept it.
 		if (other.gameObject.tag == "Pulse")
 		{
-			
 			MovePulse pulse = other.GetComponent<MovePulse>();
 			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
@@ -117,9 +99,23 @@ public class PartnerLink : MonoBehaviour {
 				{
 					pulseShot.volleys = pulse.volleys;
 				}
-				if (pulseShot.volleys >= volleysToConnect && !connection.connected)
+				if (pulseShot.volleys >= volleysToConnect)
 				{
-					connection.connected = true;
+					bool connectionAlreadyMade = false;
+					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+					{
+						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
+						{
+							connectionAlreadyMade = true;
+						}
+					}
+					if (!connectionAlreadyMade)
+					{
+						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+						connections.Add(newConnection);
+						pulse.creator.partnerLink.connections.Add(newConnection);
+						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;
 				Destroy(pulse.gameObject);
