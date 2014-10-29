@@ -19,6 +19,7 @@ public class Shield : MonoBehaviour {
 		renderer.material.color = myColor;
 		if(isActivated == true)
 		{
+			transform.collider.enabled = true;
 			//alphaFloat = 0.5f;
 			if(alphaFloat < 0.5f)
 			{
@@ -27,6 +28,7 @@ public class Shield : MonoBehaviour {
 		}
 		else if(isActivated == false)
 		{
+			transform.collider.enabled = false;
 			//alphaFloat = 0.0f;
 			if(alphaFloat > 0.0f)
 			{

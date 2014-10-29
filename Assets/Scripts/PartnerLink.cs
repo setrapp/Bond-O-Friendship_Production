@@ -115,5 +115,10 @@ public class PartnerLink : MonoBehaviour {
 				Destroy(pulse.gameObject);
 			}
 		}
+		if(other.gameObject.tag == "enemyPulse")
+		{
+			print("pulse");
+			connection.connected = false;
+		}
 	}
 }
