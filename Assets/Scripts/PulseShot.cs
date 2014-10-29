@@ -12,6 +12,7 @@ public class PulseShot : MonoBehaviour {
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
+	public Material pulseTrailMaterial;
 
 	void Start()
 	{
@@ -34,6 +35,11 @@ public class PulseShot : MonoBehaviour {
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
 		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+		TrailRenderer pulseTrail = pulse.GetComponent<TrailRenderer>();
+		if (pulseTrail != null)
+		{
+			pulseTrail.material = pulseTrailMaterial;
+		}
 
 		// Create particle trail behind pulse.
 		/*pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab, pulse.transform.position, Quaternion.identity);
