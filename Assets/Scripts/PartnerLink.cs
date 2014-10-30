@@ -6,6 +6,7 @@ public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
+	public TrailRenderer trail;
 	public PulseShot pulseShot;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
@@ -137,16 +138,16 @@ public class PartnerLink : MonoBehaviour {
 	private void OnCollisionEnter(Collision collision)
 	{
 		bool collidingConnection = false;
-		for (int i = 0; i < connections.Count; i++)
+		/*for (int i = 0; i < connections.Count; i++)
 		{
-			if (connections[i].bondCollider.gameObject == collision.collider.gameObject)
+			if (connections[i].bondCollider.gameObject == collision.collider.gameObject || connections[i].Shield.gameObject != collision.collider.gameObject)
 			{
 				collidingConnection = true;
 			}
 		}
+		Debug.Log(collision.collider.gameObject.name + " " + collision.contacts.Length);*/
 		if (collision.collider.gameObject != gameObject && !collidingConnection)
 		{
-			
 			for (int i = 0; i < collision.contacts.Length; i++)
 			{
 				contacts.Add(collision.contacts[i]);

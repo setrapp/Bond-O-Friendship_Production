@@ -82,7 +82,6 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
-  - 114: {fileID: 11400000}
   - 143: {fileID: 14300000}
   - 114: {fileID: 11400002}
   m_Layer: 0
@@ -166,7 +165,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalPosition: {x: -7.542099, y: -10.1779995, z: -63.5309982}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -320,7 +319,7 @@ TrailRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 32a67a638295de14e8c60b971bafd68d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -349,22 +348,6 @@ TrailRenderer:
       rgba: 16777215
   m_MinVertexDistance: .100000001
   m_Autodestruct: 0
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61ea4fbd2028947bd652aef2af612c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ringPrefab: {fileID: 100000, guid: 0d9e3c427dc79374c971847e53c91559, type: 2}
-  scaleRate: .200000003
-  ringDuration: 3
-  ringCollisionParticle: {fileID: 19800000, guid: 7d27ad7aeb982e4418d6327b94e824f9,
-    type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -384,7 +367,6 @@ MonoBehaviour:
   lastPulseAccepted: {fileID: 0}
   volleyOnlyFirst: 1
   volleys: 0
-  pulseTrailMaterial: {fileID: 2100000, guid: 32a67a638295de14e8c60b971bafd68d, type: 2}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -399,6 +381,7 @@ MonoBehaviour:
   isPlayer: 1
   headRenderer: {fileID: 2300002}
   fillRenderer: {fileID: 2300000}
+  trail: {fileID: 9600000}
   pulseShot: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
@@ -431,7 +414,7 @@ MonoBehaviour:
   tracer: {fileID: 11400014}
   playerNumber: 0
   absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
-  useKeyboard: 1
+  useKeyboard: 0
   geometry: {fileID: 100006}
   deadZone: .75
   basePulsePower: 10
@@ -475,8 +458,8 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   maxVertices: 200
   lineMakerPrefab: {fileID: 100000, guid: fa1341b29202ddd499b88cb363b0f4c6, type: 2}
-  trailNearWidth: .5
-  trailFarWidth: 12
+  trailNearWidth: 0
+  trailFarWidth: 0
   zOffset: 10
 --- !u!135 &13500000
 SphereCollider:

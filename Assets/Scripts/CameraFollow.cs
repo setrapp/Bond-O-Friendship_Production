@@ -27,13 +27,6 @@ public class CameraFollow : MonoBehaviour {
 		if (splitScreen)
 		{
 			Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
-			//Vector3 playerTwoVC = splitScreenCam.camera.WorldToViewportPoint(player2.transform.position);
-			//Debug.Log(playerOneVC);
-
-			//Vector3 playerOneSplitCam = splitScreenCam.camera.ViewportToWorldPoint(playerOneVC);
-			//Vector3 playerTwoMainCam = Camera.main.ViewportToWorldPoint(playerTwoVC);
-			//Debug.Log(playerOneSplitCam);
-
 
 			mainTargetPosition = player1.position + (betweenPlayers.normalized * testFloat) +cameraOffset;
 			transform.position = Vector3.Lerp(transform.position, mainTargetPosition, 1 / smoothness);
@@ -47,22 +40,12 @@ public class CameraFollow : MonoBehaviour {
 			{
 				pivot.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
 			}
-
-			//splitTargetPosition = new Vector3(player2.position.x, player2.position.y, -10) + test * testFloat;
-			//splitScreenCam.transform.position = Vector3.Lerp(splitScreenCam.transform.position, splitTargetPosition, 1 / smoothness);
-
 		}
 		else
 		{
-
-			//Vector3 test = splitScreen ? Vector3.Normalize(player1.position - player2.position) :Vector3.zero;
-
 			mainTargetPosition =  player1.position + (betweenPlayers / 2) + cameraOffset;
 			transform.position = Vector3.Lerp(transform.position, mainTargetPosition, 1 / smoothness);
 		}
-
-		
-		//transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1 / smoothness);
 	}
 
 	void ResizeMask()
@@ -79,7 +62,6 @@ public class CameraFollow : MonoBehaviour {
 			Vector3 topRight = childMainCamera.ViewportToWorldPoint(viewPort);
 
 			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;
-			Debug.Log(maskHeight);
 
 
 

@@ -34,16 +34,8 @@ public class PulseShot : MonoBehaviour {
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
 		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
-        pulse.transform.LookAt(pulseTarget, -Vector3.forward);
-
-		// Create particle trail behind pulse.
-		/*pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab, pulse.transform.position, Quaternion.identity);
-		pulseParticle.transform.parent = pulse.transform;
-		pulseParticle.transform.forward = transform.position - pulseTarget;
-		pulseParticle.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
-		pulseParticle.startSpeed = pulseTarget.magnitude;
-		Destroy(pulseParticle.gameObject, 2.0f);
-		Destroy(pulse, 10.0f);*/
+		movePulse.trail.material = partnerLink.trail.material;
+		pulse.transform.LookAt(pulseTarget, -Vector3.forward);
 
 		// If only the first pulse can be volleyed to create a connection, ignore last pulse accepted for future shots.
 		if (volleyOnlyFirst)
