@@ -15,7 +15,7 @@ public class Shield : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(0.25f,0.05f,0.8f,alphaFloat);
+		myColor = new Color(0.25f,0.8f,0.8f,alphaFloat);
 		renderer.material.color = myColor;
 		if(isActivated == true)
 		{

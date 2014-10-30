@@ -35,5 +35,9 @@ public class EnemyPulse : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
+		if(collide.gameObject.tag == "Object")
+		{
+			Destroy(gameObject);
+		}
 	}
 }
