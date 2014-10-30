@@ -16,23 +16,26 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Start()
 	{
-		wasSplit = !split;
-		CheckSplit();
+		combinedCameraSystem.transform.position = (player1.transform.position + player2.transform.position) / 2;
+		player1CameraSystem.transform.position = player1.transform.position;
+		player2CameraSystem.transform.position = player2.transform.position;
+		wasSplit = split;
+		CheckSplit(true);
 	}
 
 	void Update()
 	{
-		CheckSplit();
+		CheckSplit(false);
 	}
 
-	private void CheckSplit()
+	private void CheckSplit(bool forceCheck)
 	{
-		Vector3 testPlayerOne;// = Camera.main.WorldToViewportPoint(player1.transform.position);
-		Vector3 testPlayerTwo;// = Camera.main.WorldToViewportPoint(player2.transform.position);
+		Vector3 testPlayerOne;
+		Vector3 testPlayerTwo;
 		float splitUpperBound = 0.9f;
 		float splitLowerBound = 0.1f;
-		float combineUpperBound = 0.7f;
-		float combineLowerBound = 0.3f;
+		float combineUpperBound = 0.6f;
+		float combineLowerBound = 0.4f;
 
 		if (!split)
 		{
@@ -54,7 +57,7 @@ public class CameraSplitter : MonoBehaviour {
 			split = true;
 		}
 
-		if (split != wasSplit)
+		if (split != wasSplit || forceCheck)
 		{
 			for (int i = 0; i < combinedCameraSystem.transform.childCount; i++)
 			{
