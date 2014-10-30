@@ -70,7 +70,7 @@ public class SimpleConnection : MonoBehaviour {
 				Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
 			}
 
-			bondCollider.transform.localScale = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position), 0.5f, 10.0f);
+			bondCollider.transform.localScale = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
 			bondCollider.transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
 		}
 	}
