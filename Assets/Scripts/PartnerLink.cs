@@ -52,10 +52,11 @@ public class PartnerLink : MonoBehaviour {
 	void Update()
 	{
 		// Fill based on the amount drained by connection
-		if (connections == null || connections.Count < 1)
+		/*if (connections == null || connections.Count < 1)
 		{
 			fillScale = 0;
-		}
+		}*/
+		fillScale = 1;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 
 		// Record scale before starting charge.
