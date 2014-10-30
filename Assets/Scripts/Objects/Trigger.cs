@@ -8,7 +8,7 @@ public class Trigger : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		renderer.material.color = Color.white;
+		renderer.material.color = Color.grey;
 	
 	}
 	
