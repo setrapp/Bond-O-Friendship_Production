@@ -129,12 +129,12 @@ public class PlayerInput : MonoBehaviour {
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
 					absorb.transform.position = transform.position;
-					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
+					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
 					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
 						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
 
 			}

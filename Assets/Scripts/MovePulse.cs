@@ -11,6 +11,7 @@ public class MovePulse : MonoBehaviour {
 	private float moveSpeed = 2;
 	public GameObject pulseCreator;
 	public PulseShot volleyPartner;
+	public TrailRenderer trail;
 
 	void Start ()
 	{
