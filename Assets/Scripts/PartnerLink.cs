@@ -55,6 +55,9 @@ public class PartnerLink : MonoBehaviour {
 		}*/
 		fillScale = 1;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
+		
+		//TODO This is temporary.
+		//transform.localScale = new Vector3(1, 1, 1);
 
 		// Record scale before starting charge.
 		if (!chargingPulse && preChargeScale < transform.localScale.x)

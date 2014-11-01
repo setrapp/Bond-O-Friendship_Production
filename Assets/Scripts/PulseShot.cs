@@ -33,7 +33,8 @@ public class PulseShot : MonoBehaviour {
 		movePulse.volleyPartner = lastPulseAccepted;
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
 		pulseScale = 0;
-		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+		//pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+		movePulse.spriteRenderer.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		movePulse.trail.material = partnerLink.trail.material;
 		pulse.transform.LookAt(pulseTarget, -Vector3.forward);
 

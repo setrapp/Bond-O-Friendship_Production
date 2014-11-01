@@ -12,6 +12,7 @@ public class MovePulse : MonoBehaviour {
 	public GameObject pulseCreator;
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
+	public SpriteRenderer spriteRenderer;
 
 	void Start ()
 	{
