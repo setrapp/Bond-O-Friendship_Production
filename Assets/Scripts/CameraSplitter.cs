@@ -45,8 +45,8 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 testPlayerTwo;
 		float splitUpperBound = 0.9f;
 		float splitLowerBound = 0.1f;
-		float combineUpperBound = 0.6f;
-		float combineLowerBound = 0.4f;
+		float combineUpperBound = 0.85f;
+		float combineLowerBound = 0.15f;
 
 		if (!split)
 		{
