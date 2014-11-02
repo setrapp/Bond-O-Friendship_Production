@@ -42,9 +42,5 @@ public class PulseShot : MonoBehaviour {
 		{
 			lastPulseAccepted = null;
 		}
-
-		// Prevent scaling up immediately after making pulse, in oder to avoid tunneling.
-		//Doesn't work.
-		partnerLink.skipScaleUp = true;
 	}
 }
