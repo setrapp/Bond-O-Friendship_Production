@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
-    public Transform player1;
-    public Transform player2;
-    public float smoothness = 20;
+	public Transform player1;
+	public Transform player2;
+	public float smoothness = 20;
 	private Vector3 mainTargetPosition;
 	private Vector3 splitTargetPosition;
 
@@ -13,8 +13,8 @@ public class CameraFollow : MonoBehaviour {
 	//public GameObject splitScreenCam;
 	public Camera childMainCamera;
 	public bool splitScreen = false;
-	private float testFloat = 15;
-	private Vector3 cameraOffset = new Vector3(0, 0, -10);
+	private float centeringDistance = 10;
+	private Vector3 cameraOffset = new Vector3(0, 0, -100);
 
 	public GameObject pivot;
 	private float currentCamHeight = 0f;
@@ -28,7 +28,7 @@ public class CameraFollow : MonoBehaviour {
 		{
 			Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
 
-			mainTargetPosition = player1.position + (betweenPlayers.normalized * testFloat) +cameraOffset;
+			mainTargetPosition = player1.position + (betweenPlayers.normalized * centeringDistance) +cameraOffset;
 			transform.position = Vector3.Lerp(transform.position, mainTargetPosition, 1 / smoothness);
 
 			ResizeMask();

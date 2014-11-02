@@ -8,7 +8,7 @@ public class PulseShot : MonoBehaviour {
 	public ParticleSystem pulseParticlePrefab;
 	private ParticleSystem pulseParticle;
 	private float pulseScale;
-	public float basePulseSize = 0.5f;
+	public float basePulseSize = 0.25f;
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
