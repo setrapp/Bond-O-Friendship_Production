@@ -7,6 +7,10 @@ public class FloatMoving : MonoBehaviour {
 	public MovementStats floatStats;
 	public LayerMask ignoreLayers;
 	private bool wasFloating = false;
+	public bool Floating
+	{
+		get { return wasFloating; }
+	}
 
 	void Start()
 	{
