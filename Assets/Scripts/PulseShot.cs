@@ -8,7 +8,7 @@ public class PulseShot : MonoBehaviour {
 	public ParticleSystem pulseParticlePrefab;
 	private ParticleSystem pulseParticle;
 	private float pulseScale;
-	public float basePulseSize = 0.5f;
+	public float basePulseSize = 0.25f;
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
@@ -42,9 +42,5 @@ public class PulseShot : MonoBehaviour {
 		{
 			lastPulseAccepted = null;
 		}
-
-		// Prevent scaling up immediately after making pulse, in oder to avoid tunneling.
-		//Doesn't work.
-		partnerLink.skipScaleUp = true;
 	}
 }
