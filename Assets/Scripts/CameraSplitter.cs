@@ -2,7 +2,18 @@
 using System.Collections;
 
 public class CameraSplitter : MonoBehaviour {
-
+	private static CameraSplitter instance;
+	public static CameraSplitter Instance
+	{
+		get
+		{
+ 			if (instance == null)
+			{
+				instance = GameObject.FindGameObjectWithTag("CameraSystem").GetComponent<CameraSplitter>();
+			}
+			return instance;
+		}
+	}
 	public bool split = false;
 	private bool wasSplit = false;
 	public float splitDistance;
@@ -16,23 +27,26 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Start()
 	{
-		wasSplit = !split;
-		CheckSplit();
+		combinedCameraSystem.transform.position = (player1.transform.position + player2.transform.position) / 2;
+		player1CameraSystem.transform.position = player1.transform.position;
+		player2CameraSystem.transform.position = player2.transform.position;
+		wasSplit = split;
+		CheckSplit(true);
 	}
 
 	void Update()
 	{
-		CheckSplit();
+		CheckSplit(false);
 	}
 
-	private void CheckSplit()
+	private void CheckSplit(bool forceCheck)
 	{
-		Vector3 testPlayerOne;// = Camera.main.WorldToViewportPoint(player1.transform.position);
-		Vector3 testPlayerTwo;// = Camera.main.WorldToViewportPoint(player2.transform.position);
+		Vector3 testPlayerOne;
+		Vector3 testPlayerTwo;
 		float splitUpperBound = 0.9f;
 		float splitLowerBound = 0.1f;
-		float combineUpperBound = 0.7f;
-		float combineLowerBound = 0.3f;
+		float combineUpperBound = 0.85f;
+		float combineLowerBound = 0.15f;
 
 		if (!split)
 		{
@@ -54,7 +68,7 @@ public class CameraSplitter : MonoBehaviour {
 			split = true;
 		}
 
-		if (split != wasSplit)
+		if (split != wasSplit || forceCheck)
 		{
 			for (int i = 0; i < combinedCameraSystem.transform.childCount; i++)
 			{
@@ -71,5 +85,24 @@ public class CameraSplitter : MonoBehaviour {
 		}
 
 		wasSplit = split;
+	}
+
+	public Camera GetFollowingCamera(GameObject player)
+	{
+		if (split && (player == player1 || player == player2))
+		{
+			if (player == player1)
+			{
+				return player1CameraSystem.GetComponentInChildren<Camera>();
+			}
+			else
+			{
+				return player2CameraSystem.GetComponentInChildren<Camera>();
+			}
+		}
+		else
+		{
+			return combinedCameraSystem.GetComponentInChildren<Camera>();
+		}
 	}
 }

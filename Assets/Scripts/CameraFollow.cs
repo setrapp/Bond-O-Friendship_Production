@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
-    public Transform player1;
-    public Transform player2;
-    public float smoothness = 20;
+	public Transform player1;
+	public Transform player2;
+	public float smoothness = 20;
 	private Vector3 mainTargetPosition;
 	private Vector3 splitTargetPosition;
 
@@ -13,8 +13,8 @@ public class CameraFollow : MonoBehaviour {
 	//public GameObject splitScreenCam;
 	public Camera childMainCamera;
 	public bool splitScreen = false;
-	private float testFloat = 15;
-	private Vector3 cameraOffset = new Vector3(0, 0, -10);
+	private float centeringDistance = 10;
+	private Vector3 cameraOffset = new Vector3(0, 0, -100);
 
 	public GameObject pivot;
 	private float currentCamHeight = 0f;
@@ -27,15 +27,8 @@ public class CameraFollow : MonoBehaviour {
 		if (splitScreen)
 		{
 			Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
-			//Vector3 playerTwoVC = splitScreenCam.camera.WorldToViewportPoint(player2.transform.position);
-			//Debug.Log(playerOneVC);
 
-			//Vector3 playerOneSplitCam = splitScreenCam.camera.ViewportToWorldPoint(playerOneVC);
-			//Vector3 playerTwoMainCam = Camera.main.ViewportToWorldPoint(playerTwoVC);
-			//Debug.Log(playerOneSplitCam);
-
-
-			mainTargetPosition = player1.position + (betweenPlayers.normalized * testFloat) +cameraOffset;
+			mainTargetPosition = player1.position + (betweenPlayers.normalized * centeringDistance) +cameraOffset;
 			transform.position = Vector3.Lerp(transform.position, mainTargetPosition, 1 / smoothness);
 
 			ResizeMask();
@@ -47,22 +40,12 @@ public class CameraFollow : MonoBehaviour {
 			{
 				pivot.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
 			}
-
-			//splitTargetPosition = new Vector3(player2.position.x, player2.position.y, -10) + test * testFloat;
-			//splitScreenCam.transform.position = Vector3.Lerp(splitScreenCam.transform.position, splitTargetPosition, 1 / smoothness);
-
 		}
 		else
 		{
-
-			//Vector3 test = splitScreen ? Vector3.Normalize(player1.position - player2.position) :Vector3.zero;
-
 			mainTargetPosition =  player1.position + (betweenPlayers / 2) + cameraOffset;
 			transform.position = Vector3.Lerp(transform.position, mainTargetPosition, 1 / smoothness);
 		}
-
-		
-		//transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1 / smoothness);
 	}
 
 	void ResizeMask()
@@ -79,7 +62,6 @@ public class CameraFollow : MonoBehaviour {
 			Vector3 topRight = childMainCamera.ViewportToWorldPoint(viewPort);
 
 			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;
-			Debug.Log(maskHeight);
 
 
 
