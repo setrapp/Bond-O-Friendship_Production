@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour {
 	public SimpleMover mover;
 	public PartnerLink partnerLink;
-	public Tracer tracer;
 	protected Collider tailTrigger;
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
@@ -71,19 +70,13 @@ public class PlayerInput : MonoBehaviour {
 
 			PlayerLookAt();
 
-			//Draw the line
 			if (velocityChange.sqrMagnitude > 0)
 			{
 				mover.Accelerate(velocityChange);
-				if (tracer.lineRenderer == null)
-					tracer.StartLine();
-				else
-					tracer.AddVertex(transform.position);
 			}
 			else
 			{
 				mover.SlowDown();
-				tracer.DestroyLine();
 			}
 
 			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
