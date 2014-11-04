@@ -27,12 +27,6 @@ public class PartnerLink : MonoBehaviour {
 	public float endChargeRestoreRate;
 	public bool chargingPulse = false;
 	public int volleysToConnect = 2;
-	[SerializeField]
-	public List<ContactPoint> contacts;
-	public bool skipScaleUp = false;
-	public float baseScaleTestRadius= 0.6f;
-	public SphereCollider scaleTestCollider;
-	public bool isConnected = false;
 
 	void Awake()
 	{
@@ -50,8 +44,6 @@ public class PartnerLink : MonoBehaviour {
 		}
 
 		fillRenderer.material.color = headRenderer.material.color;
-
-		contacts = new List<ContactPoint>();
 	}
 	
 	void Update()
@@ -70,37 +62,33 @@ public class PartnerLink : MonoBehaviour {
 			preChargeScale = transform.localScale.x;
 		}
 
-		if (contacts.Count < 1 && !skipScaleUp)
+		// TODO Scaling up between colliders near parallel gets body stuck inside. Fix or remove scaling.
+
+		// Restore scale up to normal, if below it and not charging.
+		if (transform.localScale.x < normalScale && !chargingPulse)
 		{
-			// Restore scale up to normal, if below it and not charging.
-			if (transform.localScale.x < normalScale && !chargingPulse)
+			// If scale is less than the scale before starting charge, scale up to that first.
+			if (transform.localScale.x < preChargeScale)
 			{
-				// If scale is less than the scale before starting charge, scale up to that first.
-				if (transform.localScale.x < preChargeScale)
-				{
-					float actualRestoreRate = endChargeRestoreRate * transform.localScale.x;
-					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-				}
-				else
-				{
-					float actualRestoreRate = scaleRestoreRate * transform.localScale.x;
-					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-				}
+				float actualRestoreRate = endChargeRestoreRate * transform.localScale.x;
+				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
 			}
-
-			// Stay within scale bounds.
-			if (transform.localScale.x < minScale)
+			else
 			{
-				transform.localScale = new Vector3(minScale, minScale, minScale);
+				float actualRestoreRate = scaleRestoreRate * transform.localScale.x;
+				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
 			}
-			else if (transform.localScale.x > maxScale)
-			{
-				transform.localScale = new Vector3(maxScale, maxScale, maxScale);
-			}
-
-			scaleTestCollider.radius = 0.5f + ((baseScaleTestRadius - 0.5f) / transform.localScale.x);
 		}
-		skipScaleUp = false;
+
+		// Stay within scale bounds.
+		if (transform.localScale.x < minScale)
+		{
+			transform.localScale = new Vector3(minScale, minScale, minScale);
+		}
+		else if (transform.localScale.x > maxScale)
+		{
+			transform.localScale = new Vector3(maxScale, maxScale, maxScale);
+		}
 
 		trail.startWidth = transform.localScale.x;
 	}
@@ -113,10 +101,7 @@ public class PartnerLink : MonoBehaviour {
 			MovePulse pulse = other.GetComponent<MovePulse>();
 			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
 			{
-				if (contacts.Count < 1)
-				{
-					transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-				}
+				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 				{
@@ -130,7 +115,6 @@ public class PartnerLink : MonoBehaviour {
 						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
 						{
 							connectionAlreadyMade = true;
-							isConnected = true;
 						}
 					}
 					if (!connectionAlreadyMade)
@@ -146,51 +130,4 @@ public class PartnerLink : MonoBehaviour {
 			}
 		}
 	}
-	public void BreakAllConnections()
-	{
-		for(int i = connections.Count-1;i >= 0;i--)
-		{
-			connections[i].BreakConnection();
-			isConnected = false;
-		}
-	}
-	private void OnCollisionEnter(Collision collision)
-	{
-		bool collidingConnection = false;
-		/*for (int i = 0; i < connections.Count; i++)
-		{
-			if (connections[i].bondCollider.gameObject == collision.collider.gameObject || connections[i].Shield.gameObject != collision.collider.gameObject)
-			{
-				collidingConnection = true;
-			}
-		}
-		Debug.Log(collision.collider.gameObject.name + " " + collision.contacts.Length);*/
-		if (collision.collider.gameObject != gameObject && !collidingConnection)
-		{
-			for (int i = 0; i < collision.contacts.Length; i++)
-			{
-				contacts.Add(collision.contacts[i]);
-			}
-		}
-	}
-
-	private void OnCollisionExit(Collision collision)
-	{
-
-		if (collision.collider.gameObject != gameObject)
-		{
-			
-			for (int i = 0; i < collision.contacts.Length; i++)
-			{
-				for (int j = 0; j < contacts.Count; j++)
-				{
-					if (contacts[j].otherCollider == collision.contacts[i].otherCollider)
-					{
-						contacts.RemoveAt(j);
-					}
-				}
-			}
-		}
-	}
-
 }
