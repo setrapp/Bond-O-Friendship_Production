@@ -73,7 +73,7 @@ public class RingBreak : MonoBehaviour {
 		pulse = Instantiate(pulsePrefab,transform.position,Quaternion.identity) as GameObject;
 		pulse.transform.parent = GameObject.Find("Level").transform;
 		RingPulse enemyPulse = pulse.GetComponent<RingPulse>();
-		pulse.GetComponent<RingCollision>().creator = gameObject;
+		//pulse.GetComponent<RingCollision>().creator = gameObject;
 		pulse.renderer.material.color = Color.magenta;
 		//enemyPulse.target = transform.forward;
 		//enemyPulse.creator = gameObject;

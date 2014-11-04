@@ -38,10 +38,8 @@ public class RingPulse : MonoBehaviour {
 		if(collide.gameObject.tag == "Converser")
 		{
 			gameObject.collider.enabled = false;
-		}
-		if(collide.gameObject.tag == "Object")
-		{
-			gameObject.collider.enabled = false;
+			print("Collide");
+			collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
 		}
 	}
 }
