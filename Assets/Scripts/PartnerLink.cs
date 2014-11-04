@@ -99,12 +99,12 @@ public class PartnerLink : MonoBehaviour {
 	private void OnTriggerEnter(Collider other)
 	{
 		// If colliding with a pulse, accept it.
-		if (other.gameObject.tag == "Pulse")
+		if (other.gameObject.tag == "Pulse" && chargingPulse)
 		{
 			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
+			if (pulse != null)// && (pulse.creator == null || pulse.creator != pulseShot))
 			{
-				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 				{
@@ -129,7 +129,14 @@ public class PartnerLink : MonoBehaviour {
 					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;
-				Destroy(pulse.gameObject);
+				//Destroy(pulse.gameObject);
+				pulse.EndPass();
+				pulse.transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
+				Quaternion fluffRotation = Random.rotation;
+				fluffRotation.x = fluffRotation.y = 0;
+				pulse.transform.rotation = fluffRotation;
+				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
+				pulseShot.fluffSpawn.fluffs.Add(pulse.gameObject);
 			}
 		}
 	}

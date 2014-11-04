@@ -109,7 +109,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
-				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -149,13 +149,13 @@ public class PlayerInput : MonoBehaviour {
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
 				}
 				firePulse = false;
