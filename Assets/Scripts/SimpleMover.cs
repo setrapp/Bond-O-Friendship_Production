@@ -4,22 +4,24 @@ using System.Collections;
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
 	public Vector3 velocity;
+	private Vector3 oldVelocity;
 	public float acceleration;
 	public float handling;
 	public float dampening = 0.9f;
 	public float dampeningThreshold = 0.005f;
 	public float externalSpeedMultiplier = 1;
-	public SimpleFreeze freeze;
 	private bool moving;
 	public bool Moving
 	{
 		get { return moving; }
 	}
 	private CharacterController controller;
+	private Rigidbody rigidbody;
 
 	void Start()
 	{
 		controller = GetComponent<CharacterController>();
+		rigidbody = GetComponent<Rigidbody>();
 	}
 
 	void Update() {
@@ -30,25 +32,10 @@ public class SimpleMover : MonoBehaviour {
 			velocity = velocity.normalized * maxSpeed * externalSpeedMultiplier;
 		}
 
-		ApplyFreezes();
-		if (controller != null)
+		if (rigidbody != null)
 		{
-			Vector3 beforeFreeze = transform.position;
-			controller.Move(velocity * Time.deltaTime);
-			Vector3 afterFreeze = transform.position;
-			if (freeze.velocityX)
-			{
-				afterFreeze.x = beforeFreeze.x;
-			}
-			if (freeze.velocityY)
-			{
-				afterFreeze.y = beforeFreeze.y;
-			}
-			if (freeze.velocityZ)
-			{
-				afterFreeze.z = beforeFreeze.z;
-			}
-			transform.position = afterFreeze;
+			rigidbody.AddForce((velocity - oldVelocity), ForceMode.VelocityChange);
+			velocity = rigidbody.velocity;
 		}
 		else
 		{
@@ -63,6 +50,8 @@ public class SimpleMover : MonoBehaviour {
 		{
 			moving = true;
 		}
+
+		oldVelocity = velocity;
 	}
 
 	public void Stop()
@@ -122,7 +111,6 @@ public class SimpleMover : MonoBehaviour {
 			velocity = velocity.normalized * maxSpeed;
 		}
 		velocity *= Mathf.Max(externalSpeedMultiplier, 0);
-		ApplyFreezes();
 	}
 
 	public void Move(Vector3 direction, float speed, bool clampSpeed = true)
@@ -136,7 +124,6 @@ public class SimpleMover : MonoBehaviour {
 			speed = maxSpeed;
 		}
 		velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
-		ApplyFreezes();
 		if (controller != null)
 		{
 			controller.Move(velocity * Time.deltaTime);
@@ -152,7 +139,6 @@ public class SimpleMover : MonoBehaviour {
 		if (updateVelocity && Time.deltaTime > 0)
 		{
 			velocity = (position - transform.position) / Time.deltaTime;
-			ApplyFreezes();
 		}
 		if (controller != null)
 		{
@@ -169,28 +155,4 @@ public class SimpleMover : MonoBehaviour {
 	{
 		velocity *= dampening;
 	}
-
-	private void ApplyFreezes()
-	{
-		if (freeze.velocityX)
-		{
-			velocity.x = 0;
-		}
-		if (freeze.velocityY)
-		{
-			velocity.y = 0;
-		}
-		if (freeze.velocityZ)
-		{
-			velocity.z = 0;
-		}
-	}
-}
-
-[System.Serializable]
-public class SimpleFreeze
-{
-	public bool velocityX;
-	public bool velocityY;
-	public bool velocityZ;
 }

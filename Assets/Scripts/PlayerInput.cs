@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour {
 	public SimpleMover mover;
 	public PartnerLink partnerLink;
-	public Tracer tracer;
 	protected Collider tailTrigger;
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
@@ -69,21 +68,15 @@ public class PlayerInput : MonoBehaviour {
 				transform.LookAt(transform.position + velocityChange, transform.up);
 			}
 
-			PlayerLookAt(useKeyboard);
+			PlayerLookAt();
 
-			//Draw the line
 			if (velocityChange.sqrMagnitude > 0)
 			{
 				mover.Accelerate(velocityChange);
-				if (tracer.lineRenderer == null)
-					tracer.StartLine();
-				else
-					tracer.AddVertex(transform.position);
 			}
 			else
 			{
 				mover.SlowDown();
-				tracer.DestroyLine();
 			}
 
 			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
@@ -100,21 +93,13 @@ public class PlayerInput : MonoBehaviour {
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
-	void PlayerLookAt(bool assumeForward)
+	void PlayerLookAt()
 	{
-		Vector2 lookAt = geometry.transform.forward;
-		if (!assumeForward)
-		{
-			lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
-		}
-		else if (velocityChange.sqrMagnitude == 0 || !partnerLink.chargingPulse || GetButtonFirePulse())
-		{
-			lookAt = new Vector2();
-		}
+		Vector2 lookAt = FireDirection();
 
 		var chargeTime = Time.time - startChargingPulse;
 
-		if (GetButtonFirePulse() && !partnerLink.chargingPulse)
+		if (IsChargingPulse() && !partnerLink.chargingPulse)
 		{
 			partnerLink.chargingPulse = true;
 			startChargingPulse = Time.time;
@@ -129,12 +114,12 @@ public class PlayerInput : MonoBehaviour {
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
 					absorb.transform.position = transform.position;
-					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
+					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
 					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
 						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
 
 			}
@@ -145,38 +130,44 @@ public class PlayerInput : MonoBehaviour {
 			Destroy(absorb.gameObject, 1.0f);
 		}
 
-		if(lookAt.sqrMagnitude > Mathf.Pow(deadZone, 2f))
+		
+		float minToFire = useKeyboard ? 0 : deadZone;
+		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
 		{
+			lookAt.Normalize();
 			if(firePulse)
 			{
 				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				transform.LookAt(target, transform.up);
-				Vector3 joystickPos = new Vector3(lookAt.x, lookAt.y, 0);
+				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
+				Vector3 velocityBoost = Vector3.zero;
+				if (Vector3.Dot(mover.velocity, pulseDirection) > 0)
+				{
+					velocityBoost += mover.velocity;
+				}
 
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
-					joystickPos *= basePulsePower;
-					partnerLink.pulseShot.Shoot(transform.position + mover.velocity + joystickPos, basePulseDrain);
+					pulseDirection *= basePulsePower;
 					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.preChargeScale = transform.localScale.x;
-					firePulse = false;
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
-				else if (!GetButtonFirePulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
+				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
-					joystickPos *= basePulsePower +timedPulsePower * chargeTime;
+					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
 					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + mover.velocity + joystickPos, basePulseDrain + timedPulseDrain * Time.deltaTime);
-					firePulse = false;
-					partnerLink.chargingPulse = false;
-					partnerLink.preChargeScale = transform.localScale.x;
-					startChargingPulse = 0f;
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
 				}
+				firePulse = false;
+				partnerLink.chargingPulse = false;
+				partnerLink.preChargeScale = transform.localScale.x;
+				startChargingPulse = 0f;
 			}
 		}
 		else
 		{
 			firePulse = true;
-			if (!GetButtonFirePulse() && partnerLink.chargingPulse)
+			if (partnerLink.chargingPulse && !IsChargingPulse())
 			{
 				partnerLink.chargingPulse = false;
 				startChargingPulse = 0f;
@@ -198,7 +189,7 @@ public class PlayerInput : MonoBehaviour {
 	private float GetAxisAimHorizontal(){return Input.GetAxis("AimHorizontal" + playerNumber.ToString());}
 	private float GetAxisAimVertical(){return Input.GetAxis("AimVertical" + playerNumber.ToString());}
 
-	private bool GetButtonFirePulse()
+	private bool IsChargingPulse()
 	{
 		if (!useKeyboard)
 		{
@@ -206,8 +197,36 @@ public class PlayerInput : MonoBehaviour {
 		}
 		else
 		{
-			return (playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKey("[0]"));
+			bool keyboardCharge = (playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKey("[0]"));
+			bool mouseCharge = (playerNumber == Player.Player1 && Input.GetMouseButton(0)) || (playerNumber == Player.Player2 && Input.GetMouseButton(1));
+			return keyboardCharge || mouseCharge;
 		}
+	}
+
+	private Vector2 FireDirection()
+	{
+		Vector2 lookAt = Vector2.zero; 
+		if (!useKeyboard)
+		{
+			lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
+		}
+		else
+		{
+			if ((playerNumber == Player.Player1 && Input.GetMouseButtonUp(0)) || (playerNumber == Player.Player2 && Input.GetMouseButtonUp(1)))
+			{
+				Vector3 mousePos = Input.mousePosition;
+				mousePos.z = transform.position.z;
+				mousePos = CameraSplitter.Instance.GetFollowingCamera(gameObject).ScreenToWorldPoint(mousePos);
+				lookAt = mousePos - transform.position;
+				lookAt.Normalize();
+			}
+			else if ((playerNumber == Player.Player1 && Input.GetKeyUp(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKeyUp("[0]")))
+			{
+				lookAt = geometry.transform.forward;
+			}
+		}
+
+		return lookAt;
 	}
 
 	#endregion

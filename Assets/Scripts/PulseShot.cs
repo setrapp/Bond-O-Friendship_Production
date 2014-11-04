@@ -8,17 +8,22 @@ public class PulseShot : MonoBehaviour {
 	public ParticleSystem pulseParticlePrefab;
 	private ParticleSystem pulseParticle;
 	private float pulseScale;
-	public float basePulseSize = 0.5f;
+	public float basePulseSize = 0.25f;
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
-	public Material pulseTrailMaterial;
+	public FloatMoving floatMove;
+	public float floatPushBack;
 
 	void Start()
 	{
 		if (partnerLink == null)
 		{
 			partnerLink = GetComponent<PartnerLink>();
+		}
+		if (floatMove == null)
+		{
+			floatMove = GetComponent<FloatMoving>();
 		}
 	}
 
@@ -35,25 +40,21 @@ public class PulseShot : MonoBehaviour {
 		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
 		pulseScale = 0;
 		pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
-		TrailRenderer pulseTrail = pulse.GetComponent<TrailRenderer>();
-		if (pulseTrail != null)
-		{
-			pulseTrail.material = pulseTrailMaterial;
-		}
-
-		// Create particle trail behind pulse.
-		/*pulseParticle = (ParticleSystem)Instantiate(pulseParticlePrefab, pulse.transform.position, Quaternion.identity);
-		pulseParticle.transform.parent = pulse.transform;
-		pulseParticle.transform.forward = transform.position - pulseTarget;
-		pulseParticle.startColor = GetComponent<PartnerLink>().headRenderer.material.color;
-		pulseParticle.startSpeed = pulseTarget.magnitude;
-		Destroy(pulseParticle.gameObject, 2.0f);
-		Destroy(pulse, 10.0f);*/
+		movePulse.trail.material = partnerLink.trail.material;
+		pulse.transform.LookAt(pulseTarget, -Vector3.forward);
 
 		// If only the first pulse can be volleyed to create a connection, ignore last pulse accepted for future shots.
 		if (volleyOnlyFirst)
 		{
 			lastPulseAccepted = null;
+		}
+
+		// If floating propel away from pulse.
+		if (floatMove.Floating)
+		{
+			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
+			rigidbody.AddForce(pulseForce, ForceMode.VelocityChange);
+			partnerLink.mover.velocity = rigidbody.velocity;
 		}
 	}
 }
