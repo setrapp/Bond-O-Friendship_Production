@@ -32,6 +32,7 @@ public class PartnerLink : MonoBehaviour {
 	public bool skipScaleUp = false;
 	public float baseScaleTestRadius= 0.6f;
 	public SphereCollider scaleTestCollider;
+	public bool isConnected = false;
 
 	void Awake()
 	{
@@ -129,6 +130,7 @@ public class PartnerLink : MonoBehaviour {
 						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
 						{
 							connectionAlreadyMade = true;
+							isConnected = true;
 						}
 					}
 					if (!connectionAlreadyMade)
@@ -144,7 +146,14 @@ public class PartnerLink : MonoBehaviour {
 			}
 		}
 	}
-
+	public void BreakAllConnections()
+	{
+		for(int i = connections.Count-1;i >= 0;i--)
+		{
+			connections[i].BreakConnection();
+			isConnected = false;
+		}
+	}
 	private void OnCollisionEnter(Collision collision)
 	{
 		bool collidingConnection = false;
@@ -183,4 +192,5 @@ public class PartnerLink : MonoBehaviour {
 			}
 		}
 	}
+
 }
