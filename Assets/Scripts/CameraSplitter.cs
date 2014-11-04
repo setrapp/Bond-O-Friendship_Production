@@ -2,7 +2,18 @@
 using System.Collections;
 
 public class CameraSplitter : MonoBehaviour {
-
+	private static CameraSplitter instance;
+	public static CameraSplitter Instance
+	{
+		get
+		{
+ 			if (instance == null)
+			{
+				instance = GameObject.FindGameObjectWithTag("CameraSystem").GetComponent<CameraSplitter>();
+			}
+			return instance;
+		}
+	}
 	public bool split = false;
 	private bool wasSplit = false;
 	public float splitDistance;
@@ -34,8 +45,8 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 testPlayerTwo;
 		float splitUpperBound = 0.9f;
 		float splitLowerBound = 0.1f;
-		float combineUpperBound = 0.6f;
-		float combineLowerBound = 0.4f;
+		float combineUpperBound = 0.85f;
+		float combineLowerBound = 0.15f;
 
 		if (!split)
 		{
@@ -74,5 +85,24 @@ public class CameraSplitter : MonoBehaviour {
 		}
 
 		wasSplit = split;
+	}
+
+	public Camera GetFollowingCamera(GameObject player)
+	{
+		if (split && (player == player1 || player == player2))
+		{
+			if (player == player1)
+			{
+				return player1CameraSystem.GetComponentInChildren<Camera>();
+			}
+			else
+			{
+				return player2CameraSystem.GetComponentInChildren<Camera>();
+			}
+		}
+		else
+		{
+			return combinedCameraSystem.GetComponentInChildren<Camera>();
+		}
 	}
 }

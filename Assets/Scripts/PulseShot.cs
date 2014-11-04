@@ -8,16 +8,22 @@ public class PulseShot : MonoBehaviour {
 	public ParticleSystem pulseParticlePrefab;
 	private ParticleSystem pulseParticle;
 	private float pulseScale;
-	public float basePulseSize = 0.5f;
+	public float basePulseSize = 0.25f;
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
+	public FloatMoving floatMove;
+	public float floatPushBack;
 
 	void Start()
 	{
 		if (partnerLink == null)
 		{
 			partnerLink = GetComponent<PartnerLink>();
+		}
+		if (floatMove == null)
+		{
+			floatMove = GetComponent<FloatMoving>();
 		}
 	}
 
@@ -42,6 +48,14 @@ public class PulseShot : MonoBehaviour {
 		if (volleyOnlyFirst)
 		{
 			lastPulseAccepted = null;
+		}
+
+		// If floating propel away from pulse.
+		if (floatMove.Floating)
+		{
+			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
+			rigidbody.AddForce(pulseForce, ForceMode.VelocityChange);
+			partnerLink.mover.velocity = rigidbody.velocity;
 		}
 	}
 }
