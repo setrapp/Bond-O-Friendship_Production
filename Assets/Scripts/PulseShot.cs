@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PulseShot : MonoBehaviour {
 	public PartnerLink partnerLink;
@@ -15,6 +16,10 @@ public class PulseShot : MonoBehaviour {
 	public FloatMoving floatMove;
 	public float floatPushBack;
 	public FluffSpawn fluffSpawn;
+	public int minShotCount;
+	public int maxShotCount;
+	public float shotSpread;
+	public float minShotFactor;
 
 	void Start()
 	{
@@ -51,40 +56,73 @@ public class PulseShot : MonoBehaviour {
 		pulse.transform.LookAt(pulseTarget, -Vector3.forward);
 		*/
 
-		if (fluffSpawn == null || fluffSpawn.fluffs.Count < 1)
+		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffSpawn.fluffs.Count);
+
+
+		if (fluffSpawn == null || fluffSpawn.fluffs.Count < 1 || passFluffCount < 1)
 		{
 			return;
 		}
 
 		Vector3 passDir = (pulseTarget - transform.position).normalized;
-		int passFluffIndex = 0;
-		GameObject passFluff = fluffSpawn.fluffs[0];
-		float maxFluffDotPass = Vector3.Dot(passFluff.transform.up, passDir);
-		for (int i = 1; i < fluffSpawn.fluffs.Count; i++)
+		List<int> passFluffIndices = new List<int>();
+		List<GameObject> passFluffs = new List<GameObject>();
+		List<float> maxFluffDotPasses = new List<float>();
+		for (int i = 0; i < fluffSpawn.fluffs.Count; i++)
 		{
 			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDir);
-			if (fluffDotPass > maxFluffDotPass)
+			if (maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1])
 			{
-				maxFluffDotPass = fluffDotPass;
-				passFluff = fluffSpawn.fluffs[i];
-				passFluffIndex = i;
+				maxFluffDotPasses.Add(fluffDotPass);
+				passFluffs.Add(fluffSpawn.fluffs[i]);
+				passFluffIndices.Add(i);
+				if (maxFluffDotPasses.Count > passFluffCount)
+				{
+					float minMaxFluffDotPass = maxFluffDotPasses[0];
+					int minMaxFluffIndex = 0;
+					for (int j = 1; j < maxFluffDotPasses.Count; j++)
+					{
+						float maxFluffDotPass = maxFluffDotPasses[j];
+						if (maxFluffDotPass < minMaxFluffDotPass)
+						{
+							minMaxFluffDotPass = maxFluffDotPasses[j];
+							minMaxFluffIndex = j;
+						}
+					}
+				}
+				
+			}
+
+			if (maxFluffDotPasses.Count > passFluffCount)
+			{
+				maxFluffDotPasses.RemoveAt(passFluffCount);
+				passFluffs.RemoveAt(passFluffCount);
+				passFluffIndices.RemoveAt(passFluffCount);
 			}
 		}
-		fluffSpawn.fluffs.RemoveAt(passFluffIndex);
 
-		MovePulse movePulse = passFluff.GetComponent<MovePulse>();
-		movePulse.transform.position = transform.position + (passDir * transform.localScale.magnitude);
-		movePulse.transform.rotation = Quaternion.LookRotation(passDir, Vector3.Cross(passDir, -Vector3.forward));
-		movePulse.transform.parent = transform.parent;
-		movePulse.ReadyForPass();
-		movePulse.target = pulseTarget;
-		movePulse.creator = this;
-		movePulse.capacity = pulseCapacity;
-		movePulse.volleys = volleys + 1;
-		movePulse.volleyPartner = lastPulseAccepted;
-		//movePulse.spriteRenderer.color = GetComponent<PartnerLink>().headRenderer.material.color;
-		//movePulse.trail.material = partnerLink.trail.material;
-		//movePulse.
+		float shotAngle = -shotSpread;
+		float shotDist = Vector3.Distance(pulseTarget, transform.position);
+
+		for (int i = passFluffs.Count - 1; i >= 0; i--)
+		{
+			fluffSpawn.fluffs.RemoveAt(passFluffIndices[i]);
+
+			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
+
+			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
+			movePulse.transform.position = transform.position + (rotatedPassDir * transform.localScale.magnitude);
+			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
+			movePulse.transform.parent = transform.parent;
+			movePulse.ReadyForPass();
+			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
+			movePulse.creator = this;
+			movePulse.capacity = pulseCapacity;
+			movePulse.volleys = volleys + 1;
+			movePulse.volleyPartner = lastPulseAccepted;
+			shotAngle += shotSpread / passFluffCount;
+		}
+		
 
 		// If only the first pulse can be volleyed to create a connection, ignore last pulse accepted for future shots.
 		if (volleyOnlyFirst)

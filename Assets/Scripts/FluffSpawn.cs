@@ -10,6 +10,8 @@ public class FluffSpawn : MonoBehaviour {
 	public List<GameObject> fluffs;
 	public float spawnOffset;
 	public Material fluffMaterial;
+	public float spawnTime;
+	private float sinceSpawn;
 
 	void Start()
 	{
@@ -21,6 +23,23 @@ public class FluffSpawn : MonoBehaviour {
 		while (fluffs.Count < naturalFluffCount)
 		{
 			SpawnFluff();
+		}
+		sinceSpawn = 0;
+	}
+
+	void Update()
+	{
+		if (fluffs.Count < naturalFluffCount)
+		{
+			if (sinceSpawn >= spawnTime)
+			{
+				SpawnFluff();
+				sinceSpawn = 0;
+			}
+			else
+			{
+				sinceSpawn += Time.deltaTime;
+			}
 		}
 	}
 
