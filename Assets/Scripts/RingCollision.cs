@@ -27,7 +27,7 @@ public class RingCollision : MonoBehaviour {
 			else if (col.name == "Player 2")
 				collidedParticle.startColor = col.GetComponent<PartnerLink>().headRenderer.material.color;
 			else
-				collidedParticle.startColor = col.renderer.material.color;
+				collidedParticle.startColor = col.GetComponent<Renderer>().material.color;
 			Destroy(collidedParticle.gameObject, 1.0f);
 		}
 	}
