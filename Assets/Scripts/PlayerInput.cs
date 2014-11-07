@@ -109,7 +109,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
-				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -119,9 +119,12 @@ public class PlayerInput : MonoBehaviour {
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
-						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
-
+				{
+					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f)// && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					{
+						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+					}
+				}
 			}
 		}
 		else if(absorb != null)
@@ -149,14 +152,14 @@ public class PlayerInput : MonoBehaviour {
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
-					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
+					pulseDirection *= basePulsePower;// +timedPulsePower * chargeTime;
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);// + timedPulseDrain * Time.deltaTime);
 				}
 				firePulse = false;
 				partnerLink.chargingPulse = false;

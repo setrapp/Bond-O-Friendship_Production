@@ -41,7 +41,7 @@ public class Reveal : MonoBehaviour {
 			returnSpeed = 0;
 			trigger1.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
 			trigger2.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
-			renderer.material.color = Color.cyan;
+			GetComponent<Renderer>().material.color = Color.cyan;
 		}
 	}
 }

@@ -55,6 +55,9 @@ public class PartnerLink : MonoBehaviour {
 		}*/
 		fillScale = 1;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
+		
+		//TODO This is temporary.
+		//transform.localScale = new Vector3(1, 1, 1);
 
 		// Record scale before starting charge.
 		if (!chargingPulse && preChargeScale < transform.localScale.x)
@@ -99,34 +102,44 @@ public class PartnerLink : MonoBehaviour {
 		if (other.gameObject.tag == "Pulse")
 		{
 			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
+			if (pulse != null && (chargingPulse || pulse.moving))
 			{
-				transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-				pulseShot.volleys = 1;
-				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+				if (pulse.creator != pulseShot)
 				{
-					pulseShot.volleys = pulse.volleys;
-				}
-				if (pulseShot.volleys >= volleysToConnect)
-				{
-					bool connectionAlreadyMade = false;
-					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+					pulseShot.volleys = 1;
+					if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 					{
-						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
-						{
-							connectionAlreadyMade = true;
-						}
+						pulseShot.volleys = pulse.volleys;
 					}
-					if (!connectionAlreadyMade)
+					if (pulseShot.volleys >= volleysToConnect)
 					{
-						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
-						connections.Add(newConnection);
-						pulse.creator.partnerLink.connections.Add(newConnection);
-						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						bool connectionAlreadyMade = false;
+						for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+						{
+							if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
+							{
+								connectionAlreadyMade = true;
+							}
+						}
+						if (!connectionAlreadyMade)
+						{
+							SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+							connections.Add(newConnection);
+							pulse.creator.partnerLink.connections.Add(newConnection);
+							newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						}
 					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;
-				Destroy(pulse.gameObject);
+				//Destroy(pulse.gameObject);
+				pulse.EndPass();
+				pulse.transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
+				Quaternion fluffRotation = Random.rotation;
+				fluffRotation.x = fluffRotation.y = 0;
+				pulse.transform.rotation = fluffRotation;
+				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
+				pulseShot.fluffSpawn.fluffs.Add(pulse.gameObject);
 			}
 		}
 	}

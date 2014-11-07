@@ -21,19 +21,19 @@ public class EmitRing : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.E) && ring == null && gameObject.name == "Player 1")
 		{
 			ring = (GameObject)Instantiate(ringPrefab);
-			ring.collider.isTrigger = true;
+			ring.GetComponent<Collider>().isTrigger = true;
 			ring.transform.position = transform.position;
 			ring.GetComponent<RingCollision>().creator = gameObject;
-			ring.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+			ring.GetComponent<Renderer>().material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		}
 
 		if(Input.GetKeyDown(KeyCode.Keypad1) && ring == null && gameObject.name == "Player 2")
 		{
 			ring = (GameObject)Instantiate(ringPrefab);
-			ring.collider.isTrigger = true;
+			ring.GetComponent<Collider>().isTrigger = true;
 			ring.transform.position = transform.position;
 			ring.GetComponent<RingCollision>().creator = gameObject;
-			ring.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
+			ring.GetComponent<Renderer>().material.color = GetComponent<PartnerLink>().headRenderer.material.color;
 		}
 
 		if(ring != null)
