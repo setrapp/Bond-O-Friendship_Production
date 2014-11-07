@@ -39,23 +39,6 @@ public class PulseShot : MonoBehaviour {
 
 	public void Shoot(Vector3 pulseTarget, float pulseCapacity)
 	{
-		/*
-		// Create pulse.
-		pulse = Instantiate(pulsePrefab, transform.position, Quaternion.identity) as GameObject;
-		MovePulse movePulse = pulse.GetComponent<MovePulse>();
-		movePulse.target = pulseTarget;
-		movePulse.creator = this;
-		movePulse.capacity = pulseCapacity;
-		movePulse.volleys = volleys + 1;
-		movePulse.volleyPartner = lastPulseAccepted;
-		pulse.transform.localScale = new Vector3(basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale, basePulseSize + pulseCapacity + pulseScale);
-		pulseScale = 0;
-		//pulse.renderer.material.color = GetComponent<PartnerLink>().headRenderer.material.color;
-		movePulse.spriteRenderer.color = GetComponent<PartnerLink>().headRenderer.material.color;
-		movePulse.trail.material = partnerLink.trail.material;
-		pulse.transform.LookAt(pulseTarget, -Vector3.forward);
-		*/
-
 		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffSpawn.fluffs.Count);
 
 
@@ -101,7 +84,7 @@ public class PulseShot : MonoBehaviour {
 			}
 		}
 
-		float shotAngle = -shotSpread;
+		float shotAngle = -shotSpread / 2;
 		float shotDist = Vector3.Distance(pulseTarget, transform.position);
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
