@@ -17,10 +17,10 @@ public class WallFadeField : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "Converser")
 		{
-			if(collide.gameObject.GetComponent<PartnerLink>().isConnected == true)
-			{
-				fadenow = true;
-			}
+			//if(collide.gameObject.GetComponent<PartnerLink>().isConnected == true)
+		//	{
+			//	fadenow = true;
+			//}
 		}
 	}
 }

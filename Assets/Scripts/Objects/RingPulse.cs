@@ -39,7 +39,7 @@ public class RingPulse : MonoBehaviour {
 		{
 			gameObject.collider.enabled = false;
 			print("Collide");
-			collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
+			//collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
 		}
 	}
 }
