@@ -31,14 +31,17 @@ public class FluffSpawn : MonoBehaviour {
 	{
 		if (fluffs.Count < naturalFluffCount)
 		{
-			if (sinceSpawn >= spawnTime)
+			if (spawnTime >= 0)
 			{
-				SpawnFluff();
-				sinceSpawn = 0;
-			}
-			else
-			{
-				sinceSpawn += Time.deltaTime;
+				if (sinceSpawn >= spawnTime)
+				{
+					SpawnFluff();
+					sinceSpawn = 0;
+				}
+				else
+				{
+					sinceSpawn += Time.deltaTime;
+				}
 			}
 		}
 	}
