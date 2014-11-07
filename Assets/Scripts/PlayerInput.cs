@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour {
 	public SimpleMover mover;
 	public PartnerLink partnerLink;
-	public Tracer tracer;
 	protected Collider tailTrigger;
 	public enum Player{Player1, Player2};
 	public Player playerNumber;
@@ -71,19 +70,13 @@ public class PlayerInput : MonoBehaviour {
 
 			PlayerLookAt();
 
-			//Draw the line
 			if (velocityChange.sqrMagnitude > 0)
 			{
 				mover.Accelerate(velocityChange);
-				if (tracer.lineRenderer == null)
-					tracer.StartLine();
-				else
-					tracer.AddVertex(transform.position);
 			}
 			else
 			{
 				mover.SlowDown();
-				tracer.DestroyLine();
 			}
 
 			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
@@ -116,7 +109,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
-				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -156,13 +149,13 @@ public class PlayerInput : MonoBehaviour {
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
 				}
 				firePulse = false;
