@@ -18,7 +18,7 @@ public class WaitPad : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		mycolor = new Color(red,0.3f,0.5f);
-		renderer.material.color = mycolor;
+		GetComponent<Renderer>().material.color = mycolor;
 
 	if(pOonPad == true && pTonPad == true)
 		{

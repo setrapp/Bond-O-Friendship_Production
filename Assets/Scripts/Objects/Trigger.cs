@@ -8,7 +8,7 @@ public class Trigger : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		renderer.material.color = Color.cyan;
+		GetComponent<Renderer>().material.color = Color.cyan;
 	
 	}
 	
@@ -22,13 +22,13 @@ public class Trigger : MonoBehaviour {
 		{
 			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 1")
 			{
-				renderer.material.color = collide.gameObject.renderer.material.color;
+				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<Renderer>().material.color;
 				pOneTriggered = true;
 				pTwoTirggered = false;
 			}
 			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 2")
 			{
-				renderer.material.color = collide.gameObject.renderer.material.color;
+				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<Renderer>().material.color;
 				pOneTriggered = false;
 				pTwoTirggered = true;
 			}
