@@ -57,7 +57,7 @@ public class PulseShot : MonoBehaviour {
 			if (maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1])
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
-				passFluffs.Add(fluffSpawn.fluffs[i]);
+				passFluffs.Add(fluffSpawn.fluffs[i].gameObject);
 				passFluffIndices.Add(i);
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{

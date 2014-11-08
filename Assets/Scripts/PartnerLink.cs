@@ -139,7 +139,7 @@ public class PartnerLink : MonoBehaviour {
 				fluffRotation.x = fluffRotation.y = 0;
 				pulse.transform.rotation = fluffRotation;
 				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
-				pulseShot.fluffSpawn.fluffs.Add(pulse.gameObject);
+				pulseShot.fluffSpawn.fluffs.Add(pulse);
 			}
 		}
 	}

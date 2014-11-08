@@ -13,6 +13,7 @@ public class MovePulse : MonoBehaviour {
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
+	public float baseAngle;
 
 	void Start ()
 	{
