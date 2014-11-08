@@ -6,14 +6,14 @@ public class FluffGenerator : MonoBehaviour {
 	public GameObject fluffPrefab;
 	public Material greenFluffMaterial;
 	public float spawnRate = 3.0f;
-	public float velocityRange = 5.0f;
-	public float minimumVelocity = 5.0f;
+	public float minimumVelocity = 3.0f;
+	public float maximumVelocity = 10.0f;
 
 	private float spawnTimer;
 	private int colorPicker;
 	private GameObject fluff;
-	private float xVelocity;
-	private float yVelocity;
+	private float velocity;
+	private Vector3 targetAngle;
 
 	// Use this for initialization
 	void Start () {
@@ -45,18 +45,24 @@ public class FluffGenerator : MonoBehaviour {
 		fluff.transform.position = transform.position;
 		fluff.transform.parent = gameObject.transform;
 		MovePulse movePulse = fluff.GetComponent<MovePulse>();
-		xVelocity = Random.Range(-velocityRange, velocityRange);
-		if(xVelocity < 0)
-			xVelocity -= minimumVelocity;
-		else
-			xVelocity += minimumVelocity;
-		yVelocity = Random.Range(-velocityRange, velocityRange);
-		if(xVelocity < 0)
-			yVelocity -= minimumVelocity;
-		else
-			yVelocity += minimumVelocity;
+//		xVelocity = Random.Range(-velocityRange, velocityRange);
+//		if(xVelocity < 0)
+//			xVelocity -= minimumVelocity;
+//		else
+//			xVelocity += minimumVelocity;
+//		yVelocity = Random.Range(-velocityRange, velocityRange);
+//		if(xVelocity < 0)
+//			yVelocity -= minimumVelocity;
+//		else
+//			yVelocity += minimumVelocity;
 		movePulse.ReadyForPass();
 //		movePulse.target = transform.position + new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f), 0.0f);
-		movePulse.target = transform.position + new Vector3(xVelocity, yVelocity, 0.0f);
+//		movePulse.target = transform.position + new Vector3(xVelocity, yVelocity, 0.0f);
+		velocity = Random.Range(minimumVelocity, maximumVelocity);
+		if(Random.Range(0,2) == 1)
+			targetAngle = Quaternion.Euler(0, 0, Random.Range(60, 211)) * new Vector3(velocity,velocity,0);
+		else
+			targetAngle = Quaternion.Euler(0, 0, Random.Range(-120, 31)) * new Vector3(velocity,velocity,0);
+		movePulse.target = transform.position + targetAngle;
 	}
 }
