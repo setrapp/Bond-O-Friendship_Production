@@ -56,11 +56,6 @@ public class MovePulse : MonoBehaviour {
 			{
 				moving = false;
 
-				/*GameObject fluffParent = new GameObject();
-				fluffParent.transform.position = transform.position;
-				fluffParent.transform.rotation = transform.rotation;
-				transform.parent = fluffParent.transform;*/
-
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
