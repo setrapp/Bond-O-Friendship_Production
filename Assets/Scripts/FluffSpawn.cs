@@ -55,15 +55,14 @@ public class FluffSpawn : MonoBehaviour {
 	{
 		if (fluffPrefab.GetComponent<MovePulse>() != null)
 		{
-			//Quaternion fluffRotation = Random.rotation;
-			//fluffRotation.x = fluffRotation.y = 0;
 			float fluffAngle = FindOpenFluffAngle();
-			Quaternion fluffRotation = Quaternion.Euler(0, 0, fluffAngle);
+			Vector3 fluffRotation = new Vector3(270, 0, fluffAngle);
 
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
-			newFluff.transform.localRotation = fluffRotation;
-			newFluff.transform.position += newFluff.transform.up * spawnOffset;
 			newFluff.transform.parent = fluffContainer.transform;
+			newFluff.transform.localEulerAngles = fluffRotation;
+			newFluff.transform.position += newFluff.transform.up * spawnOffset;
+			
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 			newFluffInfo.baseAngle = fluffAngle;
 
