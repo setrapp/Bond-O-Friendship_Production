@@ -9,32 +9,66 @@ public class MovePulse : MonoBehaviour {
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;
-	public GameObject pulseCreator;
+	//public GameObject pulseCreator;
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
+	public bool moving = false;
+	public float baseAngle;
+	public Animation swayAnimation;
+	private bool disableColliders;
 
 	void Start ()
 	{
-		pulseCreator = GameObject.Find("Globals");
+		//pulseCreator = GameObject.Find("Globals");
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-		if (passed)
+		if (disableColliders)
+		{
+			Collider[] colliders = GetComponentsInChildren<Collider>();
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].enabled = false;
+			}
+			disableColliders = false;
+		}
+
+		if (passed && moving)
 		{
 			Vector3 direction = target - transform.position;
-			direction.z = 0;
-			float distance = direction.magnitude;
+			if (direction.sqrMagnitude > Mathf.Pow(moveSpeed * Time.deltaTime, 2))
+			{
+				direction.z = 0;
+				float distance = direction.magnitude;
 
-			float decelerationFactor = distance / 1.5f;
+				float decelerationFactor = distance / 1.5f;
 
-			float speed = moveSpeed * decelerationFactor;
+				float speed = moveSpeed * decelerationFactor;
 
-			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+				//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
 
-			Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
-			transform.position += moveVector;
+				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
+				transform.position += moveVector;
+			}
+			else
+			{
+				moving = false;
+
+				RaycastHit attachInfo;
+				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
+				{
+					//Debug.Log(attachInfo.collider.gameObject.name);
+					//transform.parent = attachInfo.collider.transform;
+				}
+				transform.rotation = Quaternion.Euler(270, 0, 0);
+
+				if (swayAnimation != null)
+				{
+					swayAnimation.enabled = true;
+				}
+			}
 		}
 	}
 
@@ -47,27 +81,30 @@ public class MovePulse : MonoBehaviour {
 			colliders[i].enabled = true;
 		}
 		passed = true;
+		moving = true;
 	}
 
 	public void EndPass()
 	{
 		trail.gameObject.SetActive(false);
-		Collider[] colliders = GetComponentsInChildren<Collider>();
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			colliders[i].enabled = false;
-		}
+		disableColliders = true;
 		passed = false;
+		moving = false;
+		creator = null;
+		volleyTarget = null;
+		volleys = 0;
+		capacity = 0;
+		volleyPartner = null;
 	}
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if (passed)
+		/*if (passed && moving)
 		{
 			if (collide.gameObject.tag == "Pulse")
 			{
 				MovePulse otherPulse = collide.GetComponent<MovePulse>();
-				if (otherPulse.passed)
+				if (otherPulse.passed && otherPulse.moving)
 				{
 					if (otherPulse != null && otherPulse.creator != creator)
 					{
@@ -98,6 +135,6 @@ public class MovePulse : MonoBehaviour {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }
