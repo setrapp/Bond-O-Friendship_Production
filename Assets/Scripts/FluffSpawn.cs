@@ -12,7 +12,8 @@ public class FluffSpawn : MonoBehaviour {
 	public Material fluffMaterial;
 	public float spawnTime;
 	private float sinceSpawn;
-	public bool startFluffed;
+	//public bool startFluffed;
+	public float startingFluff;
 
 	void Start()
 	{
@@ -21,12 +22,9 @@ public class FluffSpawn : MonoBehaviour {
 			fluffContainer = gameObject;
 		}
 
-		if (startFluffed)
+		while (fluffs.Count < startingFluff)
 		{
-			while (fluffs.Count < naturalFluffCount)
-			{
-				SpawnFluff();
-			}
+			SpawnFluff();
 		}
 		
 		sinceSpawn = 0;
