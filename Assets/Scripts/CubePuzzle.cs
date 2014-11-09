@@ -23,7 +23,7 @@ public class CubePuzzle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		currentDistance = 1 - Vector3.Distance(transform.position, destination.transform.position)/totalDistance;
-		renderer.material.color = new Color((currentDistance*0.2f + 0.1f), (currentDistance*0.9f + 0.1f), (currentDistance*0.2f + 0.1f));
+		GetComponent<Renderer>().material.color = new Color((currentDistance*0.2f + 0.1f), (currentDistance*0.9f + 0.1f), (currentDistance*0.2f + 0.1f));
 
 		if((Vector3.Distance(player1.transform.position, transform.position) < 30.0f || Vector3.Distance(player2.transform.position, transform.position) < 30.0f) && call == null)
 			call = (ParticleSystem)Instantiate(callPrefab);
@@ -37,8 +37,8 @@ public class CubePuzzle : MonoBehaviour {
 		if(currentDistance > 0.9f)
 		{
 			transform.position = destination.transform.position;
-			destination.renderer.material.color = Color.yellow;
-			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+			destination.GetComponent<Renderer>().material.color = Color.yellow;
+			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			Destroy(wall);
 		}
 
@@ -66,12 +66,12 @@ public class CubePuzzle : MonoBehaviour {
 
 		if(col.transform.tag == "Converser")
 		{
-			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 		}
 
 		if(col.transform.name == "Bond Collider")
 		{
-				rigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+				GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
 		}
 	}
 

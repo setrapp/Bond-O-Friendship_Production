@@ -13,7 +13,7 @@ public class PostProcessDepthGrayscale : MonoBehaviour
 
 	void Start()
 	{
-		camera.depthTextureMode = DepthTextureMode.Depth;
+		GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
 	}
 
 	void OnRenderImage(RenderTexture source, RenderTexture destination)

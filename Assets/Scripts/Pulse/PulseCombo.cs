@@ -59,6 +59,6 @@ public class PulseCombo : MonoBehaviour {
 		movePulse.pulseCreator = gameObject;
 		movePulse.capacity = newCap;
 		pulse.transform.localScale = newScale;
-		pulse.renderer.material.color = Color.magenta;
+		pulse.GetComponent<Renderer>().material.color = Color.magenta;
 	}
 }
