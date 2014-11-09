@@ -55,28 +55,30 @@ public class FluffSpawn : MonoBehaviour {
 	{
 		if (fluffPrefab.GetComponent<MovePulse>() != null)
 		{
-			float fluffAngle = FindOpenFluffAngle();
-			Vector3 fluffRotation = new Vector3(270, 0, fluffAngle);
+			Vector3 fluffRotation = FindOpenFluffAngle();
 
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.transform.localEulerAngles = fluffRotation;
-			newFluff.transform.position += newFluff.transform.up * spawnOffset;
+			newFluff.transform.position += newFluff.transform.up *spawnOffset;
 			
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
-			newFluffInfo.baseAngle = fluffAngle;
+			newFluffInfo.baseAngle = fluffRotation.z;
 
 			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
 			for (int i = 0; i < meshRenderers.Length; i++)
 			{
 				meshRenderers[i].material = fluffMaterial;
 			}
-
+			if (newFluffInfo.swayAnimation != null)
+			{
+				newFluffInfo.swayAnimation.enabled = false;
+			}
 			fluffs.Add(newFluffInfo);
 		}
 	}
 
-	public float FindOpenFluffAngle()
+	public Vector3 FindOpenFluffAngle()
 	{
 		float fluffAngle = -1;
 		float angleIncrement = 360.0f;
@@ -111,8 +113,7 @@ public class FluffSpawn : MonoBehaviour {
 
 			if (emptyIndex >= 0)
 			{
-				// TODO rather than pick a random from here pick a random from the super increment.
-				fluffAngle = angleIncrement * emptyIntervals[0];//Random.Range(0, emptyIndex + 1)];
+				fluffAngle = angleIncrement * emptyIntervals[0];
 			}
 			else
 			{
@@ -130,6 +131,6 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
-		return fluffAngle;
+		return new Vector3(270, 0, fluffAngle);
 	}
 }

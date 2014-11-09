@@ -132,13 +132,20 @@ public class PartnerLink : MonoBehaviour {
 					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;
-				//Destroy(pulse.gameObject);
 				pulse.EndPass();
 				pulse.transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
-				Quaternion fluffRotation = Random.rotation;
-				fluffRotation.x = fluffRotation.y = 0;
-				pulse.transform.rotation = fluffRotation;
-				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
+				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
+				pulse.transform.localEulerAngles = fluffRotation;
+				pulse.baseAngle = fluffRotation.z;
+				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position +pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
+				if (pulse.swayAnimation != null)
+				{
+					pulse.swayAnimation["Fluff_Sway"].time = 0;
+					pulse.swayAnimation.enabled = false;
+					Vector3 rotation = pulse.swayAnimation.transform.localEulerAngles;
+					rotation.z = 0;
+					pulse.swayAnimation.transform.localEulerAngles = rotation;
+				}
 				pulseShot.fluffSpawn.fluffs.Add(pulse);
 			}
 		}
