@@ -13,6 +13,8 @@ public class MovePulse : MonoBehaviour {
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
+	public float baseAngle;
+	public Animation swayAnimation;
 
 	void Start ()
 	{
@@ -42,6 +44,24 @@ public class MovePulse : MonoBehaviour {
 			else
 			{
 				moving = false;
+
+				/*GameObject fluffParent = new GameObject();
+				fluffParent.transform.position = transform.position;
+				fluffParent.transform.rotation = transform.rotation;
+				transform.parent = fluffParent.transform;*/
+
+				RaycastHit attachInfo;
+				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
+				{
+					//Debug.Log(attachInfo.collider.gameObject.name);
+					//transform.parent = attachInfo.collider.transform;
+				}
+				transform.rotation = Quaternion.Euler(270, 0, 0);
+
+				if (swayAnimation != null)
+				{
+					swayAnimation.enabled = true;
+				}
 			}
 		}
 	}
