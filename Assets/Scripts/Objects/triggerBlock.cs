@@ -10,8 +10,8 @@ public class triggerBlock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		renderer.material.color = Color.cyan;
-		myColor = renderer.material.color;
+		GetComponent<Renderer>().material.color = Color.cyan;
+		myColor = GetComponent<Renderer>().material.color;
 		triggerTime = 0.0f;
 	}
 	
@@ -19,7 +19,7 @@ public class triggerBlock : MonoBehaviour {
 	void Update () {
 		if(triggered == true)
 		{
-			renderer.material.color = Color.black;
+			GetComponent<Renderer>().material.color = Color.black;
 			if(triggerTime > 0)
 			triggerTime -= Time.deltaTime;
 		}
@@ -29,11 +29,11 @@ public class triggerBlock : MonoBehaviour {
 		}
 		if(triggered == false)
 		{
-			renderer.material.color = myColor;
+			GetComponent<Renderer>().material.color = myColor;
 		}
 		if(allDone == true)
 		{
-			renderer.material.color = Color.black;
+			GetComponent<Renderer>().material.color = Color.black;
 		}
 	}
 

@@ -67,6 +67,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400008}
+  m_Layer: 13
+  m_Name: Fluffs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100012
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,12 +92,14 @@ GameObject:
   - 4: {fileID: 400012}
   - 135: {fileID: 13500000}
   - 135: {fileID: 13500002}
-  - 114: {fileID: 11400014}
   - 114: {fileID: 11400012}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400014}
+  - 114: {fileID: 11400008}
   m_Layer: 13
   m_Name: Player
   m_TagString: Converser
@@ -157,6 +174,18 @@ Transform:
   - {fileID: 400000}
   m_Father: {fileID: 400012}
   m_RootOrder: 0
+--- !u!4 &400008
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400012}
+  m_RootOrder: 3
 --- !u!4 &400012
 Transform:
   m_ObjectHideFlags: 1
@@ -164,12 +193,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -7.542099, y: -10.1779995, z: -63.5309982}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
   - {fileID: 400014}
   - {fileID: 400002}
+  - {fileID: 400008}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400014
@@ -347,6 +377,25 @@ TrailRenderer:
       rgba: 16777215
   m_MinVertexDistance: .100000001
   m_Autodestruct: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e6b386ebad61b49ae306e3c772c73b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 0}
+  floatStats:
+    acceleration: 0
+    handling: 0
+    dampening: .999899983
+  ignoreLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,6 +415,8 @@ MonoBehaviour:
   lastPulseAccepted: {fileID: 0}
   volleyOnlyFirst: 0
   volleys: 0
+  floatMove: {fileID: 0}
+  floatPushBack: 3
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -410,7 +461,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mover: {fileID: 11400012}
   partnerLink: {fileID: 11400004}
-  tracer: {fileID: 11400014}
   playerNumber: 0
   absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 0
@@ -421,6 +471,24 @@ MonoBehaviour:
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
   absorbStrength: 20
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0b78d33542383747b139f12bba8dbc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headSprite: {fileID: 100004}
+  naturalFluffCount: 50
+  fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+  fluffContainer: {fileID: 100008}
+  fluffs: []
+  spawnOffset: .5
+  fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
