@@ -99,33 +99,36 @@ public class PartnerLink : MonoBehaviour {
 	private void OnTriggerEnter(Collider other)
 	{
 		// If colliding with a pulse, accept it.
-		if (other.gameObject.tag == "Pulse" && chargingPulse)
+		if (other.gameObject.tag == "Pulse")
 		{
 			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null)// && (pulse.creator == null || pulse.creator != pulseShot))
+			if (pulse != null && (chargingPulse || pulse.moving))
 			{
 				//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-				pulseShot.volleys = 1;
-				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				if (pulse.creator != pulseShot)
 				{
-					pulseShot.volleys = pulse.volleys;
-				}
-				if (pulseShot.volleys >= volleysToConnect)
-				{
-					bool connectionAlreadyMade = false;
-					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+					pulseShot.volleys = 1;
+					if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 					{
-						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
-						{
-							connectionAlreadyMade = true;
-						}
+						pulseShot.volleys = pulse.volleys;
 					}
-					if (!connectionAlreadyMade)
+					if (pulseShot.volleys >= volleysToConnect)
 					{
-						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
-						connections.Add(newConnection);
-						pulse.creator.partnerLink.connections.Add(newConnection);
-						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						bool connectionAlreadyMade = false;
+						for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+						{
+							if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
+							{
+								connectionAlreadyMade = true;
+							}
+						}
+						if (!connectionAlreadyMade)
+						{
+							SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+							connections.Add(newConnection);
+							pulse.creator.partnerLink.connections.Add(newConnection);
+							newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						}
 					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;

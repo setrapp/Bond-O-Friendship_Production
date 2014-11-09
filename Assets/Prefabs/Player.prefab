@@ -33,7 +33,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 1
@@ -98,7 +98,6 @@ GameObject:
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400014}
   - 114: {fileID: 11400008}
   m_Layer: 13
   m_Name: Player
@@ -417,6 +416,11 @@ MonoBehaviour:
   volleys: 0
   floatMove: {fileID: 0}
   floatPushBack: 3
+  fluffSpawn: {fileID: 0}
+  minShotCount: 3
+  maxShotCount: 10
+  shotSpread: 30
+  minShotFactor: .5
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -489,6 +493,7 @@ MonoBehaviour:
   fluffs: []
   spawnOffset: .5
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
+  spawnTime: 0
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -507,23 +512,6 @@ MonoBehaviour:
   dampening: .949999988
   dampeningThreshold: .00499999989
   externalSpeedMultiplier: 1
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 386dc030672f67b43844e472d716fc94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 0}
-  maxVertices: 200
-  lineMakerPrefab: {fileID: 100000, guid: fa1341b29202ddd499b88cb363b0f4c6, type: 2}
-  trailNearWidth: 0
-  trailFarWidth: 0
-  zOffset: 10
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

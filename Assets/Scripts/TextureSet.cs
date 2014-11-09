@@ -6,6 +6,6 @@ public class TextureSet : MonoBehaviour {
 
 	void Start()
 	{
-		renderer.material.SetTexture(0, forcedTexture);
+		GetComponent<Renderer>().material.SetTexture(0, forcedTexture);
 	}
 }
