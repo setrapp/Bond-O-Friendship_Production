@@ -17,10 +17,13 @@ public class MovePulse : MonoBehaviour {
 	public Vector3 baseDirection;
 	public Animation swayAnimation;
 	private bool disableColliders;
+	public Vector3 oldBulbPos;
+	public GameObject bulb;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
+		oldBulbPos = bulb.transform.position;
 	}
 
 	// Update is called once per frame
