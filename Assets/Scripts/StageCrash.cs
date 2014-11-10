@@ -10,6 +10,7 @@ public class StageCrash : MonoBehaviour {
 	public GameObject barrierOne;
 	public GameObject barrierTwo;
 	public float breakBarrierDistance;
+	public bool open = false;
 
 	void Update()
 	{
@@ -44,6 +45,7 @@ public class StageCrash : MonoBehaviour {
 					Destroy(barrierTwo);
 					barrierTwo = null;
 				}
+				open = true;
 			}
 		}
 	}

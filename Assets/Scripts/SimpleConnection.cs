@@ -56,9 +56,8 @@ public class SimpleConnection : MonoBehaviour {
 			if (actualMidWidth <= 0)
 			{
 				//connected = false;
-				attachment1.partner.connections.Remove(this);
-				attachment2.partner.connections.Remove(this);
-				Destroy(gameObject);
+				BreakConnection();
+
 			}
 
 			if (partnerDist < 1.5f)
@@ -75,6 +74,12 @@ public class SimpleConnection : MonoBehaviour {
 			((BoxCollider)GetComponent<Collider>()).size = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
 			transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
 		}
+	}
+	public void BreakConnection()
+	{
+		attachment1.partner.connections.Remove(this);
+		attachment2.partner.connections.Remove(this);
+		Destroy(gameObject);
 	}
 
 	public void AttachPartners(PartnerLink partner1, PartnerLink partner2)
