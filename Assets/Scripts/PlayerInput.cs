@@ -24,6 +24,7 @@ public class PlayerInput : MonoBehaviour {
 	private ParticleSystem absorb;
 	private Vector3 target;
 	public float absorbStrength = 5;
+	public Vector3 desiredLook;
 
 	private bool paused = false;
 
@@ -65,21 +66,45 @@ public class PlayerInput : MonoBehaviour {
 				{
 					velocityChange += Vector3.right;
 				}
-				transform.LookAt(transform.position + velocityChange, transform.up);
+				
+				
+			}
+
+			if (velocityChange.sqrMagnitude > 0)
+			{
+				desiredLook = velocityChange;
+			}
+
+			
+			if (desiredLook.sqrMagnitude > 0 && desiredLook != transform.forward)
+			{
+				if (Vector3.Dot(desiredLook, transform.forward) < 0)
+				{
+					Vector3 newDesire = Vector3.Cross(transform.forward, transform.up);
+					float desireDotNew = Vector3.Dot(desiredLook, newDesire);
+					if (desireDotNew < 0 || (desireDotNew == 0 && Vector3.Dot(transform.right, newDesire) < 0))
+					{
+						newDesire *= -1;
+					}
+					desiredLook = newDesire;
+				}
+				Vector3 forward = Vector3.RotateTowards(transform.forward, desiredLook, mover.handling * Time.deltaTime * Mathf.Deg2Rad, 0);
+				transform.LookAt(transform.position + forward, transform.up);
+				
 			}
 
 			PlayerLookAt();
 
 			if (velocityChange.sqrMagnitude > 0)
 			{
-				mover.Accelerate(velocityChange);
+				mover.Accelerate(transform.forward);
 			}
 			else
 			{
 				mover.SlowDown();
 			}
 
-			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
+			//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
 			if(absorb != null)
 			{
 				absorb.transform.position = transform.position;

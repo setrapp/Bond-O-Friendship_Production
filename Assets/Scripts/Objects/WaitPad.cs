@@ -8,6 +8,7 @@ public class WaitPad : MonoBehaviour {
 	private Color mycolor;
 	private float red;
 	private float turnTime;
+	public bool activated = false;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +32,14 @@ public class WaitPad : MonoBehaviour {
 			if(red > 0.1f)
 			red -= Time.deltaTime;
 		}
-
+		if(red >= 1)
+		{
+			activated = true;
+		}
+		if(activated)
+		{
+			print ("activated");
+		}
 	}
 	void OnTriggerEnter(Collider collide)
 	{

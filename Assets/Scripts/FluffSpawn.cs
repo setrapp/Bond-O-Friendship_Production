@@ -128,6 +128,6 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
-		return new Vector3(270, 0, fluffAngle);
+		return new Vector3(90, 0, fluffAngle);
 	}
 }
