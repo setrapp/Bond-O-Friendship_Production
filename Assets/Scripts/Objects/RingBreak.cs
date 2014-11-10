@@ -26,7 +26,7 @@ public class RingBreak : MonoBehaviour {
 		//p1Trans = player1.transform;
 		//p2Trans = player2.transform;
 		timer = 2.0f;
-		mycolor = renderer.material.color;
+		mycolor = GetComponent<Renderer>().material.color;
 	
 	}
 	
@@ -53,14 +53,14 @@ public class RingBreak : MonoBehaviour {
 		}
 		if(pTwoDist > 10.0f && pOneDist > 10.0f)
 		{
-			renderer.material.color = mycolor;
+			GetComponent<Renderer>().material.color = mycolor;
 		}
 		if(timer <= 1 && timer > 0)
 		{
-			renderer.material.color = Color.magenta;
+			GetComponent<Renderer>().material.color = Color.magenta;
 		}
 		else
-			renderer.material.color = mycolor;
+			GetComponent<Renderer>().material.color = mycolor;
 
 		if(timer<=0)
 		{
@@ -74,7 +74,7 @@ public class RingBreak : MonoBehaviour {
 		pulse.transform.parent = GameObject.Find("Level").transform;
 		RingPulse enemyPulse = pulse.GetComponent<RingPulse>();
 		//pulse.GetComponent<RingCollision>().creator = gameObject;
-		pulse.renderer.material.color = Color.magenta;
+		pulse.GetComponent<Renderer>().material.color = Color.magenta;
 		//enemyPulse.target = transform.forward;
 		//enemyPulse.creator = gameObject;
 	}

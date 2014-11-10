@@ -20,7 +20,7 @@ public class PushPad : MonoBehaviour {
 	void Update () {
 		print (timer);
 		myColor = new Color(red, 0.1f, 0.3f,1.0f);
-		renderer.material.color = myColor;
+		GetComponent<Renderer>().material.color = myColor;
 		if (activated == true)
 		{
 			if(timer > 0)

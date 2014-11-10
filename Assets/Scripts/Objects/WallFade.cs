@@ -27,8 +27,8 @@ public class WallFade : MonoBehaviour {
 		}
 		if(timer <= 0)
 		{
-			transform.collider.enabled = false;
-			renderer.enabled = false;
+			transform.GetComponent<Collider>().enabled = false;
+			GetComponent<Renderer>().enabled = false;
 
 		}
 	

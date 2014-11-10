@@ -18,10 +18,10 @@ public class WallActivate : MonoBehaviour {
 	void Update () {
 		if (stageCrash.GetComponent<StageCrash>().open == true)
 			{
-				wall1.collider.enabled = true;
-				wall2.collider.enabled = true;
-				wall3.collider.enabled = true;
-				wall4.collider.enabled = true;
+				wall1.GetComponent<Collider>().enabled = true;
+				wall2.GetComponent<Collider>().enabled = true;
+				wall3.GetComponent<Collider>().enabled = true;
+				wall4.GetComponent<Collider>().enabled = true;
 			}
 
 		}

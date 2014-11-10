@@ -20,7 +20,7 @@ public class RingPulse : MonoBehaviour {
 		mycolor = new Color(0.8f,0.1f,0.5f,alpha);
 
 		transform.localScale += new Vector3(scaleRate,scaleRate,0);
-		renderer.material.color = mycolor;
+		GetComponent<Renderer>().material.color = mycolor;
 		lifeTime -= Time.deltaTime;
 		alpha -= Time.deltaTime*0.3f;
 		if(lifeTime <= 0)
@@ -33,11 +33,11 @@ public class RingPulse : MonoBehaviour {
 	{
 		if(collide.gameObject.name == "Shield")
 		{
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 		}
 		if(collide.gameObject.tag == "Converser")
 		{
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 			print("Collide");
 			//collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
 		}
