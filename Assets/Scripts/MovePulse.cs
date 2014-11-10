@@ -15,6 +15,7 @@ public class MovePulse : MonoBehaviour {
 	public bool moving = false;
 	public float baseAngle;
 	public Animation swayAnimation;
+	private bool disableColliders;
 
 	void Start ()
 	{
@@ -24,6 +25,16 @@ public class MovePulse : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		if (disableColliders)
+		{
+			Collider[] colliders = GetComponentsInChildren<Collider>();
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].enabled = false;
+			}
+			disableColliders = false;
+		}
+
 		if (passed && moving)
 		{
 			Vector3 direction = target - transform.position;
@@ -44,11 +55,6 @@ public class MovePulse : MonoBehaviour {
 			else
 			{
 				moving = false;
-
-				/*GameObject fluffParent = new GameObject();
-				fluffParent.transform.position = transform.position;
-				fluffParent.transform.rotation = transform.rotation;
-				transform.parent = fluffParent.transform;*/
 
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
@@ -81,11 +87,7 @@ public class MovePulse : MonoBehaviour {
 	public void EndPass()
 	{
 		trail.gameObject.SetActive(false);
-		Collider[] colliders = GetComponentsInChildren<Collider>();
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			colliders[i].enabled = false;
-		}
+		disableColliders = true;
 		passed = false;
 		moving = false;
 		creator = null;

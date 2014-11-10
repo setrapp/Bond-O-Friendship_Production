@@ -23,7 +23,7 @@ public class PlayerInput : MonoBehaviour {
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem absorb;
 	private Vector3 target;
-	public float absorbStrength = 20.0f;
+	public float absorbStrength = 5;
 
 	private bool paused = false;
 
@@ -120,7 +120,7 @@ public class PlayerInput : MonoBehaviour {
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
 				{
-					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2) && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
 					{
 						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
 					}

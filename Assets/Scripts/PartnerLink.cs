@@ -27,6 +27,7 @@ public class PartnerLink : MonoBehaviour {
 	public float endChargeRestoreRate;
 	public bool chargingPulse = false;
 	public int volleysToConnect = 2;
+	private List<MovePulse> fluffsToAdd;
 
 	void Awake()
 	{
@@ -48,6 +49,30 @@ public class PartnerLink : MonoBehaviour {
 	
 	void Update()
 	{
+		if (fluffsToAdd != null)
+		{
+			for (int i = 0; i < fluffsToAdd.Count; i++)
+			{
+				fluffsToAdd[i].EndPass();
+				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
+				fluffsToAdd[i].transform.localEulerAngles = fluffRotation;
+				fluffsToAdd[i].baseAngle = fluffRotation.z;
+				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
+				if (fluffsToAdd[i].swayAnimation != null)
+				{
+					fluffsToAdd[i].swayAnimation["Fluff_Sway"].time = 0;
+					fluffsToAdd[i].swayAnimation.enabled = false;
+					Vector3 rotation = fluffsToAdd[i].swayAnimation.transform.localEulerAngles;
+					rotation.z = 0;
+					fluffsToAdd[i].swayAnimation.transform.localEulerAngles = rotation;
+				}
+				pulseShot.fluffSpawn.fluffs.Add(fluffsToAdd[i]);
+				fluffsToAdd[i].transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
+			}
+			fluffsToAdd.Clear();
+			fluffsToAdd = null;
+		}
+
 		// Fill based on the amount drained by connection
 		/*if (connections == null || connections.Count < 1)
 		{
@@ -132,21 +157,12 @@ public class PartnerLink : MonoBehaviour {
 					}
 				}
 				pulseShot.lastPulseAccepted = pulse.creator;
-				pulse.EndPass();
-				pulse.transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
-				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
-				pulse.transform.localEulerAngles = fluffRotation;
-				pulse.baseAngle = fluffRotation.z;
-				pulse.transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position +pulse.transform.up * pulseShot.fluffSpawn.spawnOffset;
-				if (pulse.swayAnimation != null)
+
+				if (fluffsToAdd == null)
 				{
-					pulse.swayAnimation["Fluff_Sway"].time = 0;
-					pulse.swayAnimation.enabled = false;
-					Vector3 rotation = pulse.swayAnimation.transform.localEulerAngles;
-					rotation.z = 0;
-					pulse.swayAnimation.transform.localEulerAngles = rotation;
+					fluffsToAdd = new List<MovePulse>();
 				}
-				pulseShot.fluffSpawn.fluffs.Add(pulse);
+				fluffsToAdd.Add(pulse);
 			}
 		}
 	}

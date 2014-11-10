@@ -12,7 +12,6 @@ public class FluffSpawn : MonoBehaviour {
 	public Material fluffMaterial;
 	public float spawnTime;
 	private float sinceSpawn;
-	//public bool startFluffed;
 	public float startingFluff;
 
 	void Start()
