@@ -25,7 +25,6 @@ public class PlayerInput : MonoBehaviour {
 	private Vector3 target;
 	public float absorbStrength = 5;
 	public Vector3 desiredLook;
-
 	private bool paused = false;
 
 	void Update () {
