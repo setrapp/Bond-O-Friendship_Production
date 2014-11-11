@@ -6,24 +6,37 @@ public class PlayerInput : MonoBehaviour {
 	public PartnerLink partnerLink;
 	protected Collider tailTrigger;
 	public enum Player{Player1, Player2};
+
+	public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
+
 	public Player playerNumber;
+	public JoyStick joystickNumber;
+
 	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
+
+	public PlayerInput otherPlayerInput;
 
 	public GameObject geometry;
 	public float deadZone = .75f;
 
 	private bool firePulse = true;
-	private float startChargingPulse = 0f;
 	private Vector3 velocityChange;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
 	public float basePulseDrain = 0.1f;
 	public float timedPulseDrain = 0.1f;
+
+
+	public bool swapJoysticks = false;
+
 	private ParticleSystem absorb;
 	private Vector3 target;
-	public float absorbStrength = 20.0f;
+	public float absorbStrength = 5;
+	public Vector3 desiredLook;
+
+	public bool joystickDetermined = false;
 
 	private bool paused = false;
 
@@ -33,16 +46,71 @@ public class PlayerInput : MonoBehaviour {
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
 
-		if(Input.GetButtonDown("Pause"))
+		if(!useKeyboard && !joystickDetermined)
 		{
-			if(paused)
-				Time.timeScale = 1;
-			else
-				Time.timeScale = 0;
+			if(playerNumber == Player.Player1)
+			{
+				if(Input.GetButtonDown("Joy1Absorb"))
+				{
+					joystickNumber = JoyStick.Joy1;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy2Absorb"))
+				{
+					joystickNumber = JoyStick.Joy2;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy3Absorb"))
+				{
+					joystickNumber = JoyStick.Joy3;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy4Absorb"))
+				{
+					joystickNumber = JoyStick.Joy4;
+					joystickDetermined = true;
+				}
 
-			paused = !paused;
+				//Debug.Log(joystickNumber.ToString());
+			}
+			else if(otherPlayerInput.joystickDetermined)
+			{
+				if(Input.GetButtonDown("Joy1Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy1)
+				{
+					joystickNumber = JoyStick.Joy1;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy2Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy2)
+				{
+					joystickNumber = JoyStick.Joy2;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy3Absorb")&& otherPlayerInput.joystickNumber != JoyStick.Joy3)
+				{
+					joystickNumber = JoyStick.Joy3;
+					joystickDetermined = true;
+				}
+				if(Input.GetButtonDown("Joy4Absorb")&& otherPlayerInput.joystickNumber != JoyStick.Joy4)
+				{
+					joystickNumber = JoyStick.Joy4;
+					joystickDetermined = true;
+				}
+			}
 		}
 
+
+		if(useKeyboard || joystickDetermined)
+		{
+			if(GetPause() || Input.GetKeyDown(KeyCode.Escape))
+			{
+				if(paused)
+					Time.timeScale = 1;
+				else
+					Time.timeScale = 0;
+
+				paused = !paused;
+			}
+		
 		if(!paused)
 		{
 			velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
@@ -65,25 +133,50 @@ public class PlayerInput : MonoBehaviour {
 				{
 					velocityChange += Vector3.right;
 				}
-				transform.LookAt(transform.position + velocityChange, transform.up);
+				
+				
 			}
-
-			PlayerLookAt();
 
 			if (velocityChange.sqrMagnitude > 0)
 			{
-				mover.Accelerate(velocityChange);
+				desiredLook = velocityChange;
+			}
+
+			
+			if (desiredLook.sqrMagnitude > 0 && desiredLook != transform.forward)
+			{
+				if (Vector3.Dot(desiredLook, transform.forward) < 0)
+				{
+					Vector3 newDesire = Vector3.Cross(transform.forward, transform.up);
+					float desireDotNew = Vector3.Dot(desiredLook, newDesire);
+					if (desireDotNew < 0 || (desireDotNew == 0 && Vector3.Dot(transform.right, newDesire) < 0))
+					{
+						newDesire *= -1;
+					}
+					desiredLook = newDesire;
+				}
+				Vector3 forward = Vector3.RotateTowards(transform.forward, desiredLook, mover.handling * Time.deltaTime * Mathf.Deg2Rad, 0);
+				transform.LookAt(transform.position + forward, transform.up);
+				
+			}
+
+			PlayerLookAt();
+				Absorbing();
+			if (velocityChange.sqrMagnitude > 0)
+			{
+				mover.Accelerate(transform.forward);
 			}
 			else
 			{
 				mover.SlowDown();
 			}
 
-			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
+			//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
 			if(absorb != null)
 			{
 				absorb.transform.position = transform.position;
 			}
+		}
 		}
 	}
 
@@ -93,22 +186,12 @@ public class PlayerInput : MonoBehaviour {
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
-	void PlayerLookAt()
+	void Absorbing()
 	{
-		Vector2 lookAt = FireDirection();
 
-		var chargeTime = Time.time - startChargingPulse;
-
-		if (IsChargingPulse() && !partnerLink.chargingPulse)
-		{
-			partnerLink.chargingPulse = true;
-			startChargingPulse = Time.time;
-		}
-
-		if (partnerLink.chargingPulse)
-		{
-			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
+		if ( (!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (useKeyboard && playerNumber == Player.Player2 && Input.GetKey(KeyCode.Keypad0)))
 			{
+
 				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
 				if(absorb == null)
 				{
@@ -119,59 +202,50 @@ public class PlayerInput : MonoBehaviour {
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
-						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
-
+				{
+					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2) && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					{
+						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+					}
+				}
 			}
-		}
 		else if(absorb != null)
 		{
 			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
 			Destroy(absorb.gameObject, 1.0f);
 		}
+	}
 
-		
+	void PlayerLookAt()
+	{
+		Vector2 lookAt = FireDirection();		
 		float minToFire = useKeyboard ? 0 : deadZone;
+
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
 		{
 			lookAt.Normalize();
+
 			if(firePulse)
 			{
 				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
-				transform.LookAt(target, transform.up);
 				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
-				if (Vector3.Dot(mover.velocity, pulseDirection) > 0)
-				{
-					velocityBoost += mover.velocity;
-				}
 
-				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
+				if (Vector3.Dot(mover.velocity, pulseDirection) > 0)
+					velocityBoost += mover.velocity;				
+			
+				if (CanFire(basePulseDrain))
 				{
-					pulseDirection *= basePulsePower;
+					pulseDirection *= basePulsePower;// +timedPulsePower * chargeTime;
 					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
-				}
-				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
-				{
-					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
-					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);// + timedPulseDrain * Time.deltaTime);
 				}
 				firePulse = false;
-				partnerLink.chargingPulse = false;
-				partnerLink.preChargeScale = transform.localScale.x;
-				startChargingPulse = 0f;
 			}
 		}
 		else
 		{
 			firePulse = true;
-			if (partnerLink.chargingPulse && !IsChargingPulse())
-			{
-				partnerLink.chargingPulse = false;
-				startChargingPulse = 0f;
-			}
 		}
 	}
 
@@ -180,28 +254,17 @@ public class PlayerInput : MonoBehaviour {
 		return transform.localScale.x - costToFire >= partnerLink.minScale;
 	}
 	
-	
+
 	
 	#region Helper Methods
 	
-	private float GetAxisMoveHorizontal(){return Input.GetAxis("MoveHorizontal" + playerNumber.ToString());}
-	private float GetAxisMoveVertical(){return Input.GetAxis("MoveVertical" + playerNumber.ToString());}
-	private float GetAxisAimHorizontal(){return Input.GetAxis("AimHorizontal" + playerNumber.ToString());}
-	private float GetAxisAimVertical(){return Input.GetAxis("AimVertical" + playerNumber.ToString());}
+	private float GetAxisMoveHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() + "MoveHorizontal"); else return Input.GetAxis(joystickNumber.ToString() +"ThrowHorizontal");}
+	private float GetAxisMoveVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"MoveVertical"); else return Input.GetAxis(joystickNumber.ToString() +"ThrowVertical");}
+	private float GetAxisAimHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"ThrowHorizontal"); else return Input.GetAxis(joystickNumber.ToString() + "MoveHorizontal");}
+	private float GetAxisAimVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"ThrowVertical"); else return Input.GetAxis(joystickNumber.ToString() +"MoveVertical");}
+	private bool GetAbsorb() { return Input.GetButton(joystickNumber.ToString() + "Absorb");}
+	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
 
-	private bool IsChargingPulse()
-	{
-		if (!useKeyboard)
-		{
-			return Input.GetButton("FirePulse" + playerNumber.ToString());
-		}
-		else
-		{
-			bool keyboardCharge = (playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKey("[0]"));
-			bool mouseCharge = (playerNumber == Player.Player1 && Input.GetMouseButton(0)) || (playerNumber == Player.Player2 && Input.GetMouseButton(1));
-			return keyboardCharge || mouseCharge;
-		}
-	}
 
 	private Vector2 FireDirection()
 	{
