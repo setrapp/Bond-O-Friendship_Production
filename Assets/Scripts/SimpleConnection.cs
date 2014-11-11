@@ -44,6 +44,7 @@ public class SimpleConnection : MonoBehaviour {
 
 			// Set connection points.
 			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
+			transform.position = midpoint;
 			GetComponent<Rigidbody>().MovePosition(midpoint);
 			attachment1.lineRenderer.SetPosition(0, attachment1.position);
 			attachment1.lineRenderer.SetPosition(1, midpoint);
@@ -73,6 +74,7 @@ public class SimpleConnection : MonoBehaviour {
 			//bondCollider.transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
 			((BoxCollider)GetComponent<Collider>()).size = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
 			transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
+
 		}
 	}
 	public void BreakConnection()

@@ -18,7 +18,7 @@ public class PushPad : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print (timer);
+	//	print (timer);
 		myColor = new Color(red, 0.1f, 0.3f,1.0f);
 		GetComponent<Renderer>().material.color = myColor;
 		if (activated == true)
