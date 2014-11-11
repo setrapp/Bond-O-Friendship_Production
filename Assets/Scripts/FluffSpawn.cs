@@ -71,32 +71,6 @@ public class FluffSpawn : MonoBehaviour {
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				Vector3 fluffDir = fullBackDir;
-				//Debug.Log(fluffs[i].baseDirection + " " + localFullBackDir);
-				//TODO need to figure out constraints.
-				/*if (true)//Vector3.Dot(fluffs[i].baseDirection, localFullBackDir) < checkCos)
-				{
-					Vector3 oldUp = transform.forward;//transform.TransformDirection(fluffs[i].baseDirection);
-					
-					float radAngle = (maxAlterAngle + fluffs[i].baseAngle) * Mathf.Deg2Rad;
-					float sinAngle = Mathf.Sin(radAngle);
-					float cosAngle = Mathf.Cos(radAngle);
-					fluffDir.x = (oldUp.x * cosAngle) - (oldUp.y * sinAngle);
-					fluffDir.y = (oldUp.x * sinAngle) + (oldUp.y * cosAngle);
-					//fluffDir = oldUp;
-
-					if (Vector3.Dot(fluffs[i].baseDirection, transform.right) >= 0)
-					{
-						//Debug.Log(Vector3.Dot(fluffs[i].baseDirection, transform.right));
-						fluffDir *= -1;
-					}
-				}
-
-				//if (Vector3.Dot(transform.InverseTransformDirection(fluffDir), fluffs[i].baseDirection) < Vector3.Dot(localFullBackDir, fluffs[i].baseDirection))
-				{
-					//fluffDir = fullBackDir;
-				}
-
-				fluffs[i].transform.up = fluffDir;*/
 
 				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffs[i].baseDirection);
 				worldBaseDirection.x *= -1;
@@ -104,27 +78,11 @@ public class FluffSpawn : MonoBehaviour {
 				worldBaseDirection.z = 0;
 
 
-				Vector3 newFluffUp = fluffs[i].oldBulbPos - fluffs[i].transform.position;//Vector3.RotateTowards(worldBaseDirection, fluffs[i].oldBulbPos - fluffs[i].bulb.transform.position, Mathf.PI * 2, 0);//, fluffs[i].transform.right);
-				if (Vector3.Dot(fullBackDir, newFluffUp) < Vector3.Dot(fullBackDir, fluffs[i].transform.up))
-				{
-					//newFluffUp = fluffs[i].transform.up;
-				}
-				//Debug.Log(fluffs[i].transform.up + " " + fullBackDir);
-
-				//Vector3 localNewFluffUp = transform.InverseTransformDirection(newFluffUp);
-				//localNewFluffUp.y = localNewFluffUp.z;
-				//localNewFluffUp.z = 0;
-
-				
-
-				//Debug.Log(worldBaseDirection + " " + newFluffUp);
+				Vector3 newFluffUp = fluffs[i].oldBulbPos - fluffs[i].transform.position;
 
 				float baseDotUp = Vector3.Dot(worldBaseDirection, newFluffUp);
 				float cosMax = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
 
-				//Debug.Log(transform.InverseTransformDirection(fluffs[i].baseDirection));
-
-				//Debug.Log(i + ": " + baseDotUp + ", " + fluffs[i].baseAngle);
 				if (baseDotUp >= cosMax)
 				{
 					fluffs[i].transform.up = newFluffUp;
@@ -136,10 +94,9 @@ public class FluffSpawn : MonoBehaviour {
 					if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
 					{
 						yMult = -1;
-					}					
+					}
 
-
-					Vector3 oldUp = fluffs[i].baseDirection;// transform.forward;
+					Vector3 oldUp = fluffs[i].baseDirection;
 					float radAngle = (maxAlterAngle) * Mathf.Deg2Rad;
 					float sinAngle = Mathf.Sin(radAngle);
 					float cosAngle = Mathf.Cos(radAngle);
@@ -148,44 +105,37 @@ public class FluffSpawn : MonoBehaviour {
 					fluffDir.z = 0;
 					if (Vector3.Dot(fluffs[i].baseDirection, Vector3.right) > 0)
 					{
-						//Debug.Log(Vector3.Dot(fluffs[i].baseDirection, transform.right));
 						fluffDir.y *= -1;
-					}
-					else if (Vector3.Dot(fluffDir, fluffs[i].transform.localPosition) > Vector3.Dot(localFullBackDir, fluffs[i].transform.localPosition))
-					{
-						//float tempX = fluffDir.x;
-						//fluffDir.x = -fluffDir.y;
-						//fluffDir.y = tempX;
-						//fluffDir.x *= -1;
-					}
-
-
-					Vector3 altFluffDir = fluffDir;
-					altFluffDir.x *= -1;
-					//if (Vector3.Dot(fluffDir, fluffs[i].transform.localPosition) > Vector3.Dot(altFluffDir, fluffs[i].transform.localPosition))
-					{
-						//fluffDir = altFluffDir;
 					}
 
 					fluffDir = transform.InverseTransformDirection(fluffDir);
 					fluffDir.x *= -1;
 					fluffDir.y = fluffDir.z;
 					fluffDir.z = 0;
-					//Debug.Log(i + ": " + fluffDir);
 					fluffs[i].transform.up = fluffDir;
-					/*if (Vector3.Dot(fluffs[i].transform.up, fluffs[i].transform.localPosition) < Vector3.Dot(fullBackDir, fluffs[i].transform.localPosition))
-					{
-						Vector3 inverseEulerY = fluffs[i].transform.localEulerAngles;
-						inverseEulerY.y *= -1;
-						fluffs[i].transform.localEulerAngles = inverseEulerY;
-					}*/
-				} 
+				}
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
-			//Debug.Log("------");
+		}
+		else
+		{
+			for (int i = 0; i < fluffs.Count; i++)
+			{
+				Vector3 fluffDir = fluffs[i].baseDirection;
+
+				//Debug.Log(i + " " + transform.TransformDirection(fluffDir));
+				fluffDir = transform.InverseTransformDirection(fluffDir);
+				fluffDir.y = fluffDir.z;
+				fluffDir.z = 0;
+
+				fluffs[i].transform.up = fluffDir;
+
+				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
+			}
 		}
 
+		//Debug.Log("-----");
 	}
 
 	private void SpawnFluff()
