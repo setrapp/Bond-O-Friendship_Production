@@ -122,14 +122,9 @@ public class FluffSpawn : MonoBehaviour {
 		{
 			for (int i = 0; i < fluffs.Count; i++)
 			{
-				Vector3 fluffDir = fluffs[i].baseDirection;
+				Vector3 restingUp = fluffs[i].transform.position - transform.position;
 
-				//Debug.Log(i + " " + transform.TransformDirection(fluffDir));
-				fluffDir = transform.InverseTransformDirection(fluffDir);
-				fluffDir.y = fluffDir.z;
-				fluffDir.z = 0;
-
-				fluffs[i].transform.up = fluffDir;
+				fluffs[i].transform.up = restingUp;
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
@@ -151,7 +146,11 @@ public class FluffSpawn : MonoBehaviour {
 			
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 			newFluffInfo.baseAngle = fluffRotation.z;
+
 			newFluffInfo.baseDirection = newFluff.transform.up;
+			newFluffInfo.baseDirection = transform.InverseTransformDirection(newFluffInfo.baseDirection);
+			newFluffInfo.baseDirection.y = newFluffInfo.baseDirection.z;
+			newFluffInfo.baseDirection.z = 0;
 
 			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
 			for (int i = 0; i < meshRenderers.Length; i++)
