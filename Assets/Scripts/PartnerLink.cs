@@ -78,7 +78,7 @@ public class PartnerLink : MonoBehaviour {
 		{
 			fillScale = 0;
 		}*/
-		fillScale = 1;
+		//fillScale = 1;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 		
 		//TODO This is temporary.
