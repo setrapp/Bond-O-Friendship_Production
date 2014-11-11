@@ -7,6 +7,7 @@ public class WallActivate : MonoBehaviour {
 	public GameObject wall2;
 	public GameObject wall3;
 	public GameObject wall4;
+	public GameObject wall5;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +23,7 @@ public class WallActivate : MonoBehaviour {
 				wall2.GetComponent<Collider>().enabled = true;
 				wall3.GetComponent<Collider>().enabled = true;
 				wall4.GetComponent<Collider>().enabled = true;
+			    wall5.GetComponent<Collider>().enabled = true;
 			}
 
 		}

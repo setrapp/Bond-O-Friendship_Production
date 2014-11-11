@@ -13,6 +13,9 @@ public class FluffSpawn : MonoBehaviour {
 	public float spawnTime;
 	private float sinceSpawn;
 	public float startingFluff;
+	public GameObject spawnedFluff;
+	private Vector3 endPosition;
+	public float sproutSpeed = 0.01f;
 
 	void Start()
 	{
@@ -39,11 +42,26 @@ public class FluffSpawn : MonoBehaviour {
 				{
 					SpawnFluff();
 					sinceSpawn = 0;
+					GetComponent<PartnerLink>().fillScale = 1;
 				}
 				else
 				{
+					if(GetComponent<PartnerLink>().fillScale == 1)
+						GetComponent<PartnerLink>().fillScale = 0;
 					sinceSpawn += Time.deltaTime;
+					GetComponent<PartnerLink>().fillScale += Time.deltaTime;
 				}
+			}
+		}
+
+		if(spawnedFluff!= null)
+		{
+			endPosition = transform.InverseTransformPoint(spawnedFluff.transform.up *spawnOffset + transform.position);
+			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
+			if(spawnedFluff.transform.localPosition == endPosition)
+			{
+
+				spawnedFluff = null;
 			}
 		}
 	}
@@ -57,7 +75,7 @@ public class FluffSpawn : MonoBehaviour {
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.transform.localEulerAngles = fluffRotation;
-			newFluff.transform.position += newFluff.transform.up *spawnOffset;
+			endPosition = newFluff.transform.up *spawnOffset + newFluff.transform.position;
 			
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 			newFluffInfo.baseAngle = fluffRotation.z;
@@ -72,6 +90,7 @@ public class FluffSpawn : MonoBehaviour {
 				newFluffInfo.swayAnimation.enabled = false;
 			}
 			fluffs.Add(newFluffInfo);
+			spawnedFluff = newFluff;
 		}
 	}
 
