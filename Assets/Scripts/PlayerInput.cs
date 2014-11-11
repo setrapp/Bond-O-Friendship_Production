@@ -23,7 +23,8 @@ public class PlayerInput : MonoBehaviour {
 	public float timedPulseDrain = 0.1f;
 	private ParticleSystem absorb;
 	private Vector3 target;
-	public float absorbStrength = 20.0f;
+	public float absorbStrength = 5;
+	public Vector3 desiredLook;
 
 	private bool paused = false;
 
@@ -65,21 +66,45 @@ public class PlayerInput : MonoBehaviour {
 				{
 					velocityChange += Vector3.right;
 				}
-				transform.LookAt(transform.position + velocityChange, transform.up);
+				
+				
+			}
+
+			if (velocityChange.sqrMagnitude > 0)
+			{
+				desiredLook = velocityChange;
+			}
+
+			
+			if (desiredLook.sqrMagnitude > 0 && desiredLook != transform.forward)
+			{
+				if (Vector3.Dot(desiredLook, transform.forward) < 0)
+				{
+					Vector3 newDesire = Vector3.Cross(transform.forward, transform.up);
+					float desireDotNew = Vector3.Dot(desiredLook, newDesire);
+					if (desireDotNew < 0 || (desireDotNew == 0 && Vector3.Dot(transform.right, newDesire) < 0))
+					{
+						newDesire *= -1;
+					}
+					desiredLook = newDesire;
+				}
+				Vector3 forward = Vector3.RotateTowards(transform.forward, desiredLook, mover.handling * Time.deltaTime * Mathf.Deg2Rad, 0);
+				transform.LookAt(transform.position + forward, transform.up);
+				
 			}
 
 			PlayerLookAt();
 
 			if (velocityChange.sqrMagnitude > 0)
 			{
-				mover.Accelerate(velocityChange);
+				mover.Accelerate(transform.forward);
 			}
 			else
 			{
 				mover.SlowDown();
 			}
 
-			geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
+			//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
 			if(absorb != null)
 			{
 				absorb.transform.position = transform.position;
@@ -109,7 +134,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			if (CanFire(basePulseDrain + timedPulseDrain * Time.deltaTime))
 			{
-				transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
+				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
 				if(absorb == null)
 				{
 					absorb = (ParticleSystem)Instantiate(absorbPrefab);
@@ -119,9 +144,12 @@ public class PlayerInput : MonoBehaviour {
 				}
 				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
 				foreach(GameObject livePulse in pulseArray)
-					if(Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < 100.0f && livePulse.GetComponent<MovePulse>() != null && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
-						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f*Time.deltaTime);
-
+				{
+					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2) && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					{
+						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+					}
+				}
 			}
 		}
 		else if(absorb != null)
@@ -149,14 +177,14 @@ public class PlayerInput : MonoBehaviour {
 				if (!partnerLink.chargingPulse && !useKeyboard && CanFire(basePulseDrain))
 				{
 					pulseDirection *= basePulsePower;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
 					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				else if (!IsChargingPulse() && startChargingPulse > 0 && CanFire(basePulseDrain))
 				{
-					pulseDirection *= basePulsePower +timedPulsePower * chargeTime;
-					transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain + timedPulseDrain * Time.deltaTime);
+					pulseDirection *= basePulsePower;// +timedPulsePower * chargeTime;
+					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);// + timedPulseDrain * Time.deltaTime);
 				}
 				firePulse = false;
 				partnerLink.chargingPulse = false;
