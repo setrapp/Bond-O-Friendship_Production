@@ -46,6 +46,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (velocity.sqrMagnitude < Mathf.Pow(dampeningThreshold, 2)) {
 			velocity = Vector3.zero;
+			rigidbody.velocity = Vector3.zero;
 			moving = false;
 		}
 		else

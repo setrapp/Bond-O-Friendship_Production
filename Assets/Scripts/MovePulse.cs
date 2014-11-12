@@ -14,13 +14,17 @@ public class MovePulse : MonoBehaviour {
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
-	public float baseAngle;
+	public float baseAngle = -1;
+	public Vector3 baseDirection;
 	public Animation swayAnimation;
 	private bool disableColliders;
+	public Vector3 oldBulbPos;
+	public GameObject bulb;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
+		oldBulbPos = bulb.transform.position;
 	}
 
 	// Update is called once per frame
@@ -86,6 +90,7 @@ public class MovePulse : MonoBehaviour {
 		}
 		passed = true;
 		moving = true;
+		baseAngle = -1;
 	}
 
 	public void EndPass()

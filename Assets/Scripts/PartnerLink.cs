@@ -57,6 +57,7 @@ public class PartnerLink : MonoBehaviour {
 				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
 				fluffsToAdd[i].transform.localEulerAngles = fluffRotation;
 				fluffsToAdd[i].baseAngle = fluffRotation.z;
+				fluffsToAdd[i].baseDirection = fluffsToAdd[i].transform.up;
 				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
 				if (fluffsToAdd[i].swayAnimation != null)
 				{

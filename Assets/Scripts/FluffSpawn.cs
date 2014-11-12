@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FluffSpawn : MonoBehaviour {
+	public Rigidbody rigidbody;
 	public GameObject headSprite;
 	public int naturalFluffCount;
 	public GameObject fluffPrefab;
@@ -16,17 +17,27 @@ public class FluffSpawn : MonoBehaviour {
 	public GameObject spawnedFluff;
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
+	public float maxAlterAngle;
+	private bool wasMoving;
+	private PartnerLink partnerLink;
 
 	void Start()
 	{
+		if (rigidbody == null)
+		{
+			rigidbody = GetComponent<Rigidbody>();
+		}
 		if (fluffContainer == null)
 		{
 			fluffContainer = gameObject;
 		}
 
+		partnerLink = GetComponent<PartnerLink>();
+		
+
 		while (fluffs.Count < startingFluff)
 		{
-			SpawnFluff();
+			SpawnFluff(true);
 		}
 		
 		sinceSpawn = 0;
@@ -34,6 +45,7 @@ public class FluffSpawn : MonoBehaviour {
 
 	void Update()
 	{
+		// Attempt to spawn more fluff.
 		if (fluffs.Count < naturalFluffCount)
 		{
 			if (spawnTime >= 0)
@@ -42,14 +54,16 @@ public class FluffSpawn : MonoBehaviour {
 				{
 					SpawnFluff();
 					sinceSpawn = 0;
-					GetComponent<PartnerLink>().fillScale = 1;
+					partnerLink.fillScale = 1;
 				}
-				else
+				else if (spawnedFluff == null)
 				{
-					if(GetComponent<PartnerLink>().fillScale == 1)
-						GetComponent<PartnerLink>().fillScale = 0;
+					if (partnerLink.fillScale == 1)
+					{
+						partnerLink.fillScale = 0;
+					}
 					sinceSpawn += Time.deltaTime;
-					GetComponent<PartnerLink>().fillScale += Time.deltaTime;
+					partnerLink.fillScale += Time.deltaTime;
 				}
 			}
 		}
@@ -64,9 +78,87 @@ public class FluffSpawn : MonoBehaviour {
 				spawnedFluff = null;
 			}
 		}
+		// Rotate fluffs based on movement.
+		if (rigidbody.velocity.sqrMagnitude > 0)
+		{
+			// Calculate the direction the fluffs should be pushed in both world and local space.
+			Vector3 fullBackDir = -rigidbody.velocity.normalized;
+			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
+			localFullBackDir.y = localFullBackDir.z;
+			localFullBackDir.z = 0;
+
+			for (int i = 0; i < fluffs.Count; i++)
+			{
+				Vector3 fluffDir = fullBackDir;
+
+				// Compute the fluff's resting direction in world space.
+				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffs[i].baseDirection);
+				worldBaseDirection.x *= -1;
+				worldBaseDirection.y = worldBaseDirection.z;
+				worldBaseDirection.z = 0;
+
+				// Find the vector from the fluff's root to the position of its head last frame.
+				Vector3 pushedDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
+
+				// How close is the pushed direction to the resting direction?
+				float baseDotPushed = Vector3.Dot(worldBaseDirection, pushedDir);
+
+				// How close must the pushed direction be to the resting position to be used?
+				float constrainedDot = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
+
+				// How close is the fluff's base direction to the local direction of movement. Used for special control of fluffs parallel to movement.
+				float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
+
+				// If pushed direction is within constraints, use that direction.
+				if (baseDotPushed >= constrainedDot && localBaseDotMove < 1)
+				{
+					fluffs[i].transform.up = pushedDir;
+				}
+				// Otherwise, compute the fluff direction at the constraints.
+				else
+				{
+					// If the fluff is on the right side, negate its vertical component.
+					Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
+					float yMult = 1;
+					if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
+					{
+						yMult = -1;
+					}
+
+					// Rotate the base direction by the constrained angle.
+					Vector3 baseDirection = fluffs[i].baseDirection;
+					float radAngle = (maxAlterAngle) * Mathf.Deg2Rad;
+					float sinAngle = Mathf.Sin(radAngle);
+					float cosAngle = Mathf.Cos(radAngle);
+					fluffDir.x = (baseDirection.x * cosAngle) - ((baseDirection.y * sinAngle) * yMult);
+					fluffDir.y = 0;	
+					fluffDir.z = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
+
+					// Put the rotated direction into world coordinates and use for fluff direction.
+					fluffDir = transform.TransformDirection(fluffDir);
+					fluffs[i].transform.up = fluffDir;
+				}
+
+				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
+			}
+
+			wasMoving = true;
+		}
+		else if (wasMoving)
+		{
+			for (int i = 0; i < fluffs.Count; i++)
+			{
+				Vector3 restingUp = fluffs[i].transform.position - transform.position;
+
+				fluffs[i].transform.up = restingUp;
+
+				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
+			}
+			wasMoving = false;
+		}
 	}
 
-	private void SpawnFluff()
+	private void SpawnFluff(bool instantSprout = false)
 	{
 		if (fluffPrefab.GetComponent<MovePulse>() != null)
 		{
@@ -75,10 +167,25 @@ public class FluffSpawn : MonoBehaviour {
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.transform.localEulerAngles = fluffRotation;
-			endPosition = newFluff.transform.up *spawnOffset + newFluff.transform.position;
+			spawnedFluff = newFluff;
+			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			if (instantSprout)
+			{
+				newFluff.transform.position = endPosition;
+				spawnedFluff = null;
+			}
+			else
+			{
+				newFluff.transform.position += newFluff.transform.up * spawnOffset * (Time.deltaTime / spawnTime);
+			}
 			
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 			newFluffInfo.baseAngle = fluffRotation.z;
+
+			newFluffInfo.baseDirection = newFluff.transform.up;
+			newFluffInfo.baseDirection = transform.InverseTransformDirection(newFluffInfo.baseDirection);
+			newFluffInfo.baseDirection.y = newFluffInfo.baseDirection.z;
+			newFluffInfo.baseDirection.z = 0;
 
 			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
 			for (int i = 0; i < meshRenderers.Length; i++)
@@ -90,7 +197,6 @@ public class FluffSpawn : MonoBehaviour {
 				newFluffInfo.swayAnimation.enabled = false;
 			}
 			fluffs.Add(newFluffInfo);
-			spawnedFluff = newFluff;
 		}
 	}
 

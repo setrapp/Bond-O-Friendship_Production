@@ -58,7 +58,7 @@ public class PushPad : MonoBehaviour {
 		}
 		if(open)
 		{
-			door.collider.enabled = false;
+			door.GetComponent<Collider>().enabled = false;
 			if(alpha > 0)
 			alpha -= Time.deltaTime*2.0f;
 			//door.renderer.enabled = false;
