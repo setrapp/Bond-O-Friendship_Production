@@ -15,6 +15,7 @@ public class FluffSpawn : MonoBehaviour {
 	private float sinceSpawn;
 	public float startingFluff;
 	public float maxAlterAngle;
+	private bool wasMoving;
 
 	void Start()
 	{
@@ -58,39 +59,43 @@ public class FluffSpawn : MonoBehaviour {
 		// Rotate fluffs based on movement.
 		if (rigidbody.velocity.sqrMagnitude > 0)
 		{
-			float checkCos = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
-			//float sinAngle = Mathf.Sin(maxAlterAngle * Mathf.Deg2Rad);
-			//float cosAngle = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
-			//Debug.Log(sinAngle + " " + cosAngle);
+			// Calculate the direction the fluffs should be pushed in both world and local space.
 			Vector3 fullBackDir = -rigidbody.velocity.normalized;
 			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
-			//Debug.Log(checkCos);
-			//Debug.Log(localFullBackDir);
 
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				Vector3 fluffDir = fullBackDir;
 
+				// Compute the fluff's resting direction in world space.
 				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffs[i].baseDirection);
 				worldBaseDirection.x *= -1;
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
 
-				Vector3 newFluffUp = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
+				// Find the vector from the fluff's root to the position of its head last frame.
+				Vector3 pushedDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
 
-				float baseDotUp = Vector3.Dot(worldBaseDirection, newFluffUp);
-				float cosMax = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
+				// How close is the pushed direction to the resting direction?
+				float baseDotPushed = Vector3.Dot(worldBaseDirection, pushedDir);
 
+				// How close must the pushed direction be to the resting position to be used?
+				float constrainedDot = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
+
+				// How close is the fluff's base direction to the local direction of movement. Used for special control of fluffs parallel to movement.
 				float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
 
-				if (baseDotUp >= cosMax && localBaseDotMove < 1)
+				// If pushed direction is within constraints, use that direction.
+				if (baseDotPushed >= constrainedDot && localBaseDotMove < 1)
 				{
-					fluffs[i].transform.up = newFluffUp;
+					fluffs[i].transform.up = pushedDir;
 				}
+				// Otherwise, compute the fluff direction at the constraints.
 				else
 				{
+					// If the fluff is on the right side, negate its vertical component.
 					Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
 					float yMult = 1;
 					if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
@@ -98,27 +103,27 @@ public class FluffSpawn : MonoBehaviour {
 						yMult = -1;
 					}
 
-					Vector3 oldUp = fluffs[i].baseDirection;
+					// Rotate the base direction by the constrained angle.
+					Vector3 baseDirection = fluffs[i].baseDirection;
 					float radAngle = (maxAlterAngle) * Mathf.Deg2Rad;
 					float sinAngle = Mathf.Sin(radAngle);
 					float cosAngle = Mathf.Cos(radAngle);
-					fluffDir.x = (oldUp.x * cosAngle) - ((oldUp.y * sinAngle) * yMult);
-					fluffDir.y = ((oldUp.x * sinAngle) * yMult) + (oldUp.y * cosAngle);
-					fluffDir.z = 0;					
+					fluffDir.x = (baseDirection.x * cosAngle) - ((baseDirection.y * sinAngle) * yMult);
+					fluffDir.y = 0;	
+					fluffDir.z = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
 
-					fluffDir.z = fluffDir.y;
-					fluffDir.y = 0;
-
+					// Put the rotated direction into world coordinates and use for fluff direction.
 					fluffDir = transform.TransformDirection(fluffDir);
 					fluffs[i].transform.up = fluffDir;
 				}
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
+
+			wasMoving = true;
 		}
-		else
+		else if (wasMoving)
 		{
-			// TODO Only do this on the frame of stopping. Ensure that any newly spawned fluffs are not at local origin (move them a bit when created).
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				Vector3 restingUp = fluffs[i].transform.position - transform.position;
@@ -127,9 +132,8 @@ public class FluffSpawn : MonoBehaviour {
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
+			wasMoving = false;
 		}
-
-		//Debug.Log("-----");
 	}
 
 	private void SpawnFluff()
