@@ -51,6 +51,7 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (fluffsToAdd != null)
 		{
+			//Debug.Log(pulseShot.fluffSpawn.fluffs.Count);
 			for (int i = 0; i < fluffsToAdd.Count; i++)
 			{
 				fluffsToAdd[i].EndPass();
@@ -58,6 +59,9 @@ public class PartnerLink : MonoBehaviour {
 				fluffsToAdd[i].transform.localEulerAngles = fluffRotation;
 				fluffsToAdd[i].baseAngle = fluffRotation.z;
 				fluffsToAdd[i].baseDirection = fluffsToAdd[i].transform.up;
+				fluffsToAdd[i].baseDirection = transform.InverseTransformDirection(fluffsToAdd[i].baseDirection);
+				fluffsToAdd[i].baseDirection.y = fluffsToAdd[i].baseDirection.z;
+				fluffsToAdd[i].baseDirection.z = 0;
 				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
 				if (fluffsToAdd[i].swayAnimation != null)
 				{
@@ -79,49 +83,54 @@ public class PartnerLink : MonoBehaviour {
 		trail.startWidth = transform.localScale.x;
 	}
 
+	public void AttachFluff(MovePulse pulse)
+	{
+		Debug.Log(pulse.gameObject.name);
+		if (pulse != null && (absorbing || pulse.moving))// && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
+		{
+			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+			if (pulse.creator != pulseShot)
+			{
+				pulseShot.volleys = 1;
+				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				{
+					pulseShot.volleys = pulse.volleys;
+				}
+				if (pulseShot.volleys >= volleysToConnect)
+				{
+					bool connectionAlreadyMade = false;
+					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+					{
+						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
+						{
+							connectionAlreadyMade = true;
+						}
+					}
+					if (!connectionAlreadyMade)
+					{
+						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+						connections.Add(newConnection);
+						pulse.creator.partnerLink.connections.Add(newConnection);
+						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+					}
+				}
+			}
+			pulseShot.lastPulseAccepted = pulse.creator;
+
+			if (fluffsToAdd == null)
+			{
+				fluffsToAdd = new List<MovePulse>();
+			}
+			fluffsToAdd.Add(pulse);
+		}	
+	}
+
 	private void OnTriggerEnter(Collider other)
 	{
 		// If colliding with a pulse, accept it.
-		if (other.gameObject.tag == "Pulse")
-		{
-			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && (absorbing || pulse.moving))
-			{
-				//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-				if (pulse.creator != pulseShot)
-				{
-					pulseShot.volleys = 1;
-					if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
-					{
-						pulseShot.volleys = pulse.volleys;
-					}
-					if (pulseShot.volleys >= volleysToConnect)
-					{
-						bool connectionAlreadyMade = false;
-						for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
-						{
-							if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
-							{
-								connectionAlreadyMade = true;
-							}
-						}
-						if (!connectionAlreadyMade)
-						{
-							SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
-							connections.Add(newConnection);
-							pulse.creator.partnerLink.connections.Add(newConnection);
-							newConnection.AttachPartners(pulse.creator.partnerLink, this);
-						}
-					}
-				}
-				pulseShot.lastPulseAccepted = pulse.creator;
-
-				if (fluffsToAdd == null)
-				{
-					fluffsToAdd = new List<MovePulse>();
-				}
-				fluffsToAdd.Add(pulse);
-			}
-		}
+		//if (other.gameObject.tag == "Pulse")
+		//{
+		//	MovePulse pulse = other.GetComponent<MovePulse>();
+			
 	}
 }
