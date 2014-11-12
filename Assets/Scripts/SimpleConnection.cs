@@ -100,6 +100,7 @@ public class SimpleConnection : MonoBehaviour {
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 	}
+
 	void OnTriggerEnter(Collider collide)
 	{
 		if(collide.gameObject.tag == "enemyPulse")
