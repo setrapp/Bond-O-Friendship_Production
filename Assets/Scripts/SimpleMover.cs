@@ -36,8 +36,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (rigidbody != null)
 		{
-			rigidbody.AddForce((velocity - oldVelocity), ForceMode.VelocityChange);
-			velocity = rigidbody.velocity;
+			rigidbody.velocity = velocity;
 		}
 		else
 		{

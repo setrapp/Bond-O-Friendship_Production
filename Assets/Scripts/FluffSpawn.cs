@@ -18,7 +18,7 @@ public class FluffSpawn : MonoBehaviour {
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
-	private bool wasMoving;
+	private Vector3 oldVelocity;
 	private PartnerLink partnerLink;
 
 	void Start()
@@ -82,69 +82,91 @@ public class FluffSpawn : MonoBehaviour {
 		if (rigidbody.velocity.sqrMagnitude > 0)
 		{
 			// Calculate the direction the fluffs should be pushed in both world and local space.
-			Vector3 fullBackDir = -rigidbody.velocity.normalized;
+			Vector3 currentVelocity = rigidbody.velocity;
+			float currentByOldVelocity = currentVelocity.magnitude / oldVelocity.magnitude;
+			Vector3 fullBackDir = -currentVelocity.normalized;
 			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
 
+			if (currentByOldVelocity >= 1)
+			{
+				//Debug.Log(oldVelocity + " " + currentVelocity);
+			}
+
 			for (int i = 0; i < fluffs.Count; i++)
 			{
-				Vector3 fluffDir = fullBackDir;
-
 				// Compute the fluff's resting direction in world space.
 				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffs[i].baseDirection);
 				worldBaseDirection.x *= -1;
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
 
-				// Find the vector from the fluff's root to the position of its head last frame.
-				Vector3 pushedDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
 
-				// How close is the pushed direction to the resting direction?
-				float baseDotPushed = Vector3.Dot(worldBaseDirection, pushedDir);
+				Vector3 fluffDir = fluffs[i].transform.up;
 
-				// How close must the pushed direction be to the resting position to be used?
-				float constrainedDot = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
-
-				// How close is the fluff's base direction to the local direction of movement. Used for special control of fluffs parallel to movement.
-				float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
-
-				// If pushed direction is within constraints, use that direction.
-				if (baseDotPushed >= constrainedDot && localBaseDotMove < 1)
+				if (currentByOldVelocity > 1)
 				{
-					fluffs[i].transform.up = pushedDir;
+					// Find the vector from the fluff's root to the position of its head last frame.
+					fluffDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
+
+					// How close is the pushed direction to the resting direction?
+					float baseDotPushed = Vector3.Dot(worldBaseDirection, fluffDir);
+
+					// How close must the pushed direction be to the resting position to be used?
+					float constrainedDot = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
+
+					// How close is the fluff's base direction to the local direction of movement. Used for special control of fluffs parallel to movement.
+					float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
+
+					// If pushed direction is beyond constraints, compute the fluff direction at the constraints.
+					if (baseDotPushed < constrainedDot || localBaseDotMove > 1)
+					{
+						// If the fluff is on the right side, negate its vertical component.
+						Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
+						float yMult = 1;
+						if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
+						{
+							yMult = -1;
+						}
+
+						// Rotate the base direction by the constrained angle.
+						Vector3 baseDirection = fluffs[i].baseDirection;
+						float radAngle = (maxAlterAngle) * Mathf.Deg2Rad;
+						float sinAngle = Mathf.Sin(radAngle);
+						float cosAngle = Mathf.Cos(radAngle);
+						fluffDir.x = (baseDirection.x * cosAngle) - ((baseDirection.y * sinAngle) * yMult);
+						fluffDir.y = 0;
+						fluffDir.z = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
+
+						// Put the rotated direction into world coordinates and use for fluff direction.
+						fluffDir = transform.TransformDirection(fluffDir);
+					}
 				}
-				// Otherwise, compute the fluff direction at the constraints.
 				else
 				{
-					// If the fluff is on the right side, negate its vertical component.
-					Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
-					float yMult = 1;
-					if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
-					{
-						yMult = -1;
-					}
+					// Localize the current fluff direction.
+					Vector3 localFluffDir = transform.InverseTransformDirection(fluffDir);
+					localFluffDir.y = localFluffDir.z;
+					localFluffDir.z = 0;
 
-					// Rotate the base direction by the constrained angle.
-					Vector3 baseDirection = fluffs[i].baseDirection;
-					float radAngle = (maxAlterAngle) * Mathf.Deg2Rad;
-					float sinAngle = Mathf.Sin(radAngle);
-					float cosAngle = Mathf.Cos(radAngle);
-					fluffDir.x = (baseDirection.x * cosAngle) - ((baseDirection.y * sinAngle) * yMult);
-					fluffDir.y = 0;	
-					fluffDir.z = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
+					// Interpolate towards resting direction.
+					Vector3 fromRest = localFluffDir - fluffs[i].baseDirection;
+					localFluffDir = fluffs[i].baseDirection + (fromRest * (currentByOldVelocity));
 
-					// Put the rotated direction into world coordinates and use for fluff direction.
-					fluffDir = transform.TransformDirection(fluffDir);
-					fluffs[i].transform.up = fluffDir;
+					// Worldize new fluff direction.
+					localFluffDir.z = localFluffDir.y;
+					localFluffDir.y = 0;
+					fluffDir = transform.TransformDirection(localFluffDir);
 				}
 
+				fluffs[i].transform.up = fluffDir;
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
 
-			wasMoving = true;
+			oldVelocity = currentVelocity;
 		}
-		else if (wasMoving)
+		else if (oldVelocity.sqrMagnitude > 0)
 		{
 			for (int i = 0; i < fluffs.Count; i++)
 			{
@@ -154,7 +176,7 @@ public class FluffSpawn : MonoBehaviour {
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
-			wasMoving = false;
+			oldVelocity = Vector3.zero;
 		}
 	}
 

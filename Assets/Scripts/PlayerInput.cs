@@ -110,57 +110,51 @@ public class PlayerInput : MonoBehaviour {
 				paused = !paused;
 			}
 		
-		if(!paused)
-		{
-			velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
-			// Movement
-			if(useKeyboard)
+			if(!paused)
 			{
-				if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
+				velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
+				// Movement
+				if(useKeyboard)
 				{
-					velocityChange += Vector3.up;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
-				{
-					velocityChange -= Vector3.right;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
-				{
-					velocityChange -= Vector3.up;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
-				{
-					velocityChange += Vector3.right;
-				}
+					if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
+					{
+						velocityChange += Vector3.up;
+					}
+					if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
+					{
+						velocityChange -= Vector3.right;
+					}
+					if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
+					{
+						velocityChange -= Vector3.up;
+					}
+					if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
+					{
+						velocityChange += Vector3.right;
+					}
 				
 				
-			}
+				}
 
-			if (velocityChange.sqrMagnitude > 0)
-			{
-				desiredLook = velocityChange;
-			}
-			
-			Vector3 forward = Helper.RotateTowards2D(transform.forward, desiredLook, mover.handling * Time.deltaTime * Mathf.Deg2Rad, 0, transform.right);
-			transform.LookAt(transform.position + forward, transform.up);
+				// Turn towards velocity change.
+				if (velocityChange.sqrMagnitude > 0)
+				{
+					mover.Accelerate(velocityChange);
+				}
+				else
+				{
+					mover.SlowDown();
+				}
+				transform.LookAt(transform.position + mover.velocity, transform.up);
 
-			PlayerLookAt();
+				PlayerLookAt();
 				Absorbing();
-			if (velocityChange.sqrMagnitude > 0)
-			{
-				mover.Accelerate(transform.forward);
-			}
-			else
-			{
-				mover.SlowDown();
-			}
 
-			//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
-			if(absorb != null)
-			{
-				absorb.transform.position = transform.position;
+				if(absorb != null)
+				{
+					absorb.transform.position = transform.position;
+				}
 			}
-		}
 		}
 	}
 
