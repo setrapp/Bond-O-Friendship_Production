@@ -18,7 +18,7 @@ public class FluffSpawn : MonoBehaviour {
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
-	private Vector3 oldVelocity;
+	private float oldSpeed;
 	private PartnerLink partnerLink;
 
 	void Start()
@@ -43,7 +43,7 @@ public class FluffSpawn : MonoBehaviour {
 		sinceSpawn = 0;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		// Attempt to spawn more fluff.
 		if (fluffs.Count < naturalFluffCount)
@@ -82,17 +82,12 @@ public class FluffSpawn : MonoBehaviour {
 		if (rigidbody.velocity.sqrMagnitude > 0)
 		{
 			// Calculate the direction the fluffs should be pushed in both world and local space.
-			Vector3 currentVelocity = rigidbody.velocity;
-			float currentByOldVelocity = currentVelocity.magnitude / oldVelocity.magnitude;
-			Vector3 fullBackDir = -currentVelocity.normalized;
+			float currentSpeed = rigidbody.velocity.magnitude;
+			float currentByOldSpeed = currentSpeed / oldSpeed;
+			Vector3 fullBackDir = -rigidbody.velocity / currentSpeed;
 			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
-
-			if (currentByOldVelocity >= 1)
-			{
-				//Debug.Log(oldVelocity + " " + currentVelocity);
-			}
 
 			for (int i = 0; i < fluffs.Count; i++)
 			{
@@ -102,10 +97,9 @@ public class FluffSpawn : MonoBehaviour {
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
 
-
 				Vector3 fluffDir = fluffs[i].transform.up;
 
-				if (currentByOldVelocity > 1)
+				if (currentByOldSpeed>= 1)
 				{
 					// Find the vector from the fluff's root to the position of its head last frame.
 					fluffDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
@@ -152,7 +146,7 @@ public class FluffSpawn : MonoBehaviour {
 
 					// Interpolate towards resting direction.
 					Vector3 fromRest = localFluffDir - fluffs[i].baseDirection;
-					localFluffDir = fluffs[i].baseDirection + (fromRest * (currentByOldVelocity));
+					localFluffDir = fluffs[i].baseDirection + (fromRest * currentByOldSpeed);
 
 					// Worldize new fluff direction.
 					localFluffDir.z = localFluffDir.y;
@@ -164,9 +158,9 @@ public class FluffSpawn : MonoBehaviour {
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
 
-			oldVelocity = currentVelocity;
+			oldSpeed = currentSpeed;
 		}
-		else if (oldVelocity.sqrMagnitude > 0)
+		else if (oldSpeed > 0)
 		{
 			for (int i = 0; i < fluffs.Count; i++)
 			{
@@ -176,7 +170,7 @@ public class FluffSpawn : MonoBehaviour {
 
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
-			oldVelocity = Vector3.zero;
+			oldSpeed = 0;
 		}
 	}
 
