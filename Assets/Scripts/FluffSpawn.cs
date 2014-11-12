@@ -67,6 +67,7 @@ public class FluffSpawn : MonoBehaviour {
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
 			//Debug.Log(checkCos);
+			//Debug.Log(localFullBackDir);
 
 			for (int i = 0; i < fluffs.Count; i++)
 			{
@@ -77,19 +78,20 @@ public class FluffSpawn : MonoBehaviour {
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
 
-
-				Vector3 newFluffUp = fluffs[i].oldBulbPos - fluffs[i].transform.position;
+				Vector3 newFluffUp = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
 
 				float baseDotUp = Vector3.Dot(worldBaseDirection, newFluffUp);
 				float cosMax = Mathf.Cos(maxAlterAngle * Mathf.Deg2Rad);
 
-				if (baseDotUp >= cosMax)
+				float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
+
+				if (baseDotUp >= cosMax && localBaseDotMove < 1)
 				{
 					fluffs[i].transform.up = newFluffUp;
 				}
 				else
 				{
-					Vector3 expectedRight = Vector3.Cross(-localFullBackDir, transform.up);
+					Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
 					float yMult = 1;
 					if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
 					{
@@ -101,17 +103,13 @@ public class FluffSpawn : MonoBehaviour {
 					float sinAngle = Mathf.Sin(radAngle);
 					float cosAngle = Mathf.Cos(radAngle);
 					fluffDir.x = (oldUp.x * cosAngle) - ((oldUp.y * sinAngle) * yMult);
-					fluffDir.y = (oldUp.x * sinAngle) + ((oldUp.y * cosAngle) * yMult);
-					fluffDir.z = 0;
-					if (Vector3.Dot(fluffs[i].baseDirection, Vector3.right) > 0)
-					{
-						fluffDir.y *= -1;
-					}
+					fluffDir.y = ((oldUp.x * sinAngle) * yMult) + (oldUp.y * cosAngle);
+					fluffDir.z = 0;					
 
-					fluffDir = transform.InverseTransformDirection(fluffDir);
-					fluffDir.x *= -1;
-					fluffDir.y = fluffDir.z;
-					fluffDir.z = 0;
+					fluffDir.z = fluffDir.y;
+					fluffDir.y = 0;
+
+					fluffDir = transform.TransformDirection(fluffDir);
 					fluffs[i].transform.up = fluffDir;
 				}
 
@@ -120,6 +118,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 		else
 		{
+			// TODO Only do this on the frame of stopping. Ensure that any newly spawned fluffs are not at local origin (move them a bit when created).
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				Vector3 restingUp = fluffs[i].transform.position - transform.position;
