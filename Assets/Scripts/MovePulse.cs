@@ -57,8 +57,6 @@ public class MovePulse : MonoBehaviour {
 
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 				transform.position += moveVector;
-
-
 			}
 			else
 			{
@@ -70,11 +68,11 @@ public class MovePulse : MonoBehaviour {
 					//Debug.Log(attachInfo.collider.gameObject.name);
 					//transform.parent = attachInfo.collider.transform;
 				}
-				//transform.rotation = Quaternion.Euler(270, 0, 0);
+				transform.rotation = Quaternion.Euler(270, 0, 0);
 
 				if (swayAnimation != null)
 				{
-					//swayAnimation.enabled = true;
+					swayAnimation.enabled = true;
 				}
 			}
 		}

@@ -148,7 +148,7 @@ public class PlayerInput : MonoBehaviour {
 				transform.LookAt(transform.position + mover.velocity, transform.up);
 
 				PlayerLookAt();
-				Absorbing();
+				partnerLink.absorbing = Absorbing();
 
 				if(absorb != null)
 				{
@@ -164,34 +164,35 @@ public class PlayerInput : MonoBehaviour {
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
-	void Absorbing()
+	bool Absorbing()
 	{
-
-		if ( (!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (useKeyboard && playerNumber == Player.Player2 && Input.GetKey(KeyCode.Keypad0)))
+		if ((!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))) || (useKeyboard && playerNumber == Player.Player2 && (Input.GetKey(KeyCode.Keypad0) || Input.GetMouseButton(1))))
+		{
+			if(absorb == null)
 			{
-
-				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
-				if(absorb == null)
+				absorb = (ParticleSystem)Instantiate(absorbPrefab);
+				absorb.transform.position = transform.position;
+				absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
+				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
+			}
+			GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
+			foreach(GameObject livePulse in pulseArray)
+			{
+				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
+				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 				{
-					absorb = (ParticleSystem)Instantiate(absorbPrefab);
-					absorb.transform.position = transform.position;
-					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
-					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
-				}
-				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
-				foreach(GameObject livePulse in pulseArray)
-				{
-					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2) && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
-					{
-						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
-					}
+					livePulseMove.target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+					livePulseMove.moving = true;
 				}
 			}
+			return true;
+		}
 		else if(absorb != null)
 		{
 			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
 			Destroy(absorb.gameObject, 1.0f);
 		}
+		return false;
 	}
 
 	void PlayerLookAt()
@@ -216,9 +217,8 @@ public class PlayerInput : MonoBehaviour {
 			
 				if (CanFire(basePulseDrain))
 				{
-					pulseDirection *= basePulsePower;// +timedPulsePower * chargeTime;
-					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);// + timedPulseDrain * Time.deltaTime);
+					pulseDirection *= basePulsePower;
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				firePulse = false;
 			}

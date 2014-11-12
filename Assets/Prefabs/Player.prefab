@@ -219,7 +219,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
@@ -476,7 +476,7 @@ MonoBehaviour:
   preChargeScale: 1
   scaleRestoreRate: .200000003
   endChargeRestoreRate: 1
-  chargingPulse: 0
+  absorbing: 0
   volleysToConnect: 2
 --- !u!114 &11400006
 MonoBehaviour:
@@ -503,7 +503,7 @@ MonoBehaviour:
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
   swapJoysticks: 0
-  absorbStrength: 5
+  absorbStrength: 3
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
 --- !u!114 &11400008
@@ -519,14 +519,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 0}
   headSprite: {fileID: 100010}
-  naturalFluffCount: 1
+  naturalFluffCount: 0
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   fluffContainer: {fileID: 100008}
   fluffs: []
   spawnOffset: .425000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 1
+  startingFluff: 0
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -543,8 +543,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
-  acceleration: 100
-  handling: 300
+  acceleration: 300
+  handling: 600
   dampening: .949999988
   dampeningThreshold: .5
   externalSpeedMultiplier: 1

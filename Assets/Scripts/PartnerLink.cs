@@ -25,7 +25,7 @@ public class PartnerLink : MonoBehaviour {
 	public float preChargeScale;
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
-	public bool chargingPulse = false;
+	public bool absorbing = false;
 	public int volleysToConnect = 2;
 	private List<MovePulse> fluffsToAdd;
 
@@ -74,50 +74,7 @@ public class PartnerLink : MonoBehaviour {
 			fluffsToAdd = null;
 		}
 
-		// Fill based on the amount drained by connection
-		/*if (connections == null || connections.Count < 1)
-		{
-			fillScale = 0;
-		}*/
-		//fillScale = 1;
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-		
-		//TODO This is temporary.
-		//transform.localScale = new Vector3(1, 1, 1);
-
-		// Record scale before starting charge.
-		if (!chargingPulse && preChargeScale < transform.localScale.x)
-		{
-			preChargeScale = transform.localScale.x;
-		}
-
-		// TODO Scaling up between colliders near parallel gets body stuck inside. Fix or remove scaling.
-
-		// Restore scale up to normal, if below it and not charging.
-		if (transform.localScale.x < normalScale && !chargingPulse)
-		{
-			// If scale is less than the scale before starting charge, scale up to that first.
-			if (transform.localScale.x < preChargeScale)
-			{
-				float actualRestoreRate = endChargeRestoreRate * transform.localScale.x;
-				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-			}
-			else
-			{
-				float actualRestoreRate = scaleRestoreRate * transform.localScale.x;
-				transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-			}
-		}
-
-		// Stay within scale bounds.
-		if (transform.localScale.x < minScale)
-		{
-			transform.localScale = new Vector3(minScale, minScale, minScale);
-		}
-		else if (transform.localScale.x > maxScale)
-		{
-			transform.localScale = new Vector3(maxScale, maxScale, maxScale);
-		}
 
 		trail.startWidth = transform.localScale.x;
 	}
@@ -128,7 +85,7 @@ public class PartnerLink : MonoBehaviour {
 		if (other.gameObject.tag == "Pulse")
 		{
 			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && (chargingPulse || pulse.moving))
+			if (pulse != null && (absorbing || pulse.moving))
 			{
 				//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
 				if (pulse.creator != pulseShot)
