@@ -9,6 +9,7 @@ public class MovePulse : MonoBehaviour {
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;
+	public float rotationSpeed = 50.0f;
 	//public GameObject pulseCreator;
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
@@ -48,9 +49,12 @@ public class MovePulse : MonoBehaviour {
 				float speed = moveSpeed * decelerationFactor;
 
 				//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+				transform.Rotate(rotationSpeed*Time.deltaTime,0.0f,0.0f);
 
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 				transform.position += moveVector;
+
+
 			}
 			else
 			{
@@ -62,11 +66,11 @@ public class MovePulse : MonoBehaviour {
 					//Debug.Log(attachInfo.collider.gameObject.name);
 					//transform.parent = attachInfo.collider.transform;
 				}
-				transform.rotation = Quaternion.Euler(270, 0, 0);
+				//transform.rotation = Quaternion.Euler(270, 0, 0);
 
 				if (swayAnimation != null)
 				{
-					swayAnimation.enabled = true;
+					//swayAnimation.enabled = true;
 				}
 			}
 		}
