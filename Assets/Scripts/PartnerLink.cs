@@ -28,6 +28,8 @@ public class PartnerLink : MonoBehaviour {
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
 	public bool absorbing = false;
+	private bool wasAbsorbing;
+	public float absorbSpeedFactor = 0;
 	public int volleysToConnect = 2;
 	private List<MovePulse> fluffsToAdd;
 
@@ -51,7 +53,20 @@ public class PartnerLink : MonoBehaviour {
 	
 	void Update()
 	{
-		
+		if (absorbing != wasAbsorbing)
+		{
+			if (absorbing)
+			{
+				mover.externalSpeedMultiplier += absorbSpeedFactor;
+			}
+			else
+			{
+				mover.externalSpeedMultiplier -= absorbSpeedFactor;
+			}
+			wasAbsorbing = absorbing;
+		}
+
+
 		if (flashRenderer.material.color.a > 0)
 		{
 			Color newFlashColor = flashRenderer.material.color;

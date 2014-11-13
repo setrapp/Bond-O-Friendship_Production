@@ -40,7 +40,10 @@ public class PlayerInput : MonoBehaviour {
 	private bool paused = false;
 
 	void Update () {
-
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
