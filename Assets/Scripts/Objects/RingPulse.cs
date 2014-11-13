@@ -35,11 +35,11 @@ public class RingPulse : MonoBehaviour {
 		{
 			gameObject.GetComponent<Collider>().enabled = false;
 		}
-		if(collide.gameObject.tag == "Converser")
-		{
-			gameObject.GetComponent<Collider>().enabled = false;
-			print("Collide");
+		//if(collide.gameObject.tag == "Converser")
+		//{
+		//	gameObject.GetComponent<Collider>().enabled = false;
+			//print("Collide");
 			//collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
-		}
+		//}
 	}
 }
