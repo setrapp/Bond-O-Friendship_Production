@@ -19,7 +19,8 @@ public class FluffSpawn : MonoBehaviour {
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
 	private float oldSpeed;
-	private PartnerLink partnerLink;
+	[HideInInspector]
+	public PartnerLink partnerLink;
 
 	void Start()
 	{
@@ -45,6 +46,11 @@ public class FluffSpawn : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		if (fluffs.Count >= naturalFluffCount)
+		{
+			partnerLink.fillScale = 1;
+		}
+
 		// Attempt to spawn more fluff.
 		if (fluffs.Count < naturalFluffCount)
 		{
@@ -219,6 +225,23 @@ public class FluffSpawn : MonoBehaviour {
 				newFluffInfo.swayAnimation.enabled = false;
 			}
 			fluffs.Add(newFluffInfo);
+		}
+	}
+
+	public void DestroyAllFluffs()
+	{
+		for (int i = fluffs.Count - 1; i >= 0; i--)
+		{
+			DestroyFluff(fluffs[i]);
+		}
+	}
+
+	public void DestroyFluff(MovePulse fluffToDestroy)
+	{
+		if (fluffs.Contains(fluffToDestroy))
+		{
+			Destroy(fluffToDestroy.gameObject);
+			fluffs.Remove(fluffToDestroy);
 		}
 	}
 
