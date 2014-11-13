@@ -64,7 +64,7 @@ public class PartnerLink : MonoBehaviour {
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
 				fluffsToAdd[i].transform.up = worldBaseDirection;
-				Debug.Log(fluffsToAdd[i].transform.up);
+				//Debug.Log(fluffsToAdd[i].transform.up);
 				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
 				if (fluffsToAdd[i].swayAnimation != null)
 				{
@@ -88,7 +88,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		Debug.Log(pulse.gameObject.name);
+		//Debug.Log(pulse.gameObject.name);
 		if (pulse != null && (absorbing || pulse.moving))// && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
 			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);

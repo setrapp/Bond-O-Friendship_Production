@@ -105,7 +105,7 @@ public class SimpleConnection : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "enemyPulse")
 		{
-			print("EnemyPulse");
+			//print(collide.gameObject.tag + " " + collide.gameObject.name);
 			BreakConnection();
 		}
 	}
