@@ -153,7 +153,7 @@ public class FluffSpawn : MonoBehaviour {
 					localFluffDir.y = 0;
 					fluffDir = transform.TransformDirection(localFluffDir);
 				}
-
+				Debug.Log (fluffDir);
 				fluffs[i].transform.up = fluffDir;
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
