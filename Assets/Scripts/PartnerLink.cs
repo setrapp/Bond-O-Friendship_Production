@@ -52,31 +52,21 @@ public class PartnerLink : MonoBehaviour {
 		if (fluffsToAdd != null)
 		{
 			//Debug.Log(pulseShot.fluffSpawn.fluffs.Count);
-			for (int i = 0; i < fluffsToAdd.Count; i++)
+			for (int i = fluffsToAdd.Count - 1; i >=0 ; i--)
 			{
-				fluffsToAdd[i].EndPass();
-				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
-				fluffsToAdd[i].transform.localEulerAngles = fluffRotation;
-				fluffsToAdd[i].baseAngle = fluffRotation.z;
-				fluffsToAdd[i].baseDirection = Quaternion.Euler(0, 0, fluffsToAdd[i].baseAngle) * Vector3.up;
-				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffsToAdd[i].baseDirection);
-				worldBaseDirection.x *= -1;
-				worldBaseDirection.y = worldBaseDirection.z;
-				worldBaseDirection.z = 0;
-				fluffsToAdd[i].transform.up = worldBaseDirection;
-				Debug.Log(fluffsToAdd[i].transform.up);
-				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
-				if (fluffsToAdd[i].swayAnimation != null)
+				Material fluffMaterial = null;
+				MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
+				if (fluffMesh != null)
 				{
-					fluffsToAdd[i].swayAnimation["Fluff_Sway"].time = 0;
-					fluffsToAdd[i].swayAnimation.enabled = false;
-					Vector3 rotation = fluffsToAdd[i].swayAnimation.transform.localEulerAngles;
-					rotation.z = 0;
-					fluffsToAdd[i].swayAnimation.transform.localEulerAngles = rotation;
+					fluffMaterial = fluffMesh.material;
 				}
-				pulseShot.fluffSpawn.fluffs.Add(fluffsToAdd[i]);
-				fluffsToAdd[i].transform.parent = pulseShot.fluffSpawn.fluffContainer.transform;
+
+				pulseShot.fluffSpawn.SpawnFluff(true, fluffMaterial);
+
+				Destroy(fluffsToAdd[i].gameObject);
+				fluffsToAdd.RemoveAt(i);
 			}
+
 			fluffsToAdd.Clear();
 			fluffsToAdd = null;
 		}
@@ -88,8 +78,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		Debug.Log(pulse.gameObject.name);
-		if (pulse != null && (absorbing || pulse.moving))// && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
+		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
 			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
 			if (pulse.creator != pulseShot)

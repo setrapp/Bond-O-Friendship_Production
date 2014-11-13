@@ -174,7 +174,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 	}
 
-	private void SpawnFluff(bool instantSprout = false)
+	public void SpawnFluff(bool instantSprout = false, Material useMaterial = null)
 	{
 		if (fluffPrefab.GetComponent<MovePulse>() != null)
 		{
@@ -203,10 +203,16 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.baseDirection.y = newFluffInfo.baseDirection.z;
 			newFluffInfo.baseDirection.z = 0;
 
+			if (useMaterial == null)
+			{
+				useMaterial = fluffMaterial;
+			}
+
 			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
+			
 			for (int i = 0; i < meshRenderers.Length; i++)
 			{
-				meshRenderers[i].material = fluffMaterial;
+				meshRenderers[i].material = useMaterial;
 			}
 			if (newFluffInfo.swayAnimation != null)
 			{
