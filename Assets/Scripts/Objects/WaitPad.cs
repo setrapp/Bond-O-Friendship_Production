@@ -41,7 +41,7 @@ public class WaitPad : MonoBehaviour {
 			print ("activated");
 		}
 	}
-	/*void OnTriggerEnter(Collider collide)
+	void OnTriggerEnter(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1")
 		{
@@ -61,31 +61,6 @@ public class WaitPad : MonoBehaviour {
 			pOonPad = false;
 		}
 		if(collide.gameObject.name == "Player 2")
-		{
-			pTonPad = false;
-		}
-	}*/
-
-	void OnCollisionEnter(Collision collision)
-	{
-		if (collision.collider.gameObject.name == "Player 1")
-		{
-			pOonPad = true;
-			//print("1");
-		}
-		if (collision.collider.gameObject.name == "Player 2")
-		{
-			pTonPad = true;
-			//print ("2");
-		}
-	}
-	void OnCollisionExit(Collision collision)
-	{
-		if (collision.collider.gameObject.name == "Player 1")
-		{
-			pOonPad = false;
-		}
-		if (collision.collider.gameObject.name == "Player 2")
 		{
 			pTonPad = false;
 		}

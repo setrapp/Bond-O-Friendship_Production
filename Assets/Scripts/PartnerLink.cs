@@ -58,10 +58,13 @@ public class PartnerLink : MonoBehaviour {
 				Vector3 fluffRotation = pulseShot.fluffSpawn.FindOpenFluffAngle();
 				fluffsToAdd[i].transform.localEulerAngles = fluffRotation;
 				fluffsToAdd[i].baseAngle = fluffRotation.z;
-				fluffsToAdd[i].baseDirection = fluffsToAdd[i].transform.up;
-				fluffsToAdd[i].baseDirection = transform.InverseTransformDirection(fluffsToAdd[i].baseDirection);
-				fluffsToAdd[i].baseDirection.y = fluffsToAdd[i].baseDirection.z;
-				fluffsToAdd[i].baseDirection.z = 0;
+				fluffsToAdd[i].baseDirection = Quaternion.Euler(0, 0, fluffsToAdd[i].baseAngle) * Vector3.up;
+				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffsToAdd[i].baseDirection);
+				worldBaseDirection.x *= -1;
+				worldBaseDirection.y = worldBaseDirection.z;
+				worldBaseDirection.z = 0;
+				fluffsToAdd[i].transform.up = worldBaseDirection;
+				Debug.Log(fluffsToAdd[i].transform.up);
 				fluffsToAdd[i].transform.position = pulseShot.fluffSpawn.fluffContainer.transform.position + fluffsToAdd[i].transform.up * pulseShot.fluffSpawn.spawnOffset;
 				if (fluffsToAdd[i].swayAnimation != null)
 				{
@@ -123,14 +126,5 @@ public class PartnerLink : MonoBehaviour {
 			}
 			fluffsToAdd.Add(pulse);
 		}	
-	}
-
-	private void OnTriggerEnter(Collider other)
-	{
-		// If colliding with a pulse, accept it.
-		//if (other.gameObject.tag == "Pulse")
-		//{
-		//	MovePulse pulse = other.GetComponent<MovePulse>();
-			
 	}
 }
