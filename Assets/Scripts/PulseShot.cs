@@ -84,7 +84,12 @@ public class PulseShot : MonoBehaviour {
 			}
 		}
 
+		
 		float shotAngle = -shotSpread / 2;
+		if (passFluffs.Count == 1)
+		{
+			shotAngle = 0;
+		}
 		float shotDist = Vector3.Distance(pulseTarget, transform.position);
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)

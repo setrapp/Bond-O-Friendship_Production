@@ -19,14 +19,35 @@ public class WallActivate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (stageCrash.GetComponent<StageCrash>().open == true)
+		{
+			if (wall1 != null)
 			{
 				wall1.GetComponent<Collider>().enabled = true;
+			}
+			if (wall2 != null)
+			{
 				wall2.GetComponent<Collider>().enabled = true;
+			}
+			if (wall3 != null)
+			{
 				wall3.GetComponent<Collider>().enabled = true;
+			}
+			if (wall4 != null)
+			{
 				wall4.GetComponent<Collider>().enabled = true;
+			}
+			if (wall5 != null)
+			{
 			    wall5.GetComponent<Collider>().enabled = true;
+			}
+			if (wall6 != null)
+			{
 				wall6.GetComponent<Collider>().enabled = true;
+			}
+			if (wall7 != null)
+			{
 				wall7.GetComponent<Collider>().enabled = true;
+			}
 
 			}
 
