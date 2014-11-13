@@ -14,13 +14,17 @@ public class MovePulse : MonoBehaviour {
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
-	public float baseAngle;
+	public float baseAngle = -1;
+	public Vector3 baseDirection;
 	public Animation swayAnimation;
 	private bool disableColliders;
+	public Vector3 oldBulbPos;
+	public GameObject bulb;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
+		oldBulbPos = bulb.transform.position;
 	}
 
 	// Update is called once per frame
@@ -53,8 +57,6 @@ public class MovePulse : MonoBehaviour {
 
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 				transform.position += moveVector;
-
-
 			}
 			else
 			{
@@ -66,11 +68,11 @@ public class MovePulse : MonoBehaviour {
 					//Debug.Log(attachInfo.collider.gameObject.name);
 					//transform.parent = attachInfo.collider.transform;
 				}
-				//transform.rotation = Quaternion.Euler(270, 0, 0);
+				transform.rotation = Quaternion.Euler(270, 0, 0);
 
 				if (swayAnimation != null)
 				{
-					//swayAnimation.enabled = true;
+					swayAnimation.enabled = true;
 				}
 			}
 		}
@@ -86,6 +88,7 @@ public class MovePulse : MonoBehaviour {
 		}
 		passed = true;
 		moving = true;
+		baseAngle = -1;
 	}
 
 	public void EndPass()
@@ -103,6 +106,11 @@ public class MovePulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
+		if (!collide.isTrigger && passed && collide.gameObject.tag == "Converser")
+		{
+			collide.gameObject.GetComponent<PartnerLink>().AttachFluff(this);
+		}
+
 		/*if (passed && moving)
 		{
 			if (collide.gameObject.tag == "Pulse")
