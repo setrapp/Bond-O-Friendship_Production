@@ -72,7 +72,7 @@ public class PlayerInput : MonoBehaviour {
 
 				//Debug.Log(joystickNumber.ToString());
 			}
-			else if(otherPlayerInput.joystickDetermined)
+			else if(otherPlayerInput != null && otherPlayerInput.joystickDetermined)
 			{
 				if(Input.GetButtonDown("Joy1Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy1)
 				{
