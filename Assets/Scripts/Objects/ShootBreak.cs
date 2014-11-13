@@ -63,10 +63,10 @@ public class ShootBreak : MonoBehaviour {
 		}
 		if(timer <= 1 && timer > 0)
 		{
-			pointer.renderer.material.color = Color.magenta;
+			pointer.GetComponent<Renderer>().material.color = Color.magenta;
 		}
 		else
-			pointer.renderer.material.color = Color.white;
+			pointer.GetComponent<Renderer>().material.color = Color.white;
 
 		if(timer<=0)
 		{

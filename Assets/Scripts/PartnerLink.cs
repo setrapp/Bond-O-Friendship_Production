@@ -6,6 +6,8 @@ public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
+	public Renderer flashRenderer;
+	public float flashFadeTime = 1;
 	public TrailRenderer trail;
 	public PulseShot pulseShot;
 	public float partnerLineSize = 0.25f;
@@ -25,13 +27,9 @@ public class PartnerLink : MonoBehaviour {
 	public float preChargeScale;
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
-	public bool chargingPulse = false;
+	public bool absorbing = false;
 	public int volleysToConnect = 2;
-	[SerializeField]
-	public List<ContactPoint> contacts;
-	public bool skipScaleUp = false;
-	public float baseScaleTestRadius= 0.6f;
-	public SphereCollider scaleTestCollider;
+	private List<MovePulse> fluffsToAdd;
 
 	void Awake()
 	{
@@ -48,74 +46,53 @@ public class PartnerLink : MonoBehaviour {
 			pulseShot = GetComponent<PulseShot>();
 		}
 
-		fillRenderer.material.color = headRenderer.material.color;
-
-		contacts = new List<ContactPoint>();
+		SetFlashAndFill(new Color(0, 0, 0, 0));
 	}
 	
 	void Update()
 	{
-		// Fill based on the amount drained by connection
-		/*if (connections == null || connections.Count < 1)
+		
+		if (flashRenderer.material.color.a > 0)
 		{
-			fillScale = 0;
-		}*/
-		fillScale = 1;
+			Color newFlashColor = flashRenderer.material.color;
+			newFlashColor.a = Mathf.Max(newFlashColor.a - (Time.deltaTime / flashFadeTime), 0);
+			SetFlashAndFill(newFlashColor);
+		}
+
+		if (fluffsToAdd != null)
+		{
+			// Spawn fluffs that look like clones of the ones being added.
+			for (int i = fluffsToAdd.Count - 1; i >=0 ; i--)
+			{
+				Material fluffMaterial = null;
+				MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
+				if (fluffMesh != null)
+				{
+					fluffMaterial = fluffMesh.material;
+				}
+
+				pulseShot.fluffSpawn.SpawnFluff(true, fluffMaterial);
+
+				Destroy(fluffsToAdd[i].gameObject);
+				fluffsToAdd.RemoveAt(i);
+			}
+
+			fluffsToAdd.Clear();
+			fluffsToAdd = null;
+		}
+
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-
-		// Record scale before starting charge.
-		if (!chargingPulse && preChargeScale < transform.localScale.x)
-		{
-			preChargeScale = transform.localScale.x;
-		}
-
-		if (contacts.Count < 1 && !skipScaleUp)
-		{
-			// Restore scale up to normal, if below it and not charging.
-			if (transform.localScale.x < normalScale && !chargingPulse)
-			{
-				// If scale is less than the scale before starting charge, scale up to that first.
-				if (transform.localScale.x < preChargeScale)
-				{
-					float actualRestoreRate = endChargeRestoreRate * transform.localScale.x;
-					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, preChargeScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-				}
-				else
-				{
-					float actualRestoreRate = scaleRestoreRate * transform.localScale.x;
-					transform.localScale = new Vector3(Mathf.Min(transform.localScale.x + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.y + actualRestoreRate * Time.deltaTime, normalScale), Mathf.Min(transform.localScale.z + actualRestoreRate * Time.deltaTime, normalScale));
-				}
-			}
-
-			// Stay within scale bounds.
-			if (transform.localScale.x < minScale)
-			{
-				transform.localScale = new Vector3(minScale, minScale, minScale);
-			}
-			else if (transform.localScale.x > maxScale)
-			{
-				transform.localScale = new Vector3(maxScale, maxScale, maxScale);
-			}
-
-			scaleTestCollider.radius = 0.5f + ((baseScaleTestRadius - 0.5f) / transform.localScale.x);
-		}
-		skipScaleUp = false;
 
 		trail.startWidth = transform.localScale.x;
 	}
 
-	private void OnTriggerEnter(Collider other)
+	public void AttachFluff(MovePulse pulse)
 	{
-		// If colliding with a pulse, accept it.
-		if (other.gameObject.tag == "Pulse")
+		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
-			MovePulse pulse = other.GetComponent<MovePulse>();
-			if (pulse != null && (pulse.creator == null || pulse.creator != pulseShot))
+			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
+			if (pulse.creator != pulseShot)
 			{
-				if (contacts.Count < 1)
-				{
-					transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-				}
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
 				{
@@ -139,48 +116,27 @@ public class PartnerLink : MonoBehaviour {
 						newConnection.AttachPartners(pulse.creator.partnerLink, this);
 					}
 				}
+			}
+
+			if (pulse.creator != null && pulse.creator != pulseShot)
+			{
+				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
 				pulseShot.lastPulseAccepted = pulse.creator;
-				Destroy(pulse.gameObject);
 			}
-		}
+
+			if (fluffsToAdd == null)
+			{
+				fluffsToAdd = new List<MovePulse>();
+			}
+			fluffsToAdd.Add(pulse);
+		}	
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	public void SetFlashAndFill(Color newFlashColor)
 	{
-		bool collidingConnection = false;
-		/*for (int i = 0; i < connections.Count; i++)
-		{
-			if (connections[i].bondCollider.gameObject == collision.collider.gameObject || connections[i].Shield.gameObject != collision.collider.gameObject)
-			{
-				collidingConnection = true;
-			}
-		}
-		Debug.Log(collision.collider.gameObject.name + " " + collision.contacts.Length);*/
-		if (collision.collider.gameObject != gameObject && !collidingConnection)
-		{
-			for (int i = 0; i < collision.contacts.Length; i++)
-			{
-				contacts.Add(collision.contacts[i]);
-			}
-		}
-	}
-
-	private void OnCollisionExit(Collision collision)
-	{
-
-		if (collision.collider.gameObject != gameObject)
-		{
-			
-			for (int i = 0; i < collision.contacts.Length; i++)
-			{
-				for (int j = 0; j < contacts.Count; j++)
-				{
-					if (contacts[j].otherCollider == collision.contacts[i].otherCollider)
-					{
-						contacts.RemoveAt(j);
-					}
-				}
-			}
-		}
+		flashRenderer.material.color = newFlashColor;
+		Color newFillColor = fillRenderer.material.color;
+		newFillColor.a = 1 - newFlashColor.a;
+		fillRenderer.material.color = newFillColor;
 	}
 }

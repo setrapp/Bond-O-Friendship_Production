@@ -16,10 +16,10 @@ public class Shield : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		myColor = new Color(0.25f,0.8f,0.8f,alphaFloat);
-		renderer.material.color = myColor;
+		GetComponent<Renderer>().material.color = myColor;
 		if(isActivated == true)
 		{
-			transform.collider.enabled = true;
+			transform.GetComponent<Collider>().enabled = true;
 			//alphaFloat = 0.5f;
 			if(alphaFloat < 0.5f)
 			{
@@ -28,7 +28,7 @@ public class Shield : MonoBehaviour {
 		}
 		else if(isActivated == false)
 		{
-			transform.collider.enabled = false;
+			transform.GetComponent<Collider>().enabled = false;
 			//alphaFloat = 0.0f;
 			if(alphaFloat > 0.0f)
 			{

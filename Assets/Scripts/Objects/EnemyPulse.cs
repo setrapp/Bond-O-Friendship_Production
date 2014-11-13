@@ -31,10 +31,10 @@ public class EnemyPulse : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
-		if(collide.gameObject.tag == "Converser")
-		{
-			Destroy(gameObject);
-		}
+		//if(collide.gameObject.tag == "Converser")
+		//{
+		//	Destroy(gameObject);
+		//}
 		if(collide.gameObject.tag == "Object")
 		{
 			Destroy(gameObject);
