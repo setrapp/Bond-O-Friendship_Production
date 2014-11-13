@@ -181,8 +181,12 @@ public class PlayerInput : MonoBehaviour {
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
 				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 				{
-					livePulseMove.target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+					livePulseMove.target = transform.position;
 					livePulseMove.moving = true;
+					if (livePulseMove.swayAnimation != null)
+					{
+						livePulseMove.swayAnimation.enabled = false;
+					}
 				}
 			}
 			return true;

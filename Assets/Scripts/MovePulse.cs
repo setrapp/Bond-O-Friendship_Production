@@ -106,6 +106,11 @@ public class MovePulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
+		if (!collide.isTrigger && passed && collide.gameObject.tag == "Converser")
+		{
+			collide.gameObject.GetComponent<PartnerLink>().AttachFluff(this);
+		}
+
 		/*if (passed && moving)
 		{
 			if (collide.gameObject.tag == "Pulse")

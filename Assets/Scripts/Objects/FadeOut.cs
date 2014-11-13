@@ -16,7 +16,7 @@ public class FadeOut : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		myColor = new Color(1.0f, 1.0f, 1.0f, timer);
-		renderer.material.color = myColor;
+		GetComponent<Renderer>().material.color = myColor;
 		if(fadeNow == true)
 		{
 			timer -= Time.deltaTime;
