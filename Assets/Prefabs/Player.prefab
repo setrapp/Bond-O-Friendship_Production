@@ -130,7 +130,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.00999999978, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
@@ -219,7 +219,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
@@ -227,7 +227,7 @@ MeshRenderer:
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 443cfb4199db23f4f9b025e5d5067d88, type: 2}
+  - {fileID: 2100000, guid: 7fa81883306f0864993706a671e8bf7a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -503,7 +503,7 @@ MonoBehaviour:
   basePulseDrain: .100000001
   timedPulseDrain: .400000006
   swapJoysticks: 0
-  absorbStrength: 3
+  absorbStrength: 5
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
 --- !u!114 &11400008
@@ -519,14 +519,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 0}
   headSprite: {fileID: 100010}
-  naturalFluffCount: 0
+  naturalFluffCount: 1
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   fluffContainer: {fileID: 100008}
   fluffs: []
-  spawnOffset: .425000012
+  spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 0
+  startingFluff: 1
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -543,10 +543,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
-  acceleration: 300
-  handling: 600
+  acceleration: 100
+  handling: 300
   dampening: .949999988
-  dampeningThreshold: .5
+  dampeningThreshold: .00499999989
   externalSpeedMultiplier: 1
 --- !u!135 &13500000
 SphereCollider:
