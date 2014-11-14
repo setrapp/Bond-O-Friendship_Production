@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SimpleConnection : MonoBehaviour {
+public class Connection : MonoBehaviour {
 	public PartnerAttachment attachment1;
 	public PartnerAttachment attachment2;
 	public float minDistanceToDrain;
@@ -79,8 +79,8 @@ public class SimpleConnection : MonoBehaviour {
 	}
 	public void BreakConnection()
 	{
-		//attachment1.partner.connections.Remove(this);
-		//attachment2.partner.connections.Remove(this);
+		attachment1.partner.connections.Remove(this);
+		attachment2.partner.connections.Remove(this);
 		Destroy(gameObject);
 	}
 
@@ -111,11 +111,10 @@ public class SimpleConnection : MonoBehaviour {
 	}
 }
 
-/*[System.Serializable]
+[System.Serializable]
 public class PartnerAttachment
 {
 	public PartnerLink partner;
 	public Vector3 position;
 	public LineRenderer lineRenderer;
-}*/
-
+}

@@ -17,7 +17,7 @@ public class PartnerLink : MonoBehaviour {
 	public Tracer tracer;
 	public GameObject connectionPrefab;
 	[SerializeField]
-	public List<SimpleConnection> connections;
+	public List<Connection> connections;
 	[HideInInspector]
 	public float fillScale = 1;
 	public bool empty;
@@ -125,7 +125,7 @@ public class PartnerLink : MonoBehaviour {
 					}
 					if (!connectionAlreadyMade)
 					{
-						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+						Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
 						connections.Add(newConnection);
 						pulse.creator.partnerLink.connections.Add(newConnection);
 						newConnection.AttachPartners(pulse.creator.partnerLink, this);
