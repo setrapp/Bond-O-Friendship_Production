@@ -19,11 +19,25 @@ public class Connection : MonoBehaviour {
 	public GameObject Shield;
 	public float attachPointDistance = 0.2f;
 	public GameObject bondCollider;
+	public GameObject linkPrefab;
+	public List<GameObject> links;
+	public float distancePerLink;
 
 	void Update()
 	{
 		if (attachment1.partner != null || attachment2.partner != null)
 		{
+			float connectionSqrDist = (attachment1.position - attachment2.position).sqrMagnitude;
+			if (connectionSqrDist < Mathf.Pow(distancePerLink * links.Count, 2))
+			{
+				RemoveLink();
+			}
+			else if (connectionSqrDist > Mathf.Pow(distancePerLink * (links.Count + 1), 2))
+			{
+				AddLink();
+			}
+
+
 			partnerDist = Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position);
 			Shield.transform.position = (attachment1.partner.transform.position + attachment2.partner.transform.position) * 0.5f;
 
@@ -99,6 +113,16 @@ public class Connection : MonoBehaviour {
 		Color midColor = attachment1.partner.headRenderer.material.color + attachment2.partner.headRenderer.material.color;
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
+	}
+
+	private void AddLink()
+	{
+		GameObject newLink = (GameObject)Instantiate(linkPrefab, attachment1.position + ((attachment2.position - attachment1.position) / 2), Quaternion.identity);
+	}
+
+	private void RemoveLink()
+	{
+
 	}
 
 	void OnTriggerEnter(Collider collide)
