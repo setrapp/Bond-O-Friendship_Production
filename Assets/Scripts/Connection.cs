@@ -61,7 +61,7 @@ public class Connection : MonoBehaviour {
 			}
 			else if (ConnectionLength > distancePerLink * (links.Count + 1))
 			{
-				if (links.Count < 3)
+				//if (links.Count < 3)
 				AddLink();
 			}
 
@@ -84,10 +84,11 @@ public class Connection : MonoBehaviour {
 			attachment2.position = attachment2.partner.transform.position - betweenPartners * attachment2.partner.transform.localScale.magnitude * attachPointDistance;
 
 			// Set connection points.
+			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
 			//transform.position = midpoint;
 			//GetComponent<Rigidbody>().MovePosition(midpoint);
-			links[0].transform.position = attachment1.position;
-			links[links.Count - 1].transform.position = attachment2.position;
+			links[0].GetComponent<Rigidbody>().MovePosition(attachment1.position);
+			links[links.Count - 1].GetComponent<Rigidbody>().MovePosition(attachment2.position);
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 0; i < links.Count / 2; i++)
 			{
@@ -109,9 +110,9 @@ public class Connection : MonoBehaviour {
 
 			if (links.Count % 2 == 0)
 			{
-				Vector3 midpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 -1].transform.position) / 2;
-				attachment1.lineRenderer.SetPosition(links.Count / 2, midpoint);
-				attachment2.lineRenderer.SetPosition(0, midpoint);
+				Vector3 fakeMidpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 -1].transform.position) / 2;
+				attachment1.lineRenderer.SetPosition(links.Count / 2, fakeMidpoint);
+				attachment2.lineRenderer.SetPosition(0, fakeMidpoint);
 			}
 			else
 			{
@@ -174,14 +175,19 @@ public class Connection : MonoBehaviour {
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
-		links = new List<ConnectionLink>();
-		ConnectionLink startLink = ((GameObject)Instantiate(linkPrefab, attachment1.position, Quaternion.identity)).GetComponent<ConnectionLink>();
-		ConnectionLink endLink = ((GameObject)Instantiate(linkPrefab, attachment2.position, Quaternion.identity)).GetComponent<ConnectionLink>();
-		startLink.jointNext.connectedBody = endLink.body;
-		endLink.jointPrevious.connectedBody = startLink.body;
+		//links = new List<ConnectionLink>();
+		//ConnectionLink startLink = ((GameObject)Instantiate(linkPrefab, attachment1.position, Quaternion.identity)).GetComponent<ConnectionLink>();
+		//ConnectionLink endLink = ((GameObject)Instantiate(linkPrefab, attachment2.position, Quaternion.identity)).GetComponent<ConnectionLink>();
+		//startLink.jointNext.connectedBody = endLink.body;
+		//endLink.jointPrevious.connectedBody = startLink.body;
+		
+		//startLink.transform.parent = transform;
+		//endLink.transform.parent = transform;
 
-		links.Add(startLink);
-		links.Add(endLink);
+		//links.Add(startLink);
+		//links.Add(endLink);
+		links[0].transform.position = attachment1.position;
+		links[1].transform.position = attachment2.position;
 	}
 
 	private void AddLink()
@@ -189,8 +195,8 @@ public class Connection : MonoBehaviour {
 		// Create new link in connection and add it to the center of the list.
 		Vector3 midpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 - 1].transform.position) / 2;
 		ConnectionLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<ConnectionLink>();
-		Debug.Log(midpoint);
 		int index = links.Count / 2;
+		newLink.transform.parent = transform;
 		links.Insert(index, newLink);
 
 		// Connect the new link to its neighbors.
@@ -198,10 +204,16 @@ public class Connection : MonoBehaviour {
 		ConnectionLink nextLink = links[index + 1];
 		newLink.jointPrevious.connectedBody = previousLink.body;
 		newLink.jointNext.connectedBody = nextLink.body;
-		previousLink.jointNext.connectedBody = newLink.body;
-		nextLink.jointPrevious.connectedBody = newLink.body;
+		if (previousLink.jointNext != null)
+		{
+			previousLink.jointNext.connectedBody = newLink.body;
+		}
+		if (nextLink.jointNext != null)
+		{
+			nextLink.jointPrevious.connectedBody = newLink.body;
+		}
 
-		//RepositionLinks();
+		RepositionLinks();
 	}
 
 	private void RemoveLink()
@@ -214,7 +226,7 @@ public class Connection : MonoBehaviour {
 		nextLink.jointNext.connectedBody = previousLink.body;
 		links.RemoveAt(index);
 
-		//RepositionLinks();
+		RepositionLinks();
 	}
 
 	private void RepositionLinks()
@@ -224,8 +236,11 @@ public class Connection : MonoBehaviour {
 		{
 			Vector3 fromPrevious = (links[i].transform.position - links[i - 1].transform.position).normalized;
 			links[i].transform.position = links[i - 1].transform.position + (fromPrevious * newLinkDistance);
-			//links[i].jointPrevious.connectedAnchor = fromPrevious * newLinkDistance;
-			//links[i].jointNext.connectedAnchor = -fromPrevious * newLinkDistance;
+			//links[i].jointPrevious.connectedAnchor = Vector3.zero;// links[i - 1].transform.position / 2;//fromPrevious * newLinkDistance;
+			//links[i].jointNext.connectedAnchor = Vector3.zero;//links[i + 1].transform.position / 2;
+
+			//links[i].jointPrevious.maxDistance = newLinkDistance;
+			//links[i].jointNext.maxDistance = newLinkDistance;
 		}
 	}
 
