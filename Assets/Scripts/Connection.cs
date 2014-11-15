@@ -21,7 +21,8 @@ public class Connection : MonoBehaviour {
 	public GameObject bondCollider;
 	public GameObject linkPrefab;
 	public List<ConnectionLink> links;
-	public float distancePerLink;
+	public float addLinkDistance;
+	public float removeLinkDistance;
 	private float connectionLength;
 	public float ConnectionLength
 	{
@@ -40,6 +41,10 @@ public class Connection : MonoBehaviour {
 		}
 	}
 	private bool lengthFresh = false;
+	public float upOrderSpring = 1000;
+	public float upOrderDamper = 10;
+	public float downOrderSpring = 0;
+	public float downOrderDamper = 0;
 
 
 	void Update()
@@ -51,15 +56,15 @@ public class Connection : MonoBehaviour {
 		if (attachment1.partner != null || attachment2.partner != null)
 		{
 			// TODO this should not check the distance between attachments but the total distance of the connection.
-			if (ConnectionLength < distancePerLink * links.Count)
+			if (ConnectionLength < removeLinkDistance * links.Count)
 			{
 				// TODO if the connection is short enough maybe treat it as a single link
 				if (links.Count > 2)
 				{
-					//RemoveLink();
+					RemoveLink();
 				}
 			}
-			else if (ConnectionLength > distancePerLink * (links.Count + 1))
+			else if (ConnectionLength > addLinkDistance * (links.Count + 1))
 			{
 				//if (links.Count < 3)
 				AddLink();
@@ -87,8 +92,8 @@ public class Connection : MonoBehaviour {
 			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
 			//transform.position = midpoint;
 			//GetComponent<Rigidbody>().MovePosition(midpoint);
-			links[0].GetComponent<Rigidbody>().MovePosition(attachment1.position);
-			links[links.Count - 1].GetComponent<Rigidbody>().MovePosition(attachment2.position);
+			links[0].transform.position = attachment1.position;
+			links[links.Count - 1].transform.position = attachment2.position;
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 0; i < links.Count / 2; i++)
 			{
@@ -130,7 +135,7 @@ public class Connection : MonoBehaviour {
 			if (actualMidWidth <= 0)
 			{
 				//connected = false;
-				BreakConnection();
+				//BreakConnection();
 
 			}
 
@@ -197,6 +202,7 @@ public class Connection : MonoBehaviour {
 		ConnectionLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<ConnectionLink>();
 		int index = links.Count / 2;
 		newLink.transform.parent = transform;
+		newLink.orderLevel = links.Count / 2;
 		links.Insert(index, newLink);
 
 		// Connect the new link to its neighbors.
@@ -214,6 +220,7 @@ public class Connection : MonoBehaviour {
 		}
 
 		RepositionLinks();
+		WeightJoints();
 	}
 
 	private void RemoveLink()
@@ -222,11 +229,19 @@ public class Connection : MonoBehaviour {
 		int index = links.Count / 2;
 		ConnectionLink previousLink = links[index - 1];
 		ConnectionLink nextLink = links[index + 1];
-		previousLink.jointNext.connectedBody = nextLink.body;
-		nextLink.jointNext.connectedBody = previousLink.body;
+		if (previousLink.jointNext != null)
+		{
+			previousLink.jointNext.connectedBody = nextLink.body;
+		}
+		if (nextLink.jointNext != null)
+		{
+			nextLink.jointPrevious.connectedBody = previousLink.body;
+		}
+		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
 		RepositionLinks();
+		WeightJoints();
 	}
 
 	private void RepositionLinks()
@@ -235,12 +250,55 @@ public class Connection : MonoBehaviour {
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			Vector3 fromPrevious = (links[i].transform.position - links[i - 1].transform.position).normalized;
-			links[i].transform.position = links[i - 1].transform.position + (fromPrevious * newLinkDistance);
-			//links[i].jointPrevious.connectedAnchor = Vector3.zero;// links[i - 1].transform.position / 2;//fromPrevious * newLinkDistance;
-			//links[i].jointNext.connectedAnchor = Vector3.zero;//links[i + 1].transform.position / 2;
+			//links[i].transform.position = links[i - 1].transform.position + (fromPrevious * newLinkDistance);
+			links[i].jointPrevious.connectedAnchor = fromPrevious * newLinkDistance / 2;
+			links[i].jointNext.connectedAnchor = -fromPrevious * newLinkDistance / 2;
 
 			//links[i].jointPrevious.maxDistance = newLinkDistance;
 			//links[i].jointNext.maxDistance = newLinkDistance;
+		}
+	}
+
+	private void WeightJoints()
+	{
+		for (int i = 1; i < links.Count - 1; i++)
+		{
+			if (links[i].jointPrevious != null)
+			{
+				if (links[i].orderLevel < links[i - 1].orderLevel)
+				{
+					links[i].jointPrevious.spring = downOrderSpring;
+					links[i].jointPrevious.damper = downOrderDamper;
+				}
+				else if (links[i].orderLevel == links[i - 1].orderLevel)
+				{
+					links[i].jointPrevious.spring = upOrderSpring / 2;
+					links[i].jointPrevious.damper = upOrderDamper / 2;
+				}
+				else
+				{
+					links[i].jointPrevious.spring = upOrderSpring;
+					links[i].jointPrevious.damper = upOrderDamper;
+				}
+			}
+			if (links[i].jointNext != null)
+			{
+				if (links[i].orderLevel < links[i + 1].orderLevel)
+				{
+					links[i].jointNext.spring = downOrderSpring;
+					links[i].jointNext.damper = downOrderDamper;
+				}
+				else if (links[i].orderLevel == links[i - 1].orderLevel)
+				{
+					links[i].jointNext.spring = upOrderSpring / 2;
+					links[i].jointNext.damper = upOrderDamper / 2;
+				}
+				else
+				{
+					links[i].jointNext.spring = upOrderSpring;
+					links[i].jointNext.damper = upOrderDamper;
+				}
+			}
 		}
 	}
 
