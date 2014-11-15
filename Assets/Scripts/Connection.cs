@@ -70,6 +70,31 @@ public class Connection : MonoBehaviour {
 				AddLink();
 			}
 
+			for (int i = 0; i < links.Count; i++)
+			{
+				Vector3 linkDir = Vector3.zero;
+				Vector3 linkScale = links[i].transform.localScale;
+				if (i == 0)
+				{
+					linkDir = links[i + 1].transform.position - links[i].transform.position;
+					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude / 2;
+					links[i].collider.center = new Vector3(0, linkScale.y / 2, 0);
+				}
+				else if (i == links.Count - 1)
+				{
+					linkDir = links[i].transform.position - links[i - 1].transform.position;
+					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude / 2;
+					links[i].collider.center = new Vector3(0, linkScale.y / 2, 0);
+				}
+				else
+				{
+					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
+					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude / 2 + (links[i + 1].transform.position - links[i].transform.position).magnitude / 2;
+				}
+				links[i].transform.up = linkDir;
+				links[i].transform.localScale = linkScale;
+			}
+
 			partnerDist = Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position);
 			Shield.transform.position = (attachment1.partner.transform.position + attachment2.partner.transform.position) * 0.5f;
 
@@ -124,12 +149,9 @@ public class Connection : MonoBehaviour {
 				attachment1.lineRenderer.SetPosition(links.Count / 2, links[links.Count / 2].transform.position);
 				attachment2.lineRenderer.SetPosition(0, links[links.Count / 2].transform.position);
 			}
-			/*attachment1.lineRenderer.SetPosition(0, attachment1.position);
-			attachment1.lineRenderer.SetPosition(1, midpoint);
-			attachment2.lineRenderer.SetPosition(0, midpoint);
-			attachment2.lineRenderer.SetPosition(1, attachment2.position);
+			
 			attachment1.lineRenderer.SetWidth(endsWidth, actualMidWidth);
-			attachment2.lineRenderer.SetWidth(actualMidWidth, endsWidth);*/
+			attachment2.lineRenderer.SetWidth(actualMidWidth, endsWidth);
 
 			// Disconnect if too far apart.
 			if (actualMidWidth <= 0)
