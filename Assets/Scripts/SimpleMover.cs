@@ -24,7 +24,9 @@ public class SimpleMover : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody>();
 	}
 
-	void Update() {
+	void FixedUpdate() {
+
+
 		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
 
 		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2) * externalSpeedMultiplier)
@@ -34,8 +36,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (rigidbody != null)
 		{
-			rigidbody.AddForce((velocity - oldVelocity), ForceMode.VelocityChange);
-			velocity = rigidbody.velocity;
+			rigidbody.velocity = velocity;
 		}
 		else
 		{
@@ -44,6 +45,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (velocity.sqrMagnitude < Mathf.Pow(dampeningThreshold, 2)) {
 			velocity = Vector3.zero;
+			rigidbody.velocity = Vector3.zero;
 			moving = false;
 		}
 		else
@@ -134,7 +136,7 @@ public class SimpleMover : MonoBehaviour {
 		}
 	}
 
-	public void MoveTo(Vector3 position, bool updateVelocity = false)
+	/*public void MoveTo(Vector3 position, bool updateVelocity = false)
 	{
 		if (updateVelocity && Time.deltaTime > 0)
 		{
@@ -149,7 +151,7 @@ public class SimpleMover : MonoBehaviour {
 			transform.position = position;
 		}
 
-	}
+	}*/
 
 	public void SlowDown()
 	{

@@ -9,19 +9,37 @@ public class MovePulse : MonoBehaviour {
 	public float capacity;
 	public Vector3 target;
 	private float moveSpeed = 2;
+	public float rotationSpeed = 50.0f;
 	//public GameObject pulseCreator;
 	public PulseShot volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
+	public float baseAngle = -1;
+	public Vector3 baseDirection;
+	public Animation swayAnimation;
+	private bool disableColliders;
+	public Vector3 oldBulbPos;
+	public GameObject bulb;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
+		oldBulbPos = bulb.transform.position;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+		if (disableColliders)
+		{
+			Collider[] colliders = GetComponentsInChildren<Collider>();
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].enabled = false;
+			}
+			disableColliders = false;
+		}
+
 		if (passed && moving)
 		{
 			Vector3 direction = target - transform.position;
@@ -35,6 +53,7 @@ public class MovePulse : MonoBehaviour {
 				float speed = moveSpeed * decelerationFactor;
 
 				//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+				transform.Rotate(rotationSpeed*Time.deltaTime,0.0f,0.0f);
 
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 				transform.position += moveVector;
@@ -42,6 +61,19 @@ public class MovePulse : MonoBehaviour {
 			else
 			{
 				moving = false;
+
+				RaycastHit attachInfo;
+				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
+				{
+					//Debug.Log(attachInfo.collider.gameObject.name);
+					//transform.parent = attachInfo.collider.transform;
+				}
+				transform.rotation = Quaternion.Euler(270, 0, 0);
+
+				if (swayAnimation != null)
+				{
+					swayAnimation.enabled = true;
+				}
 			}
 		}
 	}
@@ -56,16 +88,13 @@ public class MovePulse : MonoBehaviour {
 		}
 		passed = true;
 		moving = true;
+		baseAngle = -1;
 	}
 
 	public void EndPass()
 	{
 		trail.gameObject.SetActive(false);
-		Collider[] colliders = GetComponentsInChildren<Collider>();
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			colliders[i].enabled = false;
-		}
+		disableColliders = true;
 		passed = false;
 		moving = false;
 		creator = null;
@@ -77,6 +106,11 @@ public class MovePulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
+		if (!collide.isTrigger && passed && collide.gameObject.tag == "Converser")
+		{
+			collide.gameObject.GetComponent<PartnerLink>().AttachFluff(this);
+		}
+
 		/*if (passed && moving)
 		{
 			if (collide.gameObject.tag == "Pulse")

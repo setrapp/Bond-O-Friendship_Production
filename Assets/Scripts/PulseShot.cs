@@ -54,10 +54,10 @@ public class PulseShot : MonoBehaviour {
 		for (int i = 0; i < fluffSpawn.fluffs.Count; i++)
 		{
 			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDir);
-			if (maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1])
+			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffSpawn.fluffs[i].gameObject != fluffSpawn.spawnedFluff)
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
-				passFluffs.Add(fluffSpawn.fluffs[i]);
+				passFluffs.Add(fluffSpawn.fluffs[i].gameObject);
 				passFluffIndices.Add(i);
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{
@@ -84,7 +84,12 @@ public class PulseShot : MonoBehaviour {
 			}
 		}
 
+		
 		float shotAngle = -shotSpread / 2;
+		if (passFluffs.Count == 1)
+		{
+			shotAngle = 0;
+		}
 		float shotDist = Vector3.Distance(pulseTarget, transform.position);
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
