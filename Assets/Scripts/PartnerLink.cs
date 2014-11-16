@@ -17,7 +17,7 @@ public class PartnerLink : MonoBehaviour {
 	public Tracer tracer;
 	public GameObject connectionPrefab;
 	[SerializeField]
-	public List<SimpleConnection> connections;
+	public List<Connection> connections;
 	[HideInInspector]
 	public float fillScale = 1;
 	public bool empty;
@@ -105,8 +105,7 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
-			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-			if (pulse.creator != pulseShot)
+			if (pulse.creator != null && pulse.creator != pulseShot)
 			{
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
@@ -125,16 +124,13 @@ public class PartnerLink : MonoBehaviour {
 					}
 					if (!connectionAlreadyMade)
 					{
-						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+						Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
 						connections.Add(newConnection);
 						pulse.creator.partnerLink.connections.Add(newConnection);
 						newConnection.AttachPartners(pulse.creator.partnerLink, this);
 					}
 				}
-			}
 
-			if (pulse.creator != null && pulse.creator != pulseShot)
-			{
 				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
 				pulseShot.lastPulseAccepted = pulse.creator;
 			}
