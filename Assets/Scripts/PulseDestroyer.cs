@@ -54,30 +54,27 @@ public class PulseDestroyer : MonoBehaviour {
 			}
 		}
 
-		else if (other.gameObject.tag == "Converser" && destroyPulses)
+		else if (other.gameObject.tag == "Converser")
 		{
-			FluffSpawn spawn = other.GetComponent<FluffSpawn>();
-			if (spawn != null)
+			if (destroyPulses)
 			{
-				if (toEmpty == null)
+				FluffSpawn spawn = other.GetComponent<FluffSpawn>();
+				if (spawn != null)
 				{
-					toEmpty = new List<FluffSpawn>();
+					if (toEmpty == null)
+					{
+						toEmpty = new List<FluffSpawn>();
+					}
+					toEmpty.Add(spawn);
 				}
-				toEmpty.Add(spawn);
 			}
-		}
-
-		else if (other.gameObject.tag == "Connection" && destroyPulses)
-		{
-			SimpleConnection connection = other.GetComponent<SimpleConnection>();
-			if (connection != null)
+			if (destroyConnections)
 			{
-				/*if (toDestroy == null)
+				PartnerLink partnerLink = other.GetComponent<PartnerLink>();
+				for (int i = 0; i < partnerLink.connections.Count; i++)
 				{
-					toDestroy = new List<GameObject>();
+					partnerLink.connections[i].BreakConnection();
 				}
-				toDestroy.Add(other.gameObject);*/
-				connection.BreakConnection();
 			}
 		}
 	}
