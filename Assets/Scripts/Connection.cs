@@ -51,45 +51,54 @@ public class Connection : MonoBehaviour {
 	{
 		lengthFresh = false;
 
-		// TODO Move connections to attachpoints.
-
 		if (attachment1.partner != null || attachment2.partner != null)
 		{
-			// TODO this should not check the distance between attachments but the total distance of the connection.
-			if (ConnectionLength < removeLinkDistance * links.Count)
+			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
+			if (ConnectionLength < removeLinkDistance * oddLinkCount)
 			{
-				// TODO if the connection is short enough maybe treat it as a single link
 				if (links.Count > 2)
 				{
 					RemoveLink();
+					if (links.Count > 2 && links.Count % 2 == 0)
+					{
+						RemoveLink();
+					}
 				}
 			}
 			else if (ConnectionLength > addLinkDistance * (links.Count + 1))
 			{
-				//if (links.Count < 3)
 				AddLink();
+				if (links.Count % 2 == 0)
+				{
+					AddLink();
+				}
 			}
 
+			Vector3 linkDir = Vector3.zero;
+			Vector3 linkScale = Vector3.zero;
 			for (int i = 0; i < links.Count; i++)
 			{
-				Vector3 linkDir = Vector3.zero;
-				Vector3 linkScale = links[i].transform.localScale;
+				linkDir = Vector3.zero;
+				linkScale = links[i].transform.localScale;
 				if (i == 0)
 				{
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
-					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude / 2;
-					links[i].collider.center = new Vector3(0, linkScale.y / 2, 0);
+					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+					links[i].collider.center = new Vector3(0, 0.5f, 0);
 				}
 				else if (i == links.Count - 1)
 				{
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
-					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude / 2;
-					links[i].collider.center = new Vector3(0, linkScale.y / 2, 0);
+					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					links[i].collider.center = new Vector3(0, -0.5f, 0);
 				}
 				else
 				{
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
-					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude / 2 + (links[i + 1].transform.position - links[i].transform.position).magnitude / 2;
+					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+					linkScale.y = magFromPrevious / 4 + magToNext / 4;
+					links[i].collider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
 				links[i].transform.localScale = linkScale;
@@ -115,8 +124,6 @@ public class Connection : MonoBehaviour {
 
 			// Set connection points.
 			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
-			//transform.position = midpoint;
-			//GetComponent<Rigidbody>().MovePosition(midpoint);
 			links[0].transform.position = attachment1.position;
 			links[links.Count - 1].transform.position = attachment2.position;
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
@@ -241,7 +248,7 @@ public class Connection : MonoBehaviour {
 			nextLink.jointPrevious.connectedBody = newLink.body;
 		}
 
-		RepositionLinks();
+		//RepositionLinks();
 		WeightJoints();
 	}
 
@@ -262,7 +269,7 @@ public class Connection : MonoBehaviour {
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
-		RepositionLinks();
+		//RepositionLinks();
 		WeightJoints();
 	}
 
