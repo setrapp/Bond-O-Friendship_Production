@@ -121,7 +121,7 @@ public class FluffSpawn : MonoBehaviour {
 					if (baseDotPushed < constrainedDot || localBaseDotMove > 1)
 					{
 						// If the fluff is on the right side, negate its vertical component.
-						Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
+						Vector3 expectedRight = Vector3.right;
 						float yMult = 1;
 						if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
 						{
