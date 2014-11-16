@@ -39,7 +39,7 @@ public class PlayerInput : MonoBehaviour {
 
 	private bool paused = false;
 
-	void Update () {
+	void FixedUpdate () {
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
