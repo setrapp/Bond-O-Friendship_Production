@@ -5,20 +5,12 @@ using System.Collections.Generic;
 public class Connection : MonoBehaviour {
 	public PartnerAttachment attachment1;
 	public PartnerAttachment attachment2;
-	public float minDistanceToDrain;
-	public float distancePerDrain;
-	public float scalePerPulse;
-	public float drained = 0;
+	public float maxDistance;
+	public float warningDistanceFactor;
 	public float endsWidth;
 	public float midWidth;
-	public float pulseSpeed;
-	public float pulseAmplitude;
-	public int nextFluctuationDirection = 1;
-	public bool bouncePulseOnReject = false;
-	public float partnerDist;
 	public GameObject Shield;
 	public float attachPointDistance = 0.2f;
-	public GameObject bondCollider;
 	public GameObject linkPrefab;
 	public List<ConnectionLink> links;
 	public float addLinkDistance;
@@ -53,18 +45,26 @@ public class Connection : MonoBehaviour {
 
 		if (attachment1.partner != null || attachment2.partner != null)
 		{
+			bool isCountEven = links.Count % 2 == 0;
+
+			// Round the count of links down to an odd number.
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
+
+			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
 			if (ConnectionLength < removeLinkDistance * oddLinkCount)
 			{
+				// Maintain the end points.
 				if (links.Count > 2)
 				{
 					RemoveLink();
-					if (links.Count > 2 && links.Count % 2 == 0)
+					// If the link count was not even before, it is now, so remove another to stay odd.
+					if (links.Count > 2 && !isCountEven)
 					{
 						RemoveLink();
 					}
 				}
 			}
+			// If the connection length requires more connections, create some.
 			else if (ConnectionLength > addLinkDistance * (links.Count + 1))
 			{
 				AddLink();
@@ -73,7 +73,9 @@ public class Connection : MonoBehaviour {
 					AddLink();
 				}
 			}
+			isCountEven = links.Count % 2 == 0;
 
+			// Direct, scale, and place link colliders to cover the surface of the connection.
 			Vector3 linkDir = Vector3.zero;
 			Vector3 linkScale = Vector3.zero;
 			for (int i = 0; i < links.Count; i++)
@@ -104,28 +106,23 @@ public class Connection : MonoBehaviour {
 				links[i].transform.localScale = linkScale;
 			}
 
-			partnerDist = Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position);
 			Shield.transform.position = (attachment1.partner.transform.position + attachment2.partner.transform.position) * 0.5f;
 
-			// Determine how much has been drained from the partners.
-			float maxDistance = (distancePerDrain) * (Mathf.Min(attachment1.partner.transform.localScale.x, attachment2.partner.transform.localScale.x));
-			float actualDrain = ((attachment2.position - attachment1.position).magnitude - minDistanceToDrain) / maxDistance;
-			attachment1.partner.fillScale = Mathf.Clamp(attachment1.partner.fillScale - (actualDrain - drained), 0, 1);
-			attachment2.partner.fillScale = Mathf.Clamp(attachment2.partner.fillScale - (actualDrain - drained), 0, 1);
-			drained = Mathf.Clamp(actualDrain, 0, 1);
-
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
-			float actualMidWidth = midWidth * Mathf.Clamp(1 - (actualDrain - drained), 0, 1);
+			float warningDistance = maxDistance * warningDistanceFactor;
+			float actualMidWidth = midWidth * Mathf.Clamp(1 - ((connectionLength - warningDistance) / (maxDistance - warningDistance)), 0, 1);
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
 			attachment1.position = attachment1.partner.transform.position + betweenPartners * attachment1.partner.transform.localScale.magnitude * attachPointDistance;
 			attachment2.position = attachment2.partner.transform.position - betweenPartners * attachment2.partner.transform.localScale.magnitude * attachPointDistance;
 
-			// Set connection points.
+			// Place attachment points with attached characters.
 			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
 			links[0].transform.position = attachment1.position;
 			links[links.Count - 1].transform.position = attachment2.position;
+
+			// Draw lines between connection points.
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 0; i < links.Count / 2; i++)
 			{
@@ -134,7 +131,7 @@ public class Connection : MonoBehaviour {
 			attachment2.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 1; i < links.Count / 2 + 1; i++)
 			{
-				if (links.Count % 2 == 0)
+				if (isCountEven)
 				{
 					attachment2.lineRenderer.SetPosition(i, links[i + links.Count / 2 - 1].transform.position);
 				}
@@ -144,8 +141,7 @@ public class Connection : MonoBehaviour {
 				}
 			}
 
-
-			if (links.Count % 2 == 0)
+			if (isCountEven)
 			{
 				Vector3 fakeMidpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 -1].transform.position) / 2;
 				attachment1.lineRenderer.SetPosition(links.Count / 2, fakeMidpoint);
@@ -156,19 +152,18 @@ public class Connection : MonoBehaviour {
 				attachment1.lineRenderer.SetPosition(links.Count / 2, links[links.Count / 2].transform.position);
 				attachment2.lineRenderer.SetPosition(0, links[links.Count / 2].transform.position);
 			}
-			
+	
 			attachment1.lineRenderer.SetWidth(endsWidth, actualMidWidth);
 			attachment2.lineRenderer.SetWidth(actualMidWidth, endsWidth);
 
 			// Disconnect if too far apart.
 			if (actualMidWidth <= 0)
 			{
-				//connected = false;
-				//BreakConnection();
+				BreakConnection();
 
 			}
 
-			if (partnerDist < 1.5f)
+			if (connectionLength < 1.5f)
 			{
 				//Shield.SendMessage("Activate", SendMessageOptions.DontRequireReceiver);
 			}
@@ -176,13 +171,6 @@ public class Connection : MonoBehaviour {
 			{
 				//Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
 			}
-
-			//bondCollider.transform.localScale = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
-			//bondCollider.transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
-			
-			// TODO collider stuff
-			//((BoxCollider)GetComponent<Collider>()).size = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
-			//transform.up = Vector3.Cross(attachment1.partner.transform.position - attachment2.partner.transform.position, Vector3.forward);
 
 		}
 	}
@@ -209,17 +197,6 @@ public class Connection : MonoBehaviour {
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
-		//links = new List<ConnectionLink>();
-		//ConnectionLink startLink = ((GameObject)Instantiate(linkPrefab, attachment1.position, Quaternion.identity)).GetComponent<ConnectionLink>();
-		//ConnectionLink endLink = ((GameObject)Instantiate(linkPrefab, attachment2.position, Quaternion.identity)).GetComponent<ConnectionLink>();
-		//startLink.jointNext.connectedBody = endLink.body;
-		//endLink.jointPrevious.connectedBody = startLink.body;
-		
-		//startLink.transform.parent = transform;
-		//endLink.transform.parent = transform;
-
-		//links.Add(startLink);
-		//links.Add(endLink);
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
 	}
@@ -269,27 +246,12 @@ public class Connection : MonoBehaviour {
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
-		//RepositionLinks();
 		WeightJoints();
-	}
-
-	private void RepositionLinks()
-	{
-		float newLinkDistance = connectionLength / (links.Count - 1);
-		for (int i = 1; i < links.Count - 1; i++)
-		{
-			Vector3 fromPrevious = (links[i].transform.position - links[i - 1].transform.position).normalized;
-			//links[i].transform.position = links[i - 1].transform.position + (fromPrevious * newLinkDistance);
-			links[i].jointPrevious.connectedAnchor = fromPrevious * newLinkDistance / 2;
-			links[i].jointNext.connectedAnchor = -fromPrevious * newLinkDistance / 2;
-
-			//links[i].jointPrevious.maxDistance = newLinkDistance;
-			//links[i].jointNext.maxDistance = newLinkDistance;
-		}
 	}
 
 	private void WeightJoints()
 	{
+		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			if (links[i].jointPrevious != null)
