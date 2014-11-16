@@ -108,9 +108,10 @@ public class PartnerLink : MonoBehaviour {
 			if (pulse.creator != null && pulse.creator != pulseShot)
 			{
 				pulseShot.volleys = 1;
-				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				pulseShot.volleyPartner = pulse.creator;
+				if (pulse.creator.volleyPartner == pulseShot)
 				{
-					pulseShot.volleys = pulse.volleys;
+					pulseShot.volleys = pulse.creator.volleys + 1;
 				}
 				if (pulseShot.volleys >= volleysToConnect)
 				{
@@ -128,6 +129,8 @@ public class PartnerLink : MonoBehaviour {
 						connections.Add(newConnection);
 						pulse.creator.partnerLink.connections.Add(newConnection);
 						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						pulseShot.volleys = 0;
+						pulse.creator.volleys = 0;
 					}
 				}
 
