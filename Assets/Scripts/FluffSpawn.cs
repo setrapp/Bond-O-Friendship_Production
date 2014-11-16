@@ -76,11 +76,9 @@ public class FluffSpawn : MonoBehaviour {
 
 		if(spawnedFluff!= null)
 		{
-			endPosition = transform.InverseTransformPoint(spawnedFluff.transform.up *spawnOffset + transform.position);
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			if(spawnedFluff.transform.localPosition == endPosition)
 			{
-
 				spawnedFluff = null;
 			}
 		}
@@ -191,9 +189,11 @@ public class FluffSpawn : MonoBehaviour {
 			newFluff.transform.localEulerAngles = fluffRotation;
 			spawnedFluff = newFluff;
 			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			endPosition = transform.InverseTransformPoint(endPosition);
+			
 			if (instantSprout)
 			{
-				newFluff.transform.position = endPosition;
+				newFluff.transform.localPosition = endPosition;
 				spawnedFluff = null;
 			}
 			else
