@@ -35,13 +35,15 @@ public class PlayerInput : MonoBehaviour {
 	private Vector3 target;
 	public float absorbStrength = 5;
 	public Vector3 desiredLook;
-
 	public bool joystickDetermined = false;
 
 	private bool paused = false;
 
-	void Update () {
-
+	void FixedUpdate () {
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
@@ -73,7 +75,7 @@ public class PlayerInput : MonoBehaviour {
 
 				//Debug.Log(joystickNumber.ToString());
 			}
-			else if(otherPlayerInput.joystickDetermined)
+			else if(otherPlayerInput != null && otherPlayerInput.joystickDetermined)
 			{
 				if(Input.GetButtonDown("Joy1Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy1)
 				{
@@ -111,72 +113,51 @@ public class PlayerInput : MonoBehaviour {
 				paused = !paused;
 			}
 		
-		if(!paused)
-		{
-			velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
-			// Movement
-			if(useKeyboard)
+			if(!paused)
 			{
-				if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
+				velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
+				// Movement
+				if(useKeyboard)
 				{
-					velocityChange += Vector3.up;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
-				{
-					velocityChange -= Vector3.right;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
-				{
-					velocityChange -= Vector3.up;
-				}
-				if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
-				{
-					velocityChange += Vector3.right;
-				}
-				
-				
-			}
-
-			if (velocityChange.sqrMagnitude > 0)
-			{
-				desiredLook = velocityChange;
-			}
-
-			
-			if (desiredLook.sqrMagnitude > 0 && desiredLook != transform.forward)
-			{
-				if (Vector3.Dot(desiredLook, transform.forward) < 0)
-				{
-					Vector3 newDesire = Vector3.Cross(transform.forward, transform.up);
-					float desireDotNew = Vector3.Dot(desiredLook, newDesire);
-					if (desireDotNew < 0 || (desireDotNew == 0 && Vector3.Dot(transform.right, newDesire) < 0))
+					if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
 					{
-						newDesire *= -1;
+						velocityChange += Vector3.up;
 					}
-					desiredLook = newDesire;
-				}
-				Vector3 forward = Vector3.RotateTowards(transform.forward, desiredLook, mover.handling * Time.deltaTime * Mathf.Deg2Rad, 0);
-				transform.LookAt(transform.position + forward, transform.up);
+					if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
+					{
+						velocityChange -= Vector3.right;
+					}
+					if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
+					{
+						velocityChange -= Vector3.up;
+					}
+					if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
+					{
+						velocityChange += Vector3.right;
+					}
 				
-			}
+				
+				}
 
-			PlayerLookAt();
-				Absorbing();
-			if (velocityChange.sqrMagnitude > 0)
-			{
-				mover.Accelerate(transform.forward);
-			}
-			else
-			{
-				mover.SlowDown();
-			}
+				// Turn towards velocity change.
+				if (velocityChange.sqrMagnitude > 0)
+				{
+					mover.Accelerate(velocityChange);
+				}
+				else
+				{
+					mover.SlowDown();
+				}
+				transform.LookAt(transform.position + mover.velocity, transform.up);
 
-			//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
-			if(absorb != null)
-			{
-				absorb.transform.position = transform.position;
+				PlayerLookAt();
+				partnerLink.absorbing = Absorbing();
+
+				if(absorb != null)
+				{
+					absorb.transform.position = transform.position;
+				}
 			}
-		}
 		}
 	}
 
@@ -186,34 +167,39 @@ public class PlayerInput : MonoBehaviour {
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
-	void Absorbing()
+	bool Absorbing()
 	{
-
-		if ( (!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && Input.GetKey(KeyCode.Space)) || (useKeyboard && playerNumber == Player.Player2 && Input.GetKey(KeyCode.Keypad0)))
+		if ((!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))) || (useKeyboard && playerNumber == Player.Player2 && (Input.GetKey(KeyCode.Keypad0) || Input.GetMouseButton(1))))
+		{
+			if(absorb == null)
 			{
-
-				//transform.localScale -= new Vector3(timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime, timedPulseDrain * Time.deltaTime);
-				if(absorb == null)
+				absorb = (ParticleSystem)Instantiate(absorbPrefab);
+				absorb.transform.position = transform.position;
+				absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
+				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
+			}
+			GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
+			foreach(GameObject livePulse in pulseArray)
+			{
+				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
+				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 				{
-					absorb = (ParticleSystem)Instantiate(absorbPrefab);
-					absorb.transform.position = transform.position;
-					absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
-					absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
-				}
-				GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
-				foreach(GameObject livePulse in pulseArray)
-				{
-					if (Vector3.SqrMagnitude(livePulse.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2) && livePulse.GetComponent<MovePulse>() != null)// && livePulse.GetComponent<MovePulse>().creator != partnerLink.pulseShot)
+					livePulseMove.target = transform.position;
+					livePulseMove.moving = true;
+					if (livePulseMove.swayAnimation != null)
 					{
-						livePulse.GetComponent<MovePulse>().target = Vector3.MoveTowards(livePulse.GetComponent<MovePulse>().target, transform.position, 20.0f * Time.deltaTime);
+						livePulseMove.swayAnimation.enabled = false;
 					}
 				}
 			}
+			return true;
+		}
 		else if(absorb != null)
 		{
 			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
 			Destroy(absorb.gameObject, 1.0f);
 		}
+		return false;
 	}
 
 	void PlayerLookAt()
@@ -232,13 +218,14 @@ public class PlayerInput : MonoBehaviour {
 				Vector3 velocityBoost = Vector3.zero;
 
 				if (Vector3.Dot(mover.velocity, pulseDirection) > 0)
-					velocityBoost += mover.velocity;				
+				{
+					velocityBoost += mover.velocity;
+				}
 			
 				if (CanFire(basePulseDrain))
 				{
-					pulseDirection *= basePulsePower;// +timedPulsePower * chargeTime;
-					//transform.localScale -= new Vector3(basePulseDrain, basePulseDrain, basePulseDrain);
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);// + timedPulseDrain * Time.deltaTime);
+					pulseDirection *= basePulsePower;
+					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
 				}
 				firePulse = false;
 			}

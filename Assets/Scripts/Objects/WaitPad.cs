@@ -38,7 +38,7 @@ public class WaitPad : MonoBehaviour {
 		}
 		if(activated)
 		{
-			print ("activated");
+			//print ("activated");
 		}
 	}
 	void OnTriggerEnter(Collider collide)

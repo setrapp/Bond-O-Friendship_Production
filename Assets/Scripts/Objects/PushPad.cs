@@ -13,10 +13,11 @@ public class PushPad : MonoBehaviour {
 	private float doorTimer;
 	private Color doorColor;
 	private float alpha;
+	public GameObject activator;
 
 	// Use this for initialization
 	void Start () {
-		timer = 2.0f;
+		timer = 1.0f;
 		doorTimer = 1.0f;
 		red = 0.4f;
 		alpha = 1.0f;
@@ -28,7 +29,7 @@ public class PushPad : MonoBehaviour {
 
 		//print (timer);
 		myColor = new Color(red, 0.1f, 0.3f,1.0f);
-		doorColor = new Color(0.2f,0.2f,0.2f,alpha);
+		doorColor = new Color(0.6f,0.6f,0.6f,alpha);
 		pad.GetComponent<Renderer>().material.color = doorColor;
 		door.GetComponent<Renderer>().material.color = doorColor;
 		GetComponent<Renderer>().material.color = myColor;
@@ -43,7 +44,7 @@ public class PushPad : MonoBehaviour {
 		}
 		if(activated == false)
 		{
-			timer = 2.0f;
+			timer = 1.0f;
 			if(red > 0.4f)
 			{
 				red -= Time.deltaTime * 2.0f;
@@ -58,18 +59,18 @@ public class PushPad : MonoBehaviour {
 		}
 		if(open)
 		{
-			door.collider.enabled = false;
+			door.GetComponent<Collider>().enabled = false;
 			if(alpha > 0)
 			alpha -= Time.deltaTime*2.0f;
-			door.renderer.enabled = false;
-			pad.renderer.enabled = false;
+			//door.renderer.enabled = false;
+			//pad.renderer.enabled = false;
 		}
 	
 	}
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.tag == "Pushable")
+		if (collide.gameObject == activator)
 		{
 			activated = true;
 			//print ("on");
@@ -77,7 +78,7 @@ public class PushPad : MonoBehaviour {
 	}
 	void OnTriggerExit(Collider collide)
 	{
-		if(collide.gameObject.tag == "Pushable")
+		if (collide.gameObject == activator)
 		{
 			activated = false;
 			//print ("off");

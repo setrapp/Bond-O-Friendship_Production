@@ -40,4 +40,24 @@ public class Helper {
 	{
 		return AngleDegrees(baseVector, targetVector, axis) * Mathf.Deg2Rad;
 	}
+
+	public static Vector3 RotateTowards2D(Vector3 current, Vector3 desired, float maxRadiansDelta, float maxMagnitudeDelta, Vector3 sideTest = new Vector3())
+	{
+		Vector3 newCurrent = current;
+		if (desired.sqrMagnitude > 0 && desired != current)
+		{
+			if (Vector3.Dot(desired, current) < 0)
+			{
+				Vector3 newDesire = Vector3.Cross(current, -Vector3.forward);
+				float desireDotNew = Vector3.Dot(desired, newDesire);
+				if (sideTest.sqrMagnitude > 0 && (desireDotNew < 0 || (desireDotNew == 0 && Vector3.Dot(sideTest, newDesire) < 0)))
+				{
+					newDesire *= -1;
+				}
+				desired = newDesire;
+			}
+			newCurrent = Vector3.RotateTowards(current, desired, maxRadiansDelta, maxMagnitudeDelta);
+		}
+		return newCurrent;
+	}
 }

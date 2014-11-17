@@ -26,7 +26,6 @@ public class SimpleMover : MonoBehaviour {
 
 	void FixedUpdate() {
 
-
 		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
 
 		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2) * externalSpeedMultiplier)
@@ -36,8 +35,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (rigidbody != null)
 		{
-			rigidbody.AddForce((velocity - oldVelocity), ForceMode.VelocityChange);
-			velocity = rigidbody.velocity;
+			rigidbody.velocity = velocity;
 		}
 		else
 		{
@@ -46,6 +44,7 @@ public class SimpleMover : MonoBehaviour {
 
 		if (velocity.sqrMagnitude < Mathf.Pow(dampeningThreshold, 2)) {
 			velocity = Vector3.zero;
+			rigidbody.velocity = Vector3.zero;
 			moving = false;
 		}
 		else

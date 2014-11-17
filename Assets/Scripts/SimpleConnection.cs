@@ -63,11 +63,11 @@ public class SimpleConnection : MonoBehaviour {
 
 			if (partnerDist < 1.5f)
 			{
-				Shield.SendMessage("Activate", SendMessageOptions.DontRequireReceiver);
+				//Shield.SendMessage("Activate", SendMessageOptions.DontRequireReceiver);
 			}
 			else
 			{
-				Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
+				//Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
 			}
 
 			//bondCollider.transform.localScale = new Vector3(Vector3.Distance(attachment1.partner.transform.position, attachment2.partner.transform.position) - (attachment1.partner.transform.localScale.x + attachment2.partner.transform.localScale.x) * 0.65f, 0.5f, 10.0f);
@@ -79,8 +79,8 @@ public class SimpleConnection : MonoBehaviour {
 	}
 	public void BreakConnection()
 	{
-		attachment1.partner.connections.Remove(this);
-		attachment2.partner.connections.Remove(this);
+		//attachment1.partner.connections.Remove(this);
+		//attachment2.partner.connections.Remove(this);
 		Destroy(gameObject);
 	}
 
@@ -100,12 +100,22 @@ public class SimpleConnection : MonoBehaviour {
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 	}
+
+	void OnTriggerEnter(Collider collide)
+	{
+		if(collide.gameObject.tag == "enemyPulse")
+		{
+			//print(collide.gameObject.tag + " " + collide.gameObject.name);
+			BreakConnection();
+		}
+	}
 }
 
-[System.Serializable]
+/*[System.Serializable]
 public class PartnerAttachment
 {
 	public PartnerLink partner;
 	public Vector3 position;
 	public LineRenderer lineRenderer;
-}
+}*/
+
