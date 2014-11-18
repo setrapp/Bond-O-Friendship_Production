@@ -123,8 +123,8 @@ public class PulseShot : MonoBehaviour {
 		if (floatMove.Floating)
 		{
 			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
-			GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
-			partnerLink.mover.velocity = GetComponent<Rigidbody>().velocity;
+			//GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
+			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
 		}
 	}
 }

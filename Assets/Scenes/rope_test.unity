@@ -1243,6 +1243,12 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &506441240
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400004, guid: 9aad467a9dfb2c8418b452c4309792f6,
+    type: 2}
+  m_PrefabInternal: {fileID: 2032466895}
+  m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
 --- !u!1001 &572608839
 Prefab:
   m_ObjectHideFlags: 0
@@ -1285,6 +1291,14 @@ Prefab:
     - target: {fileID: 100012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
       propertyPath: m_Name
       value: Player 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: floatPushBack
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: floatStats.handling
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
@@ -1997,6 +2011,10 @@ Prefab:
       propertyPath: playerNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
   m_IsPrefabParent: 0
@@ -2062,6 +2080,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &1595977978
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400006, guid: 9aad467a9dfb2c8418b452c4309792f6,
+    type: 2}
+  m_PrefabInternal: {fileID: 2032466895}
+  m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
 --- !u!1 &1602470207
 GameObject:
   m_PrefabParentObject: {fileID: 100012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
@@ -2075,6 +2099,12 @@ Rigidbody:
 Transform:
   m_PrefabParentObject: {fileID: 400012, guid: 1ccc0e99af2cf6b47a3f4f25558fb029, type: 2}
   m_PrefabInternal: {fileID: 572608839}
+--- !u!114 &2027395814
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400002, guid: 9aad467a9dfb2c8418b452c4309792f6,
+    type: 2}
+  m_PrefabInternal: {fileID: 2032466895}
+  m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
 --- !u!1001 &2032466895
 Prefab:
   m_ObjectHideFlags: 0
@@ -2154,6 +2184,18 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400008, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
+      propertyPath: combinedCameraSystem
+      value: 
+      objectReference: {fileID: 1595977978}
+    - target: {fileID: 11400008, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
+      propertyPath: player1CameraSystem
+      value: 
+      objectReference: {fileID: 506441240}
+    - target: {fileID: 11400008, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
+      propertyPath: player2CameraSystem
+      value: 
+      objectReference: {fileID: 2027395814}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
   m_IsPrefabParent: 0
