@@ -210,13 +210,13 @@ public class PlayerInput : MonoBehaviour {
 		Vector2 lookAt = FireDirection();		
 		float minToFire = useKeyboard ? 0 : deadZone;
 
-		bool stickFire = GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
+		bool stickFire = false;// GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
 
-		if((GetAxisTriggers() > deadZone || GetAxisTriggers() < -deadZone) || stickFire)
+		/*if((GetAxisTriggers() > deadZone || GetAxisTriggers() < -deadZone) || stickFire)
 		{
 			lookAt = geometry.transform.forward;
 			minToFire = 0;
-		}
+		}*/
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
 		{
@@ -262,8 +262,8 @@ public class PlayerInput : MonoBehaviour {
 	private float GetAxisMoveVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical");}
 	private float GetAxisAimHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickHorizontal"); else return Input.GetAxis(joystickNumber.ToString() + "LeftStickHorizontal");}
 	private float GetAxisAimVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical");}
-	private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
-	private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
+	//private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
+	//private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
 	private bool GetAbsorb() { return Input.GetButton(joystickNumber.ToString() + "Absorb");}
 	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
 
