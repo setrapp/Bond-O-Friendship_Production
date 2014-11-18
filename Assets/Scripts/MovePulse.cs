@@ -69,6 +69,7 @@ public class MovePulse : MonoBehaviour {
 					//transform.parent = attachInfo.collider.transform;
 				}
 				transform.rotation = Quaternion.Euler(270, 0, 0);
+				creator = null;
 
 				if (swayAnimation != null)
 				{

@@ -8,8 +8,12 @@ public class PushPad : MonoBehaviour {
 	private float red;
 	private float newRed;
 	private Color myColor;
+	private Color postColor;
 	public GameObject pad;
 	public GameObject door;
+	public GameObject track;
+	public GameObject post1;
+	public GameObject post2;
 	private float doorTimer;
 	private Color doorColor;
 	private float alpha;
@@ -29,8 +33,12 @@ public class PushPad : MonoBehaviour {
 		//print (timer);
 		myColor = new Color(red, 0.1f, 0.3f,1.0f);
 		doorColor = new Color(0.6f,0.6f,0.6f,alpha);
+		postColor = new Color(0.6f,0.6f,0.6f,1.0f);
 		pad.GetComponent<Renderer>().material.color = doorColor;
 		door.GetComponent<Renderer>().material.color = doorColor;
+		track.GetComponent<Renderer>().material.color = doorColor;
+		post1.GetComponent<Renderer>().material.color = postColor;
+		post2.GetComponent<Renderer>().material.color = postColor;
 		GetComponent<Renderer>().material.color = myColor;
 		if (activated == true)
 		{

@@ -81,7 +81,7 @@ public class PartnerLink : MonoBehaviour {
 		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
 			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-			if (pulse.creator != pulseShot)
+			if (pulse.creator != pulseShot && pulse.creator != null)
 			{
 				pulseShot.volleys = 1;
 				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
