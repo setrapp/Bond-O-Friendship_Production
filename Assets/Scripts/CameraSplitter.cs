@@ -18,9 +18,9 @@ public class CameraSplitter : MonoBehaviour {
 	private bool wasSplit = false;
 	public float splitDistance;
 	public float combineDistance;
-	public GameObject combinedCameraSystem;
-	public GameObject player1CameraSystem;
-	public GameObject player2CameraSystem;
+	public CameraFollow combinedCameraSystem;
+	public CameraFollow player1CameraSystem;
+	public CameraFollow player2CameraSystem;
 	public GameObject player1;
 	public GameObject player2;
 	private bool justAltered;
@@ -30,6 +30,10 @@ public class CameraSplitter : MonoBehaviour {
 		combinedCameraSystem.transform.position = (player1.transform.position + player2.transform.position) / 2;
 		player1CameraSystem.transform.position = player1.transform.position;
 		player2CameraSystem.transform.position = player2.transform.position;
+
+		combinedCameraSystem.player1 = player1CameraSystem.player1 = player2CameraSystem.player2 = player1.transform;
+		combinedCameraSystem.player2 = player1CameraSystem.player2 = player2CameraSystem.player1 = player2.transform;
+
 		wasSplit = split;
 		CheckSplit(true);
 	}
