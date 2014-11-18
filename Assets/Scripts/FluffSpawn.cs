@@ -76,11 +76,9 @@ public class FluffSpawn : MonoBehaviour {
 
 		if(spawnedFluff!= null)
 		{
-			endPosition = transform.InverseTransformPoint(spawnedFluff.transform.up *spawnOffset + transform.position);
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			if(spawnedFluff.transform.localPosition == endPosition)
 			{
-
 				spawnedFluff = null;
 			}
 		}
@@ -123,7 +121,7 @@ public class FluffSpawn : MonoBehaviour {
 					if (baseDotPushed < constrainedDot || localBaseDotMove > 1)
 					{
 						// If the fluff is on the right side, negate its vertical component.
-						Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
+						Vector3 expectedRight = Vector3.right;
 						float yMult = 1;
 						if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
 						{
@@ -191,9 +189,11 @@ public class FluffSpawn : MonoBehaviour {
 			newFluff.transform.localEulerAngles = fluffRotation;
 			spawnedFluff = newFluff;
 			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			endPosition = transform.InverseTransformPoint(endPosition);
+			
 			if (instantSprout)
 			{
-				newFluff.transform.position = endPosition;
+				newFluff.transform.localPosition = endPosition;
 				spawnedFluff = null;
 			}
 			else

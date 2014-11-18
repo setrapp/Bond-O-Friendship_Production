@@ -18,16 +18,16 @@ public class CubePushBack : MonoBehaviour {
 		//Debug.Log (col.gameObject.name);
 		if(col.gameObject.name == "Simple Connection(Clone)")
 		{
-			col.gameObject.GetComponent<SimpleConnection>().attachment1.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 0.80f;
-			col.gameObject.GetComponent<SimpleConnection>().attachment2.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 0.80f;
+			//col.gameObject.GetComponent<SimpleConnection>().attachment1.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 0.80f;
+			//col.gameObject.GetComponent<SimpleConnection>().attachment2.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 0.80f;
 		}
 	}
 
 	void OnCollisionExit(Collision col){
 		if(col.gameObject.name == "Simple Connection(Clone)")
 		{
-			col.gameObject.GetComponent<SimpleConnection>().attachment1.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 1.0f;
-			col.gameObject.GetComponent<SimpleConnection>().attachment2.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 1.0f;
+			//col.gameObject.GetComponent<SimpleConnection>().attachment1.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 1.0f;
+			//col.gameObject.GetComponent<SimpleConnection>().attachment2.partner.GetComponent<SimpleMover>().externalSpeedMultiplier = 1.0f;
 		}
 	}
 }

@@ -17,6 +17,7 @@ public class PushPad : MonoBehaviour {
 	private float doorTimer;
 	private Color doorColor;
 	private float alpha;
+	public GameObject activator;
 
 	// Use this for initialization
 	void Start () {
@@ -77,7 +78,7 @@ public class PushPad : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.tag == "Pushable")
+		if (collide.gameObject == activator)
 		{
 			activated = true;
 			//print ("on");
@@ -85,7 +86,7 @@ public class PushPad : MonoBehaviour {
 	}
 	void OnTriggerExit(Collider collide)
 	{
-		if(collide.gameObject.tag == "Pushable")
+		if (collide.gameObject == activator)
 		{
 			activated = false;
 			//print ("off");

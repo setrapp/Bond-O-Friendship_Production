@@ -13,6 +13,7 @@ public class PulseShot : MonoBehaviour {
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
+	public PulseShot volleyPartner;
 	public FloatMoving floatMove;
 	public float floatPushBack;
 	public FluffSpawn fluffSpawn;

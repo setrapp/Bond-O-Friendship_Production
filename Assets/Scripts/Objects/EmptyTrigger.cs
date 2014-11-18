@@ -19,7 +19,7 @@ public class EmptyTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.tag == "Object")
+		if (other.tag == "Object" || other.tag == "Pushable")
 		{
 			collisions++;
 			collisionsChecked = true;
@@ -28,7 +28,7 @@ public class EmptyTrigger : MonoBehaviour {
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.tag == "Object")
+		if (other.tag == "Object" || other.tag == "Pushable")
 		{
 			collisions--;
 			collisionsChecked = true;
