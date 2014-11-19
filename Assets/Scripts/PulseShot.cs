@@ -120,7 +120,7 @@ public class PulseShot : MonoBehaviour {
 		}
 
 		// If floating propel away from pulse.
-		if (floatMove.Floating)
+		if (floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
 			//GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
