@@ -5,30 +5,53 @@ public class ColorChange : MonoBehaviour {
 
 	private Color startColor;
 	private Color endColor;
-	private float coolDown = 1.0f;
 	private bool changing = false;
+	private float red = 0.358f;
+	private float green = 0.390f;
+	private float blue = 0.350f;
+	private float colorFloat = 1.0f;
 
 	// Use this for initialization
 	void Start () {
-		startColor = gameObject.GetComponent<Renderer>().material.color;
-		endColor = new Color(0.9f, 0.9f, 0.9f);
+	//	Debug.Log (GetComponent<Renderer>().material.color);
+	//	startColor = new Color(0.195f, 0.221f, 0.188f, 1.0f);
+		endColor = new Color(red, green, blue, 1.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(changing == true)
-			gameObject.GetComponent<Renderer>().material.color = Color.Lerp(startColor, endColor, 2.0f*Time.deltaTime);
-		else if(gameObject.GetComponent<Renderer>().material.color != startColor)
-			gameObject.GetComponent<Renderer>().material.color = Color.Lerp(endColor, startColor, 2.0f*Time.deltaTime);
+		{
+			if(red <= 0.358f)
+				red += Time.deltaTime * 0.1f;
+			if(green <= 0.390f)
+				green += Time.deltaTime * 0.1f;
+			if(blue <= 0.350f)
+				blue += Time.deltaTime * 0.1f;
+			endColor = new Color(red, green, blue, 1.0f);
+			gameObject.GetComponent<Renderer>().material.color = endColor;
+		}
+		else
+		{
+			if(red >= 0.195f)
+				red -= Time.deltaTime * 0.1f;
+			if(green >= 0.221f)
+				green -= Time.deltaTime * 0.1f;
+			if(blue >= 0.188f)
+				blue -= Time.deltaTime * 0.1f;
+			endColor = new Color(red, green, blue, 1.0f);
+			gameObject.GetComponent<Renderer>().material.color = endColor;
+		}
+		//Debug.Log (GetComponent<Renderer>().material.color);
 
 	}
 
-	void OnCollisionEnter(Collision col){
+	void OnTriggerEnter(Collider col){
 		if(col.transform.tag == "Converser" || col.transform.tag == "Pulse")
 			changing = true;
 	}
 
-	void OnCollisionExit(Collision col){
+	void OnTriggerExit(Collider col){
 		if(col.transform.tag == "Converser" || col.transform.tag == "Pulse")
 		{
 			changing = false;
