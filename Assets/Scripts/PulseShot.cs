@@ -13,6 +13,7 @@ public class PulseShot : MonoBehaviour {
 	public PulseShot lastPulseAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
+	public PulseShot volleyPartner;
 	public FloatMoving floatMove;
 	public float floatPushBack;
 	public FluffSpawn fluffSpawn;
@@ -119,11 +120,11 @@ public class PulseShot : MonoBehaviour {
 		}
 
 		// If floating propel away from pulse.
-		if (floatMove.Floating)
+		if (floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
-			GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
-			partnerLink.mover.velocity = GetComponent<Rigidbody>().velocity;
+			//GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
+			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
 		}
 	}
 }

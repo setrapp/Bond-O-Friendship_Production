@@ -26,6 +26,7 @@ public class SimpleMover : MonoBehaviour {
 
 	void FixedUpdate() {
 
+		//Debug.Log(velocity);
 
 		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
 

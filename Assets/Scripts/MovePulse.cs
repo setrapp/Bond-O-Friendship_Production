@@ -52,29 +52,29 @@ public class MovePulse : MonoBehaviour {
 
 				float speed = moveSpeed * decelerationFactor;
 
-				//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
-				transform.Rotate(rotationSpeed*Time.deltaTime,0.0f,0.0f);
-
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
 				transform.position += moveVector;
 			}
 			else
 			{
-				moving = false;
-
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
 					//Debug.Log(attachInfo.collider.gameObject.name);
 					//transform.parent = attachInfo.collider.transform;
-				}
-				transform.rotation = Quaternion.Euler(270, 0, 0);
+					transform.rotation = Quaternion.Euler(270, 0, 0);
 
-				if (swayAnimation != null)
-				{
-					swayAnimation.enabled = true;
+					if (swayAnimation != null)
+					{
+						swayAnimation.enabled = true;
+					}
+					passed = false;
+					moving = false;
 				}
 			}
+
+			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+			transform.Rotate(rotationSpeed * Time.deltaTime, 0.0f, 0.0f);
 		}
 	}
 

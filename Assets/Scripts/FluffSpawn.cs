@@ -19,7 +19,8 @@ public class FluffSpawn : MonoBehaviour {
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
 	private float oldSpeed;
-	private PartnerLink partnerLink;
+	[HideInInspector]
+	public PartnerLink partnerLink;
 
 	void Start()
 	{
@@ -45,6 +46,11 @@ public class FluffSpawn : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		if (fluffs.Count >= naturalFluffCount)
+		{
+			partnerLink.fillScale = 1;
+		}
+
 		// Attempt to spawn more fluff.
 		if (fluffs.Count < naturalFluffCount)
 		{
@@ -70,11 +76,9 @@ public class FluffSpawn : MonoBehaviour {
 
 		if(spawnedFluff!= null)
 		{
-			endPosition = transform.InverseTransformPoint(spawnedFluff.transform.up *spawnOffset + transform.position);
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			if(spawnedFluff.transform.localPosition == endPosition)
 			{
-
 				spawnedFluff = null;
 			}
 		}
@@ -117,7 +121,7 @@ public class FluffSpawn : MonoBehaviour {
 					if (baseDotPushed < constrainedDot || localBaseDotMove > 1)
 					{
 						// If the fluff is on the right side, negate its vertical component.
-						Vector3 expectedRight = Vector3.Cross(localFullBackDir, transform.up);
+						Vector3 expectedRight = Vector3.right;
 						float yMult = 1;
 						if (Vector3.Dot(fluffs[i].baseDirection, expectedRight) > 0)
 						{
@@ -185,9 +189,11 @@ public class FluffSpawn : MonoBehaviour {
 			newFluff.transform.localEulerAngles = fluffRotation;
 			spawnedFluff = newFluff;
 			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			endPosition = transform.InverseTransformPoint(endPosition);
+			
 			if (instantSprout)
 			{
-				newFluff.transform.position = endPosition;
+				newFluff.transform.localPosition = endPosition;
 				spawnedFluff = null;
 			}
 			else
@@ -219,6 +225,23 @@ public class FluffSpawn : MonoBehaviour {
 				newFluffInfo.swayAnimation.enabled = false;
 			}
 			fluffs.Add(newFluffInfo);
+		}
+	}
+
+	public void DestroyAllFluffs()
+	{
+		for (int i = fluffs.Count - 1; i >= 0; i--)
+		{
+			DestroyFluff(fluffs[i]);
+		}
+	}
+
+	public void DestroyFluff(MovePulse fluffToDestroy)
+	{
+		if (fluffs.Contains(fluffToDestroy))
+		{
+			Destroy(fluffToDestroy.gameObject);
+			fluffs.Remove(fluffToDestroy);
 		}
 	}
 

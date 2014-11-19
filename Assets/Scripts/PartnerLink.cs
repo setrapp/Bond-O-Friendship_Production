@@ -6,6 +6,8 @@ public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
+	public Renderer flashRenderer;
+	public float flashFadeTime = 1;
 	public TrailRenderer trail;
 	public PulseShot pulseShot;
 	public float partnerLineSize = 0.25f;
@@ -15,7 +17,7 @@ public class PartnerLink : MonoBehaviour {
 	public Tracer tracer;
 	public GameObject connectionPrefab;
 	[SerializeField]
-	public List<SimpleConnection> connections;
+	public List<Connection> connections;
 	[HideInInspector]
 	public float fillScale = 1;
 	public bool empty;
@@ -26,6 +28,8 @@ public class PartnerLink : MonoBehaviour {
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
 	public bool absorbing = false;
+	private bool wasAbsorbing;
+	public float absorbSpeedFactor = 0;
 	public int volleysToConnect = 2;
 	private List<MovePulse> fluffsToAdd;
 
@@ -44,11 +48,32 @@ public class PartnerLink : MonoBehaviour {
 			pulseShot = GetComponent<PulseShot>();
 		}
 
-		//fillRenderer.material.color = headRenderer.material.color;
+		SetFlashAndFill(new Color(0, 0, 0, 0));
 	}
 	
 	void Update()
 	{
+		if (absorbing != wasAbsorbing)
+		{
+			if (absorbing)
+			{
+				mover.externalSpeedMultiplier += absorbSpeedFactor;
+			}
+			else
+			{
+				mover.externalSpeedMultiplier -= absorbSpeedFactor;
+			}
+			wasAbsorbing = absorbing;
+		}
+
+
+		if (flashRenderer.material.color.a > 0)
+		{
+			Color newFlashColor = flashRenderer.material.color;
+			newFlashColor.a = Mathf.Max(newFlashColor.a - (Time.deltaTime / flashFadeTime), 0);
+			SetFlashAndFill(newFlashColor);
+		}
+
 		if (fluffsToAdd != null)
 		{
 			// Spawn fluffs that look like clones of the ones being added.
@@ -80,13 +105,13 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
 		{
-			//transform.localScale += new Vector3(pulse.capacity, pulse.capacity, pulse.capacity);
-			if (pulse.creator != pulseShot)
+			if (pulse.creator != null && pulse.creator != pulseShot)
 			{
 				pulseShot.volleys = 1;
-				if (pulse.volleyPartner != null && pulse.volleyPartner == pulseShot)
+				pulseShot.volleyPartner = pulse.creator;
+				if (pulse.creator.volleyPartner == pulseShot)
 				{
-					pulseShot.volleys = pulse.volleys;
+					pulseShot.volleys = pulse.creator.volleys + 1;
 				}
 				if (pulseShot.volleys >= volleysToConnect)
 				{
@@ -100,14 +125,18 @@ public class PartnerLink : MonoBehaviour {
 					}
 					if (!connectionAlreadyMade)
 					{
-						SimpleConnection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<SimpleConnection>();
+						Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
 						connections.Add(newConnection);
 						pulse.creator.partnerLink.connections.Add(newConnection);
 						newConnection.AttachPartners(pulse.creator.partnerLink, this);
+						pulseShot.volleys = 0;
+						pulse.creator.volleys = 0;
 					}
 				}
+
+				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
+				pulseShot.lastPulseAccepted = pulse.creator;
 			}
-			pulseShot.lastPulseAccepted = pulse.creator;
 
 			if (fluffsToAdd == null)
 			{
@@ -115,5 +144,13 @@ public class PartnerLink : MonoBehaviour {
 			}
 			fluffsToAdd.Add(pulse);
 		}	
+	}
+
+	public void SetFlashAndFill(Color newFlashColor)
+	{
+		flashRenderer.material.color = newFlashColor;
+		Color newFillColor = fillRenderer.material.color;
+		newFillColor.a = 1 - newFlashColor.a;
+		fillRenderer.material.color = newFillColor;
 	}
 }
