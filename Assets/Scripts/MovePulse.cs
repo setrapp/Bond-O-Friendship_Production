@@ -20,11 +20,13 @@ public class MovePulse : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public GameObject bulb;
+	private CapsuleCollider hull;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
 		oldBulbPos = bulb.transform.position;
+		hull = GetComponent<CapsuleCollider>();
 	}
 
 	// Update is called once per frame
@@ -68,7 +70,6 @@ public class MovePulse : MonoBehaviour {
 					{
 						swayAnimation.enabled = true;
 					}
-					passed = false;
 					moving = false;
 				}
 			}
@@ -102,6 +103,30 @@ public class MovePulse : MonoBehaviour {
 		volleys = 0;
 		capacity = 0;
 		volleyPartner = null;
+	}
+
+	private void AttachTo(GameObject attachee)
+	{
+		if (moving)
+		{
+			float checkRadius = Mathf.Max(hull.height, hull.radius);
+			//Collider[] touchedColliders =
+			RaycastHit hitInfo;
+			Vector3 moveDir = (target - transform.position).normalized;
+			if (Physics.Raycast(transform.position, (target - transform.position).normalized, out hitInfo, checkRadius, ~(int)Mathf.Pow(2, gameObject.layer)))
+			{
+				if (hitInfo.collider.gameObject == attachee)
+				{
+					transform.up = hitInfo.normal;
+					transform.position = hitInfo.point;
+					if (swayAnimation != null)
+					{
+						swayAnimation.enabled = true;
+					}
+					moving = false;
+				}
+			}
+		}
 	}
 
 	void OnTriggerEnter(Collider collide)
