@@ -222,7 +222,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -4, y: 0, z: 0}
+  m_LocalPosition: {x: -7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -476,11 +476,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e6b386ebad61b49ae306e3c772c73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  partnerLink: {fileID: 0}
   mover: {fileID: 0}
-  floatStats:
+  loneFloatStats:
     acceleration: 0
     handling: 0
-    dampening: .999899983
+    dampening: 1
+  perConnectionFloatBonus:
+    acceleration: 10
+    handling: 10
+    dampening: 1
+  maxConnectionBonuses: 1
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -503,8 +509,9 @@ MonoBehaviour:
   lastPulseAccepted: {fileID: 0}
   volleyOnlyFirst: 0
   volleys: 0
+  volleyPartner: {fileID: 0}
   floatMove: {fileID: 0}
-  floatPushBack: 3
+  floatPushBack: 300
   fluffSpawn: {fileID: 0}
   minShotCount: 3
   maxShotCount: 6

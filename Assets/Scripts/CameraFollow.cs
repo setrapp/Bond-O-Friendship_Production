@@ -3,7 +3,9 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
+	[HideInInspector]
 	public Transform player1;
+	[HideInInspector]
 	public Transform player2;
 	public float smoothness = 20;
 	private Vector3 mainTargetPosition;
