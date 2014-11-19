@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 81: {fileID: 8100000}
+  m_Layer: 0
+  m_Name: Audio Listener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 1
@@ -182,7 +198,6 @@ GameObject:
   - 20: {fileID: 2000010}
   - 124: {fileID: 12400010}
   - 92: {fileID: 9200010}
-  - 81: {fileID: 8100000}
   m_Layer: 0
   m_Name: Combined Main Camera
   m_TagString: MainCamera
@@ -312,6 +327,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
+  m_RootOrder: 3
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -337,6 +364,7 @@ Transform:
   - {fileID: 400012}
   - {fileID: 400010}
   - {fileID: 400008}
+  - {fileID: 400000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400006
@@ -490,7 +518,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100030}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: -.00999999978, y: -0, z: 0}
+  m_LocalPosition: {x: -.00999999978, y: -0, z: -1}
   m_LocalScale: {x: .00999999978, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
@@ -528,7 +556,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100036}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: -.00999999978, y: -0, z: 6}
+  m_LocalPosition: {x: -.00999999978, y: -0, z: -1}
   m_LocalScale: {x: .00999999978, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 400034}
@@ -954,7 +982,7 @@ AudioListener:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100024}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
 --- !u!92 &9200000
 Behaviour:
@@ -1073,11 +1101,12 @@ MonoBehaviour:
   split: 0
   splitDistance: 10
   combineDistance: 3
-  combinedCameraSystem: {fileID: 100012}
-  player1CameraSystem: {fileID: 100010}
-  player2CameraSystem: {fileID: 100008}
+  combinedCameraSystem: {fileID: 11400006}
+  player1CameraSystem: {fileID: 11400004}
+  player2CameraSystem: {fileID: 11400002}
   player1: {fileID: 0}
   player2: {fileID: 0}
+  audioListener: {fileID: 8100000}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1

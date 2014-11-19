@@ -24,6 +24,7 @@ public class CameraSplitter : MonoBehaviour {
 	public GameObject player1;
 	public GameObject player2;
 	private bool justAltered;
+	public AudioListener audioListener;
 
 	void Start()
 	{
@@ -41,6 +42,8 @@ public class CameraSplitter : MonoBehaviour {
 	void Update()
 	{
 		CheckSplit(false);
+
+		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
 	}
 
 	private void CheckSplit(bool forceCheck)
