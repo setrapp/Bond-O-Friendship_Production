@@ -100,16 +100,16 @@ public class PulseShot : MonoBehaviour {
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
 
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
-			movePulse.transform.position = transform.position + (rotatedPassDir * transform.localScale.magnitude);
+			movePulse.transform.position = transform.position;
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
 			movePulse.ReadyForPass();
-			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
 			movePulse.creator = this;
 			movePulse.capacity = pulseCapacity;
 			movePulse.volleys = volleys + 1;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
+			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
 		}
 		
 

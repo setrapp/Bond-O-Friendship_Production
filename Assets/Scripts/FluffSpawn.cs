@@ -74,7 +74,7 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
-		if(spawnedFluff!= null)
+		if(spawnedFluff != null)
 		{
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			if(spawnedFluff.transform.localPosition == endPosition)
@@ -82,6 +82,7 @@ public class FluffSpawn : MonoBehaviour {
 				spawnedFluff = null;
 			}
 		}
+
 		// Rotate fluffs based on movement.
 		if (rigidbody.velocity.sqrMagnitude > 0)
 		{
@@ -186,18 +187,25 @@ public class FluffSpawn : MonoBehaviour {
 
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
+			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;
-			spawnedFluff = newFluff;
-			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
-			endPosition = transform.InverseTransformPoint(endPosition);
+			Vector3 tempEndPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			tempEndPosition = transform.InverseTransformPoint(tempEndPosition);
 			
 			if (instantSprout)
 			{
-				newFluff.transform.localPosition = endPosition;
-				spawnedFluff = null;
+				newFluff.transform.localPosition = tempEndPosition;
 			}
 			else
 			{
+				// Force the old spawned fluff out.
+				if (spawnedFluff != null)
+				{
+					spawnedFluff.transform.localPosition = transform.InverseTransformPoint(endPosition);
+				}
+
+				endPosition = tempEndPosition;
+				spawnedFluff = newFluff;
 				newFluff.transform.position += newFluff.transform.up * spawnOffset * (Time.deltaTime / spawnTime);
 			}
 			

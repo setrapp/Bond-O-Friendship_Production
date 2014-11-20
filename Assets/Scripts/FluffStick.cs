@@ -6,7 +6,7 @@ public class FluffStick : MonoBehaviour {
 	{
 		if (other.gameObject.tag == "Pulse")
 		{
-			other.SendMessage("AttachTo", gameObject);	
+			other.SendMessage("AttachTo", gameObject);
 		}
 	}
 }

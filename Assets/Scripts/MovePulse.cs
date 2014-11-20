@@ -8,7 +8,7 @@ public class MovePulse : MonoBehaviour {
 	public int volleys;
 	public float capacity;
 	public Vector3 target;
-	private float moveSpeed = 2;
+	public float moveSpeed = 2;
 	public float rotationSpeed = 50.0f;
 	//public GameObject pulseCreator;
 	public PulseShot volleyPartner;
@@ -20,13 +20,17 @@ public class MovePulse : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public GameObject bulb;
-	private CapsuleCollider hull;
+	[HideInInspector]
+	public CapsuleCollider hull;
+	[HideInInspector]
+	public Rigidbody body;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
 		oldBulbPos = bulb.transform.position;
 		hull = GetComponent<CapsuleCollider>();
+		body = GetComponent<Rigidbody>();
 	}
 
 	// Update is called once per frame
@@ -40,6 +44,13 @@ public class MovePulse : MonoBehaviour {
 				colliders[i].enabled = false;
 			}
 			disableColliders = false;
+		}
+
+		// Make rigidbody kinematic when not moving self.
+		bool shouldBeKinematic = !moving;
+		if (body.isKinematic != shouldBeKinematic)
+		{
+			body.isKinematic = shouldBeKinematic;
 		}
 
 		if (passed && moving)

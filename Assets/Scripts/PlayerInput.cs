@@ -200,7 +200,7 @@ public class PlayerInput : MonoBehaviour {
 			foreach(GameObject livePulse in pulseArray)
 			{
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
-				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
+				if (livePulseMove != null && livePulseMove.passed && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 				{
 					Vector3 fluffToAbsorber = transform.position - livePulseMove.transform.position;
 					float fluffToAbsorberDist = fluffToAbsorber.magnitude;
