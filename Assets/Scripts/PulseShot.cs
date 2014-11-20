@@ -100,16 +100,30 @@ public class PulseShot : MonoBehaviour {
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
 
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
-			movePulse.transform.position = transform.position + (rotatedPassDir * transform.localScale.magnitude);
+			movePulse.transform.position = transform.position;
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
 			movePulse.ReadyForPass();
-			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
 			movePulse.creator = this;
 			movePulse.capacity = pulseCapacity;
 			movePulse.volleys = volleys + 1;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
+
+			// Set target and determine if block within first frame of movement.
+			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
+			Vector3 fluffToTarget = (movePulse.target - movePulse.transform.position).normalized;
+			int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
+			RaycastHit[] hits = Physics.RaycastAll(movePulse.transform.position, fluffToTarget, movePulse.moveSpeed * Time.deltaTime, ~fluffLayer);
+			bool blocked = false;
+			for (int j = 0; j < hits.Length && !blocked; j++)
+			{
+				if (hits[j].collider.gameObject != gameObject)
+				{
+					blocked = hits[j].collider.gameObject != gameObject && !Physics.GetIgnoreLayerCollision(movePulse.gameObject.layer, hits[j].collider.gameObject.layer);
+					movePulse.target = hits[j].point;
+				}
+			}
 		}
 		
 
