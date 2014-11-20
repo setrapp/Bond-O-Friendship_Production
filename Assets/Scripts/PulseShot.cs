@@ -109,21 +109,7 @@ public class PulseShot : MonoBehaviour {
 			movePulse.volleys = volleys + 1;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
-
-			// Set target and determine if block within first frame of movement.
 			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
-			Vector3 fluffToTarget = (movePulse.target - movePulse.transform.position).normalized;
-			int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
-			RaycastHit[] hits = Physics.RaycastAll(movePulse.transform.position, fluffToTarget, movePulse.moveSpeed * Time.deltaTime, ~fluffLayer);
-			bool blocked = false;
-			for (int j = 0; j < hits.Length && !blocked; j++)
-			{
-				if (hits[j].collider.gameObject != gameObject)
-				{
-					blocked = hits[j].collider.gameObject != gameObject && !Physics.GetIgnoreLayerCollision(movePulse.gameObject.layer, hits[j].collider.gameObject.layer);
-					movePulse.target = hits[j].point;
-				}
-			}
 		}
 		
 
