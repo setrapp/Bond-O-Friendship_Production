@@ -20,11 +20,13 @@ public class MovePulse : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public GameObject bulb;
+	private CapsuleCollider hull;
 
 	void Start ()
 	{
 		//pulseCreator = GameObject.Find("Globals");
 		oldBulbPos = bulb.transform.position;
+		hull = GetComponent<CapsuleCollider>();
 	}
 
 	// Update is called once per frame
@@ -68,7 +70,6 @@ public class MovePulse : MonoBehaviour {
 					{
 						swayAnimation.enabled = true;
 					}
-					passed = false;
 					moving = false;
 				}
 			}
@@ -102,6 +103,33 @@ public class MovePulse : MonoBehaviour {
 		volleys = 0;
 		capacity = 0;
 		volleyPartner = null;
+	}
+
+	private void AttachTo(GameObject attachee)
+	{
+		// If moving shoot a ray and attempt to attach to the potential attachee.
+		if (moving)
+		{
+			float checkRadius = Mathf.Max(hull.height, hull.radius);
+			Vector3 moveDir = (target - transform.position).normalized;
+			RaycastHit[] hits = Physics.RaycastAll(transform.position, (target - transform.position).normalized, checkRadius, ~(int)Mathf.Pow(2, gameObject.layer));
+			bool foundAttachee = false;
+			for(int i = 0; i < hits.Length && !foundAttachee; i++)
+			{
+				if (hits[i].collider.gameObject == attachee)
+				{
+					// If the potential attachee is hit, attach to it (with a small skin amount).
+					transform.up = hits[i].normal;
+					transform.position = hits[i].point + (transform.up * 0.0001f);
+					if (swayAnimation != null)
+					{
+						swayAnimation.enabled = true;
+					}
+					moving = false;
+					foundAttachee = true;
+				}
+			}
+		}
 	}
 
 	void OnTriggerEnter(Collider collide)
