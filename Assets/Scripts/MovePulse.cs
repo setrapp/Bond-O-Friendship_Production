@@ -107,23 +107,26 @@ public class MovePulse : MonoBehaviour {
 
 	private void AttachTo(GameObject attachee)
 	{
+		// If moving shoot a ray and attempt to attach to the potential attachee.
 		if (moving)
 		{
 			float checkRadius = Mathf.Max(hull.height, hull.radius);
-			//Collider[] touchedColliders =
-			RaycastHit hitInfo;
 			Vector3 moveDir = (target - transform.position).normalized;
-			if (Physics.Raycast(transform.position, (target - transform.position).normalized, out hitInfo, checkRadius, ~(int)Mathf.Pow(2, gameObject.layer)))
+			RaycastHit[] hits = Physics.RaycastAll(transform.position, (target - transform.position).normalized, checkRadius, ~(int)Mathf.Pow(2, gameObject.layer));
+			bool foundAttachee = false;
+			for(int i = 0; i < hits.Length && !foundAttachee; i++)
 			{
-				if (hitInfo.collider.gameObject == attachee)
+				if (hits[i].collider.gameObject == attachee)
 				{
-					transform.up = hitInfo.normal;
-					transform.position = hitInfo.point;
+					// If the potential attachee is hit, attach to it (with a small skin amount).
+					transform.up = hits[i].normal;
+					transform.position = hits[i].point + (transform.up * 0.0001f);
 					if (swayAnimation != null)
 					{
 						swayAnimation.enabled = true;
 					}
 					moving = false;
+					foundAttachee = true;
 				}
 			}
 		}
