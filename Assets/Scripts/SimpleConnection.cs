@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SimpleConnection : MonoBehaviour {
-	public PartnerAttachment attachment1;
+	/*public PartnerAttachment attachment1;
 	public PartnerAttachment attachment2;
 	public float minDistanceToDrain;
 	public float distancePerDrain;
@@ -108,7 +108,7 @@ public class SimpleConnection : MonoBehaviour {
 			//print(collide.gameObject.tag + " " + collide.gameObject.name);
 			BreakConnection();
 		}
-	}
+	}*/
 }
 
 /*[System.Serializable]
