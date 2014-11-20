@@ -202,11 +202,24 @@ public class PlayerInput : MonoBehaviour {
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
 				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 				{
-					livePulseMove.target = transform.position;
-					livePulseMove.moving = true;
-					if (livePulseMove.swayAnimation != null)
+					Vector3 fluffToAbsorber = transform.position - livePulseMove.transform.position;
+					float fluffToAbsorberDist = fluffToAbsorber.magnitude;
+					int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
+					RaycastHit[] hits = Physics.RaycastAll(livePulseMove.transform.position, fluffToAbsorber / fluffToAbsorberDist, fluffToAbsorberDist, ~fluffLayer);
+					bool blocked = false;
+					for (int i = 0; i < hits.Length && !blocked; i++)
 					{
-						livePulseMove.swayAnimation.enabled = false;
+						blocked = hits[i].collider.gameObject != gameObject && !Physics.GetIgnoreLayerCollision(livePulse.layer, hits[i].collider.gameObject.layer);
+					}
+
+					if (!blocked)
+					{
+						livePulseMove.target = transform.position;
+						livePulseMove.moving = true;
+						if (livePulseMove.swayAnimation != null)
+						{
+							livePulseMove.swayAnimation.enabled = false;
+						}
 					}
 				}
 			}
