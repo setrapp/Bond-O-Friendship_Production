@@ -25,6 +25,8 @@ public class MovePulse : MonoBehaviour {
 	[HideInInspector]
 	public Rigidbody body;
 	private static bool needNonKinematic = string.Compare(Application.unityVersion, "5.0") < 0;
+	public FluffStick attachee;
+	public float attacheePullRate = 1;
 
 	void Start ()
 	{
@@ -71,7 +73,16 @@ public class MovePulse : MonoBehaviour {
 				float speed = moveSpeed * decelerationFactor;
 
 				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
-				transform.position += moveVector;
+
+				if (attachee == null || attachee.pullableBody == null)
+				{
+					transform.position += moveVector;
+				}
+				else
+				{
+					Debug.Log(moveVector / Time.deltaTime);
+					attachee.pullableBody.AddForce(moveVector / attachee.pullMass, ForceMode.VelocityChange);
+				}
 			}
 			else
 			{
@@ -121,7 +132,7 @@ public class MovePulse : MonoBehaviour {
 		volleyPartner = null;
 	}
 
-	private void AttachTo(GameObject attachee)
+	private void AttachTo(FluffStick potentialAttachee)
 	{
 		// If moving shoot a ray and attempt to attach to the potential attachee.
 		if (moving)
@@ -132,17 +143,19 @@ public class MovePulse : MonoBehaviour {
 			bool foundAttachee = false;
 			for(int i = 0; i < hits.Length && !foundAttachee; i++)
 			{
-				if (hits[i].collider.gameObject == attachee)
+				if (hits[i].collider.gameObject == potentialAttachee.gameObject)
 				{
 					// If the potential attachee is hit, attach to it (with a small skin amount).
 					transform.up = hits[i].normal;
 					transform.position = hits[i].point + (transform.up * 0.0001f);
+					transform.parent = hits[i].collider.transform;
 					if (swayAnimation != null)
 					{
 						swayAnimation.enabled = true;
 					}
 					moving = false;
 					foundAttachee = true;
+					attachee = potentialAttachee;
 				}
 			}
 		}
