@@ -100,7 +100,6 @@ public class PulseShot : MonoBehaviour {
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
 
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
-			movePulse.transform.position = transform.position;
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
 			movePulse.ReadyForPass();
@@ -110,6 +109,8 @@ public class PulseShot : MonoBehaviour {
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
 			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
+			movePulse.transform.position = transform.position + (rotatedPassDir * movePulse.moveSpeed * Time.deltaTime);
+			/*TODO getting stuck on player (may be kinematioc related)*/
 		}
 		
 
