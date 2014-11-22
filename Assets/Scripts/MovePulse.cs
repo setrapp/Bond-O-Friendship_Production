@@ -77,8 +77,12 @@ public class MovePulse : MonoBehaviour {
 				if (attachee == null || attachee.pullableBody == null)
 				{
 					transform.position += moveVector;
-
-					ToggleSwayAnimation(false);
+					if (swayAnimation.enabled)
+					{
+						transform.parent = null;
+						transform.rotation = Quaternion.Euler(0, 0, 0);
+						ToggleSwayAnimation(false);
+					}
 				}
 				else
 				{

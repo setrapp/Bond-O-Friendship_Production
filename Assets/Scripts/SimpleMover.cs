@@ -1,52 +1,65 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
 	public Vector3 velocity;
 	private Vector3 oldVelocity;
 	public float acceleration;
 	public float handling;
-	public float dampening = 0.9f;
-	public float dampeningThreshold = 0.005f;
+	public float cutSpeedThreshold = 0.1f;
 	public float externalSpeedMultiplier = 1;
 	private bool moving;
 	public bool Moving
 	{
 		get { return moving; }
 	}
-	private CharacterController controller;
-	private Rigidbody rigidbody;
+	public Rigidbody body;
+	public float bodylessDampening = 1;
+	private bool slowingDown = false;
 
 	void Start()
 	{
-		controller = GetComponent<CharacterController>();
-		rigidbody = GetComponent<Rigidbody>();
+		body = GetComponent<Rigidbody>();
 	}
 
 	void FixedUpdate() {
 
-		//Debug.Log(velocity);
+		// If slowing down either recognize rigidbody drag or apply dampening.
+		if (slowingDown)
+		{
+			if (body != null)
+			{
+				velocity = body.velocity;
+			}
+			else
+			{
+				velocity *= bodylessDampening;
+			}
+		}
 
+		// Clamp velocity within max speed, taking into account external speed multiplier.
 		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
-
 		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2) * externalSpeedMultiplier)
 		{
 			velocity = velocity.normalized * maxSpeed * externalSpeedMultiplier;
 		}
 
-		if (rigidbody != null)
+		// Move, using rigidbody if attached.
+		if (body != null)
 		{
-			rigidbody.velocity = velocity;
+			body.velocity = velocity;
 		}
 		else
 		{
 			transform.position += velocity * Time.deltaTime;
 		}
 
-		if (velocity.sqrMagnitude < Mathf.Pow(dampeningThreshold, 2)) {
+		// Cut the speed to zero if going slow enough.
+		if (velocity.sqrMagnitude < Mathf.Pow(cutSpeedThreshold, 2)) {
 			velocity = Vector3.zero;
-			rigidbody.velocity = Vector3.zero;
+			body.velocity = Vector3.zero;
 			moving = false;
 		}
 		else
@@ -55,6 +68,7 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		oldVelocity = velocity;
+		slowingDown = false;
 	}
 
 	public void Stop()
@@ -127,35 +141,11 @@ public class SimpleMover : MonoBehaviour {
 			speed = maxSpeed;
 		}
 		velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
-		if (controller != null)
-		{
-			controller.Move(velocity * Time.deltaTime);
-		}
-		else
-		{
-			transform.position += velocity * Time.deltaTime;
-		}
+		transform.position += velocity * Time.deltaTime;
 	}
-
-	/*public void MoveTo(Vector3 position, bool updateVelocity = false)
-	{
-		if (updateVelocity && Time.deltaTime > 0)
-		{
-			velocity = (position - transform.position) / Time.deltaTime;
-		}
-		if (controller != null)
-		{
-			controller.Move(position - transform.position);
-		}
-		else
-		{
-			transform.position = position;
-		}
-
-	}*/
 
 	public void SlowDown()
 	{
-		velocity *= dampening;
+		slowingDown = true;
 	}
 }
