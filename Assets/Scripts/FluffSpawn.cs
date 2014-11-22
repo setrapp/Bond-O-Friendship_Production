@@ -228,10 +228,7 @@ public class FluffSpawn : MonoBehaviour {
 			{
 				meshRenderers[i].material = useMaterial;
 			}
-			if (newFluffInfo.swayAnimation != null)
-			{
-				newFluffInfo.swayAnimation.enabled = false;
-			}
+			newFluffInfo.ToggleSwayAnimation(false);
 			fluffs.Add(newFluffInfo);
 		}
 	}

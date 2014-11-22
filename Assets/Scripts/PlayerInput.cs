@@ -204,7 +204,7 @@ public class PlayerInput : MonoBehaviour {
 				{
 					Vector3 fluffToAbsorber = transform.position - livePulseMove.transform.position;
 					float fluffToAbsorberDist = fluffToAbsorber.magnitude;
-					int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
+					int fluffLayer = (int)Mathf.Pow(2, livePulse.layer);
 					RaycastHit[] hits = Physics.RaycastAll(livePulseMove.transform.position, fluffToAbsorber / fluffToAbsorberDist, fluffToAbsorberDist, ~fluffLayer);
 					bool blocked = false;
 					for (int i = 0; i < hits.Length && !blocked; i++)
@@ -216,10 +216,6 @@ public class PlayerInput : MonoBehaviour {
 					{
 						livePulseMove.target = transform.position;
 						livePulseMove.moving = true;
-						if (livePulseMove.swayAnimation != null)
-						{
-							livePulseMove.swayAnimation.enabled = false;
-						}
 					}
 				}
 			}

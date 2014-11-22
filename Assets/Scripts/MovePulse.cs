@@ -77,10 +77,11 @@ public class MovePulse : MonoBehaviour {
 				if (attachee == null || attachee.pullableBody == null)
 				{
 					transform.position += moveVector;
+
+					ToggleSwayAnimation(false);
 				}
 				else
 				{
-					Debug.Log(moveVector / Time.deltaTime);
 					attachee.pullableBody.AddForce(moveVector / attachee.pullMass, ForceMode.VelocityChange);
 				}
 			}
@@ -89,20 +90,19 @@ public class MovePulse : MonoBehaviour {
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
-					//Debug.Log(attachInfo.collider.gameObject.name);
-					//transform.parent = attachInfo.collider.transform;
+					transform.parent = attachInfo.collider.transform;
 					transform.rotation = Quaternion.Euler(270, 0, 0);
 
-					if (swayAnimation != null)
-					{
-						swayAnimation.enabled = true;
-					}
+					ToggleSwayAnimation(true);
 					moving = false;
 				}
 			}
 
-			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
-			transform.Rotate(rotationSpeed * Time.deltaTime, 0.0f, 0.0f);
+			if (attachee == null)
+			{
+				//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+				transform.Rotate(rotationSpeed * Time.deltaTime, 0.0f, 0.0f);
+			}
 		}
 	}
 
@@ -148,16 +148,24 @@ public class MovePulse : MonoBehaviour {
 					// If the potential attachee is hit, attach to it (with a small skin amount).
 					transform.up = hits[i].normal;
 					transform.position = hits[i].point + (transform.up * 0.0001f);
-					transform.parent = hits[i].collider.transform;
-					if (swayAnimation != null)
-					{
-						swayAnimation.enabled = true;
-					}
+					transform.parent = hits[i].collider.transform; /*TODO would a fixed joint work better than parenting?*/
+					//FixedJoint joint = gameObject.AddComponent<FixedJoint>();
+					//joint.connectedBody = potentialAttachee.pullableBody;
+					ToggleSwayAnimation(true);
 					moving = false;
 					foundAttachee = true;
 					attachee = potentialAttachee;
 				}
 			}
+		}
+	}
+
+	public void ToggleSwayAnimation(bool playSway)
+	{
+		if (swayAnimation != null)
+		{
+			swayAnimation.enabled = playSway;
+			swayAnimation["Fluff_Sway"].time = 0;
 		}
 	}
 

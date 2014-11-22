@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FluffStick : MonoBehaviour {
 	public Rigidbody pullableBody;
+	public float bodyMassFactor = 1;
 	public float pullMass = -1;
 
 	void Start()
@@ -13,7 +14,7 @@ public class FluffStick : MonoBehaviour {
 		}
 		if (pullMass < 0 && pullableBody != null)
 		{
-			pullMass = pullableBody.mass;
+			pullMass = pullableBody.mass * bodyMassFactor;
 		}
 	}
 
