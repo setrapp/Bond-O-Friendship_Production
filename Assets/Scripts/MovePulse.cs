@@ -90,8 +90,9 @@ public class MovePulse : MonoBehaviour {
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
-					transform.parent = attachInfo.collider.transform;
 					transform.rotation = Quaternion.Euler(270, 0, 0);
+					transform.parent = attachInfo.collider.transform;
+					
 
 					ToggleSwayAnimation(true);
 					moving = false;
@@ -155,6 +156,7 @@ public class MovePulse : MonoBehaviour {
 					moving = false;
 					foundAttachee = true;
 					attachee = potentialAttachee;
+					
 				}
 			}
 		}
