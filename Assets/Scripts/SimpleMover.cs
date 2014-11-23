@@ -35,7 +35,7 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		// If slowing down without a rigidbody attached, dampen speed.
-		if (slowDown)
+		if (slowDown && body == null)
 		{
 			velocity *= bodylessDampening;
 		}
