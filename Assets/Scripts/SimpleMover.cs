@@ -17,26 +17,27 @@ public class SimpleMover : MonoBehaviour {
 	}
 	public Rigidbody body;
 	public float bodylessDampening = 1;
-	private bool slowingDown = false;
+	public bool slowDown = false;
 
 	void Start()
 	{
-		body = GetComponent<Rigidbody>();
+		if (body == null)
+		{
+			body = GetComponent<Rigidbody>();
+		}
 	}
 
 	void FixedUpdate() {
 
-		// If slowing down either recognize rigidbody drag or apply dampening.
-		if (slowingDown)
+		if (body != null)
 		{
-			if (body != null)
-			{
-				velocity = body.velocity;
-			}
-			else
-			{
-				velocity *= bodylessDampening;
-			}
+			velocity = body.velocity;
+		}
+
+		// If slowing down without a rigidbody attached, dampen speed.
+		if (slowDown)
+		{
+			velocity *= bodylessDampening;
 		}
 
 		// Clamp velocity within max speed, taking into account external speed multiplier.
@@ -61,6 +62,7 @@ public class SimpleMover : MonoBehaviour {
 			velocity = Vector3.zero;
 			body.velocity = Vector3.zero;
 			moving = false;
+			slowDown = false;
 		}
 		else
 		{
@@ -68,12 +70,15 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		oldVelocity = velocity;
-		slowingDown = false;
 	}
 
 	public void Stop()
 	{
 		velocity = Vector3.zero;
+		if (body != null)
+		{
+			body.velocity = Vector3.zero;
+		}
 	}
 
 	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true)
@@ -128,6 +133,10 @@ public class SimpleMover : MonoBehaviour {
 			velocity = velocity.normalized * maxSpeed;
 		}
 		velocity *= Mathf.Max(externalSpeedMultiplier, 0);
+		if (body != null && !float.IsNaN(velocity.x))
+		{
+			body.velocity = velocity;
+		}
 	}
 
 	public void Move(Vector3 direction, float speed, bool clampSpeed = true)
@@ -141,11 +150,10 @@ public class SimpleMover : MonoBehaviour {
 			speed = maxSpeed;
 		}
 		velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
+		if (body != null && !float.IsNaN(velocity.x))
+		{
+			body.velocity = velocity;
+		}
 		transform.position += velocity * Time.deltaTime;
-	}
-
-	public void SlowDown()
-	{
-		slowingDown = true;
 	}
 }

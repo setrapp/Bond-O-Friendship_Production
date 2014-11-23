@@ -21,6 +21,7 @@ public class FluffSpawn : MonoBehaviour {
 	private float oldSpeed;
 	[HideInInspector]
 	public PartnerLink partnerLink;
+	private FluffStick fluffStick;
 
 	void Start()
 	{
@@ -34,6 +35,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 
 		partnerLink = GetComponent<PartnerLink>();
+		fluffStick = GetComponent<FluffStick>();
 		
 
 		while (fluffs.Count < startingFluff)
@@ -229,6 +231,9 @@ public class FluffSpawn : MonoBehaviour {
 				meshRenderers[i].material = useMaterial;
 			}
 			newFluffInfo.ToggleSwayAnimation(false);
+			newFluffInfo.hull.isTrigger = true;
+			newFluffInfo.attachee = fluffStick;
+			newFluffInfo.attacheePossessive = true;
 			fluffs.Add(newFluffInfo);
 		}
 	}

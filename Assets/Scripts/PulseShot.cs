@@ -21,6 +21,7 @@ public class PulseShot : MonoBehaviour {
 	public int maxShotCount;
 	public float shotSpread;
 	public float minShotFactor;
+	public float passSpeed;
 
 	void Start()
 	{
@@ -102,15 +103,26 @@ public class PulseShot : MonoBehaviour {
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
-			movePulse.ReadyForPass();
 			movePulse.creator = this;
 			movePulse.capacity = pulseCapacity;
-			movePulse.volleys = volleys + 1;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
-			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
-			movePulse.transform.position = transform.position + (rotatedPassDir * movePulse.moveSpeed * Time.deltaTime);
-			/*TODO getting stuck on player (may be kinematioc related)*/
+			movePulse.transform.position = transform.position;
+
+
+			//RaycastHit attemptPassHit;
+			//bool blocked = movePulse.TestForBlocking(rotatedPassDir, movePulse.hull.height, out attemptPassHit);
+
+			//if (blocked)
+			//{
+				//movePulse.Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
+			//}
+			//else
+			//{
+				movePulse.Pass(rotatedPassDir * passSpeed, gameObject);
+			//}
+
+			
 		}
 		
 

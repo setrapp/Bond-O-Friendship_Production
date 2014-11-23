@@ -17,12 +17,4 @@ public class FluffStick : MonoBehaviour {
 			pullMass = pullableBody.mass * bodyMassFactor;
 		}
 	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.gameObject.tag == "Pulse")
-		{
-			other.SendMessage("AttachTo", this);
-		}
-	}
 }

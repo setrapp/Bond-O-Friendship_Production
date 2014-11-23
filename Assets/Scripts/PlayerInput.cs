@@ -39,6 +39,8 @@ public class PlayerInput : MonoBehaviour {
 
 	private bool paused = false;
 
+	public float pullSpeed;
+
 	void Start()
 	{
 		if (otherPlayerInput == null)
@@ -54,7 +56,7 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-	void Update()
+	/*void Update()
 	{
 		if(GetPause() || Input.GetKeyDown(KeyCode.Escape))
 		{
@@ -68,13 +70,27 @@ public class PlayerInput : MonoBehaviour {
 
 		PlayerLookAt();
 		partnerLink.absorbing = Absorbing();
-	}
+	}*/
 
-	void FixedUpdate () {
+	void Update () {
+
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
+
+		if (GetPause() || Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (paused)
+				Time.timeScale = 1;
+			else
+				Time.timeScale = 0;
+
+			paused = !paused;
+		}
+
+		PlayerLookAt();
+		partnerLink.absorbing = Absorbing();
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
@@ -164,10 +180,11 @@ public class PlayerInput : MonoBehaviour {
 				if (velocityChange.sqrMagnitude > 0)
 				{
 					mover.Accelerate(velocityChange);
+					mover.slowDown = false;
 				}
 				else
 				{
-					mover.SlowDown();
+					mover.slowDown = true;
 				}
 				transform.LookAt(transform.position + mover.velocity, transform.up);
 
@@ -200,22 +217,12 @@ public class PlayerInput : MonoBehaviour {
 			foreach(GameObject livePulse in pulseArray)
 			{
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
-				if (livePulseMove != null && livePulseMove.passed && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
+				if (livePulseMove != null)
 				{
-					Vector3 fluffToAbsorber = transform.position - livePulseMove.transform.position;
-					float fluffToAbsorberDist = fluffToAbsorber.magnitude;
-					int fluffLayer = (int)Mathf.Pow(2, livePulse.layer);
-					RaycastHit[] hits = Physics.RaycastAll(livePulseMove.transform.position, fluffToAbsorber / fluffToAbsorberDist, fluffToAbsorberDist, ~fluffLayer);
-					bool blocked = false;
-					for (int i = 0; i < hits.Length && !blocked; i++)
+					bool fluffAttachedToSelf = (livePulseMove.attachee != null && livePulseMove.attachee.gameObject == gameObject);
+					if (!fluffAttachedToSelf && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 					{
-						blocked = hits[i].collider.gameObject != gameObject && !Physics.GetIgnoreLayerCollision(livePulse.layer, hits[i].collider.gameObject.layer);
-					}
-
-					if (!blocked)
-					{
-						livePulseMove.target = transform.position;
-						livePulseMove.moving = true;
+						livePulseMove.Pull(gameObject, pullSpeed);
 					}
 				}
 			}
