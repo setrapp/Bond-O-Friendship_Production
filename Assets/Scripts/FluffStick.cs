@@ -2,11 +2,19 @@
 using System.Collections;
 
 public class FluffStick : MonoBehaviour {
-	void OnTriggerEnter(Collider other)
+	public Rigidbody pullableBody;
+	public float bodyMassFactor = 1;
+	public float pullMass = -1;
+
+	void Start()
 	{
-		if (other.gameObject.tag == "Pulse")
+		if (pullableBody == null)
 		{
-			other.SendMessage("AttachTo", gameObject);
+			pullableBody = GetComponent<Rigidbody>();
+		}
+		if (pullMass < 0 && pullableBody != null)
+		{
+			pullMass = pullableBody.mass * bodyMassFactor;
 		}
 	}
 }

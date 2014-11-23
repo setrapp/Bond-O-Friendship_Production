@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(SimpleMover))]
 public class MovePulse : MonoBehaviour {
-	public bool passed = false;
+	[HideInInspector]
+	private SimpleMover mover;
 	public PulseShot creator;
 	public PartnerLink volleyTarget;
 	public int volleys;
 	public float capacity;
 	public Vector3 target;
-	public float moveSpeed = 2;
 	public float rotationSpeed = 50.0f;
 	//public GameObject pulseCreator;
 	public PulseShot volleyPartner;
@@ -24,18 +25,29 @@ public class MovePulse : MonoBehaviour {
 	public CapsuleCollider hull;
 	[HideInInspector]
 	public Rigidbody body;
-	private static bool needNonKinematic = string.Compare(Application.unityVersion, "5.0") < 0;
+	public FluffStick attachee;
+	public float attacheePullRate = 1;
+	public bool attacheePossessive = false;
+	public GameObject ignoreCollider;
+	
 
-	void Start ()
+	void Awake()
 	{
 		//pulseCreator = GameObject.Find("Globals");
 		oldBulbPos = bulb.transform.position;
-		hull = GetComponent<CapsuleCollider>();
-		body = GetComponent<Rigidbody>();
+		if (hull == null)
+		{
+			hull = GetComponent<CapsuleCollider>();
+		}
+		if (body == null)
+		{
+			body = GetComponent<Rigidbody>();
+		}
+		mover = GetComponent<SimpleMover>();
 	}
 
 	// Update is called once per frame
-	void Update () 
+	void Update() 
 	{
 		if (disableColliders)
 		{
@@ -47,150 +59,215 @@ public class MovePulse : MonoBehaviour {
 			disableColliders = false;
 		}
 
-		// Make rigidbody kinematic when not moving self. 
-		bool shouldBeKinematic = !moving;
-		if (body.isKinematic != shouldBeKinematic)
+		if (attacheePossessive && attachee == null)
 		{
-			// Only needs doing if Unity version is below 5.0
-			if (needNonKinematic)
-			{
-				body.isKinematic = shouldBeKinematic;
-			}
+			attacheePossessive = false;
 		}
 
-		if (passed && moving)
+		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
+
+		if (moving != moverMoving)
 		{
-			Vector3 direction = target - transform.position;
-			if (direction.sqrMagnitude > Mathf.Pow(moveSpeed * Time.deltaTime, 2))
-			{
-				direction.z = 0;
-				float distance = direction.magnitude;
-
-				float decelerationFactor = distance / 1.5f;
-
-				float speed = moveSpeed * decelerationFactor;
-
-				Vector3 moveVector = direction.normalized * Time.deltaTime * speed;
-				transform.position += moveVector;
-			}
-			else
+			if (!moverMoving)
 			{
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
-					//Debug.Log(attachInfo.collider.gameObject.name);
-					//transform.parent = attachInfo.collider.transform;
-					transform.rotation = Quaternion.Euler(270, 0, 0);
-
-					if (swayAnimation != null)
-					{
-						swayAnimation.enabled = true;
-					}
-					moving = false;
+					Attach(attachInfo.collider.gameObject, transform.position, -Vector3.forward);
 				}
+				trail.gameObject.SetActive(false);
+			}
+			else
+			{
+				transform.parent = null;
+				// If fluff is pointing more in the z direction than the other directions, rotate into the correct plane.
+				if(Mathf.Pow(transform.up.z, 2) > new Vector2(transform.up.x, transform.up.y).sqrMagnitude)
+				{
+					transform.up = -mover.velocity;
+				}
+				ToggleSwayAnimation(false);
+				trail.gameObject.SetActive(true);
+				baseAngle = -1;
 			}
 
-			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
-			transform.Rotate(rotationSpeed * Time.deltaTime, 0.0f, 0.0f);
+			moving = moverMoving;
 		}
-	}
 
-	public void ReadyForPass()
-	{
-		trail.gameObject.SetActive(true);
-		Collider[] colliders = GetComponentsInChildren<Collider>();
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			colliders[i].enabled = true;
-		}
-		passed = true;
-		moving = true;
-		baseAngle = -1;
-	}
-
-	public void EndPass()
-	{
-		trail.gameObject.SetActive(false);
-		disableColliders = true;
-		passed = false;
-		moving = false;
-		creator = null;
-		volleyTarget = null;
-		volleys = 0;
-		capacity = 0;
-		volleyPartner = null;
-	}
-
-	private void AttachTo(GameObject attachee)
-	{
-		// If moving shoot a ray and attempt to attach to the potential attachee.
 		if (moving)
 		{
-			float checkRadius = Mathf.Max(hull.height, hull.radius);
-			Vector3 moveDir = (target - transform.position).normalized;
-			RaycastHit[] hits = Physics.RaycastAll(transform.position, (target - transform.position).normalized, checkRadius, ~(int)Mathf.Pow(2, gameObject.layer));
-			bool foundAttachee = false;
-			for(int i = 0; i < hits.Length && !foundAttachee; i++)
+			if (ignoreCollider == null && hull.isTrigger)
 			{
-				if (hits[i].collider.gameObject == attachee)
-				{
-					// If the potential attachee is hit, attach to it (with a small skin amount).
-					transform.up = hits[i].normal;
-					transform.position = hits[i].point + (transform.up * 0.0001f);
-					if (swayAnimation != null)
-					{
-						swayAnimation.enabled = true;
-					}
-					moving = false;
-					foundAttachee = true;
-				}
+				hull.isTrigger = false;
+			}
+
+			transform.Rotate(0.0f, 0.0f, rotationSpeed * Time.deltaTime);
+		}
+	}
+
+	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null)
+	{
+		attachee = null;
+		attacheePossessive = false;
+
+		// If something attachable is already in reach, attach without moving.
+		RaycastHit attemptPassHit;
+		float blockingTestDistance = Mathf.Max(hull.height, hull.radius);
+		bool blocked = TestForBlocking(passForce, blockingTestDistance, out attemptPassHit);
+		if (blocked)
+		{
+			moving = true;
+			Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
+			return;
+		}
+
+		// Allow fluff to act on physical objects.
+		if (body != null)
+		{
+			body.isKinematic = false;
+
+		}
+		ignoreCollider = ignoreColliderTemporary;
+		mover.Accelerate(passForce);
+	}
+
+	public void Pull(GameObject puller, float pullMagnitude)
+	{
+		// If something is blocking the path to the puller, do not move.
+		RaycastHit attemptPullHit;
+		Vector3 toPuller = puller.transform.position - transform.position;
+		float toPullerDist = toPuller.magnitude;
+		toPuller /= toPullerDist;
+		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, puller);
+		if (blocked)
+		{
+			return;
+		}
+
+		Vector3 pullForce = toPuller * pullMagnitude;
+		if (attachee != null && attachee.pullableBody != null)
+		{
+			attachee.pullableBody.AddForce(pullForce / attachee.pullMass, ForceMode.VelocityChange);
+		}
+		else 
+		{
+			if (body != null)
+			{
+				body.isKinematic = false;
+			}
+			mover.Accelerate(pullForce * Time.deltaTime, false);
+		}
+	}
+
+	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
+	{
+		// If the attachee has a special way of attaching fluffs, use its method instead;
+		PartnerLink fluffContainer = attacheeObject.GetComponent<PartnerLink>();
+		if (fluffContainer != null)
+		{
+			fluffContainer.AttachFluff(this);
+			return;
+		}
+		
+		// Position and orient.
+		transform.position = position;
+		transform.up = standDirection;
+
+		// Stop moving, and if desired, start swaying.
+		mover.Stop();
+		ToggleSwayAnimation(sway);
+		
+		// Halt physical interactions.
+		if (body != null)
+		{
+			body.isKinematic = true;
+		}
+		hull.isTrigger = true;
+
+		// Actaully attach to target.
+		if (attacheeObject != null)
+		{
+			transform.parent = attacheeObject.transform;
+			attachee = attacheeObject.GetComponent<FluffStick>();
+		}
+		moving = false;
+		creator = null;
+	}
+
+	public void ToggleSwayAnimation(bool playSway)
+	{
+		if (swayAnimation != null)
+		{
+			swayAnimation.enabled = playSway;
+			swayAnimation["Fluff_Sway"].time = 0;
+		}
+	}
+
+	public bool TestForBlocking(Vector3 moveDirection, float testDistance, out RaycastHit blocker, GameObject whoWantsToKnow = null)
+	{
+		int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
+		RaycastHit[] hits = Physics.RaycastAll((transform.position + bulb.transform.position) / 2, moveDirection, testDistance, ~fluffLayer);
+		bool blocked = false;
+		blocker = new RaycastHit();
+		for (int j = 0; j < hits.Length && !blocked; j++)
+		{
+			bool hitIgnoredCollider = hits[j].collider.gameObject == ignoreCollider;
+			bool hitTester = hits[j].collider.gameObject == whoWantsToKnow;
+			bool layerIgnorable = Physics.GetIgnoreLayerCollision(gameObject.layer, hits[j].collider.gameObject.layer);
+			blocked = !(hitIgnoredCollider || hitTester || layerIgnorable);
+			if (blocked)
+			{
+				blocker = hits[j];
+			}
+		}
+		return blocked;
+	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		// Attempt to attach to collided object.
+		bool sameLayer = (collision.collider.gameObject.layer == gameObject.layer);
+		bool alreadyAttachee = (attachee != null && collision.collider.gameObject == attachee.gameObject);
+		bool shouldIgnore = collision.collider.gameObject == ignoreCollider;
+		if (!(attacheePossessive || sameLayer || alreadyAttachee || shouldIgnore))
+		{
+			//PartnerLink fluffContainer = collision.collider.gameObject.GetComponent<PartnerLink>();
+			//if (collision.collider.gameObject != ignoreCollider && !collision.collider.isTrigger && !attacheePossessive && fluffContainer != null)
+			//{
+			//	fluffContainer.AttachFluff(this);
+			//}
+			//else
+			{
+				Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
 			}
 		}
 	}
 
-	void OnTriggerEnter(Collider collide)
+	void OnTriggerEnter(Collider other)
 	{
-		if (!collide.isTrigger && passed && collide.gameObject.tag == "Converser")
+		PartnerLink fluffContainer = other.GetComponent<PartnerLink>();
+		if (fluffContainer != null && (attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{
-			collide.gameObject.GetComponent<PartnerLink>().AttachFluff(this);
+			fluffContainer.AttachFluff(this);
 		}
+	}
 
-		/*if (passed && moving)
+	void OnTriggerExit(Collider other)
+	{
+		if (ignoreCollider == other.gameObject)
 		{
-			if (collide.gameObject.tag == "Pulse")
-			{
-				MovePulse otherPulse = collide.GetComponent<MovePulse>();
-				if (otherPulse.passed && otherPulse.moving)
-				{
-					if (otherPulse != null && otherPulse.creator != creator)
-					{
-						if (creator != null && creator.name == "Player 1")
-						{
-							PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
-							pulseCombo.pulseOne = true;
-							pulseCombo.pulseOnePos = transform.position;
-							pulseCombo.p1Cap = capacity;
-							pulseCombo.p1Quat = Quaternion.identity;
-							pulseCombo.p1For = Vector3.forward;
-							pulseCombo.p1scale = transform.localScale;
-							pulseCombo.p1Targ = target;
-						}
-						if (creator != null && creator.name == "Player 2")
-						{
-							PulseCombo pulseCombo = pulseCreator.GetComponent<PulseCombo>();
-							pulseCombo.pulseTwo = true;
-							pulseCombo.pulseTwoPos = transform.position;
-							pulseCombo.p2Cap = capacity;
-							pulseCombo.p2Quat = Quaternion.identity;
-							pulseCombo.p2For = Vector3.forward;
-							pulseCombo.p2scale = transform.localScale;
-							pulseCombo.p2Targ = target;
-						}
+			ignoreCollider = null;
+		}
+	}
 
-						Destroy(gameObject);
-					}
-				}
+	void OnDestroy()
+	{
+		if (attachee != null)
+		{
+			FluffSpawn attacheeFluffContainer = attachee.GetComponent<FluffSpawn>();
+			if (attacheeFluffContainer != null)
+			{
+				attacheeFluffContainer.fluffs.Remove(this);
 			}
-		}*/
+		}
 	}
 }
