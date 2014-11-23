@@ -258,4 +258,16 @@ public class MovePulse : MonoBehaviour {
 			ignoreCollider = null;
 		}
 	}
+
+	void OnDestroy()
+	{
+		if (attachee != null)
+		{
+			FluffSpawn attacheeFluffContainer = attachee.GetComponent<FluffSpawn>();
+			if (attacheeFluffContainer != null)
+			{
+				attacheeFluffContainer.fluffs.Remove(this);
+			}
+		}
+	}
 }
