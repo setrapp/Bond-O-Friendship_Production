@@ -78,53 +78,34 @@ public class SimpleMover : MonoBehaviour {
 		}
 	}
 
-	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true)
+	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)
 	{
-		if (forceFullAcceleration && velocityChange.sqrMagnitude != 1)
+		Vector3 parallel = velocityChange;
+		Vector3 perpendicular = Vector3.zero;
+
+		// If already moving separate acceleration into components parallel and perpendicular to velocity.
+		if (velocity.sqrMagnitude > 0)
 		{
-			velocityChange.Normalize();
+			parallel = Helper.ProjectVector(velocity, velocityChange);
+			perpendicular = velocityChange - parallel;
 		}
 
-		if (velocity.sqrMagnitude <= 0)
+		// If forcing full acceleration or attempting to accelerate beyond limits, clamp to max acceleration.
+		if (forceFullAcceleration || parallel.sqrMagnitude > Mathf.Pow(acceleration, 2))
 		{
-			if (forceFullAcceleration)
-			{
-				velocity += velocityChange * acceleration * Time.deltaTime;
-			}
-			else if (velocityChange.sqrMagnitude > Mathf.Pow(acceleration, 2))
-			{
-				velocity += velocityChange.normalized * acceleration * Time.deltaTime;
-			}
-			else
-			{
-				velocity += velocityChange * Time.deltaTime;
-			}
-		}
-		else 
-		{
-			Vector3 parallel = Helper.ProjectVector(velocity, velocityChange);
-			Vector3 perpendicular = velocityChange - parallel;
-
-			if (forceFullAcceleration)
-			{
-				parallel *= acceleration * Time.deltaTime;
-				perpendicular *= handling * Time.deltaTime;
-			}
-			else
-			{
-				if (parallel.sqrMagnitude > Mathf.Pow(acceleration, 2))
-				{
-					parallel = parallel.normalized * acceleration * Time.deltaTime;
-				}
-				if (perpendicular.sqrMagnitude > Mathf.Pow(handling, 2))
-				{
-					perpendicular = perpendicular.normalized * handling * Time.deltaTime;
-				}
-			}
-
-			velocity += (parallel + perpendicular);
+			parallel = parallel.normalized * acceleration;
 		}
 
+		// If forcing full turning or attempting to turn beyond limits, clamp to max handling.
+		if (forceFullTurning || perpendicular.sqrMagnitude > Mathf.Pow(handling, 2))
+		{
+			perpendicular = perpendicular.normalized * handling;
+		}
+
+		// Accelerate by recombining parallel and perpendicular components.
+		velocity += (parallel + perpendicular) * Time.deltaTime;
+
+		// Clamp down to max speed and if a rigid body is attached, update it.
 		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
 		{
 			velocity = velocity.normalized * maxSpeed;
