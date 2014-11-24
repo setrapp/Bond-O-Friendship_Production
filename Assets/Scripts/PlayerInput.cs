@@ -56,22 +56,6 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-	/*void Update()
-	{
-		if(GetPause() || Input.GetKeyDown(KeyCode.Escape))
-		{
-			if(paused)
-				Time.timeScale = 1;
-			else
-				Time.timeScale = 0;
-			
-			paused = !paused;
-		}
-
-		PlayerLookAt();
-		partnerLink.absorbing = Absorbing();
-	}*/
-
 	void Update () {
 
 		if (Input.GetKeyDown(KeyCode.Escape))
