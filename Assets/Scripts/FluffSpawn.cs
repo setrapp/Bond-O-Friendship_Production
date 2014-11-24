@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FluffSpawn : MonoBehaviour {
-	public Rigidbody rigidbody;
+	public Rigidbody body;
 	public GameObject headSprite;
 	public int naturalFluffCount;
 	public GameObject fluffPrefab;
@@ -21,12 +21,13 @@ public class FluffSpawn : MonoBehaviour {
 	private float oldSpeed;
 	[HideInInspector]
 	public PartnerLink partnerLink;
+	private FluffStick fluffStick;
 
 	void Start()
 	{
-		if (rigidbody == null)
+		if (body == null)
 		{
-			rigidbody = GetComponent<Rigidbody>();
+			body = GetComponent<Rigidbody>();
 		}
 		if (fluffContainer == null)
 		{
@@ -34,6 +35,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 
 		partnerLink = GetComponent<PartnerLink>();
+		fluffStick = GetComponent<FluffStick>();
 		
 
 		while (fluffs.Count < startingFluff)
@@ -74,7 +76,7 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
-		if(spawnedFluff!= null)
+		if(spawnedFluff != null)
 		{
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			if(spawnedFluff.transform.localPosition == endPosition)
@@ -82,13 +84,14 @@ public class FluffSpawn : MonoBehaviour {
 				spawnedFluff = null;
 			}
 		}
+
 		// Rotate fluffs based on movement.
-		if (rigidbody.velocity.sqrMagnitude > 0)
+		if (body.velocity.sqrMagnitude > 0)
 		{
 			// Calculate the direction the fluffs should be pushed in both world and local space.
-			float currentSpeed = rigidbody.velocity.magnitude;
+			float currentSpeed = body.velocity.magnitude;
 			float currentByOldSpeed = currentSpeed / oldSpeed;
-			Vector3 fullBackDir = -rigidbody.velocity / currentSpeed;
+			Vector3 fullBackDir = -body.velocity / currentSpeed;
 			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
@@ -186,18 +189,25 @@ public class FluffSpawn : MonoBehaviour {
 
 			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
+			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;
-			spawnedFluff = newFluff;
-			endPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
-			endPosition = transform.InverseTransformPoint(endPosition);
+			Vector3 tempEndPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
+			tempEndPosition = transform.InverseTransformPoint(tempEndPosition);
 			
 			if (instantSprout)
 			{
-				newFluff.transform.localPosition = endPosition;
-				spawnedFluff = null;
+				newFluff.transform.localPosition = tempEndPosition;
 			}
 			else
 			{
+				// Force the old spawned fluff out.
+				if (spawnedFluff != null)
+				{
+					spawnedFluff.transform.localPosition = transform.InverseTransformPoint(endPosition);
+				}
+
+				endPosition = tempEndPosition;
+				spawnedFluff = newFluff;
 				newFluff.transform.position += newFluff.transform.up * spawnOffset * (Time.deltaTime / spawnTime);
 			}
 			
@@ -220,10 +230,10 @@ public class FluffSpawn : MonoBehaviour {
 			{
 				meshRenderers[i].material = useMaterial;
 			}
-			if (newFluffInfo.swayAnimation != null)
-			{
-				newFluffInfo.swayAnimation.enabled = false;
-			}
+			newFluffInfo.ToggleSwayAnimation(false);
+			newFluffInfo.hull.isTrigger = true;
+			newFluffInfo.attachee = fluffStick;
+			newFluffInfo.attacheePossessive = true;
 			fluffs.Add(newFluffInfo);
 		}
 	}

@@ -21,6 +21,7 @@ public class PulseShot : MonoBehaviour {
 	public int maxShotCount;
 	public float shotSpread;
 	public float minShotFactor;
+	public float passSpeed;
 
 	void Start()
 	{
@@ -63,14 +64,14 @@ public class PulseShot : MonoBehaviour {
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{
 					float minMaxFluffDotPass = maxFluffDotPasses[0];
-					int minMaxFluffIndex = 0;
+					//int minMaxFluffIndex = 0;
 					for (int j = 1; j < maxFluffDotPasses.Count; j++)
 					{
 						float maxFluffDotPass = maxFluffDotPasses[j];
 						if (maxFluffDotPass < minMaxFluffDotPass)
 						{
 							minMaxFluffDotPass = maxFluffDotPasses[j];
-							minMaxFluffIndex = j;
+							//minMaxFluffIndex = j;
 						}
 					}
 				}
@@ -91,7 +92,7 @@ public class PulseShot : MonoBehaviour {
 		{
 			shotAngle = 0;
 		}
-		float shotDist = Vector3.Distance(pulseTarget, transform.position);
+		//float shotDist = Vector3.Distance(pulseTarget, transform.position);
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
 		{
@@ -100,16 +101,28 @@ public class PulseShot : MonoBehaviour {
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
 
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
-			movePulse.transform.position = transform.position + (rotatedPassDir * transform.localScale.magnitude);
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
-			movePulse.ReadyForPass();
-			movePulse.target = transform.position + (rotatedPassDir * shotDist * Random.RandomRange(minShotFactor, 1));
 			movePulse.creator = this;
 			movePulse.capacity = pulseCapacity;
-			movePulse.volleys = volleys + 1;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
+			movePulse.transform.position = transform.position;
+
+
+			//RaycastHit attemptPassHit;
+			//bool blocked = movePulse.TestForBlocking(rotatedPassDir, movePulse.hull.height, out attemptPassHit);
+
+			//if (blocked)
+			//{
+				//movePulse.Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
+			//}
+			//else
+			//{
+				movePulse.Pass(rotatedPassDir * passSpeed, gameObject);
+			//}
+
+			
 		}
 		
 
@@ -123,7 +136,7 @@ public class PulseShot : MonoBehaviour {
 		if (floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
-			//GetComponent<Rigidbody>().AddForce(pulseForce, ForceMode.VelocityChange);
+			partnerLink.mover.body.AddForce(pulseForce);
 			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
 		}
 	}
