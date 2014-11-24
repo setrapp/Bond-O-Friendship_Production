@@ -146,7 +146,7 @@ public class MovePulse : MonoBehaviour {
 		Vector3 pullForce = toPuller * pullMagnitude;
 		if (attachee != null && attachee.pullableBody != null)
 		{
-			attachee.pullableBody.AddForce(pullForce / attachee.pullMass, ForceMode.VelocityChange);
+			attachee.AddPullForce(pullForce, transform.position);
 		}
 		else 
 		{
@@ -160,6 +160,12 @@ public class MovePulse : MonoBehaviour {
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
+		// If already attached to a possessive attachee, do not attempt to attach.
+		if (attachee != null && attacheePossessive)
+		{
+			return;
+		}
+
 		// If the attachee has a special way of attaching fluffs, use its method instead;
 		PartnerLink fluffContainer = attacheeObject.GetComponent<PartnerLink>();
 		if (fluffContainer != null)
