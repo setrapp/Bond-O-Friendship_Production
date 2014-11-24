@@ -4,12 +4,12 @@ using System.Collections;
 public class Trigger : MonoBehaviour {
 
 	public bool pOneTriggered = false;
-	public bool pTwoTirggered = false;
+	public bool pTwoTriggered = false;
 	private Color myColor;
 	
 	// Use this for initialization
 	void Start () {
-		myColor = new Color(0.9f,0.4f,2.0f,1.0f);
+		myColor = new Color(0.8f,0.7f,0.5f,1.0f);
 		GetComponent<Renderer>().material.color = myColor;
 	
 	}
@@ -22,19 +22,20 @@ public class Trigger : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "Pulse")
 		{
-			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 1")
+			MovePulse mover = collide.gameObject.GetComponent<MovePulse>();
+			if(mover.creator != null && mover.creator.name == "Player 1")
 			{
 				//print("Collide");
 				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = true;
-				pTwoTirggered = false;
+				pTwoTriggered = false;
 			}
-			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 2")
+			if(mover.creator != null && mover.creator.name == "Player 2")
 			{
 				//print("Collide");
 				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = false;
-				pTwoTirggered = true;
+				pTwoTriggered = true;
 			}
 		}
 	}
