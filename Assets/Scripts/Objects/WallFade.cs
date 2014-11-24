@@ -5,14 +5,14 @@ public class WallFade : MonoBehaviour {
 
 	public GameObject field;
 	private Color myColor;
-	private float alpha;
+	//private float alpha;
 	private float timer;
 
 
 	// Use this for initialization
 	void Start () {
 		timer = 1.0f;
-		alpha = 1.0f;
+		//alpha = 1.0f;
 	}
 	
 	// Update is called once per frame

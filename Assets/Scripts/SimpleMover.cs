@@ -5,7 +5,6 @@ using System.Collections;
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
 	public Vector3 velocity;
-	private Vector3 oldVelocity;
 	public float acceleration;
 	public float handling;
 	public float cutSpeedThreshold = 0.1f;
@@ -68,8 +67,6 @@ public class SimpleMover : MonoBehaviour {
 		{
 			moving = true;
 		}
-
-		oldVelocity = velocity;
 	}
 
 	public void Stop()

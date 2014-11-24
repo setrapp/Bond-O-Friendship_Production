@@ -255,7 +255,7 @@ public class PlayerInput : MonoBehaviour {
 
 			if(firePulseReady)
 			{
-				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
+				//Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
 

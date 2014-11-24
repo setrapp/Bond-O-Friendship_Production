@@ -10,7 +10,7 @@ public class PushPad : MonoBehaviour {
 	private Color myColor;
 	public GameObject pad;
 	public GameObject door;
-	private float doorTimer;
+	//private float doorTimer;
 	private Color doorColor;
 	private float alpha;
 	public GameObject activator;
@@ -18,7 +18,7 @@ public class PushPad : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		timer = 1.0f;
-		doorTimer = 1.0f;
+		//doorTimer = 1.0f;
 		red = 0.4f;
 		alpha = 1.0f;
 	

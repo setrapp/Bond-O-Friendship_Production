@@ -64,14 +64,14 @@ public class PulseShot : MonoBehaviour {
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{
 					float minMaxFluffDotPass = maxFluffDotPasses[0];
-					int minMaxFluffIndex = 0;
+					//int minMaxFluffIndex = 0;
 					for (int j = 1; j < maxFluffDotPasses.Count; j++)
 					{
 						float maxFluffDotPass = maxFluffDotPasses[j];
 						if (maxFluffDotPass < minMaxFluffDotPass)
 						{
 							minMaxFluffDotPass = maxFluffDotPasses[j];
-							minMaxFluffIndex = j;
+							//minMaxFluffIndex = j;
 						}
 					}
 				}
@@ -92,7 +92,7 @@ public class PulseShot : MonoBehaviour {
 		{
 			shotAngle = 0;
 		}
-		float shotDist = Vector3.Distance(pulseTarget, transform.position);
+		//float shotDist = Vector3.Distance(pulseTarget, transform.position);
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
 		{

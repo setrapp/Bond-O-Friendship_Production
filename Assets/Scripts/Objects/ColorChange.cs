@@ -9,7 +9,7 @@ public class ColorChange : MonoBehaviour {
 	private float red = 0.358f;
 	private float green = 0.390f;
 	private float blue = 0.350f;
-	private float colorFloat = 1.0f;
+	//private float colorFloat = 1.0f;
 
 	// Use this for initialization
 	void Start () {
