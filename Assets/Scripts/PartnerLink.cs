@@ -103,7 +103,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || !pulse.attacheePossessive))
+		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || !pulse.attachee.possessive))
 		{
 			if (pulse.creator != null && pulse.creator != pulseShot)
 			{

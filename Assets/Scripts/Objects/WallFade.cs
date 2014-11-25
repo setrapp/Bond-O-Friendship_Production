@@ -2,36 +2,32 @@
 using System.Collections;
 
 public class WallFade : MonoBehaviour {
-
-	public GameObject field;
+	
 	private Color myColor;
-	//private float alpha;
-	private float timer;
-
+	private float alpha;
+	private bool fadenow;
 
 	// Use this for initialization
 	void Start () {
-		timer = 1.0f;
-		//alpha = 1.0f;
+		fadenow = false;
+		alpha = 0.5f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//myColor = new Color(renderer.material.color.r,renderer.material.color.g,renderer.material.color.b,alpha);
-		//renderer.material.color = myColor;
+		myColor = new Color(0.6f,0.6f,0.6f,alpha);
+		GetComponent<Renderer>().material.color = myColor;
 
-		if(field.GetComponent<WallFadeField>().fadenow == true)
+		if(fadenow == true)
 		{
-			timer -= Time.deltaTime*10.0f;
+			alpha -= Time.deltaTime/2;
 			//alpha = timer;
 		}
-		if(timer <= 0)
-		{
-			transform.GetComponent<Collider>().enabled = false;
-			GetComponent<Renderer>().enabled = false;
+	}
 
-		}
-	
+	public void FadeNow()
+	{
+		fadenow = true;
 	}
 
 }
