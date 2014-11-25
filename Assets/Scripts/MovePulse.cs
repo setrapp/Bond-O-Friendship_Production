@@ -88,7 +88,7 @@ public class MovePulse : MonoBehaviour {
 				trail.gameObject.SetActive(true);
 				baseAngle = -1;
 			}
-
+			attachee = null;
 			moving = moverMoving;
 		}
 
@@ -152,7 +152,7 @@ public class MovePulse : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce * Time.deltaTime, false, true);
+			mover.Accelerate(pullForce, false, true);
 		}
 	}
 
@@ -195,7 +195,6 @@ public class MovePulse : MonoBehaviour {
 			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		}
 		moving = false;
-		//creator = null;
 		forgetCreator = true;
 	}
 
@@ -237,6 +236,10 @@ public class MovePulse : MonoBehaviour {
 		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
 			Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
+			if (attachee != null && attachee.gameObject != null)
+			{
+				ignoreCollider = attachee.gameObject;
+			}
 		}
 	}
 
