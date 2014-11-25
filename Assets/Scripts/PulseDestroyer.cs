@@ -44,7 +44,7 @@ public class PulseDestroyer : MonoBehaviour {
 		if (other.gameObject.tag == "Pulse" && destroyPulses)
 		{
 			MovePulse fluff = other.GetComponent<MovePulse>();
-			if (fluff != null && !fluff.attacheePossessive)
+			if (fluff != null && (fluff.attachee == null || !fluff.attachee.possessive))
 			{
 				if (toDestroy == null)
 				{

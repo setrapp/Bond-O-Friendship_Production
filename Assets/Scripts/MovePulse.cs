@@ -25,9 +25,9 @@ public class MovePulse : MonoBehaviour {
 	public CapsuleCollider hull;
 	[HideInInspector]
 	public Rigidbody body;
-	public FluffStick attachee;
 	public float attacheePullRate = 1;
-	public bool attacheePossessive = false;
+	public Attachee attachee;
+	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
 	
@@ -56,9 +56,11 @@ public class MovePulse : MonoBehaviour {
 			forgetCreator = false;
 		}
 
-		if (attacheePossessive && attachee == null)
+		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
+		if (attachee != null && !attachee.controlling)
 		{
-			attacheePossessive = false;
+			transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
+			transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
 		}
 
 		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
@@ -104,7 +106,6 @@ public class MovePulse : MonoBehaviour {
 	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null)
 	{
 		attachee = null;
-		attacheePossessive = false;
 
 		// If something attachable is already in reach, attach without moving.
 		RaycastHit attemptPassHit;
@@ -141,9 +142,9 @@ public class MovePulse : MonoBehaviour {
 		}
 
 		Vector3 pullForce = toPuller * pullMagnitude;
-		if (attachee != null && attachee.pullableBody != null)
+		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.pullableBody != null)
 		{
-			attachee.AddPullForce(pullForce, transform.position);
+			attachee.attachInfo.AddPullForce(pullForce, transform.position);
 		}
 		else 
 		{
@@ -158,7 +159,7 @@ public class MovePulse : MonoBehaviour {
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
 		// If already attached to a possessive attachee, do not attempt to attach.
-		if (attachee != null && attacheePossessive)
+		if (attachee != null && attachee.possessive)
 		{
 			return;
 		}
@@ -186,11 +187,12 @@ public class MovePulse : MonoBehaviour {
 		}
 		hull.isTrigger = true;
 
-		// Actaully attach to target.
+		// Actaully attach to target and record relationship to attachee.
 		if (attacheeObject != null)
 		{
-			transform.parent = attacheeObject.transform;
-			attachee = attacheeObject.GetComponent<FluffStick>();
+			Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
+			attachee = new Attachee(attacheeObject, attacheeObject.GetComponent<FluffStick>(), attachPoint, false, false);
+			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		}
 		moving = false;
 		//creator = null;
@@ -232,17 +234,9 @@ public class MovePulse : MonoBehaviour {
 		bool sameLayer = (collision.collider.gameObject.layer == gameObject.layer);
 		bool alreadyAttachee = (attachee != null && collision.collider.gameObject == attachee.gameObject);
 		bool shouldIgnore = collision.collider.gameObject == ignoreCollider;
-		if (!(attacheePossessive || sameLayer || alreadyAttachee || shouldIgnore))
+		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
-			//PartnerLink fluffContainer = collision.collider.gameObject.GetComponent<PartnerLink>();
-			//if (collision.collider.gameObject != ignoreCollider && !collision.collider.isTrigger && !attacheePossessive && fluffContainer != null)
-			//{
-			//	fluffContainer.AttachFluff(this);
-			//}
-			//else
-			{
-				Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
-			}
+			Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
 		}
 	}
 
@@ -265,13 +259,31 @@ public class MovePulse : MonoBehaviour {
 
 	void OnDestroy()
 	{
-		if (attachee != null)
+		if (attachee != null && attachee.gameObject != null)
 		{
-			FluffSpawn attacheeFluffContainer = attachee.GetComponent<FluffSpawn>();
+			FluffSpawn attacheeFluffContainer = attachee.gameObject.GetComponent<FluffSpawn>();
 			if (attacheeFluffContainer != null)
 			{
 				attacheeFluffContainer.fluffs.Remove(this);
 			}
 		}
+	}
+}
+
+public class Attachee
+{
+	public GameObject gameObject;
+	public FluffStick attachInfo;
+	public Vector3 attachPoint;
+	public bool possessive;
+	public bool controlling;
+
+	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possive = false, bool controlling = false)
+	{
+		this.gameObject = gameObject;
+		this.attachInfo = attachInfo;
+		this.attachPoint = attachPoint;
+		this.possessive = possessive;
+		this.controlling = controlling;
 	}
 }
