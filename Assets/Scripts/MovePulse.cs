@@ -125,7 +125,7 @@ public class MovePulse : MonoBehaviour {
 
 		}
 		ignoreCollider = ignoreColliderTemporary;
-		mover.Accelerate(passForce);
+		mover.Accelerate(passForce, true, true);
 	}
 
 	public void Pull(GameObject puller, float pullMagnitude)
@@ -152,7 +152,7 @@ public class MovePulse : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce * Time.deltaTime, false);
+			mover.Accelerate(pullForce * Time.deltaTime, false, true);
 		}
 	}
 
@@ -242,6 +242,7 @@ public class MovePulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
+		// Handle fluff containers plucking fluffs from previously attached objects.
 		PartnerLink fluffContainer = other.GetComponent<PartnerLink>();
 		if (fluffContainer != null && (attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{

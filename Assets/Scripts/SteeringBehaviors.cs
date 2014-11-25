@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SteeringBehaviors : MonoBehaviour {
 	public SimpleMover mover;
@@ -75,5 +76,46 @@ public class SteeringBehaviors : MonoBehaviour {
 		{
 			Seek(pursuee.transform.position + worldOffset, arrive);
 		}
+	}
+
+	public void AvoidObstacles(float checkDistance, float checkRadius)
+	{
+		if (checkDistance <= 0 || checkRadius < 0)
+		{
+			return;
+		}
+
+		if (checkDistance < checkRadius)
+		{
+			checkDistance = checkRadius;
+		}
+
+		Vector3 startPoint = transform.position + (transform.forward * checkRadius);
+		Vector3 endPoint = (transform.position + (transform.forward * checkDistance)) - (transform.forward * checkRadius);
+		if (Physics.CheckCapsule(startPoint, endPoint, checkRadius))
+		{
+			RaycastHit[] potentialHits = Physics.CapsuleCastAll(startPoint, endPoint, checkRadius, transform.forward);
+			List<RaycastHit> obstacleHits = new List<RaycastHit>();
+			for (int i = 0; i < potentialHits.Length; i++)
+			{
+				bool hitSelf = (potentialHits[i].collider.gameObject == gameObject);
+				bool ignoreHit = Physics.GetIgnoreLayerCollision(gameObject.layer, potentialHits[i].collider.gameObject.layer);
+				if (!(hitSelf || ignoreHit))
+				{
+					obstacleHits.Add(potentialHits[i]);
+					Debug.Log(obstacleHits[i].collider.gameObject.name + " " + potentialHits[i].distance);
+				}
+			}
+
+			for (int i = 0; i < obstacleHits.Count; i++)
+			{
+				Vector3 toObstacle = (obstacleHits[i].collider.gameObject.transform.position - transform.position);
+				Vector3 projToObstacle = Helper.ProjectVector(transform.right, toObstacle);
+				steeringForce += projToObstacle.normalized * mover.handling;// *Mathf.Max(1 - (toObstacle.magnitude / checkDistance), 0);
+				//Debug.Log(obstacleHits[i].collider.gameObject.name + " " + steeringForce);
+			}
+			Debug.Log("-----");
+		}
+		mover.Accelerate(steeringForce, false, true);
 	}
 }

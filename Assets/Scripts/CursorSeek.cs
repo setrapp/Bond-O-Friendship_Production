@@ -73,7 +73,7 @@ public class CursorSeek : MonoBehaviour {
 		}
 		else
 		{
-			mover.Accelerate(dragForward);
+			mover.Accelerate(dragForward, true, true);
 		}
 		//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
 	}
