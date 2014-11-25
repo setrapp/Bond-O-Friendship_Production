@@ -29,6 +29,7 @@ public class MovePulse : MonoBehaviour {
 	public float attacheePullRate = 1;
 	public bool attacheePossessive = false;
 	public GameObject ignoreCollider;
+	private bool forgetCreator;
 	
 
 	void Awake()
@@ -49,14 +50,10 @@ public class MovePulse : MonoBehaviour {
 	// Update is called once per frame
 	void Update() 
 	{
-		if (disableColliders)
+		if(forgetCreator)
 		{
-			Collider[] colliders = GetComponentsInChildren<Collider>();
-			for (int i = 0; i < colliders.Length; i++)
-			{
-				colliders[i].enabled = false;
-			}
-			disableColliders = false;
+			creator = null;
+			forgetCreator = false;
 		}
 
 		if (attacheePossessive && attachee == null)
@@ -196,7 +193,8 @@ public class MovePulse : MonoBehaviour {
 			attachee = attacheeObject.GetComponent<FluffStick>();
 		}
 		moving = false;
-		creator = null;
+		//creator = null;
+		forgetCreator = true;
 	}
 
 	public void ToggleSwayAnimation(bool playSway)

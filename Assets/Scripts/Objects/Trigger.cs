@@ -18,22 +18,23 @@ public class Trigger : MonoBehaviour {
 	void Update () {
 	
 	}
-	void OnTriggerEnter(Collider collide)
+	void OnCollisionEnter(Collision collide)
 	{
-		if(collide.gameObject.tag == "Pulse")
+		Debug.Log(collide.collider.GetComponent<MovePulse>().creator.name);
+		if(collide.collider.gameObject.tag == "Pulse")
 		{
-			MovePulse mover = collide.gameObject.GetComponent<MovePulse>();
+			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
 			if(mover.creator != null && mover.creator.name == "Player 1")
 			{
 				//print("Collide");
-				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
+				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = true;
 				pTwoTriggered = false;
 			}
 			if(mover.creator != null && mover.creator.name == "Player 2")
 			{
 				//print("Collide");
-				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
+				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = false;
 				pTwoTriggered = true;
 			}
