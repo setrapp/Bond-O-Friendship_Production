@@ -278,7 +278,7 @@ public class Attachee
 	public bool possessive;
 	public bool controlling;
 
-	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possive = false, bool controlling = false)
+	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possessive = false, bool controlling = false)
 	{
 		this.gameObject = gameObject;
 		this.attachInfo = attachInfo;
