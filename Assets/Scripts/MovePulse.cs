@@ -24,6 +24,7 @@ public class MovePulse : MonoBehaviour {
 	public CapsuleCollider hull;
 	[HideInInspector]
 	public Rigidbody body;
+	private static bool needNonKinematic = string.Compare(Application.unityVersion, "5.0") < 0;
 
 	void Start ()
 	{
@@ -46,11 +47,15 @@ public class MovePulse : MonoBehaviour {
 			disableColliders = false;
 		}
 
-		// Make rigidbody kinematic when not moving self.
+		// Make rigidbody kinematic when not moving self. 
 		bool shouldBeKinematic = !moving;
 		if (body.isKinematic != shouldBeKinematic)
 		{
-			body.isKinematic = shouldBeKinematic;
+			// Only needs doing if Unity version is below 5.0
+			if (needNonKinematic)
+			{
+				body.isKinematic = shouldBeKinematic;
+			}
 		}
 
 		if (passed && moving)

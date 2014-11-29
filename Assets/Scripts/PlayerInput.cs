@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour {
 	public GameObject geometry;
 	public float deadZone = .75f;
 
-	private bool firePulse = true;
+	private bool firePulseReady = true;
 	private Vector3 velocityChange;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
@@ -65,6 +65,9 @@ public class PlayerInput : MonoBehaviour {
 			
 			paused = !paused;
 		}
+
+		PlayerLookAt();
+		partnerLink.absorbing = Absorbing();
 	}
 
 	void FixedUpdate () {
@@ -168,9 +171,6 @@ public class PlayerInput : MonoBehaviour {
 				}
 				transform.LookAt(transform.position + mover.velocity, transform.up);
 
-				PlayerLookAt();
-				partnerLink.absorbing = Absorbing();
-
 				if(absorb != null)
 				{
 					absorb.transform.position = transform.position;
@@ -250,7 +250,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			lookAt.Normalize();
 
-			if(firePulse)
+			if(firePulseReady)
 			{
 				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
@@ -261,27 +261,16 @@ public class PlayerInput : MonoBehaviour {
 					velocityBoost += mover.velocity;
 				}
 			
-				if (CanFire(basePulseDrain))
-				{
-					pulseDirection *= basePulsePower;
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
-				}
-				firePulse = false;
+				pulseDirection *= basePulsePower;
+				partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
+				firePulseReady = false;
 			}
 		}
 		else
 		{
-			firePulse = true;
+			firePulseReady = true;
 		}
 	}
-
-
-
-	bool CanFire(float costToFire)
-	{
-		return transform.localScale.x - costToFire >= partnerLink.minScale;
-	}
-	
 
 	
 	#region Helper Methods
