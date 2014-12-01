@@ -46,7 +46,6 @@ public class FluffGenerator : MonoBehaviour {
 		fluff.transform.position = transform.position;
 		fluff.transform.parent = gameObject.transform;
 		MovePulse movePulse = fluff.GetComponent<MovePulse>();
-		movePulse.ReadyForPass();
 		velocity = Random.Range(minimumVelocity, maximumVelocity);
 		if(Random.Range(0,2) == 1)
 			targetAngle = Quaternion.Euler(0, 0, Random.Range(60, 211)) * new Vector3(velocity,velocity,0);

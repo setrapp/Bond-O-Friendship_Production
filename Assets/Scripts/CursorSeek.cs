@@ -42,6 +42,7 @@ public class CursorSeek : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0))
 		{
 			seeking = !(toggleSeek && seeking);
+			mover.slowDown = false;
 			tracer.StartLine();
 		}
 		else if ((!toggleSeek && Input.GetMouseButton(0)) || (toggleSeek && seeking))
@@ -51,7 +52,7 @@ public class CursorSeek : MonoBehaviour {
 		else
 		{
 			seeking = false;
-			mover.SlowDown();
+			mover.slowDown = true;
 			if (destroyLineOnUp)
 			{
 				tracer.DestroyLine();
@@ -72,7 +73,7 @@ public class CursorSeek : MonoBehaviour {
 		}
 		else
 		{
-			mover.Accelerate(dragForward);
+			mover.Accelerate(dragForward, true, true);
 		}
 		//geometry.transform.LookAt(transform.position + mover.velocity, geometry.transform.up);
 	}

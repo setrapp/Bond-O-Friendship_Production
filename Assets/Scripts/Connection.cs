@@ -86,13 +86,13 @@ public class Connection : MonoBehaviour {
 				{
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
 					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					links[i].collider.center = new Vector3(0, 0.5f, 0);
+					links[i].linkCollider.center = new Vector3(0, 0.5f, 0);
 				}
 				else if (i == links.Count - 1)
 				{
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
 					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					links[i].collider.center = new Vector3(0, -0.5f, 0);
+					links[i].linkCollider.center = new Vector3(0, -0.5f, 0);
 				}
 				else
 				{
@@ -100,7 +100,7 @@ public class Connection : MonoBehaviour {
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
 					linkScale.y = magFromPrevious / 4 + magToNext / 4;
-					links[i].collider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
+					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
 				links[i].transform.localScale = linkScale;
@@ -118,7 +118,6 @@ public class Connection : MonoBehaviour {
 			attachment2.position = attachment2.partner.transform.position - betweenPartners * attachment2.partner.transform.localScale.magnitude * attachPointDistance;
 
 			// Place attachment points with attached characters.
-			Vector3 midpoint = (attachment1.position + attachment2.position) / 2;
 			links[0].transform.position = attachment1.position;
 			links[links.Count - 1].transform.position = attachment2.position;
 
@@ -176,9 +175,14 @@ public class Connection : MonoBehaviour {
 	}
 	public void BreakConnection()
 	{
+		PartnerLink partner1 = attachment1.partner;
+		PartnerLink partner2 = attachment2.partner;
 		attachment1.partner.connections.Remove(this);
 		attachment2.partner.connections.Remove(this);
 		Destroy(gameObject);
+
+		partner1.SendMessage("ConnectionBroken", partner2);
+		partner2.SendMessage("ConnectionBroken", partner1);
 	}
 
 	public void AttachPartners(PartnerLink partner1, PartnerLink partner2)
@@ -199,6 +203,9 @@ public class Connection : MonoBehaviour {
 
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
+
+		partner1.SendMessage("ConnectionMade", partner2);
+		partner2.SendMessage("ConnectionMade", partner1);
 	}
 
 	private void AddLink()

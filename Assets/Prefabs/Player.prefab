@@ -107,7 +107,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400012}
-  - 135: {fileID: 13500000}
   - 135: {fileID: 13500002}
   - 114: {fileID: 11400012}
   - 54: {fileID: 5400000}
@@ -116,6 +115,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400008}
+  - 114: {fileID: 11400010}
   m_Layer: 13
   m_Name: Player
   m_TagString: Converser
@@ -131,8 +131,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400014}
-  - 58: {fileID: 5800000}
-  - 50: {fileID: 5000000}
   m_Layer: 13
   m_Name: Attach Point
   m_TagString: Untagged
@@ -222,7 +220,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -4, y: 0, z: 0}
+  m_LocalPosition: {x: -11.9799995, y: 29.7299995, z: -63.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -375,21 +373,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!50 &5000000
-Rigidbody2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: .0500000007
-  m_GravityScale: 1
-  m_FixedAngle: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -398,26 +381,13 @@ Rigidbody:
   m_GameObject: {fileID: 100012}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 5
   m_AngularDrag: .0500000007
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!58 &5800000
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: .5
 --- !u!96 &9600000
 TrailRenderer:
   m_ObjectHideFlags: 1
@@ -476,11 +446,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e6b386ebad61b49ae306e3c772c73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  partnerLink: {fileID: 0}
   mover: {fileID: 0}
-  floatStats:
+  loneFloatStats:
     acceleration: 0
     handling: 0
-    dampening: .999899983
+    bodyDrag: 0
+    bodylessDampening: 0
+  perConnectionFloatBonus:
+    acceleration: 10
+    handling: 10
+    bodyDrag: 0
+    bodylessDampening: 0
+  maxConnectionBonuses: 1
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -503,13 +481,15 @@ MonoBehaviour:
   lastPulseAccepted: {fileID: 0}
   volleyOnlyFirst: 0
   volleys: 0
+  volleyPartner: {fileID: 0}
   floatMove: {fileID: 0}
-  floatPushBack: 3
+  floatPushBack: 300
   fluffSpawn: {fileID: 0}
   minShotCount: 3
-  maxShotCount: 6
+  maxShotCount: 5
   shotSpread: 30
   minShotFactor: .75
+  passSpeed: 10
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -572,6 +552,7 @@ MonoBehaviour:
   absorbStrength: 5
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
+  pullSpeed: 50
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -583,7 +564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b78d33542383747b139f12bba8dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
+  body: {fileID: 0}
   headSprite: {fileID: 100010}
   naturalFluffCount: 1
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
@@ -597,6 +578,21 @@ MonoBehaviour:
   sproutSpeed: .00999999978
   maxAlterAngle: 60
   partnerLink: {fileID: 0}
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pullableBody: {fileID: 0}
+  bodyMassFactor: 1
+  pullMass: 10000
+  maxPullForce: 0
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -611,22 +607,12 @@ MonoBehaviour:
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 30
-  handling: 300
-  dampening: .899999976
-  dampeningThreshold: .00499999989
+  handling: 30
+  cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
---- !u!135 &13500000
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: .5
-  m_Center: {x: 0, y: 0, z: 0}
+  body: {fileID: 0}
+  bodylessDampening: 1
+  slowDown: 0
 --- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1

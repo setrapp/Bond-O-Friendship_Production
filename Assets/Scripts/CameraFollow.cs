@@ -3,7 +3,9 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
+	[HideInInspector]
 	public Transform player1;
+	[HideInInspector]
 	public Transform player2;
 	public float smoothness = 20;
 	private Vector3 mainTargetPosition;
@@ -35,7 +37,7 @@ public class CameraFollow : MonoBehaviour {
 		{
 			if (splitScreen)
 			{
-				Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
+				//Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
 
 				mainTargetPosition = player1.position + (betweenPlayers.normalized * centeringDistance);
 				if (betweenPlayers.magnitude <= CameraSplitter.Instance.splitDistance * 2)
@@ -89,10 +91,10 @@ public class CameraFollow : MonoBehaviour {
 			currentCamHeight = camHeight;
 			currentCamAspect = camAspect;
 
-			Vector3 viewPort = new Vector3(0, 0, -10);
-			Vector3 bottomLeft = childMainCamera.ViewportToWorldPoint(viewPort);
-			viewPort = new Vector3(1, 1, -10);
-			Vector3 topRight = childMainCamera.ViewportToWorldPoint(viewPort);
+			//Vector3 viewPort = new Vector3(0, 0, -10);
+			//Vector3 bottomLeft = childMainCamera.ViewportToWorldPoint(viewPort);
+			//viewPort = new Vector3(1, 1, -10);
+			//Vector3 topRight = childMainCamera.ViewportToWorldPoint(viewPort);
 
 			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;
 

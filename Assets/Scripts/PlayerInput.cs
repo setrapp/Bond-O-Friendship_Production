@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour {
 	public GameObject geometry;
 	public float deadZone = .75f;
 
-	private bool firePulse = true;
+	private bool firePulseReady = true;
 	private Vector3 velocityChange;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
@@ -39,24 +39,42 @@ public class PlayerInput : MonoBehaviour {
 
 	private bool paused = false;
 
-	void Update()
+	public float pullSpeed;
+
+	void Start()
 	{
-		if(GetPause() || Input.GetKeyDown(KeyCode.Escape))
+		if (otherPlayerInput == null)
 		{
-			if(paused)
-				Time.timeScale = 1;
-			else
-				Time.timeScale = 0;
-			
-			paused = !paused;
+			GameObject[] conversers = GameObject.FindGameObjectsWithTag("Converser");
+			for (int i = 0; i < conversers.Length && otherPlayerInput == null; i++)
+			{
+				if (conversers[i].gameObject != gameObject)
+				{
+					otherPlayerInput = conversers[i].GetComponent<PlayerInput>();
+				}
+			}
 		}
 	}
 
-	void FixedUpdate () {
+	void Update () {
+
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
+
+		if (GetPause() || Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (paused)
+				Time.timeScale = 1;
+			else
+				Time.timeScale = 0;
+
+			paused = !paused;
+		}
+
+		PlayerLookAt();
+		partnerLink.absorbing = Absorbing();
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
@@ -141,20 +159,19 @@ public class PlayerInput : MonoBehaviour {
 				
 				
 				}
+				//velocityChange *= mover.maxSpeed;
 
 				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)
 				{
-					mover.Accelerate(velocityChange);
+					mover.Accelerate(velocityChange, true, true);
+					mover.slowDown = false;
 				}
 				else
 				{
-					mover.SlowDown();
+					mover.slowDown = true;
 				}
 				transform.LookAt(transform.position + mover.velocity, transform.up);
-
-				PlayerLookAt();
-				partnerLink.absorbing = Absorbing();
 
 				if(absorb != null)
 				{
@@ -185,13 +202,12 @@ public class PlayerInput : MonoBehaviour {
 			foreach(GameObject livePulse in pulseArray)
 			{
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
-				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
+				if (livePulseMove != null)
 				{
-					livePulseMove.target = transform.position;
-					livePulseMove.moving = true;
-					if (livePulseMove.swayAnimation != null)
+					bool fluffAttachedToSelf = (livePulseMove.attachee != null && livePulseMove.attachee.gameObject == gameObject);
+					if (!fluffAttachedToSelf && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 					{
-						livePulseMove.swayAnimation.enabled = false;
+						livePulseMove.Pull(gameObject, pullSpeed);
 					}
 				}
 			}
@@ -210,21 +226,21 @@ public class PlayerInput : MonoBehaviour {
 		Vector2 lookAt = FireDirection();		
 		float minToFire = useKeyboard ? 0 : deadZone;
 
-		bool stickFire = false;// GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
+		bool stickFire = GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
 
-		/*if((GetAxisTriggers() > deadZone || GetAxisTriggers() < -deadZone) || stickFire)
+		if((GetAxisTriggers() > deadZone || GetAxisTriggers() < -deadZone) || stickFire)
 		{
 			lookAt = geometry.transform.forward;
 			minToFire = 0;
-		}*/
+		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
 		{
 			lookAt.Normalize();
 
-			if(firePulse)
+			if(firePulseReady)
 			{
-				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
+				//Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
 
@@ -233,27 +249,16 @@ public class PlayerInput : MonoBehaviour {
 					velocityBoost += mover.velocity;
 				}
 			
-				if (CanFire(basePulseDrain))
-				{
-					pulseDirection *= basePulsePower;
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
-				}
-				firePulse = false;
+				pulseDirection *= basePulsePower;
+				partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
+				firePulseReady = false;
 			}
 		}
 		else
 		{
-			firePulse = true;
+			firePulseReady = true;
 		}
 	}
-
-
-
-	bool CanFire(float costToFire)
-	{
-		return transform.localScale.x - costToFire >= partnerLink.minScale;
-	}
-	
 
 	
 	#region Helper Methods
@@ -262,8 +267,8 @@ public class PlayerInput : MonoBehaviour {
 	private float GetAxisMoveVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical");}
 	private float GetAxisAimHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickHorizontal"); else return Input.GetAxis(joystickNumber.ToString() + "LeftStickHorizontal");}
 	private float GetAxisAimVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical");}
-	//private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
-	//private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
+	private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
+	private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
 	private bool GetAbsorb() { return Input.GetButton(joystickNumber.ToString() + "Absorb");}
 	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
 
