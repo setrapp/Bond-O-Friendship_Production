@@ -22,7 +22,7 @@ public class TextureSeasons : MonoBehaviour {
 
 	private float timer = 10.0f;
 	private float changeSpeed = 0.01f;
-	private int season;
+	public int season;
 	private Renderer seasonRenderer;
 
 	// Use this for initialization

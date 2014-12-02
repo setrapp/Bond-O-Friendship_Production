@@ -8,15 +8,15 @@ public class FreezeWall : MonoBehaviour {
 	private bool freezing;
 	private float extents;
 	private Vector3 collisionPoint;
+	private Vector3 collisionNormal;
 	private Color iceColor;
-	private Vector3 rotateDirection;
 	private Color startColor;
 	private GameObject objects;
 
 	// Use this for initialization
 	void Start () {
 		iceColor = new Color (0.2f, 1.0f, 1.0f);
-		startColor = renderer.material.color;
+		startColor = GetComponent<Renderer>().material.color;
 		objects = GameObject.Find ("Objects");
 	}
 	
@@ -24,26 +24,29 @@ public class FreezeWall : MonoBehaviour {
 	void Update () {
 		if(freezing == true && ice == null)
 		{
-			ice = (GameObject)Instantiate(icePrefab);
-			ice.transform.position = new Vector3(collisionPoint.x, collisionPoint.y, 0);
-			ice.transform.Rotate(0, 0, transform.rotation.eulerAngles.z + 180);
-			ice.transform.position = new Vector3(ice.transform.position.x, ice.transform.position.y, -0.9f);
-			ice.transform.parent = objects.transform;
+			if(GetComponent<TextureSeasons>().season == 1)
+			{
+				ice = (GameObject)Instantiate(icePrefab);
+				ice.transform.position = new Vector3(collisionPoint.x, collisionPoint.y, 0);
+				ice.transform.right = -collisionNormal;
+				ice.transform.position = new Vector3(ice.transform.position.x, ice.transform.position.y, -0.9f);
+				ice.transform.parent = objects.transform;
+			}
 		}
 
 		if(freezing == true && ice != null && ice.transform.position.z - transform.position.z >= -5.0f)
 		{
-			ice.transform.Translate(0, 0, -0.01f);
-			renderer.material.color = Color.Lerp(renderer.material.color, iceColor, Time.deltaTime*0.4f);
+			ice.transform.position += new Vector3(0, 0, -0.01f);
+			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, iceColor, Time.deltaTime*0.4f);
 		}
 
-		if(freezing == false && ice != null && ice.transform.position.z - transform.position.z <= 0)
+		if((freezing == false || GetComponent<TextureSeasons>().season != 1)  && ice != null && ice.transform.position.z - transform.position.z <= 0)
 		{
-			ice.transform.Translate(0, 0, 0.01f);
-			renderer.material.color = Color.Lerp(renderer.material.color, startColor, Time.deltaTime*0.5f);
+			ice.transform.position += new Vector3(0, 0, 0.01f);
+			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.5f);
 		}
 
-		if(freezing == false && ice != null && ice.transform.position.z - transform.position.z >= -1.0f)
+		if((freezing == false || GetComponent<TextureSeasons>().season != 1)  && ice != null && ice.transform.position.z - transform.position.z >= -1.0f)
 			Destroy(ice);
 	}
 
@@ -52,7 +55,7 @@ public class FreezeWall : MonoBehaviour {
 		{
 			freezing = true;
 			collisionPoint = col.contacts[0].point;
-			//rotateDirection = col.contacts[0].otherCollider.
+			collisionNormal = col.contacts[0].normal;
 		}
 	}
 
