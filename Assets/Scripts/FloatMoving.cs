@@ -29,19 +29,29 @@ public class FloatMoving : MonoBehaviour {
 		startingStats = new MovementStats();
 		startingStats.acceleration = mover.acceleration;
 		startingStats.handling = mover.handling;
-		startingStats.dampening = mover.dampening;
+		if (mover.body != null)
+		{
+			startingStats.bodyDrag = mover.body.drag;
+		}
+		startingStats.bodylessDampening = mover.bodylessDampening;
 	}
 
 	void Update()
 	{
+
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
 		{
 			if (wasFloating)
 			{
+				Debug.Log("hi");
 				mover.acceleration = startingStats.acceleration;
 				mover.handling = startingStats.handling;
-				mover.dampening = startingStats.dampening;
+				if (mover.body != null)
+				{
+					mover.body.drag = startingStats.bodyDrag;
+				}
+				mover.bodylessDampening = startingStats.bodylessDampening;
 				wasFloating = false;
 			}
 		}
@@ -58,14 +68,22 @@ public class FloatMoving : MonoBehaviour {
 		{
 			mover.acceleration = loneFloatStats.acceleration;
 			mover.handling = loneFloatStats.handling;
-			mover.dampening = loneFloatStats.dampening;
+			if (mover.body != null)
+			{
+				mover.body.drag = loneFloatStats.bodyDrag;
+			}
+			mover.bodylessDampening = loneFloatStats.bodylessDampening;
 
 			int connectionBonusCount = Mathf.Min(partnerLink.connections.Count, maxConnectionBonuses);
 			if (connectionBonusCount > 0)
 			{
 				mover.acceleration += perConnectionFloatBonus.acceleration * connectionBonusCount;
 				mover.handling += perConnectionFloatBonus.handling * connectionBonusCount;
-				mover.dampening += perConnectionFloatBonus.dampening * connectionBonusCount;
+				if (mover.body != null)
+				{
+					mover.body.drag += perConnectionFloatBonus.bodyDrag * connectionBonusCount;
+				}
+				mover.bodylessDampening += perConnectionFloatBonus.bodylessDampening * connectionBonusCount;
 			}
 		}
 	}
@@ -84,7 +102,9 @@ public class FloatMoving : MonoBehaviour {
 [System.Serializable]
 public class MovementStats
 {
-	public float acceleration = 0;
-	public float handling = 0;
-	public float dampening = 1;
+	public float acceleration;
+	public float handling;
+	public float bodyDrag;
+	public float bodylessDampening;
+	
 }

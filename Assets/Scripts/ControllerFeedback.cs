@@ -5,7 +5,7 @@ using XInputDotNetPure;
 public class ControllerFeedback : MonoBehaviour {
 
 	float duration;
-	float intensity;
+	//float intensity;
 	float startTime;
 
 	bool isVibrating;
@@ -13,7 +13,7 @@ public class ControllerFeedback : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		isVibrating = true;
-		intensity = 0.0f;
+		//intensity = 0.0f;
 		duration = 0.0f;
 	}
 	
@@ -36,26 +36,26 @@ public class ControllerFeedback : MonoBehaviour {
 
 	public void HardVibrate (float time) {
 		startTime = Time.time;
-		intensity = 0.5f;
+		//intensity = 0.5f;
 		duration = 0.5f;
 	}
 
 	public void SoftVibrate (float time) {
 		startTime = Time.time;
-		intensity = 0.3f;
+		//intensity = 0.3f;
 		duration = 0.5f;
 	}
 
 	public void SetVibration (float intensity)
 	{
 		isVibrating = true;
-		this.intensity = intensity;
+		//this.intensity = intensity;
 	}
 
 	public void SetVibration (float intensity, float duration)
 	{
 		isVibrating = true;
-		this.intensity = intensity;
+		//this.intensity = intensity;
 		this.duration = duration;
 		startTime = Time.time;
 	}
@@ -63,6 +63,6 @@ public class ControllerFeedback : MonoBehaviour {
 	public void EndVibration ()
 	{
 		isVibrating = false;
-		intensity = 0.0f;
+		//intensity = 0.0f;
 	}
 }
