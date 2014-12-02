@@ -80,6 +80,12 @@ public class SimpleMover : MonoBehaviour {
 
 	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)
 	{
+		// Dividing by deltaTime later so avoid even trying to change velocity if time has not changed.
+		if (Time.deltaTime <= 0)
+		{
+			return;
+		}
+
 		Vector3 parallel = velocityChange;
 		Vector3 perpendicular = Vector3.zero;
 
@@ -100,6 +106,17 @@ public class SimpleMover : MonoBehaviour {
 		if (forceFullTurning || perpendicular.sqrMagnitude > Mathf.Pow(handling, 2))
 		{
 			perpendicular = perpendicular.normalized * handling;
+			// Avoid overshooting desired direction.
+			if (forceFullTurning)
+			{
+				Vector3 oldVelPerpAcceleration = velocity - Helper.ProjectVector(velocityChange, velocity);
+				Vector3 newVelocity = velocity + perpendicular * Time.deltaTime;
+				Vector3 newVelPerpAcceleration = newVelocity - Helper.ProjectVector(velocityChange, newVelocity);
+				if (Vector3.Dot(oldVelPerpAcceleration, newVelPerpAcceleration) < 0)
+				{
+					perpendicular = -oldVelPerpAcceleration / Time.deltaTime;
+				}
+			}
 		}
 
 		// Accelerate by recombining parallel and perpendicular components.

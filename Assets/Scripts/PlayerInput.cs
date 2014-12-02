@@ -159,11 +159,12 @@ public class PlayerInput : MonoBehaviour {
 				
 				
 				}
+				//velocityChange *= mover.maxSpeed;
 
 				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)
 				{
-					mover.Accelerate(velocityChange);
+					mover.Accelerate(velocityChange, true, true);
 					mover.slowDown = false;
 				}
 				else
