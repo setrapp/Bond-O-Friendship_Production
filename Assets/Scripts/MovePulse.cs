@@ -30,7 +30,6 @@ public class MovePulse : MonoBehaviour {
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
-	
 
 	void Awake()
 	{
@@ -45,6 +44,15 @@ public class MovePulse : MonoBehaviour {
 			body = GetComponent<Rigidbody>();
 		}
 		mover = GetComponent<SimpleMover>();
+
+		if (attachee != null && attachee.gameObject != null)
+		{
+			Attach(attachee.gameObject, transform.position, transform.up, true);
+		}
+		else
+		{
+			attachee = null;
+		}
 	}
 
 	// Update is called once per frame
@@ -88,7 +96,7 @@ public class MovePulse : MonoBehaviour {
 				trail.gameObject.SetActive(true);
 				baseAngle = -1;
 			}
-			attachee = null;
+
 			moving = moverMoving;
 		}
 
@@ -125,7 +133,7 @@ public class MovePulse : MonoBehaviour {
 
 		}
 		ignoreCollider = ignoreColliderTemporary;
-		mover.Accelerate(passForce, true, true);
+		mover.Accelerate(passForce);
 	}
 
 	public void Pull(GameObject puller, float pullMagnitude)
@@ -148,11 +156,12 @@ public class MovePulse : MonoBehaviour {
 		}
 		else 
 		{
+			Debug.Log(pullForce * Time.deltaTime);
 			if (body != null)
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, false, true);
+			mover.Accelerate(pullForce * Time.deltaTime, true, false);
 		}
 	}
 
@@ -236,16 +245,11 @@ public class MovePulse : MonoBehaviour {
 		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
 			Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
-			if (attachee != null && attachee.gameObject != null)
-			{
-				ignoreCollider = attachee.gameObject;
-			}
 		}
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		// Handle fluff containers plucking fluffs from previously attached objects.
 		PartnerLink fluffContainer = other.GetComponent<PartnerLink>();
 		if (fluffContainer != null && (attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{
@@ -274,6 +278,7 @@ public class MovePulse : MonoBehaviour {
 	}
 }
 
+[System.Serializable]
 public class Attachee
 {
 	public GameObject gameObject;
@@ -282,7 +287,7 @@ public class Attachee
 	public bool possessive;
 	public bool controlling;
 
-	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possessive = false, bool controlling = false)
+	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possive = false, bool controlling = false)
 	{
 		this.gameObject = gameObject;
 		this.attachInfo = attachInfo;
