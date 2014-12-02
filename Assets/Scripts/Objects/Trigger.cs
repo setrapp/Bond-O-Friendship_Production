@@ -4,11 +4,13 @@ using System.Collections;
 public class Trigger : MonoBehaviour {
 
 	public bool pOneTriggered = false;
-	public bool pTwoTirggered = false;
+	public bool pTwoTriggered = false;
+	private Color myColor;
 	
 	// Use this for initialization
 	void Start () {
-		GetComponent<Renderer>().material.color = Color.cyan;
+		myColor = new Color(0.8f,0.7f,0.5f,1.0f);
+		GetComponent<Renderer>().material.color = myColor;
 	
 	}
 	
@@ -16,21 +18,25 @@ public class Trigger : MonoBehaviour {
 	void Update () {
 	
 	}
-	void OnTriggerEnter(Collider collide)
+	void OnCollisionEnter(Collision collide)
 	{
-		if(collide.gameObject.tag == "Pulse")
+		Debug.Log(collide.collider.GetComponent<MovePulse>().creator.name);
+		if(collide.collider.gameObject.tag == "Pulse")
 		{
-			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 1")
+			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
+			if(mover.creator != null && mover.creator.name == "Player 1")
 			{
-				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<Renderer>().material.color;
+				//print("Collide");
+				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = true;
-				pTwoTirggered = false;
+				pTwoTriggered = false;
 			}
-			if(collide.gameObject.GetComponent<MovePulse>().creator.name == "Player 2")
+			if(mover.creator != null && mover.creator.name == "Player 2")
 			{
-				GetComponent<Renderer>().material.color = collide.gameObject.GetComponent<Renderer>().material.color;
+				//print("Collide");
+				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.partnerLink.headRenderer.material.color;
 				pOneTriggered = false;
-				pTwoTirggered = true;
+				pTwoTriggered = true;
 			}
 		}
 	}

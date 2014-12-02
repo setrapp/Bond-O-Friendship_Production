@@ -3,7 +3,6 @@ using System.Collections;
 
 public class EmptyTrigger : MonoBehaviour {
 	private int collisions = 0;
-	private bool collisionsChecked = false;
 	public GameObject listener;
 
 	void Update()
@@ -22,7 +21,6 @@ public class EmptyTrigger : MonoBehaviour {
 		if (other.tag == "Object" || other.tag == "Pushable")
 		{
 			collisions++;
-			collisionsChecked = true;
 		}
 	}
 
@@ -31,7 +29,6 @@ public class EmptyTrigger : MonoBehaviour {
 		if (other.tag == "Object" || other.tag == "Pushable")
 		{
 			collisions--;
-			collisionsChecked = true;
 		}
 	}
 }

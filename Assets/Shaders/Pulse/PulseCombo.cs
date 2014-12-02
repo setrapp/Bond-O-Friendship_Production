@@ -12,7 +12,7 @@ public class PulseCombo : MonoBehaviour {
 	private Vector3 newPos;
 	public Quaternion p1Quat;
 	public Quaternion p2Quat;
-	private Quaternion newQuat;
+	//private Quaternion newQuat;
 	public Vector3 p1For;
 	public Vector3 p2For;
 	private Vector3 forAv;
@@ -39,7 +39,7 @@ public class PulseCombo : MonoBehaviour {
 			newPos = (pulseOnePos + pulseTwoPos)*0.5f;
 			forAv = (p1For+p2For)*0.5f;
 			forQuat = Quaternion.LookRotation(forAv);
-			newQuat = p1Quat * p2Quat;
+			//newQuat = p1Quat * p2Quat;
 			newTarg = (p1Targ + p2Targ)*0.5f;
 			newScale = (p1scale + p2scale)*0.5f;
 			newCap = (p1Cap+p2Cap)*0.5f;
