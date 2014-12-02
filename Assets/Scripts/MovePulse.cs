@@ -30,7 +30,6 @@ public class MovePulse : MonoBehaviour {
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
-	
 
 	void Awake()
 	{
@@ -45,6 +44,15 @@ public class MovePulse : MonoBehaviour {
 			body = GetComponent<Rigidbody>();
 		}
 		mover = GetComponent<SimpleMover>();
+
+		if (attachee != null && attachee.gameObject != null)
+		{
+			Attach(attachee.gameObject, transform.position, transform.up, true);
+		}
+		else
+		{
+			attachee = null;
+		}
 	}
 
 	// Update is called once per frame
@@ -148,11 +156,12 @@ public class MovePulse : MonoBehaviour {
 		}
 		else 
 		{
+			Debug.Log(pullForce * Time.deltaTime);
 			if (body != null)
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce * Time.deltaTime, false);
+			mover.Accelerate(pullForce * Time.deltaTime, true, false);
 		}
 	}
 
@@ -195,7 +204,6 @@ public class MovePulse : MonoBehaviour {
 			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		}
 		moving = false;
-		//creator = null;
 		forgetCreator = true;
 	}
 
@@ -270,6 +278,7 @@ public class MovePulse : MonoBehaviour {
 	}
 }
 
+[System.Serializable]
 public class Attachee
 {
 	public GameObject gameObject;
