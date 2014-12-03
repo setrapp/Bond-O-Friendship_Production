@@ -140,19 +140,9 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		// Accelerate by recombining parallel and perpendicular components.
-		//velocity += (parallel + perpendicular) * Time.deltaTime;
 		unfixedVelocity += (parallel + perpendicular) * Time.deltaTime;
 
 		// Clamp down to max speed and if a rigid body is attached, update it.
-		/*if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
-		{
-			velocity = velocity.normalized * maxSpeed;
-		}
-		velocity *= Mathf.Max(externalSpeedMultiplier, 0);
-		if (body != null && !float.IsNaN(velocity.x))
-		{
-			body.velocity = velocity;
-		}*/
 		if (unfixedVelocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
 		{
 			unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
@@ -170,12 +160,6 @@ public class SimpleMover : MonoBehaviour {
 		{
 			speed = maxSpeed;
 		}
-		/*velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
-		if (body != null && !float.IsNaN(velocity.x))
-		{
-			body.velocity = velocity;
-		}
-		transform.position += velocity * Time.deltaTime;*/
 		unfixedVelocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
 	}
 }

@@ -114,18 +114,7 @@ public class PulseShot : MonoBehaviour {
 			shotAngle += shotSpread / passFluffCount;
 			movePulse.transform.position = transform.position;
 
-
-			//RaycastHit attemptPassHit;
-			//bool blocked = movePulse.TestForBlocking(rotatedPassDir, movePulse.hull.height, out attemptPassHit);
-
-			//if (blocked)
-			//{
-				//movePulse.Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
-			//}
-			//else
-			//{
-				movePulse.Pass(rotatedPassDir * passForce, gameObject);
-			//}
+			movePulse.Pass(rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f), gameObject);
 
 			
 		}
