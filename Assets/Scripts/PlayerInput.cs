@@ -250,7 +250,7 @@ public class PlayerInput : MonoBehaviour {
 				}
 			
 				pulseDirection *= basePulsePower;
-				partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
+				partnerLink.pulseShot.Shoot(pulseDirection, velocityBoost, basePulseDrain);
 				firePulseReady = false;
 			}
 		}

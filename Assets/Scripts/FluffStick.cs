@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FluffStick : MonoBehaviour {
 	public Rigidbody pullableBody;
+	public bool noKinematicOnPull;
 	public float bodyMassFactor = 1;
 	public float pullMass = -1;
 	public float maxPullForce = 0;
@@ -27,6 +28,12 @@ public class FluffStick : MonoBehaviour {
 
 	public void AddPullForce(Vector3 pullForce, Vector3 position)
 	{
+		if (pullableBody.isKinematic && noKinematicOnPull)
+		{
+			pullableBody.velocity = Vector3.zero;
+			pullableBody.isKinematic = false;
+		}
+
 		if ((currentPullForce < maxPullForce || maxPullForce < 0) && pullableBody != null)
 		{
 			float pullForceMag = pullForce.magnitude;

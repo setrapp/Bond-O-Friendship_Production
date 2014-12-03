@@ -30,7 +30,6 @@ public class MovePulse : MonoBehaviour {
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
-	
 
 	void Awake()
 	{
@@ -45,6 +44,15 @@ public class MovePulse : MonoBehaviour {
 			body = GetComponent<Rigidbody>();
 		}
 		mover = GetComponent<SimpleMover>();
+
+		if (attachee != null && attachee.gameObject != null)
+		{
+			Attach(attachee.gameObject, transform.position, transform.up, true);
+		}
+		else
+		{
+			attachee = null;
+		}
 	}
 
 	// Update is called once per frame
@@ -59,8 +67,15 @@ public class MovePulse : MonoBehaviour {
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
 		if (attachee != null && !attachee.controlling)
 		{
-			transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
-			transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			if (attachee.gameObject == null)
+			{
+				Destroy(gameObject);
+			}
+			else
+			{
+				transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
+				transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			}
 		}
 
 		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
@@ -78,7 +93,8 @@ public class MovePulse : MonoBehaviour {
 			}
 			else
 			{
-				transform.parent = null;
+				attachee = null;
+
 				// If fluff is pointing more in the z direction than the other directions, rotate into the correct plane.
 				if(Mathf.Pow(transform.up.z, 2) > new Vector2(transform.up.x, transform.up.y).sqrMagnitude)
 				{
@@ -88,7 +104,7 @@ public class MovePulse : MonoBehaviour {
 				trail.gameObject.SetActive(true);
 				baseAngle = -1;
 			}
-			attachee = null;
+
 			moving = moverMoving;
 		}
 
@@ -125,7 +141,9 @@ public class MovePulse : MonoBehaviour {
 
 		}
 		ignoreCollider = ignoreColliderTemporary;
-		mover.Accelerate(passForce, true, true);
+
+		float passForceMag = passForce.magnitude;
+		mover.Move(passForce / passForceMag, passForceMag * Time.deltaTime, false);
 	}
 
 	public void Pull(GameObject puller, float pullMagnitude)
@@ -152,7 +170,7 @@ public class MovePulse : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, false, true);
+			mover.Accelerate(pullForce, true, true);
 		}
 	}
 
@@ -193,6 +211,7 @@ public class MovePulse : MonoBehaviour {
 			Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
 			attachee = new Attachee(attacheeObject, attacheeObject.GetComponent<FluffStick>(), attachPoint, false, false);
 			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
+			ignoreCollider = attacheeObject;	
 		}
 		moving = false;
 		forgetCreator = true;
@@ -236,16 +255,11 @@ public class MovePulse : MonoBehaviour {
 		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
 			Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
-			if (attachee != null && attachee.gameObject != null)
-			{
-				ignoreCollider = attachee.gameObject;
-			}
 		}
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		// Handle fluff containers plucking fluffs from previously attached objects.
 		PartnerLink fluffContainer = other.GetComponent<PartnerLink>();
 		if (fluffContainer != null && (attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{
@@ -274,6 +288,7 @@ public class MovePulse : MonoBehaviour {
 	}
 }
 
+[System.Serializable]
 public class Attachee
 {
 	public GameObject gameObject;

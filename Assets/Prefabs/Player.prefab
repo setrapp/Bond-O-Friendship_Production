@@ -220,7 +220,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -11.9799995, y: 29.7299995, z: -63.5}
+  m_LocalPosition: {x: -6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -489,7 +489,8 @@ MonoBehaviour:
   maxShotCount: 5
   shotSpread: 30
   minShotFactor: .75
-  passSpeed: 10
+  passForce: 1000
+  movingBonusFactor: 1
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -552,7 +553,7 @@ MonoBehaviour:
   absorbStrength: 5
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
-  pullSpeed: 50
+  pullSpeed: 10
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -590,6 +591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pullableBody: {fileID: 0}
+  noKinematicOnPull: 0
   bodyMassFactor: 1
   pullMass: 10000
   maxPullForce: 0
@@ -607,7 +609,7 @@ MonoBehaviour:
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 30
-  handling: 30
+  handling: 100
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
   body: {fileID: 0}
