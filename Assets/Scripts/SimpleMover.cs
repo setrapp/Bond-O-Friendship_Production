@@ -90,7 +90,12 @@ public class SimpleMover : MonoBehaviour {
 
 	public void Stop()
 	{
+		velocity = Vector3.zero;
 		unfixedVelocity = Vector3.zero;
+		if (body != null)
+		{
+			body.velocity = Vector3.zero;
+		}
 	}
 
 	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)

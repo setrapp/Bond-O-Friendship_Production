@@ -193,6 +193,7 @@ public class MovePulse : MonoBehaviour {
 			Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
 			attachee = new Attachee(attacheeObject, attacheeObject.GetComponent<FluffStick>(), attachPoint, false, false);
 			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
+			Debug.Log(baseDirection);
 		}
 		moving = false;
 		forgetCreator = true;

@@ -21,7 +21,7 @@ public class PulseShot : MonoBehaviour {
 	public int maxShotCount;
 	public float shotSpread;
 	public float minShotFactor;
-	public float passSpeed;
+	public float passForce = 1000;
 
 	void Start()
 	{
@@ -124,7 +124,7 @@ public class PulseShot : MonoBehaviour {
 			//}
 			//else
 			//{
-				movePulse.Pass(rotatedPassDir * passSpeed, gameObject);
+				movePulse.Pass(rotatedPassDir * passForce, gameObject);
 			//}
 
 			
