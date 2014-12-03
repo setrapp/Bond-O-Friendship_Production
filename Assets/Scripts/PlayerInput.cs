@@ -58,6 +58,9 @@ public class PlayerInput : MonoBehaviour {
 
 	void Update () {
 
+//		if(playerNumber == Player.Player2)
+//			Debug.Log(joystickDetermined);
+
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
@@ -72,9 +75,6 @@ public class PlayerInput : MonoBehaviour {
 
 			paused = !paused;
 		}
-
-		PlayerLookAt();
-		partnerLink.absorbing = Absorbing();
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
@@ -136,6 +136,9 @@ public class PlayerInput : MonoBehaviour {
 		{		
 			if(!paused)
 			{
+				PlayerLookAt();
+				partnerLink.absorbing = Absorbing();
+
 				velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
 				// Movement
 				if(useKeyboard)

@@ -153,4 +153,13 @@ public class PartnerLink : MonoBehaviour {
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
 	}
+
+	private void OnDestroy()
+	{
+		for (int i = 0; i < connections.Count;)
+		{
+			connections[i].BreakConnection();
+		}
+	}
+
 }

@@ -9,6 +9,7 @@ public class StageCrash : MonoBehaviour {
 	public float stopDistance;
 	public GameObject barrierOne;
 	public GameObject barrierTwo;
+	public GameObject fluffGenerator;
 	public float breakBarrierDistance;
 	public bool open = false;
 
@@ -44,6 +45,11 @@ public class StageCrash : MonoBehaviour {
 				{
 					Destroy(barrierTwo);
 					barrierTwo = null;
+				}
+				if(fluffGenerator)
+				{
+					Destroy(fluffGenerator);
+					fluffGenerator = null;
 				}
 				open = true;
 			}
