@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour {
 	public GameObject geometry;
 	public float deadZone = .75f;
 
-	private bool firePulse = true;
+	private bool firePulseReady = true;
 	private Vector3 velocityChange;
 	public float basePulsePower = 10;
 	public float timedPulsePower = 10;
@@ -39,6 +39,8 @@ public class PlayerInput : MonoBehaviour {
 
 	private bool paused = false;
 
+	public float pullSpeed;
+
 	void Start()
 	{
 		if (otherPlayerInput == null)
@@ -54,24 +56,25 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-	void Update()
-	{
-		if(GetPause() || Input.GetKeyDown(KeyCode.Escape))
-		{
-			if(paused)
-				Time.timeScale = 1;
-			else
-				Time.timeScale = 0;
-			
-			paused = !paused;
-		}
-	}
+	void Update () {
 
-	void FixedUpdate () {
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
+
+		if (GetPause() || Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (paused)
+				Time.timeScale = 1;
+			else
+				Time.timeScale = 0;
+
+			paused = !paused;
+		}
+
+		PlayerLookAt();
+		partnerLink.absorbing = Absorbing();
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
@@ -156,20 +159,19 @@ public class PlayerInput : MonoBehaviour {
 				
 				
 				}
+				//velocityChange *= mover.maxSpeed;
 
 				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)
 				{
-					mover.Accelerate(velocityChange);
+					mover.Accelerate(velocityChange, true, true);
+					mover.slowDown = false;
 				}
 				else
 				{
-					mover.SlowDown();
+					mover.slowDown = true;
 				}
 				transform.LookAt(transform.position + mover.velocity, transform.up);
-
-				PlayerLookAt();
-				partnerLink.absorbing = Absorbing();
 
 				if(absorb != null)
 				{
@@ -200,26 +202,12 @@ public class PlayerInput : MonoBehaviour {
 			foreach(GameObject livePulse in pulseArray)
 			{
 				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
-				if (livePulseMove != null && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
+				if (livePulseMove != null)
 				{
-					Vector3 fluffToAbsorber = transform.position - livePulseMove.transform.position;
-					float fluffToAbsorberDist = fluffToAbsorber.magnitude;
-					int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
-					RaycastHit[] hits = Physics.RaycastAll(livePulseMove.transform.position, fluffToAbsorber / fluffToAbsorberDist, fluffToAbsorberDist, ~fluffLayer);
-					bool blocked = false;
-					for (int i = 0; i < hits.Length && !blocked; i++)
+					bool fluffAttachedToSelf = (livePulseMove.attachee != null && livePulseMove.attachee.gameObject == gameObject);
+					if (!fluffAttachedToSelf && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
 					{
-						blocked = hits[i].collider.gameObject != gameObject && !Physics.GetIgnoreLayerCollision(livePulse.layer, hits[i].collider.gameObject.layer);
-					}
-
-					if (!blocked)
-					{
-						livePulseMove.target = transform.position;
-						livePulseMove.moving = true;
-						if (livePulseMove.swayAnimation != null)
-						{
-							livePulseMove.swayAnimation.enabled = false;
-						}
+						livePulseMove.Pull(gameObject, pullSpeed);
 					}
 				}
 			}
@@ -250,9 +238,9 @@ public class PlayerInput : MonoBehaviour {
 		{
 			lookAt.Normalize();
 
-			if(firePulse)
+			if(firePulseReady)
 			{
-				Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
+				//Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
 
@@ -261,27 +249,16 @@ public class PlayerInput : MonoBehaviour {
 					velocityBoost += mover.velocity;
 				}
 			
-				if (CanFire(basePulseDrain))
-				{
-					pulseDirection *= basePulsePower;
-					partnerLink.pulseShot.Shoot(transform.position + velocityBoost + pulseDirection, basePulseDrain);
-				}
-				firePulse = false;
+				pulseDirection *= basePulsePower;
+				partnerLink.pulseShot.Shoot(pulseDirection, velocityBoost, basePulseDrain);
+				firePulseReady = false;
 			}
 		}
 		else
 		{
-			firePulse = true;
+			firePulseReady = true;
 		}
 	}
-
-
-
-	bool CanFire(float costToFire)
-	{
-		return transform.localScale.x - costToFire >= partnerLink.minScale;
-	}
-	
 
 	
 	#region Helper Methods
