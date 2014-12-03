@@ -44,7 +44,6 @@ public class FloatMoving : MonoBehaviour {
 		{
 			if (wasFloating)
 			{
-				Debug.Log("hi");
 				mover.acceleration = startingStats.acceleration;
 				mover.handling = startingStats.handling;
 				if (mover.body != null)

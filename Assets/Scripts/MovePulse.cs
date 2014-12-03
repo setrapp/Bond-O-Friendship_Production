@@ -67,8 +67,15 @@ public class MovePulse : MonoBehaviour {
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
 		if (attachee != null && !attachee.controlling)
 		{
-			transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
-			transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			if (attachee.gameObject == null)
+			{
+				Destroy(gameObject);
+			}
+			else
+			{
+				transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
+				transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			}
 		}
 
 		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
@@ -87,7 +94,7 @@ public class MovePulse : MonoBehaviour {
 			else
 			{
 				attachee = null;
-				transform.parent = null;
+
 				// If fluff is pointing more in the z direction than the other directions, rotate into the correct plane.
 				if(Mathf.Pow(transform.up.z, 2) > new Vector2(transform.up.x, transform.up.y).sqrMagnitude)
 				{

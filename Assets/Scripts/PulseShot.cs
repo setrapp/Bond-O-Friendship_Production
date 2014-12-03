@@ -128,7 +128,7 @@ public class PulseShot : MonoBehaviour {
 		// If floating propel away from pulse.
 		if (floatMove.Floating && passFluffs.Count > 0)
 		{
-			Vector3 pulseForce = passDirection * floatPushBack;
+			Vector3 pulseForce = -passDirection * floatPushBack;
 			partnerLink.mover.body.AddForce(pulseForce);
 			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
 		}
