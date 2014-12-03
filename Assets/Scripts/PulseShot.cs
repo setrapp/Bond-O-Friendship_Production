@@ -22,6 +22,7 @@ public class PulseShot : MonoBehaviour {
 	public float shotSpread;
 	public float minShotFactor;
 	public float passForce = 1000;
+	public float movingBonusFactor = 0.3f;
 
 	void Start()
 	{
@@ -114,9 +115,7 @@ public class PulseShot : MonoBehaviour {
 			shotAngle += shotSpread / passFluffCount;
 			movePulse.transform.position = transform.position;
 
-			movePulse.Pass(rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f), gameObject);
-
-			
+			movePulse.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
 		}
 		
 

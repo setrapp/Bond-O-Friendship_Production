@@ -489,7 +489,8 @@ MonoBehaviour:
   maxShotCount: 5
   shotSpread: 30
   minShotFactor: .75
-  passForce: 400
+  passForce: 1000
+  movingBonusFactor: 1
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -552,7 +553,7 @@ MonoBehaviour:
   absorbStrength: 5
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
-  pullSpeed: 50
+  pullSpeed: 10
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -566,14 +567,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   headSprite: {fileID: 100010}
-  naturalFluffCount: 1
+  naturalFluffCount: 0
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   fluffContainer: {fileID: 100008}
   fluffs: []
   spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 16
+  startingFluff: 1
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -590,6 +591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pullableBody: {fileID: 0}
+  noKinematicOnPull: 0
   bodyMassFactor: 1
   pullMass: 10000
   maxPullForce: 0
@@ -606,7 +608,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
-  unfixedVelocity: {x: 0, y: 0, z: 0}
   acceleration: 30
   handling: 100
   cutSpeedThreshold: .100000001

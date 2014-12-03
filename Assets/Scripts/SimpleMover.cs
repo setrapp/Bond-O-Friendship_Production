@@ -5,7 +5,7 @@ using System.Collections;
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
 	public Vector3 velocity;
-	public Vector3 unfixedVelocity;
+	private Vector3 unfixedVelocity;
 	public float acceleration;
 	public float handling;
 	public float cutSpeedThreshold = 0.1f;
@@ -51,13 +51,6 @@ public class SimpleMover : MonoBehaviour {
 		if (slowDown && body == null)
 		{
 			velocity *= bodylessDampening;
-		}
-
-		// Clamp velocity within max speed, taking into account external speed multiplier.
-		externalSpeedMultiplier = Mathf.Max(externalSpeedMultiplier, 0);
-		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2) * externalSpeedMultiplier)
-		{
-			velocity = velocity.normalized * maxSpeed * externalSpeedMultiplier;
 		}
 
 		// Move, using rigidbody if attached.
