@@ -19,7 +19,7 @@ public class SimpleMover : MonoBehaviour {
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
 
-	void Start()
+	void Awake()
 	{
 		if (body == null)
 		{
