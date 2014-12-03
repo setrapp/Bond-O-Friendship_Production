@@ -5,6 +5,7 @@ using System.Collections;
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
 	public Vector3 velocity;
+	public Vector3 unfixedVelocity;
 	public float acceleration;
 	public float handling;
 	public float cutSpeedThreshold = 0.1f;
@@ -28,9 +29,22 @@ public class SimpleMover : MonoBehaviour {
 
 	void FixedUpdate() {
 
-		if (body != null)
+		if (unfixedVelocity != velocity)
 		{
-			velocity = body.velocity;
+			velocity = unfixedVelocity;
+			if (body != null)
+			{
+				body.velocity = velocity;
+			}
+		}
+		else
+		{
+			if (body != null)
+			{
+				velocity = body.velocity;
+				
+			}
+			unfixedVelocity = velocity;
 		}
 
 		// If slowing down without a rigidbody attached, dampen speed.
@@ -55,11 +69,16 @@ public class SimpleMover : MonoBehaviour {
 		{
 			transform.position += velocity * Time.deltaTime;
 		}
+		unfixedVelocity = velocity;
 
 		// Cut the speed to zero if going slow enough.
 		if (velocity.sqrMagnitude < Mathf.Pow(cutSpeedThreshold, 2)) {
 			velocity = Vector3.zero;
-			body.velocity = Vector3.zero;
+			unfixedVelocity = Vector3.zero;
+			if (body != null)
+			{
+				body.velocity = Vector3.zero;
+			}			
 			moving = false;
 			slowDown = false;
 		}
@@ -71,11 +90,7 @@ public class SimpleMover : MonoBehaviour {
 
 	public void Stop()
 	{
-		velocity = Vector3.zero;
-		if (body != null)
-		{
-			body.velocity = Vector3.zero;
-		}
+		unfixedVelocity = Vector3.zero;
 	}
 
 	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)
@@ -120,10 +135,11 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		// Accelerate by recombining parallel and perpendicular components.
-		velocity += (parallel + perpendicular) * Time.deltaTime;
+		//velocity += (parallel + perpendicular) * Time.deltaTime;
+		unfixedVelocity += (parallel + perpendicular) * Time.deltaTime;
 
 		// Clamp down to max speed and if a rigid body is attached, update it.
-		if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
+		/*if (velocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
 		{
 			velocity = velocity.normalized * maxSpeed;
 		}
@@ -131,7 +147,12 @@ public class SimpleMover : MonoBehaviour {
 		if (body != null && !float.IsNaN(velocity.x))
 		{
 			body.velocity = velocity;
+		}*/
+		if (unfixedVelocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
+		{
+			unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
 		}
+		unfixedVelocity *= Mathf.Max(externalSpeedMultiplier, 0);
 	}
 
 	public void Move(Vector3 direction, float speed, bool clampSpeed = true)
@@ -144,11 +165,12 @@ public class SimpleMover : MonoBehaviour {
 		{
 			speed = maxSpeed;
 		}
-		velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
+		/*velocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
 		if (body != null && !float.IsNaN(velocity.x))
 		{
 			body.velocity = velocity;
 		}
-		transform.position += velocity * Time.deltaTime;
+		transform.position += velocity * Time.deltaTime;*/
+		unfixedVelocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
 	}
 }

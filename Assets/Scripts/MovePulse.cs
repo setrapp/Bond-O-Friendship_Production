@@ -125,7 +125,7 @@ public class MovePulse : MonoBehaviour {
 
 		}
 		ignoreCollider = ignoreColliderTemporary;
-		mover.Accelerate(passForce, true, true);
+		mover.Accelerate(passForce, false, true);
 	}
 
 	public void Pull(GameObject puller, float pullMagnitude)
