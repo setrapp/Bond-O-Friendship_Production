@@ -181,8 +181,8 @@ public class Connection : MonoBehaviour {
 		attachment2.partner.connections.Remove(this);
 		Destroy(gameObject);
 
-		partner1.SendMessage("ConnectionBroken", partner2);
-		partner2.SendMessage("ConnectionBroken", partner1);
+		partner1.SendMessage("ConnectionBroken", partner2, SendMessageOptions.DontRequireReceiver);
+		partner2.SendMessage("ConnectionBroken", partner1, SendMessageOptions.DontRequireReceiver);
 	}
 
 	public void AttachPartners(PartnerLink partner1, PartnerLink partner2)
@@ -204,8 +204,8 @@ public class Connection : MonoBehaviour {
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
 
-		partner1.SendMessage("ConnectionMade", partner2);
-		partner2.SendMessage("ConnectionMade", partner1);
+		partner1.SendMessage("ConnectionMade", partner2, SendMessageOptions.DontRequireReceiver);
+		partner2.SendMessage("ConnectionMade", partner1, SendMessageOptions.DontRequireReceiver);
 	}
 
 	private void AddLink()

@@ -21,7 +21,8 @@ public class PulseShot : MonoBehaviour {
 	public int maxShotCount;
 	public float shotSpread;
 	public float minShotFactor;
-	public float passSpeed;
+	public float passForce = 1000;
+	public float movingBonusFactor = 0.3f;
 
 	void Start()
 	{
@@ -39,8 +40,13 @@ public class PulseShot : MonoBehaviour {
 		}
 	}
 
-	public void Shoot(Vector3 pulseTarget, float pulseCapacity)
+	public void Shoot(Vector3 passDirection, Vector3 velocityBoost, float pulseCapacity)
 	{
+		if (Time.deltaTime <= 0)
+		{
+			return;
+		}
+
 		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffSpawn.fluffs.Count);
 
 
@@ -49,13 +55,13 @@ public class PulseShot : MonoBehaviour {
 			return;
 		}
 
-		Vector3 passDir = (pulseTarget - transform.position).normalized;
+		passDirection.Normalize();
 		List<int> passFluffIndices = new List<int>();
 		List<GameObject> passFluffs = new List<GameObject>();
 		List<float> maxFluffDotPasses = new List<float>();
 		for (int i = 0; i < fluffSpawn.fluffs.Count; i++)
 		{
-			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDir);
+			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDirection);
 			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffSpawn.fluffs[i].gameObject != fluffSpawn.spawnedFluff)
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
@@ -98,7 +104,7 @@ public class PulseShot : MonoBehaviour {
 		{
 			fluffSpawn.fluffs.RemoveAt(passFluffIndices[i]);
 
-			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDir;
+			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDirection;
 
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
@@ -109,20 +115,7 @@ public class PulseShot : MonoBehaviour {
 			shotAngle += shotSpread / passFluffCount;
 			movePulse.transform.position = transform.position;
 
-
-			//RaycastHit attemptPassHit;
-			//bool blocked = movePulse.TestForBlocking(rotatedPassDir, movePulse.hull.height, out attemptPassHit);
-
-			//if (blocked)
-			//{
-				//movePulse.Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
-			//}
-			//else
-			//{
-				movePulse.Pass(rotatedPassDir * passSpeed, gameObject);
-			//}
-
-			
+			movePulse.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
 		}
 		
 
@@ -135,7 +128,7 @@ public class PulseShot : MonoBehaviour {
 		// If floating propel away from pulse.
 		if (floatMove.Floating && passFluffs.Count > 0)
 		{
-			Vector3 pulseForce = (((transform.position - pulseTarget).normalized * floatPushBack));
+			Vector3 pulseForce = -passDirection * floatPushBack;
 			partnerLink.mover.body.AddForce(pulseForce);
 			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
 		}

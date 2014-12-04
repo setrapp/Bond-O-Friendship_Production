@@ -67,8 +67,15 @@ public class MovePulse : MonoBehaviour {
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
 		if (attachee != null && !attachee.controlling)
 		{
-			transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
-			transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			if (attachee.gameObject == null)
+			{
+				Destroy(gameObject);
+			}
+			else
+			{
+				transform.position = attachee.gameObject.transform.position + attachee.gameObject.transform.TransformDirection(attachee.attachPoint);
+				transform.up = attachee.gameObject.transform.TransformDirection(baseDirection);
+			}
 		}
 
 		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
@@ -86,7 +93,8 @@ public class MovePulse : MonoBehaviour {
 			}
 			else
 			{
-				transform.parent = null;
+				attachee = null;
+
 				// If fluff is pointing more in the z direction than the other directions, rotate into the correct plane.
 				if(Mathf.Pow(transform.up.z, 2) > new Vector2(transform.up.x, transform.up.y).sqrMagnitude)
 				{
@@ -133,7 +141,9 @@ public class MovePulse : MonoBehaviour {
 
 		}
 		ignoreCollider = ignoreColliderTemporary;
-		mover.Accelerate(passForce);
+
+		float passForceMag = passForce.magnitude;
+		mover.Move(passForce / passForceMag, passForceMag * Time.deltaTime, false);
 	}
 
 	public void Pull(GameObject puller, float pullMagnitude)
@@ -156,12 +166,11 @@ public class MovePulse : MonoBehaviour {
 		}
 		else 
 		{
-			Debug.Log(pullForce * Time.deltaTime);
 			if (body != null)
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce * Time.deltaTime, true, false);
+			mover.Accelerate(pullForce, true, true);
 		}
 	}
 
@@ -202,6 +211,7 @@ public class MovePulse : MonoBehaviour {
 			Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
 			attachee = new Attachee(attacheeObject, attacheeObject.GetComponent<FluffStick>(), attachPoint, false, false);
 			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
+			ignoreCollider = attacheeObject;	
 		}
 		moving = false;
 		forgetCreator = true;
@@ -287,7 +297,7 @@ public class Attachee
 	public bool possessive;
 	public bool controlling;
 
-	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possive = false, bool controlling = false)
+	public Attachee(GameObject gameObject, FluffStick attachInfo, Vector3 attachPoint, bool possessive = false, bool controlling = false)
 	{
 		this.gameObject = gameObject;
 		this.attachInfo = attachInfo;

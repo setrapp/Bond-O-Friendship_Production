@@ -7,23 +7,37 @@ public class FluffGenerator : MonoBehaviour {
 	public Material greenFluffMaterial;
 	//public float fluffSound;
 	public float spawnRate = 3.0f;
-	public float minimumVelocity = 3.0f;
-	public float maximumVelocity = 10.0f;
+	public float minimumForce = 3.0f;
+	public float maximumForce = 10.0f;
+
+	public GameObject generatorTop;
 
 	private float spawnTimer;
 	private int colorPicker;
 	private GameObject fluff;
 	private float velocity;
 	private Vector3 targetAngle;
+	private Vector3 baseTarget;
+	public PulseShot pulseShot;
 
 	// Use this for initialization
 	void Start () {
 		spawnTimer = spawnRate;
+		baseTarget = generatorTop.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		spawnTimer -= Time.deltaTime;
+		//Debug.Log(targetAngle);
+		if(targetAngle != null && targetAngle != Vector3.zero)
+		{
+			//Debug.Log(spawnTimer);
+			if(spawnTimer >= spawnRate/2)
+				generatorTop.transform.position = Vector3.Lerp(generatorTop.transform.position, targetAngle.normalized, 2 * Time.deltaTime);
+			else
+				generatorTop.transform.position = Vector3.Lerp(generatorTop.transform.position, baseTarget, 1 * Time.deltaTime);
+		}
 
 		if(spawnTimer <= 0)
 		{
@@ -46,11 +60,13 @@ public class FluffGenerator : MonoBehaviour {
 		fluff.transform.position = transform.position;
 		fluff.transform.parent = gameObject.transform;
 		MovePulse movePulse = fluff.GetComponent<MovePulse>();
-		velocity = Random.Range(minimumVelocity, maximumVelocity);
+		velocity = Random.Range(minimumForce, maximumForce);
 		if(Random.Range(0,2) == 1)
 			targetAngle = Quaternion.Euler(0, 0, Random.Range(60, 211)) * new Vector3(velocity,velocity,0);
 		else
 			targetAngle = Quaternion.Euler(0, 0, Random.Range(-120, 31)) * new Vector3(velocity,velocity,0);
-		movePulse.target = transform.position + targetAngle;
+		//movePulse.target = transform.position + targetAngle;
+		movePulse.creator = pulseShot;
+		movePulse.Pass(targetAngle, this.gameObject);
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections;
 public class FloatMoving : MonoBehaviour {
 	public PartnerLink partnerLink;
 	public SimpleMover mover;
-	private MovementStats startingStats;
+	public MovementStats startingStats;
 	public MovementStats loneFloatStats;
 	public MovementStats perConnectionFloatBonus;
 	public int maxConnectionBonuses;
@@ -15,7 +15,7 @@ public class FloatMoving : MonoBehaviour {
 		get { return wasFloating; }
 	}
 
-	void Start()
+	void Awake()
 	{
 		if (mover == null)
 		{
@@ -25,7 +25,10 @@ public class FloatMoving : MonoBehaviour {
 		{
 			partnerLink = GetComponent<PartnerLink>();
 		}
+	}
 
+	void Start()
+	{
 		startingStats = new MovementStats();
 		startingStats.acceleration = mover.acceleration;
 		startingStats.handling = mover.handling;
@@ -44,7 +47,6 @@ public class FloatMoving : MonoBehaviour {
 		{
 			if (wasFloating)
 			{
-				Debug.Log("hi");
 				mover.acceleration = startingStats.acceleration;
 				mover.handling = startingStats.handling;
 				if (mover.body != null)
