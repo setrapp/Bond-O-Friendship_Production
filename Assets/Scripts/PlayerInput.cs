@@ -13,6 +13,8 @@ public class PlayerInput : MonoBehaviour {
 	public JoyStick joystickNumber;
 	public GameObject canvasStart;
 
+	public GameObject canvasPaused;
+
 	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
@@ -67,12 +69,18 @@ public class PlayerInput : MonoBehaviour {
 			Application.Quit();
 		}
 
-		if (GetPause() || Input.GetKeyDown(KeyCode.Escape))
+		if (GetPause() && joystickDetermined)
 		{
 			if (paused)
+			{
+				canvasPaused.SetActive(false);
 				Time.timeScale = 1;
+			}
 			else
+			{
+				canvasPaused.SetActive(true);
 				Time.timeScale = 0;
+			}
 
 			paused = !paused;
 		}
@@ -84,22 +92,22 @@ public class PlayerInput : MonoBehaviour {
 		{
 			if(playerNumber == Player.Player1)
 			{
-				if(Input.GetButtonDown("Joy1Absorb"))
+				if(Input.GetButtonDown("Joy1Absorb") || Input.GetButtonDown("Joy1Pause") || Input.GetButtonDown("Joy1StickThrow"))
 				{
 					joystickNumber = JoyStick.Joy1;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy2Absorb"))
+				if(Input.GetButtonDown("Joy2Absorb") || Input.GetButtonDown("Joy2Pause") || Input.GetButtonDown("Joy2StickThrow"))
 				{
 					joystickNumber = JoyStick.Joy2;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy3Absorb"))
+				if(Input.GetButtonDown("Joy3Absorb") || Input.GetButtonDown("Joy3Pause") || Input.GetButtonDown("Joy3StickThrow"))
 				{
 					joystickNumber = JoyStick.Joy3;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy4Absorb"))
+				if(Input.GetButtonDown("Joy4Absorb") || Input.GetButtonDown("Joy4Pause") || Input.GetButtonDown("Joy4StickThrow"))
 				{
 					joystickNumber = JoyStick.Joy4;
 					joystickDetermined = true;
@@ -111,22 +119,22 @@ public class PlayerInput : MonoBehaviour {
 			}
 			else if(otherPlayerInput != null && otherPlayerInput.joystickDetermined)
 			{
-				if(Input.GetButtonDown("Joy1Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy1)
+				if((Input.GetButtonDown("Joy1Absorb") || Input.GetButtonDown("Joy1Pause") || Input.GetButtonDown("Joy1StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy1)
 				{
 					joystickNumber = JoyStick.Joy1;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy2Absorb") && otherPlayerInput.joystickNumber != JoyStick.Joy2)
+				if((Input.GetButtonDown("Joy2Absorb") || Input.GetButtonDown("Joy2Pause") || Input.GetButtonDown("Joy2StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy2)
 				{
 					joystickNumber = JoyStick.Joy2;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy3Absorb")&& otherPlayerInput.joystickNumber != JoyStick.Joy3)
+				if((Input.GetButtonDown("Joy3Absorb") || Input.GetButtonDown("Joy3Pause") || Input.GetButtonDown("Joy3StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy3)
 				{
 					joystickNumber = JoyStick.Joy3;
 					joystickDetermined = true;
 				}
-				if(Input.GetButtonDown("Joy4Absorb")&& otherPlayerInput.joystickNumber != JoyStick.Joy4)
+				if((Input.GetButtonDown("Joy4Absorb") || Input.GetButtonDown("Joy4Pause") || Input.GetButtonDown("Joy4StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy4)
 				{
 					joystickNumber = JoyStick.Joy4;
 					joystickDetermined = true;
