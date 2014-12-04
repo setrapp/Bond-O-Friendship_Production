@@ -11,6 +11,7 @@ public class PlayerInput : MonoBehaviour {
 
 	public Player playerNumber;
 	public JoyStick joystickNumber;
+	public GameObject canvasStart;
 
 	public ParticleSystem absorbPrefab;
 
@@ -104,6 +105,8 @@ public class PlayerInput : MonoBehaviour {
 					joystickDetermined = true;
 				}
 
+				if(joystickDetermined)
+					canvasStart.SetActive(false);
 				//Debug.Log(joystickNumber.ToString());
 			}
 			else if(otherPlayerInput != null && otherPlayerInput.joystickDetermined)
@@ -128,6 +131,9 @@ public class PlayerInput : MonoBehaviour {
 					joystickNumber = JoyStick.Joy4;
 					joystickDetermined = true;
 				}
+
+				if(joystickDetermined)
+					canvasStart.SetActive(false);
 			}
 		}
 
