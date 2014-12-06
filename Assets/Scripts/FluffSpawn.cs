@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FluffSpawn : MonoBehaviour {
-	public Rigidbody rigidbody;
+	public Rigidbody body;
 	public GameObject headSprite;
 	public int naturalFluffCount;
 	public GameObject fluffPrefab;
@@ -21,12 +21,13 @@ public class FluffSpawn : MonoBehaviour {
 	private float oldSpeed;
 	[HideInInspector]
 	public PartnerLink partnerLink;
+	private FluffStick fluffStick;
 
 	void Start()
 	{
-		if (rigidbody == null)
+		if (body == null)
 		{
-			rigidbody = GetComponent<Rigidbody>();
+			body = GetComponent<Rigidbody>();
 		}
 		if (fluffContainer == null)
 		{
@@ -34,6 +35,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 
 		partnerLink = GetComponent<PartnerLink>();
+		fluffStick = GetComponent<FluffStick>();
 		
 
 		while (fluffs.Count < startingFluff)
@@ -84,12 +86,12 @@ public class FluffSpawn : MonoBehaviour {
 		}
 
 		// Rotate fluffs based on movement.
-		if (rigidbody.velocity.sqrMagnitude > 0)
+		if (body.velocity.sqrMagnitude > 0)
 		{
 			// Calculate the direction the fluffs should be pushed in both world and local space.
-			float currentSpeed = rigidbody.velocity.magnitude;
+			float currentSpeed = body.velocity.magnitude;
 			float currentByOldSpeed = currentSpeed / oldSpeed;
-			Vector3 fullBackDir = -rigidbody.velocity / currentSpeed;
+			Vector3 fullBackDir = -body.velocity / currentSpeed;
 			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
 			localFullBackDir.y = localFullBackDir.z;
 			localFullBackDir.z = 0;
@@ -228,10 +230,9 @@ public class FluffSpawn : MonoBehaviour {
 			{
 				meshRenderers[i].material = useMaterial;
 			}
-			if (newFluffInfo.swayAnimation != null)
-			{
-				newFluffInfo.swayAnimation.enabled = false;
-			}
+			newFluffInfo.ToggleSwayAnimation(false);
+			newFluffInfo.hull.isTrigger = true;
+			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
 			fluffs.Add(newFluffInfo);
 		}
 	}

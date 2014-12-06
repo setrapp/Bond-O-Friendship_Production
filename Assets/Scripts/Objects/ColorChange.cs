@@ -9,12 +9,10 @@ public class ColorChange : MonoBehaviour {
 	private float red = 0.358f;
 	private float green = 0.390f;
 	private float blue = 0.350f;
-	private float colorFloat = 1.0f;
+	//private float colorFloat = 1.0f;
 
 	// Use this for initialization
 	void Start () {
-	//	Debug.Log (GetComponent<Renderer>().material.color);
-	//	startColor = new Color(0.195f, 0.221f, 0.188f, 1.0f);
 		endColor = new Color(red, green, blue, 1.0f);
 	}
 	
@@ -42,7 +40,6 @@ public class ColorChange : MonoBehaviour {
 			endColor = new Color(red, green, blue, 1.0f);
 			gameObject.GetComponent<Renderer>().material.color = endColor;
 		}
-		//Debug.Log (GetComponent<Renderer>().material.color);
 
 	}
 

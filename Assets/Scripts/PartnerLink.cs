@@ -103,7 +103,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		if (pulse != null && (absorbing || pulse.moving) && (fluffsToAdd == null || !fluffsToAdd.Contains(pulse)))
+		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || !pulse.attachee.possessive))
 		{
 			if (pulse.creator != null && pulse.creator != pulseShot)
 			{
@@ -153,4 +153,13 @@ public class PartnerLink : MonoBehaviour {
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
 	}
+
+	private void OnDestroy()
+	{
+		for (int i = 0; i < connections.Count;)
+		{
+			connections[i].BreakConnection();
+		}
+	}
+
 }
