@@ -20,7 +20,7 @@ public class Trigger : MonoBehaviour {
 	}
 	void OnCollisionEnter(Collision collide)
 	{
-		Debug.Log(collide.collider.GetComponent<MovePulse>().creator.name);
+		//Debug.Log(collide.collider.GetComponent<MovePulse>().creator.name);
 		if(collide.collider.gameObject.tag == "Pulse")
 		{
 			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
