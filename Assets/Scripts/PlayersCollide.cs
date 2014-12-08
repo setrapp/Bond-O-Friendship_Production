@@ -24,10 +24,10 @@ public class PlayersCollide : MonoBehaviour {
 			collisionParticle.transform.position = (col.transform.position + transform.position)/2;
 			Destroy(collisionParticle.gameObject, 1.0f);
 		}
-		else{
-			collisionParticle = (ParticleSystem)Instantiate(collisionParticlePrefab);
-			collisionParticle.transform.position =  col.contacts[0].point;
-			Destroy(collisionParticle.gameObject, 1.0f);
-		}
+//		else{
+//			collisionParticle = (ParticleSystem)Instantiate(collisionParticlePrefab);
+//			collisionParticle.transform.position =  col.contacts[0].point;
+//			Destroy(collisionParticle.gameObject, 1.0f);
+//		}
 	}
 }
