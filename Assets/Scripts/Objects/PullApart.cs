@@ -14,6 +14,9 @@ public class PullApart : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(player1.GetComponent<PartnerLink>().absorbing == true && player2.GetComponent<PartnerLink>().absorbing == true)
+		{
+	//		if(Vector3.Distance(player1.transform.position, transform.position) < 7.0f 
+		}
 	}
 }
