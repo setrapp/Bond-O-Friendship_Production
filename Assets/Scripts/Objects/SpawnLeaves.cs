@@ -26,6 +26,7 @@ public class SpawnLeaves : MonoBehaviour {
 	private float area;
 	private float fadeSpeed;
 	private Color startColor;
+	private int leafArraySize;
 
 	// Use this for initialization
 	void Start () {
@@ -39,7 +40,7 @@ public class SpawnLeaves : MonoBehaviour {
 
 		area = halfWidth*halfHeight*2;
 
-		int leafArraySize = Mathf.RoundToInt(area) + 1;
+		leafArraySize = Mathf.RoundToInt(area) + 1;
 
 		leaves = new GameObject[leafArraySize];
 	}
@@ -80,11 +81,12 @@ public class SpawnLeaves : MonoBehaviour {
 		}
 		if(season == 0 && leafCount > 0)
 		{
-			fadeSpeed = Random.Range(0.4f, 0.7f);
-			for(int i = 0; i < area; i++)
+
+			for(int i = 0; i < leafArraySize; i++)
 			{
 				if(leaves[i] != null)
 				{
+					fadeSpeed = Random.Range(0.4f, 0.7f);
 					Color alpha = leaves[i].GetComponent<Renderer>().material.color;
 					if(alpha.a < 1.0f)
 					{
@@ -100,22 +102,22 @@ public class SpawnLeaves : MonoBehaviour {
 
 		if(season != 0 && leafCount > 0)
 		{
-			fadeSpeed = Random.Range(0.4f, 0.7f);
-			for(int i = 0; i < area; i++)
+			for(int i = 0; i < leafArraySize; i++)
 			{
 				if(leaves[i] != null)
 				{
-						Color alpha = leaves[i].GetComponent<Renderer>().material.color;
-						alpha.a -= Time.deltaTime*fadeSpeed*0.5f;
-						alpha.r -= Time.deltaTime*fadeSpeed*0.5f;
-						alpha.g -= Time.deltaTime*fadeSpeed*0.5f;
-						alpha.b -= Time.deltaTime*fadeSpeed*0.5f;
-						leaves[i].GetComponent<Renderer>().material.color = alpha;
-						if(alpha.a <= 0)
-						{
-							Destroy(leaves[i], 1.0f);
-							leafCount--;
-						}
+					fadeSpeed = Random.Range(0.4f, 0.7f);
+					Color alpha = leaves[i].GetComponent<Renderer>().material.color;
+					alpha.a -= Time.deltaTime*fadeSpeed*0.5f;
+					alpha.r -= Time.deltaTime*fadeSpeed*0.5f;
+					alpha.g -= Time.deltaTime*fadeSpeed*0.5f;
+					alpha.b -= Time.deltaTime*fadeSpeed*0.5f;
+					leaves[i].GetComponent<Renderer>().material.color = alpha;
+					if(alpha.a <= 0)
+					{
+						Destroy(leaves[i].gameObject);
+						leafCount--;
+					}
 				}
 			}
 		}
