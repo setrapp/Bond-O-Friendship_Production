@@ -53,6 +53,9 @@ public class MovePulse : MonoBehaviour {
 		{
 			attachee = null;
 		}
+
+		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
+		gameObject.tag = "Pulse";
 	}
 
 	// Update is called once per frame
