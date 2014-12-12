@@ -9,7 +9,7 @@ Properties {
 }
 
 	SubShader {
-		Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+		Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent+2"}
 		LOD 100
 	
 		Stencil {
