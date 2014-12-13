@@ -4,6 +4,7 @@ using System.Collections;
 public class FluffStick : MonoBehaviour {
 	public Rigidbody pullableBody;
 	public bool noKinematicOnPull;
+	public bool allowSway = true;
 	public float bodyMassFactor = 1;
 	public float pullMass = -1;
 	public float maxPullForce = 0;
