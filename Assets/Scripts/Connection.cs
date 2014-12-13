@@ -10,7 +10,6 @@ public class Connection : MonoBehaviour {
 	public float endsWidth;
 	public float midWidth;
 	public GameObject Shield;
-	public float attachPointDistance = 0.2f;
 	public GameObject linkPrefab;
 	public List<ConnectionLink> links;
 	public float addLinkDistance;
@@ -114,8 +113,8 @@ public class Connection : MonoBehaviour {
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
-			attachment1.position = attachment1.attachee.transform.position + betweenPartners * attachment1.attachee.transform.localScale.magnitude * attachPointDistance;
-			attachment2.position = attachment2.attachee.transform.position - betweenPartners * attachment2.attachee.transform.localScale.magnitude * attachPointDistance;
+			attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);//attachment1.attachee.transform.position + betweenPartners * attachment1.attachee.transform.localScale.magnitude * attachPointDistance;
+			attachment2.position = attachment2.attachee.transform.position + attachment2.attachee.transform.TransformDirection(attachment2.offset);//attachment2.attachee.transform.position - betweenPartners * attachment2.attachee.transform.localScale.magnitude * attachPointDistance;
 
 			// Place attachment points with attached characters.
 			links[0].transform.position = attachment1.position;
@@ -190,18 +189,17 @@ public class Connection : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	//public void AttachPartners(ConnectionAttachable attachee1, Vector3 attachPoint1, ConnectionAttachable attachee2, Vector3 attachPoint2)
-	public void AttachPartners(ConnectionAttachable attachee1, ConnectionAttachable attachee2)
+	public void AttachPartners(ConnectionAttachable attachee1, Vector3 attachPoint1, ConnectionAttachable attachee2, Vector3 attachPoint2)
 	{
-		//TODO make connection attach to given points.
-
 		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
 
 		attachment1.attachee = attachee1;
-		attachment1.position = attachee1.transform.position + betweenPartners * attachee1.transform.localScale.magnitude * attachPointDistance;
+		attachment1.position = attachPoint1;
+		attachment1.offset = attachee1.transform.InverseTransformDirection(attachPoint1 - attachee1.transform.position);
 
 		attachment2.attachee = attachee2;
-		attachment2.position = attachee2.transform.position - betweenPartners * attachee1.transform.localScale.magnitude * attachPointDistance;
+		attachment2.position = attachPoint2;
+		attachment2.offset = attachee2.transform.InverseTransformDirection(attachPoint2 - attachee2.transform.position);
 
 		Color color1 = attachment1.attachee.attachmentColor;
 		Color color2 = attachment2.attachee.attachmentColor;
@@ -313,7 +311,6 @@ public class Connection : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "enemyPulse")
 		{
-			//print(collide.gameObject.tag + " " + collide.gameObject.name);
 			BreakConnection();
 		}
 	}
@@ -324,5 +321,6 @@ public class ConnectionAttachment
 {
 	public ConnectionAttachable attachee;
 	public Vector3 position;
+	public Vector3 offset;
 	public LineRenderer lineRenderer;
 }

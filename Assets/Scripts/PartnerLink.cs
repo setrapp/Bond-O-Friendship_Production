@@ -110,7 +110,7 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || pulse.attachee.gameObject == gameObject || !pulse.attachee.possessive))
 		{
-			connectionAttachable.AttemptConnection(pulse.creator);
+			connectionAttachable.AttemptConnection(pulse);
 			
 			if (pulse.creator != null && pulse.creator != connectionAttachable)
 			{
