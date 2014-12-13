@@ -3,52 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ConnectionAttachable : MonoBehaviour {
+	public Color attachmentColor;
 	public GameObject connectionPrefab;
 	[SerializeField]
 	public List<Connection> connections;
+	public int volleysToConnect;
+	public int volleys = 0;
+	public ConnectionAttachable volleyPartner;
 
-	public void AttachFluff(MovePulse pulse)
+	public void AttemptConnection(ConnectionAttachable connectionPartner)
 	{
-		/*if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || !pulse.attachee.possessive))
+		if (connectionPartner == null)
 		{
-			if (pulse.creator != null && pulse.creator != pulseShot)
+			return;
+		}
+
+		if (connectionPartner != gameObject)
+		{
+			volleys = 1;
+			volleyPartner = connectionPartner;
+			if (connectionPartner.volleyPartner == this)
 			{
-				pulseShot.volleys = 1;
-				pulseShot.volleyPartner = pulse.creator;
-				if (pulse.creator.volleyPartner == pulseShot)
+				volleys = connectionPartner.volleys + 1;
+			}
+			if (volleys >= volleysToConnect)
+			{
+				bool connectionAlreadyMade = false;
+				for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
 				{
-					pulseShot.volleys = pulse.creator.volleys + 1;
-				}
-				if (pulseShot.volleys >= volleysToConnect)
-				{
-					bool connectionAlreadyMade = false;
-					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+					if ((connections[i].attachment1.attachee == this && connections[i].attachment2.attachee == connectionPartner) || (connections[i].attachment2.attachee == this && connections[i].attachment1.attachee == connectionPartner))
 					{
-						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
-						{
-							connectionAlreadyMade = true;
-						}
-					}
-					if (!connectionAlreadyMade)
-					{
-						Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
-						connections.Add(newConnection);
-						pulse.creator.partnerLink.connections.Add(newConnection);
-						newConnection.AttachPartners(pulse.creator.partnerLink, this);
-						pulseShot.volleys = 0;
-						pulse.creator.volleys = 0;
+						connectionAlreadyMade = true;
 					}
 				}
-
-				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
-				pulseShot.lastPulseAccepted = pulse.creator;
+				if (!connectionAlreadyMade)
+				{
+					Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
+					connections.Add(newConnection);
+					connectionPartner.connections.Add(newConnection);
+					newConnection.AttachPartners(connectionPartner, this);
+					volleys = 0;
+					connectionPartner.volleys = 0;
+				}
 			}
-
-			if (fluffsToAdd == null)
-			{
-				fluffsToAdd = new List<MovePulse>();
-			}
-			fluffsToAdd.Add(pulse);
-		}*/
+		}
 	}
 }

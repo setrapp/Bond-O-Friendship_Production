@@ -5,7 +5,8 @@ using System.Collections;
 public class MovePulse : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
-	public PulseShot creator;
+	//public PulseShot creator;
+	public ConnectionAttachable creator;
 	public PartnerLink volleyTarget;
 	public int volleys;
 	public float capacity;

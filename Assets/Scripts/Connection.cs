@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Connection : MonoBehaviour {
-	public PartnerAttachment attachment1;
-	public PartnerAttachment attachment2;
+	public ConnectionAttachment attachment1;
+	public ConnectionAttachment attachment2;
 	public float maxDistance;
 	public float warningDistanceFactor;
 	public float endsWidth;
@@ -43,7 +43,7 @@ public class Connection : MonoBehaviour {
 	{
 		lengthFresh = false;
 
-		if (attachment1.partner != null || attachment2.partner != null)
+		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
 			bool isCountEven = links.Count % 2 == 0;
 
@@ -106,7 +106,7 @@ public class Connection : MonoBehaviour {
 				links[i].transform.localScale = linkScale;
 			}
 
-			Shield.transform.position = (attachment1.partner.transform.position + attachment2.partner.transform.position) * 0.5f;
+			Shield.transform.position = (attachment1.attachee.transform.position + attachment2.attachee.transform.position) * 0.5f;
 
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
 			float warningDistance = maxDistance * warningDistanceFactor;
@@ -114,8 +114,8 @@ public class Connection : MonoBehaviour {
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
-			attachment1.position = attachment1.partner.transform.position + betweenPartners * attachment1.partner.transform.localScale.magnitude * attachPointDistance;
-			attachment2.position = attachment2.partner.transform.position - betweenPartners * attachment2.partner.transform.localScale.magnitude * attachPointDistance;
+			attachment1.position = attachment1.attachee.transform.position + betweenPartners * attachment1.attachee.transform.localScale.magnitude * attachPointDistance;
+			attachment2.position = attachment2.attachee.transform.position - betweenPartners * attachment2.attachee.transform.localScale.magnitude * attachPointDistance;
 
 			// Place attachment points with attached characters.
 			links[0].transform.position = attachment1.position;
@@ -175,37 +175,43 @@ public class Connection : MonoBehaviour {
 	}
 	public void BreakConnection()
 	{
-		PartnerLink partner1 = attachment1.partner;
-		PartnerLink partner2 = attachment2.partner;
-		attachment1.partner.connections.Remove(this);
-		attachment2.partner.connections.Remove(this);
+		ConnectionAttachable attachee1 = attachment1.attachee;
+		ConnectionAttachable attachee2 = attachment2.attachee;
+		if (attachee1 != null)
+		{
+			attachee1.connections.Remove(this);
+			attachee1.SendMessage("ConnectionBroken", attachee2, SendMessageOptions.DontRequireReceiver);
+		}
+		if (attachee2 != null)
+		{
+			attachee2.connections.Remove(this);
+			attachee2.SendMessage("ConnectionBroken", attachee1, SendMessageOptions.DontRequireReceiver);
+		}
 		Destroy(gameObject);
-
-		partner1.SendMessage("ConnectionBroken", partner2, SendMessageOptions.DontRequireReceiver);
-		partner2.SendMessage("ConnectionBroken", partner1, SendMessageOptions.DontRequireReceiver);
 	}
 
-	public void AttachPartners(PartnerLink partner1, PartnerLink partner2)
+	public void AttachPartners(ConnectionAttachable attachee1, ConnectionAttachable attachee2)
 	{
-		Vector3 betweenPartners = (partner2.transform.position - partner1.transform.position).normalized;
+		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
 
-		attachment1.partner = partner1;
-		attachment1.position = partner1.transform.position + betweenPartners * partner1.transform.localScale.magnitude * attachPointDistance;
+		attachment1.attachee = attachee1;
+		attachment1.position = attachee1.transform.position + betweenPartners * attachee1.transform.localScale.magnitude * attachPointDistance;
 
-		attachment2.partner = partner2;
-		attachment2.position = partner2.transform.position - betweenPartners * partner1.transform.localScale.magnitude * attachPointDistance;
+		attachment2.attachee = attachee2;
+		attachment2.position = attachee2.transform.position - betweenPartners * attachee1.transform.localScale.magnitude * attachPointDistance;
 
-		Color color1 = attachment1.partner.headRenderer.material.color;
-		Color color2 = attachment2.partner.headRenderer.material.color;
-		Color midColor = attachment1.partner.headRenderer.material.color + attachment2.partner.headRenderer.material.color;
+		Color color1 = attachment1.attachee.attachmentColor;
+		Color color2 = attachment2.attachee.attachmentColor;
+		Color midColor = color1 + color2;
+		midColor.a = (color1.a + color2.a) / 2;
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
 
-		partner1.SendMessage("ConnectionMade", partner2, SendMessageOptions.DontRequireReceiver);
-		partner2.SendMessage("ConnectionMade", partner1, SendMessageOptions.DontRequireReceiver);
+		attachee1.SendMessage("ConnectionMade", attachee2, SendMessageOptions.DontRequireReceiver);
+		attachee2.SendMessage("ConnectionMade", attachee1, SendMessageOptions.DontRequireReceiver);
 	}
 
 	private void AddLink()
@@ -311,9 +317,9 @@ public class Connection : MonoBehaviour {
 }
 
 [System.Serializable]
-public class PartnerAttachment
+public class ConnectionAttachment
 {
-	public PartnerLink partner;
+	public ConnectionAttachable attachee;
 	public Vector3 position;
 	public LineRenderer lineRenderer;
 }

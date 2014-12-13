@@ -10,6 +10,7 @@ public class PartnerLink : MonoBehaviour {
 	public float flashFadeTime = 1;
 	public TrailRenderer trail;
 	public PulseShot pulseShot;
+	public ConnectionAttachable connectionAttachable;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
@@ -46,6 +47,10 @@ public class PartnerLink : MonoBehaviour {
 		if (pulseShot == null)
 		{
 			pulseShot = GetComponent<PulseShot>();
+		}
+		if (connectionAttachable == null)
+		{
+			connectionAttachable = GetComponent<ConnectionAttachable>();
 		}
 
 		SetFlashAndFill(new Color(0, 0, 0, 0));
@@ -105,7 +110,8 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || pulse.attachee.gameObject == gameObject || !pulse.attachee.possessive))
 		{
-			if (pulse.creator != null && pulse.creator != pulseShot)
+			connectionAttachable.AttemptConnection(pulse.creator);
+			/*if (pulse.creator != null && pulse.creator != pulseShot)
 			{
 				pulseShot.volleys = 1;
 				pulseShot.volleyPartner = pulse.creator;
@@ -136,6 +142,10 @@ public class PartnerLink : MonoBehaviour {
 
 				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
 				pulseShot.lastPulseAccepted = pulse.creator;
+			}*/
+			if (pulse.creator != null && pulse.creator != connectionAttachable)
+			{
+				SetFlashAndFill(pulse.creator.attachmentColor);
 			}
 
 			if (fluffsToAdd == null)
