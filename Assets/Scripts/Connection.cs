@@ -190,8 +190,11 @@ public class Connection : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
+	//public void AttachPartners(ConnectionAttachable attachee1, Vector3 attachPoint1, ConnectionAttachable attachee2, Vector3 attachPoint2)
 	public void AttachPartners(ConnectionAttachable attachee1, ConnectionAttachable attachee2)
 	{
+		//TODO make connection attach to given points.
+
 		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
 
 		attachment1.attachee = attachee1;

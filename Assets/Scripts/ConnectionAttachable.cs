@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ConnectionAttachable : MonoBehaviour {
+	public bool handleFluffAttachment = true;
+	public bool connectAtFluffPoint = true;
 	public Color attachmentColor;
 	public GameObject connectionPrefab;
 	[SerializeField]
@@ -11,11 +13,24 @@ public class ConnectionAttachable : MonoBehaviour {
 	public int volleys = 0;
 	public ConnectionAttachable volleyPartner;
 
-	public void AttemptConnection(ConnectionAttachable connectionPartner)
+	public void AttachFluff(MovePulse pulse)
 	{
+		if (pulse != null)
+		{
+			Connection newConnection = AttemptConnection(pulse.creator);
+			if (newConnection != null)
+			{
+				//newConnection.
+			}
+		}
+	}
+
+	public Connection AttemptConnection(ConnectionAttachable connectionPartner)
+	{
+		Connection newConnection = null;
 		if (connectionPartner == null)
 		{
-			return;
+			return newConnection;
 		}
 
 		if (connectionPartner != gameObject)
@@ -38,7 +53,7 @@ public class ConnectionAttachable : MonoBehaviour {
 				}
 				if (!connectionAlreadyMade)
 				{
-					Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
+					newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
 					connections.Add(newConnection);
 					connectionPartner.connections.Add(newConnection);
 					newConnection.AttachPartners(connectionPartner, this);
@@ -47,5 +62,7 @@ public class ConnectionAttachable : MonoBehaviour {
 				}
 			}
 		}
+
+		return newConnection;
 	}
 }
