@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class ConnectionAttachable : MonoBehaviour {
 	public bool handleFluffAttachment = true;
 	public bool connectAtFluffPoint = true;
-	public Vector3 connectionOffset;
 	public Color attachmentColor;
 	public GameObject connectionPrefab;
 	[SerializeField]
@@ -18,11 +17,7 @@ public class ConnectionAttachable : MonoBehaviour {
 	{
 		if (pulse != null)
 		{
-			Connection newConnection = AttemptConnection(pulse);
-			if (newConnection != null)
-			{
-				//newConnection.
-			}
+			AttemptConnection(pulse);
 		}
 	}
 
@@ -53,6 +48,8 @@ public class ConnectionAttachable : MonoBehaviour {
 						connectionAlreadyMade = true;
 					}
 				}
+
+				// If enough volleys have been passed, and the volleyers are not already connected, establish a new connection.
 				if (!connectionAlreadyMade)
 				{
 					Vector3 connectionPoint = transform.position;
@@ -60,12 +57,17 @@ public class ConnectionAttachable : MonoBehaviour {
 					{
 						connectionPoint = connectionFluff.transform.position;
 					}
-					connectionPoint += connectionOffset;
 
 					newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
 					connections.Add(newConnection);
 					connectionPartner.connections.Add(newConnection);
-					newConnection.AttachPartners(connectionPartner, connectionPartner.transform.position + connectionPartner.connectionOffset, this, connectionPoint);
+					ConnectionStatsHolder statsHolder = GetComponent<ConnectionStatsHolder>();
+					if (statsHolder != null && statsHolder.stats != null)
+					{
+						newConnection.stats = statsHolder.stats;
+					}
+					//newConnection.AttachPartners(this, connectionPoint, connectionPartner, connectionPartner.transform.position);
+					newConnection.AttachPartners(connectionPartner, connectionPartner.transform.position, this, connectionPoint);
 					volleys = 0;
 					connectionPartner.volleys = 0;
 				}

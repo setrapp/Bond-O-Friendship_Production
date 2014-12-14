@@ -5,15 +5,8 @@ using System.Collections.Generic;
 public class Connection : MonoBehaviour {
 	public ConnectionAttachment attachment1;
 	public ConnectionAttachment attachment2;
-	public float maxDistance;
-	public float warningDistanceFactor;
-	public float endsWidth;
-	public float midWidth;
-	public GameObject Shield;
 	public GameObject linkPrefab;
 	public List<ConnectionLink> links;
-	public float addLinkDistance;
-	public float removeLinkDistance;
 	private float connectionLength;
 	public float ConnectionLength
 	{
@@ -32,11 +25,7 @@ public class Connection : MonoBehaviour {
 		}
 	}
 	private bool lengthFresh = false;
-	public float upOrderSpring = 1000;
-	public float upOrderDamper = 10;
-	public float downOrderSpring = 0;
-	public float downOrderDamper = 0;
-
+	public ConnectionStats stats;
 
 	void Update()
 	{
@@ -50,7 +39,7 @@ public class Connection : MonoBehaviour {
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
 			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
-			if (ConnectionLength < removeLinkDistance * oddLinkCount)
+			if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
 			{
 				// Maintain the end points.
 				if (links.Count > 2)
@@ -64,7 +53,7 @@ public class Connection : MonoBehaviour {
 				}
 			}
 			// If the connection length requires more connections, create some.
-			else if (ConnectionLength > addLinkDistance * (links.Count + 1))
+			else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
 			{
 				AddLink();
 				if (links.Count % 2 == 0)
@@ -105,16 +94,14 @@ public class Connection : MonoBehaviour {
 				links[i].transform.localScale = linkScale;
 			}
 
-			Shield.transform.position = (attachment1.attachee.transform.position + attachment2.attachee.transform.position) * 0.5f;
-
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
-			float warningDistance = maxDistance * warningDistanceFactor;
-			float actualMidWidth = midWidth * Mathf.Clamp(1 - ((connectionLength - warningDistance) / (maxDistance - warningDistance)), 0, 1);
+			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
+			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((connectionLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
-			attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);//attachment1.attachee.transform.position + betweenPartners * attachment1.attachee.transform.localScale.magnitude * attachPointDistance;
-			attachment2.position = attachment2.attachee.transform.position + attachment2.attachee.transform.TransformDirection(attachment2.offset);//attachment2.attachee.transform.position - betweenPartners * attachment2.attachee.transform.localScale.magnitude * attachPointDistance;
+			attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);
+			attachment2.position = attachment2.attachee.transform.position + attachment2.attachee.transform.TransformDirection(attachment2.offset);
 
 			// Place attachment points with attached characters.
 			links[0].transform.position = attachment1.position;
@@ -150,9 +137,9 @@ public class Connection : MonoBehaviour {
 				attachment1.lineRenderer.SetPosition(links.Count / 2, links[links.Count / 2].transform.position);
 				attachment2.lineRenderer.SetPosition(0, links[links.Count / 2].transform.position);
 			}
-	
-			attachment1.lineRenderer.SetWidth(endsWidth, actualMidWidth);
-			attachment2.lineRenderer.SetWidth(actualMidWidth, endsWidth);
+
+			attachment1.lineRenderer.SetWidth(stats.endsWidth, actualMidWidth);
+			attachment2.lineRenderer.SetWidth(actualMidWidth, stats.endsWidth);
 
 			// Disconnect if too far apart.
 			if (actualMidWidth <= 0)
@@ -160,16 +147,6 @@ public class Connection : MonoBehaviour {
 				BreakConnection();
 
 			}
-
-			if (connectionLength < 1.5f)
-			{
-				//Shield.SendMessage("Activate", SendMessageOptions.DontRequireReceiver);
-			}
-			else
-			{
-				//Shield.SendMessage("DeActivate", SendMessageOptions.DontRequireReceiver);
-			}
-
 		}
 	}
 	public void BreakConnection()
@@ -210,6 +187,13 @@ public class Connection : MonoBehaviour {
 
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
+
+		links[0].jointPrevious.connectedBody = attachee1.GetComponent<Rigidbody>();
+		links[0].jointNext.connectedBody = links[1].body;
+		links[1].jointPrevious.connectedBody = links[0].body;
+		links[1].jointNext.connectedBody = attachee2.GetComponent<Rigidbody>();
+
+		WeightJoints();
 
 		attachee1.SendMessage("ConnectionMade", attachee2, SendMessageOptions.DontRequireReceiver);
 		attachee2.SendMessage("ConnectionMade", attachee1, SendMessageOptions.DontRequireReceiver);
@@ -268,51 +252,51 @@ public class Connection : MonoBehaviour {
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		for (int i = 1; i < links.Count - 1; i++)
 		{
+			int prevLinkOrderLevel = (i > 0) ? links[i - 1].orderLevel : -1;
+			int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
+
 			if (links[i].jointPrevious != null)
 			{
-				if (links[i].orderLevel < links[i - 1].orderLevel)
+				if (links[i].orderLevel < prevLinkOrderLevel)
 				{
-					links[i].jointPrevious.spring = downOrderSpring;
-					links[i].jointPrevious.damper = downOrderDamper;
+					links[i].jointPrevious.spring = stats.downOrderSpring;
+					links[i].jointPrevious.damper = stats.downOrderDamper;
 				}
-				else if (links[i].orderLevel == links[i - 1].orderLevel)
+				else if (links[i].orderLevel == prevLinkOrderLevel)
 				{
-					links[i].jointPrevious.spring = upOrderSpring / 2;
-					links[i].jointPrevious.damper = upOrderDamper / 2;
+					links[i].jointPrevious.spring = stats.upOrderSpring / 2;
+					links[i].jointPrevious.damper = stats.upOrderDamper / 2;
 				}
 				else
 				{
-					links[i].jointPrevious.spring = upOrderSpring;
-					links[i].jointPrevious.damper = upOrderDamper;
+					links[i].jointPrevious.spring = stats.upOrderSpring;
+					links[i].jointPrevious.damper = stats.upOrderDamper;
 				}
 			}
 			if (links[i].jointNext != null)
 			{
-				if (links[i].orderLevel < links[i + 1].orderLevel)
+				if (links[i].orderLevel < nextLinkOrderLevel)
 				{
-					links[i].jointNext.spring = downOrderSpring;
-					links[i].jointNext.damper = downOrderDamper;
+					links[i].jointNext.spring = stats.downOrderSpring;
+					links[i].jointNext.damper = stats.downOrderDamper;
 				}
-				else if (links[i].orderLevel == links[i - 1].orderLevel)
+				else if (links[i].orderLevel == nextLinkOrderLevel)
 				{
-					links[i].jointNext.spring = upOrderSpring / 2;
-					links[i].jointNext.damper = upOrderDamper / 2;
+					links[i].jointNext.spring = stats.upOrderSpring / 2;
+					links[i].jointNext.damper = stats.upOrderDamper / 2;
 				}
 				else
 				{
-					links[i].jointNext.spring = upOrderSpring;
-					links[i].jointNext.damper = upOrderDamper;
+					links[i].jointNext.spring = stats.upOrderSpring;
+					links[i].jointNext.damper = stats.upOrderDamper;
 				}
 			}
 		}
-	}
 
-	void OnTriggerEnter(Collider collide)
-	{
-		if(collide.gameObject.tag == "enemyPulse")
-		{
-			BreakConnection();
-		}
+		links[0].jointPrevious.spring = stats.attachSpring1;
+		links[0].jointNext.spring = stats.attachSpring1;
+		links[links.Count - 1].jointPrevious.spring = stats.attachSpring2;
+		links[links.Count - 1].jointNext.spring = stats.attachSpring2;
 	}
 }
 
@@ -323,4 +307,21 @@ public class ConnectionAttachment
 	public Vector3 position;
 	public Vector3 offset;
 	public LineRenderer lineRenderer;
+}
+
+[System.Serializable]
+public class ConnectionStats
+{
+	public float attachSpring1 = 0;
+	public float attachSpring2 = 0;
+	public float maxDistance = 25;
+	public float relativeWarningDistance = 0.5f;
+	public float endsWidth = 0.02f;
+	public float midWidth = 0.5f;
+	public float addLinkDistance = 0.5f;
+	public float removeLinkDistance = 0.3f;
+	public float upOrderSpring = 10000;
+	public float upOrderDamper = 5;
+	public float downOrderSpring = 5000;
+	public float downOrderDamper = 0;
 }
