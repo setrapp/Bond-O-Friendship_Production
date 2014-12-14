@@ -27,9 +27,9 @@ public class SlideWall : MonoBehaviour {
 		transform.localScale = new Vector3(transform.localScale.x, originalYScale*(1 - scaling), transform.localScale.z);
 
 		if(name == "Stone Gate")
-			transform.position = new Vector3(transform.position.x, originalYPos - (originalYScale*0.5f*scaling), transform.position.z);
+			transform.position = new Vector3(transform.position.x, originalYPos + (originalYScale*0.5f*scaling), transform.position.z);
 
 		if(name == "Stone Gate 2")
-			transform.position = new Vector3(transform.position.x, originalYPos + (originalYScale*0.5f*scaling), transform.position.z);
+			transform.position = new Vector3(transform.position.x, originalYPos - (originalYScale*0.5f*scaling), transform.position.z);
 	}
 }

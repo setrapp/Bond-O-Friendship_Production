@@ -72,7 +72,7 @@ public class SpawnLeaves : MonoBehaviour {
 				xPos = Random.Range(transform.position.x - halfWidth, transform.position.x + halfWidth);
 				yPos = Random.Range(transform.position.y - halfHeight, transform.position.y + halfHeight);
 
-				leaf.transform.position = new Vector3(xPos, yPos, -0.97f); 
+				leaf.transform.position = new Vector3(xPos, yPos, -2); 
 				leaves[leafCount] = leaf;
 				leafCount++;
 				leaf.transform.parent = GameObject.Find ("Objects").transform;
