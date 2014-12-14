@@ -18,7 +18,8 @@ public class FluffGenerator : MonoBehaviour {
 	private float velocity;
 	private Vector3 targetAngle;
 	private Vector3 baseTarget;
-	public PulseShot pulseShot;
+	//public PulseShot pulseShot;
+	public ConnectionAttachable connectionAttachable;
 
 	// Use this for initialization
 	void Start () {
@@ -66,7 +67,7 @@ public class FluffGenerator : MonoBehaviour {
 		else
 			targetAngle = Quaternion.Euler(0, 0, Random.Range(-120, 31)) * new Vector3(velocity,velocity,0);
 		//movePulse.target = transform.position + targetAngle;
-		movePulse.creator = pulseShot;
+		movePulse.creator = connectionAttachable;
 		movePulse.Pass(targetAngle, this.gameObject);
 	}
 }

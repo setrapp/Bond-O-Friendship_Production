@@ -90,12 +90,12 @@ public class FloatMoving : MonoBehaviour {
 		}
 	}
 
-	private void ConnectionMade(PartnerLink connectedPartner)
+	private void ConnectionMade(ConnectionAttachable connectionPartner)
 	{
 		ApplyFloatStats();
 	}
 
-	private void ConnectionBroken(PartnerLink disConnectedPartner)
+	private void ConnectionBroken(ConnectionAttachable disconnectedPartner)
 	{
 		ApplyFloatStats();
 	}

@@ -250,6 +250,7 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
+			newFluffInfo.creator = partnerLink.connectionAttachable;
 			fluffs.Add(newFluffInfo);
 		}
 	}
