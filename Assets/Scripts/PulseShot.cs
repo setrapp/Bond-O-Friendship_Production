@@ -62,7 +62,7 @@ public class PulseShot : MonoBehaviour {
 		for (int i = 0; i < fluffSpawn.fluffs.Count; i++)
 		{
 			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDirection);
-			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffSpawn.fluffs[i].gameObject != fluffSpawn.spawnedFluff)
+			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffSpawn.fluffs[i] != fluffSpawn.spawnedFluff)
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
 				passFluffs.Add(fluffSpawn.fluffs[i].gameObject);
