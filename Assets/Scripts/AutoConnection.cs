@@ -17,7 +17,7 @@ public class AutoConnection : MonoBehaviour {
 		{
 			newConnection.stats = statsHolder.stats;
 		}
-		//newConnection.AttachPartners(this, connectionPoint, connectionPartner, connectionPartner.transform.position);
+		// TODO this should be able to happen in reverse order (pulling attachments is buggy).
 		newConnection.AttachPartners(attachable2, attachable2.transform.position, attachable1, attachable1.transform.position + attachable1.transform.InverseTransformDirection(connectionOffset));
 	}
 }

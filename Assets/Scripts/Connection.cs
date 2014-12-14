@@ -31,6 +31,29 @@ public class Connection : MonoBehaviour {
 	{
 		lengthFresh = false;
 
+		// Only maintain a spring joint to connected objects if the attachment springs have more than zero force.
+		if (stats.attachSpring1 <= 0 && (links[0].jointPrevious.connectedBody != null || links[0].jointNext.connectedBody != null))
+		{
+			links[0].jointPrevious.connectedBody = null;
+			links[0].jointNext.connectedBody = null;
+		}
+		else if (stats.attachSpring1 > 0 && (links[0].jointPrevious.connectedBody == null || links[0].jointNext.connectedBody == null))
+		{
+			links[0].jointPrevious.connectedBody = attachment1.attachee.GetComponent<Rigidbody>();
+			links[0].jointNext.connectedBody = links[1].body;
+		}
+		if (stats.attachSpring2 <= 0 && (links[links.Count - 1].jointPrevious.connectedBody != null || links[links.Count - 1].jointNext.connectedBody != null))
+		{
+			links[links.Count - 1].jointPrevious.connectedBody = null;
+			links[links.Count - 1].jointNext.connectedBody = null;
+		}
+		else if (stats.attachSpring2 > 0 && (links[links.Count - 1].jointPrevious.connectedBody == null || links[links.Count - 1].jointNext.connectedBody == null))
+		{
+			links[links.Count - 1].jointPrevious.connectedBody = links[links.Count - 2].body;
+			links[links.Count - 1].jointNext.connectedBody = attachment2.attachee.GetComponent<Rigidbody>();
+		}
+
+
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
 			bool isCountEven = links.Count % 2 == 0;

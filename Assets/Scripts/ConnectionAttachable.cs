@@ -15,7 +15,7 @@ public class ConnectionAttachable : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		if (pulse != null)
+		if (handleFluffAttachment && pulse != null)
 		{
 			AttemptConnection(pulse);
 		}
@@ -24,7 +24,7 @@ public class ConnectionAttachable : MonoBehaviour {
 	public Connection AttemptConnection(MovePulse connectionFluff)
 	{
 		Connection newConnection = null;
-		if (connectionFluff == null || connectionFluff.creator == null)
+		if (connectionFluff == null || connectionFluff.creator == null || connectionFluff.creator == this)
 		{
 			return newConnection;
 		}
@@ -66,6 +66,8 @@ public class ConnectionAttachable : MonoBehaviour {
 					{
 						newConnection.stats = statsHolder.stats;
 					}
+
+					// TODO this should be able to happen in reverse order (pulling attachments is buggy).
 					//newConnection.AttachPartners(this, connectionPoint, connectionPartner, connectionPartner.transform.position);
 					newConnection.AttachPartners(connectionPartner, connectionPartner.transform.position, this, connectionPoint);
 					volleys = 0;
