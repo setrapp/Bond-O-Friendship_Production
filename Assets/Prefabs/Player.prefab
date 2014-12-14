@@ -116,6 +116,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11400018}
   m_Layer: 13
   m_Name: Player
   m_TagString: Converser
@@ -202,7 +203,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106709}
+  m_LocalRotation: {x: .707106888, y: 0, z: 0, w: .707106769}
   m_LocalPosition: {x: 0, y: -.00999999978, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -255,7 +256,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: -7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -549,6 +550,7 @@ MonoBehaviour:
   flashFadeTime: 1
   trail: {fileID: 9600000}
   pulseShot: {fileID: 0}
+  connectionAttachable: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
   tracer: {fileID: 0}
@@ -581,6 +583,7 @@ MonoBehaviour:
   playerNumber: 0
   joystickNumber: 0
   canvasStart: {fileID: 100018}
+  canvasPaused: {fileID: 0}
   absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 0
   otherPlayerInput: {fileID: 0}
@@ -633,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullableBody: {fileID: 0}
   noKinematicOnPull: 0
+  allowSway: 0
   bodyMassFactor: 1
   pullMass: 10000
   maxPullForce: 0
@@ -699,6 +703,26 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &11400018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleFluffAttachment: 0
+  connectAtFluffPoint: 0
+  connectionOffset: {x: 0, y: 0, z: 0}
+  attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
+  connectionPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  connections: []
+  volleysToConnect: 2
+  volleys: 0
+  volleyPartner: {fileID: 0}
 --- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -31,10 +31,10 @@ public class RingPulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.name == "Shield")
-		{
-			gameObject.GetComponent<Collider>().enabled = false;
-		}
+		//if(collide.gameObject.name == "Shield")
+		//{
+		//	gameObject.GetComponent<Collider>().enabled = false;
+		//}
 		//if(collide.gameObject.tag == "Converser")
 		//{
 		//	gameObject.GetComponent<Collider>().enabled = false;

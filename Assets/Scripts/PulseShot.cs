@@ -109,7 +109,7 @@ public class PulseShot : MonoBehaviour {
 			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
 			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
 			movePulse.transform.parent = transform.parent;
-			movePulse.creator = this;
+			//movePulse.creator = this;
 			movePulse.capacity = pulseCapacity;
 			movePulse.volleyPartner = lastPulseAccepted;
 			shotAngle += shotSpread / passFluffCount;
