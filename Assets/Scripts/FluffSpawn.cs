@@ -14,11 +14,13 @@ public class FluffSpawn : MonoBehaviour {
 	public float spawnTime;
 	private float sinceSpawn;
 	public float startingFluff;
-	public GameObject spawnedFluff;
+	public MovePulse spawnedFluff;
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
 	private float oldSpeed;
+	private bool wasSlowing;
+	private Vector3 oldForward;
 	[HideInInspector]
 	public PartnerLink partnerLink;
 	private FluffStick fluffStick;
@@ -44,6 +46,8 @@ public class FluffSpawn : MonoBehaviour {
 		}
 		
 		sinceSpawn = 0;
+		oldForward = transform.forward;
+		wasSlowing = false;
 	}
 
 	void FixedUpdate()
@@ -79,11 +83,14 @@ public class FluffSpawn : MonoBehaviour {
 		if(spawnedFluff != null)
 		{
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
+			spawnedFluff.oldBulbPos = spawnedFluff.bulb.transform.position;
 			if(spawnedFluff.transform.localPosition == endPosition)
 			{
 				spawnedFluff = null;
 			}
 		}
+
+		/*TODO rotate fluff constraints to rigidbody direction rather that transform direction.*/
 
 		// Rotate fluffs based on movement.
 		if (body.velocity.sqrMagnitude > 0)
@@ -99,14 +106,22 @@ public class FluffSpawn : MonoBehaviour {
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				// Compute the fluff's resting direction in world space.
-				Vector3 worldBaseDirection = transform.InverseTransformDirection(fluffs[i].baseDirection);
+				Vector3 worldBaseDirection = fluffs[i].baseDirection;
+				worldBaseDirection = transform.InverseTransformDirection(worldBaseDirection);
 				worldBaseDirection.x *= -1;
 				worldBaseDirection.y = worldBaseDirection.z;
 				worldBaseDirection.z = 0;
-
+				
 				Vector3 fluffDir = fluffs[i].transform.up;
 
-				if (currentByOldSpeed>= 1)
+				// If the character turned about-face from last frame, flip fluffs expected parallel direction.
+				if (Vector3.Dot(transform.forward, oldForward) < 0)
+				{
+					fluffDir *= -1;
+					fluffs[i].oldBulbPos -= (fluffs[i].oldBulbPos - transform.position) * 2;
+				}
+
+				if (currentByOldSpeed >= 1 || !wasSlowing)
 				{
 					// Find the vector from the fluff's root to the position of its head last frame.
 					fluffDir = (fluffs[i].oldBulbPos - fluffs[i].transform.position).normalized;
@@ -160,11 +175,12 @@ public class FluffSpawn : MonoBehaviour {
 					localFluffDir.y = 0;
 					fluffDir = transform.TransformDirection(localFluffDir);
 				}
-
+				
 				fluffs[i].transform.up = fluffDir;
 				fluffs[i].oldBulbPos = fluffs[i].bulb.transform.position;
 			}
 
+			wasSlowing = currentByOldSpeed < 1;
 			oldSpeed = currentSpeed;
 		}
 		else if (oldSpeed > 0)
@@ -179,6 +195,7 @@ public class FluffSpawn : MonoBehaviour {
 			}
 			oldSpeed = 0;
 		}
+		oldForward = transform.forward;
 	}
 
 	public void SpawnFluff(bool instantSprout = false, Material useMaterial = null)
@@ -193,10 +210,13 @@ public class FluffSpawn : MonoBehaviour {
 			newFluff.transform.localEulerAngles = fluffRotation;
 			Vector3 tempEndPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
 			tempEndPosition = transform.InverseTransformPoint(tempEndPosition);
-			
+
+			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
+
 			if (instantSprout)
 			{
 				newFluff.transform.localPosition = tempEndPosition;
+				newFluffInfo.oldBulbPos = newFluffInfo.bulb.transform.position;
 			}
 			else
 			{
@@ -207,11 +227,10 @@ public class FluffSpawn : MonoBehaviour {
 				}
 
 				endPosition = tempEndPosition;
-				spawnedFluff = newFluff;
+				spawnedFluff = newFluffInfo;
 				newFluff.transform.position += newFluff.transform.up * spawnOffset * (Time.deltaTime / spawnTime);
 			}
 			
-			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 			newFluffInfo.baseAngle = fluffRotation.z;
 
 			newFluffInfo.baseDirection = newFluff.transform.up;
@@ -233,6 +252,7 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
+			newFluffInfo.creator = partnerLink.connectionAttachable;
 			fluffs.Add(newFluffInfo);
 		}
 	}

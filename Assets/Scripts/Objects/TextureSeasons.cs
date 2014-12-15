@@ -20,7 +20,7 @@ public class TextureSeasons : MonoBehaviour {
 	public Material spring3;
 	public Material springWall;
 
-	private float timer = 10.0f;
+	public float timer = 30.0f;
 	private float changeSpeed = 0.01f;
 	public int season;
 	private Renderer seasonRenderer;
@@ -38,7 +38,7 @@ public class TextureSeasons : MonoBehaviour {
 			season++;
 			if(season == 4)
 				season = 0;
-			timer = 7.0f;
+			timer = 30.0f;
 		}
 		switch(season)
 		{

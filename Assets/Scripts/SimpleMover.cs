@@ -54,7 +54,7 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		// Move, using rigidbody if attached.
-		if (body != null)
+		if (body != null && !body.isKinematic)
 		{
 			body.velocity = velocity;
 		}
@@ -68,7 +68,7 @@ public class SimpleMover : MonoBehaviour {
 		if (velocity.sqrMagnitude < Mathf.Pow(cutSpeedThreshold, 2)) {
 			velocity = Vector3.zero;
 			unfixedVelocity = Vector3.zero;
-			if (body != null)
+			if (body != null && !body.isKinematic)
 			{
 				body.velocity = Vector3.zero;
 			}			
@@ -85,7 +85,7 @@ public class SimpleMover : MonoBehaviour {
 	{
 		velocity = Vector3.zero;
 		unfixedVelocity = Vector3.zero;
-		if (body != null)
+		if (body != null && !body.isKinematic)
 		{
 			body.velocity = Vector3.zero;
 		}

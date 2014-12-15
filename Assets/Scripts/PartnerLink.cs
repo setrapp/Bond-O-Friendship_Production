@@ -6,10 +6,11 @@ public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
-	public Renderer flashRenderer;
+	public SpriteRenderer flashRenderer;
 	public float flashFadeTime = 1;
 	public TrailRenderer trail;
 	public PulseShot pulseShot;
+	public ConnectionAttachable connectionAttachable;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
@@ -27,11 +28,15 @@ public class PartnerLink : MonoBehaviour {
 	public float preChargeScale;
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
+	public bool connectionAbsorb = true;
+	public float connectionOffsetFactor = 0.5f;
 	public bool absorbing = false;
-	private bool wasAbsorbing;
+	private bool slowing = false;
+	private bool wasSlowing = false;
 	public float absorbSpeedFactor = 0;
 	public int volleysToConnect = 2;
 	private List<MovePulse> fluffsToAdd;
+	private FloatMoving floatMove;
 
 	void Awake()
 	{
@@ -47,15 +52,21 @@ public class PartnerLink : MonoBehaviour {
 		{
 			pulseShot = GetComponent<PulseShot>();
 		}
+		if (connectionAttachable == null)
+		{
+			connectionAttachable = GetComponent<ConnectionAttachable>();
+		}
 
+		floatMove = GetComponent<FloatMoving>();
 		SetFlashAndFill(new Color(0, 0, 0, 0));
 	}
 	
 	void Update()
 	{
-		if (absorbing != wasAbsorbing)
+		slowing = absorbing && !floatMove.Floating;
+		if (slowing != wasSlowing)
 		{
-			if (absorbing)
+			if (slowing)
 			{
 				mover.externalSpeedMultiplier += absorbSpeedFactor;
 			}
@@ -63,15 +74,21 @@ public class PartnerLink : MonoBehaviour {
 			{
 				mover.externalSpeedMultiplier -= absorbSpeedFactor;
 			}
-			wasAbsorbing = absorbing;
+			wasSlowing = slowing;
 		}
 
 
-		if (flashRenderer.material.color.a > 0)
+		if (flashRenderer.color.a > 0)
 		{
-			Color newFlashColor = flashRenderer.material.color;
+			Color newFlashColor = flashRenderer.color;
 			newFlashColor.a = Mathf.Max(newFlashColor.a - (Time.deltaTime / flashFadeTime), 0);
 			SetFlashAndFill(newFlashColor);
+			if (connectionAttachable.volleyPartner != null)
+			{
+				Vector3 toPartner = connectionAttachable.volleyPartner.transform.position - transform.position;
+				toPartner.z = 0;
+				flashRenderer.transform.parent.up = toPartner;
+			}
 		}
 
 		if (fluffsToAdd != null)
@@ -103,39 +120,13 @@ public class PartnerLink : MonoBehaviour {
 
 	public void AttachFluff(MovePulse pulse)
 	{
-		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || !pulse.attachee.possessive))
+		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || pulse.attachee.gameObject == gameObject || !pulse.attachee.possessive))
 		{
-			if (pulse.creator != null && pulse.creator != pulseShot)
-			{
-				pulseShot.volleys = 1;
-				pulseShot.volleyPartner = pulse.creator;
-				if (pulse.creator.volleyPartner == pulseShot)
-				{
-					pulseShot.volleys = pulse.creator.volleys + 1;
-				}
-				if (pulseShot.volleys >= volleysToConnect)
-				{
-					bool connectionAlreadyMade = false;
-					for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
-					{
-						if ((connections[i].attachment1.partner == this && connections[i].attachment2.partner == pulse.creator.partnerLink) || (connections[i].attachment2.partner == this && connections[i].attachment1.partner == pulse.creator.partnerLink))
-						{
-							connectionAlreadyMade = true;
-						}
-					}
-					if (!connectionAlreadyMade)
-					{
-						Connection newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
-						connections.Add(newConnection);
-						pulse.creator.partnerLink.connections.Add(newConnection);
-						newConnection.AttachPartners(pulse.creator.partnerLink, this);
-						pulseShot.volleys = 0;
-						pulse.creator.volleys = 0;
-					}
-				}
+			connectionAttachable.AttemptConnection(pulse);
 
-				SetFlashAndFill(pulse.creator.partnerLink.headRenderer.material.color);
-				pulseShot.lastPulseAccepted = pulse.creator;
+			if (pulse.creator != null && pulse.creator != connectionAttachable)
+			{
+				SetFlashAndFill(pulse.creator.attachmentColor);
 			}
 
 			if (fluffsToAdd == null)
@@ -148,7 +139,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void SetFlashAndFill(Color newFlashColor)
 	{
-		flashRenderer.material.color = newFlashColor;
+		flashRenderer.color = newFlashColor;
 		Color newFillColor = fillRenderer.material.color;
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
