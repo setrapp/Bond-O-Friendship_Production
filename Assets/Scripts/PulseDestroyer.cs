@@ -44,7 +44,16 @@ public class PulseDestroyer : MonoBehaviour {
 		{
 			for (int i = toDestroy.Count - 1; i >= 0; i--)
 			{
-				Destroy(toDestroy[i]);
+				MovePulse fluff = toDestroy[i].GetComponent<MovePulse>();
+				if (fluff != null)
+				{
+					fluff.StopMoving();
+					fluff.PopFluff();
+				}
+				else
+				{
+					Destroy(toDestroy[i]);
+				}
 				toDestroy.RemoveAt(i);
 			}
 			toDestroy.Clear();

@@ -31,6 +31,7 @@ public class MovePulse : MonoBehaviour {
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
+	public Animation popAnimation;
 
 	void Awake()
 	{
@@ -254,6 +255,30 @@ public class MovePulse : MonoBehaviour {
 			}
 		}
 		return blocked;
+	}
+
+	public void PopFluff()
+	{
+		if (popAnimation != null)
+		{
+			if(!popAnimation.isPlaying)
+			{
+				popAnimation.Play();
+				Destroy(gameObject, popAnimation.clip.length);
+			}
+		}
+		else
+		{
+			//Destroy(gameObject);
+		}
+	}
+
+	public void StopMoving()
+	{
+		if (mover != null)
+		{
+			mover.Stop();
+		}
 	}
 
 	void OnCollisionEnter(Collision collision)

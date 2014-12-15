@@ -257,19 +257,28 @@ public class FluffSpawn : MonoBehaviour {
 		}
 	}
 
-	public void DestroyAllFluffs()
+	public void DestroyAllFluffs(bool popFluff = true)
 	{
 		for (int i = fluffs.Count - 1; i >= 0; i--)
 		{
-			DestroyFluff(fluffs[i]);
+			DestroyFluff(fluffs[i], popFluff);
 		}
 	}
 
-	public void DestroyFluff(MovePulse fluffToDestroy)
+	public void DestroyFluff(MovePulse fluffToDestroy, bool popFluff = true)
 	{
 		if (fluffs.Contains(fluffToDestroy))
 		{
-			Destroy(fluffToDestroy.gameObject);
+			if (popFluff)
+			{
+				fluffToDestroy.PopFluff();
+				fluffToDestroy.transform.parent = transform.parent;
+				fluffToDestroy.StopMoving();
+			}
+			else
+			{
+				Destroy(fluffToDestroy.gameObject);
+			}
 			fluffs.Remove(fluffToDestroy);
 		}
 	}
