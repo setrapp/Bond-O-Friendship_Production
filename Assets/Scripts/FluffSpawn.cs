@@ -90,6 +90,8 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
+		/*TODO rotate fluff constraints to rigidbody direction rather that transform direction.*/
+
 		// Rotate fluffs based on movement.
 		if (body.velocity.sqrMagnitude > 0)
 		{
@@ -134,7 +136,7 @@ public class FluffSpawn : MonoBehaviour {
 					float localBaseDotMove = Vector3.Dot(fluffs[i].baseDirection, -localFullBackDir);
 
 					// If pushed direction is beyond constraints, compute the fluff direction at the constraints.
-					if (true)//baseDotPushed < constrainedDot || localBaseDotMove > 1)
+					if (baseDotPushed < constrainedDot || localBaseDotMove > 1)
 					{
 						// If the fluff is on the right side, negate its vertical component.
 						Vector3 expectedRight = Vector3.right;
@@ -160,7 +162,7 @@ public class FluffSpawn : MonoBehaviour {
 				else
 				{
 					// Localize the current fluff direction.
-					/*Vector3 localFluffDir = transform.InverseTransformDirection(fluffDir);
+					Vector3 localFluffDir = transform.InverseTransformDirection(fluffDir);
 					localFluffDir.y = localFluffDir.z;
 					localFluffDir.z = 0;
 
@@ -171,7 +173,7 @@ public class FluffSpawn : MonoBehaviour {
 					// Worldize new fluff direction.
 					localFluffDir.z = localFluffDir.y;
 					localFluffDir.y = 0;
-					fluffDir = transform.TransformDirection(localFluffDir);*/
+					fluffDir = transform.TransformDirection(localFluffDir);
 				}
 				
 				fluffs[i].transform.up = fluffDir;
