@@ -176,11 +176,8 @@ public class PlayerInput : MonoBehaviour {
 					if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
 					{
 						velocityChange += Vector3.right;
-					}
-				
-				
+					}				
 				}
-				//velocityChange *= mover.maxSpeed;
 
 				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)

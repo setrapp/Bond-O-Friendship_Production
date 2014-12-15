@@ -29,10 +29,12 @@ public class PartnerLink : MonoBehaviour {
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
 	public bool absorbing = false;
-	private bool wasAbsorbing;
+	private bool slowing = false;
+	private bool wasSlowing = false;
 	public float absorbSpeedFactor = 0;
 	public int volleysToConnect = 2;
 	private List<MovePulse> fluffsToAdd;
+	private FloatMoving floatMove;
 
 	void Awake()
 	{
@@ -53,14 +55,16 @@ public class PartnerLink : MonoBehaviour {
 			connectionAttachable = GetComponent<ConnectionAttachable>();
 		}
 
+		floatMove = GetComponent<FloatMoving>();
 		SetFlashAndFill(new Color(0, 0, 0, 0));
 	}
 	
 	void Update()
 	{
-		if (absorbing != wasAbsorbing)
+		slowing = absorbing && !floatMove.Floating;
+		if (slowing != wasSlowing)
 		{
-			if (absorbing)
+			if (slowing)
 			{
 				mover.externalSpeedMultiplier += absorbSpeedFactor;
 			}
@@ -68,7 +72,7 @@ public class PartnerLink : MonoBehaviour {
 			{
 				mover.externalSpeedMultiplier -= absorbSpeedFactor;
 			}
-			wasAbsorbing = absorbing;
+			wasSlowing = slowing;
 		}
 
 
