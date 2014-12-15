@@ -223,9 +223,34 @@ public class PlayerInput : MonoBehaviour {
 				if (livePulseMove != null)
 				{
 					bool fluffAttachedToSelf = (livePulseMove.attachee != null && livePulseMove.attachee.gameObject == gameObject);
-					if (!fluffAttachedToSelf && Vector3.SqrMagnitude(livePulseMove.transform.position - transform.position) < Mathf.Pow(absorbStrength, 2))
+					if (!fluffAttachedToSelf)
 					{
-						livePulseMove.Pull(gameObject, pullSpeed);
+						float fluffSqrDist = (livePulseMove.transform.position - transform.position).sqrMagnitude;
+						Vector3 absorbOffset = Vector3.zero;
+						// If the fluff is too far to be absorbed directly and absorption through the connection is enabled, attempt connection absorption.
+						if (fluffSqrDist > Mathf.Pow(absorbStrength, 2) && partnerLink.connectionAbsorb)
+						{
+							float nearSqrDist = fluffSqrDist;
+							for (int i = 0; i < partnerLink.connectionAttachable.connections.Count; i++)
+							{
+								// Only check connection distance to fluff if the connection is at least as long as the distance from this to the fluff.
+								if (Mathf.Pow(partnerLink.connectionAttachable.connections[i].ConnectionLength, 2) >= fluffSqrDist)
+								{
+									Vector3 nearConnection = partnerLink.connectionAttachable.connections[i].NearestPoint(livePulse.transform.position);
+									float sqrDist = (livePulse.transform.position - nearConnection).sqrMagnitude;
+									if (sqrDist < nearSqrDist)
+									{
+										nearSqrDist = sqrDist;
+										absorbOffset = (nearConnection - transform.position) * partnerLink.connectionOffsetFactor;
+									}
+								}
+							}
+							fluffSqrDist = nearSqrDist;
+						}
+						if (fluffSqrDist <= Mathf.Pow(absorbStrength, 2))
+						{
+							livePulseMove.Pull(gameObject, absorbOffset, pullSpeed);
+						}
 					}
 				}
 			}

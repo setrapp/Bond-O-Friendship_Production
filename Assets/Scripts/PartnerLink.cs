@@ -28,6 +28,8 @@ public class PartnerLink : MonoBehaviour {
 	public float preChargeScale;
 	public float scaleRestoreRate;
 	public float endChargeRestoreRate;
+	public bool connectionAbsorb = true;
+	public float connectionOffsetFactor = 0.5f;
 	public bool absorbing = false;
 	private bool slowing = false;
 	private bool wasSlowing = false;

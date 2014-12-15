@@ -325,6 +325,62 @@ public class Connection : MonoBehaviour {
 		links[links.Count - 1].jointPrevious.spring = stats.attachSpring2;
 		links[links.Count - 1].jointNext.spring = stats.attachSpring2;
 	}
+
+	public Vector3 NearestPoint(Vector3 checkPoint)
+	{
+		if (links.Count < 2)
+		{
+			return Vector3.zero;
+		}
+
+		int nearIndex = 0;
+		Vector3 nearPos = links[nearIndex].transform.position;
+		float nearSqrDist = (checkPoint - nearPos).sqrMagnitude;
+
+		// Find the nearest joint.
+		for (int i = 1; i < links.Count; i++)
+		{
+			float sqrDist = (checkPoint - links[i].transform.position).sqrMagnitude;
+			if (sqrDist < nearSqrDist)
+			{
+				nearSqrDist = sqrDist;
+				nearIndex = i;
+				nearPos = links[nearIndex].transform.position;
+			}
+		}
+
+		// Find the position of the neighbor nearest to the check point.
+		Vector3 neighborPos;
+		if (nearIndex == 0)
+		{
+			neighborPos = links[nearIndex + 1].transform.position;
+		}
+		else if (nearIndex == links.Count - 1)
+		{
+			neighborPos = links[nearIndex - 1].transform.position;
+		}
+		else
+		{
+			if ((checkPoint - links[nearIndex + 1].transform.position).sqrMagnitude < (checkPoint - links[nearIndex - 1].transform.position).sqrMagnitude)
+			{
+				neighborPos = links[nearIndex + 1].transform.position;
+			}
+			else
+			{
+				neighborPos = links[nearIndex - 1].transform.position;
+			}
+		}
+
+		// Find the nearest point on the line between the nearest joint and its neighbor.
+		Vector3 toCheckOnLine = Helper.ProjectVector(neighborPos - nearPos, checkPoint - nearPos);
+		Vector3 nearestPos = nearPos + toCheckOnLine;
+		if (Vector3.Dot(nearestPos - nearPos, neighborPos - nearPos) < 0)
+		{
+			nearestPos = nearPos;
+		}
+
+		return nearestPos;
+	}
 }
 
 [System.Serializable]
