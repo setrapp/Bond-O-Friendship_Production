@@ -189,7 +189,7 @@ public class PlayerInput : MonoBehaviour {
 				{
 					mover.slowDown = true;
 				}
-				transform.LookAt(transform.position + mover.velocity, transform.up);
+				transform.LookAt(transform.position + velocityChange, transform.up);
 
 				if(absorb != null)
 				{
