@@ -28,6 +28,8 @@ public class SpawnLeaves : MonoBehaviour {
 	private Color startColor;
 	private int leafArraySize;
 
+	public float nearPlayerDistance;
+
 	// Use this for initialization
 	void Start () {
 		halfWidth = GetComponent<Collider>().bounds.extents.x;
@@ -48,6 +50,12 @@ public class SpawnLeaves : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		season = GetComponent<TextureSeasons>().season;
+
+		nearPlayerDistance = Vector3.Distance(transform.position, player1.transform.position);
+		if (Vector3.Distance(transform.position, player2.transform.position) < nearPlayerDistance)
+		{
+			nearPlayerDistance = Vector3.Distance(transform.position, player2.transform.position);
+		}
 
 		if(season == 0 && leafCount < area)
 		{
@@ -78,7 +86,29 @@ public class SpawnLeaves : MonoBehaviour {
 				leaf.transform.parent = GameObject.Find ("Objects").transform;
 				leaf.GetComponent<Renderer>().material.color = startColor;
 			}
+
 		}
+
+		if (leafCount > 0 && season == 0)
+		{
+			if(Vector3.Distance(transform.position, player1.transform.position) > spawnRange && Vector3.Distance(transform.position, player2.transform.position) > spawnRange)
+			{
+				//Debug.Log(leafArraySize);
+				for(int i = 0; i < leafArraySize; i++)
+				{
+					//					if(leaves[i] != null)
+					//						leaves[i].GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+					if(leaves[i] != null)
+					{
+						Destroy(leaves[i].gameObject);
+						//Debug.Log (gameObject.name + " " + leaves.Length);
+						leafCount--;
+					}
+				}	
+			}
+
+		}
+		
 		if(season == 0 && leafCount > 0)
 		{
 
