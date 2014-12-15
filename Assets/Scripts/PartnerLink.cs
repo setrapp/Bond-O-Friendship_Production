@@ -6,7 +6,7 @@ public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
 	public Renderer headRenderer;
 	public Renderer fillRenderer;
-	public Renderer flashRenderer;
+	public SpriteRenderer flashRenderer;
 	public float flashFadeTime = 1;
 	public TrailRenderer trail;
 	public PulseShot pulseShot;
@@ -76,11 +76,17 @@ public class PartnerLink : MonoBehaviour {
 		}
 
 
-		if (flashRenderer.material.color.a > 0)
+		if (flashRenderer.color.a > 0)
 		{
-			Color newFlashColor = flashRenderer.material.color;
+			Color newFlashColor = flashRenderer.color;
 			newFlashColor.a = Mathf.Max(newFlashColor.a - (Time.deltaTime / flashFadeTime), 0);
 			SetFlashAndFill(newFlashColor);
+			if (connectionAttachable.volleyPartner != null)
+			{
+				Vector3 toPartner = connectionAttachable.volleyPartner.transform.position - transform.position;
+				toPartner.z = 0;
+				flashRenderer.transform.parent.up = toPartner;
+			}
 		}
 
 		if (fluffsToAdd != null)
@@ -131,7 +137,7 @@ public class PartnerLink : MonoBehaviour {
 
 	public void SetFlashAndFill(Color newFlashColor)
 	{
-		flashRenderer.material.color = newFlashColor;
+		flashRenderer.color = newFlashColor;
 		Color newFillColor = fillRenderer.material.color;
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
