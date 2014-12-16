@@ -5,6 +5,7 @@ public class Trigger : MonoBehaviour {
 
 	public bool pOneTriggered = false;
 	public bool pTwoTriggered = false;
+	public bool nullTriggered = false;
 	public bool triggered = false;
 	private Color myColor;
 	public GameObject myCenter;
@@ -27,18 +28,15 @@ public class Trigger : MonoBehaviour {
 		if(timedTrigger)
 		{
 
-			if(pOneTriggered || pTwoTriggered)
+			if(pOneTriggered || pTwoTriggered || nullTriggered)
 			{
+				triggered = true;
 				timeCount -= Time.deltaTime;
 				myCenter.transform.localScale = new Vector3((timeCount/2)*centerScale.x,centerScale.y,(timeCount/2)*centerScale.z); 
 			}
 		}
 
-		if(pOneTriggered || pTwoTriggered)
-		{
-			triggered = true;
-		}
-		else if(!pOneTriggered && !pTwoTriggered)
+		if(!pOneTriggered && !pTwoTriggered && !nullTriggered)
 		{
 			triggered = false;
 
@@ -62,19 +60,28 @@ public class Trigger : MonoBehaviour {
 		if(collide.collider.gameObject.tag == "Pulse")
 		{
 			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
-			if(mover.creator != null && mover.creator.name == "Player 1")
+			if (mover != null)
 			{
-				//print("Collide");
-				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
-				pOneTriggered = true;
-				pTwoTriggered = false;
-			}
-			if(mover.creator != null && mover.creator.name == "Player 2")
-			{
-				//print("Collide");
-				GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
-				pOneTriggered = false;
-				pTwoTriggered = true;
+				if(mover.creator != null && mover.creator.name == "Player 1")
+				{
+					//print("Collide");
+					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
+					pOneTriggered = true;
+					pTwoTriggered = false;
+				}
+				else if(mover.creator != null && mover.creator.name == "Player 2")
+				{
+					//print("Collide");
+					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
+					pOneTriggered = false;
+					pTwoTriggered = true;
+				}
+				else
+				{
+					nullTriggered = true;
+					print("Collide");
+				}
+
 			}
 		}
 	}

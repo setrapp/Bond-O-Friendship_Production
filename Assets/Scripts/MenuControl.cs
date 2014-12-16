@@ -195,11 +195,11 @@ public class MenuControl : MonoBehaviour {
 
 		if(Globals.sharing && (Input.GetButtonDown(Globals.playerOneJoystickNumber.ToString() + "Pause") || Input.GetButtonDown(Globals.playerTwoJoystickNumber.ToString() + "Pause")))
 		{
-			Application.LoadLevel("Ceadle 4");
+			Application.LoadLevel("Cradle 4");
 		}
 		if(!Globals.sharing && playerTwoReady && playerOneReady)
 		{
-			Application.LoadLevel("Ceadle 4");
+			Application.LoadLevel("Cradle 4");
 		}
 			
 	}

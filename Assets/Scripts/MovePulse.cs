@@ -114,8 +114,10 @@ public class MovePulse : MonoBehaviour {
 
 		if (moving)
 		{
+			Debug.Log(ignoreCollider);
 			if (ignoreCollider == null && hull.isTrigger)
 			{
+				Debug.Log("hi");
 				hull.isTrigger = false;
 			}
 
