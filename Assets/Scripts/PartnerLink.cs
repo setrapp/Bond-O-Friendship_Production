@@ -8,7 +8,9 @@ public class PartnerLink : MonoBehaviour {
 	public Renderer fillRenderer;
 	public SpriteRenderer flashRenderer;
 	public float flashFadeTime = 1;
-	public TrailRenderer trail;
+	public TrailRenderer leftTrail;
+	public TrailRenderer midTrail;
+	public TrailRenderer rightTrail;
 	public PulseShot pulseShot;
 	public ConnectionAttachable connectionAttachable;
 	public float partnerLineSize = 0.25f;
@@ -16,9 +18,6 @@ public class PartnerLink : MonoBehaviour {
 	public SimpleMover mover;
 	[HideInInspector]
 	public Tracer tracer;
-	public GameObject connectionPrefab;
-	[SerializeField]
-	public List<Connection> connections;
 	[HideInInspector]
 	public float fillScale = 1;
 	public bool empty;
@@ -114,8 +113,6 @@ public class PartnerLink : MonoBehaviour {
 		}
 
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
-
-		trail.startWidth = transform.localScale.x;
 	}
 
 	public void AttachFluff(MovePulse pulse)
@@ -144,13 +141,4 @@ public class PartnerLink : MonoBehaviour {
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
 	}
-
-	private void OnDestroy()
-	{
-		for (int i = 0; i < connections.Count;)
-		{
-			connections[i].BreakConnection();
-		}
-	}
-
 }

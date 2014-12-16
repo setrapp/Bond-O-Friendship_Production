@@ -78,4 +78,12 @@ public class ConnectionAttachable : MonoBehaviour {
 
 		return newConnection;
 	}
+
+	private void OnDestroy()
+	{
+		for (int i = 0; i < connections.Count; )
+		{
+			connections[i].BreakConnection();
+		}
+	}
 }
