@@ -21,7 +21,7 @@ public class TriggerWall : MonoBehaviour {
 		myColor = new Color(0.6f,0.6f,0.6f,alpha);
 		GetComponent<Renderer>().material.color = myColor;
 
-		if(trigger1.GetComponent<Trigger>().triggered && trigger2.GetComponent<Trigger>().triggered)
+		if(trigger1.GetComponent<Trigger>().triggered && trigger2 != null && trigger2.GetComponent<Trigger>().triggered)
 		{
 			FadeNow ();
 		}

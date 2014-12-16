@@ -46,6 +46,7 @@ public class Trigger : MonoBehaviour {
 		{
 			pTwoTriggered = false;
 			pOneTriggered = false;
+			nullTriggered = false;
 			GetComponent<Renderer>().material.color = myColor;
 			myCenter.transform.localScale = centerScale;
 			timeCount = 2.0f;
@@ -79,10 +80,9 @@ public class Trigger : MonoBehaviour {
 				else
 				{
 					nullTriggered = true;
-					print("Collide");
 				}
-
 			}
+			mover.PopFluff();
 		}
 	}
 }
