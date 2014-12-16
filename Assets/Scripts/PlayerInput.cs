@@ -7,10 +7,12 @@ public class PlayerInput : MonoBehaviour {
 	protected Collider tailTrigger;
 	public enum Player{Player1, Player2};
 
-	public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
+	//public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
+
+	public Globals.ControlScheme controlScheme;
 
 	public Player playerNumber;
-	public JoyStick joystickNumber;
+	public Globals.JoyStick joystickNumber;
 	public GameObject canvasStart;
 
 	public GameObject canvasPaused;
@@ -20,6 +22,8 @@ public class PlayerInput : MonoBehaviour {
 	public bool useKeyboard = false;
 
 	public PlayerInput otherPlayerInput;
+
+	public bool sharing = false;
 
 	public GameObject geometry;
 	public float deadZone = .75f;
@@ -43,6 +47,7 @@ public class PlayerInput : MonoBehaviour {
 	private bool paused = false;
 
 	public float pullSpeed;
+	private float i = 0;
 
 	void Start()
 	{
@@ -57,6 +62,28 @@ public class PlayerInput : MonoBehaviour {
 				}
 			}
 		}
+
+		sharing = Globals.sharing;
+		if(playerNumber == Player.Player1)
+		{
+			joystickNumber = Globals.playerOneJoystickNumber;
+			controlScheme = Globals.playerOneControlScheme;
+		}
+		else
+		{
+			if(!sharing)
+			{
+				joystickNumber = Globals.playerTwoJoystickNumber;
+				controlScheme = Globals.playerTwoControlScheme;
+			}
+			else
+			{
+				joystickNumber = Globals.playerOneJoystickNumber;
+				controlScheme = Globals.playerTwoControlScheme;
+			}
+		}
+
+
 	}
 
 	void Update () {
@@ -69,7 +96,7 @@ public class PlayerInput : MonoBehaviour {
 			Application.Quit();
 		}
 
-		if (GetPause() && joystickDetermined)
+		if (GetPause())
 		{
 			if (paused)
 			{
@@ -85,14 +112,19 @@ public class PlayerInput : MonoBehaviour {
 			paused = !paused;
 		}
 
-		var gamepads = Input.GetJoystickNames();
-		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
-		if (useKeyboard && canvasStart.activeInHierarchy)
+		if(playerNumber == Player.Player2)
 		{
-			canvasStart.SetActive(false);
+			Debug.Log(controlScheme.ToString());
 		}
 
-		if(!useKeyboard && !joystickDetermined)
+		//var gamepads = Input.GetJoystickNames();
+		//useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
+		//if (useKeyboard && canvasStart.activeInHierarchy)
+		//{
+		//	canvasStart.SetActive(false);
+		//}
+
+		/*if(!useKeyboard && !joystickDetermined)
 		{
 			if(playerNumber == Player.Player1)
 			{
@@ -147,37 +179,17 @@ public class PlayerInput : MonoBehaviour {
 				if(joystickDetermined)
 					canvasStart.SetActive(false);
 			}
-		}
+		}*/
 
 
-		if(useKeyboard || joystickDetermined)
-		{		
+				
 			if(!paused)
 			{
 				PlayerLookAt();
 				partnerLink.absorbing = Absorbing();
 
-				velocityChange = !useKeyboard ? PlayerJoystickMovement() : Vector3.zero;
+				velocityChange =  PlayerJoystickMovement();
 				// Movement
-				if(useKeyboard)
-				{
-					if ((playerNumber == Player.Player1 && Input.GetKey("w")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.UpArrow)))
-					{
-						velocityChange += Vector3.up;
-					}
-					if ((playerNumber == Player.Player1 && Input.GetKey("a")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.LeftArrow)))
-					{
-						velocityChange -= Vector3.right;
-					}
-					if ((playerNumber == Player.Player1 && Input.GetKey("s")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.DownArrow)))
-					{
-						velocityChange -= Vector3.up;
-					}
-					if ((playerNumber == Player.Player1 && Input.GetKey("d")) || (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightArrow)))
-					{
-						velocityChange += Vector3.right;
-					}				
-				}
 
 				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)
@@ -196,18 +208,36 @@ public class PlayerInput : MonoBehaviour {
 					absorb.transform.position = transform.position;
 				}
 			}
-		}
 	}
 
 	private Vector3 PlayerJoystickMovement()
 	{
+
 		Vector2 leftStickInput = new Vector2(GetAxisMoveHorizontal(), GetAxisMoveVertical());
+
+		if(sharing && playerNumber == Player.Player2)
+		{
+			leftStickInput = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
+			return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisAimHorizontal(),GetAxisAimVertical(),0) : Vector3.zero;
+		}
+
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
 	bool Absorbing()
 	{
-		if ((!useKeyboard && GetAbsorb()) || (useKeyboard && playerNumber == Player.Player1 && (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))) || (useKeyboard && playerNumber == Player.Player2 && (Input.GetKey(KeyCode.Keypad0) || Input.GetMouseButton(1))))
+		bool canAbsorb = false;
+
+		if(sharing && playerNumber == Player.Player1 && GetRightBumperAbsorb() > .5)
+			canAbsorb = true;
+		else if(sharing && playerNumber == Player.Player2 && GetLeftBumperAbsorb() > .5)
+			canAbsorb = true;
+		else if(!sharing && (GetAbsorb() || GetRightBumperAbsorb() > .5 || GetLeftBumperAbsorb() > .5))
+			canAbsorb = true;
+
+		//Debug.Log(GetBumperAbsorb());
+
+		if (canAbsorb)
 		{
 			if(absorb == null)
 			{
@@ -266,15 +296,50 @@ public class PlayerInput : MonoBehaviour {
 
 	void PlayerLookAt()
 	{
-		Vector2 lookAt = FireDirection();		
-		float minToFire = useKeyboard ? 0 : deadZone;
+		Vector2 lookAt = FireDirection();	
 
-		bool stickFire = GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
 
-		if((GetAxisTriggers() > deadZone || GetAxisTriggers() < -deadZone) || stickFire)
+		if(controlScheme == Globals.ControlScheme.triggers || sharing)
 		{
-			lookAt = geometry.transform.forward;
+			lookAt = Vector2.zero;
+		}
+
+		float minToFire = deadZone;
+
+		//bool stickFire = GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
+
+		//Debug.Log(GetAxisTriggers())
+		if(!sharing && controlScheme == Globals.ControlScheme.triggers && (GetAxisTriggers() > deadZone|| GetAxisTriggers() < -deadZone))
+		{
+			lookAt = transform.forward;
 			minToFire = 0;
+		}
+
+		//if((sharing && playerNumber == Player.Player1 && GetAxisTriggers() < -deadZone) || (sharing && playerNumber == Player.Player2 && GetAxisTriggers() < -deadZone))
+		//{
+		//	minToFire = 0;
+		//}
+
+		if(sharing)
+		{
+			if(playerNumber == Player.Player1)
+			{
+				if(GetAxisLeftTrigger() > deadZone)
+				{
+					lookAt = transform.forward;
+					minToFire = 0;
+				}
+			}
+			else if(playerNumber == Player.Player2)
+			{
+				if(GetAxisRightTrigger() > deadZone)
+				{
+					//Debug.Log(i);
+					//i++;
+					lookAt = transform.forward;
+					minToFire = 0;
+				}
+			}
 		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
@@ -311,33 +376,37 @@ public class PlayerInput : MonoBehaviour {
 	private float GetAxisAimHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickHorizontal"); else return Input.GetAxis(joystickNumber.ToString() + "LeftStickHorizontal");}
 	private float GetAxisAimVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical");}
 	private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
+	private float GetAxisLeftTrigger() {return Input.GetAxis(joystickNumber.ToString() + "LeftTrigger");}
+	private float GetAxisRightTrigger() {return Input.GetAxis(joystickNumber.ToString() + "RightTrigger");}
 	private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
 	private bool GetAbsorb() { return Input.GetButton(joystickNumber.ToString() + "Absorb");}
+	private float GetRightBumperAbsorb() { return Input.GetAxis(joystickNumber.ToString() + "RightBumperAbsorb");}
+	private float GetLeftBumperAbsorb() { return Input.GetAxis(joystickNumber.ToString() + "LeftBumperAbsorb");}
 	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
 
 
 	private Vector2 FireDirection()
 	{
 		Vector2 lookAt = Vector2.zero; 
-		if (!useKeyboard)
-		{
+		//if (!useKeyboard)
+		//{
 			lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
-		}
-		else
-		{
-			if ((playerNumber == Player.Player1 && Input.GetMouseButtonUp(0)) || (playerNumber == Player.Player2 && Input.GetMouseButtonUp(1)))
-			{
-				Vector3 mousePos = Input.mousePosition;
-				mousePos.z = transform.position.z;
-				mousePos = CameraSplitter.Instance.GetFollowingCamera(gameObject).ScreenToWorldPoint(mousePos);
-				lookAt = mousePos - transform.position;
-				lookAt.Normalize();
-			}
-			else if ((playerNumber == Player.Player1 && Input.GetKeyUp(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKeyUp("[0]")))
-			{
-				lookAt = geometry.transform.forward;
-			}
-		}
+		//}
+		///else
+		//{
+		//	if ((playerNumber == Player.Player1 && Input.GetMouseButtonUp(0)) || (playerNumber == Player.Player2 && Input.GetMouseButtonUp(1)))
+		//	{
+		//		Vector3 mousePos = Input.mousePosition;
+		//		mousePos.z = transform.position.z;
+		//		mousePos = CameraSplitter.Instance.GetFollowingCamera(gameObject).ScreenToWorldPoint(mousePos);
+		//		lookAt = mousePos - transform.position;
+	//			lookAt.Normalize();
+	//		}
+		//	else if ((playerNumber == Player.Player1 && Input.GetKeyUp(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKeyUp("[0]")))
+		//	{
+		////		lookAt = geometry.transform.forward;
+		//	}
+		//}
 
 		return lookAt;
 	}
