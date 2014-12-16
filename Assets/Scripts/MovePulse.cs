@@ -150,11 +150,11 @@ public class MovePulse : MonoBehaviour {
 		mover.Move(passForce / passForceMag, passForceMag * Time.deltaTime, false);
 	}
 
-	public void Pull(GameObject puller, float pullMagnitude)
+	public void Pull(GameObject puller, Vector3 pullOffset, float pullMagnitude)
 	{
 		// If something is blocking the path to the puller, do not move.
 		RaycastHit attemptPullHit;
-		Vector3 toPuller = puller.transform.position - transform.position;
+		Vector3 toPuller = (puller.transform.position + pullOffset) - transform.position;
 		float toPullerDist = toPuller.magnitude;
 		toPuller /= toPullerDist;
 		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, puller);

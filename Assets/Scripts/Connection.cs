@@ -58,33 +58,37 @@ public class Connection : MonoBehaviour {
 		{
 			bool isCountEven = links.Count % 2 == 0;
 
-			// Round the count of links down to an odd number.
-			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
-
-			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
-			if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
+			if (!stats.keepRigid)
 			{
-				// Maintain the end points.
-				if (links.Count > 2)
+				// Round the count of links down to an odd number.
+				int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
+
+				// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
+				if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
 				{
-					RemoveLink();
-					// If the link count was not even before, it is now, so remove another to stay odd.
-					if (links.Count > 2 && !isCountEven)
+					// Maintain the end points.
+					if (links.Count > 2)
 					{
 						RemoveLink();
+						// If the link count was not even before, it is now, so remove another to stay odd.
+						if (links.Count > 2 && !isCountEven)
+						{
+							RemoveLink();
+						}
 					}
 				}
-			}
-			// If the connection length requires more connections, create some.
-			else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
-			{
-				AddLink();
-				if (links.Count % 2 == 0)
+				// If the connection length requires more connections, create some.
+				else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
 				{
 					AddLink();
+					if (links.Count % 2 == 0)
+					{
+						AddLink();
+					}
 				}
+				isCountEven = links.Count % 2 == 0;
 			}
-			isCountEven = links.Count % 2 == 0;
+
 
 			// Direct, scale, and place link colliders to cover the surface of the connection.
 			Vector3 linkDir = Vector3.zero;
@@ -119,7 +123,7 @@ public class Connection : MonoBehaviour {
 
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
-			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((connectionLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
+			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((ConnectionLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
@@ -275,7 +279,7 @@ public class Connection : MonoBehaviour {
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		for (int i = 1; i < links.Count - 1; i++)
 		{
-			int prevLinkOrderLevel = (i > 0) ? links[i - 1].orderLevel : -1;
+			int prevLinkOrderLevel = links[i - 1].orderLevel;
 			int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
 
 			if (links[i].jointPrevious != null)
@@ -321,6 +325,62 @@ public class Connection : MonoBehaviour {
 		links[links.Count - 1].jointPrevious.spring = stats.attachSpring2;
 		links[links.Count - 1].jointNext.spring = stats.attachSpring2;
 	}
+
+	public Vector3 NearestPoint(Vector3 checkPoint)
+	{
+		if (links.Count < 2)
+		{
+			return Vector3.zero;
+		}
+
+		int nearIndex = 0;
+		Vector3 nearPos = links[nearIndex].transform.position;
+		float nearSqrDist = (checkPoint - nearPos).sqrMagnitude;
+
+		// Find the nearest joint.
+		for (int i = 1; i < links.Count; i++)
+		{
+			float sqrDist = (checkPoint - links[i].transform.position).sqrMagnitude;
+			if (sqrDist < nearSqrDist)
+			{
+				nearSqrDist = sqrDist;
+				nearIndex = i;
+				nearPos = links[nearIndex].transform.position;
+			}
+		}
+
+		// Find the position of the neighbor nearest to the check point.
+		Vector3 neighborPos;
+		if (nearIndex == 0)
+		{
+			neighborPos = links[nearIndex + 1].transform.position;
+		}
+		else if (nearIndex == links.Count - 1)
+		{
+			neighborPos = links[nearIndex - 1].transform.position;
+		}
+		else
+		{
+			if ((checkPoint - links[nearIndex + 1].transform.position).sqrMagnitude < (checkPoint - links[nearIndex - 1].transform.position).sqrMagnitude)
+			{
+				neighborPos = links[nearIndex + 1].transform.position;
+			}
+			else
+			{
+				neighborPos = links[nearIndex - 1].transform.position;
+			}
+		}
+
+		// Find the nearest point on the line between the nearest joint and its neighbor.
+		Vector3 toCheckOnLine = Helper.ProjectVector(neighborPos - nearPos, checkPoint - nearPos);
+		Vector3 nearestPos = nearPos + toCheckOnLine;
+		if (Vector3.Dot(nearestPos - nearPos, neighborPos - nearPos) < 0)
+		{
+			nearestPos = nearPos;
+		}
+
+		return nearestPos;
+	}
 }
 
 [System.Serializable]
@@ -335,6 +395,7 @@ public class ConnectionAttachment
 [System.Serializable]
 public class ConnectionStats
 {
+	public bool keepRigid = false;
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
 	public float maxDistance = 25;

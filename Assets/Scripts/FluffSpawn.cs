@@ -90,6 +90,8 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
+		/*TODO rotate fluff constraints to rigidbody direction rather that transform direction.*/
+
 		// Rotate fluffs based on movement.
 		if (body.velocity.sqrMagnitude > 0)
 		{

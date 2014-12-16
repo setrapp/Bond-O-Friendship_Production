@@ -4,6 +4,7 @@ using System.Collections;
 public class FloatMoving : MonoBehaviour {
 	public PartnerLink partnerLink;
 	public SimpleMover mover;
+	public FluffSpawn fluffSpawn;
 	public MovementStats startingStats;
 	public MovementStats loneFloatStats;
 	public MovementStats perConnectionFloatBonus;
@@ -24,6 +25,10 @@ public class FloatMoving : MonoBehaviour {
 		if (partnerLink == null)
 		{
 			partnerLink = GetComponent<PartnerLink>();
+		}
+		if (fluffSpawn == null)
+		{
+			fluffSpawn = GetComponent<FluffSpawn>();
 		}
 	}
 
@@ -61,6 +66,12 @@ public class FloatMoving : MonoBehaviour {
 		{
 			wasFloating = true;
 			ApplyFloatStats();
+
+			// Ensure that players have fluffs while floating.
+			if (fluffSpawn.naturalFluffCount <= 0)
+			{
+				fluffSpawn.naturalFluffCount = 1;
+			}
 		}
 	}
 
