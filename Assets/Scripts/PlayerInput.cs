@@ -112,10 +112,10 @@ public class PlayerInput : MonoBehaviour {
 			paused = !paused;
 		}
 
-		if(playerNumber == Player.Player2)
-		{
-			Debug.Log(controlScheme.ToString());
-		}
+		//if(playerNumber == Player.Player2)
+		//{
+			//Debug.Log(controlScheme.ToString());
+		//}
 
 		//var gamepads = Input.GetJoystickNames();
 		//useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
