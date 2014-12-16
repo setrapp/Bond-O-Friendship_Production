@@ -190,7 +190,10 @@ public class Connection : MonoBehaviour {
 			attachee2.connections.Remove(this);
 			attachee2.SendMessage("ConnectionBroken", attachee1, SendMessageOptions.DontRequireReceiver);
 		}
-		Destroy(gameObject);
+		if (gameObject != null)
+		{
+			Destroy(gameObject);
+		}
 	}
 
 	public void AttachPartners(ConnectionAttachable attachee1, Vector3 attachPoint1, ConnectionAttachable attachee2, Vector3 attachPoint2)

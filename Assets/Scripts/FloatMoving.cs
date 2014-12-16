@@ -42,6 +42,8 @@ public class FloatMoving : MonoBehaviour {
 			startingStats.bodyDrag = mover.body.drag;
 		}
 		startingStats.bodylessDampening = mover.bodylessDampening;
+		startingStats.sideTrailTime = partnerLink.leftTrail.time;
+		startingStats.midTrailTime = partnerLink.midTrail.time;
 	}
 
 	void Update()
@@ -59,6 +61,8 @@ public class FloatMoving : MonoBehaviour {
 					mover.body.drag = startingStats.bodyDrag;
 				}
 				mover.bodylessDampening = startingStats.bodylessDampening;
+				partnerLink.leftTrail.time = partnerLink.rightTrail.time = startingStats.sideTrailTime;
+				partnerLink.midTrail.time = partnerLink.rightTrail.time = startingStats.sideTrailTime;
 				wasFloating = false;
 			}
 		}
@@ -86,8 +90,10 @@ public class FloatMoving : MonoBehaviour {
 				mover.body.drag = loneFloatStats.bodyDrag;
 			}
 			mover.bodylessDampening = loneFloatStats.bodylessDampening;
+			partnerLink.leftTrail.time = partnerLink.rightTrail.time = loneFloatStats.sideTrailTime;
+			partnerLink.midTrail.time = partnerLink.rightTrail.time = loneFloatStats.midTrailTime;
 
-			int connectionBonusCount = Mathf.Min(partnerLink.connections.Count, maxConnectionBonuses);
+			int connectionBonusCount = Mathf.Min(partnerLink.connectionAttachable.connections.Count, maxConnectionBonuses);
 			if (connectionBonusCount > 0)
 			{
 				mover.acceleration += perConnectionFloatBonus.acceleration * connectionBonusCount;
@@ -97,6 +103,8 @@ public class FloatMoving : MonoBehaviour {
 					mover.body.drag += perConnectionFloatBonus.bodyDrag * connectionBonusCount;
 				}
 				mover.bodylessDampening += perConnectionFloatBonus.bodylessDampening * connectionBonusCount;
+				partnerLink.leftTrail.time = partnerLink.rightTrail.time += perConnectionFloatBonus.sideTrailTime * connectionBonusCount;
+				partnerLink.midTrail.time = partnerLink.rightTrail.time += perConnectionFloatBonus.midTrailTime * connectionBonusCount;
 			}
 		}
 	}
@@ -119,5 +127,6 @@ public class MovementStats
 	public float handling;
 	public float bodyDrag;
 	public float bodylessDampening;
-	
+	public float sideTrailTime;
+	public float midTrailTime;
 }
