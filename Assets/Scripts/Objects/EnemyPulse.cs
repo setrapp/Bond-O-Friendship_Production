@@ -27,10 +27,10 @@ public class EnemyPulse : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.name == "Shield")
-		{
-			Destroy(gameObject);
-		}
+		//if(collide.gameObject.name == "Shield")
+		//{
+		//	Destroy(gameObject);
+		//}
 		//if(collide.gameObject.tag == "Converser")
 		//{
 		//	Destroy(gameObject);

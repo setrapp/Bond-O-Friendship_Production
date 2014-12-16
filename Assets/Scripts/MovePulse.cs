@@ -5,7 +5,8 @@ using System.Collections;
 public class MovePulse : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
-	public PulseShot creator;
+	//public PulseShot creator;
+	public ConnectionAttachable creator;
 	public PartnerLink volleyTarget;
 	public int volleys;
 	public float capacity;
@@ -53,6 +54,9 @@ public class MovePulse : MonoBehaviour {
 		{
 			attachee = null;
 		}
+
+		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
+		gameObject.tag = "Pulse";
 	}
 
 	// Update is called once per frame
@@ -176,28 +180,30 @@ public class MovePulse : MonoBehaviour {
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
+		// If no potentiall attachee is given, disregard.
+		if (attacheeObject == null)
+		{
+			return;
+		}
+
 		// If already attached to a possessive attachee, do not attempt to attach.
 		if (attachee != null && attachee.possessive)
 		{
 			return;
 		}
 
-		// If the attachee has a special way of attaching fluffs, use its method instead;
-		PartnerLink fluffContainer = attacheeObject.GetComponent<PartnerLink>();
-		if (fluffContainer != null)
-		{
-			fluffContainer.AttachFluff(this);
-			return;
-		}
+		FluffStick attacheeStick = attacheeObject.GetComponent<FluffStick>();
 		
 		// Position and orient.
 		transform.position = position;
 		transform.up = standDirection;
 
-		// Stop moving, and if desired, start swaying.
-		mover.Stop();
-		ToggleSwayAnimation(sway);
-		
+		// If desired, start swaying. 
+		if (attacheeStick == null || attacheeStick.allowSway)
+		{
+			ToggleSwayAnimation(sway);
+		}
+
 		// Halt physical interactions.
 		if (body != null)
 		{
@@ -206,13 +212,17 @@ public class MovePulse : MonoBehaviour {
 		hull.isTrigger = true;
 
 		// Actaully attach to target and record relationship to attachee.
-		if (attacheeObject != null)
-		{
-			Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
-			attachee = new Attachee(attacheeObject, attacheeObject.GetComponent<FluffStick>(), attachPoint, false, false);
-			baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
-			ignoreCollider = attacheeObject;	
-		}
+		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
+		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
+		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
+		ignoreCollider = attacheeObject;
+		
+
+		// Notify the potential attachee that fluff has been attached.
+		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
+
+		// Stop moving.
+		mover.Stop();
 		moving = false;
 		forgetCreator = true;
 	}

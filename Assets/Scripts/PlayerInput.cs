@@ -87,6 +87,10 @@ public class PlayerInput : MonoBehaviour {
 
 		var gamepads = Input.GetJoystickNames();
 		useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
+		if (useKeyboard && canvasStart.activeInHierarchy)
+		{
+			canvasStart.SetActive(false);
+		}
 
 		if(!useKeyboard && !joystickDetermined)
 		{

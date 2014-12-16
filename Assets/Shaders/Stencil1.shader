@@ -1,6 +1,6 @@
 ﻿Shader "Player View Stencil/Stencil1" {
 	SubShader {
-		Tags { "RenderType"="Opaque" "Queue"="Geometry-1"}
+		Tags { "RenderType"="Opaque" "Queue"="Transparent"}
 		Pass {
 			Stencil {
 				Ref 1
