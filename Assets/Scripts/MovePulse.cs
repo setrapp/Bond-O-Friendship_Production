@@ -269,7 +269,7 @@ public class MovePulse : MonoBehaviour {
 		}
 		else
 		{
-			//Destroy(gameObject);
+			Destroy(gameObject);
 		}
 	}
 
