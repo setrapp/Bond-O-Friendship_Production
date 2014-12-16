@@ -111,9 +111,9 @@ public class PulseDestroyer : MonoBehaviour {
 			if (destroyConnections)
 			{
 				PartnerLink partnerLink = other.GetComponent<PartnerLink>();
-				for (int i = 0; i < partnerLink.connections.Count; i++)
+				for (int i = 0; i < partnerLink.connectionAttachable.connections.Count; i++)
 				{
-					partnerLink.connections[i].BreakConnection();
+					partnerLink.connectionAttachable.connections[i].BreakConnection();
 				}
 			}
 			crossed = true;
