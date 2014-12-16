@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Globals : MonoBehaviour {
 
-
 	public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
 	
 	public enum ControlScheme{sticks, triggers};
@@ -19,7 +18,7 @@ public class Globals : MonoBehaviour {
 	// Use this for initialization
 	void Awake()
 	{
-		DontDestroyOnLoad(transform.gameObject);
+		DontDestroyOnLoad(gameObject);
 	}
 
 }

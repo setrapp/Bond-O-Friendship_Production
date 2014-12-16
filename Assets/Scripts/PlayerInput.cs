@@ -237,6 +237,9 @@ public class PlayerInput : MonoBehaviour {
 
 		//Debug.Log(GetBumperAbsorb());
 
+		if(!firePulseReady)
+			canAbsorb = false;
+
 		if (canAbsorb)
 		{
 			if(absorb == null)

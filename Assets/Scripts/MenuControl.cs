@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MenuControl : MonoBehaviour {
 
+	public string startScene;
 
 	public GameObject startArrow;
 	public GameObject optionsArrow;
@@ -193,13 +194,24 @@ public class MenuControl : MonoBehaviour {
 
 		gamepadCount = Input.GetJoystickNames().Length;
 
+		GameObject[] messages = GameObject.FindGameObjectsWithTag("TranslevelMessage");
+		bool levelLoadFound = false;
+		for (int i = 0; i < messages.Length && !levelLoadFound; i++)
+		{
+			TranslevelMessage message = messages[i].GetComponent<TranslevelMessage>();
+			if (message != null && message.messageName == "LevelLoad")
+			{
+				startScene = message.message;
+			}
+		}
+
 		if(Globals.sharing && (Input.GetButtonDown(Globals.playerOneJoystickNumber.ToString() + "Pause") || Input.GetButtonDown(Globals.playerTwoJoystickNumber.ToString() + "Pause")))
 		{
-			Application.LoadLevel("Cradle 4");
+			Application.LoadLevel(startScene);
 		}
 		if(!Globals.sharing && playerTwoReady && playerOneReady)
 		{
-			Application.LoadLevel("Cradle 4");
+			Application.LoadLevel(startScene);
 		}
 			
 	}
