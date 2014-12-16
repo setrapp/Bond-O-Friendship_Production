@@ -91,7 +91,7 @@ public class SpawnLeaves : MonoBehaviour {
 
 		if (leafCount > 0 && season == 0)
 		{
-			if(Vector3.Distance(transform.position, player1.transform.position) > spawnRange && Vector3.Distance(transform.position, player2.transform.position) > spawnRange)
+			if(Vector3.Distance(transform.position, player1.transform.position) > spawnRange * 1.5f && Vector3.Distance(transform.position, player2.transform.position) > spawnRange * 1.5f)
 			{
 				//Debug.Log(leafArraySize);
 				for(int i = 0; i < leafArraySize; i++)

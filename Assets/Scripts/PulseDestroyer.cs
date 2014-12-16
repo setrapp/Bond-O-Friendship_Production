@@ -42,6 +42,7 @@ public class PulseDestroyer : MonoBehaviour {
 
 		if (toDestroy != null)
 		{
+
 			for (int i = toDestroy.Count - 1; i >= 0; i--)
 			{
 				MovePulse fluff = toDestroy[i].GetComponent<MovePulse>();
@@ -64,7 +65,10 @@ public class PulseDestroyer : MonoBehaviour {
 		{
 			for (int i = toEmpty.Count - 1; i >= 0; i--)
 			{
-				toEmpty[i].DestroyAllFluffs();
+				if (destroyPulses)
+				{
+					toEmpty[i].DestroyAllFluffs();
+				}
 				if (newNaturalFluff >= 0)
 				{
 					toEmpty[i].naturalFluffCount = newNaturalFluff;
@@ -94,18 +98,16 @@ public class PulseDestroyer : MonoBehaviour {
 		}
 		else if (other.gameObject.tag == "Converser")
 		{
-			if (destroyPulses)
+			FluffSpawn spawn = other.GetComponent<FluffSpawn>();
+			if (spawn != null)
 			{
-				FluffSpawn spawn = other.GetComponent<FluffSpawn>();
-				if (spawn != null)
+				if (toEmpty == null)
 				{
-					if (toEmpty == null)
-					{
-						toEmpty = new List<FluffSpawn>();
-					}
-					toEmpty.Add(spawn);
+					toEmpty = new List<FluffSpawn>();
 				}
+				toEmpty.Add(spawn);
 			}
+
 			if (destroyConnections)
 			{
 				PartnerLink partnerLink = other.GetComponent<PartnerLink>();
