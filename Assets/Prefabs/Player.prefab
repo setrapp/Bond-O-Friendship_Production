@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   - 135: {fileID: 13500002}
+  - 114: {fileID: 11400020}
   - 114: {fileID: 11400012}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400004}
@@ -321,7 +322,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: .70710659, y: 0, z: 0, w: -.707106948}
-  m_LocalPosition: {x: -36.4000015, y: 0, z: 0}
+  m_LocalPosition: {x: -7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -732,7 +733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 1
-  headRenderer: {fileID: 2300006}
   fillRenderer: {fileID: 2300000}
   flashRenderer: {fileID: 21200000}
   flashFadeTime: 2
@@ -914,6 +914,31 @@ MonoBehaviour:
   volleysToConnect: 2
   volleys: 0
   volleyPartner: {fileID: 0}
+--- !u!114 &11400020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c75081cf463f94d8ee662abd8c4764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateColors: 0
+  attachmentColor: {r: 0, g: 0, b: 1, a: 1}
+  headMaterial: {fileID: 2100000, guid: 3104c057573cc4c48a6a0388c3b5c4d2, type: 2}
+  fillMaterial: {fileID: 2100000, guid: 7fa81883306f0864993706a671e8bf7a, type: 2}
+  trailMaterial: {fileID: 2100000, guid: 32a67a638295de14e8c60b971bafd68d, type: 2}
+  fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
+  connectionAttachable: {fileID: 11400018}
+  headRenderer: {fileID: 2300006}
+  fillRenderer: {fileID: 2300000}
+  flashRenderer: {fileID: 21200000}
+  leftTrailRenderer: {fileID: 9600004}
+  midTrailRenderer: {fileID: 9600002}
+  rightTrailRenderer: {fileID: 9600000}
+  fluffSpawn: {fileID: 11400008}
 --- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1

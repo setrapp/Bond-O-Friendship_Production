@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ConnectionAttachable : MonoBehaviour {
 	public bool handleFluffAttachment = true;
 	public bool connectAtFluffPoint = true;
+	[HideInInspector]
 	public Color attachmentColor;
 	public GameObject connectionPrefab;
 	[SerializeField]

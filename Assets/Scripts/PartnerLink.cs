@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class PartnerLink : MonoBehaviour {
 	public bool isPlayer = false;
-	public Renderer headRenderer;
 	public Renderer fillRenderer;
 	public SpriteRenderer flashRenderer;
 	public float flashFadeTime = 1;
@@ -58,6 +57,10 @@ public class PartnerLink : MonoBehaviour {
 		}
 
 		floatMove = GetComponent<FloatMoving>();
+	}
+
+	void Start()
+	{
 		SetFlashAndFill(new Color(0, 0, 0, 0));
 	}
 	

@@ -245,7 +245,7 @@ public class PlayerInput : MonoBehaviour {
 			{
 				absorb = (ParticleSystem)Instantiate(absorbPrefab);
 				absorb.transform.position = transform.position;
-				absorb.startColor = GetComponent<PartnerLink>().headRenderer.material.color / 2;
+				absorb.startColor = GetComponent<ConnectionAttachable>().attachmentColor / 2;
 				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 			}
 			GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
