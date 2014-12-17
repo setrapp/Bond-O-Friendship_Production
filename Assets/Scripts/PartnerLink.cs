@@ -120,7 +120,7 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || pulse.attachee.gameObject == gameObject || !pulse.attachee.possessive))
 		{
-			connectionAttachable.AttemptConnection(pulse);
+			connectionAttachable.AttemptConnection(pulse.creator, pulse.transform.position);
 
 			if (pulse.creator != null && pulse.creator != connectionAttachable)
 			{
@@ -133,6 +133,18 @@ public class PartnerLink : MonoBehaviour {
 			}
 			fluffsToAdd.Add(pulse);
 		}	
+	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		if (collision.collider.tag == "Converser")
+		{
+			ConnectionAttachable partner = collision.collider.GetComponent<ConnectionAttachable>();
+			if (floatMove.Floating && partner != null && !connectionAttachable.IsConnectionMade(partner))
+			{
+				connectionAttachable.AttemptConnection(partner, transform.position, true);
+			}
+		}
 	}
 
 	public void SetFlashAndFill(Color newFlashColor)

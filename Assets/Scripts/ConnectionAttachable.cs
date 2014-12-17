@@ -17,20 +17,19 @@ public class ConnectionAttachable : MonoBehaviour {
 	{
 		if (handleFluffAttachment && pulse != null)
 		{
-			AttemptConnection(pulse);
+			AttemptConnection(pulse.creator, pulse.transform.position);
 		}
 	}
 
-	public Connection AttemptConnection(MovePulse connectionFluff)
+	public Connection AttemptConnection(ConnectionAttachable connectionPartner, Vector3 contactPosition, bool forceConnection = false)
 	{
 		Connection newConnection = null;
-		if (connectionFluff == null || connectionFluff.creator == null || connectionFluff.creator == this)
+		if (connectionPartner == null || connectionPartner == this)
 		{
 			return newConnection;
 		}
-		ConnectionAttachable connectionPartner = connectionFluff.creator;
 
-		if (connectionPartner != gameObject)
+		if (connectionPartner.gameObject != gameObject)
 		{
 			volleys = 1;
 			volleyPartner = connectionPartner;
@@ -38,24 +37,16 @@ public class ConnectionAttachable : MonoBehaviour {
 			{
 				volleys = connectionPartner.volleys + 1;
 			}
-			if (volleys >= volleysToConnect)
-			{
-				bool connectionAlreadyMade = false;
-				for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
-				{
-					if ((connections[i].attachment1.attachee == this && connections[i].attachment2.attachee == connectionPartner) || (connections[i].attachment2.attachee == this && connections[i].attachment1.attachee == connectionPartner))
-					{
-						connectionAlreadyMade = true;
-					}
-				}
 
+			if (forceConnection || volleys >= volleysToConnect)
+			{
 				// If enough volleys have been passed, and the volleyers are not already connected, establish a new connection.
-				if (!connectionAlreadyMade)
+				if (!IsConnectionMade(connectionPartner))
 				{
 					Vector3 connectionPoint = transform.position;
 					if (connectAtFluffPoint)
 					{
-						connectionPoint = connectionFluff.transform.position;
+						connectionPoint = contactPosition;
 					}
 
 					newConnection = ((GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Connection>();
@@ -85,5 +76,23 @@ public class ConnectionAttachable : MonoBehaviour {
 		{
 			connections[i].BreakConnection();
 		}
+	}
+
+	public bool IsConnectionMade(ConnectionAttachable partner)
+	{
+		if (partner == null)
+		{
+			return connections.Count > 0;
+		}
+
+		bool connectionAlreadyMade = false;
+		for (int i = 0; i < connections.Count && !connectionAlreadyMade; i++)
+		{
+			if ((connections[i].attachment1.attachee == this && connections[i].attachment2.attachee == partner) || (connections[i].attachment2.attachee == this && connections[i].attachment1.attachee == partner))
+			{
+				connectionAlreadyMade = true;
+			}
+		}
+		return connectionAlreadyMade;
 	}
 }
