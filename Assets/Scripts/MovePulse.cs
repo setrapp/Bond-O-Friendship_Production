@@ -158,7 +158,7 @@ public class MovePulse : MonoBehaviour {
 		Vector3 toPuller = (puller.transform.position + pullOffset) - transform.position;
 		float toPullerDist = toPuller.magnitude;
 		toPuller /= toPullerDist;
-		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, puller);
+		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, false, puller);
 		if (blocked)
 		{
 			return;
@@ -237,7 +237,7 @@ public class MovePulse : MonoBehaviour {
 		}
 	}
 
-	public bool TestForBlocking(Vector3 moveDirection, float testDistance, out RaycastHit blocker, GameObject whoWantsToKnow = null)
+	public bool TestForBlocking(Vector3 moveDirection, float testDistance, out RaycastHit blocker, bool ignoreIgnorable = true, GameObject whoWantsToKnow = null)
 	{
 		int fluffLayer = (int)Mathf.Pow(2, gameObject.layer);
 		RaycastHit[] hits = Physics.RaycastAll((transform.position + bulb.transform.position) / 2, moveDirection, testDistance, ~fluffLayer);
@@ -245,7 +245,7 @@ public class MovePulse : MonoBehaviour {
 		blocker = new RaycastHit();
 		for (int j = 0; j < hits.Length && !blocked; j++)
 		{
-			bool hitIgnoredCollider = hits[j].collider.gameObject == ignoreCollider;
+			bool hitIgnoredCollider = ignoreIgnorable && hits[j].collider.gameObject == ignoreCollider;
 			bool hitTester = hits[j].collider.gameObject == whoWantsToKnow;
 			bool layerIgnorable = Physics.GetIgnoreLayerCollision(gameObject.layer, hits[j].collider.gameObject.layer);
 			blocked = !(hitIgnoredCollider || hitTester || layerIgnorable);

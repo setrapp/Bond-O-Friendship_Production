@@ -29,6 +29,7 @@ public class PartnerLink : MonoBehaviour {
 	public float endChargeRestoreRate;
 	public bool connectionAbsorb = true;
 	public float connectionOffsetFactor = 0.5f;
+	public float absorbStrength = 5;
 	public bool absorbing = false;
 	private bool slowing = false;
 	private bool wasSlowing = false;
@@ -140,5 +141,14 @@ public class PartnerLink : MonoBehaviour {
 		Color newFillColor = fillRenderer.material.color;
 		newFillColor.a = 1 - newFlashColor.a;
 		fillRenderer.material.color = newFillColor;
+	}
+
+	void OnDrawGizmos()
+	{
+		if (absorbing)
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawWireSphere(transform.position, absorbStrength);
+		}
 	}
 }

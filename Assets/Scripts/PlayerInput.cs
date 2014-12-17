@@ -40,7 +40,6 @@ public class PlayerInput : MonoBehaviour {
 
 	private ParticleSystem absorb;
 	private Vector3 target;
-	public float absorbStrength = 5;
 	public Vector3 desiredLook;
 	public bool joystickDetermined = false;
 
@@ -261,7 +260,7 @@ public class PlayerInput : MonoBehaviour {
 						float fluffSqrDist = (livePulseMove.transform.position - transform.position).sqrMagnitude;
 						Vector3 absorbOffset = Vector3.zero;
 						// If the fluff is too far to be absorbed directly and absorption through the connection is enabled, attempt connection absorption.
-						if (fluffSqrDist > Mathf.Pow(absorbStrength, 2) && partnerLink.connectionAbsorb)
+						if (fluffSqrDist > Mathf.Pow(partnerLink.absorbStrength, 2) && partnerLink.connectionAbsorb)
 						{
 							float nearSqrDist = fluffSqrDist;
 							for (int i = 0; i < partnerLink.connectionAttachable.connections.Count; i++)
@@ -280,7 +279,7 @@ public class PlayerInput : MonoBehaviour {
 							}
 							fluffSqrDist = nearSqrDist;
 						}
-						if (fluffSqrDist <= Mathf.Pow(absorbStrength, 2))
+						if (fluffSqrDist <= Mathf.Pow(partnerLink.absorbStrength, 2))
 						{
 							livePulseMove.Pull(gameObject, absorbOffset, pullSpeed);
 						}
