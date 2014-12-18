@@ -189,8 +189,6 @@ public class PlayerInput : MonoBehaviour {
 
 				velocityChange =  PlayerJoystickMovement();
 				// Movement
-
-				// Turn towards velocity change.
 				if (velocityChange.sqrMagnitude > 0)
 				{
 					mover.Accelerate(velocityChange, true, true);
@@ -200,6 +198,7 @@ public class PlayerInput : MonoBehaviour {
 				{
 					mover.slowDown = true;
 				}
+				// Turn towards velocity change.
 				transform.LookAt(transform.position + velocityChange, transform.up);
 
 				if(absorb != null)
