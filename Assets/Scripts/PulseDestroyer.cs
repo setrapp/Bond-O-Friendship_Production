@@ -8,7 +8,7 @@ public class PulseDestroyer : MonoBehaviour {
 	public int newNaturalFluff = -1;
 	private List<GameObject> toDestroy = null;
 	private List<FluffSpawn> toEmpty = null;
-	public float crossAlpha = 1;
+	public float crossAlpha = 0.5f;
 	private float restAlpha;
 	public float fadeTime = 1;
 	private MeshRenderer renderer;
