@@ -4,6 +4,10 @@ using System.Collections;
 public class PlayersEstablish : MonoBehaviour {
 	public GameObject player1Spawn;
 	public GameObject player2Spawn;
+	public int naturalFluffCount = -1;
+	public int startFluffCount = -1;
+	private bool setPlayer1Fluff = false;
+	private bool setPlayer2Fluff = false;
 
 	void Awake()
 	{
@@ -41,6 +45,7 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
 					player1 = Globals.Instance.player1;
 					player1.gameObject.SetActive(true);
+					setPlayer1Fluff = true;
 				}
 				else
 				{
@@ -61,6 +66,7 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
 					player2 = Globals.Instance.player2;
 					player2.gameObject.SetActive(true);
+					setPlayer2Fluff = true;
 				}
 				else
 				{
@@ -78,6 +84,43 @@ public class PlayersEstablish : MonoBehaviour {
 		if (player2Spawn != null)
 		{
 			Destroy(player2Spawn);
+		}
+	}
+
+	void Start()
+	{
+		if (Globals.Instance != null)
+		{
+			PlayerInput player1 = Globals.Instance.player1;
+			PlayerInput player2 = Globals.Instance.player2;
+
+			if (setPlayer1Fluff && player1 != null)
+			{
+				FluffSpawn fluffSpawn1 = player1.GetComponent<FluffSpawn>();
+				if (naturalFluffCount >= 0)
+				{
+					fluffSpawn1.naturalFluffCount = naturalFluffCount;
+				}
+				if (startFluffCount >= 0)
+				{
+					fluffSpawn1.startingFluff = startFluffCount;
+					fluffSpawn1.SpawnStartingFluff();
+				}
+			}
+
+			if (setPlayer2Fluff && player2 != null)
+			{
+				FluffSpawn fluffSpawn2 = player2.GetComponent<FluffSpawn>();
+				if (naturalFluffCount >= 0)
+				{
+					fluffSpawn2.naturalFluffCount = naturalFluffCount;
+				}
+				if (startFluffCount >= 0)
+				{
+					fluffSpawn2.startingFluff = startFluffCount;
+					fluffSpawn2.SpawnStartingFluff();
+				}
+			}
 		}
 	}
 }

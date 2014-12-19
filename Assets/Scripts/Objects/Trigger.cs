@@ -63,14 +63,14 @@ public class Trigger : MonoBehaviour {
 			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
 			if (mover != null)
 			{
-				if(mover.creator != null && mover.creator.name == "Player 1")
+				if(mover.creator != null && mover.creator.gameObject == Globals.Instance.player1.gameObject)
 				{
 					//print("Collide");
 					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
 					pOneTriggered = true;
 					pTwoTriggered = false;
 				}
-				else if(mover.creator != null && mover.creator.name == "Player 2")
+				else if (mover.creator != null && mover.creator.gameObject == Globals.Instance.player2.gameObject)
 				{
 					//print("Collide");
 					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;

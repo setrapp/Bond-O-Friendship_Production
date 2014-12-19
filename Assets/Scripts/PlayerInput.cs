@@ -50,15 +50,15 @@ public class PlayerInput : MonoBehaviour {
 
 	void Start()
 	{
-		if (otherPlayerInput == null)
+		if (otherPlayerInput == null && Globals.Instance != null)
 		{
-			GameObject[] conversers = GameObject.FindGameObjectsWithTag("Converser");
-			for (int i = 0; i < conversers.Length && otherPlayerInput == null; i++)
+			if (Globals.Instance.player1 == this)
 			{
-				if (conversers[i].gameObject != gameObject)
-				{
-					otherPlayerInput = conversers[i].GetComponent<PlayerInput>();
-				}
+				otherPlayerInput = Globals.Instance.player2;
+			}
+			else if (Globals.Instance.player2 == this)
+			{
+				otherPlayerInput = Globals.Instance.player1;
 			}
 		}
 

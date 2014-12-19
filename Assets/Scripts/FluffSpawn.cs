@@ -25,7 +25,7 @@ public class FluffSpawn : MonoBehaviour {
 	public PartnerLink partnerLink;
 	private FluffStick fluffStick;
 
-	void Start()
+	void Awake()
 	{
 		if (body == null)
 		{
@@ -38,12 +38,8 @@ public class FluffSpawn : MonoBehaviour {
 
 		partnerLink = GetComponent<PartnerLink>();
 		fluffStick = GetComponent<FluffStick>();
-		
 
-		while (fluffs.Count < startingFluff)
-		{
-			SpawnFluff(true);
-		}
+		SpawnStartingFluff();
 		
 		sinceSpawn = 0;
 		oldForward = transform.forward;
@@ -254,6 +250,15 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
 			newFluffInfo.creator = partnerLink.connectionAttachable;
 			fluffs.Add(newFluffInfo);
+		}
+	}
+
+	public void SpawnStartingFluff()
+	{
+		DestroyAllFluffs(false);
+		while (fluffs.Count < startingFluff)
+		{
+			SpawnFluff(true);
 		}
 	}
 
