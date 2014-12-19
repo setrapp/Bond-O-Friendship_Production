@@ -39,6 +39,8 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player1.transform.position = player1Spawn.transform.position;
 					Globals.Instance.player1.transform.rotation = player1Spawn.transform.rotation;
 					Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
+					player1 = Globals.Instance.player1;
+					player1.gameObject.SetActive(true);
 				}
 				else
 				{
@@ -57,6 +59,8 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player2.transform.position = player2Spawn.transform.position;
 					Globals.Instance.player2.transform.rotation = player2Spawn.transform.rotation;
 					Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
+					player2 = Globals.Instance.player2;
+					player2.gameObject.SetActive(true);
 				}
 				else
 				{
@@ -66,7 +70,14 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 		}
+
+		if (player1Spawn != null)
+		{
+			Destroy(player1Spawn);
+		}
+		if (player2Spawn != null)
+		{
+			Destroy(player2Spawn);
+		}
 	}
 }
-
-/* TODO why is menu being reopened?*/

@@ -39,7 +39,6 @@ public class CameraSplitter : MonoBehaviour {
 			combinedCameraSystem.player1 = player1CameraSystem.player1 = player2CameraSystem.player2 = player1.transform;
 			combinedCameraSystem.player2 = player1CameraSystem.player2 = player2CameraSystem.player1 = player2.transform;
 		}
-
 		wasSplit = split;
 		CheckSplit(true);
 	}
