@@ -28,12 +28,17 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Start()
 	{
-		combinedCameraSystem.transform.position = (player1.transform.position + player2.transform.position) / 2;
-		player1CameraSystem.transform.position = player1.transform.position;
-		player2CameraSystem.transform.position = player2.transform.position;
+		if (Globals.Instance != null)
+		{
+			player1 = Globals.Instance.player1.gameObject;
+			player2 = Globals.Instance.player2.gameObject;
+			combinedCameraSystem.transform.position = (player1.transform.position + player2.transform.position) / 2;
+			player1CameraSystem.transform.position = player1.transform.position;
+			player2CameraSystem.transform.position = player2.transform.position;
 
-		combinedCameraSystem.player1 = player1CameraSystem.player1 = player2CameraSystem.player2 = player1.transform;
-		combinedCameraSystem.player2 = player1CameraSystem.player2 = player2CameraSystem.player1 = player2.transform;
+			combinedCameraSystem.player1 = player1CameraSystem.player1 = player2CameraSystem.player2 = player1.transform;
+			combinedCameraSystem.player2 = player1CameraSystem.player2 = player2CameraSystem.player1 = player2.transform;
+		}
 
 		wasSplit = split;
 		CheckSplit(true);

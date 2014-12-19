@@ -202,6 +202,7 @@ public class MenuControl : MonoBehaviour {
 			if (message != null && message.messageName == "LevelLoad")
 			{
 				startScene = message.message;
+				Destroy(message.gameObject);
 			}
 		}
 

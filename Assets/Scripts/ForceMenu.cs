@@ -7,7 +7,7 @@ public class ForceMenu : MonoBehaviour {
 	
 	void Awake()
 	{
-		if (GameObject.FindGameObjectWithTag("Globals") == null)
+		if (Globals.Instance == null)
 		{
 			GameObject levelLoadObject = (GameObject)Instantiate(messagePrefab);
 			levelLoadObject.name = "Level Load Message";
