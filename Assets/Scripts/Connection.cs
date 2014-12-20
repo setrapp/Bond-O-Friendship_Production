@@ -31,63 +31,37 @@ public class Connection : MonoBehaviour {
 	{
 		lengthFresh = false;
 
-		// Only maintain a spring joint to connected objects if the attachment springs have more than zero force.
-		if (stats.attachSpring1 <= 0 && (links[0].jointPrevious.connectedBody != null || links[0].jointNext.connectedBody != null))
-		{
-			links[0].jointPrevious.connectedBody = null;
-			links[0].jointNext.connectedBody = null;
-		}
-		else if (stats.attachSpring1 > 0 && (links[0].jointPrevious.connectedBody == null || links[0].jointNext.connectedBody == null))
-		{
-			links[0].jointPrevious.connectedBody = attachment1.attachee.GetComponent<Rigidbody>();
-			links[0].jointNext.connectedBody = links[1].body;
-		}
-		if (stats.attachSpring2 <= 0 && (links[links.Count - 1].jointPrevious.connectedBody != null || links[links.Count - 1].jointNext.connectedBody != null))
-		{
-			links[links.Count - 1].jointPrevious.connectedBody = null;
-			links[links.Count - 1].jointNext.connectedBody = null;
-		}
-		else if (stats.attachSpring2 > 0 && (links[links.Count - 1].jointPrevious.connectedBody == null || links[links.Count - 1].jointNext.connectedBody == null))
-		{
-			links[links.Count - 1].jointPrevious.connectedBody = links[links.Count - 2].body;
-			links[links.Count - 1].jointNext.connectedBody = attachment2.attachee.GetComponent<Rigidbody>();
-		}
-
-
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
 			bool isCountEven = links.Count % 2 == 0;
 
-			if (!stats.keepRigid)
-			{
-				// Round the count of links down to an odd number.
-				int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
+			// Round the count of links down to an odd number.
+			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
-				// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
-				if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
+			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
+			if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
+			{
+				// Maintain the end points.
+				if (links.Count > 2)
 				{
-					// Maintain the end points.
-					if (links.Count > 2)
+					RemoveLink();
+					// If the link count was not even before, it is now, so remove another to stay odd.
+					if (links.Count > 2 && !isCountEven)
 					{
 						RemoveLink();
-						// If the link count was not even before, it is now, so remove another to stay odd.
-						if (links.Count > 2 && !isCountEven)
-						{
-							RemoveLink();
-						}
 					}
 				}
-				// If the connection length requires more connections, create some.
-				else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
+			}
+			// If the connection length requires more connections, create some.
+			else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
+			{
+				AddLink();
+				if (links.Count % 2 == 0)
 				{
 					AddLink();
-					if (links.Count % 2 == 0)
-					{
-						AddLink();
-					}
 				}
-				isCountEven = links.Count % 2 == 0;
 			}
+			isCountEven = links.Count % 2 == 0;
 
 
 			// Direct, scale, and place link colliders to cover the surface of the connection.
@@ -100,13 +74,13 @@ public class Connection : MonoBehaviour {
 				if (i == 0)
 				{
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
-					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+					linkScale.x = (links[i + 1].transform.position - links[i].transform.position).magnitude;
 					links[i].linkCollider.center = new Vector3(0, 0.5f, 0);
 				}
 				else if (i == links.Count - 1)
 				{
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
-					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					linkScale.x = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					links[i].linkCollider.center = new Vector3(0, -0.5f, 0);
 				}
 				else
@@ -114,11 +88,11 @@ public class Connection : MonoBehaviour {
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScale.y = magFromPrevious / 4 + magToNext / 4;
+					linkScale.x = magFromPrevious / 4 + magToNext / 4;
 					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
-				links[i].transform.localScale = linkScale;
+				links[i].linkCollider.size = linkScale;
 			}
 
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
@@ -197,7 +171,7 @@ public class Connection : MonoBehaviour {
 			attachee2.connections.Remove(this);
 			attachee2.SendMessage("ConnectionBroken", attachee1, SendMessageOptions.DontRequireReceiver);
 		}
-		if (gameObject != null)
+		if (this != null && gameObject != null)
 		{
 			Destroy(gameObject);
 		}
@@ -224,11 +198,6 @@ public class Connection : MonoBehaviour {
 
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
-
-		links[0].jointPrevious.connectedBody = attachee1.GetComponent<Rigidbody>();
-		links[0].jointNext.connectedBody = links[1].body;
-		links[1].jointPrevious.connectedBody = links[0].body;
-		links[1].jointNext.connectedBody = attachee2.GetComponent<Rigidbody>();
 
 		WeightJoints();
 
@@ -292,6 +261,16 @@ public class Connection : MonoBehaviour {
 			int prevLinkOrderLevel = links[i - 1].orderLevel;
 			int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
 
+			if (i < links.Count / 2)
+			{
+				links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
+			}
+			else
+			{
+				links[i].jointToAttachment.connectedBody = attachment2.attachee.body;
+			}
+			links[i].jointToAttachment.spring = 0;
+
 			if (links[i].jointPrevious != null)
 			{
 				if (links[i].orderLevel < prevLinkOrderLevel)
@@ -330,10 +309,11 @@ public class Connection : MonoBehaviour {
 			}
 		}
 
-		links[0].jointPrevious.spring = stats.attachSpring1;
-		links[0].jointNext.spring = stats.attachSpring1;
-		links[links.Count - 1].jointPrevious.spring = stats.attachSpring2;
-		links[links.Count - 1].jointNext.spring = stats.attachSpring2;
+		if (links.Count > 2)
+		{
+			links[1].jointToAttachment.spring = stats.attachSpring1;
+			links[links.Count-2].jointToAttachment.spring = stats.attachSpring2;
+		}
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
@@ -405,7 +385,6 @@ public class ConnectionAttachment
 [System.Serializable]
 public class ConnectionStats
 {
-	public bool keepRigid = false;
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
 	public float maxDistance = 25;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ConnectionAttachable : MonoBehaviour {
+	public Rigidbody body;
 	public bool handleFluffAttachment = true;
 	public bool connectAtFluffPoint = true;
 	public Color attachmentColor;
@@ -12,6 +13,14 @@ public class ConnectionAttachable : MonoBehaviour {
 	public int volleysToConnect;
 	public int volleys = 0;
 	public ConnectionAttachable volleyPartner;
+
+	void Awake()
+	{
+		if (body == null)
+		{
+			body = GetComponent<Rigidbody>();
+		}
+	}
 
 	public void AttachFluff(MovePulse pulse)
 	{

@@ -31,6 +31,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 145: {fileID: 14500002}
   - 145: {fileID: 14500006}
+  - 145: {fileID: 14500010}
   m_Layer: 19
   m_Name: Attachment 2 Link
   m_TagString: Untagged
@@ -83,8 +84,6 @@ GameObject:
   - 23: {fileID: 2300004}
   - 114: {fileID: 11400006}
   - 65: {fileID: 6500002}
-  - 145: {fileID: 14500000}
-  - 145: {fileID: 14500004}
   m_Layer: 19
   m_Name: Attachment 1 Link
   m_TagString: Untagged
@@ -290,7 +289,6 @@ MonoBehaviour:
   - {fileID: 11400006}
   - {fileID: 11400004}
   stats:
-    keepRigid: 0
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: 25
@@ -316,8 +314,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkCollider: {fileID: 6500002}
   body: {fileID: 5400000}
-  jointPrevious: {fileID: 14500002}
-  jointNext: {fileID: 14500006}
+  jointPrevious: {fileID: 0}
+  jointNext: {fileID: 0}
+  jointToAttachment: {fileID: 0}
   orderLevel: 0
 --- !u!114 &11400006
 MonoBehaviour:
@@ -332,8 +331,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkCollider: {fileID: 6500002}
   body: {fileID: 5400002}
-  jointPrevious: {fileID: 14500000}
-  jointNext: {fileID: 14500004}
+  jointPrevious: {fileID: 0}
+  jointNext: {fileID: 0}
+  jointToAttachment: {fileID: 0}
   orderLevel: 0
 --- !u!120 &12000000
 LineRenderer:
@@ -401,23 +401,6 @@ LineRenderer:
       serializedVersion: 2
       rgba: 16776960
   m_UseWorldSpace: 1
---- !u!145 &14500000
-SpringJoint:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_Spring: 0
-  m_Damper: 5
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
 --- !u!145 &14500002
 SpringJoint:
   m_ObjectHideFlags: 1
@@ -429,24 +412,7 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_Spring: 0
-  m_Damper: 5
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
---- !u!145 &14500004
-SpringJoint:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_Spring: 0
-  m_Damper: 5
+  m_Damper: 0
   m_MinDistance: 0
   m_MaxDistance: 0
   m_BreakForce: Infinity
@@ -463,7 +429,24 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_Spring: 0
-  m_Damper: 5
+  m_Damper: 0
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+--- !u!145 &14500010
+SpringJoint:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 0
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_Spring: 0
+  m_Damper: 0
   m_MinDistance: 0
   m_MaxDistance: 0
   m_BreakForce: Infinity

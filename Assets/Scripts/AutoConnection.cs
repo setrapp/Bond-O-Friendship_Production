@@ -5,7 +5,8 @@ public class AutoConnection : MonoBehaviour {
 	public ConnectionAttachable attachable1;
 	public ConnectionAttachable attachable2;
 	public GameObject connectionPrefab;
-	public Vector3 connectionOffset;
+	public Vector3 connectionOffset1;
+	public Vector3 connectionOffset2;
 	public bool connectToPlayer;
 	public PlayerInput.Player playerNumber;
 
@@ -48,7 +49,9 @@ public class AutoConnection : MonoBehaviour {
 				newConnection.stats = statsHolder.stats;
 			}
 			// TODO this should be able to happen in reverse order (pulling attachments is buggy).
-			newConnection.AttachPartners(attachable2, attachable2.transform.position, attachable1, attachable1.transform.position + attachable1.transform.InverseTransformDirection(connectionOffset));
+			Vector3 attachPos1 = attachable1.transform.position + attachable1.transform.InverseTransformDirection(connectionOffset1);
+			Vector3 attachPos2 = attachable2.transform.position + attachable2.transform.InverseTransformDirection(connectionOffset2);
+			newConnection.AttachPartners(attachable1, attachPos1, attachable2, attachPos2);
 		}
 	}
 }
