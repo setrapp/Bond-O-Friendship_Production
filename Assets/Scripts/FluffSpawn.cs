@@ -95,18 +95,12 @@ public class FluffSpawn : MonoBehaviour {
 			float currentSpeed = body.velocity.magnitude;
 			float currentByOldSpeed = currentSpeed / oldSpeed;
 			Vector3 fullBackDir = -body.velocity / currentSpeed;
-			Vector3 localFullBackDir = transform.InverseTransformDirection(fullBackDir);
-			localFullBackDir.y = localFullBackDir.z;
-			localFullBackDir.z = 0;
-
+			Vector3 localFullBackDir = fluffContainer.transform.InverseTransformDirection(fullBackDir);
 			for (int i = 0; i < fluffs.Count; i++)
 			{
 				// Compute the fluff's resting direction in world space.
 				Vector3 worldBaseDirection = fluffs[i].baseDirection;
-				worldBaseDirection = transform.InverseTransformDirection(worldBaseDirection);
-				worldBaseDirection.x *= -1;
-				worldBaseDirection.y = worldBaseDirection.z;
-				worldBaseDirection.z = 0;
+				worldBaseDirection = fluffContainer.transform.TransformDirection(worldBaseDirection);
 				
 				Vector3 fluffDir = fluffs[i].transform.up;
 
@@ -148,28 +142,24 @@ public class FluffSpawn : MonoBehaviour {
 						float sinAngle = Mathf.Sin(radAngle);
 						float cosAngle = Mathf.Cos(radAngle);
 						fluffDir.x = (baseDirection.x * cosAngle) - ((baseDirection.y * sinAngle) * yMult);
-						fluffDir.y = 0;
-						fluffDir.z = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
+						fluffDir.y = ((baseDirection.x * sinAngle) * yMult) + (baseDirection.y * cosAngle);
+						fluffDir.z = 0;
 
 						// Put the rotated direction into world coordinates and use for fluff direction.
-						fluffDir = transform.TransformDirection(fluffDir);
+						fluffDir = fluffContainer.transform.TransformDirection(fluffDir);
 					}
 				}
 				else
 				{
 					// Localize the current fluff direction.
-					Vector3 localFluffDir = transform.InverseTransformDirection(fluffDir);
-					localFluffDir.y = localFluffDir.z;
-					localFluffDir.z = 0;
+					Vector3 localFluffDir = fluffContainer.transform.InverseTransformDirection(fluffDir);
 
 					// Interpolate towards resting direction.
 					Vector3 fromRest = localFluffDir - fluffs[i].baseDirection;
 					localFluffDir = fluffs[i].baseDirection + (fromRest * currentByOldSpeed);
 
 					// Worldize new fluff direction.
-					localFluffDir.z = localFluffDir.y;
-					localFluffDir.y = 0;
-					fluffDir = transform.TransformDirection(localFluffDir);
+					fluffDir = fluffContainer.transform.TransformDirection(localFluffDir);
 				}
 				
 				fluffs[i].transform.up = fluffDir;
@@ -205,7 +195,7 @@ public class FluffSpawn : MonoBehaviour {
 			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;
 			Vector3 tempEndPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
-			tempEndPosition = transform.InverseTransformPoint(tempEndPosition);
+			tempEndPosition = fluffContainer.transform.InverseTransformPoint(tempEndPosition);
 
 			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
 
@@ -219,7 +209,7 @@ public class FluffSpawn : MonoBehaviour {
 				// Force the old spawned fluff out.
 				if (spawnedFluff != null)
 				{
-					spawnedFluff.transform.localPosition = transform.InverseTransformPoint(endPosition);
+					spawnedFluff.transform.localPosition = fluffContainer.transform.InverseTransformPoint(endPosition);
 				}
 
 				endPosition = tempEndPosition;
@@ -230,9 +220,7 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.baseAngle = fluffRotation.z;
 
 			newFluffInfo.baseDirection = newFluff.transform.up;
-			newFluffInfo.baseDirection = transform.InverseTransformDirection(newFluffInfo.baseDirection);
-			newFluffInfo.baseDirection.y = newFluffInfo.baseDirection.z;
-			newFluffInfo.baseDirection.z = 0;
+			newFluffInfo.baseDirection = fluffContainer.transform.InverseTransformDirection(newFluffInfo.baseDirection);
 
 			if (useMaterial == null)
 			{
@@ -341,6 +329,6 @@ public class FluffSpawn : MonoBehaviour {
 			}
 		}
 
-		return new Vector3(90, 0, fluffAngle);
+		return new Vector3(0, 0, fluffAngle);
 	}
 }
