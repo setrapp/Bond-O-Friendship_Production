@@ -76,7 +76,7 @@ public class CubePuzzle : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider col) {
-		if(col.transform.tag == "Pulse")
+		if(col.transform.tag == "Fluff")
 		{
 			transform.position = startPosition.transform.position;
 		}

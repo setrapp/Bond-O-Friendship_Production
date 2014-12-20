@@ -28,12 +28,8 @@ public class PlayerInput : MonoBehaviour {
 	public GameObject geometry;
 	public float deadZone = .75f;
 
-	private bool firePulseReady = true;
+	private bool fireFluffReady = true;
 	private Vector3 velocityChange;
-	public float basePulsePower = 10;
-	public float timedPulsePower = 10;
-	public float basePulseDrain = 0.1f;
-	public float timedPulseDrain = 0.1f;
 
 
 	public bool swapJoysticks = false;
@@ -235,7 +231,7 @@ public class PlayerInput : MonoBehaviour {
 
 		//Debug.Log(GetBumperAbsorb());
 
-		if(!firePulseReady)
+		if(!fireFluffReady)
 			canAbsorb = false;
 
 		if (canAbsorb)
@@ -247,16 +243,16 @@ public class PlayerInput : MonoBehaviour {
 				absorb.startColor = GetComponent<ConnectionAttachable>().attachmentColor / 2;
 				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 			}
-			GameObject[] pulseArray = GameObject.FindGameObjectsWithTag("Pulse");
-			foreach(GameObject livePulse in pulseArray)
+			GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
+			foreach(GameObject liveFluffObject in fluffArray)
 			{
-				MovePulse livePulseMove = livePulse.GetComponent<MovePulse>();
-				if (livePulseMove != null)
+				Fluff liveFluff = liveFluffObject.GetComponent<Fluff>();
+				if (liveFluff != null)
 				{
-					bool fluffAttachedToSelf = (livePulseMove.attachee != null && livePulseMove.attachee.gameObject == gameObject);
+					bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
 					if (!fluffAttachedToSelf)
 					{
-						float fluffSqrDist = (livePulseMove.transform.position - transform.position).sqrMagnitude;
+						float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
 						Vector3 absorbOffset = Vector3.zero;
 						// If the fluff is too far to be absorbed directly and absorption through the connection is enabled, attempt connection absorption.
 						if (fluffSqrDist > Mathf.Pow(partnerLink.absorbStrength, 2) && partnerLink.connectionAbsorb)
@@ -267,8 +263,8 @@ public class PlayerInput : MonoBehaviour {
 								// Only check connection distance to fluff if the connection is at least as long as the distance from this to the fluff.
 								if (Mathf.Pow(partnerLink.connectionAttachable.connections[i].ConnectionLength, 2) >= fluffSqrDist)
 								{
-									Vector3 nearConnection = partnerLink.connectionAttachable.connections[i].NearestPoint(livePulse.transform.position);
-									float sqrDist = (livePulse.transform.position - nearConnection).sqrMagnitude;
+									Vector3 nearConnection = partnerLink.connectionAttachable.connections[i].NearestPoint(liveFluffObject.transform.position);
+									float sqrDist = (liveFluffObject.transform.position - nearConnection).sqrMagnitude;
 									if (sqrDist < nearSqrDist)
 									{
 										nearSqrDist = sqrDist;
@@ -280,7 +276,7 @@ public class PlayerInput : MonoBehaviour {
 						}
 						if (fluffSqrDist <= Mathf.Pow(partnerLink.absorbStrength, 2))
 						{
-							livePulseMove.Pull(gameObject, absorbOffset, pullSpeed);
+							liveFluff.Pull(gameObject, absorbOffset, pullSpeed);
 						}
 					}
 				}
@@ -347,25 +343,23 @@ public class PlayerInput : MonoBehaviour {
 		{
 			lookAt.Normalize();
 
-			if(firePulseReady)
+			if(fireFluffReady)
 			{
 				//Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
-				Vector3 pulseDirection = new Vector3(lookAt.x, lookAt.y, 0);
+				Vector3 throwDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
 
-				if (Vector3.Dot(mover.velocity, pulseDirection) > 0)
+				if (Vector3.Dot(mover.velocity, throwDirection) > 0)
 				{
 					velocityBoost += mover.velocity;
 				}
-			
-				pulseDirection *= basePulsePower;
-				partnerLink.pulseShot.Shoot(pulseDirection, velocityBoost, basePulseDrain);
-				firePulseReady = false;
+                partnerLink.fluffThrow.Throw(throwDirection, velocityBoost);
+				fireFluffReady = false;
 			}
 		}
 		else
 		{
-			firePulseReady = true;
+			fireFluffReady = true;
 		}
 	}
 

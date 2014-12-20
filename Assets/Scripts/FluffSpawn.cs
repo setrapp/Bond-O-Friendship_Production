@@ -8,13 +8,13 @@ public class FluffSpawn : MonoBehaviour {
 	public int naturalFluffCount;
 	public GameObject fluffPrefab;
 	public GameObject fluffContainer;
-	public List<MovePulse> fluffs;
+	public List<Fluff> fluffs;
 	public float spawnOffset;
 	public Material fluffMaterial;
 	public float spawnTime;
 	private float sinceSpawn;
 	public float startingFluff;
-	public MovePulse spawnedFluff;
+	public Fluff spawnedFluff;
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
 	public float maxAlterAngle;
@@ -186,7 +186,7 @@ public class FluffSpawn : MonoBehaviour {
 
 	public void SpawnFluff(bool instantSprout = false, Material useMaterial = null)
 	{
-		if (fluffPrefab.GetComponent<MovePulse>() != null)
+		if (fluffPrefab.GetComponent<Fluff>() != null)
 		{
 			Vector3 fluffRotation = FindOpenFluffAngle();
 
@@ -197,7 +197,7 @@ public class FluffSpawn : MonoBehaviour {
 			Vector3 tempEndPosition = newFluff.transform.up * spawnOffset + newFluff.transform.position;
 			tempEndPosition = fluffContainer.transform.InverseTransformPoint(tempEndPosition);
 
-			MovePulse newFluffInfo = newFluff.GetComponent<MovePulse>();
+			Fluff newFluffInfo = newFluff.GetComponent<Fluff>();
 
 			if (instantSprout)
 			{
@@ -258,7 +258,7 @@ public class FluffSpawn : MonoBehaviour {
 		}
 	}
 
-	public void DestroyFluff(MovePulse fluffToDestroy, bool popFluff = true)
+	public void DestroyFluff(Fluff fluffToDestroy, bool popFluff = true)
 	{
 		if (fluffs.Contains(fluffToDestroy))
 		{

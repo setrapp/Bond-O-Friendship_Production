@@ -22,11 +22,11 @@ public class ConnectionAttachable : MonoBehaviour {
 		}
 	}
 
-	public void AttachFluff(MovePulse pulse)
+	public void AttachFluff(Fluff fluff)
 	{
-		if (handleFluffAttachment && pulse != null)
+		if (handleFluffAttachment && fluff != null)
 		{
-			AttemptConnection(pulse.creator, pulse.transform.position);
+			AttemptConnection(fluff.creator, fluff.transform.position);
 		}
 	}
 

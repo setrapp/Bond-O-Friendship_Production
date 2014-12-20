@@ -2,18 +2,16 @@
 using System.Collections;
 
 [RequireComponent(typeof(SimpleMover))]
-public class MovePulse : MonoBehaviour {
+public class Fluff : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
-	//public PulseShot creator;
 	public ConnectionAttachable creator;
 	public PartnerLink volleyTarget;
 	public int volleys;
 	public float capacity;
 	public Vector3 target;
 	public float rotationSpeed = 50.0f;
-	//public GameObject pulseCreator;
-	public PulseShot volleyPartner;
+	public FluffThrow volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
 	public float baseAngle = -1;
@@ -35,7 +33,6 @@ public class MovePulse : MonoBehaviour {
 
 	void Awake()
 	{
-		//pulseCreator = GameObject.Find("Globals");
 		oldBulbPos = bulb.transform.position;
 		if (hull == null)
 		{
@@ -57,7 +54,7 @@ public class MovePulse : MonoBehaviour {
 		}
 
 		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
-		gameObject.tag = "Pulse";
+		gameObject.tag = "Fluff";
 	}
 
 	// Update is called once per frame

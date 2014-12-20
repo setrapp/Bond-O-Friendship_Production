@@ -10,7 +10,7 @@ public class PartnerLink : MonoBehaviour {
 	public TrailRenderer leftTrail;
 	public TrailRenderer midTrail;
 	public TrailRenderer rightTrail;
-	public PulseShot pulseShot;
+	public FluffThrow fluffThrow;
 	public ConnectionAttachable connectionAttachable;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
@@ -34,7 +34,7 @@ public class PartnerLink : MonoBehaviour {
 	private bool wasSlowing = false;
 	public float absorbSpeedFactor = 0;
 	public int volleysToConnect = 2;
-	private List<MovePulse> fluffsToAdd;
+	private List<Fluff> fluffsToAdd;
 	private FloatMoving floatMove;
 
 	void Awake()
@@ -47,9 +47,9 @@ public class PartnerLink : MonoBehaviour {
 		{
 			tracer = GetComponent<Tracer>();
 		}
-		if (pulseShot == null)
+		if (fluffThrow == null)
 		{
-			pulseShot = GetComponent<PulseShot>();
+			fluffThrow = GetComponent<FluffThrow>();
 		}
 		if (connectionAttachable == null)
 		{
@@ -106,7 +106,7 @@ public class PartnerLink : MonoBehaviour {
 					fluffMaterial = fluffMesh.material;
 				}
 
-				pulseShot.fluffSpawn.SpawnFluff(true, fluffMaterial);
+				fluffThrow.fluffSpawn.SpawnFluff(true, fluffMaterial);
 
 				Destroy(fluffsToAdd[i].gameObject);
 				fluffsToAdd.RemoveAt(i);
@@ -119,22 +119,22 @@ public class PartnerLink : MonoBehaviour {
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 	}
 
-	public void AttachFluff(MovePulse pulse)
+	public void AttachFluff(Fluff fluff)
 	{
-		if (pulse != null && (absorbing || pulse.moving) && (pulse.attachee == null || pulse.attachee.gameObject == gameObject || !pulse.attachee.possessive))
+		if (fluff != null && (absorbing || fluff.moving) && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
 		{
-			connectionAttachable.AttemptConnection(pulse.creator, pulse.transform.position);
+			connectionAttachable.AttemptConnection(fluff.creator, fluff.transform.position);
 
-			if (pulse.creator != null && pulse.creator != connectionAttachable)
+			if (fluff.creator != null && fluff.creator != connectionAttachable)
 			{
-				SetFlashAndFill(pulse.creator.attachmentColor);
+				SetFlashAndFill(fluff.creator.attachmentColor);
 			}
 
 			if (fluffsToAdd == null)
 			{
-				fluffsToAdd = new List<MovePulse>();
+				fluffsToAdd = new List<Fluff>();
 			}
-			fluffsToAdd.Add(pulse);
+			fluffsToAdd.Add(fluff);
 		}	
 	}
 

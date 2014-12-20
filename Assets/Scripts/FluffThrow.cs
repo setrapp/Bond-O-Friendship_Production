@@ -2,18 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PulseShot : MonoBehaviour {
+public class FluffThrow : MonoBehaviour {
 	public PartnerLink partnerLink;
-	public GameObject pulsePrefab;
-	private GameObject pulse;
-	public ParticleSystem pulseParticlePrefab;
-	private ParticleSystem pulseParticle;
-	private float pulseScale;
-	public float basePulseSize = 0.25f;
-	public PulseShot lastPulseAccepted;
+	public FluffThrow lastFluffAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
-	public PulseShot volleyPartner;
+	public FluffThrow volleyPartner;
 	public FloatMoving floatMove;
 	public float floatPushBack;
 	public FluffSpawn fluffSpawn;
@@ -40,7 +34,7 @@ public class PulseShot : MonoBehaviour {
 		}
 	}
 
-	public void Shoot(Vector3 passDirection, Vector3 velocityBoost, float pulseCapacity)
+	public void Throw(Vector3 passDirection, Vector3 velocityBoost)
 	{
 		if (Time.deltaTime <= 0)
 		{
@@ -105,30 +99,29 @@ public class PulseShot : MonoBehaviour {
 
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDirection;
 
-			MovePulse movePulse = passFluffs[i].GetComponent<MovePulse>();
-			movePulse.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
-			movePulse.transform.parent = transform.parent;
-			movePulse.capacity = pulseCapacity;
-			movePulse.volleyPartner = lastPulseAccepted;
+			Fluff fluff = passFluffs[i].GetComponent<Fluff>();
+            fluff.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
+            fluff.transform.parent = transform.parent;
+            fluff.volleyPartner = lastFluffAccepted;
 			shotAngle += shotSpread / passFluffCount;
-			movePulse.transform.position = transform.position;
+            fluff.transform.position = transform.position;
 
-			movePulse.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
+            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
 		}
 		
 
-		// If only the first pulse can be volleyed to create a connection, ignore last pulse accepted for future shots.
+		// If only the first fluff can be volleyed to create a connection, ignore last fluff accepted for future shots.
 		if (volleyOnlyFirst)
 		{
-			lastPulseAccepted = null;
+			lastFluffAccepted = null;
 		}
 
-		// If floating propel away from pulse.
+		// If floating propel away from fluff.
 		if (floatMove.Floating && passFluffs.Count > 0)
 		{
-			Vector3 pulseForce = -passDirection * floatPushBack;
-			partnerLink.mover.body.AddForce(pulseForce);
-			partnerLink.mover.velocity += pulseForce * Time.deltaTime;
+			Vector3 recoilForce = -passDirection * floatPushBack;
+			partnerLink.mover.body.AddForce(recoilForce);
+			partnerLink.mover.velocity += recoilForce * Time.deltaTime;
 		}
 	}
 }

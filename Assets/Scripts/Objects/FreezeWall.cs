@@ -87,7 +87,7 @@ public class FreezeWall : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		if(col.transform.tag == "Converser" || col.transform.tag == "Pulse")
+		if(col.transform.tag == "Converser" || col.transform.tag == "Fluff")
 		{
 			freezing = true;
 			dropLeaves = true;
@@ -97,7 +97,7 @@ public class FreezeWall : MonoBehaviour {
 	}
 
 	void OnCollisionExit(Collision col){
-		if(col.transform.tag == "Converser" || col.transform.tag == "Pulse")
+		if(col.transform.tag == "Converser" || col.transform.tag == "Fluff")
 		{
 			freezing = false;
 			dropLeaves = false;

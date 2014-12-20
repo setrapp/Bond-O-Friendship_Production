@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PulseDestroyer : MonoBehaviour {
-	public bool destroyPulses = true;
+public class FluffDestroyer : MonoBehaviour {
+	public bool destroyFluffs = true;
 	public bool destroyConnections = true;
 	public int newNaturalFluff = -1;
 	private List<GameObject> toDestroy = null;
@@ -45,7 +45,7 @@ public class PulseDestroyer : MonoBehaviour {
 
 			for (int i = toDestroy.Count - 1; i >= 0; i--)
 			{
-				MovePulse fluff = toDestroy[i].GetComponent<MovePulse>();
+				Fluff fluff = toDestroy[i].GetComponent<Fluff>();
 				if (fluff != null)
 				{
 					fluff.StopMoving();
@@ -65,7 +65,7 @@ public class PulseDestroyer : MonoBehaviour {
 		{
 			for (int i = toEmpty.Count - 1; i >= 0; i--)
 			{
-				if (destroyPulses)
+				if (destroyFluffs)
 				{
 					toEmpty[i].DestroyAllFluffs();
 				}
@@ -83,9 +83,9 @@ public class PulseDestroyer : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		bool crossed = false;
-		if (other.gameObject.tag == "Pulse" && destroyPulses)
+		if (other.gameObject.tag == "Fluff" && destroyFluffs)
 		{
-			MovePulse fluff = other.GetComponent<MovePulse>();
+			Fluff fluff = other.GetComponent<Fluff>();
 			if (fluff != null && (fluff.attachee == null || !fluff.attachee.possessive))
 			{
 				if (toDestroy == null)
