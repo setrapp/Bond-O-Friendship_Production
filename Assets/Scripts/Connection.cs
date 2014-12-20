@@ -134,6 +134,13 @@ public class Connection : MonoBehaviour {
 			links[0].transform.position = attachment1.position;
 			links[links.Count - 1].transform.position = attachment2.position;
 
+			// Ensure smooth transition between the two lines at the center.
+			if (!isCountEven && links.Count > 2)
+			{
+				Vector3 betweenMids = links[(links.Count/2)+1].transform.position - links[(links.Count/2)-1].transform.position;
+				links[links.Count/2].transform.position = links[(links.Count/2)-1].transform.position + (betweenMids/2);
+			}
+
 			// Draw lines between connection points.
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 0; i < links.Count / 2; i++)
