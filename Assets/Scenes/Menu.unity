@@ -1467,7 +1467,7 @@ GameObject:
   - 114: {fileID: 841552382}
   m_Layer: 13
   m_Name: Player 1
-  m_TagString: Converser
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1500,6 +1500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   handleFluffAttachment: 0
   connectAtFluffPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
@@ -1547,7 +1548,7 @@ MonoBehaviour:
   spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 0
+  startingFluff: 1
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -1612,11 +1613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partnerLink: {fileID: 0}
-  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
-  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
-    type: 2}
-  basePulseSize: .25
-  lastPulseAccepted: {fileID: 0}
+  lastFluffAccepted: {fileID: 0}
   volleyOnlyFirst: 0
   volleys: 0
   volleyPartner: {fileID: 0}
@@ -1654,10 +1651,6 @@ MonoBehaviour:
   sharing: 0
   geometry: {fileID: 814978149}
   deadZone: .75
-  basePulsePower: 10
-  timedPulsePower: 10
-  basePulseDrain: .100000001
-  timedPulseDrain: .400000006
   swapJoysticks: 0
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
@@ -1681,7 +1674,7 @@ MonoBehaviour:
   leftTrail: {fileID: 1229815175}
   midTrail: {fileID: 419342791}
   rightTrail: {fileID: 1469592156}
-  pulseShot: {fileID: 0}
+  fluffThrow: {fileID: 0}
   connectionAttachable: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
@@ -2523,7 +2516,7 @@ GameObject:
   - 114: {fileID: 1293440120}
   m_Layer: 13
   m_Name: Player 2
-  m_TagString: Converser
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2556,6 +2549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   handleFluffAttachment: 0
   connectAtFluffPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
@@ -2603,7 +2597,7 @@ MonoBehaviour:
   spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 0
+  startingFluff: 1
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -2668,11 +2662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partnerLink: {fileID: 0}
-  pulsePrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
-  pulseParticlePrefab: {fileID: 19800000, guid: 49567360ef55f014a96609e4d7dcddb5,
-    type: 2}
-  basePulseSize: .25
-  lastPulseAccepted: {fileID: 0}
+  lastFluffAccepted: {fileID: 0}
   volleyOnlyFirst: 0
   volleys: 0
   volleyPartner: {fileID: 0}
@@ -2710,10 +2700,6 @@ MonoBehaviour:
   sharing: 0
   geometry: {fileID: 1500494302}
   deadZone: .75
-  basePulsePower: 10
-  timedPulsePower: 10
-  basePulseDrain: .100000001
-  timedPulseDrain: .400000006
   swapJoysticks: 0
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
@@ -2737,7 +2723,7 @@ MonoBehaviour:
   leftTrail: {fileID: 1646456281}
   midTrail: {fileID: 122779312}
   rightTrail: {fileID: 1542212951}
-  pulseShot: {fileID: 0}
+  fluffThrow: {fileID: 0}
   connectionAttachable: {fileID: 0}
   partnerLineSize: .25
   mover: {fileID: 0}
@@ -3845,7 +3831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40588a4d2d1d91945980389e71d8e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: Cradle 4
+  startScene: Cradle
   startArrow: {fileID: 439529935}
   optionsArrow: {fileID: 657683567}
   quitArrow: {fileID: 2112359052}
