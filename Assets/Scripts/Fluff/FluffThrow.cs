@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FluffThrow : MonoBehaviour {
-	public PartnerLink partnerLink;
+	public CharacterComponents character;
 	public FluffThrow lastFluffAccepted;
 	public bool volleyOnlyFirst = true;
 	public int volleys;
 	public FluffThrow volleyPartner;
 	public FloatMoving floatMove;
 	public float floatPushBack;
-	public FluffSpawn fluffSpawn;
+	public FluffHandler fluffHandler;
 	public int minShotCount;
 	public int maxShotCount;
 	public float shotSpread;
@@ -20,17 +20,17 @@ public class FluffThrow : MonoBehaviour {
 
 	void Start()
 	{
-		if (partnerLink == null)
+		if (character == null)
 		{
-			partnerLink = GetComponent<PartnerLink>();
+			character = GetComponent<CharacterComponents>();
 		}
 		if (floatMove == null)
 		{
 			floatMove = GetComponent<FloatMoving>();
 		}
-		if (fluffSpawn == null)
+		if (fluffHandler == null)
 		{
-			fluffSpawn = GetComponent<FluffSpawn>();
+			fluffHandler = GetComponent<FluffHandler>();
 		}
 	}
 
@@ -41,10 +41,10 @@ public class FluffThrow : MonoBehaviour {
 			return;
 		}
 
-		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffSpawn.fluffs.Count);
+		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffHandler.fluffs.Count);
 
 
-		if (fluffSpawn == null || fluffSpawn.fluffs.Count < 1 || passFluffCount < 1)
+		if (fluffHandler == null || fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
 		{
 			return;
 		}
@@ -53,13 +53,13 @@ public class FluffThrow : MonoBehaviour {
 		List<int> passFluffIndices = new List<int>();
 		List<GameObject> passFluffs = new List<GameObject>();
 		List<float> maxFluffDotPasses = new List<float>();
-		for (int i = 0; i < fluffSpawn.fluffs.Count; i++)
+		for (int i = 0; i < fluffHandler.fluffs.Count; i++)
 		{
-			float fluffDotPass = Vector3.Dot(fluffSpawn.fluffs[i].transform.up, passDirection);
-			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffSpawn.fluffs[i] != fluffSpawn.spawnedFluff)
+			float fluffDotPass = Vector3.Dot(fluffHandler.fluffs[i].transform.up, passDirection);
+			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffHandler.fluffs[i] != fluffHandler.spawnedFluff)
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
-				passFluffs.Add(fluffSpawn.fluffs[i].gameObject);
+				passFluffs.Add(fluffHandler.fluffs[i].gameObject);
 				passFluffIndices.Add(i);
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{
@@ -95,7 +95,7 @@ public class FluffThrow : MonoBehaviour {
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
 		{
-			fluffSpawn.fluffs.RemoveAt(passFluffIndices[i]);
+			fluffHandler.fluffs.RemoveAt(passFluffIndices[i]);
 
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDirection;
 
@@ -110,7 +110,7 @@ public class FluffThrow : MonoBehaviour {
 		}
 		
 
-		// If only the first fluff can be volleyed to create a connection, ignore last fluff accepted for future shots.
+		// If only the first fluff can be volleyed to create a bond, ignore last fluff accepted for future shots.
 		if (volleyOnlyFirst)
 		{
 			lastFluffAccepted = null;
@@ -120,8 +120,8 @@ public class FluffThrow : MonoBehaviour {
 		if (floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 recoilForce = -passDirection * floatPushBack;
-			partnerLink.mover.body.AddForce(recoilForce);
-			partnerLink.mover.velocity += recoilForce * Time.deltaTime;
+			character.mover.body.AddForce(recoilForce);
+			character.mover.velocity += recoilForce * Time.deltaTime;
 		}
 	}
 }

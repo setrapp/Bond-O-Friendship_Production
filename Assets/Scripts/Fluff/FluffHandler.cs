@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class FluffSpawn : MonoBehaviour {
+public class FluffHandler : MonoBehaviour {
+	public CharacterComponents character;
 	public Rigidbody body;
 	public GameObject headSprite;
 	public int naturalFluffCount;
@@ -21,9 +22,8 @@ public class FluffSpawn : MonoBehaviour {
 	private float oldSpeed;
 	private bool wasSlowing;
 	private Vector3 oldForward;
-	[HideInInspector]
-	public PartnerLink partnerLink;
 	private FluffStick fluffStick;
+	private List<Fluff> fluffsToAdd;
 
 	void Awake()
 	{
@@ -35,8 +35,11 @@ public class FluffSpawn : MonoBehaviour {
 		{
 			fluffContainer = gameObject;
 		}
-
-		partnerLink = GetComponent<PartnerLink>();
+		if (character == null)
+		{
+			character = GetComponent<CharacterComponents>();
+		}
+		
 		fluffStick = GetComponent<FluffStick>();
 
 		SpawnStartingFluff();
@@ -46,11 +49,11 @@ public class FluffSpawn : MonoBehaviour {
 		wasSlowing = false;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 		if (fluffs.Count >= naturalFluffCount)
 		{
-			partnerLink.fillScale = 1;
+			character.fillScale = 1;
 		}
 
 		// Attempt to spawn more fluff.
@@ -62,30 +65,56 @@ public class FluffSpawn : MonoBehaviour {
 				{
 					SpawnFluff();
 					sinceSpawn = 0;
-					partnerLink.fillScale = 1;
+					character.fillScale = 1;
 				}
 				else if (spawnedFluff == null)
 				{
-					if (partnerLink.fillScale == 1)
+					if (character.fillScale == 1)
 					{
-						partnerLink.fillScale = 0;
+						character.fillScale = 0;
 					}
 					sinceSpawn += Time.deltaTime;
-					partnerLink.fillScale += Time.deltaTime;
+					character.fillScale += Time.deltaTime;
 				}
 			}
 		}
 
-		if(spawnedFluff != null)
+		// Push the most recently spawned fluff to the outside.
+		if (spawnedFluff != null)
 		{
 			spawnedFluff.transform.localPosition = Vector3.MoveTowards(spawnedFluff.transform.localPosition, endPosition, sproutSpeed);
 			spawnedFluff.oldBulbPos = spawnedFluff.bulb.transform.position;
-			if(spawnedFluff.transform.localPosition == endPosition)
+			if (spawnedFluff.transform.localPosition == endPosition)
 			{
 				spawnedFluff = null;
 			}
 		}
 
+		if (fluffsToAdd != null)
+		{
+			// Spawn fluffs that look like clones of the ones being added.
+			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
+			{
+				Material fluffMaterial = null;
+				MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
+				if (fluffMesh != null)
+				{
+					fluffMaterial = fluffMesh.material;
+				}
+
+				SpawnFluff(true, fluffMaterial);
+
+				Destroy(fluffsToAdd[i].gameObject);
+				fluffsToAdd.RemoveAt(i);
+			}
+
+			fluffsToAdd.Clear();
+			fluffsToAdd = null;
+		}
+	}
+
+	void FixedUpdate()
+	{
 		/*TODO rotate fluff constraints to rigidbody direction rather that transform direction.*/
 
 		// Rotate fluffs based on movement.
@@ -236,7 +265,7 @@ public class FluffSpawn : MonoBehaviour {
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
-			newFluffInfo.creator = partnerLink.connectionAttachable;
+			newFluffInfo.creator = character.bondAttachable;
 			fluffs.Add(newFluffInfo);
 		}
 	}
@@ -247,6 +276,25 @@ public class FluffSpawn : MonoBehaviour {
 		while (fluffs.Count < startingFluff)
 		{
 			SpawnFluff(true);
+		}
+	}
+
+	public void AttachFluff(Fluff fluff)
+	{
+		if (fluff != null && (character.attractor.attracting || fluff.moving) && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
+		{
+			character.bondAttachable.AttemptBond(fluff.creator, fluff.transform.position);
+
+			if (fluff.creator != null && fluff.creator != character.bondAttachable)
+			{
+				character.SetFlashAndFill(fluff.creator.attachmentColor);
+			}
+
+			if (fluffsToAdd == null)
+			{
+				fluffsToAdd = new List<Fluff>();
+			}
+			fluffsToAdd.Add(fluff);
 		}
 	}
 

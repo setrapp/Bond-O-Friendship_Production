@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CharacterColors : MonoBehaviour {
 	public bool updateColors = false;
+	public CharacterComponents character;
 	[Header("Colors")]
 	public Color attachmentColor;
 	[Header("Materials")]
@@ -10,18 +11,14 @@ public class CharacterColors : MonoBehaviour {
 	public Material fillMaterial;
 	public Material trailMaterial;
 	public Material fluffMaterial;
-	[Header("Objects")]
-	public BondAttachable connectionAttachable;
-	public MeshRenderer headRenderer;
-	public MeshRenderer fillRenderer;
-	public SpriteRenderer flashRenderer;
-	public TrailRenderer leftTrailRenderer;
-	public TrailRenderer midTrailRenderer;
-	public TrailRenderer rightTrailRenderer;
-	public FluffSpawn fluffSpawn;
 
 	void Awake()
 	{
+		if (character == null)
+		{
+			character = GetComponent<CharacterComponents>();
+		}
+		character.FindComponents();
 		UpdateCharacterColors();
 	}
 
@@ -36,13 +33,13 @@ public class CharacterColors : MonoBehaviour {
 
 	private void UpdateCharacterColors()
 	{
-		connectionAttachable.attachmentColor = attachmentColor;
-		headRenderer.material = headMaterial;
-		fillRenderer.material = fillMaterial;
-		flashRenderer.color = attachmentColor;
-		leftTrailRenderer.material = trailMaterial;
-		midTrailRenderer.material = trailMaterial;
-		rightTrailRenderer.material = trailMaterial;
-		fluffSpawn.fluffMaterial = fluffMaterial;
+		character.bondAttachable.attachmentColor = attachmentColor;
+		character.headRenderer.material = headMaterial;
+		character.fillRenderer.material = fillMaterial;
+		character.flashRenderer.color = attachmentColor;
+		character.leftTrail.material = trailMaterial;
+		character.midTrail.material = trailMaterial;
+		character.rightTrail.material = trailMaterial;
+		character.fluffHandler.fluffMaterial = fluffMaterial;
 	}
 }

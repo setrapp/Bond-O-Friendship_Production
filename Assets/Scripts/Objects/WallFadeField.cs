@@ -17,7 +17,7 @@ public class WallFadeField : MonoBehaviour {
 	{
 		if(collide.gameObject.tag == "Character")
 		{
-			//if(collide.gameObject.GetComponent<PartnerLink>().isConnected == true)
+			//if(collide.gameObject.GetComponent<CharacterComponents>().isConnected == true)
 		//	{
 			//	fadenow = true;
 			//}

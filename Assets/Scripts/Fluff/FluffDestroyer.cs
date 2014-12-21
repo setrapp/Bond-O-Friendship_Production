@@ -7,7 +7,7 @@ public class FluffDestroyer : MonoBehaviour {
 	public bool destroyBonds = true;
 	public int newNaturalFluff = -1;
 	private List<GameObject> toDestroy = null;
-	private List<FluffSpawn> toEmpty = null;
+	private List<FluffHandler> toEmpty = null;
 	public float crossAlpha = 0.5f;
 	private float restAlpha;
 	public float fadeTime = 1;
@@ -98,22 +98,22 @@ public class FluffDestroyer : MonoBehaviour {
 		}
 		else if (other.gameObject.tag == "Character")
 		{
-			FluffSpawn spawn = other.GetComponent<FluffSpawn>();
+			FluffHandler spawn = other.GetComponent<FluffHandler>();
 			if (spawn != null)
 			{
 				if (toEmpty == null)
 				{
-					toEmpty = new List<FluffSpawn>();
+					toEmpty = new List<FluffHandler>();
 				}
 				toEmpty.Add(spawn);
 			}
 
 			if (destroyBonds)
 			{
-				PartnerLink partnerLink = other.GetComponent<PartnerLink>();
-				for (int i = 0; i < partnerLink.connectionAttachable.bonds.Count; i++)
+				CharacterComponents character = other.GetComponent<CharacterComponents>();
+				for (int i = 0; i < character.bondAttachable.bonds.Count; i++)
 				{
-					partnerLink.connectionAttachable.bonds[i].BreakBond();
+					character.bondAttachable.bonds[i].BreakBond();
 				}
 			}
 			crossed = true;

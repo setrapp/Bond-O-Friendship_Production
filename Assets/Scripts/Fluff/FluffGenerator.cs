@@ -17,7 +17,7 @@ public class FluffGenerator : MonoBehaviour {
 	private float velocity;
 	private Vector3 targetAngle;
 	private Vector3 baseTarget;
-	public BondAttachable connectionAttachable;
+	public BondAttachable bondAttachable;
 
 	// Use this for initialization
 	void Start () {
@@ -65,7 +65,7 @@ public class FluffGenerator : MonoBehaviour {
 		else
 			targetAngle = Quaternion.Euler(0, 0, Random.Range(-120, 31)) * new Vector3(velocity,velocity,0);
 		//fluff.target = transform.position + targetAngle;
-		fluff.creator = connectionAttachable;
+		fluff.creator = bondAttachable;
 		fluff.Pass(targetAngle, this.gameObject);
 	}
 }

@@ -2,12 +2,8 @@
 using System.Collections;
 
 public class PlayerInput : MonoBehaviour {
-	public SimpleMover mover;
-	public PartnerLink partnerLink;
-	protected Collider tailTrigger;
+	public CharacterComponents character;
 	public enum Player{Player1, Player2};
-
-	//public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
 
 	public Globals.ControlScheme controlScheme;
 
@@ -16,8 +12,6 @@ public class PlayerInput : MonoBehaviour {
 	public GameObject canvasStart;
 
 	public GameObject canvasPaused;
-
-	public ParticleSystem absorbPrefab;
 
 	public bool useKeyboard = false;
 
@@ -34,15 +28,21 @@ public class PlayerInput : MonoBehaviour {
 
 	public bool swapJoysticks = false;
 
-	private ParticleSystem absorb;
 	private Vector3 target;
 	public Vector3 desiredLook;
 	public bool joystickDetermined = false;
 
 	private bool paused = false;
 
-	public float pullSpeed;
 	private float i = 0;
+
+	void Awake()
+	{
+		if (character == null)
+		{
+			character = GetComponent<CharacterComponents>();
+		}
+	}
 
 	void Start()
 	{
@@ -82,10 +82,6 @@ public class PlayerInput : MonoBehaviour {
 	}
 
 	void Update () {
-
-//		if(playerNumber == Player.Player2)
-//			Debug.Log(joystickDetermined);
-
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
@@ -106,102 +102,26 @@ public class PlayerInput : MonoBehaviour {
 
 			paused = !paused;
 		}
-
-		//if(playerNumber == Player.Player2)
-		//{
-			//Debug.Log(controlScheme.ToString());
-		//}
-
-		//var gamepads = Input.GetJoystickNames();
-		//useKeyboard = (gamepads.Length == 1 && playerNumber == Player.Player1) || gamepads.Length > 1 ? false : true;
-		//if (useKeyboard && canvasStart.activeInHierarchy)
-		//{
-		//	canvasStart.SetActive(false);
-		//}
-
-		/*if(!useKeyboard && !joystickDetermined)
-		{
-			if(playerNumber == Player.Player1)
-			{
-				if(Input.GetButtonDown("Joy1Absorb") || Input.GetButtonDown("Joy1Pause") || Input.GetButtonDown("Joy1StickThrow"))
-				{
-					joystickNumber = JoyStick.Joy1;
-					joystickDetermined = true;
-				}
-				if(Input.GetButtonDown("Joy2Absorb") || Input.GetButtonDown("Joy2Pause") || Input.GetButtonDown("Joy2StickThrow"))
-				{
-					joystickNumber = JoyStick.Joy2;
-					joystickDetermined = true;
-				}
-				if(Input.GetButtonDown("Joy3Absorb") || Input.GetButtonDown("Joy3Pause") || Input.GetButtonDown("Joy3StickThrow"))
-				{
-					joystickNumber = JoyStick.Joy3;
-					joystickDetermined = true;
-				}
-				if(Input.GetButtonDown("Joy4Absorb") || Input.GetButtonDown("Joy4Pause") || Input.GetButtonDown("Joy4StickThrow"))
-				{
-					joystickNumber = JoyStick.Joy4;
-					joystickDetermined = true;
-				}
-
-				if(joystickDetermined)
-					canvasStart.SetActive(false);
-				//Debug.Log(joystickNumber.ToString());
-			}
-			else if(otherPlayerInput != null && otherPlayerInput.joystickDetermined)
-			{
-				if((Input.GetButtonDown("Joy1Absorb") || Input.GetButtonDown("Joy1Pause") || Input.GetButtonDown("Joy1StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy1)
-				{
-					joystickNumber = JoyStick.Joy1;
-					joystickDetermined = true;
-				}
-				if((Input.GetButtonDown("Joy2Absorb") || Input.GetButtonDown("Joy2Pause") || Input.GetButtonDown("Joy2StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy2)
-				{
-					joystickNumber = JoyStick.Joy2;
-					joystickDetermined = true;
-				}
-				if((Input.GetButtonDown("Joy3Absorb") || Input.GetButtonDown("Joy3Pause") || Input.GetButtonDown("Joy3StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy3)
-				{
-					joystickNumber = JoyStick.Joy3;
-					joystickDetermined = true;
-				}
-				if((Input.GetButtonDown("Joy4Absorb") || Input.GetButtonDown("Joy4Pause") || Input.GetButtonDown("Joy4StickThrow")) && otherPlayerInput.joystickNumber != JoyStick.Joy4)
-				{
-					joystickNumber = JoyStick.Joy4;
-					joystickDetermined = true;
-				}
-
-				if(joystickDetermined)
-					canvasStart.SetActive(false);
-			}
-		}*/
-
-
 				
-			if(!paused)
+		if(!paused)
+		{
+			AttemptFluffThrow();
+			AttemptFluffAttract();
+
+			velocityChange =  PlayerJoystickMovement();
+			// Movement
+			if (velocityChange.sqrMagnitude > 0)
 			{
-				PlayerLookAt();
-				partnerLink.absorbing = Absorbing();
-
-				velocityChange =  PlayerJoystickMovement();
-				// Movement
-				if (velocityChange.sqrMagnitude > 0)
-				{
-					mover.Accelerate(velocityChange, true, true);
-					mover.slowDown = false;
-				}
-				else
-				{
-					mover.slowDown = true;
-				}
-				// Turn towards velocity change.
-				transform.LookAt(transform.position + velocityChange, transform.up);
-
-				if(absorb != null)
-				{
-					absorb.transform.position = transform.position;
-				}
+				character.mover.Accelerate(velocityChange, true, true);
+				character.mover.slowDown = false;
 			}
+			else
+			{
+				character.mover.slowDown = true;
+			}
+			// Turn towards velocity change.
+			transform.LookAt(transform.position + velocityChange, transform.up);
+		}
 	}
 
 	private Vector3 PlayerJoystickMovement()
@@ -218,82 +138,35 @@ public class PlayerInput : MonoBehaviour {
 		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
 	}
 
-	bool Absorbing()
+	private void AttemptFluffAttract()
 	{
-		bool canAbsorb = false;
+		bool canAttract = false;
 
-		if(sharing && playerNumber == Player.Player1 && GetRightBumperAbsorb() > .5)
-			canAbsorb = true;
-		else if(sharing && playerNumber == Player.Player2 && GetLeftBumperAbsorb() > .5)
-			canAbsorb = true;
-		else if(!sharing && (GetAbsorb() || GetRightBumperAbsorb() > .5 || GetLeftBumperAbsorb() > .5))
-			canAbsorb = true;
+		if (sharing && playerNumber == Player.Player1 && GetRightBumperAbsorb() > 0.5f)
+			canAttract = true;
+		else if (sharing && playerNumber == Player.Player2 && GetLeftBumperAbsorb() > 0.5f)
+			canAttract = true;
+		else if (!sharing && (GetAbsorb() || GetRightBumperAbsorb() > 0.5f || GetLeftBumperAbsorb() > 0.5f))
+			canAttract = true;
 
-		//Debug.Log(GetBumperAbsorb());
-
-		if(!fireFluffReady)
-			canAbsorb = false;
-
-		if (canAbsorb)
+		if (!fireFluffReady)
 		{
-			if(absorb == null)
-			{
-				absorb = (ParticleSystem)Instantiate(absorbPrefab);
-				absorb.transform.position = transform.position;
-				absorb.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
-				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
-			}
-			GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
-			foreach(GameObject liveFluffObject in fluffArray)
-			{
-				Fluff liveFluff = liveFluffObject.GetComponent<Fluff>();
-				if (liveFluff != null)
-				{
-					bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
-					if (!fluffAttachedToSelf)
-					{
-						float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
-						Vector3 absorbOffset = Vector3.zero;
-						// If the fluff is too far to be absorbed directly and absorption through the connection is enabled, attempt connection absorption.
-						if (fluffSqrDist > Mathf.Pow(partnerLink.absorbStrength, 2) && partnerLink.connectionAbsorb)
-						{
-							float nearSqrDist = fluffSqrDist;
-							for (int i = 0; i < partnerLink.connectionAttachable.bonds.Count; i++)
-							{
-								// Only check connection distance to fluff if the connection is at least as long as the distance from this to the fluff.
-								if (Mathf.Pow(partnerLink.connectionAttachable.bonds[i].BondLength, 2) >= fluffSqrDist)
-								{
-									Vector3 nearBond = partnerLink.connectionAttachable.bonds[i].NearestPoint(liveFluffObject.transform.position);
-									float sqrDist = (liveFluffObject.transform.position - nearBond).sqrMagnitude;
-									if (sqrDist < nearSqrDist)
-									{
-										nearSqrDist = sqrDist;
-										absorbOffset = (nearBond - transform.position) * partnerLink.connectionOffsetFactor;
-									}
-								}
-							}
-							fluffSqrDist = nearSqrDist;
-						}
-						if (fluffSqrDist <= Mathf.Pow(partnerLink.absorbStrength, 2))
-						{
-							liveFluff.Pull(gameObject, absorbOffset, pullSpeed);
-						}
-					}
-				}
-			}
-			return true;
+			canAttract = false;
 		}
-		else if(absorb != null)
+
+		if (canAttract)
 		{
-			absorb.startColor = Color.Lerp(absorb.startColor, new Color(0, 0, 0, 0), 0.5f);
-			Destroy(absorb.gameObject, 1.0f);
+			character.attractor.AttractFluffs();
 		}
-		return false;
+		else
+		{
+			character.attractor.StopAttracting();
+		}
 	}
 
-	void PlayerLookAt()
+	private void AttemptFluffThrow()
 	{
-		Vector2 lookAt = FireDirection();	
+		Vector2 lookAt = CalculateThrowDirection();	
 
 
 		if(controlScheme == Globals.ControlScheme.triggers || sharing)
@@ -303,20 +176,12 @@ public class PlayerInput : MonoBehaviour {
 
 		float minToFire = deadZone;
 
-		//bool stickFire = GetAxisStickThrow() != 0;//!swapJoysticks ? GetAxisStickThrow() > 0 : GetAxisStickThrow() < 0;
-
-		//Debug.Log(GetAxisTriggers())
 		if(!sharing && controlScheme == Globals.ControlScheme.triggers && (GetAxisTriggers() > deadZone|| GetAxisTriggers() < -deadZone))
 		{
 			lookAt = transform.forward;
 			minToFire = 0;
 		}
-
-		//if((sharing && playerNumber == Player.Player1 && GetAxisTriggers() < -deadZone) || (sharing && playerNumber == Player.Player2 && GetAxisTriggers() < -deadZone))
-		//{
-		//	minToFire = 0;
-		//}
-
+		
 		if(sharing)
 		{
 			if(playerNumber == Player.Player1)
@@ -331,8 +196,6 @@ public class PlayerInput : MonoBehaviour {
 			{
 				if(GetAxisRightTrigger() > deadZone)
 				{
-					//Debug.Log(i);
-					//i++;
 					lookAt = transform.forward;
 					minToFire = 0;
 				}
@@ -345,15 +208,14 @@ public class PlayerInput : MonoBehaviour {
 
 			if(fireFluffReady)
 			{
-				//Vector3 target = transform.position + new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 throwDirection = new Vector3(lookAt.x, lookAt.y, 0);
 				Vector3 velocityBoost = Vector3.zero;
 
-				if (Vector3.Dot(mover.velocity, throwDirection) > 0)
+				if (Vector3.Dot(character.mover.velocity, throwDirection) > 0)
 				{
-					velocityBoost += mover.velocity;
+					velocityBoost += character.mover.velocity;
 				}
-                partnerLink.fluffThrow.Throw(throwDirection, velocityBoost);
+                character.fluffThrow.Throw(throwDirection, velocityBoost);
 				fireFluffReady = false;
 			}
 		}
@@ -380,28 +242,10 @@ public class PlayerInput : MonoBehaviour {
 	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
 
 
-	private Vector2 FireDirection()
+	private Vector2 CalculateThrowDirection()
 	{
 		Vector2 lookAt = Vector2.zero; 
-		//if (!useKeyboard)
-		//{
-			lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
-		//}
-		///else
-		//{
-		//	if ((playerNumber == Player.Player1 && Input.GetMouseButtonUp(0)) || (playerNumber == Player.Player2 && Input.GetMouseButtonUp(1)))
-		//	{
-		//		Vector3 mousePos = Input.mousePosition;
-		//		mousePos.z = transform.position.z;
-		//		mousePos = CameraSplitter.Instance.GetFollowingCamera(gameObject).ScreenToWorldPoint(mousePos);
-		//		lookAt = mousePos - transform.position;
-	//			lookAt.Normalize();
-	//		}
-		//	else if ((playerNumber == Player.Player1 && Input.GetKeyUp(KeyCode.Space)) || (playerNumber == Player.Player2 && Input.GetKeyUp("[0]")))
-		//	{
-		////		lookAt = geometry.transform.forward;
-		//	}
-		//}
+		lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
 
 		return lookAt;
 	}

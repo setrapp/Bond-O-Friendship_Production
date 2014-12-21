@@ -96,29 +96,29 @@ public class PlayersEstablish : MonoBehaviour {
 
 			if (setPlayer1Fluff && player1 != null)
 			{
-				FluffSpawn fluffSpawn1 = player1.GetComponent<FluffSpawn>();
+				FluffHandler fluffHandler1 = player1.GetComponent<FluffHandler>();
 				if (naturalFluffCount >= 0)
 				{
-					fluffSpawn1.naturalFluffCount = naturalFluffCount;
+					fluffHandler1.naturalFluffCount = naturalFluffCount;
 				}
 				if (startFluffCount >= 0)
 				{
-					fluffSpawn1.startingFluff = startFluffCount;
-					fluffSpawn1.SpawnStartingFluff();
+					fluffHandler1.startingFluff = startFluffCount;
+					fluffHandler1.SpawnStartingFluff();
 				}
 			}
 
 			if (setPlayer2Fluff && player2 != null)
 			{
-				FluffSpawn fluffSpawn2 = player2.GetComponent<FluffSpawn>();
+				FluffHandler fluffHandler2 = player2.GetComponent<FluffHandler>();
 				if (naturalFluffCount >= 0)
 				{
-					fluffSpawn2.naturalFluffCount = naturalFluffCount;
+					fluffHandler2.naturalFluffCount = naturalFluffCount;
 				}
 				if (startFluffCount >= 0)
 				{
-					fluffSpawn2.startingFluff = startFluffCount;
-					fluffSpawn2.SpawnStartingFluff();
+					fluffHandler2.startingFluff = startFluffCount;
+					fluffHandler2.SpawnStartingFluff();
 				}
 			}
 		}

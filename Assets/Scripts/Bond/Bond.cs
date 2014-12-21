@@ -38,7 +38,7 @@ public class Bond : MonoBehaviour {
 			// Round the count of links down to an odd number.
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
-			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
+			// If the bond is too short to require the current number of bonds, remove some. (Attempt to keep count odd)
 			if (BondLength < stats.removeLinkDistance * oddLinkCount)
 			{
 				// Maintain the end points.
@@ -52,7 +52,7 @@ public class Bond : MonoBehaviour {
 					}
 				}
 			}
-			// If the connection length requires more connections, create some.
+			// If the bond length requires more bonds, create some.
 			else if (BondLength > stats.addLinkDistance * (links.Count + 1))
 			{
 				AddLink();
@@ -64,7 +64,7 @@ public class Bond : MonoBehaviour {
 			isCountEven = links.Count % 2 == 0;
 
 
-			// Direct, scale, and place link colliders to cover the surface of the connection.
+			// Direct, scale, and place link colliders to cover the surface of the bond.
 			Vector3 linkDir = Vector3.zero;
 			Vector3 linkScale = Vector3.zero;
 			for (int i = 0; i < links.Count; i++)
@@ -95,7 +95,7 @@ public class Bond : MonoBehaviour {
 				links[i].linkCollider.size = linkScale;
 			}
 
-			// Base the width of the connection on how much has been drained beyond the partners' capacity.
+			// Base the width of the bond on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
 			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((BondLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
 
@@ -115,7 +115,7 @@ public class Bond : MonoBehaviour {
 				links[links.Count/2].transform.position = links[(links.Count/2)-1].transform.position + (betweenMids/2);
 			}
 
-			// Draw lines between connection points.
+			// Draw lines between bond points.
 			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 			for (int i = 0; i < links.Count / 2; i++)
 			{
@@ -207,7 +207,7 @@ public class Bond : MonoBehaviour {
 
 	private void AddLink()
 	{
-		// Create new link in connection and add it to the center of the list.
+		// Create new link in bond and add it to the center of the list.
 		Vector3 midpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 - 1].transform.position) / 2;
 		BondLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<BondLink>();
 		int index = links.Count / 2;

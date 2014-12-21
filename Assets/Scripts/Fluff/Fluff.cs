@@ -6,7 +6,7 @@ public class Fluff : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
 	public BondAttachable creator;
-	public PartnerLink volleyTarget;
+	public CharacterComponents volleyTarget;
 	public int volleys;
 	public float capacity;
 	public Vector3 target;
@@ -292,10 +292,9 @@ public class Fluff : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		PartnerLink fluffContainer = other.GetComponent<PartnerLink>();
-		if (fluffContainer != null && (attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
+		if ((attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{
-			fluffContainer.AttachFluff(this);
+			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -311,7 +310,7 @@ public class Fluff : MonoBehaviour {
 	{
 		if (attachee != null && attachee.gameObject != null)
 		{
-			FluffSpawn attacheeFluffContainer = attachee.gameObject.GetComponent<FluffSpawn>();
+			FluffHandler attacheeFluffContainer = attachee.gameObject.GetComponent<FluffHandler>();
 			if (attacheeFluffContainer != null)
 			{
 				attacheeFluffContainer.fluffs.Remove(this);

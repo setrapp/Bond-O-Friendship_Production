@@ -30,37 +30,37 @@ public class BondAttachable : MonoBehaviour {
 		}
 	}
 
-	public Bond AttemptBond(BondAttachable connectionPartner, Vector3 contactPosition, bool forceBond = false)
+	public Bond AttemptBond(BondAttachable bondPartner, Vector3 contactPosition, bool forceBond = false)
 	{
 		Bond newBond = null;
-		if (connectionPartner == null || connectionPartner == this)
+		if (bondPartner == null || bondPartner == this)
 		{
 			return newBond;
 		}
 
-		if (connectionPartner.gameObject != gameObject)
+		if (bondPartner.gameObject != gameObject)
 		{
 			volleys = 1;
-			volleyPartner = connectionPartner;
-			if (connectionPartner.volleyPartner == this)
+			volleyPartner = bondPartner;
+			if (bondPartner.volleyPartner == this)
 			{
-				volleys = connectionPartner.volleys + 1;
+				volleys = bondPartner.volleys + 1;
 			}
 
 			if (forceBond || volleys >= volleysToBond)
 			{
-				// If enough volleys have been passed, and the volleyers are not already connected, establish a new connection.
-				if (!IsBondMade(connectionPartner))
+				// If enough volleys have been passed, and the volleyers are not already connected, establish a new bond.
+				if (!IsBondMade(bondPartner))
 				{
-					Vector3 connectionPoint = transform.position;
+					Vector3 bondPoint = transform.position;
 					if (bondAtFluffPoint)
 					{
-						connectionPoint = contactPosition;
+						bondPoint = contactPosition;
 					}
 
 					newBond = ((GameObject)Instantiate(bondPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Bond>();
 					bonds.Add(newBond);
-					connectionPartner.bonds.Add(newBond);
+					bondPartner.bonds.Add(newBond);
 					BondStatsHolder statsHolder = GetComponent<BondStatsHolder>();
 					if (statsHolder != null && statsHolder.stats != null)
 					{
@@ -68,10 +68,10 @@ public class BondAttachable : MonoBehaviour {
 					}
 
 					// TODO this should be able to happen in reverse order (pulling attachments is buggy).
-					//newBond.AttachPartners(this, connectionPoint, connectionPartner, connectionPartner.transform.position);
-					newBond.AttachPartners(connectionPartner, connectionPartner.transform.position, this, connectionPoint);
+					//newBond.AttachPartners(this, bondPoint, bondPartner, bondPartner.transform.position);
+					newBond.AttachPartners(bondPartner, bondPartner.transform.position, this, bondPoint);
 					volleys = 0;
-					connectionPartner.volleys = 0;
+					bondPartner.volleys = 0;
 				}
 			}
 		}
@@ -94,14 +94,14 @@ public class BondAttachable : MonoBehaviour {
 			return bonds.Count > 0;
 		}
 
-		bool connectionAlreadyMade = false;
-		for (int i = 0; i < bonds.Count && !connectionAlreadyMade; i++)
+		bool bondAlreadyMade = false;
+		for (int i = 0; i < bonds.Count && !bondAlreadyMade; i++)
 		{
 			if ((bonds[i].attachment1.attachee == this && bonds[i].attachment2.attachee == partner) || (bonds[i].attachment2.attachee == this && bonds[i].attachment1.attachee == partner))
 			{
-				connectionAlreadyMade = true;
+				bondAlreadyMade = true;
 			}
 		}
-		return connectionAlreadyMade;
+		return bondAlreadyMade;
 	}
 }
