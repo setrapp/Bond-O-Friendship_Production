@@ -5,7 +5,7 @@ using System.Collections;
 public class Fluff : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
-	public ConnectionAttachable creator;
+	public BondAttachable creator;
 	public PartnerLink volleyTarget;
 	public int volleys;
 	public float capacity;

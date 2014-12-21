@@ -2,30 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Connection : MonoBehaviour {
-	public ConnectionAttachment attachment1;
-	public ConnectionAttachment attachment2;
+public class Bond : MonoBehaviour {
+	public BondAttachment attachment1;
+	public BondAttachment attachment2;
 	public GameObject linkPrefab;
-	public List<ConnectionLink> links;
-	private float connectionLength;
-	public float ConnectionLength
+	public List<BondLink> links;
+	private float bondLength;
+	public float BondLength
 	{
 		get
 		{
 			if (!lengthFresh)
 			{
-				connectionLength = 0;
+				bondLength = 0;
 				for(int i = 1; i < links.Count; i++)
 				{
-					connectionLength += (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					bondLength += (links[i].transform.position - links[i - 1].transform.position).magnitude;
 				}
 				lengthFresh = true;
 			}
-			return connectionLength;
+			return bondLength;
 		}
 	}
 	private bool lengthFresh = false;
-	public ConnectionStats stats;
+	public BondStats stats;
 
 	void Update()
 	{
@@ -39,7 +39,7 @@ public class Connection : MonoBehaviour {
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
 			// If the connection is too short to require the current number of connections, remove some. (Attempt to keep count odd)
-			if (ConnectionLength < stats.removeLinkDistance * oddLinkCount)
+			if (BondLength < stats.removeLinkDistance * oddLinkCount)
 			{
 				// Maintain the end points.
 				if (links.Count > 2)
@@ -53,7 +53,7 @@ public class Connection : MonoBehaviour {
 				}
 			}
 			// If the connection length requires more connections, create some.
-			else if (ConnectionLength > stats.addLinkDistance * (links.Count + 1))
+			else if (BondLength > stats.addLinkDistance * (links.Count + 1))
 			{
 				AddLink();
 				if (links.Count % 2 == 0)
@@ -97,7 +97,7 @@ public class Connection : MonoBehaviour {
 
 			// Base the width of the connection on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
-			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((ConnectionLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
+			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((BondLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
@@ -152,24 +152,24 @@ public class Connection : MonoBehaviour {
 			// Disconnect if too far apart.
 			if (actualMidWidth <= 0)
 			{
-				BreakConnection();
+				BreakBond();
 
 			}
 		}
 	}
-	public void BreakConnection()
+	public void BreakBond()
 	{
-		ConnectionAttachable attachee1 = attachment1.attachee;
-		ConnectionAttachable attachee2 = attachment2.attachee;
+		BondAttachable attachee1 = attachment1.attachee;
+		BondAttachable attachee2 = attachment2.attachee;
 		if (attachee1 != null)
 		{
-			attachee1.connections.Remove(this);
-			attachee1.SendMessage("ConnectionBroken", attachee2, SendMessageOptions.DontRequireReceiver);
+			attachee1.bonds.Remove(this);
+			attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver);
 		}
 		if (attachee2 != null)
 		{
-			attachee2.connections.Remove(this);
-			attachee2.SendMessage("ConnectionBroken", attachee1, SendMessageOptions.DontRequireReceiver);
+			attachee2.bonds.Remove(this);
+			attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver);
 		}
 		if (this != null && gameObject != null)
 		{
@@ -177,7 +177,7 @@ public class Connection : MonoBehaviour {
 		}
 	}
 
-	public void AttachPartners(ConnectionAttachable attachee1, Vector3 attachPoint1, ConnectionAttachable attachee2, Vector3 attachPoint2)
+	public void AttachPartners(BondAttachable attachee1, Vector3 attachPoint1, BondAttachable attachee2, Vector3 attachPoint2)
 	{
 		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
 
@@ -201,23 +201,23 @@ public class Connection : MonoBehaviour {
 
 		WeightJoints();
 
-		attachee1.SendMessage("ConnectionMade", attachee2, SendMessageOptions.DontRequireReceiver);
-		attachee2.SendMessage("ConnectionMade", attachee1, SendMessageOptions.DontRequireReceiver);
+		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
+		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
 	}
 
 	private void AddLink()
 	{
 		// Create new link in connection and add it to the center of the list.
 		Vector3 midpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 - 1].transform.position) / 2;
-		ConnectionLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<ConnectionLink>();
+		BondLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<BondLink>();
 		int index = links.Count / 2;
 		newLink.transform.parent = transform;
 		newLink.orderLevel = links.Count / 2;
 		links.Insert(index, newLink);
 
 		// Connect the new link to its neighbors.
-		ConnectionLink previousLink = links[index - 1];
-		ConnectionLink nextLink = links[index + 1];
+		BondLink previousLink = links[index - 1];
+		BondLink nextLink = links[index + 1];
 		newLink.jointPrevious.connectedBody = previousLink.body;
 		newLink.jointNext.connectedBody = nextLink.body;
 		if (previousLink.jointNext != null)
@@ -237,8 +237,8 @@ public class Connection : MonoBehaviour {
 	{
 		// Remove the center link and connect its remaining neighbors together.
 		int index = links.Count / 2;
-		ConnectionLink previousLink = links[index - 1];
-		ConnectionLink nextLink = links[index + 1];
+		BondLink previousLink = links[index - 1];
+		BondLink nextLink = links[index + 1];
 		if (previousLink.jointNext != null)
 		{
 			previousLink.jointNext.connectedBody = nextLink.body;
@@ -374,16 +374,16 @@ public class Connection : MonoBehaviour {
 }
 
 [System.Serializable]
-public class ConnectionAttachment
+public class BondAttachment
 {
-	public ConnectionAttachable attachee;
+	public BondAttachable attachee;
 	public Vector3 position;
 	public Vector3 offset;
 	public LineRenderer lineRenderer;
 }
 
 [System.Serializable]
-public class ConnectionStats
+public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
@@ -393,8 +393,8 @@ public class ConnectionStats
 	public float midWidth = 0.5f;
 	public float addLinkDistance = 0.5f;
 	public float removeLinkDistance = 0.3f;
-	public float upOrderSpring = 10000;
+	public float upOrderSpring = 3000;
 	public float upOrderDamper = 5;
-	public float downOrderSpring = 5000;
+	public float downOrderSpring = 2000;
 	public float downOrderDamper = 0;
 }

@@ -17,7 +17,7 @@ public class FluffGenerator : MonoBehaviour {
 	private float velocity;
 	private Vector3 targetAngle;
 	private Vector3 baseTarget;
-	public ConnectionAttachable connectionAttachable;
+	public BondAttachable connectionAttachable;
 
 	// Use this for initialization
 	void Start () {

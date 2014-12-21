@@ -23,9 +23,9 @@ public class RingCollision : MonoBehaviour {
 			collidedParticle = (ParticleSystem)Instantiate(ringCollisionParticle);
 			collidedParticle.transform.position = col.transform.position;
 			if (col.name == "Player 1")
-				collidedParticle.startColor = col.GetComponent<ConnectionAttachable>().attachmentColor;
+				collidedParticle.startColor = col.GetComponent<BondAttachable>().attachmentColor;
 			else if (col.name == "Player 2")
-				collidedParticle.startColor = col.GetComponent<ConnectionAttachable>().attachmentColor;
+				collidedParticle.startColor = col.GetComponent<BondAttachable>().attachmentColor;
 			else
 				collidedParticle.startColor = col.GetComponent<Renderer>().material.color;
 			Destroy(collidedParticle.gameObject, 1.0f);

@@ -240,7 +240,7 @@ public class PlayerInput : MonoBehaviour {
 			{
 				absorb = (ParticleSystem)Instantiate(absorbPrefab);
 				absorb.transform.position = transform.position;
-				absorb.startColor = GetComponent<ConnectionAttachable>().attachmentColor / 2;
+				absorb.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
 				absorb.startColor = new Color(absorb.startColor.r, absorb.startColor.g, absorb.startColor.b, 0.1f);
 			}
 			GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
@@ -258,17 +258,17 @@ public class PlayerInput : MonoBehaviour {
 						if (fluffSqrDist > Mathf.Pow(partnerLink.absorbStrength, 2) && partnerLink.connectionAbsorb)
 						{
 							float nearSqrDist = fluffSqrDist;
-							for (int i = 0; i < partnerLink.connectionAttachable.connections.Count; i++)
+							for (int i = 0; i < partnerLink.connectionAttachable.bonds.Count; i++)
 							{
 								// Only check connection distance to fluff if the connection is at least as long as the distance from this to the fluff.
-								if (Mathf.Pow(partnerLink.connectionAttachable.connections[i].ConnectionLength, 2) >= fluffSqrDist)
+								if (Mathf.Pow(partnerLink.connectionAttachable.bonds[i].BondLength, 2) >= fluffSqrDist)
 								{
-									Vector3 nearConnection = partnerLink.connectionAttachable.connections[i].NearestPoint(liveFluffObject.transform.position);
-									float sqrDist = (liveFluffObject.transform.position - nearConnection).sqrMagnitude;
+									Vector3 nearBond = partnerLink.connectionAttachable.bonds[i].NearestPoint(liveFluffObject.transform.position);
+									float sqrDist = (liveFluffObject.transform.position - nearBond).sqrMagnitude;
 									if (sqrDist < nearSqrDist)
 									{
 										nearSqrDist = sqrDist;
-										absorbOffset = (nearConnection - transform.position) * partnerLink.connectionOffsetFactor;
+										absorbOffset = (nearBond - transform.position) * partnerLink.connectionOffsetFactor;
 									}
 								}
 							}

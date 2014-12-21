@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FluffDestroyer : MonoBehaviour {
 	public bool destroyFluffs = true;
-	public bool destroyConnections = true;
+	public bool destroyBonds = true;
 	public int newNaturalFluff = -1;
 	private List<GameObject> toDestroy = null;
 	private List<FluffSpawn> toEmpty = null;
@@ -108,12 +108,12 @@ public class FluffDestroyer : MonoBehaviour {
 				toEmpty.Add(spawn);
 			}
 
-			if (destroyConnections)
+			if (destroyBonds)
 			{
 				PartnerLink partnerLink = other.GetComponent<PartnerLink>();
-				for (int i = 0; i < partnerLink.connectionAttachable.connections.Count; i++)
+				for (int i = 0; i < partnerLink.connectionAttachable.bonds.Count; i++)
 				{
-					partnerLink.connectionAttachable.connections[i].BreakConnection();
+					partnerLink.connectionAttachable.bonds[i].BreakBond();
 				}
 			}
 			crossed = true;

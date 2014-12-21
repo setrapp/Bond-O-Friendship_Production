@@ -11,7 +11,7 @@ public class PartnerLink : MonoBehaviour {
 	public TrailRenderer midTrail;
 	public TrailRenderer rightTrail;
 	public FluffThrow fluffThrow;
-	public ConnectionAttachable connectionAttachable;
+	public BondAttachable connectionAttachable;
 	public float partnerLineSize = 0.25f;
 	[HideInInspector]
 	public SimpleMover mover;
@@ -47,7 +47,7 @@ public class PartnerLink : MonoBehaviour {
 		}
 		if (connectionAttachable == null)
 		{
-			connectionAttachable = GetComponent<ConnectionAttachable>();
+			connectionAttachable = GetComponent<BondAttachable>();
 		}
 
 		floatMove = GetComponent<FloatMoving>();
@@ -117,7 +117,7 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (fluff != null && (absorbing || fluff.moving) && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
 		{
-			connectionAttachable.AttemptConnection(fluff.creator, fluff.transform.position);
+			connectionAttachable.AttemptBond(fluff.creator, fluff.transform.position);
 
 			if (fluff.creator != null && fluff.creator != connectionAttachable)
 			{
@@ -136,10 +136,10 @@ public class PartnerLink : MonoBehaviour {
 	{
 		if (collision.collider.tag == "Character")
 		{
-			ConnectionAttachable partner = collision.collider.GetComponent<ConnectionAttachable>();
-			if (floatMove.Floating && partner != null && !connectionAttachable.IsConnectionMade(partner))
+			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
+			if (floatMove.Floating && partner != null && !connectionAttachable.IsBondMade(partner))
 			{
-				connectionAttachable.AttemptConnection(partner, transform.position, true);
+				connectionAttachable.AttemptBond(partner, transform.position, true);
 			}
 		}
 	}

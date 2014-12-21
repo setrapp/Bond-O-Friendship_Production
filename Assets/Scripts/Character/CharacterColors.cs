@@ -11,7 +11,7 @@ public class CharacterColors : MonoBehaviour {
 	public Material trailMaterial;
 	public Material fluffMaterial;
 	[Header("Objects")]
-	public ConnectionAttachable connectionAttachable;
+	public BondAttachable connectionAttachable;
 	public MeshRenderer headRenderer;
 	public MeshRenderer fillRenderer;
 	public SpriteRenderer flashRenderer;

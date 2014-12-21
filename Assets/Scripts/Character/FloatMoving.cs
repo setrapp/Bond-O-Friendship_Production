@@ -8,8 +8,8 @@ public class FloatMoving : MonoBehaviour {
 	public FluffStick fluffStick;
 	public MovementStats startingStats;
 	public MovementStats loneFloatStats;
-	public MovementStats perConnectionFloatBonus;
-	public int maxConnectionBonuses;
+	public MovementStats perBondFloatBonus;
+	public int maxBondBonuses;
 	public LayerMask ignoreLayers;
 	private bool wasFloating = false;
 	public bool Floating
@@ -104,30 +104,30 @@ public class FloatMoving : MonoBehaviour {
 			partnerLink.absorbStrength = loneFloatStats.absorbStrength;
 			fluffStick.maxPullForce = loneFloatStats.maxAbsorbReact;
 
-			int connectionBonusCount = Mathf.Min(partnerLink.connectionAttachable.connections.Count, maxConnectionBonuses);
+			int connectionBonusCount = Mathf.Min(partnerLink.connectionAttachable.bonds.Count, maxBondBonuses);
 			if (connectionBonusCount > 0)
 			{
-				mover.acceleration += perConnectionFloatBonus.acceleration * connectionBonusCount;
-				mover.handling += perConnectionFloatBonus.handling * connectionBonusCount;
+				mover.acceleration += perBondFloatBonus.acceleration * connectionBonusCount;
+				mover.handling += perBondFloatBonus.handling * connectionBonusCount;
 				if (mover.body != null)
 				{
-					mover.body.drag += perConnectionFloatBonus.bodyDrag * connectionBonusCount;
+					mover.body.drag += perBondFloatBonus.bodyDrag * connectionBonusCount;
 				}
-				mover.bodylessDampening += perConnectionFloatBonus.bodylessDampening * connectionBonusCount;
-				partnerLink.leftTrail.time = partnerLink.rightTrail.time += perConnectionFloatBonus.sideTrailTime * connectionBonusCount;
-				partnerLink.midTrail.time = partnerLink.rightTrail.time += perConnectionFloatBonus.midTrailTime * connectionBonusCount;
-				partnerLink.absorbStrength = perConnectionFloatBonus.absorbStrength * connectionBonusCount;
-				fluffStick.maxPullForce = perConnectionFloatBonus.maxAbsorbReact * connectionBonusCount;
+				mover.bodylessDampening += perBondFloatBonus.bodylessDampening * connectionBonusCount;
+				partnerLink.leftTrail.time = partnerLink.rightTrail.time += perBondFloatBonus.sideTrailTime * connectionBonusCount;
+				partnerLink.midTrail.time = partnerLink.rightTrail.time += perBondFloatBonus.midTrailTime * connectionBonusCount;
+				partnerLink.absorbStrength = perBondFloatBonus.absorbStrength * connectionBonusCount;
+				fluffStick.maxPullForce = perBondFloatBonus.maxAbsorbReact * connectionBonusCount;
 			}
 		}
 	}
 
-	private void ConnectionMade(ConnectionAttachable connectionPartner)
+	private void BondMade(BondAttachable connectionPartner)
 	{
 		ApplyFloatStats();
 	}
 
-	private void ConnectionBroken(ConnectionAttachable disconnectedPartner)
+	private void BondBroken(BondAttachable disconnectedPartner)
 	{
 		ApplyFloatStats();
 	}
