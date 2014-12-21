@@ -16,7 +16,7 @@ public class PlayersEstablish : MonoBehaviour {
 			/* TODO check if players already exist in scene.*/
 			PlayerInput player1 = null;
 			PlayerInput player2 = null;
-			GameObject[] characters = GameObject.FindGameObjectsWithTag("Converser");
+			GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");
 			for (int i = 0; i < characters.Length; i++)
 			{
 				PlayerInput player = characters[i].GetComponent<PlayerInput>();

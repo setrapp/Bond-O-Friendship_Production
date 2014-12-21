@@ -96,7 +96,7 @@ public class FluffDestroyer : MonoBehaviour {
 			}
 			crossed = true;
 		}
-		else if (other.gameObject.tag == "Converser")
+		else if (other.gameObject.tag == "Character")
 		{
 			FluffSpawn spawn = other.GetComponent<FluffSpawn>();
 			if (spawn != null)

@@ -44,12 +44,12 @@ public class ColorChange : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider col){
-		if(col.transform.tag == "Converser" || col.transform.tag == "Fluff")
+		if(col.transform.tag == "Character" || col.transform.tag == "Fluff")
 			changing = true;
 	}
 
 	void OnTriggerExit(Collider col){
-		if(col.transform.tag == "Converser" || col.transform.tag == "Fluff")
+		if(col.transform.tag == "Character" || col.transform.tag == "Fluff")
 		{
 			changing = false;
 		}

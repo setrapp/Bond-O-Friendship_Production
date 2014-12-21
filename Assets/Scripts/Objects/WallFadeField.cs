@@ -15,7 +15,7 @@ public class WallFadeField : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.tag == "Converser")
+		if(collide.gameObject.tag == "Character")
 		{
 			//if(collide.gameObject.GetComponent<PartnerLink>().isConnected == true)
 		//	{

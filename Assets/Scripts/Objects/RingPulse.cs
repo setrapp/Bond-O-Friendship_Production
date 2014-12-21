@@ -35,7 +35,7 @@ public class RingPulse : MonoBehaviour {
 		//{
 		//	gameObject.GetComponent<Collider>().enabled = false;
 		//}
-		//if(collide.gameObject.tag == "Converser")
+		//if(collide.gameObject.tag == "Character")
 		//{
 		//	gameObject.GetComponent<Collider>().enabled = false;
 			//print("Collide");

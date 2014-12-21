@@ -64,7 +64,7 @@ public class CubePuzzle : MonoBehaviour {
 	
 	void OnCollisionEnter (Collision col) {
 
-		if(col.transform.tag == "Converser")
+		if(col.transform.tag == "Character")
 		{
 			GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 		}

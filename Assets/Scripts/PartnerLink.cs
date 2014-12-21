@@ -140,7 +140,7 @@ public class PartnerLink : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (collision.collider.tag == "Converser")
+		if (collision.collider.tag == "Character")
 		{
 			ConnectionAttachable partner = collision.collider.GetComponent<ConnectionAttachable>();
 			if (floatMove.Floating && partner != null && !connectionAttachable.IsConnectionMade(partner))
