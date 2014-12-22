@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FloatMoving : MonoBehaviour {
 	public CharacterComponents character;
+	public float trailShrinkRate = 1.0f;
 	public MovementStats startingStats;
 	public MovementStats loneFloatStats;
 	public MovementStats perBondFloatBonus;
@@ -40,6 +41,17 @@ public class FloatMoving : MonoBehaviour {
 
 	void Update()
 	{
+		if (!wasFloating && character.midTrail.time > startingStats.midTrailTime)
+		{
+			float shrinkFactor = Time.deltaTime * trailShrinkRate;
+			if (character.midTrail.time - startingStats.midTrailTime < shrinkFactor)
+			{
+				shrinkFactor = 1;
+			}
+			character.leftTrail.time -= (character.leftTrail.time - startingStats.sideTrailTime) * shrinkFactor;
+			character.midTrail.time -= (character.midTrail.time - startingStats.midTrailTime) * shrinkFactor;
+			character.rightTrail.time -= (character.rightTrail.time - startingStats.sideTrailTime) * shrinkFactor;
+		}
 
 		RaycastHit hit;
 		if(Physics.Raycast(transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
@@ -53,8 +65,6 @@ public class FloatMoving : MonoBehaviour {
 					character.mover.body.drag = startingStats.bodyDrag;
 				}
 				character.mover.bodylessDampening = startingStats.bodylessDampening;
-				character.leftTrail.time = character.rightTrail.time = startingStats.sideTrailTime;
-				character.midTrail.time = character.rightTrail.time = startingStats.sideTrailTime;
 				character.attractor.attractRange = startingStats.attractRange;
 				character.fluffStick.maxPullForce = startingStats.maxAbsorbReact;
 				wasFloating = false;
@@ -85,7 +95,7 @@ public class FloatMoving : MonoBehaviour {
 			}
 			character.mover.bodylessDampening = loneFloatStats.bodylessDampening;
 			character.leftTrail.time = character.rightTrail.time = loneFloatStats.sideTrailTime;
-			character.midTrail.time = character.rightTrail.time = loneFloatStats.midTrailTime;
+			character.midTrail.time = loneFloatStats.midTrailTime;
 			character.attractor.attractRange = loneFloatStats.attractRange;
 			character.fluffStick.maxPullForce = loneFloatStats.maxAbsorbReact;
 
@@ -100,7 +110,7 @@ public class FloatMoving : MonoBehaviour {
 				}
 				character.mover.bodylessDampening += perBondFloatBonus.bodylessDampening * bondBonusCount;
 				character.leftTrail.time = character.rightTrail.time += perBondFloatBonus.sideTrailTime * bondBonusCount;
-				character.midTrail.time = character.rightTrail.time += perBondFloatBonus.midTrailTime * bondBonusCount;
+				character.midTrail.time += perBondFloatBonus.midTrailTime * bondBonusCount;
 				character.attractor.attractRange = perBondFloatBonus.attractRange * bondBonusCount;
 				character.fluffStick.maxPullForce = perBondFloatBonus.maxAbsorbReact * bondBonusCount;
 			}
