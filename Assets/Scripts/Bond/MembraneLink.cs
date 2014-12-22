@@ -4,6 +4,7 @@ using System.Collections;
 public class MembraneLink : BondLink {
 	public Membrane membrane;
 	public BondAttachable bondAttachable;
+	public SpringJoint jointShaping;
 
 	void OnCollisionEnter(Collision collision)
 	{

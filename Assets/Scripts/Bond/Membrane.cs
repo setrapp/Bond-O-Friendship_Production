@@ -6,6 +6,18 @@ public class Membrane : Bond {
 	public Color attachmentColor;
 	public BondStatsHolder internalBondStats;
 	public bool preferNewBonds = false;
+	public List<ShapingPoint> shapingPoints;
+	public MembraneStats extraStats;
+
+	protected override void PostUpdate()
+	{
+		base.PostUpdate();
+		for (int i = 1; i < links.Count - 1; i++)
+		{
+			MembraneLink membraneLink = links[i] as MembraneLink;
+			ApplyShaping(membraneLink);
+		}
+	}
 
 	protected override void LinkAdded(BondLink addedLink)
 	{
@@ -18,6 +30,7 @@ public class Membrane : Bond {
 			{
 				addedMembraneLink.bondAttachable.attachmentColor = attachmentColor;
 				addedMembraneLink.bondAttachable.bondOverrideStats = internalBondStats;
+				ApplyShaping(addedMembraneLink);
 			}
 		}
 	}
@@ -47,4 +60,60 @@ public class Membrane : Bond {
 			}
 		}
 	}
+
+	private ShapingPoint NearestShapingPoint(MembraneLink link)
+	{
+		ShapingPoint nearPoint = null;
+
+		if (shapingPoints.Count > 0)
+		{
+			nearPoint = shapingPoints[0];
+			float nearSqrDist = (nearPoint.transform.position - link.transform.position).sqrMagnitude;
+			for (int i = 1; i < shapingPoints.Count; i++)
+			{
+				float sqrDist = (shapingPoints[i].transform.position - link.transform.position).sqrMagnitude;
+				if (sqrDist < nearSqrDist)
+				{
+					nearSqrDist = sqrDist;
+
+					nearPoint = shapingPoints[i];
+				}
+			}
+		}
+		
+		return nearPoint;
+	}
+
+	private void ApplyShaping(MembraneLink membraneLink)
+	{
+		if (membraneLink != null)
+		{
+			ShapingPoint shapingPoint = NearestShapingPoint(membraneLink);
+			if (shapingPoint != null)
+			{
+				membraneLink.jointShaping.connectedBody = shapingPoint.body;
+				float shapingForce = extraStats.defaultShapingForce;
+				if (shapingPoint.body == null || shapingPoint.body == links[0].body || shapingPoint.body == links[links.Count - 1].body)
+				{
+					shapingForce = 0;
+				}
+				else if (shapingPoint.shapingForce >= 0)
+				{
+					shapingForce = shapingPoint.shapingForce;
+				}
+				membraneLink.jointShaping.spring = shapingForce;
+			}
+			else
+			{
+				membraneLink.jointShaping.connectedBody = null;
+				membraneLink.jointShaping.spring = 0;
+			}
+		}
+	}
+}
+
+[System.Serializable]
+public class MembraneStats
+{
+	public float defaultShapingForce = 5;
 }

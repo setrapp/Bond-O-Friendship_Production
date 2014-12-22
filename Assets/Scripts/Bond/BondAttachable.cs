@@ -66,6 +66,10 @@ public class BondAttachable : MonoBehaviour {
 					newBond = ((GameObject)Instantiate(bondPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Bond>();
 					bonds.Add(newBond);
 					bondPartner.bonds.Add(newBond);
+					if (bondOverrideStats == null)
+					{
+						bondOverrideStats = GetComponent<BondStatsHolder>();
+					}
 					if (bondOverrideStats != null && bondOverrideStats.stats != null)
 					{
 						newBond.stats = bondOverrideStats.stats;

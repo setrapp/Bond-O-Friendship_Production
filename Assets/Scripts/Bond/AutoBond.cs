@@ -2,15 +2,22 @@
 using System.Collections;
 
 public class AutoBond : MonoBehaviour {
+	public Bond createdBond;
 	public BondAttachable attachable1;
 	public BondAttachable attachable2;
 	public GameObject bondPrefab;
 	public Vector3 bondOffset1;
 	public Vector3 bondOffset2;
+	public BondStatsHolder bondOverrideStats;
 	public bool bondToPlayer;
 	public PlayerInput.Player playerNumber;
 
 	void Start()
+	{
+		CreateBond();
+	}
+
+	protected virtual void CreateBond()
 	{
 		if (bondToPlayer && Globals.Instance != null)
 		{
@@ -40,18 +47,20 @@ public class AutoBond : MonoBehaviour {
 
 		if (attachable1 && attachable2 != null)
 		{
-			Bond newBond = ((GameObject)Instantiate(bondPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Bond>();
-			attachable1.bonds.Add(newBond);
-			attachable2.bonds.Add(newBond);
-			BondStatsHolder statsHolder = GetComponent<BondStatsHolder>();
-			if (statsHolder != null && statsHolder.stats != null)
+			createdBond = ((GameObject)Instantiate(bondPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Bond>();
+			attachable1.bonds.Add(createdBond);
+			attachable2.bonds.Add(createdBond);
+			if (bondOverrideStats == null)
 			{
-				newBond.stats = statsHolder.stats;
+				bondOverrideStats = GetComponent<BondStatsHolder>();
 			}
-
+			if (bondOverrideStats != null && bondOverrideStats.stats != null)
+			{
+				createdBond.stats = bondOverrideStats.stats;
+			}
 			Vector3 attachPos1 = attachable1.transform.position + attachable1.transform.InverseTransformDirection(bondOffset1);
 			Vector3 attachPos2 = attachable2.transform.position + attachable2.transform.InverseTransformDirection(bondOffset2);
-			newBond.AttachPartners(attachable1, attachPos1, attachable2, attachPos2);
+			createdBond.AttachPartners(attachable1, attachPos1, attachable2, attachPos2);
 		}
 	}
 }

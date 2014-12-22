@@ -156,6 +156,8 @@ public class Bond : MonoBehaviour {
 
 			}
 		}
+
+		PostUpdate();
 	}
 	public void BreakBond()
 	{
@@ -387,6 +389,7 @@ public class Bond : MonoBehaviour {
 	}
 
 	// Hooks for subclasses.
+	protected virtual void PostUpdate() {}
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
 }
