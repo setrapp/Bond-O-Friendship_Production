@@ -80,11 +80,9 @@ public class Fluff : MonoBehaviour {
 			}
 		}
 
-		bool moverMoving = (mover.velocity.sqrMagnitude > mover.cutSpeedThreshold);
-
-		if (moving != moverMoving)
+		if (moving != mover.Moving)
 		{
-			if (!moverMoving)
+			if (!mover.Moving)
 			{
 				RaycastHit attachInfo;
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
@@ -107,7 +105,7 @@ public class Fluff : MonoBehaviour {
 				baseAngle = -1;
 			}
 
-			moving = moverMoving;
+			moving = mover.Moving;
 		}
 
 		if (moving)
@@ -202,19 +200,11 @@ public class Fluff : MonoBehaviour {
 			ToggleSwayAnimation(sway);
 		}
 
-		// Halt physical interactions.
-		if (body != null)
-		{
-			body.isKinematic = true;
-		}
-		hull.isTrigger = true;
-
 		// Actaully attach to target and record relationship to attachee.
 		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
 		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		ignoreCollider = attacheeObject;
-		
 
 		// Notify the potential attachee that fluff has been attached.
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
@@ -222,6 +212,14 @@ public class Fluff : MonoBehaviour {
 		// Stop moving.
 		mover.Stop();
 		moving = false;
+
+		// Halt physical interactions.
+		if (body != null)
+		{
+			body.isKinematic = true;
+		}
+		hull.isTrigger = true;
+
 		forgetCreator = true;
 	}
 
@@ -286,7 +284,20 @@ public class Fluff : MonoBehaviour {
 		bool shouldIgnore = collision.collider.gameObject == ignoreCollider;
 		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
-			Attach(collision.collider.gameObject, collision.contacts[0].point, collision.contacts[0].normal);
+			// Ensure the standing direction is the surface normal of the collided object.
+			Vector3 standingDirection = collision.contacts[0].normal;
+			RaycastHit[] hits = Physics.RaycastAll(collision.contacts[0].point + collision.contacts[0].normal, -collision.contacts[0].normal, Mathf.Infinity);
+			bool hitFound = false;
+			for (int i = 0; i < hits.Length && !hitFound; i++)
+			{
+				if (hits[i].collider == collision.collider)
+				{
+					standingDirection = hits[i].normal;
+					hitFound = true;
+				}
+			}
+			standingDirection.z = 0;
+			Attach(collision.collider.gameObject, collision.contacts[0].point, standingDirection);
 		}
 	}
 

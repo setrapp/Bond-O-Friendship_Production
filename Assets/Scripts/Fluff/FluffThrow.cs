@@ -5,12 +5,7 @@ using System.Collections.Generic;
 public class FluffThrow : MonoBehaviour {
 	public CharacterComponents character;
 	public FluffThrow lastFluffAccepted;
-	public bool volleyOnlyFirst = true;
-	public int volleys;
-	public FluffThrow volleyPartner;
-	public FloatMoving floatMove;
 	public float floatPushBack;
-	public FluffHandler fluffHandler;
 	public int minShotCount;
 	public int maxShotCount;
 	public float shotSpread;
@@ -24,14 +19,6 @@ public class FluffThrow : MonoBehaviour {
 		{
 			character = GetComponent<CharacterComponents>();
 		}
-		if (floatMove == null)
-		{
-			floatMove = GetComponent<FloatMoving>();
-		}
-		if (fluffHandler == null)
-		{
-			fluffHandler = GetComponent<FluffHandler>();
-		}
 	}
 
 	public void Throw(Vector3 passDirection, Vector3 velocityBoost)
@@ -41,10 +28,10 @@ public class FluffThrow : MonoBehaviour {
 			return;
 		}
 
-		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), fluffHandler.fluffs.Count);
+		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), character.fluffHandler.fluffs.Count);
 
 
-		if (fluffHandler == null || fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
+		if (character.fluffHandler.fluffs == null || character.fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
 		{
 			return;
 		}
@@ -53,25 +40,23 @@ public class FluffThrow : MonoBehaviour {
 		List<int> passFluffIndices = new List<int>();
 		List<GameObject> passFluffs = new List<GameObject>();
 		List<float> maxFluffDotPasses = new List<float>();
-		for (int i = 0; i < fluffHandler.fluffs.Count; i++)
+		for (int i = 0; i < character.fluffHandler.fluffs.Count; i++)
 		{
-			float fluffDotPass = Vector3.Dot(fluffHandler.fluffs[i].transform.up, passDirection);
-			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && fluffHandler.fluffs[i] != fluffHandler.spawnedFluff)
+			float fluffDotPass = Vector3.Dot(character.fluffHandler.fluffs[i].transform.up, passDirection);
+			if ((maxFluffDotPasses.Count < passFluffCount || fluffDotPass > maxFluffDotPasses[passFluffCount - 1]) && character.fluffHandler.fluffs[i] != character.fluffHandler.spawnedFluff)
 			{
 				maxFluffDotPasses.Add(fluffDotPass);
-				passFluffs.Add(fluffHandler.fluffs[i].gameObject);
+				passFluffs.Add(character.fluffHandler.fluffs[i].gameObject);
 				passFluffIndices.Add(i);
 				if (maxFluffDotPasses.Count > passFluffCount)
 				{
 					float minMaxFluffDotPass = maxFluffDotPasses[0];
-					//int minMaxFluffIndex = 0;
 					for (int j = 1; j < maxFluffDotPasses.Count; j++)
 					{
 						float maxFluffDotPass = maxFluffDotPasses[j];
 						if (maxFluffDotPass < minMaxFluffDotPass)
 						{
 							minMaxFluffDotPass = maxFluffDotPasses[j];
-							//minMaxFluffIndex = j;
 						}
 					}
 				}
@@ -95,7 +80,7 @@ public class FluffThrow : MonoBehaviour {
 
 		for (int i = passFluffs.Count - 1; i >= 0; i--)
 		{
-			fluffHandler.fluffs.RemoveAt(passFluffIndices[i]);
+			character.fluffHandler.fluffs.RemoveAt(passFluffIndices[i]);
 
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDirection;
 
@@ -109,15 +94,8 @@ public class FluffThrow : MonoBehaviour {
             fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
 		}
 		
-
-		// If only the first fluff can be volleyed to create a bond, ignore last fluff accepted for future shots.
-		if (volleyOnlyFirst)
-		{
-			lastFluffAccepted = null;
-		}
-
 		// If floating propel away from fluff.
-		if (floatMove.Floating && passFluffs.Count > 0)
+		if (character.floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 recoilForce = -passDirection * floatPushBack;
 			character.mover.body.AddForce(recoilForce);
