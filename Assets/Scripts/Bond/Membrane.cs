@@ -8,6 +8,8 @@ public class Membrane : Bond {
 	public bool preferNewBonds = false;
 	public List<ShapingPoint> shapingPoints;
 	public MembraneStats extraStats;
+	public Membrane membranePrevious;
+	public Membrane membraneNext;
 
 	protected override void PostUpdate()
 	{
@@ -17,6 +19,40 @@ public class Membrane : Bond {
 			MembraneLink membraneLink = links[i] as MembraneLink;
 			ApplyShaping(membraneLink);
 		}
+	}
+
+	protected override void BondBreaking()
+	{
+		base.BondBreaking();
+		if (membranePrevious != null)
+		{
+			if (membranePrevious.membranePrevious == this)
+			{
+				membranePrevious.membranePrevious = null;
+			}
+			if (membranePrevious.membraneNext == this)
+			{
+				membranePrevious.membraneNext = null;
+			}
+			Membrane breakMembrane = membranePrevious;
+			membranePrevious = null;
+			breakMembrane.BreakBond();
+		}
+		if (membraneNext != null)
+		{
+			if (membraneNext.membranePrevious == this)
+			{
+				membraneNext.membranePrevious = null;
+			}
+			if (membraneNext.membraneNext == this)
+			{
+				membraneNext.membraneNext = null;
+			}
+			Membrane breakMembrane = membraneNext;
+			membraneNext = null;
+			breakMembrane.BreakBond();
+		}
+
 	}
 
 	protected override void LinkAdded(BondLink addedLink)
@@ -49,7 +85,7 @@ public class Membrane : Bond {
 		return bonded;
 	}
 
-	public void BreakBond(BondAttachable partner)
+	public void BreakInnerBond(BondAttachable partner)
 	{
 		for (int i = 0; i < links.Count; i++)
 		{

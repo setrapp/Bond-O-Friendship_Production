@@ -4,6 +4,10 @@ using System.Collections;
 public class AutoMembrane : AutoBond {
 	public GameObject shapingPointContainer;
 	public MembraneStatsHolder membraneOverrideStats;
+	public AutoMembrane neighborPrevious;
+	public AutoMembrane neighborNext;
+	public Membrane membranePrevious;
+	public Membrane membraneNext;
 
 	protected override void CreateBond()
 	{
@@ -35,6 +39,54 @@ public class AutoMembrane : AutoBond {
 					}
 				}
 			}
+
+			// Attach neighboring membranes to created membrane.
+			if (membranePrevious != null)
+			{
+				createdMembrane.membranePrevious = membranePrevious;
+				membranePrevious = null;
+			}
+			if (membraneNext != null)
+			{
+				createdMembrane.membraneNext = membraneNext;
+				membraneNext = null;
+			}
+
+			// Attach created membrane to neighboring membranes.
+			if (neighborPrevious != null && neighborPrevious != this)
+			{
+				neighborPrevious.AttachMembraneNext(createdMembrane);
+			}
+			if (neighborNext != null && neighborNext != this)
+			{
+				neighborNext.AttachMembranePrevious(createdMembrane);
+			}
+		}
+	}
+
+	public void AttachMembranePrevious(Membrane previous)
+	{
+		Membrane createdMembrane = createdBond as Membrane;
+		if (createdMembrane != null)
+		{
+			createdMembrane.membranePrevious = previous;
+		}
+		else
+		{
+			membranePrevious = previous;
+		}
+	}
+
+	public void AttachMembraneNext(Membrane next)
+	{
+		Membrane createdMembrane = createdBond as Membrane;
+		if (createdMembrane != null)
+		{
+			createdMembrane.membraneNext = next;
+		}
+		else
+		{
+			membraneNext = next;
 		}
 	}
 }

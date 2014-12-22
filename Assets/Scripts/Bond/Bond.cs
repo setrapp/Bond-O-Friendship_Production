@@ -161,6 +161,7 @@ public class Bond : MonoBehaviour {
 	}
 	public void BreakBond()
 	{
+		BondBreaking();
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 		if (attachee1 != null)
@@ -390,6 +391,7 @@ public class Bond : MonoBehaviour {
 
 	// Hooks for subclasses.
 	protected virtual void PostUpdate() {}
+	protected virtual void BondBreaking() {}
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
 }

@@ -15,7 +15,7 @@ public class MembraneLink : BondLink {
 			{
 				if (membrane.preferNewBonds)
 				{
-					membrane.BreakBond(partner);
+					membrane.BreakInnerBond(partner);
 				}
 				bondAttachable.AttemptBond(partner, transform.position, true);
 			}
