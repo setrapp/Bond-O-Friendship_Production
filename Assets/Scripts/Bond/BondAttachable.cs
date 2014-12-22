@@ -8,6 +8,7 @@ public class BondAttachable : MonoBehaviour {
 	public bool bondAtFluffPoint = true;
 	public Color attachmentColor;
 	public GameObject bondPrefab;
+	public BondStatsHolder bondOverrideStats;
 	[SerializeField]
 	public List<Bond> bonds;
 	public int volleysToBond;
@@ -19,6 +20,10 @@ public class BondAttachable : MonoBehaviour {
 		if (body == null)
 		{
 			body = GetComponent<Rigidbody>();
+		}
+		if (bondOverrideStats == null)
+		{
+			bondOverrideStats = GetComponent<BondStatsHolder>();
 		}
 	}
 
@@ -61,15 +66,12 @@ public class BondAttachable : MonoBehaviour {
 					newBond = ((GameObject)Instantiate(bondPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Bond>();
 					bonds.Add(newBond);
 					bondPartner.bonds.Add(newBond);
-					BondStatsHolder statsHolder = GetComponent<BondStatsHolder>();
-					if (statsHolder != null && statsHolder.stats != null)
+					if (bondOverrideStats != null && bondOverrideStats.stats != null)
 					{
-						newBond.stats = statsHolder.stats;
+						newBond.stats = bondOverrideStats.stats;
 					}
 
-					// TODO this should be able to happen in reverse order (pulling attachments is buggy).
-					//newBond.AttachPartners(this, bondPoint, bondPartner, bondPartner.transform.position);
-					newBond.AttachPartners(bondPartner, bondPartner.transform.position, this, bondPoint);
+					newBond.AttachPartners(this, bondPoint, bondPartner, bondPartner.transform.position);
 					volleys = 0;
 					bondPartner.volleys = 0;
 				}

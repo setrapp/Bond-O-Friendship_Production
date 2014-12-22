@@ -70,25 +70,25 @@ public class Bond : MonoBehaviour {
 			for (int i = 0; i < links.Count; i++)
 			{
 				linkDir = Vector3.zero;
-				linkScale = links[i].transform.localScale;
+				linkScale = links[i].linkCollider.size;
 				if (i == 0)
 				{
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
-					linkScale.x = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, 0.5f, 0);
+					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+					links[i].linkCollider.center = new Vector3(0, 0, 0);
 				}
-				else if (i == links.Count - 1)
+				else if (i == (links.Count - 1))
 				{
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
-					linkScale.x = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, -0.5f, 0);
+					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					links[i].linkCollider.center = new Vector3(0, 0, 0);
 				}
 				else
 				{
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScale.x = magFromPrevious / 4 + magToNext / 4;
+					linkScale.y = magFromPrevious + magToNext;
 					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
@@ -229,8 +229,8 @@ public class Bond : MonoBehaviour {
 			nextLink.jointPrevious.connectedBody = newLink.body;
 		}
 
-		//RepositionLinks();
 		WeightJoints();
+		LinkAdded(newLink);
 	}
 
 	private void RemoveLink()
@@ -247,6 +247,7 @@ public class Bond : MonoBehaviour {
 		{
 			nextLink.jointPrevious.connectedBody = previousLink.body;
 		}
+		LinkRemoved(links[index]);
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
@@ -384,6 +385,10 @@ public class Bond : MonoBehaviour {
 		}
 		return null;
 	}
+
+	// Hooks for subclasses.
+	protected virtual void LinkAdded(BondLink addedLink) {}
+	protected virtual void LinkRemoved(BondLink removedLink) {}
 }
 
 [System.Serializable]

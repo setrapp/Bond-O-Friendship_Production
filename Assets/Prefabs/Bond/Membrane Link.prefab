@@ -16,8 +16,9 @@ GameObject:
   - 145: {fileID: 14500004}
   - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
-  m_Layer: 19
-  m_Name: Bond Link
+  - 114: {fileID: 11400002}
+  m_Layer: 26
+  m_Name: Membrane Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e9b8a977b3ed14f947ad373e275e72, type: 3}
+  m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   linkCollider: {fileID: 6500000}
@@ -106,6 +107,29 @@ MonoBehaviour:
   jointNext: {fileID: 14500000}
   jointToAttachment: {fileID: 14500004}
   orderLevel: 0
+  membrane: {fileID: 0}
+  bondAttachable: {fileID: 11400002}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 5400000}
+  handleFluffAttachment: 0
+  bondAtFluffPoint: 0
+  attachmentColor: {r: 0, g: 0, b: 0, a: 0}
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bondOverrideStats: {fileID: 0}
+  bonds: []
+  volleysToBond: 0
+  volleys: 0
+  volleyPartner: {fileID: 0}
 --- !u!145 &14500000
 SpringJoint:
   m_ObjectHideFlags: 1

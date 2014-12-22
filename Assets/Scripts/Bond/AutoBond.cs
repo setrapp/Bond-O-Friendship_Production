@@ -48,7 +48,7 @@ public class AutoBond : MonoBehaviour {
 			{
 				newBond.stats = statsHolder.stats;
 			}
-			// TODO this should be able to happen in reverse order (pulling attachments is buggy).
+
 			Vector3 attachPos1 = attachable1.transform.position + attachable1.transform.InverseTransformDirection(bondOffset1);
 			Vector3 attachPos2 = attachable2.transform.position + attachable2.transform.InverseTransformDirection(bondOffset2);
 			newBond.AttachPartners(attachable1, attachPos1, attachable2, attachPos2);

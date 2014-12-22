@@ -6,12 +6,7 @@ public class Fluff : MonoBehaviour {
 	[HideInInspector]
 	private SimpleMover mover;
 	public BondAttachable creator;
-	public CharacterComponents volleyTarget;
-	public int volleys;
-	public float capacity;
-	public Vector3 target;
 	public float rotationSpeed = 50.0f;
-	public FluffThrow volleyPartner;
 	public TrailRenderer trail;
 	public bool moving = false;
 	public float baseAngle = -1;

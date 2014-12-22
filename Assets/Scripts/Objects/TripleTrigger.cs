@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Membrane : MonoBehaviour {
+public class TripleTrigger : MonoBehaviour {
 
 	public GameObject trigger1;
 	public GameObject trigger2;

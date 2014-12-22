@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class FluffThrow : MonoBehaviour {
 	public CharacterComponents character;
-	public FluffThrow lastFluffAccepted;
 	public float floatPushBack;
 	public int minShotCount;
 	public int maxShotCount;
@@ -87,7 +86,6 @@ public class FluffThrow : MonoBehaviour {
 			Fluff fluff = passFluffs[i].GetComponent<Fluff>();
             fluff.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
             fluff.transform.parent = transform.parent;
-            fluff.volleyPartner = lastFluffAccepted;
 			shotAngle += shotSpread / passFluffCount;
             fluff.transform.position = transform.position;
 
