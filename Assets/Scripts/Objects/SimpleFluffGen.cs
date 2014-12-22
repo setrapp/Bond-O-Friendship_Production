@@ -15,12 +15,9 @@ public class SimpleFluffGen : MonoBehaviour {
 	
 	private float spawnTimer;
 	private int colorPicker;
-	private GameObject fluff;
 	private float velocity;
 	private Vector3 targetAngle;
 	private Vector3 baseTarget;
-	//public PulseShot pulseShot;
-	//public ConnectionAttachable connectionAttachable;
 	
 	// Use this for initialization
 	void Start () {
@@ -49,26 +46,24 @@ public class SimpleFluffGen : MonoBehaviour {
 	}
 	
 	void GenerateFluff () {
-		fluff = (GameObject)Instantiate(fluffPrefab);
+		GameObject fluffObject = (GameObject)Instantiate(fluffPrefab);
 		colorPicker = Random.Range(0, 2);
 		if(colorPicker == 1)
 		{
-			MeshRenderer[] meshRenderers = fluff.GetComponentsInChildren<MeshRenderer>();
+            MeshRenderer[] meshRenderers = fluffObject.GetComponentsInChildren<MeshRenderer>();
 			for (int i = 0; i < meshRenderers.Length; i++)
 			{
 				meshRenderers[i].material = greenFluffMaterial;
 			}
 		}
-		fluff.transform.position = transform.position;
-		fluff.transform.parent = gameObject.transform;
-		MovePulse movePulse = fluff.GetComponent<MovePulse>();
+        fluffObject.transform.position = transform.position;
+        fluffObject.transform.parent = gameObject.transform;
+        Fluff fluff = fluffObject.GetComponent<Fluff>();
 		velocity = maximumForce;
 		//if(Random.Range(0,2) == 1)
 			//targetAngle = Quaternion.Euler(0, 0, Random.Range(60, 211)) * new Vector3(velocity,velocity,0);
 		//else
 		targetAngle = Quaternion.Euler(0, 0, angleShot) * new Vector3(velocity,velocity,0);
-		//movePulse.target = transform.position + targetAngle;
-		//movePulse.creator = conn;
-		movePulse.Pass(targetAngle);//, this.gameObject);
+        fluff.Pass(targetAngle);
 	}
 }

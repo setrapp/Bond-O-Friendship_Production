@@ -57,23 +57,22 @@ public class Trigger : MonoBehaviour {
 	}
 	void OnCollisionEnter(Collision collide)
 	{
-		//Debug.Log(collide.collider.GetComponent<MovePulse>().creator.name);
-		if(collide.collider.gameObject.tag == "Pulse")
+		if(collide.collider.gameObject.tag == "Fluff")
 		{
-			MovePulse mover = collide.collider.gameObject.GetComponent<MovePulse>();
-			if (mover != null)
+			Fluff fluff = collide.collider.gameObject.GetComponent<Fluff>();
+			if (fluff != null)
 			{
-				if(mover.creator != null && mover.creator.gameObject == Globals.Instance.player1.gameObject)
+				if(fluff.creator != null && fluff.creator.gameObject == Globals.Instance.player1.gameObject)
 				{
 					//print("Collide");
-					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
+					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<Fluff>().creator.attachmentColor;
 					pOneTriggered = true;
 					pTwoTriggered = false;
 				}
-				else if (mover.creator != null && mover.creator.gameObject == Globals.Instance.player2.gameObject)
+				else if (fluff.creator != null && fluff.creator.gameObject == Globals.Instance.player2.gameObject)
 				{
 					//print("Collide");
-					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<MovePulse>().creator.attachmentColor;
+					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<Fluff>().creator.attachmentColor;
 					pOneTriggered = false;
 					pTwoTriggered = true;
 				}
@@ -82,7 +81,7 @@ public class Trigger : MonoBehaviour {
 					nullTriggered = true;
 				}
 			}
-			mover.PopFluff();
+			fluff.PopFluff();
 		}
 	}
 }
