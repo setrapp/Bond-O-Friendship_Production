@@ -1455,16 +1455,17 @@ GameObject:
   m_Component:
   - 4: {fileID: 841552381}
   - 135: {fileID: 841552392}
-  - 114: {fileID: 841552391}
-  - 114: {fileID: 841552390}
   - 54: {fileID: 841552389}
   - 114: {fileID: 841552388}
+  - 114: {fileID: 841552391}
+  - 114: {fileID: 841552390}
   - 114: {fileID: 841552387}
   - 114: {fileID: 841552386}
   - 114: {fileID: 841552385}
   - 114: {fileID: 841552384}
   - 114: {fileID: 841552383}
   - 114: {fileID: 841552382}
+  - 114: {fileID: 841552393}
   m_Layer: 13
   m_Name: Player 1
   m_TagString: Character
@@ -1500,13 +1501,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  body: {fileID: 841552389}
   handleFluffAttachment: 0
-  connectAtFluffPoint: 0
+  bondAtFluffPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
-  connectionPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  connections: []
-  volleysToConnect: 2
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bonds: []
+  volleysToBond: 2
   volleys: 0
   volleyPartner: {fileID: 0}
 --- !u!114 &841552383
@@ -1521,7 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullableBody: {fileID: 0}
+  pullableBody: {fileID: 841552389}
   noKinematicOnPull: 0
   allowSway: 0
   bodyMassFactor: 1
@@ -1539,7 +1540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b78d33542383747b139f12bba8dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  character: {fileID: 841552388}
+  body: {fileID: 841552389}
   headSprite: {fileID: 1341921063}
   naturalFluffCount: 1
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
@@ -1552,7 +1554,6 @@ MonoBehaviour:
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
-  partnerLink: {fileID: 0}
 --- !u!114 &841552385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1565,10 +1566,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e6b386ebad61b49ae306e3c772c73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partnerLink: {fileID: 0}
-  mover: {fileID: 0}
-  fluffSpawn: {fileID: 0}
-  fluffStick: {fileID: 0}
+  character: {fileID: 841552388}
+  trailShrinkRate: 1
   startingStats:
     acceleration: 0
     handling: 0
@@ -1576,7 +1575,7 @@ MonoBehaviour:
     bodylessDampening: 0
     sideTrailTime: 0
     midTrailTime: 0
-    absorbStrength: 0
+    attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
     acceleration: 3
@@ -1585,18 +1584,18 @@ MonoBehaviour:
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    absorbStrength: 10
+    attractRange: 10
     maxAbsorbReact: 1
-  perConnectionFloatBonus:
+  perBondFloatBonus:
     acceleration: 10
     handling: 10
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
     midTrailTime: 0
-    absorbStrength: 0
+    attractRange: 0
     maxAbsorbReact: 0
-  maxConnectionBonuses: 1
+  maxBondBonuses: 0
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1612,14 +1611,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1467802f8cf8f549ad1891a667d2444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partnerLink: {fileID: 0}
+  character: {fileID: 841552388}
   lastFluffAccepted: {fileID: 0}
-  volleyOnlyFirst: 0
-  volleys: 0
-  volleyPartner: {fileID: 0}
-  floatMove: {fileID: 0}
   floatPushBack: 300
-  fluffSpawn: {fileID: 0}
   minShotCount: 3
   maxShotCount: 5
   shotSpread: 30
@@ -1638,14 +1632,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94546ec2f861d674383ec3b3c22b0e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mover: {fileID: 841552390}
-  partnerLink: {fileID: 841552388}
+  character: {fileID: 841552388}
   controlScheme: 0
   playerNumber: 0
   joystickNumber: 0
   canvasStart: {fileID: 1520162320}
   canvasPaused: {fileID: 991876899}
-  absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 0
   otherPlayerInput: {fileID: 0}
   sharing: 0
@@ -1654,7 +1646,6 @@ MonoBehaviour:
   swapJoysticks: 0
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
-  pullSpeed: 10
 --- !u!114 &841552388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1667,31 +1658,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56d86b5491f62f46b8990126f139f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 1
+  headRenderer: {fileID: 1341921065}
   fillRenderer: {fileID: 717760444}
   flashRenderer: {fileID: 366076891}
-  flashFadeTime: 2
   leftTrail: {fileID: 1229815175}
   midTrail: {fileID: 419342791}
   rightTrail: {fileID: 1469592156}
-  fluffThrow: {fileID: 0}
-  connectionAttachable: {fileID: 0}
-  partnerLineSize: .25
-  mover: {fileID: 0}
+  fluffHandler: {fileID: 841552384}
+  fluffThrow: {fileID: 841552386}
+  fluffStick: {fileID: 841552383}
+  bondAttachable: {fileID: 841552382}
+  mover: {fileID: 841552390}
+  floatMove: {fileID: 841552385}
+  body: {fileID: 841552389}
+  attractor: {fileID: 841552393}
   fillScale: 1
-  empty: 0
-  minScale: .5
-  maxScale: 2
-  normalScale: 1
-  preChargeScale: 1
-  scaleRestoreRate: .200000003
-  endChargeRestoreRate: 1
-  connectionAbsorb: 1
-  connectionOffsetFactor: .899999976
-  absorbStrength: 5
-  absorbing: 0
-  absorbSpeedFactor: -.200000003
-  volleysToConnect: 2
+  flashFadeTime: 2
+  bondAbsorb: 1
+  bondOffsetFactor: .5
 --- !u!54 &841552389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1742,19 +1726,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateColors: 0
+  character: {fileID: 841552388}
   attachmentColor: {r: 0, g: 0, b: 1, a: 1}
   headMaterial: {fileID: 2100000, guid: 3104c057573cc4c48a6a0388c3b5c4d2, type: 2}
   fillMaterial: {fileID: 2100000, guid: 7fa81883306f0864993706a671e8bf7a, type: 2}
   trailMaterial: {fileID: 2100000, guid: 32a67a638295de14e8c60b971bafd68d, type: 2}
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
-  connectionAttachable: {fileID: 841552382}
-  headRenderer: {fileID: 1341921065}
-  fillRenderer: {fileID: 717760444}
-  flashRenderer: {fileID: 366076891}
-  leftTrailRenderer: {fileID: 1229815175}
-  midTrailRenderer: {fileID: 419342791}
-  rightTrailRenderer: {fileID: 1469592156}
-  fluffSpawn: {fileID: 841552384}
 --- !u!135 &841552392
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1768,6 +1745,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &841552393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400022, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 52328356}
+  m_GameObject: {fileID: 841552380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704f7869f80c7f44ab13631205e8caf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 841552388}
+  attracting: 0
+  attractRange: 5
+  attractSpeed: 1000
+  attractSlowingFactor: .150000006
+  attractionPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
 --- !u!1 &867306988
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,16 +2498,17 @@ GameObject:
   m_Component:
   - 4: {fileID: 1293440119}
   - 135: {fileID: 1293440130}
-  - 114: {fileID: 1293440129}
-  - 114: {fileID: 1293440128}
   - 54: {fileID: 1293440127}
   - 114: {fileID: 1293440126}
+  - 114: {fileID: 1293440129}
+  - 114: {fileID: 1293440128}
   - 114: {fileID: 1293440125}
   - 114: {fileID: 1293440124}
   - 114: {fileID: 1293440123}
   - 114: {fileID: 1293440122}
   - 114: {fileID: 1293440121}
   - 114: {fileID: 1293440120}
+  - 114: {fileID: 1293440131}
   m_Layer: 13
   m_Name: Player 2
   m_TagString: Character
@@ -2548,13 +2544,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  body: {fileID: 1293440127}
   handleFluffAttachment: 0
-  connectAtFluffPoint: 0
+  bondAtFluffPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
-  connectionPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  connections: []
-  volleysToConnect: 2
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bonds: []
+  volleysToBond: 2
   volleys: 0
   volleyPartner: {fileID: 0}
 --- !u!114 &1293440121
@@ -2569,7 +2565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullableBody: {fileID: 0}
+  pullableBody: {fileID: 1293440127}
   noKinematicOnPull: 0
   allowSway: 0
   bodyMassFactor: 1
@@ -2587,7 +2583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b78d33542383747b139f12bba8dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  character: {fileID: 1293440126}
+  body: {fileID: 1293440127}
   headSprite: {fileID: 189712143}
   naturalFluffCount: 1
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
@@ -2600,7 +2597,6 @@ MonoBehaviour:
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
-  partnerLink: {fileID: 0}
 --- !u!114 &1293440123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2613,10 +2609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e6b386ebad61b49ae306e3c772c73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partnerLink: {fileID: 0}
-  mover: {fileID: 0}
-  fluffSpawn: {fileID: 0}
-  fluffStick: {fileID: 0}
+  character: {fileID: 1293440126}
+  trailShrinkRate: 1
   startingStats:
     acceleration: 0
     handling: 0
@@ -2624,7 +2618,7 @@ MonoBehaviour:
     bodylessDampening: 0
     sideTrailTime: 0
     midTrailTime: 0
-    absorbStrength: 0
+    attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
     acceleration: 3
@@ -2633,18 +2627,18 @@ MonoBehaviour:
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    absorbStrength: 10
+    attractRange: 10
     maxAbsorbReact: 1
-  perConnectionFloatBonus:
+  perBondFloatBonus:
     acceleration: 10
     handling: 10
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
     midTrailTime: 0
-    absorbStrength: 0
+    attractRange: 0
     maxAbsorbReact: 0
-  maxConnectionBonuses: 1
+  maxBondBonuses: 0
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2660,14 +2654,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1467802f8cf8f549ad1891a667d2444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partnerLink: {fileID: 0}
+  character: {fileID: 1293440126}
   lastFluffAccepted: {fileID: 0}
-  volleyOnlyFirst: 0
-  volleys: 0
-  volleyPartner: {fileID: 0}
-  floatMove: {fileID: 0}
   floatPushBack: 300
-  fluffSpawn: {fileID: 0}
   minShotCount: 3
   maxShotCount: 5
   shotSpread: 30
@@ -2686,14 +2675,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94546ec2f861d674383ec3b3c22b0e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mover: {fileID: 1293440128}
-  partnerLink: {fileID: 1293440126}
+  character: {fileID: 1293440126}
   controlScheme: 0
   playerNumber: 1
   joystickNumber: 0
   canvasStart: {fileID: 572604316}
   canvasPaused: {fileID: 991876899}
-  absorbPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
   useKeyboard: 0
   otherPlayerInput: {fileID: 0}
   sharing: 0
@@ -2702,7 +2689,6 @@ MonoBehaviour:
   swapJoysticks: 0
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
-  pullSpeed: 10
 --- !u!114 &1293440126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2715,31 +2701,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56d86b5491f62f46b8990126f139f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 1
+  headRenderer: {fileID: 189712145}
   fillRenderer: {fileID: 674962510}
   flashRenderer: {fileID: 55384842}
-  flashFadeTime: 2
   leftTrail: {fileID: 1646456281}
   midTrail: {fileID: 122779312}
   rightTrail: {fileID: 1542212951}
-  fluffThrow: {fileID: 0}
-  connectionAttachable: {fileID: 0}
-  partnerLineSize: .25
-  mover: {fileID: 0}
+  fluffHandler: {fileID: 1293440122}
+  fluffThrow: {fileID: 1293440124}
+  fluffStick: {fileID: 1293440121}
+  bondAttachable: {fileID: 1293440120}
+  mover: {fileID: 1293440128}
+  floatMove: {fileID: 1293440123}
+  body: {fileID: 1293440127}
+  attractor: {fileID: 1293440131}
   fillScale: 1
-  empty: 0
-  minScale: .5
-  maxScale: 2
-  normalScale: 1
-  preChargeScale: 1
-  scaleRestoreRate: .200000003
-  endChargeRestoreRate: 1
-  connectionAbsorb: 1
-  connectionOffsetFactor: .899999976
-  absorbStrength: 5
-  absorbing: 0
-  absorbSpeedFactor: -.200000003
-  volleysToConnect: 2
+  flashFadeTime: 2
+  bondAbsorb: 1
+  bondOffsetFactor: .5
 --- !u!54 &1293440127
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2790,19 +2769,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateColors: 0
+  character: {fileID: 1293440126}
   attachmentColor: {r: 0, g: 1, b: 0, a: 1}
   headMaterial: {fileID: 2100000, guid: 0c7e43bd7884fd74fb7a9cced0ed05c6, type: 2}
   fillMaterial: {fileID: 2100000, guid: 1dac60bf9c055814985d9c376f55b9f1, type: 2}
   trailMaterial: {fileID: 2100000, guid: 47df192c5447d6148b5f0cf5236031f1, type: 2}
   fluffMaterial: {fileID: 2100000, guid: bc31ba9070f2dee4eb042a8d41a2bad9, type: 2}
-  connectionAttachable: {fileID: 1293440120}
-  headRenderer: {fileID: 189712145}
-  fillRenderer: {fileID: 674962510}
-  flashRenderer: {fileID: 55384842}
-  leftTrailRenderer: {fileID: 1646456281}
-  midTrailRenderer: {fileID: 122779312}
-  rightTrailRenderer: {fileID: 1542212951}
-  fluffSpawn: {fileID: 1293440122}
 --- !u!135 &1293440130
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2816,6 +2788,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1293440131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400022, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 2020569886}
+  m_GameObject: {fileID: 1293440118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704f7869f80c7f44ab13631205e8caf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 1293440126}
+  attracting: 0
+  attractRange: 5
+  attractSpeed: 1000
+  attractSlowingFactor: .150000006
+  attractionPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
 --- !u!1 &1341921063
 GameObject:
   m_ObjectHideFlags: 0

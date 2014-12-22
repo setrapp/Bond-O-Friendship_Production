@@ -371,6 +371,19 @@ public class Bond : MonoBehaviour {
 
 		return nearestPos;
 	}
+
+	public BondAttachable OtherAttachee(BondAttachable attachee)
+	{
+		if (attachment1.attachee == attachee)
+		{
+			return attachment2.attachee;
+		}
+		else if (attachment2.attachee == attachee)
+		{
+			return attachment1.attachee;
+		}
+		return null;
+	}
 }
 
 [System.Serializable]

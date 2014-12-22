@@ -21,8 +21,6 @@ public class CharacterComponents : MonoBehaviour {
 	[HideInInspector]
 	public float fillScale = 1;
 	public float flashFadeTime = 1;
-	public bool bondAbsorb = true;
-	public float bondOffsetFactor = 0.5f;
 	
 	void Awake()
 	{

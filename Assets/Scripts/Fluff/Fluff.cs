@@ -30,6 +30,8 @@ public class Fluff : MonoBehaviour {
 	public GameObject ignoreCollider;
 	private bool forgetCreator;
 	public Animation popAnimation;
+	public Vector3 pullForce;
+	public float pullDistance;
 
 	void Awake()
 	{
@@ -64,6 +66,13 @@ public class Fluff : MonoBehaviour {
 		{
 			creator = null;
 			forgetCreator = false;
+		}
+
+		if (pullForce.sqrMagnitude > 0)
+		{
+			ApplyPullForce();
+			pullForce = Vector3.zero;
+			pullDistance = 0;
 		}
 
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
@@ -159,18 +168,32 @@ public class Fluff : MonoBehaviour {
 			return;
 		}
 
-		Vector3 pullForce = toPuller * pullMagnitude;
+		// Compute new pull force to be compared to existing pull force.
+		Vector3 newPullForce = toPuller * pullMagnitude;
+		float newPullDistance = toPullerDist + pullOffset.magnitude;
+
+		// If the new pull force over distance is greater than the existing pull force over distance, use the new.
+		float distEpsilon = 0.00001f;
+		if ((newPullForce.magnitude / (newPullDistance + distEpsilon)) > (pullForce.magnitude / (pullDistance + distEpsilon)))
+		{
+			pullForce = newPullForce;
+			pullDistance = newPullDistance;
+		}
+	}
+
+	private void ApplyPullForce()
+	{
 		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.pullableBody != null)
 		{
 			attachee.attachInfo.AddPullForce(pullForce, transform.position);
 		}
-		else 
+		else
 		{
 			if (body != null)
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, true, true);
+			mover.Accelerate(pullForce, false, true);
 		}
 	}
 
