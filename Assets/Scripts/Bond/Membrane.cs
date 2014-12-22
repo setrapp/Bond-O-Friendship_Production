@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Membrane : Bond {
 	public Color attachmentColor;
 	public BondStatsHolder internalBondStats;
+	public bool preferNewBonds = false;
 
 	protected override void LinkAdded(BondLink addedLink)
 	{
@@ -33,5 +34,17 @@ public class Membrane : Bond {
 			}
 		}
 		return bonded;
+	}
+
+	public void BreakBond(BondAttachable partner)
+	{
+		for (int i = 0; i < links.Count; i++)
+		{
+			MembraneLink membraneLink = links[i] as MembraneLink;
+			if (membraneLink != null && membraneLink.bondAttachable != null && membraneLink.bondAttachable.IsBondMade(partner))
+			{
+				membraneLink.bondAttachable.BreakBound(partner);
+			}
+		}
 	}
 }

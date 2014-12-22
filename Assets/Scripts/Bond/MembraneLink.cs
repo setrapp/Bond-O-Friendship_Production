@@ -10,8 +10,12 @@ public class MembraneLink : BondLink {
 		if (collision.collider.tag == "Character")
 		{
 			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
-			if (partner != null && !membrane.IsBondMade(partner))
+			if (partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
 			{
+				if (membrane.preferNewBonds)
+				{
+					membrane.BreakBond(partner);
+				}
 				bondAttachable.AttemptBond(partner, transform.position, true);
 			}
 		}
