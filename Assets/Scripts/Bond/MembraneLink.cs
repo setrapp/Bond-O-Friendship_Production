@@ -11,7 +11,7 @@ public class MembraneLink : BondLink {
 		if (collision.collider.tag == "Character")
 		{
 			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
-			if (partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
+			if (bondAttachable != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
 			{
 				if (membrane.preferNewBonds)
 				{

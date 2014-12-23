@@ -19,6 +19,22 @@ public class Membrane : Bond {
 			MembraneLink membraneLink = links[i] as MembraneLink;
 			ApplyShaping(membraneLink);
 		}
+
+		if (extraStats.smoothWithNeighbors)
+		{
+			SmoothToNeighbors();
+		}
+	}
+
+	protected override void BondForming()
+	{
+		base.BondForming();
+		/*MembraneLink membraneLinkStart = links[0] as MembraneLink;
+		MembraneLink membraneLinkEnd = links[1] as MembraneLink;
+		if (membraneLinkStart != null)
+		{
+			mem//add pullable bonds to either starting links or attachements
+		}*/
 	}
 
 	protected override void BondBreaking()
@@ -148,16 +164,18 @@ public class Membrane : Bond {
 
 		if (shapingPoints.Count > 0)
 		{
-			nearPoint = shapingPoints[0];
+			int nearIndex = 0;
+			nearPoint = shapingPoints[nearIndex];
 			float nearSqrDist = (nearPoint.transform.position - link.transform.position).sqrMagnitude;
 			for (int i = 1; i < shapingPoints.Count; i++)
 			{
 				float sqrDist = (shapingPoints[i].transform.position - link.transform.position).sqrMagnitude;
-				if (sqrDist < nearSqrDist)
+				// Get the nearest shaping point, only using the attachment points if no others exist.
+				if (sqrDist < nearSqrDist || (i > 1 && nearIndex <= 1))
 				{
+					nearIndex = i;
 					nearSqrDist = sqrDist;
-
-					nearPoint = shapingPoints[i];
+					nearPoint = shapingPoints[nearIndex];
 				}
 			}
 		}
@@ -167,7 +185,7 @@ public class Membrane : Bond {
 
 	private void ApplyShaping(MembraneLink membraneLink)
 	{
-		if (membraneLink != null)
+		if (membraneLink != null && membraneLink.jointShaping != null)
 		{
 			ShapingPoint shapingPoint = NearestShapingPoint(membraneLink);
 			if (shapingPoint != null)
@@ -191,13 +209,42 @@ public class Membrane : Bond {
 			}
 		}
 	}
+
+	private void SmoothToNeighbors()
+	{
+		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
+		{
+			attachment1.attachee.transform.position = (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2;
+		}
+		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
+		{
+			attachment2.attachee.transform.position = (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2;
+		}
+	}
+
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.white;
+		if (membranePrevious != null)
+		{
+			Gizmos.DrawLine(links[0].jointNext.connectedBody.transform.position, (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2);
+		}
+		if (membraneNext != null)
+		{
+			Gizmos.DrawLine(links[links.Count - 1].jointPrevious.connectedBody.transform.position, (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2);
+		}
+		
+	}
 }
+
+
 
 [System.Serializable]
 public class MembraneStats
 {
 	public float defaultShapingForce = 5;
 	public bool breakWithNeighbors = true;
-	public bool smoothWithNeighbors = true;
 	public bool considerNeighborBonds = true;
+	[HideInInspector]
+	public bool smoothWithNeighbors = false;
 }

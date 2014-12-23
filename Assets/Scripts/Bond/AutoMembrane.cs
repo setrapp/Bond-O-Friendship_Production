@@ -2,12 +2,12 @@
 using System.Collections;
 
 public class AutoMembrane : AutoBond {
-	public GameObject shapingPointContainer;
 	public MembraneStatsHolder membraneOverrideStats;
+	public GameObject shapingPointContainer;
 	public AutoMembrane neighborPrevious;
 	public AutoMembrane neighborNext;
-	public Membrane membranePrevious;
-	public Membrane membraneNext;
+	private Membrane membranePrevious;
+	private Membrane membraneNext;
 
 	protected override void CreateBond()
 	{

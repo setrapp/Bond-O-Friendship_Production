@@ -206,6 +206,8 @@ public class Bond : MonoBehaviour {
 
 		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
 		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
+
+		BondForming();
 	}
 
 	private void AddLink()
@@ -391,6 +393,7 @@ public class Bond : MonoBehaviour {
 
 	// Hooks for subclasses.
 	protected virtual void PostUpdate() {}
+	protected virtual void BondForming() {}
 	protected virtual void BondBreaking() {}
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
