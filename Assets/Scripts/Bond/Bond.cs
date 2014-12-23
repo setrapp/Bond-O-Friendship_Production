@@ -63,7 +63,6 @@ public class Bond : MonoBehaviour {
 			}
 			isCountEven = links.Count % 2 == 0;
 
-
 			// Direct, scale, and place link colliders to cover the surface of the bond.
 			Vector3 linkDir = Vector3.zero;
 			Vector3 linkScale = Vector3.zero;
@@ -75,20 +74,20 @@ public class Bond : MonoBehaviour {
 				{
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
 					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, 0, 0);
+					links[i].linkCollider.center = new Vector3(0, linkScale.y / 2, 0);
 				}
 				else if (i == (links.Count - 1))
 				{
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
 					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, 0, 0);
+					links[i].linkCollider.center = new Vector3(0, -linkScale.y / 2, 0);
 				}
 				else
 				{
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScale.y = magFromPrevious + magToNext;
+					linkScale.y = stats.addLinkDistance;//magFromPrevious + magToNext;
 					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
@@ -261,6 +260,13 @@ public class Bond : MonoBehaviour {
 
 	private void WeightJoints()
 	{
+		// Set order level of each link.
+		int halfCount = (links.Count % 2 == 0) ? links.Count / 2 : links.Count / 2 + 1;
+		for (int i = 0; i < halfCount; i++)
+		{
+			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
+		}
+
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		for (int i = 1; i < links.Count - 1; i++)
 		{

@@ -28,11 +28,11 @@ GameObject:
   - 33: {fileID: 3300002}
   - 23: {fileID: 2300002}
   - 114: {fileID: 11400004}
-  - 65: {fileID: 6500000}
   - 114: {fileID: 11400010}
   - 145: {fileID: 14500002}
   - 145: {fileID: 14500006}
   - 145: {fileID: 14500010}
+  - 65: {fileID: 6500002}
   m_Layer: 26
   m_Name: Attachment 2 Link
   m_TagString: Untagged
@@ -85,11 +85,11 @@ GameObject:
   - 33: {fileID: 3300004}
   - 23: {fileID: 2300004}
   - 114: {fileID: 11400006}
-  - 65: {fileID: 6500002}
   - 114: {fileID: 11400008}
   - 145: {fileID: 14500000}
   - 145: {fileID: 14500004}
   - 145: {fileID: 14500008}
+  - 65: {fileID: 6500000}
   m_Layer: 26
   m_Name: Attachment 1 Link
   m_TagString: Untagged
@@ -224,7 +224,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 10
   m_Drag: 1
-  m_AngularDrag: 1
+  m_AngularDrag: 100
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -239,7 +239,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 10
   m_Drag: 1
-  m_AngularDrag: 1
+  m_AngularDrag: 100
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -250,7 +250,7 @@ BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
+  m_GameObject: {fileID: 100010}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -262,7 +262,7 @@ BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
+  m_GameObject: {fileID: 100002}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -339,11 +339,14 @@ MonoBehaviour:
   - {fileID: 11400010}
   extraStats:
     defaultShapingForce: 5
+    bondOnContact: 1
     breakWithNeighbors: 1
     considerNeighborBonds: 1
     smoothWithNeighbors: 0
   membranePrevious: {fileID: 0}
   membraneNext: {fileID: 0}
+  startLink: {fileID: 11400006}
+  endLink: {fileID: 11400004}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -355,6 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   linkCollider: {fileID: 6500002}
   body: {fileID: 5400000}
   jointPrevious: {fileID: 14500002}
@@ -375,7 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkCollider: {fileID: 6500002}
+  bond: {fileID: 0}
+  linkCollider: {fileID: 6500000}
   body: {fileID: 5400002}
   jointPrevious: {fileID: 14500000}
   jointNext: {fileID: 14500004}

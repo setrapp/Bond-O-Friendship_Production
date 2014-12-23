@@ -10,6 +10,8 @@ public class Membrane : Bond {
 	public MembraneStats extraStats;
 	public Membrane membranePrevious;
 	public Membrane membraneNext;
+	public MembraneLink startLink;
+	public MembraneLink endLink;
 
 	protected override void PostUpdate()
 	{
@@ -20,7 +22,7 @@ public class Membrane : Bond {
 			ApplyShaping(membraneLink);
 		}
 
-		if (extraStats.smoothWithNeighbors)
+		if (extraStats.smoothForce > 0)
 		{
 			SmoothToNeighbors();
 		}
@@ -214,11 +216,13 @@ public class Membrane : Bond {
 	{
 		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
 		{
-			attachment1.attachee.transform.position = (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2;
+			Vector3 prevSmoothPos = (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2;
+			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
 		}
 		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
 		{
-			attachment2.attachee.transform.position = (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2;
+			Vector3 nextSmoothPos = (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2;
+			attachment2.attachee.body.AddForce((nextSmoothPos - attachment2.position).normalized * extraStats.smoothForce);
 		}
 	}
 
@@ -243,8 +247,8 @@ public class Membrane : Bond {
 public class MembraneStats
 {
 	public float defaultShapingForce = 5;
+	public bool bondOnContact = true;
 	public bool breakWithNeighbors = true;
 	public bool considerNeighborBonds = true;
-	[HideInInspector]
-	public bool smoothWithNeighbors = false;
+	public float smoothForce = 10;
 }
