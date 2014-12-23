@@ -12,6 +12,9 @@ public class Membrane : Bond {
 	public Membrane membraneNext;
 	public LineRenderer smoothCornerLine1;
 	public LineRenderer smoothCornerLine2;
+	private MembraneLink attachment1FauxLink;
+	private MembraneLink attachment2FauxLink;
+	public float endpointSpring = -1;
 
 	protected override void PostUpdate()
 	{
@@ -37,12 +40,47 @@ public class Membrane : Bond {
 	protected override void BondForming()
 	{
 		base.BondForming();
-		/*MembraneLink membraneLinkStart = links[0] as MembraneLink;
-		MembraneLink membraneLinkEnd = links[1] as MembraneLink;
-		if (membraneLinkStart != null)
+
+		if (endpointSpring < 0)
 		{
-			mem//add pullable bonds to either starting links or attachements
-		}*/
+			endpointSpring = internalBondStats.stats.attachSpring1;
+		}
+
+		// Setup endpoint links.
+		MembraneLink startLink = links[0] as MembraneLink;
+		if (startLink != null)
+		{
+			startLink.membrane = this;
+		}
+		MembraneLink endLink = links[links.Count-1] as MembraneLink;
+		if (endLink != null)
+		{
+			endLink.membrane = this;
+		}
+
+		// Setup faux links on attachees to allow them to be interacted with in place of endpoint links.
+		attachment1FauxLink = attachment1.attachee.GetComponent<MembraneLink>();
+		if (attachment1FauxLink != null)
+		{
+			attachment1FauxLink.membrane = this;
+			if (attachment1FauxLink.bondAttachable != null)
+			{
+				attachment1FauxLink.bondAttachable.attachmentColor = attachmentColor;
+				attachment1FauxLink.bondAttachable.bondOverrideStats = internalBondStats;
+				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
+			}
+		}
+		attachment2FauxLink = attachment2.attachee.GetComponent<MembraneLink>();
+		if (attachment2FauxLink != null)
+		{
+			attachment2FauxLink.membrane = this;
+			if (attachment2FauxLink.bondAttachable != null)
+			{
+				attachment2FauxLink.bondAttachable.attachmentColor = attachmentColor;
+				attachment2FauxLink.bondAttachable.bondOverrideStats = internalBondStats;
+				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring2 = endpointSpring;
+			}
+		}
 	}
 
 	protected override void BondBreaking()
@@ -100,10 +138,41 @@ public class Membrane : Bond {
 			}
 		}
 	}
+	
+	public BondAttachable FindLinkAttachable(MembraneLink link)
+	{
+		if (link == null)
+		{
+			return null;
+		}
+
+		BondAttachable linkAttachable = link.bondAttachable;
+		if (linkAttachable == null)
+		{
+			if (link == links[0] && attachment1FauxLink != null)
+			{
+				linkAttachable = attachment1FauxLink.bondAttachable;
+			}
+			else if (link == links[links.Count-1] && attachment2FauxLink != null)
+			{
+				linkAttachable = attachment2FauxLink.bondAttachable;
+			}
+		}
+
+		return linkAttachable;
+	}
 
 	public bool IsBondMade(BondAttachable partner, List<Membrane> ignoreMembranes = null)
 	{
 		bool bonded = false;
+		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
+		{
+			bonded = true;
+		}
+		else if (attachment2FauxLink != null && attachment2FauxLink.bondAttachable != null && attachment2FauxLink.bondAttachable.IsBondMade(partner))
+		{
+			bonded = true;
+		}
 		for (int i = 0; i < links.Count && !bonded; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -138,6 +207,14 @@ public class Membrane : Bond {
 
 	public void BreakInnerBond(BondAttachable partner, List<Membrane> ignoreMembranes = null)
 	{
+		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
+		{
+			attachment1FauxLink.bondAttachable.BreakBound(partner);
+		}
+		if (attachment2FauxLink != null && attachment2FauxLink.bondAttachable != null && attachment2FauxLink.bondAttachable.IsBondMade(partner))
+		{
+			attachment2FauxLink.bondAttachable.BreakBound(partner);
+		}
 		for (int i = 0; i < links.Count; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -295,6 +372,7 @@ public class MembraneStats
 {
 	public float defaultShapingForce = 5;
 	public bool bondOnContact = true;
+	public bool bondOnFluff = true;
 	public bool breakWithNeighbors = true;
 	public bool considerNeighborBonds = true;
 	public float smoothForce = 10;

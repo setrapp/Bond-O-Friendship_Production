@@ -10,14 +10,9 @@ public class MembraneLink : BondLink {
 	{
 		if (collision.collider.tag == "Character")
 		{
-			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
-			if (membrane != null && membrane.extraStats.bondOnContact && bondAttachable != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
+			if (membrane != null && membrane.extraStats.bondOnContact)
 			{
-				if (membrane.preferNewBonds)
-				{
-					membrane.BreakInnerBond(partner);
-				}
-				bondAttachable.AttemptBond(partner, transform.position, true);
+				AttempBond(collision.collider.GetComponent<BondAttachable>());
 			}
 		}
 	}
@@ -26,11 +21,28 @@ public class MembraneLink : BondLink {
 	{
 		if (fluff != null && fluff.moving && (fluff.attachee == null || fluff.attachee.gameObject == gameObject))
 		{
-			if (!membrane.IsBondMade(fluff.creator))
+			if (membrane != null && membrane.extraStats.bondOnFluff)
 			{
-				bondAttachable.AttemptBond(fluff.creator, transform.position, true);
+				AttempBond(fluff.creator);
 			}
 			fluff.PopFluff();
+		}
+	}
+
+	private void AttempBond(BondAttachable partner)
+	{
+		if (membrane != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
+		{
+			// Use the attachable provided by the membrane, to allow endpoint links to be handled differently.
+			BondAttachable linkAttachable = membrane.FindLinkAttachable(this);
+			if (linkAttachable != null)
+			{
+				if (membrane.preferNewBonds)
+				{
+					membrane.BreakInnerBond(partner);
+				}
+				linkAttachable.AttemptBond(partner, transform.position, true);
+			}
 		}
 	}
 }
