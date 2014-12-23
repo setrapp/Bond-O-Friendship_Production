@@ -10,8 +10,8 @@ public class Membrane : Bond {
 	public MembraneStats extraStats;
 	public Membrane membranePrevious;
 	public Membrane membraneNext;
-	public MembraneLink startLink;
-	public MembraneLink endLink;
+	public LineRenderer smoothCornerLine1;
+	public LineRenderer smoothCornerLine2;
 
 	protected override void PostUpdate()
 	{
@@ -25,6 +25,12 @@ public class Membrane : Bond {
 		if (extraStats.smoothForce > 0)
 		{
 			SmoothToNeighbors();
+		}
+		
+		if (extraStats.smoothForce <= 0 || membranePrevious == null)
+		{
+			smoothCornerLine1.SetVertexCount(0);
+			smoothCornerLine2.SetVertexCount(0);
 		}
 	}
 
@@ -216,28 +222,69 @@ public class Membrane : Bond {
 	{
 		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
 		{
-			Vector3 prevSmoothPos = (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2;
+			Vector3 thisNearEndPos = links[0].jointNext.connectedBody.transform.position;
+			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position;
+			Vector3 prevSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
 			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+
+			DrawLineFromPrevious();
 		}
 		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
 		{
-			Vector3 nextSmoothPos = (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2;
+			Vector3 thisNearEndPos = links[links.Count - 1].jointPrevious.connectedBody.transform.position;
+			Vector3 nextNearEndPos = membraneNext.links[0].jointNext.connectedBody.transform.position;
+			Vector3 nextSmoothPos = (thisNearEndPos + nextNearEndPos) / 2;
 			attachment2.attachee.body.AddForce((nextSmoothPos - attachment2.position).normalized * extraStats.smoothForce);
 		}
 	}
 
-	void OnDrawGizmos()
+	private void DrawLineFromPrevious()
 	{
-		Gizmos.color = Color.white;
-		if (membranePrevious != null)
+		if (membranePrevious == null)
 		{
-			Gizmos.DrawLine(links[0].jointNext.connectedBody.transform.position, (links[0].jointNext.connectedBody.transform.position + membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position) / 2);
+			return;
 		}
-		if (membraneNext != null)
-		{
-			Gizmos.DrawLine(links[links.Count - 1].jointPrevious.connectedBody.transform.position, (links[links.Count - 1].jointPrevious.connectedBody.transform.position + membraneNext.links[0].jointNext.connectedBody.transform.position) / 2);
-		}
-		
+
+		// Find the needed end points and their adjacent links on each membrane.
+		BondLink thisEnd = links[0];
+		BondLink prevEnd = membranePrevious.links[membranePrevious.links.Count - 1];
+		Vector3 thisNearEndPos = thisEnd.jointNext.connectedBody.transform.position;
+		Vector3 prevNearEndPos = prevEnd.jointPrevious.connectedBody.transform.position;
+
+		// Compute the directions from the adjacent links to the endpoints.
+		Vector3 thisEndDir = (thisEnd.transform.position - thisNearEndPos).normalized;
+		Vector3 prevEndDir = (prevEnd.transform.position - prevNearEndPos).normalized;
+
+		// Find the needed corners of this membrane's line.
+		Vector3 thisEndPerp = Vector3.Cross(thisEndDir, Vector3.forward) * (stats.endsWidth / 2);
+		Vector3 thisEndCorner1 = thisEnd.transform.position + thisEndPerp;
+		Vector3 thisEndCorner2 = thisEnd.transform.position - thisEndPerp;
+
+		// Find the needed corners of previous membrane's line.
+		Vector3 prevEndPerp = Vector3.Cross(prevEndDir, Vector3.forward) * (membranePrevious.stats.endsWidth / 2);
+		Vector3 prevEndCorner1 = prevEnd.transform.position - prevEndPerp;
+		Vector3 prevEndCorner2 = prevEnd.transform.position + prevEndPerp;
+
+		// Prepare the line drawing positions and widths.
+		Vector3 smoothLineStart1 = (prevEndCorner1 + thisEndCorner1) / 2;
+		Vector3 smoothLineStart2 = (prevEndCorner2 + thisEndCorner2) / 2;
+		Vector3 smoothLineMidpoint = (prevEnd.transform.position + thisEnd.transform.position) / 2;
+		float smoothLineWidth1 = (prevEndCorner1 - thisEndCorner1).magnitude;
+		float smoothLineWidth2 = (prevEndCorner2 - thisEndCorner2).magnitude;
+
+		// Draw a line from the space between the first two corners to the space between the endpoints.
+		smoothCornerLine1.SetVertexCount(2);
+		smoothCornerLine1.SetPosition(0, smoothLineStart1);
+		smoothCornerLine1.SetPosition(1, smoothLineMidpoint);
+		smoothCornerLine1.SetColors(membranePrevious.attachmentColor, attachmentColor);
+		smoothCornerLine1.SetWidth(smoothLineWidth1, smoothLineWidth1);
+
+		// Draw a line from the space between the second two corners to the space between the endpoints.
+		smoothCornerLine2.SetVertexCount(2);
+		smoothCornerLine2.SetPosition(0, smoothLineStart2);
+		smoothCornerLine2.SetPosition(1, smoothLineMidpoint);
+		smoothCornerLine2.SetColors(membranePrevious.attachmentColor, attachmentColor);
+		smoothCornerLine2.SetWidth(smoothLineWidth1, smoothLineWidth2);
 	}
 }
 

@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 120: {fileID: 12000000}
   m_Layer: 26
-  m_Name: Line 2
+  m_Name: Smooth Corner Line 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,6 +57,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400006}
+  - 120: {fileID: 12000002}
+  m_Layer: 26
+  m_Name: Line 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100008
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +113,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400012}
+  - 120: {fileID: 12000006}
+  m_Layer: 26
+  m_Name: Smooth Corner Line 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -108,7 +140,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
-  m_RootOrder: 3
+  m_RootOrder: 5
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -128,15 +160,29 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.32933903, y: 0, z: 3.57627869e-07}
+  m_LocalPosition: {x: -3.19558549, y: -6.03076029, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
   - {fileID: 400002}
   - {fileID: 400008}
+  - {fileID: 400006}
+  - {fileID: 400012}
   - {fileID: 400000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &400006
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
+  m_RootOrder: 3
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -161,6 +207,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400004}
   m_RootOrder: 0
+--- !u!4 &400012
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
+  m_RootOrder: 4
 --- !u!23 &2300002
 Renderer:
   m_ObjectHideFlags: 1
@@ -313,7 +371,7 @@ MonoBehaviour:
     attachee: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
-    lineRenderer: {fileID: 12000000}
+    lineRenderer: {fileID: 12000002}
   linkPrefab: {fileID: 100000, guid: 52e3492505dd14d439f2ae6e66a54f3e, type: 2}
   links:
   - {fileID: 11400006}
@@ -342,11 +400,11 @@ MonoBehaviour:
     bondOnContact: 1
     breakWithNeighbors: 1
     considerNeighborBonds: 1
-    smoothWithNeighbors: 0
+    smoothForce: 10
   membranePrevious: {fileID: 0}
   membraneNext: {fileID: 0}
-  startLink: {fileID: 11400006}
-  endLink: {fileID: 11400004}
+  smoothCornerLine1: {fileID: 12000006}
+  smoothCornerLine2: {fileID: 12000000}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -358,7 +416,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bond: {fileID: 0}
   linkCollider: {fileID: 6500002}
   body: {fileID: 5400000}
   jointPrevious: {fileID: 14500002}
@@ -379,7 +436,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bond: {fileID: 0}
   linkCollider: {fileID: 6500000}
   body: {fileID: 5400002}
   jointPrevious: {fileID: 14500000}
@@ -448,6 +504,39 @@ LineRenderer:
       serializedVersion: 2
       rgba: 4281269558
   m_UseWorldSpace: 1
+--- !u!120 &12000002
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    startWidth: 1
+    endWidth: 1
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 16776960
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 4281269558
+  m_UseWorldSpace: 1
 --- !u!120 &12000004
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -480,6 +569,39 @@ LineRenderer:
     m_EndColor:
       serializedVersion: 2
       rgba: 16776960
+  m_UseWorldSpace: 1
+--- !u!120 &12000006
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    startWidth: 1
+    endWidth: 1
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 16776960
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 4281269558
   m_UseWorldSpace: 1
 --- !u!145 &14500000
 SpringJoint:
