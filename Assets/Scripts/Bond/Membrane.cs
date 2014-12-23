@@ -36,7 +36,10 @@ public class Membrane : Bond {
 			}
 			Membrane breakMembrane = membranePrevious;
 			membranePrevious = null;
-			breakMembrane.BreakBond();
+			if (breakMembrane.extraStats.breakWithNeighbors)
+			{
+				breakMembrane.BreakBond();
+			}
 		}
 		if (membraneNext != null)
 		{
@@ -50,7 +53,10 @@ public class Membrane : Bond {
 			}
 			Membrane breakMembrane = membraneNext;
 			membraneNext = null;
-			breakMembrane.BreakBond();
+			if (breakMembrane.extraStats.breakWithNeighbors)
+			{
+				breakMembrane.BreakBond();
+			}
 		}
 
 	}
@@ -71,7 +77,7 @@ public class Membrane : Bond {
 		}
 	}
 
-	public bool IsBondMade(BondAttachable partner)
+	public bool IsBondMade(BondAttachable partner, List<Membrane> ignoreMembranes = null)
 	{
 		bool bonded = false;
 		for (int i = 0; i < links.Count && !bonded; i++)
@@ -82,10 +88,31 @@ public class Membrane : Bond {
 				bonded = true;
 			}
 		}
+
+		if (!bonded && extraStats.considerNeighborBonds)
+		{ 
+			if (ignoreMembranes == null)
+			{
+				ignoreMembranes = new List<Membrane>();
+			}
+			ignoreMembranes.Add(this);
+
+			bool previousBondMade = false, nextBondMade = false;
+			if(membranePrevious != null && !ignoreMembranes.Contains(membranePrevious))
+			{
+				previousBondMade = membranePrevious.IsBondMade(partner, ignoreMembranes);
+			}
+			if (membraneNext != null && !ignoreMembranes.Contains(membraneNext))
+			{
+				nextBondMade = membraneNext.IsBondMade(partner, ignoreMembranes);
+			}
+			bonded = bonded || previousBondMade || nextBondMade;
+		}
+
 		return bonded;
 	}
 
-	public void BreakInnerBond(BondAttachable partner)
+	public void BreakInnerBond(BondAttachable partner, List<Membrane> ignoreMembranes = null)
 	{
 		for (int i = 0; i < links.Count; i++)
 		{
@@ -93,6 +120,24 @@ public class Membrane : Bond {
 			if (membraneLink != null && membraneLink.bondAttachable != null && membraneLink.bondAttachable.IsBondMade(partner))
 			{
 				membraneLink.bondAttachable.BreakBound(partner);
+			}
+		}
+
+		if (extraStats.considerNeighborBonds)
+		{
+			if (ignoreMembranes == null)
+			{
+				ignoreMembranes = new List<Membrane>();
+			}
+			ignoreMembranes.Add(this);
+
+			if (membranePrevious != null && !ignoreMembranes.Contains(membranePrevious))
+			{
+				membranePrevious.BreakInnerBond(partner, ignoreMembranes);
+			}
+			if (membraneNext != null && !ignoreMembranes.Contains(membraneNext))
+			{
+				membraneNext.BreakInnerBond(partner, ignoreMembranes);
 			}
 		}
 	}
@@ -152,4 +197,7 @@ public class Membrane : Bond {
 public class MembraneStats
 {
 	public float defaultShapingForce = 5;
+	public bool breakWithNeighbors = true;
+	public bool smoothWithNeighbors = true;
+	public bool considerNeighborBonds = true;
 }
