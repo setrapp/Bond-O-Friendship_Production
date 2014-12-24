@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class BondLink : MonoBehaviour {
-	public BoxCollider linkCollider = null;
+	public BoxCollider toPreviousCollider = null;
+	public BoxCollider toNextCollider = null;
 	public Rigidbody body = null;
 	public SpringJoint jointPrevious = null;
 	public SpringJoint jointNext = null;

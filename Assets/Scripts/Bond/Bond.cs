@@ -63,41 +63,52 @@ public class Bond : MonoBehaviour {
 			}
 			isCountEven = links.Count % 2 == 0;
 
-
 			// Direct, scale, and place link colliders to cover the surface of the bond.
 			Vector3 linkDir = Vector3.zero;
-			Vector3 linkScale = Vector3.zero;
+			Vector3 linkScalePrev = Vector3.zero;
+			Vector3 linkScaleNext = Vector3.zero;
 			for (int i = 0; i < links.Count; i++)
 			{
 				linkDir = Vector3.zero;
-				linkScale = links[i].linkCollider.size;
+				
 				if (i == 0)
 				{
+					linkScaleNext = links[i].toNextCollider.size;
 					linkDir = links[i + 1].transform.position - links[i].transform.position;
-					linkScale.y = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, 0, 0);
+					linkScaleNext.y = stats.addLinkDistance;
+					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
+					links[i].toNextCollider.size = linkScaleNext;
 				}
 				else if (i == (links.Count - 1))
 				{
+					linkScalePrev = links[i].toPreviousCollider.size;
 					linkDir = links[i].transform.position - links[i - 1].transform.position;
-					linkScale.y = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					links[i].linkCollider.center = new Vector3(0, 0, 0);
+					linkScalePrev.y = stats.addLinkDistance;
+					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
+					links[i].toPreviousCollider.size = linkScalePrev;
 				}
 				else
 				{
+					linkScalePrev = links[i].toPreviousCollider.size;
+					linkScaleNext = links[i].toNextCollider.size;
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScale.y = magFromPrevious + magToNext;
-					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
+					linkScalePrev.y = magFromPrevious;
+					linkScaleNext.y = magToNext;
+					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
+					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
+					links[i].toPreviousCollider.size = linkScalePrev;
+					links[i].toNextCollider.size = linkScaleNext;
+					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
+					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
 				}
 				links[i].transform.up = linkDir;
-				links[i].linkCollider.size = linkScale;
 			}
 
 			// Base the width of the bond on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
-			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - ((BondLength - warningDistance) / (stats.maxDistance - warningDistance)), 0, 1);
+			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1);
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
@@ -202,10 +213,21 @@ public class Bond : MonoBehaviour {
 		links[0].transform.position = attachment1.position;
 		links[1].transform.position = attachment2.position;
 
+		if (links[0].jointNext != null)
+		{
+			links[0].jointNext.connectedBody = links[1].body;
+		}
+		if (links[1].jointNext != null)
+		{
+			links[1].jointPrevious.connectedBody = links[0].body;
+		}
+
 		WeightJoints();
 
 		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
 		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
+
+		BondForming();
 	}
 
 	private void AddLink()
@@ -259,64 +281,74 @@ public class Bond : MonoBehaviour {
 
 	private void WeightJoints()
 	{
-		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
-		for (int i = 1; i < links.Count - 1; i++)
+		// Set order level of each link.
+		int halfCount = (links.Count % 2 == 0) ? links.Count / 2 : links.Count / 2 + 1;
+		for (int i = 0; i < halfCount; i++)
 		{
-			int prevLinkOrderLevel = links[i - 1].orderLevel;
-			int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
-
-			if (i < links.Count / 2)
-			{
-				links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
-			}
-			else
-			{
-				links[i].jointToAttachment.connectedBody = attachment2.attachee.body;
-			}
-			links[i].jointToAttachment.spring = 0;
-
-			if (links[i].jointPrevious != null)
-			{
-				if (links[i].orderLevel < prevLinkOrderLevel)
-				{
-					links[i].jointPrevious.spring = stats.downOrderSpring;
-					links[i].jointPrevious.damper = stats.downOrderDamper;
-				}
-				else if (links[i].orderLevel == prevLinkOrderLevel)
-				{
-					links[i].jointPrevious.spring = stats.upOrderSpring / 2;
-					links[i].jointPrevious.damper = stats.upOrderDamper / 2;
-				}
-				else
-				{
-					links[i].jointPrevious.spring = stats.upOrderSpring;
-					links[i].jointPrevious.damper = stats.upOrderDamper;
-				}
-			}
-			if (links[i].jointNext != null)
-			{
-				if (links[i].orderLevel < nextLinkOrderLevel)
-				{
-					links[i].jointNext.spring = stats.downOrderSpring;
-					links[i].jointNext.damper = stats.downOrderDamper;
-				}
-				else if (links[i].orderLevel == nextLinkOrderLevel)
-				{
-					links[i].jointNext.spring = stats.upOrderSpring / 2;
-					links[i].jointNext.damper = stats.upOrderDamper / 2;
-				}
-				else
-				{
-					links[i].jointNext.spring = stats.upOrderSpring;
-					links[i].jointNext.damper = stats.upOrderDamper;
-				}
-			}
+			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
 		}
 
+		// Weight the strength of most recent joints, those near the middle, based on where links and neighbors exist in hierarchy.
 		if (links.Count > 2)
 		{
+			int startIndex = Mathf.Max(1, (links.Count % 2 == 0) ? halfCount - 2 : halfCount - 1);
+			int endIndex = Mathf.Min(links.Count - 2, halfCount + 1);
+			for (int i = startIndex; i <= endIndex; i++)
+			{
+				int prevLinkOrderLevel = links[i - 1].orderLevel;
+				int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
+
+				if (i < links.Count / 2)
+				{
+					links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
+				}
+				else
+				{
+					links[i].jointToAttachment.connectedBody = attachment2.attachee.body;
+				}
+				links[i].jointToAttachment.spring = 0;
+
+				if (links[i].jointPrevious != null)
+				{
+					if (links[i].orderLevel < prevLinkOrderLevel)
+					{
+						links[i].jointPrevious.spring = stats.downOrderSpring;
+						links[i].jointPrevious.damper = stats.downOrderDamper;
+					}
+					else if (links[i].orderLevel == prevLinkOrderLevel)
+					{
+						links[i].jointPrevious.spring = stats.upOrderSpring / 2;
+						links[i].jointPrevious.damper = stats.upOrderDamper / 2;
+					}
+					else
+					{
+						links[i].jointPrevious.spring = stats.upOrderSpring;
+						links[i].jointPrevious.damper = stats.upOrderDamper;
+					}
+				}
+				if (links[i].jointNext != null)
+				{
+					if (links[i].orderLevel < nextLinkOrderLevel)
+					{
+						links[i].jointNext.spring = stats.downOrderSpring;
+						links[i].jointNext.damper = stats.downOrderDamper;
+					}
+					else if (links[i].orderLevel == nextLinkOrderLevel)
+					{
+						links[i].jointNext.spring = stats.upOrderSpring / 2;
+						links[i].jointNext.damper = stats.upOrderDamper / 2;
+					}
+					else
+					{
+						links[i].jointNext.spring = stats.upOrderSpring;
+						links[i].jointNext.damper = stats.upOrderDamper;
+					}
+				}
+			}
+
+			// Attach near end links to attachments to allow pulling.
 			links[1].jointToAttachment.spring = stats.attachSpring1;
-			links[links.Count-2].jointToAttachment.spring = stats.attachSpring2;
+			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
 		}
 	}
 
@@ -391,6 +423,7 @@ public class Bond : MonoBehaviour {
 
 	// Hooks for subclasses.
 	protected virtual void PostUpdate() {}
+	protected virtual void BondForming() {}
 	protected virtual void BondBreaking() {}
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
@@ -420,4 +453,41 @@ public class BondStats
 	public float upOrderDamper = 5;
 	public float downOrderSpring = 2000;
 	public float downOrderDamper = 0;
+
+	public BondStats(BondStats original)
+	{
+		this.attachSpring1 = original.attachSpring1;
+		this.attachSpring2 = original.attachSpring2;
+		this.maxDistance = original.maxDistance;
+		this.relativeWarningDistance = original.relativeWarningDistance;
+		this.endsWidth = original.endsWidth;
+		this.midWidth = original.midWidth;
+		this.addLinkDistance = original.addLinkDistance;
+		this.removeLinkDistance = original.removeLinkDistance;
+		this.upOrderSpring = original.upOrderSpring;
+		this.upOrderDamper = original.upOrderDamper;
+		this.downOrderSpring = original.downOrderSpring;
+		this.downOrderDamper = original.downOrderDamper;
+	}
+
+	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
+	{
+		if (replacement == null)
+		{
+			return;
+		}
+
+		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
+		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
+		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
+		if (fullOverwrite || replacement.endsWidth >= 0)				{	this.endsWidth = replacement.endsWidth;								}
+		if (fullOverwrite || replacement.midWidth >= 0)					{	this.midWidth = replacement.midWidth;								}
+		if (fullOverwrite || replacement.addLinkDistance >= 0)			{	this.addLinkDistance = replacement.addLinkDistance;					}
+		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
+		if (fullOverwrite || replacement.upOrderSpring >= 0)			{	this.upOrderSpring = replacement.upOrderSpring;						}
+		if (fullOverwrite || replacement.upOrderDamper >= 0)			{	this.upOrderDamper = replacement.upOrderDamper;						}
+		if (fullOverwrite || replacement.downOrderSpring >= 0)			{	this.downOrderSpring = replacement.downOrderSpring;					}
+		if (fullOverwrite || replacement.downOrderDamper >= 0)			{	this.downOrderDamper = replacement.downOrderDamper;					}
+	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class BondAttachable : MonoBehaviour {
 	public Rigidbody body;
 	public bool handleFluffAttachment = true;
-	public bool bondAtFluffPoint = true;
+	public bool bondAtContactPoint = true;
 	public Color attachmentColor;
 	public GameObject bondPrefab;
 	public BondStatsHolder bondOverrideStats;
@@ -58,7 +58,7 @@ public class BondAttachable : MonoBehaviour {
 				if (!IsBondMade(bondPartner))
 				{
 					Vector3 bondPoint = transform.position;
-					if (bondAtFluffPoint)
+					if (bondAtContactPoint)
 					{
 						bondPoint = contactPosition;
 					}
