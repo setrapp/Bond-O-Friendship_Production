@@ -38,29 +38,40 @@ public class Bond : MonoBehaviour {
 			// Round the count of links down to an odd number.
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
-			// If the bond is too short to require the current number of bonds, remove some. (Attempt to keep count odd)
-			if (BondLength < stats.removeLinkDistance * oddLinkCount)
-			{
-				// Maintain the end points.
-				if (links.Count > 2)
-				{
-					RemoveLink();
-					// If the link count was not even before, it is now, so remove another to stay odd.
-					if (links.Count > 2 && !isCountEven)
-					{
-						RemoveLink();
-					}
-				}
-			}
-			// If the bond length requires more bonds, create some.
-			else if (BondLength > stats.addLinkDistance * (links.Count + 1))
+			// Mainting desired length of links by adding and removing.
+			if (links.Count < 4)
 			{
 				AddLink();
-				if (links.Count % 2 == 0)
+			}
+			else
+			{
+				bool bondChanged = false;
+				float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
+				float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
+				for (int i = 1; i < links.Count - 2; i++)
 				{
-					AddLink();
+					float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+					if (sqrDist > sqrAddDist)
+					{
+						AddLink(i + 1, false);
+						bondChanged = true;
+					}
+				}
+				for (int i = 1; i < links.Count - 2; i++)
+				{
+					float dist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+					if (dist < sqrRemoveDist)
+					{
+						RemoveLink(i, false);
+						bondChanged = true;
+					}
+				}
+				if (bondChanged)
+				{
+					WeightJoints();
 				}
 			}
+
 			isCountEven = links.Count % 2 == 0;
 
 			// Direct, scale, and place link colliders to cover the surface of the bond.
@@ -230,14 +241,17 @@ public class Bond : MonoBehaviour {
 		BondForming();
 	}
 
-	private void AddLink()
+	private void AddLink(int index = -1, bool weightJoints = true)
 	{
-		// Create new link in bond and add it to the center of the list.
-		Vector3 midpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 - 1].transform.position) / 2;
+
+		// Create new link in bond at the given index, or default to center.
+		if (index < 0)
+		{
+			index = links.Count / 2;
+		}
+		Vector3 midpoint = (links[index].transform.position + links[index - 1].transform.position) / 2;
 		BondLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<BondLink>();
-		int index = links.Count / 2;
 		newLink.transform.parent = transform;
-		newLink.orderLevel = links.Count / 2;
 		links.Insert(index, newLink);
 
 		// Connect the new link to its neighbors.
@@ -254,14 +268,20 @@ public class Bond : MonoBehaviour {
 			nextLink.jointPrevious.connectedBody = newLink.body;
 		}
 
-		WeightJoints();
+		if (weightJoints)
+		{
+			WeightJoints();
+		}
 		LinkAdded(newLink);
 	}
 
-	private void RemoveLink()
+	private void RemoveLink(int index, bool weightJoints = true)
 	{
-		// Remove the center link and connect its remaining neighbors together.
-		int index = links.Count / 2;
+		// Remove link in bond at the given index, or default to center.
+		if (index < 0)
+		{
+			index = links.Count / 2;
+		}
 		BondLink previousLink = links[index - 1];
 		BondLink nextLink = links[index + 1];
 		if (previousLink.jointNext != null)
@@ -276,7 +296,10 @@ public class Bond : MonoBehaviour {
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
-		WeightJoints();
+		if (weightJoints)
+		{
+			WeightJoints();
+		}
 	}
 
 	private void WeightJoints()
@@ -291,12 +314,12 @@ public class Bond : MonoBehaviour {
 		// Weight the strength of most recent joints, those near the middle, based on where links and neighbors exist in hierarchy.
 		if (links.Count > 2)
 		{
-			int startIndex = Mathf.Max(1, (links.Count % 2 == 0) ? halfCount - 2 : halfCount - 1);
-			int endIndex = Mathf.Min(links.Count - 2, halfCount + 1);
+			int startIndex = 1;// Mathf.Max(1, (links.Count % 2 == 0) ? halfCount - 2 : halfCount - 1);
+			int endIndex = links.Count - 2;// Mathf.Min(links.Count - 2, halfCount + 1);
 			for (int i = startIndex; i <= endIndex; i++)
 			{
 				int prevLinkOrderLevel = links[i - 1].orderLevel;
-				int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
+				int nextLinkOrderLevel = links[i + 1].orderLevel;
 
 				if (i < links.Count / 2)
 				{
