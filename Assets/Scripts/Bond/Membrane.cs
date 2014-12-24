@@ -258,54 +258,102 @@ public class Membrane : Bond {
 		}
 	}
 
-	private ShapingPoint NearestShapingPoint(MembraneLink link)
+	private ShapingPoint[] NearestShapingPoints(MembraneLink link)
 	{
-		ShapingPoint nearPoint = null;
+		ShapingPoint[] nearPoints = new ShapingPoint[3]{null, null, null};
 
 		if (shapingPoints.Count > 0)
 		{
-			int nearIndex = 0;
-			nearPoint = shapingPoints[nearIndex];
-			float nearSqrDist = (nearPoint.transform.position - link.transform.position).sqrMagnitude;
+			int[] nearIndex = new int[3]{0, -1, -1};
+			nearPoints[0] = shapingPoints[nearIndex[0]];
+			float[] nearSqrDist = new float[3]{(nearPoints[0].transform.position - link.transform.position).sqrMagnitude, -1, -1};
 			for (int i = 1; i < shapingPoints.Count; i++)
 			{
 				float sqrDist = (shapingPoints[i].transform.position - link.transform.position).sqrMagnitude;
 				// Get the nearest shaping point, only using the attachment points if no others exist.
-				if (sqrDist < nearSqrDist || (i > 1 && nearIndex <= 1))
+				int beatsIndex = -1;
+				if (sqrDist < nearSqrDist[2] || (i > 1 && nearIndex[2] <= 1))
 				{
-					nearIndex = i;
-					nearSqrDist = sqrDist;
-					nearPoint = shapingPoints[nearIndex];
+					beatsIndex = 2;
+					if (sqrDist < nearSqrDist[1] || (i > 1 && nearIndex[1] <= 1))
+					{
+						beatsIndex = 1;
+						if (sqrDist < nearSqrDist[0] || (i > 1 && nearIndex[0] <= 1))
+						{
+							beatsIndex = 0;
+						}
+					}
+				}
+
+				if (beatsIndex >= 0)
+				{
+					for(int j = nearPoints.Length - 2; j >= beatsIndex; j--)
+					{
+						nearIndex[j + 1] = nearIndex[j];
+						nearSqrDist[j + 1] = nearSqrDist[j];
+						nearPoints[j + 1] = nearPoints[j];
+					}
+
+					nearIndex[beatsIndex] = i;
+					nearSqrDist[beatsIndex] = sqrDist;
+					nearPoints[beatsIndex] = shapingPoints[i];
 				}
 			}
 		}
+
 		
-		return nearPoint;
+		
+		return nearPoints;
 	}
 
 	private void ApplyShaping(MembraneLink membraneLink)
 	{
-		if (membraneLink != null && membraneLink.jointShaping != null)
+		if (membraneLink != null && membraneLink.jointsShaping != null)
 		{
-			ShapingPoint shapingPoint = NearestShapingPoint(membraneLink);
-			if (shapingPoint != null)
+			ShapingPoint[] shapingPoints = NearestShapingPoints(membraneLink);
+			if (shapingPoints != null && shapingPoints[0] != null)
 			{
-				membraneLink.jointShaping.connectedBody = shapingPoint.body;
-				float shapingForce = extraStats.defaultShapingForce;
-				if (shapingPoint.body == null || shapingPoint.body == links[0].body || shapingPoint.body == links[links.Count - 1].body)
+				if (shapingPoints[1] == null)
 				{
-					shapingForce = 0;
+					shapingPoints[1] = shapingPoints[0];
 				}
-				else if (shapingPoint.shapingForce >= 0)
+				if (shapingPoints[2] == null)
 				{
-					shapingForce = shapingPoint.shapingForce;
+					shapingPoints[2] = shapingPoints[0];
 				}
-				membraneLink.jointShaping.spring = shapingForce;
+
+				for (int i = 0; i < shapingPoints.Length && i < membraneLink.jointsShaping.Length; i++)
+				{
+					Rigidbody connectedBody = shapingPoints[i].body;
+					float shapingForce = extraStats.defaultShapingForce;
+					if (connectedBody == null || (connectedBody == links[0].body || connectedBody == links[links.Count - 1].body))
+					{
+						shapingForce = 0;
+					}
+					else if (shapingPoints[i].shapingForce >= 0)
+					{
+						shapingForce = shapingPoints[i].shapingForce;
+					}
+
+					//shapingForce /= Mathf.Pow(2, (i + 1) / 2);
+
+					membraneLink.jointsShaping[i].connectedBody = connectedBody;
+					membraneLink.jointsShaping[i].spring = shapingForce;
+				}
+
+				for (int i = shapingPoints.Length; i < membraneLink.jointsShaping.Length; i++)
+				{
+					membraneLink.jointsShaping[i].connectedBody = null;
+					membraneLink.jointsShaping[i].spring = 0;
+				}
 			}
 			else
 			{
-				membraneLink.jointShaping.connectedBody = null;
-				membraneLink.jointShaping.spring = 0;
+				for (int i = 0; i < membraneLink.jointsShaping.Length; i++)
+				{
+					membraneLink.jointsShaping[i].connectedBody = null;
+					membraneLink.jointsShaping[i].spring = 0;
+				}
 			}
 		}
 	}

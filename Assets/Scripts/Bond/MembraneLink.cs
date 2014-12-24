@@ -4,7 +4,7 @@ using System.Collections;
 public class MembraneLink : BondLink {
 	public Membrane membrane;
 	public BondAttachable bondAttachable;
-	public SpringJoint jointShaping;
+	public SpringJoint[] jointsShaping;
 
 	void OnCollisionEnter(Collision collision)
 	{
@@ -12,7 +12,7 @@ public class MembraneLink : BondLink {
 		{
 			if (membrane != null && membrane.extraStats.bondOnContact)
 			{
-				AttempBond(collision.collider.GetComponent<BondAttachable>());
+				AttempBond(collision.collider.GetComponent<BondAttachable>(), collision.contacts[0].point);
 			}
 		}
 	}
@@ -23,13 +23,13 @@ public class MembraneLink : BondLink {
 		{
 			if (membrane != null && membrane.extraStats.bondOnFluff)
 			{
-				AttempBond(fluff.creator);
+				AttempBond(fluff.creator, fluff.transform.position);
 			}
 			fluff.PopFluff();
 		}
 	}
 
-	private void AttempBond(BondAttachable partner)
+	private void AttempBond(BondAttachable partner, Vector3 contactPosition)
 	{
 		if (membrane != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
 		{
@@ -41,7 +41,7 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				linkAttachable.AttemptBond(partner, transform.position, true);
+				linkAttachable.AttemptBond(partner, contactPosition, true);
 			}
 		}
 	}

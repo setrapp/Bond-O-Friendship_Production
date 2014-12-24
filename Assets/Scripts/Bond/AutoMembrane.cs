@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AutoMembrane : AutoBond {
 	public MembraneStatsHolder membraneOverrideStats;
+	public BondStatsHolder internalBondStats;
 	public GameObject shapingPointContainer;
 	public AutoMembrane neighborPrevious;
 	public AutoMembrane neighborNext;
@@ -24,6 +25,12 @@ public class AutoMembrane : AutoBond {
 			if (membraneOverrideStats != null && membraneOverrideStats.stats != null)
 			{
 				createdMembrane.extraStats = membraneOverrideStats.stats;
+			}
+
+			// Override membrane's internal bonding stats.
+			if (internalBondStats != null && internalBondStats.stats != null)
+			{
+				createdMembrane.internalBondStats.stats = internalBondStats.stats;
 			}
 
 			// Add shaping points to membrane.

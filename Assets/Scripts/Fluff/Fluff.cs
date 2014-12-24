@@ -315,7 +315,15 @@ public class Fluff : MonoBehaviour {
 				}
 			}
 			standingDirection.z = 0;
-			Attach(collision.collider.gameObject, collision.contacts[0].point, standingDirection);
+
+			GameObject newAttachee = collision.collider.gameObject;
+			FluffAttachDelgator fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
+			while (fluffAttachDelegator != null && fluffAttachDelegator.attachDelegatee != null && fluffAttachDelegator.attachDelegatee != newAttachee)
+			{
+				newAttachee = fluffAttachDelegator.attachDelegatee;
+				fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
+			}
+			Attach(newAttachee, collision.contacts[0].point, standingDirection);
 		}
 	}
 

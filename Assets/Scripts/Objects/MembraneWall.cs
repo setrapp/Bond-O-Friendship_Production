@@ -14,6 +14,9 @@ public class MembraneWall : MonoBehaviour {
 	public List<ShapingPointStats> shapingPoints;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
+	[Header("Live Values")]
+	public float currentLength;
+	public float relativeActualDistance;
 	
 	void Awake()
 	{
@@ -33,6 +36,15 @@ public class MembraneWall : MonoBehaviour {
 		if (createOnStart)
 		{
 			CreateWall();
+		}
+	}
+
+	void Update()
+	{
+		if (membraneCreator != null && membraneCreator.createdBond != null)
+		{
+			currentLength = membraneCreator.createdBond.BondLength;
+			relativeActualDistance = currentLength / membraneLength;
 		}
 	}
 
@@ -102,5 +114,9 @@ public class MembraneWall : MonoBehaviour {
 
 		// Create membrane.
 		membraneCreator.CreateBond();
+		if (membraneCreator.createdBond != null)
+		{
+			membraneCreator.createdBond.transform.parent = transform;
+		}
 	}
 }

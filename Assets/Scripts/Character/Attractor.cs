@@ -72,7 +72,6 @@ public class Attractor : MonoBehaviour {
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
 					Vector3 attractOffset = Vector3.zero;
-					float attractSpeedDistFactor = 1;
 					// If the fluff is too far to be absorbed directly and absorption through the bond is enabled, attempt bond absorption.
 					if (fluffSqrDist > Mathf.Pow(character.attractor.attractRange, 2) && bondAttract)
 					{
@@ -88,7 +87,6 @@ public class Attractor : MonoBehaviour {
 								{
 									nearSqrDist = sqrDist;
 									attractOffset = (nearBond - transform.position) * bondOffsetFactor;
-									//attractSpeedDistFactor = Mathf.Clamp(1 - ((nearBond - transform.position).magnitude / character.bondAttachable.bonds[i].BondLength), 0, 1);
 								}
 							}
 						}
@@ -96,7 +94,7 @@ public class Attractor : MonoBehaviour {
 					}
 					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
-						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime * attractSpeedDistFactor);
+						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
 					}
 				}
 			}
