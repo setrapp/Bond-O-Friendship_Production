@@ -15,6 +15,7 @@ public class Membrane : Bond {
 	private MembraneLink attachment1FauxLink;
 	private MembraneLink attachment2FauxLink;
 	public float endpointSpring = -1;
+	private FixedJoint jointToPrevious;
 
 	protected override void PostUpdate()
 	{
@@ -30,6 +31,7 @@ public class Membrane : Bond {
 			SmoothToNeighbors();
 		}
 		
+		// Hide smoothing line if no smoothing will be down.
 		if (extraStats.smoothForce <= 0 || membranePrevious == null)
 		{
 			smoothCornerLine1.SetVertexCount(0);
@@ -66,7 +68,8 @@ public class Membrane : Bond {
 			if (attachment1FauxLink.bondAttachable != null)
 			{
 				attachment1FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment1FauxLink.bondAttachable.bondOverrideStats = internalBondStats;
+				attachment1FauxLink.bondAttachable.bondOverrideStats = attachment1FauxLink.gameObject.AddComponent<BondStatsHolder>();
+				attachment1FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
 				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
@@ -77,8 +80,9 @@ public class Membrane : Bond {
 			if (attachment2FauxLink.bondAttachable != null)
 			{
 				attachment2FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment2FauxLink.bondAttachable.bondOverrideStats = internalBondStats;
-				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring2 = endpointSpring;
+				attachment2FauxLink.bondAttachable.bondOverrideStats = attachment2FauxLink.gameObject.AddComponent<BondStatsHolder>();
+				attachment2FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
+				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
 	}
@@ -121,6 +125,17 @@ public class Membrane : Bond {
 			}
 		}
 
+		if (extraStats.breakDestroyAttachments)
+		{
+			if (attachment1 != null && attachment1.attachee != null)
+			{
+				Destroy(attachment1.attachee.gameObject);
+			}
+			if (attachment2 != null && attachment2.attachee != null)
+			{
+				Destroy(attachment2.attachee.gameObject);
+			}
+		}
 	}
 
 	protected override void LinkAdded(BondLink addedLink)
@@ -304,6 +319,12 @@ public class Membrane : Bond {
 			Vector3 prevSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
 			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
 
+			if (jointToPrevious == null)
+			{
+				jointToPrevious = attachment1.attachee.gameObject.AddComponent<FixedJoint>();
+				jointToPrevious.connectedBody = membranePrevious.attachment2.attachee.body;
+			}
+
 			DrawLineFromPrevious();
 		}
 		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
@@ -374,6 +395,32 @@ public class MembraneStats
 	public bool bondOnContact = true;
 	public bool bondOnFluff = true;
 	public bool breakWithNeighbors = true;
+	public bool breakDestroyAttachments = true;
 	public bool considerNeighborBonds = true;
 	public float smoothForce = 10;
+
+	public MembraneStats(MembraneStats original)
+	{
+		this.defaultShapingForce = original.defaultShapingForce;
+		this.bondOnContact = original.bondOnContact;
+		this.bondOnFluff = original.bondOnFluff;
+		this.breakWithNeighbors = original.breakWithNeighbors;
+		this.considerNeighborBonds = original.considerNeighborBonds;
+		this.smoothForce = original.smoothForce;
+	}
+
+	public void Overwrite(MembraneStats replacement, bool fullOverwrite = false)
+	{
+		if (replacement == null)
+		{
+			return;
+		}
+
+		if (fullOverwrite || replacement.defaultShapingForce >= 0)	{	this.defaultShapingForce = replacement.defaultShapingForce;	}
+		this.bondOnContact = replacement.bondOnContact;
+		this.bondOnFluff = replacement.bondOnFluff;
+		this.breakWithNeighbors = replacement.breakWithNeighbors;
+		this.considerNeighborBonds = replacement.considerNeighborBonds;
+		if (fullOverwrite || replacement.smoothForce >= 0)			{	this.smoothForce = replacement.smoothForce;					}
+	}
 }

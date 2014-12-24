@@ -9,7 +9,7 @@ public class AutoMembrane : AutoBond {
 	private Membrane membranePrevious;
 	private Membrane membraneNext;
 
-	protected override void CreateBond()
+	public override void CreateBond()
 	{
 		base.CreateBond();
 

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AutoBond : MonoBehaviour {
 	public Bond createdBond;
+	public bool createOnStart = true;
 	public BondAttachable attachable1;
 	public BondAttachable attachable2;
 	public GameObject bondPrefab;
@@ -14,11 +15,19 @@ public class AutoBond : MonoBehaviour {
 
 	void Start()
 	{
-		CreateBond();
+		if (createOnStart)
+		{
+			CreateBond();
+		}
 	}
 
-	protected virtual void CreateBond()
+	public virtual void CreateBond()
 	{
+		if (createdBond != null)
+		{
+			return;	
+		}
+
 		if (bondToPlayer && Globals.Instance != null)
 		{
 			if (attachable1 == null)

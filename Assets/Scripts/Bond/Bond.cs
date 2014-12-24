@@ -87,7 +87,7 @@ public class Bond : MonoBehaviour {
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScale.y = stats.addLinkDistance;//magFromPrevious + magToNext;
+					linkScale.y = stats.addLinkDistance;
 					links[i].linkCollider.center = new Vector3(0, (magFromPrevious - magToNext) / 2, 0);
 				}
 				links[i].transform.up = linkDir;
@@ -429,4 +429,41 @@ public class BondStats
 	public float upOrderDamper = 5;
 	public float downOrderSpring = 2000;
 	public float downOrderDamper = 0;
+
+	public BondStats(BondStats original)
+	{
+		this.attachSpring1 = original.attachSpring1;
+		this.attachSpring2 = original.attachSpring2;
+		this.maxDistance = original.maxDistance;
+		this.relativeWarningDistance = original.relativeWarningDistance;
+		this.endsWidth = original.endsWidth;
+		this.midWidth = original.midWidth;
+		this.addLinkDistance = original.addLinkDistance;
+		this.removeLinkDistance = original.removeLinkDistance;
+		this.upOrderSpring = original.upOrderSpring;
+		this.upOrderDamper = original.upOrderDamper;
+		this.downOrderSpring = original.downOrderSpring;
+		this.downOrderDamper = original.downOrderDamper;
+	}
+
+	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
+	{
+		if (replacement == null)
+		{
+			return;
+		}
+
+		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
+		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
+		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
+		if (fullOverwrite || replacement.endsWidth >= 0)				{	this.endsWidth = replacement.endsWidth;								}
+		if (fullOverwrite || replacement.midWidth >= 0)					{	this.midWidth = replacement.midWidth;								}
+		if (fullOverwrite || replacement.addLinkDistance >= 0)			{	this.addLinkDistance = replacement.addLinkDistance;					}
+		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
+		if (fullOverwrite || replacement.upOrderSpring >= 0)			{	this.upOrderSpring = replacement.upOrderSpring;						}
+		if (fullOverwrite || replacement.upOrderDamper >= 0)			{	this.upOrderDamper = replacement.upOrderDamper;						}
+		if (fullOverwrite || replacement.downOrderSpring >= 0)			{	this.downOrderSpring = replacement.downOrderSpring;					}
+		if (fullOverwrite || replacement.downOrderDamper >= 0)			{	this.downOrderDamper = replacement.downOrderDamper;					}
+	}
 }
