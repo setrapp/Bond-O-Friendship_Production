@@ -5,6 +5,8 @@ using System.Collections;
 public class ShapingPoint : MonoBehaviour {
 	public Rigidbody body;
 	public float shapingForce = -1;
+	[HideInInspector]
+	public float lodShapingForce = -1;
 }
 
 [System.Serializable]

@@ -16,10 +16,19 @@ public class Membrane : Bond {
 	private MembraneLink attachment2FauxLink;
 	public float endpointSpring = -1;
 	private FixedJoint jointToPrevious;
+	public float fullDetailShapingForce;
+	public float fullDetailSmoothForce;
 
-	protected override void PostUpdate()
+	protected override void Start()
 	{
-		base.PostUpdate();
+		base.Start();
+		fullDetailShapingForce = extraStats.defaultShapingForce;
+		fullDetailSmoothForce = extraStats.smoothForce;
+	}
+
+	protected override void Update()
+	{
+		base.Update();
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -68,8 +77,8 @@ public class Membrane : Bond {
 			if (attachment1FauxLink.bondAttachable != null)
 			{
 				attachment1FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment1FauxLink.bondAttachable.bondOverrideStats = attachment1FauxLink.gameObject.AddComponent<BondStatsHolder>();
-				attachment1FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
+				attachment1FauxLink.bondAttachable.bondOverrideStats = attachment1FauxLink.gameObject.GetComponent<BondStatsHolder>();
+				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.Overwrite(internalBondStats.stats, true);
 				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
@@ -80,8 +89,8 @@ public class Membrane : Bond {
 			if (attachment2FauxLink.bondAttachable != null)
 			{
 				attachment2FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment2FauxLink.bondAttachable.bondOverrideStats = attachment2FauxLink.gameObject.AddComponent<BondStatsHolder>();
-				attachment2FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
+				attachment2FauxLink.bondAttachable.bondOverrideStats = attachment2FauxLink.gameObject.GetComponent<BondStatsHolder>();
+				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.Overwrite(internalBondStats.stats, true);
 				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
@@ -330,9 +339,9 @@ public class Membrane : Bond {
 					{
 						shapingForce = 0;
 					}
-					else if (shapingPoints[i].shapingForce >= 0)
+					else if (shapingPoints[i].lodShapingForce >= 0)
 					{
-						shapingForce = shapingPoints[i].shapingForce;
+						shapingForce = shapingPoints[i].lodShapingForce;
 					}
 
 					//shapingForce /= Mathf.Pow(2, (i + 1) / 2);
@@ -431,6 +440,26 @@ public class Membrane : Bond {
 		smoothCornerLine2.SetPosition(1, smoothLineMidpoint);
 		smoothCornerLine2.SetColors(membranePrevious.attachmentColor, attachmentColor);
 		smoothCornerLine2.SetWidth(smoothLineWidth1, smoothLineWidth2);
+	}
+
+	protected override float SetLevelOfDetail()
+	{
+		float detailFraction = base.SetLevelOfDetail();
+		/*extraStats.defaultShapingForce = fullDetailShapingForce / detailFraction;
+		for (int i = 0; i < shapingPoints.Count; i++)
+		{
+			shapingPoints[i].lodShapingForce = shapingPoints[i].shapingForce / detailFraction;
+		}*/
+		//extraStats.smoothForce = fullDetailSmoothForce * detailFraction;
+		if (detailFraction < 1)
+		{
+			extraStats.smoothForce = 0;
+		}
+		else
+		{
+			extraStats.smoothForce = fullDetailSmoothForce;
+		}
+		return detailFraction;
 	}
 }
 

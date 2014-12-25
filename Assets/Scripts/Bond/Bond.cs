@@ -26,10 +26,20 @@ public class Bond : MonoBehaviour {
 	}
 	private bool lengthFresh = false;
 	public BondStats stats;
+	public float fullDetailAddDistance = -1;
+	public float fullDetailRemoveDistance = -1;
 
-	void Update()
+	protected virtual void Start()
+	{
+		fullDetailAddDistance = stats.addLinkDistance;
+		fullDetailRemoveDistance = stats.removeLinkDistance;
+	}
+
+	protected virtual void Update()
 	{
 		lengthFresh = false;
+		
+		SetLevelOfDetail();
 
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
@@ -178,8 +188,6 @@ public class Bond : MonoBehaviour {
 
 			}
 		}
-
-		PostUpdate();
 	}
 	public void BreakBond()
 	{
@@ -311,11 +319,11 @@ public class Bond : MonoBehaviour {
 			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
 		}
 
-		// Weight the strength of most recent joints, those near the middle, based on where links and neighbors exist in hierarchy.
+		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		if (links.Count > 2)
 		{
-			int startIndex = 1;// Mathf.Max(1, (links.Count % 2 == 0) ? halfCount - 2 : halfCount - 1);
-			int endIndex = links.Count - 2;// Mathf.Min(links.Count - 2, halfCount + 1);
+			int startIndex = 1;
+			int endIndex = links.Count - 2;
 			for (int i = startIndex; i <= endIndex; i++)
 			{
 				int prevLinkOrderLevel = links[i - 1].orderLevel;
@@ -444,8 +452,34 @@ public class Bond : MonoBehaviour {
 		return null;
 	}
 
+	protected virtual float SetLevelOfDetail()
+	{
+		if ((stats.fullDetailDistance < 0 || stats.sparseDetailDistance < stats.fullDetailDistance || stats.sparseDetailFactor <= 0))
+		{
+			if (stats.addLinkDistance != fullDetailAddDistance)
+			{
+				stats.addLinkDistance = fullDetailAddDistance;
+			}
+			if (stats.removeLinkDistance != fullDetailRemoveDistance)
+			{
+				stats.removeLinkDistance = fullDetailRemoveDistance;
+			}
+			return 1;
+		}
+
+		GameObject player1 = Globals.Instance.player1.gameObject;
+		GameObject player2 = Globals.Instance.player2.gameObject;
+		float player1Dist = (NearestPoint(player1.transform.position) - player1.transform.position).magnitude;
+		float player2Dist = (NearestPoint(player2.transform.position) - player2.transform.position).magnitude;
+		float nearestDist = (player1Dist < player2Dist) ? player1Dist : player2Dist;
+		float distFraction = Mathf.Clamp((nearestDist - stats.fullDetailDistance) / (stats.sparseDetailDistance - stats.fullDetailDistance), 0, 1);
+		float detailFraction = 1 - ((1 - stats.sparseDetailFactor) * distFraction);
+		stats.addLinkDistance = fullDetailAddDistance / detailFraction;
+		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
+		return detailFraction;
+	}
+
 	// Hooks for subclasses.
-	protected virtual void PostUpdate() {}
 	protected virtual void BondForming() {}
 	protected virtual void BondBreaking() {}
 	protected virtual void LinkAdded(BondLink addedLink) {}
@@ -476,22 +510,9 @@ public class BondStats
 	public float upOrderDamper = 5;
 	public float downOrderSpring = 2000;
 	public float downOrderDamper = 0;
-
-	public BondStats(BondStats original)
-	{
-		this.attachSpring1 = original.attachSpring1;
-		this.attachSpring2 = original.attachSpring2;
-		this.maxDistance = original.maxDistance;
-		this.relativeWarningDistance = original.relativeWarningDistance;
-		this.endsWidth = original.endsWidth;
-		this.midWidth = original.midWidth;
-		this.addLinkDistance = original.addLinkDistance;
-		this.removeLinkDistance = original.removeLinkDistance;
-		this.upOrderSpring = original.upOrderSpring;
-		this.upOrderDamper = original.upOrderDamper;
-		this.downOrderSpring = original.downOrderSpring;
-		this.downOrderDamper = original.downOrderDamper;
-	}
+	public float fullDetailDistance = -1;
+	public float sparseDetailDistance = -1;
+	public float sparseDetailFactor = -1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
 	{
@@ -512,5 +533,8 @@ public class BondStats
 		if (fullOverwrite || replacement.upOrderDamper >= 0)			{	this.upOrderDamper = replacement.upOrderDamper;						}
 		if (fullOverwrite || replacement.downOrderSpring >= 0)			{	this.downOrderSpring = replacement.downOrderSpring;					}
 		if (fullOverwrite || replacement.downOrderDamper >= 0)			{	this.downOrderDamper = replacement.downOrderDamper;					}
+		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
+		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
+		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
 	}
 }
