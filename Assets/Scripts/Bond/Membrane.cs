@@ -371,8 +371,8 @@ public class Membrane : Bond {
 	{
 		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
 		{
-			Vector3 thisNearEndPos = links[0].jointNext.connectedBody.transform.position;
-			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position;
+			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
+			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
 			Vector3 prevSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
 			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
 
@@ -386,8 +386,8 @@ public class Membrane : Bond {
 		}
 		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
 		{
-			Vector3 thisNearEndPos = links[links.Count - 1].jointPrevious.connectedBody.transform.position;
-			Vector3 nextNearEndPos = membraneNext.links[0].jointNext.connectedBody.transform.position;
+			Vector3 thisNearEndPos = links[links.Count - 1].linkPrevious.transform.position;
+			Vector3 nextNearEndPos = membraneNext.links[0].linkNext.transform.position;
 			Vector3 nextSmoothPos = (thisNearEndPos + nextNearEndPos) / 2;
 			attachment2.attachee.body.AddForce((nextSmoothPos - attachment2.position).normalized * extraStats.smoothForce);
 		}
@@ -403,8 +403,8 @@ public class Membrane : Bond {
 		// Find the needed end points and their adjacent links on each membrane.
 		BondLink thisEnd = links[0];
 		BondLink prevEnd = membranePrevious.links[membranePrevious.links.Count - 1];
-		Vector3 thisNearEndPos = thisEnd.jointNext.connectedBody.transform.position;
-		Vector3 prevNearEndPos = prevEnd.jointPrevious.connectedBody.transform.position;
+		Vector3 thisNearEndPos = thisEnd.linkNext.transform.position;
+		Vector3 prevNearEndPos = prevEnd.linkPrevious.transform.position;
 
 		// Compute the directions from the adjacent links to the endpoints.
 		Vector3 thisEndDir = (thisEnd.transform.position - thisNearEndPos).normalized;

@@ -41,7 +41,7 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				linkAttachable.AttemptBond(partner, contactPosition, true);
+				linkAttachable.AttemptBond(partner, transform.position, true);
 			}
 		}
 	}

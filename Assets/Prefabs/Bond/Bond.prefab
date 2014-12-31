@@ -30,7 +30,6 @@ GameObject:
   - 114: {fileID: 11400004}
   - 65: {fileID: 6500000}
   - 145: {fileID: 14500002}
-  - 145: {fileID: 14500006}
   - 145: {fileID: 14500010}
   m_Layer: 19
   m_Name: Attachment 2 Link
@@ -85,7 +84,6 @@ GameObject:
   - 114: {fileID: 11400006}
   - 65: {fileID: 6500002}
   - 145: {fileID: 14500000}
-  - 145: {fileID: 14500004}
   - 145: {fileID: 14500008}
   m_Layer: 19
   m_Name: Attachment 1 Link
@@ -300,10 +298,15 @@ MonoBehaviour:
     midWidth: .5
     addLinkDistance: .5
     removeLinkDistance: .449999988
-    upOrderSpring: 3000
+    upOrderSpring: 5000
     upOrderDamper: 5
-    downOrderSpring: 2000
-    downOrderDamper: 1
+    downOrderSpring: 0
+    downOrderDamper: 0
+    fullDetailDistance: -1
+    sparseDetailDistance: -1
+    sparseDetailFactor: -1
+  fullDetailAddDistance: -1
+  fullDetailRemoveDistance: -1
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,8 +321,9 @@ MonoBehaviour:
   toPreviousCollider: {fileID: 6500000}
   toNextCollider: {fileID: 0}
   body: {fileID: 5400000}
-  jointPrevious: {fileID: 14500002}
-  jointNext: {fileID: 14500006}
+  linkNext: {fileID: 0}
+  linkPrevious: {fileID: 0}
+  jointToNeighbor: {fileID: 14500002}
   jointToAttachment: {fileID: 14500010}
   orderLevel: 0
 --- !u!114 &11400006
@@ -336,8 +340,9 @@ MonoBehaviour:
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 6500002}
   body: {fileID: 5400002}
-  jointPrevious: {fileID: 14500000}
-  jointNext: {fileID: 14500004}
+  linkNext: {fileID: 0}
+  linkPrevious: {fileID: 0}
+  jointToNeighbor: {fileID: 14500000}
   jointToAttachment: {fileID: 14500008}
   orderLevel: 0
 --- !u!120 &12000000
@@ -424,40 +429,6 @@ SpringJoint:
   m_BreakTorque: Infinity
   m_EnableCollision: 0
 --- !u!145 &14500002
-SpringJoint:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_Spring: 0
-  m_Damper: 0
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
---- !u!145 &14500004
-SpringJoint:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_Spring: 0
-  m_Damper: 0
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
---- !u!145 &14500006
 SpringJoint:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

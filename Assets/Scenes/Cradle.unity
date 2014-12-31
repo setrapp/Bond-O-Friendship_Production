@@ -25081,9 +25081,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 744363618}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: .000631504983, y: -.394389361, z: -6.66516066}
+  m_LocalPosition: {x: .000631499977, y: -.391389996, z: -6.66520023}
   m_LocalScale: {x: .0342009664, y: .245850876, z: .0336570032}
-  m_Children: []
+  m_Children:
+  - {fileID: 1662514022}
   m_Father: {fileID: 20059179}
   m_RootOrder: 18
 --- !u!114 &744363620
@@ -25097,11 +25098,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2bcfbf7b5f9544a8fd0639a28982ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createdBond: {fileID: 0}
+  createOnStart: 1
   attachable1: {fileID: 744363622}
   attachable2: {fileID: 0}
   bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
   bondOffset1: {x: 0, y: 0, z: 0}
   bondOffset2: {x: 0, y: 0, z: 0}
+  bondOverrideStats: {fileID: 0}
   bondToPlayer: 1
   playerNumber: 0
 --- !u!114 &744363621
@@ -25124,10 +25128,13 @@ MonoBehaviour:
     midWidth: .800000012
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    upOrderSpring: 3000
+    upOrderSpring: 5000
     upOrderDamper: 5
-    downOrderSpring: 2000
+    downOrderSpring: 0
     downOrderDamper: 0
+    fullDetailDistance: -1
+    sparseDetailDistance: -1
+    sparseDetailFactor: -1
 --- !u!114 &744363622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25141,9 +25148,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   handleFluffAttachment: 1
-  bondAtFluffPoint: 1
+  bondAtContactPoint: 1
   attachmentColor: {r: 0, g: 0, b: 1, a: 1}
   bondPrefab: {fileID: 0}
+  bondOverrideStats: {fileID: 0}
   bonds: []
   volleysToBond: 0
   volleys: 0
@@ -40924,9 +40932,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1214492919}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: .000631409348, y: .395250112, z: -6.66516066}
+  m_LocalPosition: {x: .000631409988, y: .39052999, z: -6.66520023}
   m_LocalScale: {x: .0342009664, y: .245850876, z: .0336570032}
-  m_Children: []
+  m_Children:
+  - {fileID: 1924481176}
   m_Father: {fileID: 20059179}
   m_RootOrder: 19
 --- !u!114 &1214492921
@@ -40940,11 +40949,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2bcfbf7b5f9544a8fd0639a28982ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createdBond: {fileID: 0}
+  createOnStart: 1
   attachable1: {fileID: 1214492923}
   attachable2: {fileID: 0}
   bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
   bondOffset1: {x: 0, y: 0, z: 0}
   bondOffset2: {x: 0, y: 0, z: 0}
+  bondOverrideStats: {fileID: 0}
   bondToPlayer: 1
   playerNumber: 1
 --- !u!114 &1214492922
@@ -40967,10 +40979,13 @@ MonoBehaviour:
     midWidth: .800000012
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    upOrderSpring: 3000
+    upOrderSpring: 5000
     upOrderDamper: 5
-    downOrderSpring: 2000
+    downOrderSpring: 0
     downOrderDamper: 0
+    fullDetailDistance: -1
+    sparseDetailDistance: -1
+    sparseDetailFactor: -1
 --- !u!114 &1214492923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40984,9 +40999,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   handleFluffAttachment: 1
-  bondAtFluffPoint: 1
+  bondAtContactPoint: 1
   attachmentColor: {r: 0, g: 1, b: 0, a: 1}
   bondPrefab: {fileID: 0}
+  bondOverrideStats: {fileID: 0}
   bonds: []
   volleysToBond: 0
   volleys: 0
@@ -58326,6 +58342,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1661367430}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1662514021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1662514022}
+  - 135: {fileID: 1662514023}
+  m_Layer: 15
+  m_Name: Mini Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1662514022
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1662514021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 744363619}
+  m_RootOrder: 0
+--- !u!135 &1662514023
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1662514021}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .400000006
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1662653305
 GameObject:
   m_ObjectHideFlags: 0
@@ -65834,6 +65890,46 @@ MonoBehaviour:
   popAnimation: {fileID: 0}
   pullForce: {x: 0, y: 0, z: 0}
   pullDistance: 0
+--- !u!1 &1924481175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1924481176}
+  - 135: {fileID: 1924481177}
+  m_Layer: 15
+  m_Name: Mini Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1924481176
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1924481175}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1214492920}
+  m_RootOrder: 0
+--- !u!135 &1924481177
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1924481175}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .400000006
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1925326477
 GameObject:
   m_ObjectHideFlags: 0
