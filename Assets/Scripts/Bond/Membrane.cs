@@ -445,20 +445,20 @@ public class Membrane : Bond {
 	protected override float SetLevelOfDetail()
 	{
 		float detailFraction = base.SetLevelOfDetail();
-		/*extraStats.defaultShapingForce = fullDetailShapingForce / detailFraction;
+		extraStats.defaultShapingForce = fullDetailShapingForce / detailFraction;
 		for (int i = 0; i < shapingPoints.Count; i++)
 		{
 			shapingPoints[i].lodShapingForce = shapingPoints[i].shapingForce / detailFraction;
-		}*/
-		//extraStats.smoothForce = fullDetailSmoothForce * detailFraction;
-		if (detailFraction < 1)
-		{
-			extraStats.smoothForce = 0;
 		}
-		else
-		{
-			extraStats.smoothForce = fullDetailSmoothForce;
-		}
+		extraStats.smoothForce = fullDetailSmoothForce * detailFraction;
+		//if (detailFraction < 1)
+		//{
+		//	extraStats.smoothForce = 0;
+		//}
+		//else
+		//{
+		//	extraStats.smoothForce = fullDetailSmoothForce;
+		//}
 		return detailFraction;
 	}
 }

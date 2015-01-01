@@ -84,6 +84,19 @@ public class Bond : MonoBehaviour {
 
 			isCountEven = links.Count % 2 == 0;
 
+			// Ensure that links with unconnected joints are not applying spring forces.
+			for (int i = 0; i < links.Count; i++)
+			{
+				if (links[i].jointToNeighbor != null && links[i].jointToNeighbor.connectedBody == null)
+				{
+					links[i].jointToNeighbor.spring = 0;
+				}
+				if (links[i].jointToAttachment != null && links[i].jointToAttachment.connectedBody == null)
+				{
+					links[i].jointToAttachment.spring = 0;
+				}
+			}
+
 			// Direct, scale, and place link colliders to cover the surface of the bond.
 			Vector3 linkDir = Vector3.zero;
 			Vector3 linkScalePrev = Vector3.zero;
@@ -277,6 +290,16 @@ public class Bond : MonoBehaviour {
 			nextLink.linkPrevious = newLink;
 		}
 
+		if (newLink.jointToNeighbor != null)
+		{
+			newLink.jointToNeighbor.spring = 0;
+		}
+
+		if (newLink.jointToAttachment != null)
+		{
+			newLink.jointToAttachment.spring = 0;
+		}
+
 		if (weightJoints)
 		{
 			WeightJoints();
@@ -305,6 +328,24 @@ public class Bond : MonoBehaviour {
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
 
+		if (previousLink.jointToNeighbor != null)
+		{
+			previousLink.jointToNeighbor.spring = 0;
+		}
+		if (previousLink.jointToAttachment != null)
+		{
+			previousLink.jointToAttachment.spring = 0;
+		}
+
+		if (nextLink.jointToNeighbor != null)
+		{
+			nextLink.jointToNeighbor.spring = 0;
+		}
+		if (nextLink.jointToAttachment != null)
+		{
+			nextLink.jointToAttachment.spring = 0;
+		}
+
 		if (weightJoints)
 		{
 			WeightJoints();
@@ -323,13 +364,10 @@ public class Bond : MonoBehaviour {
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		if (links.Count > 2)
 		{
-			int startIndex = 0;// 1;
-			int endIndex = links.Count - 1;//links.Count - 2;
+			int startIndex = 0;
+			int endIndex = links.Count - 1;
 			for (int i = startIndex; i <= endIndex; i++)
 			{
-				//int prevLinkOrderLevel = (i > 0) ? links[i - 1].orderLevel : -1;
-				//int nextLinkOrderLevel = (i < links.Count - 1) ? links[i + 1].orderLevel : -1;
-
 				if (i < links.Count / 2)
 				{
 					links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
@@ -342,6 +380,10 @@ public class Bond : MonoBehaviour {
 
 				if (links[i].jointToNeighbor != null)
 				{
+					links[i].jointToNeighbor.connectedBody = null;
+					links[i].jointToNeighbor.spring = 0;
+					links[i].jointToNeighbor.damper = stats.springDamper;
+
 					BondLink jointedLink = null;
 					if (links[i].linkPrevious != null && links[i].linkPrevious.orderLevel > links[i].orderLevel)
 					{
@@ -354,9 +396,10 @@ public class Bond : MonoBehaviour {
 
 					if (jointedLink != null && jointedLink.body != null)
 					{
+						if (links[i].orderLevel == links.Count / 2)
+							Debug.Log(i);
 						links[i].jointToNeighbor.connectedBody = jointedLink.body;
 						links[i].jointToNeighbor.spring = stats.springForce;
-						links[i].jointToNeighbor.damper = stats.springDamper;
 					}
 				}
 			}
@@ -460,6 +503,12 @@ public class Bond : MonoBehaviour {
 		float detailFraction = 1 - ((1 - stats.sparseDetailFactor) * distFraction);
 		stats.addLinkDistance = fullDetailAddDistance / detailFraction;
 		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
+		for (int i = 0; i < links.Count; i++)
+		{
+			links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
+		}
+		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
 		return detailFraction;
 	}
 
@@ -511,8 +560,8 @@ public class BondStats
 		if (fullOverwrite || replacement.midWidth >= 0)					{	this.midWidth = replacement.midWidth;								}
 		if (fullOverwrite || replacement.addLinkDistance >= 0)			{	this.addLinkDistance = replacement.addLinkDistance;					}
 		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
-		if (fullOverwrite || replacement.springForce >= 0)			{	this.springForce = replacement.springForce;						}
-		if (fullOverwrite || replacement.springDamper >= 0)			{	this.springDamper = replacement.springDamper;						}
+		if (fullOverwrite || replacement.springForce >= 0)				{	this.springForce = replacement.springForce;							}
+		if (fullOverwrite || replacement.springDamper >= 0)				{	this.springDamper = replacement.springDamper;						}
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
