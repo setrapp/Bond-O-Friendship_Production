@@ -7,8 +7,6 @@ public class BondLink : MonoBehaviour {
 	public Rigidbody body = null;
 	public BondLink linkNext = null;
 	public BondLink linkPrevious = null;
-	//public SpringJoint jointPrevious = null;
-	//public SpringJoint jointNext = null;
 	public SpringJoint jointToNeighbor = null;
 	public SpringJoint jointToAttachment = null;
 	public int orderLevel = 0;

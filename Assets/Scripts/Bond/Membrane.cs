@@ -10,6 +10,10 @@ public class Membrane : Bond {
 	public MembraneStats extraStats;
 	public Membrane membranePrevious;
 	public Membrane membraneNext;
+	[HideInInspector]
+	public Vector3 startPosition1;
+	[HideInInspector]
+	public Vector3 startPosition2;
 	public LineRenderer smoothCornerLine1;
 	public LineRenderer smoothCornerLine2;
 	private MembraneLink attachment1FauxLink;
@@ -62,11 +66,13 @@ public class Membrane : Bond {
 		if (startLink != null)
 		{
 			startLink.membrane = this;
+			startPosition1 = startLink.transform.position;
 		}
 		MembraneLink endLink = links[links.Count-1] as MembraneLink;
 		if (endLink != null)
 		{
 			endLink.membrane = this;
+			startPosition2 = endLink.transform.position;
 		}
 
 		// Setup faux links on attachees to allow them to be interacted with in place of endpoint links.
@@ -186,7 +192,7 @@ public class Membrane : Bond {
 		return linkAttachable;
 	}
 
-	public bool IsBondMade(BondAttachable partner, List<Membrane> ignoreMembranes = null)
+	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
 	{
 		bool bonded = false;
 		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
@@ -344,7 +350,7 @@ public class Membrane : Bond {
 						shapingForce = shapingPoints[i].lodShapingForce;
 					}
 
-					//shapingForce /= Mathf.Pow(2, (i + 1) / 2);
+					shapingForce /= Mathf.Pow(2, (i + 1) / 2);
 
 					membraneLink.jointsShaping[i].connectedBody = connectedBody;
 					membraneLink.jointsShaping[i].spring = shapingForce;
@@ -371,25 +377,28 @@ public class Membrane : Bond {
 	{
 		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
 		{
+			// Pull the first endpoint of this membrane and the last endpoint of the previous towards an average position that smooths transition between the two.
 			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
 			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
-			Vector3 prevSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
-			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
+			float bestSmoothForce = Mathf.Max(extraStats.smoothForce, membranePrevious.extraStats.smoothForce);
+			float bestFullSmoothForce = Mathf.Max(fullDetailSmoothForce, membranePrevious.fullDetailSmoothForce); ;
+			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * bestSmoothForce);
+			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * bestSmoothForce);
 
+			// Pull the endpoints back towards their starting positions when accounting for level of detail.
+			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (bestFullSmoothForce - bestSmoothForce));
+			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (bestFullSmoothForce - bestSmoothForce));
+
+			// Ensure that the endpoints stay connected.
 			if (jointToPrevious == null)
 			{
 				jointToPrevious = attachment1.attachee.gameObject.AddComponent<FixedJoint>();
 				jointToPrevious.connectedBody = membranePrevious.attachment2.attachee.body;
 			}
 
+			// Draw a line between the endpoints to hide the gap between ending corners.
 			DrawLineFromPrevious();
-		}
-		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
-		{
-			Vector3 thisNearEndPos = links[links.Count - 1].linkPrevious.transform.position;
-			Vector3 nextNearEndPos = membraneNext.links[0].linkNext.transform.position;
-			Vector3 nextSmoothPos = (thisNearEndPos + nextNearEndPos) / 2;
-			attachment2.attachee.body.AddForce((nextSmoothPos - attachment2.position).normalized * extraStats.smoothForce);
 		}
 	}
 
@@ -445,20 +454,7 @@ public class Membrane : Bond {
 	protected override float SetLevelOfDetail()
 	{
 		float detailFraction = base.SetLevelOfDetail();
-		extraStats.defaultShapingForce = fullDetailShapingForce / detailFraction;
-		for (int i = 0; i < shapingPoints.Count; i++)
-		{
-			shapingPoints[i].lodShapingForce = shapingPoints[i].shapingForce / detailFraction;
-		}
 		extraStats.smoothForce = fullDetailSmoothForce * detailFraction;
-		//if (detailFraction < 1)
-		//{
-		//	extraStats.smoothForce = 0;
-		//}
-		//else
-		//{
-		//	extraStats.smoothForce = fullDetailSmoothForce;
-		//}
 		return detailFraction;
 	}
 }

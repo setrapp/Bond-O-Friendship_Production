@@ -41,8 +41,20 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				linkAttachable.AttemptBond(partner, transform.position, true);
+				bool bonded = linkAttachable.AttemptBond(partner, contactPosition, true);
+				if (bonded)
+				{
+					membrane.forceFullDetail = true;
+				}
 			}
+		}
+	}
+
+	private void BondBroken()
+	{
+		if (membrane != null && !membrane.IsBondMade())
+		{
+			membrane.forceFullDetail = false;
 		}
 	}
 }
