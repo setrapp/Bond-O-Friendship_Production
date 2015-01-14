@@ -381,14 +381,14 @@ public class Membrane : Bond {
 			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
 			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
 			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
-			float bestSmoothForce = Mathf.Max(extraStats.smoothForce, membranePrevious.extraStats.smoothForce);
-			float bestFullSmoothForce = Mathf.Max(fullDetailSmoothForce, membranePrevious.fullDetailSmoothForce); ;
-			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * bestSmoothForce);
-			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * bestSmoothForce);
+			//float bestSmoothForce = Mathf.Max(extraStats.smoothForce, membranePrevious.extraStats.smoothForce);
+			//float bestFullSmoothForce = Mathf.Max(fullDetailSmoothForce, membranePrevious.fullDetailSmoothForce);
+			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * membranePrevious.extraStats.smoothForce);
 
 			// Pull the endpoints back towards their starting positions when accounting for level of detail.
-			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (bestFullSmoothForce - bestSmoothForce));
-			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (bestFullSmoothForce - bestSmoothForce));
+			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (fullDetailSmoothForce - extraStats.smoothForce));
+			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (membranePrevious.fullDetailSmoothForce - membranePrevious.extraStats.smoothForce));
 
 			// Ensure that the endpoints stay connected.
 			if (jointToPrevious == null)

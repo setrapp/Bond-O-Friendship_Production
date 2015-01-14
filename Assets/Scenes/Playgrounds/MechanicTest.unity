@@ -1284,7 +1284,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
@@ -2566,7 +2566,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
@@ -4696,9 +4696,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    defaultShapingForce: .150000006
-    bondOnContact: 1
-    bondOnFluff: 1
+    defaultShapingForce: 2
+    bondOnContact: 0
+    bondOnFluff: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
@@ -4719,16 +4719,16 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: -1
-    relativeWarningDistance: .99000001
+    relativeWarningDistance: .899999976
     endsWidth: 2
     midWidth: 2
     addLinkDistance: 5
     removeLinkDistance: 2
-    springForce: 20
+    springForce: 80
     springDamper: 5
     fullDetailDistance: 10
     sparseDetailDistance: 50
-    sparseDetailFactor: .0500000007
+    sparseDetailFactor: .100000001
 --- !u!114 &799212136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4791,7 +4791,9 @@ MonoBehaviour:
   - pointName: Late Shape Point
     position: {x: .0500000007, y: .75}
     shapingForce: -1
+  shapingIndices: 0000000003000000020000000400000001000000
   relativeMaxDistance: -1
+  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &878114844
@@ -5023,7 +5025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &970956132
 Transform:
   m_ObjectHideFlags: 0
@@ -5099,7 +5101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1032500349
 Transform:
   m_ObjectHideFlags: 0
@@ -5701,7 +5703,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
@@ -6084,8 +6086,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69bd88cf28171f41bc085782f4cfe23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1Spawn: {fileID: 1950200650}
-  player2Spawn: {fileID: 1032500348}
+  player1Spawn: {fileID: 970956131}
+  player2Spawn: {fileID: 1746478869}
   naturalFluffCount: -1
   startFluffCount: -1
 --- !u!1 &1338913859
@@ -6216,7 +6218,9 @@ MonoBehaviour:
   - pointName: Late Shape Point
     position: {x: .100000001, y: .75}
     shapingForce: -1
+  shapingIndices: 
   relativeMaxDistance: 2
+  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!4 &1338913864
@@ -6267,6 +6271,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6333,7 +6341,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.defaultShapingForce
-      value: .150000006
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.considerNeighborBonds
@@ -6349,11 +6357,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.bondOnFluff
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.bondOnContact
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: membraneLength
@@ -6409,7 +6417,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.sparseDetailFactor
-      value: .0500000007
+      value: .100000001
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: shapingPoints.Array.data[2].position.x
@@ -6425,7 +6433,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.springForce
-      value: 20
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.maxDistance
@@ -6437,7 +6445,35 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.relativeWarningDistance
-      value: .99000001
+      value: .899999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingPoints.Array.data[0].position.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingPoints.Array.data[1].position.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[3]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[2]
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}
@@ -6600,7 +6636,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a579be8231d4f334f84aa9683541c023, type: 2}
@@ -7029,7 +7065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1746478870
 Transform:
   m_ObjectHideFlags: 0
@@ -7085,11 +7121,11 @@ Prefab:
     - target: {fileID: 11400010, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
       propertyPath: player1Spawn
       value: 
-      objectReference: {fileID: 1950200650}
+      objectReference: {fileID: 970956131}
     - target: {fileID: 11400010, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
       propertyPath: player2Spawn
       value: 
-      objectReference: {fileID: 1032500348}
+      objectReference: {fileID: 1746478869}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
   m_RootGameObject: {fileID: 1338318043}
@@ -7249,7 +7285,9 @@ MonoBehaviour:
   - pointName: Late Shape Point
     position: {x: .100000001, y: .75}
     shapingForce: -1
+  shapingIndices: 
   relativeMaxDistance: 2
+  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!4 &1840810121
@@ -7618,7 +7656,9 @@ MonoBehaviour:
   - pointName: Late Shape Point
     position: {x: .100000001, y: .75}
     shapingForce: -1
+  shapingIndices: 
   relativeMaxDistance: 2
+  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &1890853529
@@ -7931,7 +7971,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1950200651
 Transform:
   m_ObjectHideFlags: 0

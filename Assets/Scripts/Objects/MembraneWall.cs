@@ -12,9 +12,29 @@ public class MembraneWall : MonoBehaviour {
 	public GameObject shapingPointPrefab;
 	[SerializeField]
 	public List<ShapingPointStats> shapingPoints;
+	[SerializeField]
+	public List<int> shapingIndices;
+	private float ShapedDistance
+	{
+		get
+		{
+			float shapedDistance = 0;
+			Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+			Vector3 startPos = createdMembrane.attachment1.position;
+			for (int i = 0; i < shapingIndices.Count; i++)
+			{
+				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
+				startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+			}
+			shapedDistance += (createdMembrane.attachment2.position - startPos).magnitude;
+			//TODO figure out how to make this work for the ends.
+			return shapedDistance;
+		}
+	}
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
 	[Header("Live Values")]
+	public float shapedDistance; // TODO remove
 	public float currentLength;
 	public float relativeActualDistance;
 	
@@ -28,6 +48,11 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator != null)
 		{
 			membraneCreator.createOnStart = false;
+		}
+
+		if (shapingIndices.Count != shapingPoints.Count)
+		{
+			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 	}
 
@@ -44,7 +69,9 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator != null && membraneCreator.createdBond != null)
 		{
 			currentLength = membraneCreator.createdBond.BondLength;
-			relativeActualDistance = currentLength / membraneLength;
+			//relativeActualDistance = currentLength / membraneLength;
+			shapedDistance = ShapedDistance;
+			relativeActualDistance = currentLength / shapedDistance;
 		}
 	}
 
