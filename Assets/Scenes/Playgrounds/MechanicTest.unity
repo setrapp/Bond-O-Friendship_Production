@@ -3489,7 +3489,7 @@ MonoBehaviour:
   createdWalls: []
   membraneWallOriginal: {fileID: 799212131}
   createOnStart: 1
-  wallCount: 20
+  wallCount: 40
 --- !u!1 &783925682
 GameObject:
   m_ObjectHideFlags: 0
@@ -4670,8 +4670,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 30
-    attachSpring2: 5
+    attachSpring1: 20
+    attachSpring2: 20
     maxDistance: 10
     relativeWarningDistance: .5
     endsWidth: .5
@@ -4696,13 +4696,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    defaultShapingForce: 2
-    bondOnContact: 0
-    bondOnFluff: 0
+    defaultShapingForce: 1
+    bondOnContact: 1
+    bondOnFluff: 1
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
-    smoothForce: 20
+    smoothForce: 50
 --- !u!114 &799212135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4719,15 +4719,15 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: -1
-    relativeWarningDistance: .899999976
+    relativeWarningDistance: -1
     endsWidth: 2
     midWidth: 2
-    addLinkDistance: 5
+    addLinkDistance: 4
     removeLinkDistance: 2
-    springForce: 80
+    springForce: 20
     springDamper: 5
-    fullDetailDistance: 10
-    sparseDetailDistance: 50
+    fullDetailDistance: 5
+    sparseDetailDistance: 30
     sparseDetailFactor: .100000001
 --- !u!114 &799212136
 MonoBehaviour:
@@ -4772,7 +4772,7 @@ MonoBehaviour:
   createOnStart: 1
   wallIsCentered: 1
   membraneDirection: {x: 1, y: 0, z: 0}
-  membraneLength: 100
+  membraneLength: 50
   defaultShapingForce: -1
   shapingPointPrefab: {fileID: 100000, guid: 5f3569abbc25275498bbd3b3daed0dbb, type: 2}
   shapingPoints:
@@ -4792,8 +4792,8 @@ MonoBehaviour:
     position: {x: .0500000007, y: .75}
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
-  relativeMaxDistance: -1
-  shapedDistance: 0
+  requiredPlayersToBreak: 2
+  relativeMaxDistance: 1.08000004
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &878114844
@@ -6218,9 +6218,9 @@ MonoBehaviour:
   - pointName: Late Shape Point
     position: {x: .100000001, y: .75}
     shapingForce: -1
-  shapingIndices: 
+  shapingIndices: 0000000003000000020000000400000001000000
+  requiredPlayersToBreak: 0
   relativeMaxDistance: 2
-  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!4 &1338913864
@@ -6325,11 +6325,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: wallCount
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.smoothForce
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2300002, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_Enabled
@@ -6341,7 +6341,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.defaultShapingForce
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.considerNeighborBonds
@@ -6357,19 +6357,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.bondOnFluff
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.bondOnContact
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: membraneLength
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.addLinkDistance
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.removeLinkDistance
@@ -6401,19 +6401,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring1
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring2
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.fullDetailDistance
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.sparseDetailDistance
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.sparseDetailFactor
@@ -6433,7 +6433,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.springForce
-      value: 80
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.maxDistance
@@ -6441,11 +6441,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: relativeMaxDistance
-      value: -1
+      value: 1.08000004
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.relativeWarningDistance
-      value: .899999976
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: shapingPoints.Array.data[0].position.x
@@ -6473,6 +6473,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: shapingIndices.Array.data[2]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.breakResistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: requiredPlayersToBreak
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6944,6 +6952,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6986,6 +6998,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.bondOnContact
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[3]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[2]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: shapingIndices.Array.data[0]
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -7286,8 +7318,8 @@ MonoBehaviour:
     position: {x: .100000001, y: .75}
     shapingForce: -1
   shapingIndices: 
+  requiredPlayersToBreak: 0
   relativeMaxDistance: 2
-  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!4 &1840810121
@@ -7657,8 +7689,8 @@ MonoBehaviour:
     position: {x: .100000001, y: .75}
     shapingForce: -1
   shapingIndices: 
+  requiredPlayersToBreak: 0
   relativeMaxDistance: 2
-  shapedDistance: 0
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &1890853529

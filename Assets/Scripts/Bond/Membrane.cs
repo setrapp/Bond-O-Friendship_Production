@@ -33,6 +33,7 @@ public class Membrane : Bond {
 	protected override void Update()
 	{
 		base.Update();
+
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -381,8 +382,6 @@ public class Membrane : Bond {
 			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
 			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
 			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
-			//float bestSmoothForce = Mathf.Max(extraStats.smoothForce, membranePrevious.extraStats.smoothForce);
-			//float bestFullSmoothForce = Mathf.Max(fullDetailSmoothForce, membranePrevious.fullDetailSmoothForce);
 			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
 			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * membranePrevious.extraStats.smoothForce);
 
@@ -494,6 +493,6 @@ public class MembraneStats
 		this.bondOnFluff = replacement.bondOnFluff;
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
-		if (fullOverwrite || replacement.smoothForce >= 0)			{	this.smoothForce = replacement.smoothForce;					}
+		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;				}
 	}
 }

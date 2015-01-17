@@ -123,7 +123,7 @@ public class Bond : MonoBehaviour {
 
 			// Base the width of the bond on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
-			float actualMidWidth = stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1);
+			float actualMidWidth = (stats.relativeWarningDistance > 0) ? stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1) : stats.midWidth;
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
@@ -176,10 +176,9 @@ public class Bond : MonoBehaviour {
 			attachment2.lineRenderer.SetWidth(actualMidWidth, stats.endsWidth);
 
 			// Disconnect if too far apart.
-			if (actualMidWidth <= 0)
+			if (stats.maxDistance > 0 && BondLength >= stats.maxDistance)
 			{
 				BreakBond();
-
 			}
 		}
 	}

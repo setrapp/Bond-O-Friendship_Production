@@ -20,21 +20,21 @@ public class MembraneWall : MonoBehaviour {
 		{
 			float shapedDistance = 0;
 			Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-			Vector3 startPos = createdMembrane.attachment1.position;
-			for (int i = 0; i < shapingIndices.Count; i++)
+			Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
+			for (int i = 1; i < shapingIndices.Count; i++)
 			{
 				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
 				startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
 			}
-			shapedDistance += (createdMembrane.attachment2.position - startPos).magnitude;
-			//TODO figure out how to make this work for the ends.
+			shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
 			return shapedDistance;
 		}
 	}
+	[Header("Breaking Requirements")]
+	public int requiredPlayersToBreak = 0;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
 	[Header("Live Values")]
-	public float shapedDistance; // TODO remove
 	public float currentLength;
 	public float relativeActualDistance;
 	
@@ -66,12 +66,36 @@ public class MembraneWall : MonoBehaviour {
 
 	void Update()
 	{
-		if (membraneCreator != null && membraneCreator.createdBond != null)
+		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+		if (membraneCreator != null && createdMembrane != null)
 		{
-			currentLength = membraneCreator.createdBond.BondLength;
-			//relativeActualDistance = currentLength / membraneLength;
-			shapedDistance = ShapedDistance;
+			currentLength = createdMembrane.BondLength;
+			float shapedDistance = ShapedDistance;
+			createdMembrane.stats.maxDistance = shapedDistance * relativeMaxDistance;
 			relativeActualDistance = currentLength / shapedDistance;
+		}
+
+		bool enoughPlayersBonded = true;
+		if (requiredPlayersToBreak > 0)
+		{
+			int playersBonded = 0;
+			if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+			{
+				playersBonded++;
+			}
+			if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+			{
+				playersBonded++;
+			}
+			if (playersBonded < requiredPlayersToBreak)
+			{
+				enoughPlayersBonded = false;
+			}
+		}
+
+		if (!enoughPlayersBonded)
+		{
+			createdMembrane.stats.maxDistance = -1;
 		}
 	}
 
@@ -89,7 +113,6 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.bondOverrideStats.stats.maxDistance = membraneLength * relativeMaxDistance;
 		}
-
 
 		// Set end positions, allowing for either originating from this position, or centering on it.
 		Vector3 startPos = transform.position;
