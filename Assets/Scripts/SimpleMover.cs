@@ -89,6 +89,7 @@ public class SimpleMover : MonoBehaviour {
 		{
 			body.velocity = Vector3.zero;
 		}
+		moving = false;
 	}
 
 	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)

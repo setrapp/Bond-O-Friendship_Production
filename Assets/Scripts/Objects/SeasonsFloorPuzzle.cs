@@ -76,8 +76,8 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision col) {
-		MovePulse fluff = col.gameObject.GetComponent<MovePulse>();
-		if(col.transform.tag == "Pulse" && fluff != null && fluff.creator != null)
+		Fluff fluff = col.gameObject.GetComponent<Fluff>();
+		if(col.transform.tag == "Fluff" && fluff != null && fluff.creator != null)
 		{
 			GetComponent<Renderer>().material.color = fluff.creator.attachmentColor;
 			if(transform.parent.name == "Left Floor Puzzle" && leftColorCount < 4  && colored == false)
