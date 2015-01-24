@@ -3,13 +3,6 @@ using System.Collections;
 
 public class SpawnLeaves : MonoBehaviour {
 
-	public GameObject leaf1Prefab;
-	public GameObject leaf2Prefab;
-	public GameObject leaf3Prefab;
-	public GameObject leaf4Prefab;
-	public GameObject leaf5Prefab;
-	public GameObject leaf6Prefab;
-	public GameObject leaf7Prefab;
 	private GameObject leaf;
 	private GameObject[] leaves;
 	private GameObject player1;
@@ -18,7 +11,7 @@ public class SpawnLeaves : MonoBehaviour {
 	private int season;
 	private int leafSelector;
 	private int leafCount;
-	public float spawnRange;
+
 	private float xPos;
 	private float yPos;
 	private float halfWidth;
@@ -27,6 +20,15 @@ public class SpawnLeaves : MonoBehaviour {
 	private float fadeSpeed;
 	private Color startColor;
 	private int leafArraySize;
+	private ManageSeasons manager;
+	private GameObject leaf1Prefab;
+	private GameObject leaf2Prefab;
+	private GameObject leaf3Prefab;
+	private GameObject leaf4Prefab;
+	private GameObject leaf5Prefab;
+	private GameObject leaf6Prefab;
+	private GameObject leaf7Prefab;
+	private float spawnRange;
 
 	public float nearPlayerDistance;
 
@@ -45,12 +47,24 @@ public class SpawnLeaves : MonoBehaviour {
 		leafArraySize = Mathf.RoundToInt(area) + 1;
 
 		leaves = new GameObject[leafArraySize];
+
+		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ();
+
+
+		leaf1Prefab =manager.leaf1Prefab;
+		leaf2Prefab =manager.leaf2Prefab;
+		leaf3Prefab =manager.leaf3Prefab;
+		leaf4Prefab =manager.leaf4Prefab;
+		leaf5Prefab =manager.leaf5Prefab;
+		leaf6Prefab =manager.leaf6Prefab;
+		leaf7Prefab =manager.leaf7Prefab;
+
+		spawnRange = manager.leafSpawnRange;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		season = GetComponent<TextureSeasons>().season;
-
+		season = manager.season;
 		nearPlayerDistance = Vector3.Distance(transform.position, player1.transform.position);
 		if (Vector3.Distance(transform.position, player2.transform.position) < nearPlayerDistance)
 		{

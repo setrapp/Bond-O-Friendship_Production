@@ -85,7 +85,7 @@ GameObject:
   - 33: {fileID: 10272118}
   - 23: {fileID: 10272117}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,7 +197,7 @@ GameObject:
   - 33: {fileID: 13791271}
   - 23: {fileID: 13791270}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,7 +335,7 @@ GameObject:
   - 33: {fileID: 39744203}
   - 23: {fileID: 39744202}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -468,7 +468,7 @@ Transform:
   - {fileID: 235575314}
   - {fileID: 417734699}
   m_Father: {fileID: 121782053}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!1 &65474229
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,85 +513,6 @@ Transform:
   - {fileID: 184977348}
   m_Father: {fileID: 68265799}
   m_RootOrder: 2
---- !u!1 &66038078
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100064, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 66038079}
-  - 20: {fileID: 66038082}
-  - 124: {fileID: 66038081}
-  - 92: {fileID: 66038080}
-  m_Layer: 0
-  m_Name: Player2 Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &66038079
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400064, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 66038078}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 121782053}
-  m_RootOrder: 0
---- !u!92 &66038080
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 9200024, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 66038078}
-  m_Enabled: 1
---- !u!124 &66038081
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12400024, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 66038078}
-  m_Enabled: 1
---- !u!20 &66038082
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2000024, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 66038078}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 4
-  m_BackGroundColor: {r: .474509835, g: .192156896, b: .43167001, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 1
-  orthographic size: 15
-  m_Depth: 1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
 --- !u!1 &68265798
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,7 +587,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 831468187}
   - {fileID: 1284789384}
   m_Father: {fileID: 882951004}
   m_RootOrder: 0
@@ -680,7 +600,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: .0196078438}
+  m_BackGroundColor: {r: .79411763, g: .812576115, b: 1, a: .0196078438}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -810,12 +730,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &90600515
 Renderer:
   m_ObjectHideFlags: 0
@@ -882,8 +796,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &118642895
 Prefab:
   m_ObjectHideFlags: 0
@@ -1054,7 +966,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 66038079}
   - {fileID: 56832339}
   m_Father: {fileID: 80192622}
   m_RootOrder: 0
@@ -1174,7 +1085,7 @@ GameObject:
   - 33: {fileID: 142827126}
   - 23: {fileID: 142827125}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1141,7 @@ GameObject:
   - 33: {fileID: 146724566}
   - 23: {fileID: 146724565}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1462,14 +1373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &168541920
 MonoBehaviour:
@@ -1499,8 +1402,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &184977347
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,14 +1489,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &184977353
 MonoBehaviour:
@@ -1625,8 +1518,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &189921807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,7 +1529,7 @@ GameObject:
   - 33: {fileID: 189921810}
   - 23: {fileID: 189921809}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1694,7 +1585,7 @@ GameObject:
   - 33: {fileID: 199829469}
   - 23: {fileID: 199829468}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1750,7 +1641,7 @@ GameObject:
   - 33: {fileID: 205261324}
   - 23: {fileID: 205261323}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1882,7 +1773,7 @@ GameObject:
   - 33: {fileID: 215450778}
   - 23: {fileID: 215450777}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3222,12 +3113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &238087067
 Renderer:
   m_ObjectHideFlags: 0
@@ -3294,8 +3179,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &240985693
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,12 +3222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &240985696
 Renderer:
   m_ObjectHideFlags: 0
@@ -3411,8 +3288,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &242051199
 GameObject:
   m_ObjectHideFlags: 0
@@ -3480,7 +3355,7 @@ GameObject:
   - 33: {fileID: 251788601}
   - 23: {fileID: 251788600}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3732,14 +3607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &257984734
 MonoBehaviour:
@@ -3769,8 +3636,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &262250516
 GameObject:
   m_ObjectHideFlags: 0
@@ -3814,12 +3679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &262250519
 Renderer:
   m_ObjectHideFlags: 0
@@ -3886,8 +3745,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &271540755
 GameObject:
   m_ObjectHideFlags: 0
@@ -3931,12 +3788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &271540758
 Renderer:
   m_ObjectHideFlags: 0
@@ -4003,8 +3854,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &273436298
 Prefab:
   m_ObjectHideFlags: 0
@@ -4152,14 +4001,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &282425211
 MonoBehaviour:
@@ -4189,8 +4030,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &283423961
 GameObject:
   m_ObjectHideFlags: 0
@@ -5356,8 +5195,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &287755981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5369,12 +5206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &287755982
 Renderer:
   m_ObjectHideFlags: 0
@@ -5501,14 +5332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &290864565
 MonoBehaviour:
@@ -5538,8 +5361,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &305863237
 GameObject:
   m_ObjectHideFlags: 0
@@ -5599,8 +5420,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &305863240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5612,12 +5431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &305863241
 Renderer:
   m_ObjectHideFlags: 0
@@ -5700,12 +5513,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &307372850
 Renderer:
   m_ObjectHideFlags: 0
@@ -5772,8 +5579,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &311599059
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,12 +5622,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &311599062
 Renderer:
   m_ObjectHideFlags: 0
@@ -5889,8 +5688,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &319290725
 GameObject:
   m_ObjectHideFlags: 0
@@ -5902,7 +5699,7 @@ GameObject:
   - 33: {fileID: 319290728}
   - 23: {fileID: 319290727}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6034,14 +5831,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &332191320
 MonoBehaviour:
@@ -6071,8 +5860,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &335285903
 GameObject:
   m_ObjectHideFlags: 0
@@ -6160,14 +5947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &335285909
 MonoBehaviour:
@@ -6197,8 +5976,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &337404274
 GameObject:
   m_ObjectHideFlags: 0
@@ -7357,12 +7134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &341088190
 Renderer:
   m_ObjectHideFlags: 0
@@ -7429,8 +7200,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &353569233
 GameObject:
   m_ObjectHideFlags: 0
@@ -7474,12 +7243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &353569236
 Renderer:
   m_ObjectHideFlags: 0
@@ -7546,8 +7309,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &368017843
 Prefab:
   m_ObjectHideFlags: 0
@@ -7799,7 +7560,7 @@ GameObject:
   - 33: {fileID: 425162732}
   - 23: {fileID: 425162731}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7915,7 +7676,7 @@ GameObject:
   - 33: {fileID: 435945625}
   - 23: {fileID: 435945624}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7971,7 +7732,7 @@ GameObject:
   - 33: {fileID: 443332647}
   - 23: {fileID: 443332646}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8163,14 +7924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &452677915
 MonoBehaviour:
@@ -8200,8 +7953,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &456352634
 GameObject:
   m_ObjectHideFlags: 0
@@ -8290,6 +8041,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 2141432093}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 0
+  groupTotal: 2
 --- !u!1 &456615930
 GameObject:
   m_ObjectHideFlags: 0
@@ -8333,12 +8087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &456615933
 Renderer:
   m_ObjectHideFlags: 0
@@ -8405,8 +8153,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &458219847
 Prefab:
   m_ObjectHideFlags: 0
@@ -8554,14 +8300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &460037840
 MonoBehaviour:
@@ -8591,8 +8329,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &477258646
 GameObject:
   m_ObjectHideFlags: 0
@@ -8737,8 +8473,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &488040172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8750,12 +8484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &488040173
 Renderer:
   m_ObjectHideFlags: 0
@@ -9004,14 +8732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &501608201
 MonoBehaviour:
@@ -9041,8 +8761,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &502832577
 GameObject:
   m_ObjectHideFlags: 0
@@ -9130,14 +8848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &502832583
 MonoBehaviour:
@@ -9167,8 +8877,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &513506120
 GameObject:
   m_ObjectHideFlags: 0
@@ -9256,14 +8964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &513506126
 MonoBehaviour:
@@ -9293,8 +8993,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &519788372
 GameObject:
   m_ObjectHideFlags: 0
@@ -9430,12 +9128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &550118352
 Renderer:
   m_ObjectHideFlags: 0
@@ -9502,8 +9194,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &564751090
 Prefab:
   m_ObjectHideFlags: 0
@@ -9715,6 +9405,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 1029387595}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 1
+  groupTotal: 2
 --- !u!1 &585255907
 GameObject:
   m_ObjectHideFlags: 0
@@ -9802,14 +9495,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &585255913
 MonoBehaviour:
@@ -9839,8 +9524,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &593350970
 GameObject:
   m_ObjectHideFlags: 0
@@ -9900,8 +9583,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &593350973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9913,12 +9594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &593350974
 Renderer:
   m_ObjectHideFlags: 0
@@ -10001,12 +9676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &595054815
 Renderer:
   m_ObjectHideFlags: 0
@@ -10073,8 +9742,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &662398884
 GameObject:
   m_ObjectHideFlags: 0
@@ -10086,7 +9753,7 @@ GameObject:
   - 33: {fileID: 662398887}
   - 23: {fileID: 662398886}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10374,14 +10041,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &704874827
 MonoBehaviour:
@@ -10411,8 +10070,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &723351625
 GameObject:
   m_ObjectHideFlags: 0
@@ -10500,14 +10157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &723351631
 MonoBehaviour:
@@ -10537,8 +10186,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &725072248
 GameObject:
   m_ObjectHideFlags: 0
@@ -11825,8 +11472,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &775033557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11838,12 +11483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &775033558
 Renderer:
   m_ObjectHideFlags: 0
@@ -11894,7 +11533,7 @@ GameObject:
   - 33: {fileID: 775986479}
   - 23: {fileID: 775986478}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11950,7 +11589,7 @@ GameObject:
   - 33: {fileID: 782062302}
   - 23: {fileID: 782062301}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12038,12 +11677,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &788382405
 Renderer:
   m_ObjectHideFlags: 0
@@ -12110,8 +11743,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &789263394
 GameObject:
   m_ObjectHideFlags: 0
@@ -12123,7 +11754,7 @@ GameObject:
   - 33: {fileID: 789263397}
   - 23: {fileID: 789263396}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12224,85 +11855,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 813393481}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &831468186
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100060, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 831468187}
-  - 20: {fileID: 831468190}
-  - 124: {fileID: 831468189}
-  - 92: {fileID: 831468188}
-  m_Layer: 0
-  m_Name: Player1 Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &831468187
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400060, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 831468186}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 74325570}
-  m_RootOrder: 0
---- !u!92 &831468188
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 9200022, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 831468186}
-  m_Enabled: 1
---- !u!124 &831468189
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12400022, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 831468186}
-  m_Enabled: 1
---- !u!20 &831468190
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2000022, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 831468186}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 4
-  m_BackGroundColor: {r: .474509835, g: .192156896, b: .43167001, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 1
-  orthographic size: 15
-  m_Depth: 2
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 512
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
 --- !u!1 &831899632
 GameObject:
   m_ObjectHideFlags: 0
@@ -12390,14 +11942,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &831899638
 MonoBehaviour:
@@ -12427,8 +11971,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &842098349
 GameObject:
   m_ObjectHideFlags: 0
@@ -13641,7 +13183,7 @@ GameObject:
   - 33: {fileID: 873085487}
   - 23: {fileID: 873085486}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13745,7 +13287,7 @@ GameObject:
   - 33: {fileID: 893140868}
   - 23: {fileID: 893140867}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14907,7 +14449,7 @@ GameObject:
   - 33: {fileID: 934333093}
   - 23: {fileID: 934333092}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15040,6 +14582,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 1029387595}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 1
+  groupTotal: 2
 --- !u!1 &942111095
 GameObject:
   m_ObjectHideFlags: 0
@@ -15051,7 +14596,7 @@ GameObject:
   - 33: {fileID: 942111098}
   - 23: {fileID: 942111097}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15156,85 +14701,6 @@ Prefab:
   m_RootGameObject: {fileID: 585255907}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!1 &959093888
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100026, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 959093889}
-  - 20: {fileID: 959093892}
-  - 124: {fileID: 959093891}
-  - 92: {fileID: 959093890}
-  m_Layer: 0
-  m_Name: Player2 Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &959093889
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400026, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 959093888}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2018600162}
-  m_RootOrder: 2
---- !u!92 &959093890
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 9200012, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 959093888}
-  m_Enabled: 1
---- !u!124 &959093891
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12400012, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 959093888}
-  m_Enabled: 1
---- !u!20 &959093892
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2000012, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 959093888}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 4
-  m_BackGroundColor: {r: .474509835, g: .192156896, b: .43167001, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 1
-  orthographic size: 15
-  m_Depth: 1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
 --- !u!1 &968817548
 GameObject:
   m_ObjectHideFlags: 0
@@ -16605,6 +16071,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 1029387595}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 1
+  groupTotal: 2
 --- !u!1 &991651414
 GameObject:
   m_ObjectHideFlags: 0
@@ -16648,12 +16117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &991651417
 Renderer:
   m_ObjectHideFlags: 0
@@ -16720,8 +16183,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &996578470
 GameObject:
   m_ObjectHideFlags: 0
@@ -16908,12 +16369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1025959483
 Renderer:
   m_ObjectHideFlags: 0
@@ -16980,8 +16435,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1029387595
 GameObject:
   m_ObjectHideFlags: 0
@@ -17138,14 +16591,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1031366798
 MonoBehaviour:
@@ -17175,8 +16620,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1037017908
 GameObject:
   m_ObjectHideFlags: 0
@@ -17188,7 +16631,7 @@ GameObject:
   - 33: {fileID: 1037017911}
   - 23: {fileID: 1037017910}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17244,7 +16687,7 @@ GameObject:
   - 33: {fileID: 1042786776}
   - 23: {fileID: 1042786775}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17518,12 +16961,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1059725814
 Renderer:
   m_ObjectHideFlags: 0
@@ -17602,8 +17039,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1091821929
 GameObject:
   m_ObjectHideFlags: 0
@@ -17615,7 +17050,7 @@ GameObject:
   - 33: {fileID: 1091821932}
   - 23: {fileID: 1091821931}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17759,8 +17194,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1097372968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17772,14 +17205,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!1 &1110908047
 GameObject:
@@ -17824,12 +17249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1110908050
 Renderer:
   m_ObjectHideFlags: 0
@@ -17896,8 +17315,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &1113803630
 Prefab:
   m_ObjectHideFlags: 0
@@ -17953,7 +17370,7 @@ GameObject:
   - 33: {fileID: 1133186955}
   - 23: {fileID: 1133186954}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18334,12 +17751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1178751537
 Renderer:
   m_ObjectHideFlags: 0
@@ -18406,8 +17817,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1205853740
 GameObject:
   m_ObjectHideFlags: 0
@@ -18419,7 +17828,7 @@ GameObject:
   - 33: {fileID: 1205853743}
   - 23: {fileID: 1205853742}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18543,12 +17952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1229074934
 Renderer:
   m_ObjectHideFlags: 0
@@ -18615,8 +18018,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1244893092
 GameObject:
   m_ObjectHideFlags: 0
@@ -18704,14 +18105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1244893098
 MonoBehaviour:
@@ -18741,8 +18134,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1246876540
 GameObject:
   m_ObjectHideFlags: 0
@@ -18786,12 +18177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1246876543
 Renderer:
   m_ObjectHideFlags: 0
@@ -18858,8 +18243,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1250572463
 GameObject:
   m_ObjectHideFlags: 0
@@ -18903,12 +18286,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1250572466
 Renderer:
   m_ObjectHideFlags: 0
@@ -18975,8 +18352,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1255280074
 GameObject:
   m_ObjectHideFlags: 0
@@ -19064,14 +18439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1255280080
 MonoBehaviour:
@@ -19101,8 +18468,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1257800305
 GameObject:
   m_ObjectHideFlags: 0
@@ -19187,7 +18552,7 @@ GameObject:
   - 33: {fileID: 1264060692}
   - 23: {fileID: 1264060691}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19320,6 +18685,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 2141432093}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 0
+  groupTotal: 2
 --- !u!1 &1281236658
 GameObject:
   m_ObjectHideFlags: 0
@@ -19407,14 +18775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1281236664
 MonoBehaviour:
@@ -19444,8 +18804,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1284789383
 GameObject:
   m_ObjectHideFlags: 0
@@ -19474,7 +18832,7 @@ Transform:
   - {fileID: 996578471}
   - {fileID: 1257800306}
   m_Father: {fileID: 74325570}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!1 &1287165409
 GameObject:
   m_ObjectHideFlags: 0
@@ -19675,6 +19033,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 2141432093}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 0
+  groupTotal: 2
 --- !u!1001 &1299919604
 Prefab:
   m_ObjectHideFlags: 0
@@ -19778,12 +19139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1304198433
 Renderer:
   m_ObjectHideFlags: 0
@@ -19850,8 +19205,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1316399339
 GameObject:
   m_ObjectHideFlags: 0
@@ -19863,7 +19216,7 @@ GameObject:
   - 33: {fileID: 1316399342}
   - 23: {fileID: 1316399341}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19919,7 +19272,7 @@ GameObject:
   - 33: {fileID: 1316745336}
   - 23: {fileID: 1316745335}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19975,7 +19328,7 @@ GameObject:
   - 33: {fileID: 1329656546}
   - 23: {fileID: 1329656545}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20076,6 +19429,62 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1332176937}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1335239160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1335239162}
+  - 114: {fileID: 1335239161}
+  m_Layer: 0
+  m_Name: Seasons Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1335239161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1335239160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a849cc35a79d9b04083d484dcac630a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
+  petalsPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
+  rain: {fileID: 283423964}
+  rain2: {fileID: 929891045}
+  rain3: {fileID: 1817224354}
+  rainLight: {fileID: 567880925}
+  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
+  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
+  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
+  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
+  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
+  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
+  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
+  season: 0
+  seasonLength: 30
+  leafSpawnRange: 30
+  seasonTimeRemaining: 0
+--- !u!4 &1335239162
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1335239160}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25.0160007, y: 40.0900002, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
 --- !u!1001 &1347681636
 Prefab:
   m_ObjectHideFlags: 0
@@ -20211,14 +19620,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1351458637
 MonoBehaviour:
@@ -20248,8 +19649,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1356112574
 GameObject:
   m_ObjectHideFlags: 0
@@ -20325,12 +19724,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1366595717
 Renderer:
   m_ObjectHideFlags: 0
@@ -20397,8 +19790,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1367928775
 GameObject:
   m_ObjectHideFlags: 0
@@ -20552,14 +19943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1410768858
 MonoBehaviour:
@@ -20589,8 +19972,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1421781431
 GameObject:
   m_ObjectHideFlags: 0
@@ -20650,8 +20031,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1421781434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20663,12 +20042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1421781435
 Renderer:
   m_ObjectHideFlags: 0
@@ -21900,14 +21273,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1455996510
 MonoBehaviour:
@@ -21937,8 +21302,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1474515700
 GameObject:
   m_ObjectHideFlags: 0
@@ -23081,11 +22444,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1479900190}
   m_LocalRotation: {x: 0, y: 0, z: .923879564, w: .382683456}
-  m_LocalPosition: {x: -30.3400002, y: -23.8999996, z: 1}
-  m_LocalScale: {x: 3, y: 10, z: 10}
+  m_LocalPosition: {x: -30.3400021, y: -23.8999996, z: 1}
+  m_LocalScale: {x: 2.99999976, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 1599920802}
-  m_RootOrder: 17
+  m_RootOrder: 15
 --- !u!114 &1479900192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23113,8 +22476,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1479900193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23126,12 +22487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1479900194
 Renderer:
   m_ObjectHideFlags: 0
@@ -23240,7 +22595,7 @@ GameObject:
   - 33: {fileID: 1484278656}
   - 23: {fileID: 1484278655}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23296,7 +22651,7 @@ GameObject:
   - 33: {fileID: 1524919159}
   - 23: {fileID: 1524919158}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23352,7 +22707,7 @@ GameObject:
   - 33: {fileID: 1536762835}
   - 23: {fileID: 1536762834}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23440,12 +22795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1538846490
 Renderer:
   m_ObjectHideFlags: 0
@@ -23512,8 +22861,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1541472895
 GameObject:
   m_ObjectHideFlags: 0
@@ -23594,7 +22941,7 @@ GameObject:
   - 33: {fileID: 1576484204}
   - 23: {fileID: 1576484203}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23679,10 +23026,10 @@ Transform:
   - {fileID: 1867793190}
   - {fileID: 1968117159}
   - {fileID: 1769871203}
-  - {fileID: 1642711741}
   - {fileID: 2069386504}
-  - {fileID: 2050219111}
   - {fileID: 1479900191}
+  - {fileID: 1642711741}
+  - {fileID: 2050219111}
   - {fileID: 513506121}
   - {fileID: 335285904}
   - {fileID: 1410768853}
@@ -23783,7 +23130,7 @@ Transform:
   - {fileID: 1484278654}
   - {fileID: 10272116}
   m_Father: {fileID: 1599920802}
-  m_RootOrder: 14
+  m_RootOrder: 16
 --- !u!1 &1648710158
 GameObject:
   m_ObjectHideFlags: 0
@@ -23827,12 +23174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1648710161
 Renderer:
   m_ObjectHideFlags: 0
@@ -23899,8 +23240,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1652400326
 GameObject:
   m_ObjectHideFlags: 0
@@ -23988,14 +23327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1652400332
 MonoBehaviour:
@@ -24025,8 +23356,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1656990162
 GameObject:
   m_ObjectHideFlags: 0
@@ -24229,12 +23558,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1677180646
 Renderer:
   m_ObjectHideFlags: 0
@@ -24301,8 +23624,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1707072739
 GameObject:
   m_ObjectHideFlags: 0
@@ -24362,8 +23683,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1707072742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24375,12 +23694,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1707072743
 Renderer:
   m_ObjectHideFlags: 0
@@ -24463,12 +23776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1710082053
 Renderer:
   m_ObjectHideFlags: 0
@@ -24535,8 +23842,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1001 &1715238404
 Prefab:
   m_ObjectHideFlags: 0
@@ -24712,8 +24017,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1769871205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24725,12 +24028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1769871206
 Renderer:
   m_ObjectHideFlags: 0
@@ -24945,8 +24242,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1776418045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24958,12 +24253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1776418046
 Renderer:
   m_ObjectHideFlags: 0
@@ -25134,12 +24423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1776976774
 Renderer:
   m_ObjectHideFlags: 0
@@ -25206,8 +24489,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1786584300
 GameObject:
   m_ObjectHideFlags: 0
@@ -25219,7 +24500,7 @@ GameObject:
   - 33: {fileID: 1786584303}
   - 23: {fileID: 1786584302}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25351,14 +24632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1786999911
 MonoBehaviour:
@@ -25388,8 +24661,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1798236102
 GameObject:
   m_ObjectHideFlags: 0
@@ -25477,14 +24748,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1798236108
 MonoBehaviour:
@@ -25514,8 +24777,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1811207915
 GameObject:
   m_ObjectHideFlags: 0
@@ -25559,12 +24820,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1811207918
 Renderer:
   m_ObjectHideFlags: 0
@@ -25631,8 +24886,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1814682713
 GameObject:
   m_ObjectHideFlags: 0
@@ -25720,14 +24973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &1814682719
 MonoBehaviour:
@@ -25757,8 +25002,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1817224351
 GameObject:
   m_ObjectHideFlags: 0
@@ -26985,85 +26228,6 @@ Prefab:
   m_RootGameObject: {fileID: 460037834}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!1 &1831991411
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100056, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1831991412}
-  - 20: {fileID: 1831991415}
-  - 124: {fileID: 1831991414}
-  - 92: {fileID: 1831991413}
-  m_Layer: 0
-  m_Name: Player1 Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1831991412
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400056, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 1831991411}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2018600162}
-  m_RootOrder: 1
---- !u!92 &1831991413
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 9200018, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 1831991411}
-  m_Enabled: 1
---- !u!124 &1831991414
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12400018, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 1831991411}
-  m_Enabled: 1
---- !u!20 &1831991415
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 2000018, guid: 9aad467a9dfb2c8418b452c4309792f6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901064346}
-  m_GameObject: {fileID: 1831991411}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 4
-  m_BackGroundColor: {r: .474509835, g: .192156896, b: .43167001, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 1
-  orthographic size: 15
-  m_Depth: 2
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 512
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
 --- !u!1 &1836699666
 GameObject:
   m_ObjectHideFlags: 0
@@ -27176,12 +26340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1853426138
 Renderer:
   m_ObjectHideFlags: 0
@@ -27248,8 +26406,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1867793189
 GameObject:
   m_ObjectHideFlags: 0
@@ -27309,8 +26465,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1867793192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27322,12 +26476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1867793193
 Renderer:
   m_ObjectHideFlags: 0
@@ -27438,7 +26586,7 @@ GameObject:
   - 33: {fileID: 1872830677}
   - 23: {fileID: 1872830676}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27494,7 +26642,7 @@ GameObject:
   - 33: {fileID: 1877136868}
   - 23: {fileID: 1877136867}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27550,7 +26698,7 @@ GameObject:
   - 33: {fileID: 1886301839}
   - 23: {fileID: 1886301838}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27606,7 +26754,7 @@ GameObject:
   - 33: {fileID: 1887835645}
   - 23: {fileID: 1887835644}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27758,7 +26906,7 @@ GameObject:
   - 33: {fileID: 1911261895}
   - 23: {fileID: 1911261894}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27814,7 +26962,7 @@ GameObject:
   - 33: {fileID: 1914821713}
   - 23: {fileID: 1914821712}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27947,6 +27095,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 2141432093}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 0
+  groupTotal: 2
 --- !u!1001 &1936177139
 Prefab:
   m_ObjectHideFlags: 0
@@ -28050,12 +27201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1959113254
 Renderer:
   m_ObjectHideFlags: 0
@@ -28122,8 +27267,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1962184488
 GameObject:
   m_ObjectHideFlags: 0
@@ -28167,12 +27310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1962184491
 Renderer:
   m_ObjectHideFlags: 0
@@ -28239,8 +27376,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &1968117158
 GameObject:
   m_ObjectHideFlags: 0
@@ -28300,8 +27435,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!114 &1968117161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28313,12 +27446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &1968117162
 Renderer:
   m_ObjectHideFlags: 0
@@ -28369,7 +27496,7 @@ GameObject:
   - 33: {fileID: 1982124298}
   - 23: {fileID: 1982124297}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28425,7 +27552,7 @@ GameObject:
   - 33: {fileID: 1985096253}
   - 23: {fileID: 1985096252}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28627,7 +27754,7 @@ GameObject:
   - 33: {fileID: 2012510025}
   - 23: {fileID: 2012510024}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28701,8 +27828,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 980500670}
-  - {fileID: 1831991412}
-  - {fileID: 959093889}
   m_Father: {fileID: 2143360940}
   m_RootOrder: 0
 --- !u!20 &2018600163
@@ -28715,7 +27840,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: .0196078438}
+  m_BackGroundColor: {r: .792156875, g: .811764717, b: 1, a: .0196078438}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -28993,6 +28118,9 @@ MonoBehaviour:
   emergencyEscapeGate: {fileID: 1029387595}
   timer: 10
   maxTime: 10
+  totalTargets: 4
+  groupNumber: 1
+  groupTotal: 2
 --- !u!1 &2050219110
 GameObject:
   m_ObjectHideFlags: 0
@@ -29021,7 +28149,7 @@ Transform:
   - {fileID: 519788373}
   - {fileID: 1356112575}
   m_Father: {fileID: 1599920802}
-  m_RootOrder: 16
+  m_RootOrder: 17
 --- !u!1001 &2063463755
 Prefab:
   m_ObjectHideFlags: 0
@@ -29109,11 +28237,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2069386503}
   m_LocalRotation: {x: 0, y: 0, z: .38268292, w: .923879743}
-  m_LocalPosition: {x: -22.75, y: -36.4500008, z: 1}
-  m_LocalScale: {x: 3, y: 6.89999962, z: 10}
+  m_LocalPosition: {x: -22.7499981, y: -36.4500008, z: 1}
+  m_LocalScale: {x: 2.99999976, y: 6.89999914, z: 10}
   m_Children: []
   m_Father: {fileID: 1599920802}
-  m_RootOrder: 15
+  m_RootOrder: 14
 --- !u!114 &2069386505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29125,12 +28253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &2069386506
 Renderer:
   m_ObjectHideFlags: 0
@@ -29197,8 +28319,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2073101692
 GameObject:
   m_ObjectHideFlags: 0
@@ -29242,12 +28362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &2073101695
 Renderer:
   m_ObjectHideFlags: 0
@@ -29314,8 +28428,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2082170829
 GameObject:
   m_ObjectHideFlags: 0
@@ -29403,14 +28515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &2082170835
 MonoBehaviour:
@@ -29440,8 +28544,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2100747680
 GameObject:
   m_ObjectHideFlags: 0
@@ -29485,12 +28587,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6972bd9f0606e94382410cc045b65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icePrefab: {fileID: 100000, guid: 9ec4adbfd0ec3c1459ff7166a8226b71, type: 2}
-  leavesPrefab: {fileID: 100000, guid: 3a0e003fa8d57ed4f801283bef4bd824, type: 2}
-  rain: {fileID: 283423964}
-  rain2: {fileID: 929891045}
-  rain3: {fileID: 1817224354}
-  rainLight: {fileID: 567880925}
 --- !u!23 &2100747683
 Renderer:
   m_ObjectHideFlags: 0
@@ -29557,8 +28653,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2101035656
 GameObject:
   m_ObjectHideFlags: 0
@@ -29626,7 +28720,7 @@ GameObject:
   - 33: {fileID: 2120286953}
   - 23: {fileID: 2120286952}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29738,7 +28832,7 @@ GameObject:
   - 33: {fileID: 2123678328}
   - 23: {fileID: 2123678327}
   m_Layer: 16
-  m_Name: Wall
+  m_Name: Hidden Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29870,14 +28964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &2129750942
 MonoBehaviour:
@@ -29907,8 +28993,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2139133839
 GameObject:
   m_ObjectHideFlags: 0
@@ -29996,14 +29080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bec5949153e204ea691a2e2a2b0538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaf1Prefab: {fileID: 100000, guid: a33a8e51f804f45458bd439451cf1642, type: 2}
-  leaf2Prefab: {fileID: 100000, guid: a7981c80f2829c24eb7fb9bf357d00f1, type: 2}
-  leaf3Prefab: {fileID: 100000, guid: f7b8e2b2a723eff41a4ba8310a1f21bf, type: 2}
-  leaf4Prefab: {fileID: 100000, guid: ba484bad69b9fe440ad0dc38c2fcf716, type: 2}
-  leaf5Prefab: {fileID: 100000, guid: 8b76ac002a8b4d341944407ce4e390a5, type: 2}
-  leaf6Prefab: {fileID: 100000, guid: 6444739973c07f046af8a636411f18b8, type: 2}
-  leaf7Prefab: {fileID: 100000, guid: 9af7629224585614fac123acf729bc71, type: 2}
-  spawnRange: 30
   nearPlayerDistance: 0
 --- !u!114 &2139133845
 MonoBehaviour:
@@ -30033,8 +29109,6 @@ MonoBehaviour:
   spring2: {fileID: 2100000, guid: 3684cdeb42aa6db47aa3a829b6481599, type: 2}
   spring3: {fileID: 2100000, guid: dc70f53f9c82dd64ca137de64764a60b, type: 2}
   springWall: {fileID: 2100000, guid: 87574292b75feaa44a657555d3f3104c, type: 2}
-  timer: 30
-  season: 0
 --- !u!1 &2141432093
 GameObject:
   m_ObjectHideFlags: 0
