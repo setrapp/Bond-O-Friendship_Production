@@ -17,7 +17,7 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 	private bool puzzleComplete;
 	private Vector3 originalSize;
 	private Color originalColor;
-	private int[] groups;
+	private static int[] groups;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +25,8 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 		originalSize = transform.localScale;
 		originalColor = GetComponent<Renderer>().material.color;
 		groups = new int[groupTotal];
+		for(int i = 0; i < groupTotal; i++)
+			groups[i] = 0;
 	}
 	
 	// Update is called once per frame
@@ -65,7 +67,10 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 		{
 			GetComponent<Renderer>().material.color = fluff.creator.attachmentColor;
 			if(groups[groupNumber] < totalTargets  && colored == false)
+			{
 				groups[groupNumber]++;
+				Debug.Log(groups[groupNumber]);
+			}
 			if(puzzleComplete == true)
 				outerRing.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
 			colored = true;
