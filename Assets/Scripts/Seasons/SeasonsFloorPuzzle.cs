@@ -67,10 +67,7 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 		{
 			GetComponent<Renderer>().material.color = fluff.creator.attachmentColor;
 			if(groups[groupNumber] < totalTargets  && colored == false)
-			{
 				groups[groupNumber]++;
-				Debug.Log(groups[groupNumber]);
-			}
 			if(puzzleComplete == true)
 				outerRing.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
 			colored = true;
