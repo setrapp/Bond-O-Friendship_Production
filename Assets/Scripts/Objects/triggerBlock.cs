@@ -39,7 +39,7 @@ public class triggerBlock : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.tag == "Pulse")
+		if(collide.gameObject.tag == "Fluff")
 		{
 			triggered = true;
 			triggerTime = 0.3f;
