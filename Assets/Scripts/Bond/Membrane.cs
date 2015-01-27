@@ -44,7 +44,7 @@ public class Membrane : Bond {
 		{
 			SmoothToNeighbors();
 		}
-		
+
 		// Hide smoothing line if no smoothing will be down.
 		if (extraStats.smoothForce <= 0 || membranePrevious == null)
 		{
@@ -316,9 +316,6 @@ public class Membrane : Bond {
 				}
 			}
 		}
-
-		
-		
 		return nearPoints;
 	}
 
@@ -448,6 +445,51 @@ public class Membrane : Bond {
 		smoothCornerLine2.SetPosition(1, smoothLineMidpoint);
 		smoothCornerLine2.SetColors(membranePrevious.attachmentColor, attachmentColor);
 		smoothCornerLine2.SetWidth(smoothLineWidth1, smoothLineWidth2);
+	}
+
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint)
+	{
+		MembraneLink nearestLink;
+		return NearestNeighboredPoint(checkPoint, out nearestLink);
+	}
+
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint, out MembraneLink nearestLink)
+	{
+		BondLink nearestBondLink;
+		Vector3 nearestPoint = base.NearestPoint(checkPoint, out nearestBondLink);
+		float nearestSqrDist = (nearestPoint - checkPoint).sqrMagnitude;
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membranePrevious != null)
+		{
+			BondLink nearestLinkPrevious;
+			Vector3 nearestPointPrevious = membranePrevious.NearestPoint(checkPoint, out nearestLinkPrevious);
+			float previousSqrDist = (nearestPointPrevious - checkPoint).sqrMagnitude;
+			if (previousSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointPrevious;
+				nearestSqrDist = previousSqrDist;
+				nearestBondLink = nearestLinkPrevious;
+			}
+		}
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membraneNext != null)
+		{
+			BondLink nearestLinkNext;
+			Vector3 nearestPointNext = membraneNext.NearestPoint(checkPoint, out nearestLinkNext);
+			float nextSqrDist = (nearestPointNext - checkPoint).sqrMagnitude;
+			if (nextSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointNext;
+				nearestSqrDist = nextSqrDist;
+				nearestBondLink = nearestLinkNext;
+			}
+		}
+
+		nearestLink = nearestBondLink as MembraneLink;
+
+		return nearestPoint;
 	}
 
 	protected override float SetLevelOfDetail()

@@ -6,6 +6,32 @@ public class MembraneLink : BondLink {
 	public BondAttachable bondAttachable;
 	public SpringJoint[] jointsShaping;
 
+	void Update()
+	{
+		if (bondAttachable && bondAttachable.bonds.Count > 0)
+		{
+			for (int i = 0; i < bondAttachable.bonds.Count; i++)
+			{
+				Bond bond = bondAttachable.bonds[i];
+				MembraneLink nearestLink;
+				bond.attachment1.position = membrane.NearestNeighboredPoint(bond.attachment2.position, out nearestLink);
+				if (nearestLink != this)
+				{
+					BondAttachable newAttachee = nearestLink.bondAttachable;
+					if (nearestLink == membrane.links[0])
+					{
+						newAttachee = membrane.attachment1.attachee;
+					}
+					else if (nearestLink == membrane.links[membrane.links.Count - 1])
+					{
+						newAttachee = membrane.attachment2.attachee;
+					}
+					bond.ReplacePartner(bondAttachable, newAttachee);
+				}
+			}
+		}
+	}
+
 	void OnCollisionEnter(Collision collision)
 	{
 		if (collision.collider.tag == "Character")
@@ -41,10 +67,11 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				bool bonded = linkAttachable.AttemptBond(partner, contactPosition, true);
+				bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition)/*contactPosition*/, true);
 				if (bonded)
 				{
 					membrane.forceFullDetail = true;
+					bondAttachable.bonds[bondAttachable.bonds.Count - 1].stats.manualAttachment1 = true;
 				}
 			}
 		}

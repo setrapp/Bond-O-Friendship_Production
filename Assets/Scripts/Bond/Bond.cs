@@ -127,8 +127,14 @@ public class Bond : MonoBehaviour {
 
 			// Place attachment points for each partner.
 			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
-			attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);
-			attachment2.position = attachment2.attachee.transform.position + attachment2.attachee.transform.TransformDirection(attachment2.offset);
+			if (!stats.manualAttachment1)
+			{
+				attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);
+			}
+			if (!stats.manualAttachment2)
+			{
+				attachment2.position = attachment2.attachee.transform.position + attachment2.attachee.transform.TransformDirection(attachment2.offset);
+			}
 
 			// Place attachment points with attached characters.
 			links[0].transform.position = attachment1.position;
@@ -237,6 +243,40 @@ public class Bond : MonoBehaviour {
 		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
 
 		BondForming();
+	}
+
+	public void ReplacePartner(BondAttachable partnerToReplace, BondAttachable replacement)
+	{
+		if (replacement == partnerToReplace)
+		{
+			return;
+		}
+
+		if (partnerToReplace == attachment1.attachee)
+		{
+			//attachment1.attachee.bonds.Remove(this);
+			attachment1.attachee = replacement;
+			replacement.bonds.Add(this);
+			//attachment1.attachee.SendMessage("BondMade", attachment2.attachee, SendMessageOptions.DontRequireReceiver);
+		}
+		else if (partnerToReplace == attachment2.attachee)
+		{
+			//attachment2.attachee.bonds.Remove(this);
+			//attachment2.attachee = replacement;
+			//attachment2.attachee.SendMessage("BondMade", attachment1.attachee, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	public void RemovePartner(BondAttachable partner)
+	{
+		if (partner == attachment1.attachee)
+		{
+			attachment1.attachee = null;
+		}
+		else if (partner == attachment2.attachee)
+		{
+			attachment2.attachee = null;
+		}
 	}
 
 	private void AddLink(int index = -1, bool weightJoints = true)
@@ -373,8 +413,6 @@ public class Bond : MonoBehaviour {
 
 					if (jointedLink != null && jointedLink.body != null)
 					{
-						if (links[i].orderLevel == links.Count / 2)
-							Debug.Log(i);
 						links[i].jointToNeighbor.connectedBody = jointedLink.body;
 						links[i].jointToNeighbor.spring = stats.springForce;
 					}
@@ -389,6 +427,14 @@ public class Bond : MonoBehaviour {
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
 	{
+		BondLink nearestLink;
+		return NearestPoint(checkPoint, out nearestLink);
+	}
+
+	public Vector3 NearestPoint(Vector3 checkPoint, out BondLink nearestLink)
+	{
+		nearestLink = null;
+
 		if (links.Count < 2)
 		{
 			return Vector3.zero;
@@ -440,16 +486,19 @@ public class Bond : MonoBehaviour {
 			nearestPos = nearPos;
 		}
 
+		// Store the nearest link to the check point;
+		nearestLink = links[nearIndex];
+
 		return nearestPos;
 	}
 
-	public BondAttachable OtherAttachee(BondAttachable attachee)
+	public BondAttachable OtherPartner(BondAttachable partner)
 	{
-		if (attachment1.attachee == attachee)
+		if (attachment1.attachee == partner)
 		{
 			return attachment2.attachee;
 		}
-		else if (attachment2.attachee == attachee)
+		else if (attachment2.attachee == partner)
 		{
 			return attachment1.attachee;
 		}
@@ -516,6 +565,8 @@ public class BondStats
 	public float removeLinkDistance = 0.3f;
 	public float springForce = 5000;
 	public float springDamper = 5;
+	public bool manualAttachment1 = false;
+	public bool manualAttachment2 = false;
 	public float fullDetailDistance = -1;
 	public float sparseDetailDistance = -1;
 	public float sparseDetailFactor = -1;
@@ -537,6 +588,8 @@ public class BondStats
 		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
 		if (fullOverwrite || replacement.springForce >= 0)				{	this.springForce = replacement.springForce;							}
 		if (fullOverwrite || replacement.springDamper >= 0)				{	this.springDamper = replacement.springDamper;						}
+		manualAttachment1 = replacement.manualAttachment1;
+		manualAttachment2 = replacement.manualAttachment2;
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
