@@ -34,6 +34,8 @@ public class MembraneWall : MonoBehaviour {
 	public int requiredPlayersToBreak = 0;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
+	public float relativeRequiredAdd = -1;
+	private float requirementDistanceAdd = -1;
 	[Header("Live Values")]
 	public float currentLength;
 	public float relativeActualDistance;
@@ -71,31 +73,48 @@ public class MembraneWall : MonoBehaviour {
 		{
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
-			createdMembrane.stats.maxDistance = shapedDistance * relativeMaxDistance;
+			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
 			relativeActualDistance = currentLength / shapedDistance;
-		}
 
-		bool enoughPlayersBonded = true;
-		if (requiredPlayersToBreak > 0)
-		{
-			int playersBonded = 0;
-			if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+			// Ensure that enough players are attempting to break the membrane.
+			bool enoughPlayersBonded = true;
+			if (requiredPlayersToBreak > 0)
 			{
-				playersBonded++;
+				int playersBonded = 0;
+				if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+				{
+					playersBonded++;
+				}
+				if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+				{
+					playersBonded++;
+				}
+				if (playersBonded < requiredPlayersToBreak)
+				{
+					enoughPlayersBonded = false;
+				}
 			}
-			if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
-			{
-				playersBonded++;
-			}
-			if (playersBonded < requiredPlayersToBreak)
-			{
-				enoughPlayersBonded = false;
-			}
-		}
 
-		if (!enoughPlayersBonded)
-		{
-			createdMembrane.stats.maxDistance = -1;
+			if (!enoughPlayersBonded)
+			{
+				maxDistance = -1;
+				requirementDistanceAdd = 0;
+			}
+			else
+			{
+				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
+				if (requirementDistanceAdd <= 0 && maxDistance >= 0 && relativeRequiredAdd >= 0)
+				{
+					float distAddForReq = shapedDistance * relativeRequiredAdd;
+					if (currentLength > maxDistance - distAddForReq)
+					{
+						maxDistance = currentLength + distAddForReq;
+						requirementDistanceAdd = maxDistance - createdMembrane.stats.maxDistance;
+					}
+				}
+			}
+
+			createdMembrane.stats.maxDistance = maxDistance;
 		}
 	}
 

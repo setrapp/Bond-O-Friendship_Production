@@ -14,17 +14,20 @@ public class MembraneLink : BondLink {
 			{
 				Bond bond = bondAttachable.bonds[i];
 				MembraneLink nearestLink;
-				bond.attachment1.position = membrane.NearestNeighboredPoint(bond.attachment2.position, out nearestLink);
+				Vector3 halfWidthOffset = transform.right * 0.5f;
+				Vector3 currentPos = (bond.attachment1.position - halfWidthOffset);
+				Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
+				bond.attachment1.position = newPos;
 				if (nearestLink != this)
 				{
 					BondAttachable newAttachee = nearestLink.bondAttachable;
-					if (nearestLink == membrane.links[0])
+					if (nearestLink == nearestLink.membrane.links[0])
 					{
-						newAttachee = membrane.attachment1.attachee;
+						newAttachee = nearestLink.membrane.attachment1FauxLink.bondAttachable;
 					}
-					else if (nearestLink == membrane.links[membrane.links.Count - 1])
+					else if (nearestLink == nearestLink.membrane.links[nearestLink.membrane.links.Count - 1])
 					{
-						newAttachee = membrane.attachment2.attachee;
+						newAttachee = nearestLink.membrane.attachment2FauxLink.bondAttachable;
 					}
 					bond.ReplacePartner(bondAttachable, newAttachee);
 				}

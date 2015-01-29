@@ -16,8 +16,8 @@ public class Membrane : Bond {
 	public Vector3 startPosition2;
 	public LineRenderer smoothCornerLine1;
 	public LineRenderer smoothCornerLine2;
-	private MembraneLink attachment1FauxLink;
-	private MembraneLink attachment2FauxLink;
+	public MembraneLink attachment1FauxLink;
+	public MembraneLink attachment2FauxLink;
 	public float endpointSpring = -1;
 	private FixedJoint jointToPrevious;
 	public float fullDetailShapingForce;

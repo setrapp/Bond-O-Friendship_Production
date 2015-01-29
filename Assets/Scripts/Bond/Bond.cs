@@ -254,16 +254,17 @@ public class Bond : MonoBehaviour {
 
 		if (partnerToReplace == attachment1.attachee)
 		{
-			//attachment1.attachee.bonds.Remove(this);
+			attachment1.attachee.bonds.Remove(this);
 			attachment1.attachee = replacement;
 			replacement.bonds.Add(this);
-			//attachment1.attachee.SendMessage("BondMade", attachment2.attachee, SendMessageOptions.DontRequireReceiver);
+			attachment1.attachee.SendMessage("BondMade", attachment2.attachee, SendMessageOptions.DontRequireReceiver);
 		}
 		else if (partnerToReplace == attachment2.attachee)
 		{
-			//attachment2.attachee.bonds.Remove(this);
-			//attachment2.attachee = replacement;
-			//attachment2.attachee.SendMessage("BondMade", attachment1.attachee, SendMessageOptions.DontRequireReceiver);
+			attachment2.attachee.bonds.Remove(this);
+			attachment2.attachee = replacement;
+			replacement.bonds.Add(this);
+			attachment2.attachee.SendMessage("BondMade", attachment1.attachee, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
