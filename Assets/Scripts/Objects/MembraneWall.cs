@@ -12,8 +12,31 @@ public class MembraneWall : MonoBehaviour {
 	public GameObject shapingPointPrefab;
 	[SerializeField]
 	public List<ShapingPointStats> shapingPoints;
+	[SerializeField]
+	public List<int> shapingIndices;
+	private float ShapedDistance
+	{
+		get
+		{
+			float shapedDistance = 0;
+			Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+			Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
+			for (int i = 1; i < shapingIndices.Count; i++)
+			{
+				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
+				startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+			}
+			shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
+			return shapedDistance;
+		}
+	}
+	[Header("Breaking Requirements")]
+	public int requiredPlayersToBreak = 0;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
+	public float relativeRequiredAdd = -1;
+	private float requirementDistanceAdd = -1;
+	private float preRequirementLength = -1;
 	[Header("Live Values")]
 	public float currentLength;
 	public float relativeActualDistance;
@@ -29,6 +52,11 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.createOnStart = false;
 		}
+
+		if (shapingIndices.Count != shapingPoints.Count)
+		{
+			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
+		}
 	}
 
 	void Start()
@@ -41,10 +69,58 @@ public class MembraneWall : MonoBehaviour {
 
 	void Update()
 	{
-		if (membraneCreator != null && membraneCreator.createdBond != null)
+		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+		if (membraneCreator != null && createdMembrane != null)
 		{
-			currentLength = membraneCreator.createdBond.BondLength;
-			relativeActualDistance = currentLength / membraneLength;
+			currentLength = createdMembrane.BondLength;
+			float shapedDistance = ShapedDistance;
+			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
+			relativeActualDistance = currentLength / shapedDistance;
+
+			// Ensure that enough players are attempting to break the membrane.
+			bool enoughPlayersBonded = true;
+			if (requiredPlayersToBreak > 0)
+			{
+				int playersBonded = 0;
+				if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+				{
+					playersBonded++;
+				}
+				if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+				{
+					playersBonded++;
+				}
+				if (playersBonded < requiredPlayersToBreak)
+				{
+					enoughPlayersBonded = false;
+				}
+			}
+
+			if (!enoughPlayersBonded)
+			{
+				maxDistance = -1;
+				requirementDistanceAdd = 0;
+			}
+			else
+			{
+				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
+				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
+				{
+					float distAddForReq = shapedDistance * relativeRequiredAdd;
+					if (requirementDistanceAdd <= 0 && currentLength > maxDistance - distAddForReq)
+					{
+						maxDistance = currentLength + distAddForReq;
+						requirementDistanceAdd = maxDistance - createdMembrane.stats.maxDistance;
+						preRequirementLength = currentLength;
+					}
+					else if (Mathf.Abs(currentLength - preRequirementLength) >= distAddForReq)
+					{
+						createdMembrane.BreakBond();
+					}
+				}
+			}
+
+			createdMembrane.stats.maxDistance = maxDistance;
 		}
 	}
 
@@ -62,7 +138,6 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.bondOverrideStats.stats.maxDistance = membraneLength * relativeMaxDistance;
 		}
-
 
 		// Set end positions, allowing for either originating from this position, or centering on it.
 		Vector3 startPos = transform.position;

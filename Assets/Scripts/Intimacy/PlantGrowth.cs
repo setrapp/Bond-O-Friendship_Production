@@ -51,7 +51,7 @@ public class PlantGrowth : MonoBehaviour {
 				if(fluffCount/fluffsRequiredPerBud > i + 1 && blossoms[i] == null)
 				{
 					blossoms[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-					blossoms[i].renderer.material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
+					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
 					blossoms[i].transform.position = buds[i].transform.position + buds[i].transform.up*(buds[i].transform.localScale.y/2) - new Vector3(0, 0, 1);
