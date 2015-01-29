@@ -36,6 +36,7 @@ public class MembraneWall : MonoBehaviour {
 	public float relativeMaxDistance = -1;
 	public float relativeRequiredAdd = -1;
 	private float requirementDistanceAdd = -1;
+	private float preRequirementLength = -1;
 	[Header("Live Values")]
 	public float currentLength;
 	public float relativeActualDistance;
@@ -103,13 +104,18 @@ public class MembraneWall : MonoBehaviour {
 			else
 			{
 				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
-				if (requirementDistanceAdd <= 0 && maxDistance >= 0 && relativeRequiredAdd >= 0)
+				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
 				{
 					float distAddForReq = shapedDistance * relativeRequiredAdd;
-					if (currentLength > maxDistance - distAddForReq)
+					if (requirementDistanceAdd <= 0 && currentLength > maxDistance - distAddForReq)
 					{
 						maxDistance = currentLength + distAddForReq;
 						requirementDistanceAdd = maxDistance - createdMembrane.stats.maxDistance;
+						preRequirementLength = currentLength;
+					}
+					else if (Mathf.Abs(currentLength - preRequirementLength) >= distAddForReq)
+					{
+						createdMembrane.BreakBond();
 					}
 				}
 			}
