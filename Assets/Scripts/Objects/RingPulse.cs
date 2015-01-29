@@ -31,15 +31,15 @@ public class RingPulse : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.gameObject.name == "Shield")
-		{
-			gameObject.GetComponent<Collider>().enabled = false;
-		}
-		//if(collide.gameObject.tag == "Converser")
+		//if(collide.gameObject.name == "Shield")
+		//{
+		//	gameObject.GetComponent<Collider>().enabled = false;
+		//}
+		//if(collide.gameObject.tag == "Character")
 		//{
 		//	gameObject.GetComponent<Collider>().enabled = false;
 			//print("Collide");
-			//collide.gameObject.GetComponent<PartnerLink>().BreakAllConnections();
+			//collide.gameObject.GetComponent<CharacterComponents>().BreakAllBonds();
 		//}
 	}
 }

@@ -16,7 +16,7 @@ public class SpaceParticles : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		/*if(player.GetComponent<PartnerLink>().partner == null)
+		/*if(player.GetComponent<CharacterComponents>().partner == null)
 		{
 			renderer.material = spacedots;
 		}*/
