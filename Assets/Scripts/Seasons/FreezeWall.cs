@@ -2,15 +2,9 @@
 using System.Collections;
 
 public class FreezeWall : MonoBehaviour {
-
-	public GameObject icePrefab;
+	
 	private GameObject ice;
-	public GameObject leavesPrefab;
 	private GameObject leaves;
-	public ParticleSystem rain;
-	public ParticleSystem rain2;
-	public ParticleSystem rain3;
-	public Light rainLight;
 	private bool freezing;
 	private bool dropLeaves;
 	private float extents;
@@ -19,9 +13,12 @@ public class FreezeWall : MonoBehaviour {
 	private Color iceColor;
 	private Color startColor;
 	private GameObject objects;
+	private ManageSeasons manager;
 
 	// Use this for initialization
 	void Start () {
+		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ();
+
 		iceColor = new Color (0.2f, 1.0f, 1.0f);
 		startColor = GetComponent<Renderer>().material.color;
 		objects = GameObject.Find ("Objects");
@@ -31,9 +28,9 @@ public class FreezeWall : MonoBehaviour {
 	void Update () {
 		if(freezing == true && ice == null)
 		{
-			if(GetComponent<TextureSeasons>().season == 1)
+			if(manager.season == 1)
 			{
-				ice = (GameObject)Instantiate(icePrefab);
+				ice = (GameObject)Instantiate(manager.icePrefab);
 				ice.transform.position = new Vector3(collisionPoint.x, collisionPoint.y, 0);
 				ice.transform.right = -collisionNormal;
 				ice.transform.position = new Vector3(ice.transform.position.x, ice.transform.position.y, -0.9f);
@@ -43,31 +40,14 @@ public class FreezeWall : MonoBehaviour {
 
 		if(dropLeaves == true && leaves == null)
 		{
-			if(GetComponent<TextureSeasons>().season == 2)
+			if(manager.season == 2)
 			{
-				leaves = (GameObject)Instantiate(leavesPrefab);
+				leaves = (GameObject)Instantiate(manager.petalsPrefab);
 				leaves.transform.position = new Vector3(collisionPoint.x, collisionPoint.y, 0);
 				leaves.transform.position = new Vector3(leaves.transform.position.x, leaves.transform.position.y, -10.0f);
 				leaves.transform.parent = objects.transform;
 				Destroy(leaves, leaves.GetComponent<ParticleSystem>().startLifetime);
 			}
-		}
-
-		if(GetComponent<TextureSeasons>().season == 3)
-		{
-			rain.enableEmission = true;
-			rain2.enableEmission = true;
-			rain3.enableEmission = true;
-			if(rainLight.intensity > 0.36)
-				rainLight.intensity -= Time.deltaTime * 0.001f;
-		}
-		else
-		{
-			rain.enableEmission = false;
-			rain2.enableEmission = false;
-			rain3.enableEmission = false;
-			if(rainLight.intensity < 0.49)
-				rainLight.intensity += Time.deltaTime * 0.001f;
 		}
 
 		if(freezing == true && ice != null && ice.transform.position.z - transform.position.z >= -5.0f)
@@ -76,13 +56,13 @@ public class FreezeWall : MonoBehaviour {
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, iceColor, Time.deltaTime*0.4f);
 		}
 
-		if((freezing == false || GetComponent<TextureSeasons>().season != 1)  && ice != null && ice.transform.position.z - transform.position.z <= 0)
+		if((freezing == false || manager.season != 1)  && ice != null && ice.transform.position.z - transform.position.z <= 0)
 		{
 			ice.transform.position += new Vector3(0, 0, 0.01f);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.5f);
 		}
 
-		if((freezing == false || GetComponent<TextureSeasons>().season != 1)  && ice != null && ice.transform.position.z - transform.position.z >= -1.0f)
+		if((freezing == false || manager.season != 1)  && ice != null && ice.transform.position.z - transform.position.z >= -1.0f)
 			Destroy(ice);
 	}
 

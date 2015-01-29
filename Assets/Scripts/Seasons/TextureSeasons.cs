@@ -20,26 +20,19 @@ public class TextureSeasons : MonoBehaviour {
 	public Material spring3;
 	public Material springWall;
 
-	public float timer = 30.0f;
+	private int season;
 	private float changeSpeed = 0.01f;
-	public int season;
 	private Renderer seasonRenderer;
 
 	// Use this for initialization
 	void Start () {
 		seasonRenderer = GetComponent<Renderer>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		timer -= Time.deltaTime;
-		if(timer <= 0)
-		{
-			season++;
-			if(season == 4)
-				season = 0;
-			timer = 30.0f;
-		}
+		season = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ().season;
 		switch(season)
 		{
 		case 0:
