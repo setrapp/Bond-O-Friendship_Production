@@ -11,3 +11,8 @@ public class BondLink : MonoBehaviour {
 	public SpringJoint jointToAttachment = null;
 	public int orderLevel = 0;
 }
+
+public class BondLinkContainer
+{
+	public BondLink link = null;
+}

@@ -6,6 +6,35 @@ public class MembraneLink : BondLink {
 	public BondAttachable bondAttachable;
 	public SpringJoint[] jointsShaping;
 
+	void Update()
+	{
+		if (bondAttachable && bondAttachable.bonds.Count > 0)
+		{
+			for (int i = 0; i < bondAttachable.bonds.Count; i++)
+			{
+				Bond bond = bondAttachable.bonds[i];
+				MembraneLink nearestLink;
+				Vector3 halfWidthOffset = transform.right * 0.5f;
+				Vector3 currentPos = (bond.attachment1.position - halfWidthOffset);
+				Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
+				bond.attachment1.position = newPos;
+				if (nearestLink != this)
+				{
+					BondAttachable newAttachee = nearestLink.bondAttachable;
+					if (nearestLink == nearestLink.membrane.links[0])
+					{
+						newAttachee = nearestLink.membrane.attachment1FauxLink.bondAttachable;
+					}
+					else if (nearestLink == nearestLink.membrane.links[nearestLink.membrane.links.Count - 1])
+					{
+						newAttachee = nearestLink.membrane.attachment2FauxLink.bondAttachable;
+					}
+					bond.ReplacePartner(bondAttachable, newAttachee);
+				}
+			}
+		}
+	}
+
 	void OnCollisionEnter(Collision collision)
 	{
 		if (collision.collider.tag == "Character")
@@ -41,10 +70,11 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				bool bonded = linkAttachable.AttemptBond(partner, contactPosition, true);
+				bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition)/*contactPosition*/, true);
 				if (bonded)
 				{
 					membrane.forceFullDetail = true;
+					bondAttachable.bonds[bondAttachable.bonds.Count - 1].stats.manualAttachment1 = true;
 				}
 			}
 		}

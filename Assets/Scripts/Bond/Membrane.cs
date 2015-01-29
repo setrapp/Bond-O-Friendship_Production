@@ -16,8 +16,8 @@ public class Membrane : Bond {
 	public Vector3 startPosition2;
 	public LineRenderer smoothCornerLine1;
 	public LineRenderer smoothCornerLine2;
-	private MembraneLink attachment1FauxLink;
-	private MembraneLink attachment2FauxLink;
+	public MembraneLink attachment1FauxLink;
+	public MembraneLink attachment2FauxLink;
 	public float endpointSpring = -1;
 	private FixedJoint jointToPrevious;
 	public float fullDetailShapingForce;
@@ -33,6 +33,7 @@ public class Membrane : Bond {
 	protected override void Update()
 	{
 		base.Update();
+
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -43,7 +44,7 @@ public class Membrane : Bond {
 		{
 			SmoothToNeighbors();
 		}
-		
+
 		// Hide smoothing line if no smoothing will be down.
 		if (extraStats.smoothForce <= 0 || membranePrevious == null)
 		{
@@ -315,9 +316,6 @@ public class Membrane : Bond {
 				}
 			}
 		}
-
-		
-		
 		return nearPoints;
 	}
 
@@ -381,14 +379,12 @@ public class Membrane : Bond {
 			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
 			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
 			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
-			float bestSmoothForce = Mathf.Max(extraStats.smoothForce, membranePrevious.extraStats.smoothForce);
-			float bestFullSmoothForce = Mathf.Max(fullDetailSmoothForce, membranePrevious.fullDetailSmoothForce); ;
-			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * bestSmoothForce);
-			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * bestSmoothForce);
+			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * membranePrevious.extraStats.smoothForce);
 
 			// Pull the endpoints back towards their starting positions when accounting for level of detail.
-			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (bestFullSmoothForce - bestSmoothForce));
-			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (bestFullSmoothForce - bestSmoothForce));
+			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (fullDetailSmoothForce - extraStats.smoothForce));
+			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (membranePrevious.fullDetailSmoothForce - membranePrevious.extraStats.smoothForce));
 
 			// Ensure that the endpoints stay connected.
 			if (jointToPrevious == null)
@@ -451,6 +447,51 @@ public class Membrane : Bond {
 		smoothCornerLine2.SetWidth(smoothLineWidth1, smoothLineWidth2);
 	}
 
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint)
+	{
+		MembraneLink nearestLink;
+		return NearestNeighboredPoint(checkPoint, out nearestLink);
+	}
+
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint, out MembraneLink nearestLink)
+	{
+		BondLink nearestBondLink;
+		Vector3 nearestPoint = base.NearestPoint(checkPoint, out nearestBondLink);
+		float nearestSqrDist = (nearestPoint - checkPoint).sqrMagnitude;
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membranePrevious != null)
+		{
+			BondLink nearestLinkPrevious;
+			Vector3 nearestPointPrevious = membranePrevious.NearestPoint(checkPoint, out nearestLinkPrevious);
+			float previousSqrDist = (nearestPointPrevious - checkPoint).sqrMagnitude;
+			if (previousSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointPrevious;
+				nearestSqrDist = previousSqrDist;
+				nearestBondLink = nearestLinkPrevious;
+			}
+		}
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membraneNext != null)
+		{
+			BondLink nearestLinkNext;
+			Vector3 nearestPointNext = membraneNext.NearestPoint(checkPoint, out nearestLinkNext);
+			float nextSqrDist = (nearestPointNext - checkPoint).sqrMagnitude;
+			if (nextSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointNext;
+				nearestSqrDist = nextSqrDist;
+				nearestBondLink = nearestLinkNext;
+			}
+		}
+
+		nearestLink = nearestBondLink as MembraneLink;
+
+		return nearestPoint;
+	}
+
 	protected override float SetLevelOfDetail()
 	{
 		float detailFraction = base.SetLevelOfDetail();
@@ -494,6 +535,6 @@ public class MembraneStats
 		this.bondOnFluff = replacement.bondOnFluff;
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
-		if (fullOverwrite || replacement.smoothForce >= 0)			{	this.smoothForce = replacement.smoothForce;					}
+		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;				}
 	}
 }
