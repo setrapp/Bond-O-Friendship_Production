@@ -1,23 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class PlayerInput : MonoBehaviour {
 	public CharacterComponents character;
 	public enum Player{Player1, Player2};
 
-	public Globals.ControlScheme controlScheme;
-
 	public Player playerNumber;
-	public Globals.JoyStick joystickNumber;
 	public GameObject canvasStart;
 
 	public GameObject canvasPaused;
-
-	public bool useKeyboard = false;
-
-	public PlayerInput otherPlayerInput;
-
-	public bool sharing = false;
 
 	public GameObject geometry;
 	public float deadZone = .75f;
@@ -26,15 +18,18 @@ public class PlayerInput : MonoBehaviour {
 	private Vector3 velocityChange;
 
 
-	public bool swapJoysticks = false;
 
 	private Vector3 target;
 	public Vector3 desiredLook;
 	public bool joystickDetermined = false;
 
-	private bool paused = false;
+	//private bool paused = false;
 
 	private float i = 0;
+
+    InputDevice device;
+
+    private bool oneController;
 
 	void Awake()
 	{
@@ -46,64 +41,41 @@ public class PlayerInput : MonoBehaviour {
 
 	void Start()
 	{
-		if (otherPlayerInput == null && Globals.Instance != null)
-		{
-			if (Globals.Instance.player1 == this)
-			{
-				otherPlayerInput = Globals.Instance.player2;
-			}
-			else if (Globals.Instance.player2 == this)
-			{
-				otherPlayerInput = Globals.Instance.player1;
-			}
-		}
-
-		sharing = Globals.sharing;
-		if(playerNumber == Player.Player1)
-		{
-			joystickNumber = Globals.playerOneJoystickNumber;
-			controlScheme = Globals.playerOneControlScheme;
-		}
-		else
-		{
-			if(!sharing)
-			{
-				joystickNumber = Globals.playerTwoJoystickNumber;
-				controlScheme = Globals.playerTwoControlScheme;
-			}
-			else
-			{
-				joystickNumber = Globals.playerOneJoystickNumber;
-				controlScheme = Globals.playerTwoControlScheme;
-			}
-		}
-
 
 	}
 
-	void Update () {
+	void Update () 
+    {
+
+
+        device = playerNumber == Player.Player1 ? Globals.playerOneDevice : Globals.playerTwoDevice;
+        //device = InputManager.Devices.Count == 1 ? Globals.playerOneDevice : device;
+
+        CheckDevices();
+       // Debug.Log(device.Name);
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
 
-		if (GetPause())
+		if (device.Action4.WasPressed)
 		{
-			if (paused)
-			{
-				canvasPaused.SetActive(false);
-				Time.timeScale = 1;
-			}
-			else
-			{
-				canvasPaused.SetActive(true);
-				Time.timeScale = 0;
-			}
-
-			paused = !paused;
+            if (Globals.isPaused)
+            {
+                canvasPaused.SetActive(false);
+                Time.timeScale = 1;
+            }
+            else
+            {
+                canvasPaused.SetActive(true);
+                Time.timeScale = 0;
+            }
+            Globals.isPaused = !Globals.isPaused;
 		}
-				
-		if(!paused)
+
+
+
+        if (!Globals.isPaused)
 		{
 			AttemptFluffThrow();
 			AttemptFluffAttract();
@@ -123,31 +95,60 @@ public class PlayerInput : MonoBehaviour {
 			transform.LookAt(transform.position + velocityChange, transform.up);
 		}
 	}
-
+    
 	private Vector3 PlayerJoystickMovement()
 	{
 
-		Vector2 leftStickInput = new Vector2(GetAxisMoveHorizontal(), GetAxisMoveVertical());
+        Vector2 stickInput = Vector2.zero;
 
-		if(sharing && playerNumber == Player.Player2)
-		{
-			leftStickInput = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
-			return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisAimHorizontal(),GetAxisAimVertical(),0) : Vector3.zero;
-		}
+        //Debug.Log(device.LeftStick.Vector.ToString());
 
-		return leftStickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(GetAxisMoveHorizontal(),GetAxisMoveVertical(),0) : Vector3.zero;
+        if (oneController)
+        {
+            if(playerNumber == Player.Player1)
+            {
+                stickInput = device.LeftStick.Vector;
+                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
+            }
+            if (playerNumber == Player.Player2)
+            {
+                stickInput = device.RightStick.Vector;
+                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
+            }
+        }
+        else
+        {
+            stickInput = device.RightStick.Vector;
+
+            stickInput = device.LeftStick.Vector != Vector2.zero ? device.LeftStick.Vector : stickInput;
+
+            if (device.LeftStick.Vector != Vector2.zero)
+            {
+                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
+            }
+            else
+                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
+        }
+
+        return Vector3.zero;
 	}
-
+    
 	private void AttemptFluffAttract()
 	{
 		bool canAttract = false;
 
-		if (sharing && playerNumber == Player.Player1 && GetRightBumperAbsorb() > 0.5f)
-			canAttract = true;
-		else if (sharing && playerNumber == Player.Player2 && GetLeftBumperAbsorb() > 0.5f)
-			canAttract = true;
-		else if (!sharing && (GetAbsorb() || GetRightBumperAbsorb() > 0.5f || GetLeftBumperAbsorb() > 0.5f))
-			canAttract = true;
+        if (oneController)
+        {
+            if (playerNumber == Player.Player1 && device.LeftBumper.IsPressed)
+                canAttract = true;
+            else if (playerNumber == Player.Player2 && device.RightBumper.IsPressed)
+                canAttract = true;
+        }
+        else
+        {
+            if (device.LeftBumper.IsPressed || device.RightBumper.IsPressed)
+                canAttract = true;
+        }
 
 		if (!fireFluffReady)
 		{
@@ -164,43 +165,40 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
+    
 	private void AttemptFluffThrow()
 	{
-		Vector2 lookAt = CalculateThrowDirection();	
-
-
-		if(controlScheme == Globals.ControlScheme.triggers || sharing)
-		{
-			lookAt = Vector2.zero;
-		}
-
+        Vector2 lookAt = Vector2.zero;
 		float minToFire = deadZone;
 
-		if(!sharing && controlScheme == Globals.ControlScheme.triggers && (GetAxisTriggers() > deadZone|| GetAxisTriggers() < -deadZone))
-		{
-			lookAt = transform.forward;
-			minToFire = 0;
-		}
+        if (oneController)
+        {
+            if (playerNumber == Player.Player1)
+            {
+                if (device.LeftTrigger.WasPressed)
+                {
+                    lookAt = transform.forward;
+                    minToFire = 0;
+                }
+            }
+            else if (playerNumber == Player.Player2)
+            {
+                if (device.RightTrigger.WasPressed)
+                {
+                    lookAt = transform.forward;
+                    minToFire = 0;
+                }
+            }
+        }
+        else
+        {
+            if (device.LeftTrigger.WasPressed || device.RightTrigger.WasPressed)
+            {
+                lookAt = transform.forward;
+                minToFire = 0;
+            }
+        }
 		
-		if(sharing)
-		{
-			if(playerNumber == Player.Player1)
-			{
-				if(GetAxisLeftTrigger() > deadZone)
-				{
-					lookAt = transform.forward;
-					minToFire = 0;
-				}
-			}
-			else if(playerNumber == Player.Player2)
-			{
-				if(GetAxisRightTrigger() > deadZone)
-				{
-					lookAt = transform.forward;
-					minToFire = 0;
-				}
-			}
-		}
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
 		{
@@ -223,34 +221,50 @@ public class PlayerInput : MonoBehaviour {
 		{
 			fireFluffReady = true;
 		}
-	}
-
-	
-	#region Helper Methods
-	
-	private float GetAxisMoveHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() + "LeftStickHorizontal"); else return Input.GetAxis(joystickNumber.ToString() +"RightStickHorizontal");}
-	private float GetAxisMoveVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical");}
-	private float GetAxisAimHorizontal(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickHorizontal"); else return Input.GetAxis(joystickNumber.ToString() + "LeftStickHorizontal");}
-	private float GetAxisAimVertical(){if(!swapJoysticks)return Input.GetAxis(joystickNumber.ToString() +"RightStickVertical"); else return Input.GetAxis(joystickNumber.ToString() +"LeftStickVertical");}
-	private float GetAxisTriggers(){return Input.GetAxis(joystickNumber.ToString() + "Triggers");}
-	private float GetAxisLeftTrigger() {return Input.GetAxis(joystickNumber.ToString() + "LeftTrigger");}
-	private float GetAxisRightTrigger() {return Input.GetAxis(joystickNumber.ToString() + "RightTrigger");}
-	private float GetAxisStickThrow(){return Input.GetAxis(joystickNumber.ToString() + "StickThrow");}
-	private bool GetAbsorb() { return Input.GetButton(joystickNumber.ToString() + "Absorb");}
-	private float GetRightBumperAbsorb() { return Input.GetAxis(joystickNumber.ToString() + "RightBumperAbsorb");}
-	private float GetLeftBumperAbsorb() { return Input.GetAxis(joystickNumber.ToString() + "LeftBumperAbsorb");}
-	private bool GetPause() { return Input.GetButtonDown(joystickNumber.ToString() + "Pause");}
+    }
 
 
-	private Vector2 CalculateThrowDirection()
-	{
-		Vector2 lookAt = Vector2.zero; 
-		lookAt = new Vector2(GetAxisAimHorizontal(), GetAxisAimVertical());
+    #region Helper Methods
 
-		return lookAt;
-	}
+    private void CheckDevices()
+    {      
 
-	#endregion
+        if (InputManager.Devices.Count != Globals.numberOfControllers)
+        {
+            if (Globals.numberOfControllers < InputManager.Devices.Count)
+            {
+                Globals.numberOfControllers++;
+            }
+            else
+            {
+                canvasPaused.SetActive(true);
+                Time.timeScale = 0;
+                Globals.isPaused = true;
+            }
+        }
+
+        if (Globals.numberOfControllers == 1)
+        {
+            oneController = true;
+        }
+        else
+            oneController = false;
+
+
+        if (InputManager.Devices.Count > 1)
+        {
+            Globals.playerTwoDevice = InputManager.Devices[1];
+        }
+        else if(InputManager.Devices.Count == 1)
+        {
+            Globals.playerTwoDevice = InputManager.Devices[0];
+        }
+    }
+
+   
+
+    
+    #endregion
 
 
 
