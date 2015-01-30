@@ -3,31 +3,39 @@ using System.Collections;
 
 public class RingPulse : MonoBehaviour {
 
-	private float lifeTime;
-	private float alpha;
-	private Color mycolor;
-	private float scaleRate;
+	public float lifeTime;
+	public float alpha;
+	public Color mycolor;
+	public float scaleRate;
+	public float alphaFade;
+
 
 	// Use this for initialization
 	void Start () {
-		scaleRate = 0.1f;
-		lifeTime = 2.0f;
-		alpha = 1.0f;
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		mycolor = new Color(0.8f,0.1f,0.5f,alpha);
-
-		transform.localScale += new Vector3(scaleRate,scaleRate,0);
+		transform.localScale += new Vector3(scaleRate*Time.deltaTime,0,scaleRate*Time.deltaTime);
 		GetComponent<Renderer>().material.color = mycolor;
 		lifeTime -= Time.deltaTime;
-		alpha -= Time.deltaTime*0.3f;
+		alpha -= Time.deltaTime*alphaFade;
 		if(lifeTime <= 0)
 		{
 			Destroy(gameObject);
 		}
+
 	}
+
+	void FixedUpdate ()
+	{
+
+
+	}
+
 
 	void OnTriggerEnter(Collider collide)
 	{
