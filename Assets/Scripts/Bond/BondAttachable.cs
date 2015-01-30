@@ -93,7 +93,7 @@ public class BondAttachable : MonoBehaviour {
 		}
 	}
 
-	public bool IsBondMade(BondAttachable partner)
+	public bool IsBondMade(BondAttachable partner = null)
 	{
 		if (partner == null)
 		{
