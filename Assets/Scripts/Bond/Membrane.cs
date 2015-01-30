@@ -10,16 +10,30 @@ public class Membrane : Bond {
 	public MembraneStats extraStats;
 	public Membrane membranePrevious;
 	public Membrane membraneNext;
+	[HideInInspector]
+	public Vector3 startPosition1;
+	[HideInInspector]
+	public Vector3 startPosition2;
 	public LineRenderer smoothCornerLine1;
 	public LineRenderer smoothCornerLine2;
-	private MembraneLink attachment1FauxLink;
-	private MembraneLink attachment2FauxLink;
+	public MembraneLink attachment1FauxLink;
+	public MembraneLink attachment2FauxLink;
 	public float endpointSpring = -1;
 	private FixedJoint jointToPrevious;
+	public float fullDetailShapingForce;
+	public float fullDetailSmoothForce;
 
-	protected override void PostUpdate()
+	protected override void Start()
 	{
-		base.PostUpdate();
+		base.Start();
+		fullDetailShapingForce = extraStats.defaultShapingForce;
+		fullDetailSmoothForce = extraStats.smoothForce;
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
 		for (int i = 1; i < links.Count - 1; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
@@ -30,7 +44,7 @@ public class Membrane : Bond {
 		{
 			SmoothToNeighbors();
 		}
-		
+
 		// Hide smoothing line if no smoothing will be down.
 		if (extraStats.smoothForce <= 0 || membranePrevious == null)
 		{
@@ -53,11 +67,13 @@ public class Membrane : Bond {
 		if (startLink != null)
 		{
 			startLink.membrane = this;
+			startPosition1 = startLink.transform.position;
 		}
 		MembraneLink endLink = links[links.Count-1] as MembraneLink;
 		if (endLink != null)
 		{
 			endLink.membrane = this;
+			startPosition2 = endLink.transform.position;
 		}
 
 		// Setup faux links on attachees to allow them to be interacted with in place of endpoint links.
@@ -68,8 +84,8 @@ public class Membrane : Bond {
 			if (attachment1FauxLink.bondAttachable != null)
 			{
 				attachment1FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment1FauxLink.bondAttachable.bondOverrideStats = attachment1FauxLink.gameObject.AddComponent<BondStatsHolder>();
-				attachment1FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
+				attachment1FauxLink.bondAttachable.bondOverrideStats = attachment1FauxLink.gameObject.GetComponent<BondStatsHolder>();
+				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.Overwrite(internalBondStats.stats, true);
 				attachment1FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
@@ -80,8 +96,8 @@ public class Membrane : Bond {
 			if (attachment2FauxLink.bondAttachable != null)
 			{
 				attachment2FauxLink.bondAttachable.attachmentColor = attachmentColor;
-				attachment2FauxLink.bondAttachable.bondOverrideStats = attachment2FauxLink.gameObject.AddComponent<BondStatsHolder>();
-				attachment2FauxLink.bondAttachable.bondOverrideStats.stats = new BondStats(internalBondStats.stats);
+				attachment2FauxLink.bondAttachable.bondOverrideStats = attachment2FauxLink.gameObject.GetComponent<BondStatsHolder>();
+				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.Overwrite(internalBondStats.stats, true);
 				attachment2FauxLink.bondAttachable.bondOverrideStats.stats.attachSpring1 = endpointSpring;
 			}
 		}
@@ -177,7 +193,7 @@ public class Membrane : Bond {
 		return linkAttachable;
 	}
 
-	public bool IsBondMade(BondAttachable partner, List<Membrane> ignoreMembranes = null)
+	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
 	{
 		bool bonded = false;
 		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
@@ -300,9 +316,6 @@ public class Membrane : Bond {
 				}
 			}
 		}
-
-		
-		
 		return nearPoints;
 	}
 
@@ -330,12 +343,12 @@ public class Membrane : Bond {
 					{
 						shapingForce = 0;
 					}
-					else if (shapingPoints[i].shapingForce >= 0)
+					else if (shapingPoints[i].lodShapingForce >= 0)
 					{
-						shapingForce = shapingPoints[i].shapingForce;
+						shapingForce = shapingPoints[i].lodShapingForce;
 					}
 
-					//shapingForce /= Mathf.Pow(2, (i + 1) / 2);
+					shapingForce /= Mathf.Pow(2, (i + 1) / 2);
 
 					membraneLink.jointsShaping[i].connectedBody = connectedBody;
 					membraneLink.jointsShaping[i].spring = shapingForce;
@@ -362,25 +375,26 @@ public class Membrane : Bond {
 	{
 		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
 		{
-			Vector3 thisNearEndPos = links[0].jointNext.connectedBody.transform.position;
-			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].jointPrevious.connectedBody.transform.position;
-			Vector3 prevSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
-			attachment1.attachee.body.AddForce((prevSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+			// Pull the first endpoint of this membrane and the last endpoint of the previous towards an average position that smooths transition between the two.
+			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
+			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
+			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
+			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
+			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * membranePrevious.extraStats.smoothForce);
 
+			// Pull the endpoints back towards their starting positions when accounting for level of detail.
+			attachment1.attachee.body.AddForce((startPosition1 - attachment1.position) * (fullDetailSmoothForce - extraStats.smoothForce));
+			membranePrevious.attachment2.attachee.body.AddForce((membranePrevious.startPosition2 - membranePrevious.attachment2.position) * (membranePrevious.fullDetailSmoothForce - membranePrevious.extraStats.smoothForce));
+
+			// Ensure that the endpoints stay connected.
 			if (jointToPrevious == null)
 			{
 				jointToPrevious = attachment1.attachee.gameObject.AddComponent<FixedJoint>();
 				jointToPrevious.connectedBody = membranePrevious.attachment2.attachee.body;
 			}
 
+			// Draw a line between the endpoints to hide the gap between ending corners.
 			DrawLineFromPrevious();
-		}
-		if (membraneNext != null && links.Count > 2 && membraneNext.links.Count > 2)
-		{
-			Vector3 thisNearEndPos = links[links.Count - 1].jointPrevious.connectedBody.transform.position;
-			Vector3 nextNearEndPos = membraneNext.links[0].jointNext.connectedBody.transform.position;
-			Vector3 nextSmoothPos = (thisNearEndPos + nextNearEndPos) / 2;
-			attachment2.attachee.body.AddForce((nextSmoothPos - attachment2.position).normalized * extraStats.smoothForce);
 		}
 	}
 
@@ -394,8 +408,8 @@ public class Membrane : Bond {
 		// Find the needed end points and their adjacent links on each membrane.
 		BondLink thisEnd = links[0];
 		BondLink prevEnd = membranePrevious.links[membranePrevious.links.Count - 1];
-		Vector3 thisNearEndPos = thisEnd.jointNext.connectedBody.transform.position;
-		Vector3 prevNearEndPos = prevEnd.jointPrevious.connectedBody.transform.position;
+		Vector3 thisNearEndPos = thisEnd.linkNext.transform.position;
+		Vector3 prevNearEndPos = prevEnd.linkPrevious.transform.position;
 
 		// Compute the directions from the adjacent links to the endpoints.
 		Vector3 thisEndDir = (thisEnd.transform.position - thisNearEndPos).normalized;
@@ -431,6 +445,58 @@ public class Membrane : Bond {
 		smoothCornerLine2.SetPosition(1, smoothLineMidpoint);
 		smoothCornerLine2.SetColors(membranePrevious.attachmentColor, attachmentColor);
 		smoothCornerLine2.SetWidth(smoothLineWidth1, smoothLineWidth2);
+	}
+
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint)
+	{
+		MembraneLink nearestLink;
+		return NearestNeighboredPoint(checkPoint, out nearestLink);
+	}
+
+	public Vector3 NearestNeighboredPoint(Vector3 checkPoint, out MembraneLink nearestLink)
+	{
+		BondLink nearestBondLink;
+		Vector3 nearestPoint = base.NearestPoint(checkPoint, out nearestBondLink);
+		float nearestSqrDist = (nearestPoint - checkPoint).sqrMagnitude;
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membranePrevious != null)
+		{
+			BondLink nearestLinkPrevious;
+			Vector3 nearestPointPrevious = membranePrevious.NearestPoint(checkPoint, out nearestLinkPrevious);
+			float previousSqrDist = (nearestPointPrevious - checkPoint).sqrMagnitude;
+			if (previousSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointPrevious;
+				nearestSqrDist = previousSqrDist;
+				nearestBondLink = nearestLinkPrevious;
+			}
+		}
+
+		// Check if preious neighbor is closer to the checked point.
+		if (membraneNext != null)
+		{
+			BondLink nearestLinkNext;
+			Vector3 nearestPointNext = membraneNext.NearestPoint(checkPoint, out nearestLinkNext);
+			float nextSqrDist = (nearestPointNext - checkPoint).sqrMagnitude;
+			if (nextSqrDist < nearestSqrDist)
+			{
+				nearestPoint = nearestPointNext;
+				nearestSqrDist = nextSqrDist;
+				nearestBondLink = nearestLinkNext;
+			}
+		}
+
+		nearestLink = nearestBondLink as MembraneLink;
+
+		return nearestPoint;
+	}
+
+	protected override float SetLevelOfDetail()
+	{
+		float detailFraction = base.SetLevelOfDetail();
+		extraStats.smoothForce = fullDetailSmoothForce * detailFraction;
+		return detailFraction;
 	}
 }
 
@@ -469,6 +535,6 @@ public class MembraneStats
 		this.bondOnFluff = replacement.bondOnFluff;
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
-		if (fullOverwrite || replacement.smoothForce >= 0)			{	this.smoothForce = replacement.smoothForce;					}
+		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;				}
 	}
 }
