@@ -12,7 +12,6 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   - 145: {fileID: 14500002}
-  - 145: {fileID: 14500000}
   - 145: {fileID: 14500004}
   - 114: {fileID: 11400000}
   m_Layer: 19
@@ -174,8 +173,9 @@ MonoBehaviour:
   toPreviousCollider: {fileID: 6500002}
   toNextCollider: {fileID: 6500000}
   body: {fileID: 5400000}
-  jointPrevious: {fileID: 14500002}
-  jointNext: {fileID: 14500000}
+  linkNext: {fileID: 0}
+  linkPrevious: {fileID: 0}
+  jointToNeighbor: {fileID: 14500002}
   jointToAttachment: {fileID: 14500004}
   orderLevel: 0
 --- !u!114 &11400002
@@ -202,23 +202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attachDelegatee: {fileID: 100000}
---- !u!145 &14500000
-SpringJoint:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 0
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_Spring: 0
-  m_Damper: 0
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
 --- !u!145 &14500002
 SpringJoint:
   m_ObjectHideFlags: 1

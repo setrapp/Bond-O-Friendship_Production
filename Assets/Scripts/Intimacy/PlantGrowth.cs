@@ -54,10 +54,19 @@ public class PlantGrowth : MonoBehaviour {
 					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f));
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
-					blossoms[i].transform.position = collidedBud.transform.position + collidedBud.transform.up*(collidedBud.transform.localScale.y/2) - new Vector3(0, 0, 1);
+					blossoms[i].transform.position = buds[i].transform.position + buds[i].transform.up*(buds[i].transform.localScale.y/2) - new Vector3(0, 0, 1);
 					blossoms[i].name = "Blossom";
-					if(blossoms.Length == buds.Length)
+					blossoms[i].layer = 16;
+					if(i == buds.Length - 1 && blossoms[i] != null)
+					{
 						fullyBloomed = true;
+						for(int j = 0; j < blossoms.Length; j++)
+						{
+							Rigidbody blossomRigid = blossoms[j].AddComponent<Rigidbody>();
+							blossomRigid.useGravity = false;
+							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
+						}
+					}
 				}
 				if(fluffCount/fluffsRequiredPerBud < i + 1 && blossoms[i] != null)
 				{
