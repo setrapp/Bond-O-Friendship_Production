@@ -47,33 +47,37 @@ public class PlayerInput : MonoBehaviour {
 	void Update () 
     {
 
-
+        CheckDevices();
         device = playerNumber == Player.Player1 ? Globals.playerOneDevice : Globals.playerTwoDevice;
         //device = InputManager.Devices.Count == 1 ? Globals.playerOneDevice : device;
-
-        CheckDevices();
+        
        // Debug.Log(device.Name);
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
 
-		if (device.Action4.WasPressed)
-		{
-            if (Globals.isPaused)
-            {
-                canvasPaused.SetActive(false);
-                Time.timeScale = 1;
-            }
-            else
-            {
-                canvasPaused.SetActive(true);
-                Time.timeScale = 0;
-            }
-            Globals.isPaused = !Globals.isPaused;
-		}
+        
 
+        if ((oneController && playerNumber == Player.Player1) || !oneController)
+        {
+            if (device.Action4.WasPressed)
+            {
+                if (Globals.isPaused)
+                {
+                    canvasPaused.SetActive(false);
+                    Time.timeScale = 1;
+                }
+                else
+                {
+                    canvasPaused.SetActive(true);
+                    Time.timeScale = 0;
+                }
+                Globals.isPaused = !Globals.isPaused;
+            }
+        }
 
+        
 
         if (!Globals.isPaused)
 		{
@@ -227,8 +231,8 @@ public class PlayerInput : MonoBehaviour {
     #region Helper Methods
 
     private void CheckDevices()
-    {      
-
+    {
+        
         if (InputManager.Devices.Count != Globals.numberOfControllers)
         {
             if (Globals.numberOfControllers < InputManager.Devices.Count)
@@ -253,12 +257,15 @@ public class PlayerInput : MonoBehaviour {
 
         if (InputManager.Devices.Count > 1)
         {
+            Globals.playerOneDevice = InputManager.Devices[0];
             Globals.playerTwoDevice = InputManager.Devices[1];
         }
         else if(InputManager.Devices.Count == 1)
         {
+            Globals.playerOneDevice = InputManager.Devices[0];
             Globals.playerTwoDevice = InputManager.Devices[0];
         }
+
     }
 
    
