@@ -3,7 +3,7 @@ using XInputDotNetPure; // Required in C#
 
 public class XInputTestCS : MonoBehaviour
 {
-    bool playerIndexSet = false;
+   /* bool playerIndexSet = false;
     PlayerIndex playerIndex;
     GamePadState state;
     GamePadState prevState;
@@ -66,5 +66,5 @@ public class XInputTestCS : MonoBehaviour
         text += string.Format("\tButtons A {0} B {1} X {2} Y {3}\n", state.Buttons.A, state.Buttons.B, state.Buttons.X, state.Buttons.Y);
         text += string.Format("\tSticks Left {0} {1} Right {2} {3}\n", state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y, state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
         GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text);
-    }
+    }*/
 }

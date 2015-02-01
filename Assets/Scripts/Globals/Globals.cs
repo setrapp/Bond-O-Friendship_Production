@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class Globals : MonoBehaviour {
 	private static Globals instance = null;
@@ -26,11 +27,14 @@ public class Globals : MonoBehaviour {
 	public PlayerInput player1;
 	public PlayerInput player2;
 
-	public static ControlScheme playerOneControlScheme;
-	public static ControlScheme playerTwoControlScheme;
 
-	public static JoyStick playerOneJoystickNumber;
-	public static JoyStick playerTwoJoystickNumber;
+    public static InputDevice startingDevice;
+    public static InputDevice playerOneDevice;
+    public static InputDevice playerTwoDevice;
+
+    public static int numberOfControllers;
+
+    public static bool isPaused;
 
 	public GameObject canvasPaused;
 
