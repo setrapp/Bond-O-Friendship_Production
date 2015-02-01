@@ -148,38 +148,7 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Draw lines between bond points.
-			attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
-			for (int i = 0; i < links.Count / 2; i++)
-			{
-				attachment1.lineRenderer.SetPosition(i, links[i].transform.position);
-			}
-			attachment2.lineRenderer.SetVertexCount(links.Count / 2 + 1);
-			for (int i = 1; i < links.Count / 2 + 1; i++)
-			{
-				if (isCountEven)
-				{
-					attachment2.lineRenderer.SetPosition(i, links[i + links.Count / 2 - 1].transform.position);
-				}
-				else
-				{
-					attachment2.lineRenderer.SetPosition(i, links[i + links.Count / 2].transform.position);
-				}
-			}
-
-			if (isCountEven)
-			{
-				Vector3 fakeMidpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 -1].transform.position) / 2;
-				attachment1.lineRenderer.SetPosition(links.Count / 2, fakeMidpoint);
-				attachment2.lineRenderer.SetPosition(0, fakeMidpoint);
-			}
-			else
-			{
-				attachment1.lineRenderer.SetPosition(links.Count / 2, links[links.Count / 2].transform.position);
-				attachment2.lineRenderer.SetPosition(0, links[links.Count / 2].transform.position);
-			}
-
-			attachment1.lineRenderer.SetWidth(stats.endsWidth, actualMidWidth);
-			attachment2.lineRenderer.SetWidth(actualMidWidth, stats.endsWidth);
+			RenderBond(actualMidWidth, isCountEven);
 
 			// Disconnect if too far apart.
 			if (stats.maxDistance > 0 && BondLength >= stats.maxDistance)
@@ -188,7 +157,44 @@ public class Bond : MonoBehaviour {
 			}
 		}
 	}
-	public void BreakBond()
+
+	public virtual void RenderBond(float actualMidWidth, bool isCountEven)
+	{
+		attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
+		for (int i = 0; i < links.Count / 2; i++)
+		{
+			attachment1.lineRenderer.SetPosition(i, links[i].transform.position);
+		}
+		attachment2.lineRenderer.SetVertexCount(links.Count / 2 + 1);
+		for (int i = 1; i < links.Count / 2 + 1; i++)
+		{
+			if (isCountEven)
+			{
+				attachment2.lineRenderer.SetPosition(i, links[i + links.Count / 2 - 1].transform.position);
+			}
+			else
+			{
+				attachment2.lineRenderer.SetPosition(i, links[i + links.Count / 2].transform.position);
+			}
+		}
+
+		if (isCountEven)
+		{
+			Vector3 fakeMidpoint = (links[links.Count / 2].transform.position + links[links.Count / 2 - 1].transform.position) / 2;
+			attachment1.lineRenderer.SetPosition(links.Count / 2, fakeMidpoint);
+			attachment2.lineRenderer.SetPosition(0, fakeMidpoint);
+		}
+		else
+		{
+			attachment1.lineRenderer.SetPosition(links.Count / 2, links[links.Count / 2].transform.position);
+			attachment2.lineRenderer.SetPosition(0, links[links.Count / 2].transform.position);
+		}
+
+		attachment1.lineRenderer.SetWidth(stats.endsWidth, actualMidWidth);
+		attachment2.lineRenderer.SetWidth(actualMidWidth, stats.endsWidth);
+	}
+
+	public virtual void BreakBond()
 	{
 		BondBreaking();
 		BondAttachable attachee1 = attachment1.attachee;
