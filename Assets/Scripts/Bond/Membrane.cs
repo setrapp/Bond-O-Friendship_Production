@@ -53,6 +53,11 @@ public class Membrane : Bond {
 		}
 	}
 
+	public override void BreakBond()
+	{
+		base.BreakBond();
+	}
+
 	protected override void BondForming()
 	{
 		base.BondForming();
