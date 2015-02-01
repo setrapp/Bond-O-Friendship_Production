@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: bg1particle
-  m_Shader: {fileID: 200, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: CirclePaint
+  m_Shader: {fileID: 52, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords:
   - _LIGHTMAPPING_DYNAMIC_LIGHTMAPS
   - _UVSEC_UV1
@@ -78,32 +78,11 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _Cube
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MainBump
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _Mask
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
-          name: _Shininess
-        second: .200000003
+          name: _Cutoff
+        second: .5
       data:
         first:
           name: _AlphaTestRef
@@ -159,35 +138,7 @@ Material:
       data:
         first:
           name: _InvFade
-        second: .00999999978
-      data:
-        first:
-          name: _Stencil
-        second: 0
-      data:
-        first:
-          name: _StencilComp
-        second: 8
-      data:
-        first:
-          name: _StencilOp
-        second: 0
-      data:
-        first:
-          name: _StencilReadMask
-        second: 255
-      data:
-        first:
-          name: _StencilWriteMask
-        second: 255
-      data:
-        first:
-          name: _ColorMask
-        second: 15
-      data:
-        first:
-          name: _Focus
-        second: -100
+        second: 1
     m_Colors:
       data:
         first:
@@ -213,11 +164,3 @@ Material:
         first:
           name: _TintColor
         second: {r: .5, g: .5, b: .5, a: .5}
-      data:
-        first:
-          name: _ReflectColor
-        second: {r: 1, g: 1, b: 1, a: .5}
-      data:
-        first:
-          name: _Specular
-        second: {r: 0, g: 0, b: 0, a: 0}

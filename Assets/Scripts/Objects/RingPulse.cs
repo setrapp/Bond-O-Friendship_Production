@@ -18,7 +18,7 @@ public class RingPulse : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		mycolor = new Color(0.8f,0.1f,0.5f,alpha);
+		mycolor = new Color(1.0f,1.0f,1.0f,alpha);
 		transform.localScale += new Vector3(scaleRate*Time.deltaTime,0,scaleRate*Time.deltaTime);
 		GetComponent<Renderer>().material.color = mycolor;
 		lifeTime -= Time.deltaTime;

@@ -35,8 +35,8 @@ public class ExNode : MonoBehaviour {
 		myColor = new Color (r,g,b,a);
 		if (activated == true)
 		{
-			renderer.material.color = myColor;
-			gameObject.collider.enabled = false;
+			GetComponent<Renderer>().material.color = myColor;
+			gameObject.GetComponent<Collider>().enabled = false;
 		}
 
 	}
