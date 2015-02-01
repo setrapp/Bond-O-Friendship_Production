@@ -20,13 +20,22 @@ public class MembraneWall : MonoBehaviour {
 		{
 			float shapedDistance = 0;
 			Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-			Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
-			for (int i = 1; i < shapingIndices.Count; i++)
+
+			if (createdMembrane.shapingPoints.Count < 3)
 			{
-				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
-				startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+				shapedDistance = (createdMembrane.attachment1.position - createdMembrane.attachment2.position).magnitude;
 			}
-			shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
+			else
+			{
+				Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
+				for (int i = 1; i < shapingIndices.Count; i++)
+				{
+					shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
+					startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+				}
+				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
+			}
+
 			return shapedDistance;
 		}
 	}
@@ -51,11 +60,6 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator != null)
 		{
 			membraneCreator.createOnStart = false;
-		}
-
-		if (shapingIndices.Count != shapingPoints.Count)
-		{
-			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 	}
 
@@ -129,6 +133,13 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator == null || membraneCreator.attachable1 == null || membraneCreator.attachable2 == null)
 		{
 			return;
+		}
+
+		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+		if (shapingIndices.Count != shapingPoints.Count)// && (createdMembrane == null || shapingIndices.Count != createdMembrane.shapingPoints.Count - 2))
+		{
+			Debug.Log(shapingIndices.Count + " " + shapingPoints.Count);
+			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 
 		// Update override stats to account for starting distance between endpoints.
