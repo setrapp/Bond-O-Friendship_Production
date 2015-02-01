@@ -55,7 +55,55 @@ public class Membrane : Bond {
 
 	public override void BreakBond()
 	{
-		base.BreakBond();
+		StartCoroutine("DeconstructMembrane");
+
+		//BondBreaking();
+		BondAttachable attachee1 = attachment1.attachee;
+		BondAttachable attachee2 = attachment2.attachee;
+
+		if (attachee1 != null) { attachee1.bonds.Remove(this); }
+		if (attachee2 != null) { attachee2.bonds.Remove(this); }
+
+		//if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
+		//if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
+
+		//if (this != null && gameObject != null)
+		//{
+		//	Destroy(gameObject);
+		//}
+	}
+
+	private IEnumerator DeconstructMembrane()
+	{
+		Debug.Log("break");
+		stats.addLinkDistance = -1;
+		stats.removeLinkDistance = -1;
+
+		DestroyLink(links.Count / 2);
+		if (links.Count % 2 == 0)
+		{
+			DestroyLink((links.Count / 2));
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			yield return null;
+			DestroyLink((links.Count / 2));
+			DestroyLink((links.Count / 2));
+		}
+	}
+
+	private void DestroyLink(int indexToDestroy)
+	{
+		if (indexToDestroy >= 0 && indexToDestroy < links.Count)
+		{
+			MembraneLink linkToDestroy = links[indexToDestroy] as MembraneLink;
+			if (linkToDestroy != null)
+			{
+				Destroy(linkToDestroy);
+			}
+			links.RemoveAt(indexToDestroy);
+		}
 	}
 
 	protected override void BondForming()

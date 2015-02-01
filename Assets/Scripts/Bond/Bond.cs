@@ -59,22 +59,28 @@ public class Bond : MonoBehaviour {
 				bool bondChanged = false;
 				float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
 				float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
-				for (int i = 1; i < links.Count - 2; i++)
+				if (stats.addLinkDistance >= 0)
 				{
-					float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
-					if (sqrDist > sqrAddDist)
+					for (int i = 1; i < links.Count - 2; i++)
 					{
-						AddLink(i + 1, false);
-						bondChanged = true;
+						float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+						if (sqrDist > sqrAddDist)
+						{
+							AddLink(i + 1, false);
+							bondChanged = true;
+						}
 					}
 				}
-				for (int i = 1; i < links.Count - 2; i++)
+				if (stats.removeLinkDistance >= 0)
 				{
-					float dist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
-					if (dist < sqrRemoveDist)
+					for (int i = 1; i < links.Count - 2; i++)
 					{
-						RemoveLink(i, false);
-						bondChanged = true;
+						float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+						if (sqrDist < sqrRemoveDist)
+						{
+							RemoveLink(i, false);
+							bondChanged = true;
+						}
 					}
 				}
 				if (bondChanged)
