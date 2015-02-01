@@ -10,8 +10,8 @@ public class PlantGrowth : MonoBehaviour {
 	public GameObject collidedBud;
 
 	private int fluffCount;
-	private Color startColor;
-	private Color finalColor;
+//	private Color startColor;
+//	private Color finalColor;
 	private bool wilting;
 	private Bud[] buds;
 	private GameObject[] blossoms;
@@ -21,10 +21,10 @@ public class PlantGrowth : MonoBehaviour {
 	void Start () {
 		buds = GetComponentsInChildren<Bud>();
 		blossoms = new GameObject[buds.Length];
-		finalColor = buds[0].GetComponent<Renderer>().material.color;
-		startColor = new Color(1, 1, 1, 1);
-		for(int i = 0; i < buds.Length; i++)
-			buds[i].GetComponent<Renderer>().material.color = startColor;
+//		finalColor = buds[0].GetComponent<Renderer>().material.color;
+//		startColor = new Color(1, 1, 1, 1);
+//		for(int i = 0; i < buds.Length; i++)
+//			buds[i].GetComponent<Renderer>().material.color = startColor;
 	}
 	
 	// Update is called once per frame
