@@ -33,6 +33,6 @@ public class HaloEffect : MonoBehaviour {
 		if(fluffCountAdjust < 1)
 			fluffCountAdjust = 1;
 		fluffHandler.naturalFluffCount = fluffCountAdjust;
-		light.range = haloRange/Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position);
+		light.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));//haloRange/Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position);
 	}
 }
