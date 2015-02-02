@@ -50,42 +50,45 @@ public class Bond : MonoBehaviour {
 			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
 
 			// Mainting desired length of links by adding and removing.
-			if (links.Count < 4)
+			if (!stats.manualLinks)
 			{
-				AddLink();
-			}
-			else
-			{
-				bool bondChanged = false;
-				float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
-				float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
-				if (stats.addLinkDistance >= 0)
+				if (links.Count < 4)
 				{
-					for (int i = 1; i < links.Count - 2; i++)
+					AddLink();
+				}
+				else
+				{
+					bool bondChanged = false;
+					float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
+					float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
+					if (stats.addLinkDistance >= 0)
 					{
-						float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
-						if (sqrDist > sqrAddDist)
+						for (int i = 1; i < links.Count - 2; i++)
 						{
-							AddLink(i + 1, false);
-							bondChanged = true;
+							float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+							if (sqrDist > sqrAddDist)
+							{
+								AddLink(i + 1, false);
+								bondChanged = true;
+							}
 						}
 					}
-				}
-				if (stats.removeLinkDistance >= 0)
-				{
-					for (int i = 1; i < links.Count - 2; i++)
+					if (stats.removeLinkDistance >= 0)
 					{
-						float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
-						if (sqrDist < sqrRemoveDist)
+						for (int i = 1; i < links.Count - 2; i++)
 						{
-							RemoveLink(i, false);
-							bondChanged = true;
+							float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+							if (sqrDist < sqrRemoveDist)
+							{
+								RemoveLink(i, false);
+								bondChanged = true;
+							}
 						}
 					}
-				}
-				if (bondChanged)
-				{
-					WeightJoints();
+					if (bondChanged)
+					{
+						WeightJoints();
+					}
 				}
 			}
 
@@ -105,26 +108,29 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Direct, scale, and place link colliders to cover the surface of the bond.
-			Vector3 linkDir = Vector3.zero;
-			Vector3 linkScalePrev = Vector3.zero;
-			Vector3 linkScaleNext = Vector3.zero;
-			for (int i = 1; i < links.Count - 1; i++)
+			if (!stats.manualLinks)
 			{
-				linkDir = Vector3.zero;
-				linkScalePrev = links[i].toPreviousCollider.size;
-				linkScaleNext = links[i].toNextCollider.size;
-				linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
-				float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-				float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-				linkScalePrev.y = magFromPrevious;
-				linkScaleNext.y = magToNext;
-				links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
-				links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
-				links[i].toPreviousCollider.size = linkScalePrev;
-				links[i].toNextCollider.size = linkScaleNext;
-				links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
-				links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
-				links[i].transform.up = linkDir;
+				Vector3 linkDir = Vector3.zero;
+				Vector3 linkScalePrev = Vector3.zero;
+				Vector3 linkScaleNext = Vector3.zero;
+				for (int i = 1; i < links.Count - 1; i++)
+				{
+					linkDir = Vector3.zero;
+					linkScalePrev = links[i].toPreviousCollider.size;
+					linkScaleNext = links[i].toNextCollider.size;
+					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
+					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+					linkScalePrev.y = magFromPrevious;
+					linkScaleNext.y = magToNext;
+					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
+					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
+					links[i].toPreviousCollider.size = linkScalePrev;
+					links[i].toNextCollider.size = linkScaleNext;
+					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
+					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+					links[i].transform.up = linkDir;
+				}
 			}
 
 			// Base the width of the bond on how much has been drained beyond the partners' capacity.
@@ -200,18 +206,21 @@ public class Bond : MonoBehaviour {
 		attachment2.lineRenderer.SetWidth(actualMidWidth, stats.endsWidth);
 	}
 
-	public virtual void BreakBond()
+	public virtual void BreakBond(bool quickDestroy = false)
 	{
-		BondBreaking();
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 
 		if (attachee1 != null)	{ attachee1.bonds.Remove(this); }
 		if (attachee2 != null)	{ attachee2.bonds.Remove(this); }
 
-		if (attachee1 != null)	{ attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
-		if (attachee2 != null)	{ attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
-		
+		if (!quickDestroy)
+		{
+			BondBreaking();
+			if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
+			if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
+		}
+
 		if (this != null && gameObject != null)
 		{
 			Destroy(gameObject);
@@ -551,7 +560,7 @@ public class Bond : MonoBehaviour {
 
 	// Hooks for subclasses.
 	protected virtual void BondForming() {}
-	protected virtual void BondBreaking() {}
+	protected virtual void BondBreaking() { }
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
 }
@@ -580,8 +589,12 @@ public class BondStats
 	public float springDamper = 5;
 	public bool manualAttachment1 = false;
 	public bool manualAttachment2 = false;
+	public bool manualLinks = false;
+	[Header("Level of Detail")]
 	public float fullDetailDistance = -1;
+	[Header("Level of Detail")]
 	public float sparseDetailDistance = -1;
+	[Header("Level of Detail")]
 	public float sparseDetailFactor = -1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
