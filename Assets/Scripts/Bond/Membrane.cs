@@ -23,22 +23,27 @@ public class Membrane : Bond {
 	public float fullDetailShapingForce;
 	public float fullDetailSmoothForce;
 	private bool deconstructing = false;
+	private List<MembraneLink> breakLinks;
 
 	protected override void Start()
 	{
 		base.Start();
 		fullDetailShapingForce = extraStats.defaultShapingForce;
 		fullDetailSmoothForce = extraStats.smoothForce;
+		breakLinks = new List<MembraneLink>();
 	}
 
 	protected override void Update()
 	{
 		base.Update();
 
-		for (int i = 1; i < links.Count - 1; i++)
+		if (!deconstructing)
 		{
-			MembraneLink membraneLink = links[i] as MembraneLink;
-			ApplyShaping(membraneLink);
+			for (int i = 1; i < links.Count - 1; i++)
+			{
+				MembraneLink membraneLink = links[i] as MembraneLink;
+				ApplyShaping(membraneLink);
+			}
 		}
 
 		if (extraStats.smoothForce > 0)
@@ -56,6 +61,29 @@ public class Membrane : Bond {
 
 	public override void BreakBond(bool quickDestroy = false)
 	{
+		if (!deconstructing)
+		{
+			List<Membrane> ignoreNeighbors = new List<Membrane>();
+			ignoreNeighbors.Add(membranePrevious);
+			ignoreNeighbors.Add(membraneNext);
+
+			// Check for bonds with the players on this membrane only (ignoring neighbors).
+			
+			MembraneLink bondedLink;
+			if (IsBondMade(out bondedLink, Globals.Instance.player1.character.bondAttachable, ignoreNeighbors))
+			{
+				breakLinks.Add(bondedLink);
+			}
+			if (IsBondMade(out bondedLink, Globals.Instance.player2.character.bondAttachable, ignoreNeighbors))
+			{
+				breakLinks.Add(bondedLink);
+			}
+		}
+		BreakMembrane(quickDestroy);
+	}
+
+	public void BreakMembrane(bool quickDestroy = false)
+	{
 		if (quickDestroy)
 		{
 			base.BreakBond(true);
@@ -66,36 +94,77 @@ public class Membrane : Bond {
 		{
 			deconstructing = true;
 			stats.manualLinks = true;
-			StartCoroutine(DeconstructMembrane(0.05f));
+			StartCoroutine(DeconstructMembrane(0.01f));
 		}
+	}
+
+	public void BreakMembraneWithNeighbor(Membrane brokenNeighbor, bool quickDestroy = false)
+	{
+		if (brokenNeighbor == membranePrevious)
+		{
+			Debug.Log("break from previous");
+			breakLinks.Add(links[0] as MembraneLink);
+		}
+		if (brokenNeighbor == membraneNext)
+		{
+			Debug.Log("break from next");
+			breakLinks.Add(links[links.Count - 1] as MembraneLink);
+		}
+		
+		BreakMembrane(quickDestroy);
 	}
 
 	private IEnumerator DeconstructMembrane(float destroyInterval = 0)
 	{
+		// If no other break points have been stored, start breaking from the center.
+		if (breakLinks.Count < 1)
+		{
+			breakLinks.Add(links[links.Count / 2] as MembraneLink);
+		}
+
 		// Drop reference of membrane from the bonded attachments.
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 		if (attachee1 != null) { attachee1.bonds.Remove(this); }
 		if (attachee2 != null) { attachee2.bonds.Remove(this); }
 
-		// If an odd number of links exist, destroy the one closest to the breaking point.
-		if (links.Count % 2 != 0)
-		{
-			DestroyLink(links.Count / 2);
-		}
+		// If an odd number of links exist, prepare to destroy the one closest to the breaking point.
+		List<MembraneLink> linksToDestroy = new List<MembraneLink>();
 
 		// Destroy successive pairs, spanning out from break, of links over time.
 		int linkDestroyCount = 0;
 		while(links.Count > 0)
 		{
+			// Move link about to break to final breaking stage.
+			while(breakLinks.Count > 0)
+			{
+				linksToDestroy.Add(breakLinks[0]);
+				breakLinks.RemoveAt(0);
+			}
+
+			// Create list of links to break after the upcoming group is broken.
+			for (int i = 0; i < linksToDestroy.Count; i++)
+			{
+				if (linksToDestroy[i].linkPrevious != null)
+				{
+					breakLinks.Add(linksToDestroy[i].linkPrevious as MembraneLink);
+				}
+				if (linksToDestroy[i].linkNext != null)
+				{
+					breakLinks.Add(linksToDestroy[i].linkNext as MembraneLink);
+				}
+			}
+
+			// After releasing and regaining control, destroy all links at the final break stage.
 			yield return new WaitForSeconds(destroyInterval);
 			bool spawnFluff = extraStats.destroyedLinksPerFluff > 0 && (linkDestroyCount % extraStats.destroyedLinksPerFluff == 0);
-			DestroyLink(links.Count / 2, spawnFluff);
-			if (links.Count > 0)
+			while(linksToDestroy.Count > 0)
 			{
-				DestroyLink(links.Count / 2, spawnFluff);
-				
+				MembraneLink destroyeeLink = linksToDestroy[0];
+				linksToDestroy.RemoveAt(0);
+				DestroyLink(destroyeeLink);
 			}
+
 			linkDestroyCount++;
 		}
 
@@ -109,43 +178,50 @@ public class Membrane : Bond {
 		}
 	}
 
-	private void DestroyLink(int indexToDestroy, bool spawnFluff = false)
+	private void DestroyLink(MembraneLink linkToDestroy, bool spawnFluff = false)
 	{
-		if (indexToDestroy >= 0 && indexToDestroy < links.Count)
+		int indexToDestroy = links.IndexOf(linkToDestroy);
+		if (linkToDestroy != null && indexToDestroy >= 0 && indexToDestroy < links.Count)
 		{
-			MembraneLink linkToDestroy = links[indexToDestroy] as MembraneLink;
-			if (linkToDestroy != null)
+			// Remove the neighboring links' references to the link about to be destroyed.
+			if (linkToDestroy.linkPrevious != null)
 			{
-				// Remove the neighboring links' references to the link about to be destroyed.
-				if (linkToDestroy.linkPrevious != null)
+				if (linkToDestroy.linkPrevious.jointToNeighbor != null && linkToDestroy.linkPrevious.jointToNeighbor.connectedBody == linkToDestroy.body)
 				{
-					if (linkToDestroy.linkPrevious.jointToNeighbor != null && linkToDestroy.linkPrevious.jointToNeighbor.connectedBody == linkToDestroy.body)
-					{
-						linkToDestroy.linkPrevious.jointToNeighbor.connectedBody = null;
-					}
-					linkToDestroy.linkPrevious.linkNext = null;
+					linkToDestroy.linkPrevious.jointToNeighbor.connectedBody = null;
 				}
-				if (linkToDestroy.linkNext != null)
-				{
-					if (linkToDestroy.linkNext.jointToNeighbor != null && linkToDestroy.linkNext.jointToNeighbor.connectedBody == linkToDestroy.body)
-					{
-						linkToDestroy.linkNext.jointToNeighbor.connectedBody = null;
-					}
-					linkToDestroy.linkNext.linkPrevious = null;
-				}
-
-				// If spawning of a fluff in place of the link is desired, do so.
-				if (spawnFluff && extraStats != null && extraStats.fluffPrefab != null)
-				{
-					if (indexToDestroy != 0 && indexToDestroy != links.Count - 1)
-					{
-						GameObject.Instantiate(extraStats.fluffPrefab, linkToDestroy.transform.position, Quaternion.Euler(linkToDestroy.transform.rotation.eulerAngles + new Vector3(0, 0, 90)));
-					}
-				}
-
-				Destroy(linkToDestroy.gameObject);
+				linkToDestroy.linkPrevious.linkNext = null;
 			}
+			if (linkToDestroy.linkNext != null)
+			{
+				if (linkToDestroy.linkNext.jointToNeighbor != null && linkToDestroy.linkNext.jointToNeighbor.connectedBody == linkToDestroy.body)
+				{
+					linkToDestroy.linkNext.jointToNeighbor.connectedBody = null;
+				}
+				linkToDestroy.linkNext.linkPrevious = null;
+			}
+
+			// If spawning of a fluff in place of the link is desired, do so.
+			if (spawnFluff && extraStats != null && extraStats.fluffPrefab != null)
+			{
+				if (indexToDestroy != 0 && indexToDestroy != links.Count - 1)
+				{
+					GameObject.Instantiate(extraStats.fluffPrefab, linkToDestroy.transform.position, Quaternion.Euler(linkToDestroy.transform.rotation.eulerAngles + new Vector3(0, 0, 90)));
+				}
+			}
+			Destroy(linkToDestroy.gameObject);
 			links.RemoveAt(indexToDestroy);
+
+			// If an end has been reached, begin breaking the neighboring memebrane.
+			if (indexToDestroy == 0)
+			{
+				BreakNeighbor(membranePrevious);
+			}
+			else if (indexToDestroy == links.Count - 1)
+			{
+				Debug.Log("move to next");
+				BreakNeighbor(membraneNext);
+			}
 		}
 	}
 
@@ -202,50 +278,60 @@ public class Membrane : Bond {
 	protected override void BondBreaking()
 	{
 		base.BondBreaking();
-		if (membranePrevious != null)
-		{
-			if (membranePrevious.membranePrevious == this)
-			{
-				membranePrevious.membranePrevious = null;
-			}
-			if (membranePrevious.membraneNext == this)
-			{
-				membranePrevious.membraneNext = null;
-			}
-			Membrane breakMembrane = membranePrevious;
-			membranePrevious = null;
-			if (breakMembrane.extraStats.breakWithNeighbors)
-			{
-				breakMembrane.BreakBond();
-			}
-		}
-		if (membraneNext != null)
-		{
-			if (membraneNext.membranePrevious == this)
-			{
-				membraneNext.membranePrevious = null;
-			}
-			if (membraneNext.membraneNext == this)
-			{
-				membraneNext.membraneNext = null;
-			}
-			Membrane breakMembrane = membraneNext;
-			membraneNext = null;
-			if (breakMembrane.extraStats.breakWithNeighbors)
-			{
-				breakMembrane.BreakBond();
-			}
-		}
 
+		BreakNeighbor(membranePrevious);
+		BreakNeighbor(membraneNext);
+
+		// If desired, destroy attachments, unless they are used by neighbors.
 		if (extraStats.breakDestroyAttachments)
 		{
 			if (attachment1 != null && attachment1.attachee != null)
 			{
-				Destroy(attachment1.attachee.gameObject);
+				if ((membranePrevious == null || (membranePrevious.attachment1.attachee != attachment1.attachee && membranePrevious.attachment2.attachee != attachment1.attachee)) &&
+					(membraneNext == null || (membraneNext.attachment1.attachee != attachment1.attachee && membraneNext.attachment2.attachee != attachment1.attachee)))
+				{
+					Destroy(attachment1.attachee.gameObject);
+				}
 			}
 			if (attachment2 != null && attachment2.attachee != null)
 			{
-				Destroy(attachment2.attachee.gameObject);
+				if ((membranePrevious == null || (membranePrevious.attachment1.attachee != attachment2.attachee && membranePrevious.attachment2.attachee != attachment2.attachee)) &&
+					(membraneNext == null || (membraneNext.attachment2.attachee != attachment1.attachee && membraneNext.attachment2.attachee != attachment2.attachee)))
+				{
+					Destroy(attachment2.attachee.gameObject);
+				}
+			}
+		}
+
+		membranePrevious = membraneNext = null;
+
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	private void BreakNeighbor(Membrane neighbor)
+	{
+		if (neighbor == null || (neighbor != membranePrevious && neighbor != membraneNext))
+		{
+			return;
+		}
+
+		if ((neighbor.membranePrevious == this || neighbor.membraneNext == this))
+		{
+			if (neighbor.extraStats.breakWithNeighbors)
+			{
+				neighbor.BreakMembraneWithNeighbor(this);
+			}
+
+			if (neighbor.membranePrevious == this)
+			{
+				neighbor.membranePrevious = null;
+			}
+			if (neighbor.membraneNext == this)
+			{
+				neighbor.membraneNext = null;
 			}
 		}
 	}
@@ -291,26 +377,40 @@ public class Membrane : Bond {
 
 	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
 	{
+		MembraneLink bondedLink;
+		return IsBondMade(out bondedLink, partner, ignoreMembranes);
+	}
+
+	public bool IsBondMade(out MembraneLink bondedLink, BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
+	{
+		bondedLink = null;
 		bool bonded = false;
 		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
 		{
+			bondedLink = links[0] as MembraneLink;
 			bonded = true;
 		}
 		else if (attachment2FauxLink != null && attachment2FauxLink.bondAttachable != null && attachment2FauxLink.bondAttachable.IsBondMade(partner))
 		{
+			bondedLink = links[links.Count - 1] as MembraneLink;
 			bonded = true;
 		}
-		for (int i = 0; i < links.Count && !bonded; i++)
+		else
 		{
-			MembraneLink membraneLink = links[i] as MembraneLink;
-			if (membraneLink != null && membraneLink.bondAttachable != null && membraneLink.bondAttachable.IsBondMade(partner))
+			for (int i = 0; i < links.Count && !bonded; i++)
 			{
-				bonded = true;
+				MembraneLink membraneLink = links[i] as MembraneLink;
+				if (membraneLink != null && membraneLink.bondAttachable != null && membraneLink.bondAttachable.IsBondMade(partner))
+				{
+					bondedLink = links[i] as MembraneLink;
+					bonded = true;
+				}
 			}
 		}
+		
 
 		if (!bonded && extraStats.considerNeighborBonds)
-		{ 
+		{
 			if (ignoreMembranes == null)
 			{
 				ignoreMembranes = new List<Membrane>();
@@ -318,13 +418,13 @@ public class Membrane : Bond {
 			ignoreMembranes.Add(this);
 
 			bool previousBondMade = false, nextBondMade = false;
-			if(membranePrevious != null && !ignoreMembranes.Contains(membranePrevious))
+			if (membranePrevious != null && !ignoreMembranes.Contains(membranePrevious))
 			{
-				previousBondMade = membranePrevious.IsBondMade(partner, ignoreMembranes);
+				previousBondMade = membranePrevious.IsBondMade(out bondedLink, partner, ignoreMembranes);
 			}
 			if (membraneNext != null && !ignoreMembranes.Contains(membraneNext))
 			{
-				nextBondMade = membraneNext.IsBondMade(partner, ignoreMembranes);
+				nextBondMade = membraneNext.IsBondMade(out bondedLink, partner, ignoreMembranes);
 			}
 			bonded = bonded || previousBondMade || nextBondMade;
 		}
@@ -469,7 +569,7 @@ public class Membrane : Bond {
 
 	private void SmoothToNeighbors()
 	{
-		if (membranePrevious != null && links.Count > 2 && membranePrevious.links.Count > 2)
+		if (membranePrevious != null && (links[0] != null && links[0].linkNext != null) && (membranePrevious.links[membranePrevious.links.Count - 1] != null && membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious != null))
 		{
 			// Pull the first endpoint of this membrane and the last endpoint of the previous towards an average position that smooths transition between the two.
 			Vector3 thisNearEndPos = links[0].linkNext.transform.position;

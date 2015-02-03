@@ -205,4 +205,13 @@ public class MembraneWall : MonoBehaviour {
 			membraneCreator.createdBond.transform.parent = transform;
 		}
 	}
+
+	private void MembraneBroken(Membrane brokenMembrane)
+	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
+		Destroy(gameObject);
+	}
 }

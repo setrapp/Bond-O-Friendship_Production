@@ -46,9 +46,6 @@ public class Bond : MonoBehaviour {
 		{
 			bool isCountEven = links.Count % 2 == 0;
 
-			// Round the count of links down to an odd number.
-			int oddLinkCount = (links.Count % 2 == 0) ? links.Count - 1 : links.Count;
-
 			// Mainting desired length of links by adding and removing.
 			if (!stats.manualLinks)
 			{
@@ -149,8 +146,11 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Place attachment points with attached characters.
-			links[0].transform.position = attachment1.position;
-			links[links.Count - 1].transform.position = attachment2.position;
+			if (links.Count > 1)
+			{
+				links[0].transform.position = attachment1.position;
+				links[links.Count - 1].transform.position = attachment2.position;
+			}
 
 			// Ensure smooth transition between the two lines at the center.
 			if (!isCountEven && links.Count > 2)
@@ -172,6 +172,11 @@ public class Bond : MonoBehaviour {
 
 	public virtual void RenderBond(float actualMidWidth, bool isCountEven)
 	{
+		if (links.Count < 2)
+		{
+			return;
+		}
+
 		attachment1.lineRenderer.SetVertexCount(links.Count / 2 + 1);
 		for (int i = 0; i < links.Count / 2; i++)
 		{
@@ -457,9 +462,15 @@ public class Bond : MonoBehaviour {
 	{
 		nearestLink = null;
 
-		if (links.Count < 2)
+		if (links.Count < 1)
 		{
+			Debug.LogError("Attempting to find nearest point on bond with no links.");
 			return Vector3.zero;
+		}
+		if (links.Count == 1)
+		{
+			nearestLink = links[0];
+			return links[0].transform.position;
 		}
 
 		int nearIndex = 0;
@@ -548,6 +559,11 @@ public class Bond : MonoBehaviour {
 
 	private void ApplyLevelOfDetail(float detailFraction)
 	{
+		if (links.Count < 2)
+		{
+			return;
+		}
+
 		stats.addLinkDistance = fullDetailAddDistance / detailFraction;
 		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
 		for (int i = 0; i < links.Count; i++)
