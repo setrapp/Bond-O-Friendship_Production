@@ -8,23 +8,28 @@ public class PlantGrowth : MonoBehaviour {
 	public int fluffsRequiredPerBud;
 	public bool collided;
 	public GameObject collidedBud;
+	public Material plantColor;
 
 	private int fluffCount;
-//	private Color startColor;
-//	private Color finalColor;
 	private bool wilting;
 	private Bud[] buds;
 	private GameObject[] blossoms;
 	private bool fullyBloomed;
+	private float colorValue;
+	private Material plantColorCopy;
+
 
 	// Use this for initialization
 	void Start () {
 		buds = GetComponentsInChildren<Bud>();
 		blossoms = new GameObject[buds.Length];
-//		finalColor = buds[0].GetComponent<Renderer>().material.color;
-//		startColor = new Color(1, 1, 1, 1);
-//		for(int i = 0; i < buds.Length; i++)
-//			buds[i].GetComponent<Renderer>().material.color = startColor;
+		plantColorCopy = new Material(plantColor);
+		//plantColorCopy.CopyPropertiesFromMaterial(plantColor);
+		MeshRenderer[] childRenders = GetComponentsInChildren<MeshRenderer>();
+		for(int i = 0; i < childRenders.Length; i++)
+		{
+			childRenders[i].material = plantColorCopy;
+		}
 	}
 	
 	// Update is called once per frame
@@ -80,6 +85,8 @@ public class PlantGrowth : MonoBehaviour {
 					blossoms[i] = null;
 				}
 			}
+			colorValue = (float)fluffCount/(fluffsRequiredPerBud*buds.Length);
+			plantColorCopy.color = new Color(colorValue, colorValue, colorValue);
 		}
 	}
 }

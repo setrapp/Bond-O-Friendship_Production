@@ -8,7 +8,7 @@ public class HaloEffect : MonoBehaviour {
 	private Light light;
 
 	public int fluffMax = 10;
-	public float haloRange = 8;
+	public float haloRange = 9;
 
 	// Use this for initialization
 	void Start () {
@@ -29,10 +29,10 @@ public class HaloEffect : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		fluffCountAdjust = (int)Mathf.Round(fluffMax/Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
+		fluffCountAdjust = (int)Mathf.Round(fluffMax - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
 		if(fluffCountAdjust < 1)
 			fluffCountAdjust = 1;
 		fluffHandler.naturalFluffCount = fluffCountAdjust;
-		light.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));//haloRange/Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position);
+		light.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
 	}
 }
