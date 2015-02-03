@@ -6,12 +6,13 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: black-texture
-  m_Shader: {fileID: 4800000, guid: 24bd1aee4fc840e44b7b1c1e89dd6daf, type: 3}
+  m_Name: black-texture 1
+  m_Shader: {fileID: 10751, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords:
   - _LIGHTMAPPING_DYNAMIC_LIGHTMAPS
   - _UVSEC_UV1
-  m_CustomRenderQueue: -1
+  - _ALPHABLEND_ON
+  m_CustomRenderQueue: 3000
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
@@ -81,6 +82,10 @@ Material:
     m_Floats:
       data:
         first:
+          name: _Cutoff
+        second: .0130000003
+      data:
+        first:
           name: _AlphaTestRef
         second: .5
       data:
@@ -90,11 +95,11 @@ Material:
       data:
         first:
           name: _SrcBlend
-        second: 1
+        second: 5
       data:
         first:
           name: _DstBlend
-        second: 0
+        second: 10
       data:
         first:
           name: _Parallax
@@ -102,7 +107,7 @@ Material:
       data:
         first:
           name: _ZWrite
-        second: 1
+        second: 0
       data:
         first:
           name: _Glossiness
@@ -126,7 +131,7 @@ Material:
       data:
         first:
           name: _Mode
-        second: 0
+        second: 2
       data:
         first:
           name: _EmissionScaleUI
@@ -139,7 +144,7 @@ Material:
       data:
         first:
           name: _EmissionColor
-        second: {r: 0, g: 0, b: 0, a: 1}
+        second: {r: 0, g: 0, b: 0, a: .99999994}
       data:
         first:
           name: _SpecularColor
