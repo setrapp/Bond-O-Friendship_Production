@@ -15,7 +15,7 @@ public class TriangleFade : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(0.6f, 0.5f, 0.7f, timer);
+		myColor = new Color(0.6f, 0.6f, 0.8f, timer);
 		GetComponent<Renderer>().material.color = myColor;
 		if(waitPad.GetComponent<WaitPad>().activated)
 		{
