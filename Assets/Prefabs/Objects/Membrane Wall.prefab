@@ -34,7 +34,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +100,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.8742027, y: -80.0762253, z: 0}
+  m_LocalPosition: {x: 0, y: 7.34000015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -133,7 +133,7 @@ Transform:
   m_Father: {fileID: 400002}
   m_RootOrder: 1
 --- !u!23 &2300000
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -142,18 +142,24 @@ Renderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2300002
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -162,14 +168,20 @@ Renderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300000
@@ -385,11 +397,14 @@ MonoBehaviour:
   createOnStart: 1
   wallIsCentered: 1
   membraneDirection: {x: 1, y: 0, z: 0}
-  membraneLength: 10
+  membraneLength: 50
   defaultShapingForce: -1
   shapingPointPrefab: {fileID: 100000, guid: 5f3569abbc25275498bbd3b3daed0dbb, type: 2}
   shapingPoints: []
-  relativeMaxDistance: 2
+  shapingIndices: 
+  requiredPlayersToBreak: 0
+  relativeMaxDistance: 1.29999995
+  relativeRequiredAdd: -1
   currentLength: 0
   relativeActualDistance: 0
 --- !u!114 &11400016
@@ -407,13 +422,16 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: -1
-    relativeWarningDistance: .5
+    relativeWarningDistance: -1
     endsWidth: 1
     midWidth: .800000012
-    addLinkDistance: .5
-    removeLinkDistance: .300000012
-    springForce: 150
+    addLinkDistance: 1
+    removeLinkDistance: .5
+    springForce: 25
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -436,6 +454,8 @@ MonoBehaviour:
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
     smoothForce: 20
+    fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+    destroyedLinksPerFluff: 1
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -458,6 +478,9 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -483,6 +506,9 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -508,6 +534,9 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -548,4 +577,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100002}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

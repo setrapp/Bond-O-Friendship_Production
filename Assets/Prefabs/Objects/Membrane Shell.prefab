@@ -447,7 +447,7 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 0
-  relativeMaxDistance: -1
+  relativeMaxDistance: 1.08000004
   relativeRequiredAdd: -1
   currentLength: 0
   relativeActualDistance: 0
@@ -466,15 +466,16 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: -1
-    relativeWarningDistance: .5
+    relativeWarningDistance: -1
     endsWidth: 1
     midWidth: .800000012
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    springForce: 150
+    springForce: 10
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: 10
     sparseDetailFactor: .100000001
@@ -491,12 +492,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     defaultShapingForce: .25
-    bondOnContact: 0
+    bondOnContact: 1
     bondOnFluff: 1
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
     smoothForce: 20
+    fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
+    destroyedLinksPerFluff: 1
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -536,6 +539,7 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -563,6 +567,7 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -590,6 +595,7 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1

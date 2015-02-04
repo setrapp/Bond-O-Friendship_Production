@@ -23,7 +23,9 @@ public class Membrane : Bond {
 	public float fullDetailShapingForce;
 	public float fullDetailSmoothForce;
 	private bool deconstructing = false;
+	//private float destroyedLinksPerFluff = 0;
 	private List<MembraneLink> breakLinks;
+	private List<LineRenderer> breakLines;
 
 	protected override void Start()
 	{
@@ -102,12 +104,10 @@ public class Membrane : Bond {
 	{
 		if (brokenNeighbor == membranePrevious)
 		{
-			Debug.Log("break from previous");
 			breakLinks.Add(links[0] as MembraneLink);
 		}
 		if (brokenNeighbor == membraneNext)
 		{
-			Debug.Log("break from next");
 			breakLinks.Add(links[links.Count - 1] as MembraneLink);
 		}
 		
@@ -116,6 +116,35 @@ public class Membrane : Bond {
 
 	private IEnumerator DeconstructMembrane(float destroyInterval = 0)
 	{
+		// TODO base destroyedLinksPerFluff off of a percentage of links before the break began.
+		//destroyedLinksPerFluff = links.Count * extraStats.destroyedLinksPerFluff;
+
+		// Prepare neighbors to fill be broken while this is deconstructing.
+		if (extraStats.considerNeighborBonds)
+		{
+			if (membranePrevious != null)
+			{
+				membranePrevious.forceFullDetail = true;
+			}
+			if (membraneNext != null)
+			{
+				membraneNext.forceFullDetail = true;
+			}
+		}
+
+		// Prepare to draw lines between each break, requiring one more line than break.
+		breakLines = new List<LineRenderer>();
+		breakLines.Add(attachment1.lineRenderer);
+		breakLines.Add(attachment2.lineRenderer);
+		for (int i = 2; i < breakLinks.Count + 1; i++)
+		{
+			GameObject newLineObject = GameObject.Instantiate(breakLines[0].gameObject);
+			LineRenderer newLineRenderer = newLineObject.GetComponent<LineRenderer>();
+			newLineRenderer.transform.parent = breakLines[0].transform.parent;
+			newLineRenderer.SetVertexCount(0);
+			breakLines.Add(newLineRenderer);
+		}
+
 		// If no other break points have been stored, start breaking from the center.
 		if (breakLinks.Count < 1)
 		{
@@ -209,19 +238,82 @@ public class Membrane : Bond {
 					GameObject.Instantiate(extraStats.fluffPrefab, linkToDestroy.transform.position, Quaternion.Euler(linkToDestroy.transform.rotation.eulerAngles + new Vector3(0, 0, 90)));
 				}
 			}
+
+			bool destroyingStartLink = (linkToDestroy == attachment1.attachedLink);
+			bool destroyingEndLink = (linkToDestroy == attachment2.attachedLink);
+
 			Destroy(linkToDestroy.gameObject);
 			links.RemoveAt(indexToDestroy);
 
 			// If an end has been reached, begin breaking the neighboring memebrane.
-			if (indexToDestroy == 0)
+			if (destroyingStartLink)
 			{
+				attachment1.attachedLink = null;
+				smoothCornerLine1.SetVertexCount(0);
+				smoothCornerLine2.SetVertexCount(0);
 				BreakNeighbor(membranePrevious);
 			}
-			else if (indexToDestroy == links.Count - 1)
+			else if (destroyingEndLink)
 			{
-				Debug.Log("move to next");
+				attachment2.attachedLink = null;
 				BreakNeighbor(membraneNext);
 			}
+			
+		}
+	}
+
+	public override void RenderBond(float actualMidWidth, bool isCountEven)
+	{
+		// If not in the process of breaking, render lines the usual way.
+		if (!deconstructing || breakLines == null || breakLines.Count == 0)
+		{
+			base.RenderBond(actualMidWidth, isCountEven);
+			return;
+		}
+
+		// Remove all lines if one or fewer links exists.
+		if (links.Count < 2)
+		{
+			for (int i = 0; i < breakLines.Count; i++)
+			{
+				breakLines[0].SetVertexCount(0);
+			}
+			return;
+		}
+
+		// Determine how many links are covered in each line, from break to break.
+		int[] lineSizes = new int[breakLines.Count];
+		int[] startingIndices = new int[breakLines.Count];
+		startingIndices[0] = 0;
+		for (int i = 0; i < breakLines.Count; i++)
+		{
+			breakLines[i].SetVertexCount(0);
+			bool breakFound = false;
+			for (int j = startingIndices[i]; j < links.Count && !breakFound; j++)
+			{
+				// If the next link does not exist, either a break or an endpoint has been found, so end line.
+				if (links[j].linkNext == null)
+				{
+					lineSizes[i] = (j - startingIndices[i]) + 1;
+					breakLines[i].SetVertexCount(lineSizes[i]);
+					if (i < startingIndices.Length - 1)
+					{
+						startingIndices[i + 1] = j + 1;
+					}
+					breakFound = true;
+				}
+			}
+		}
+
+		// Draw lines at link positions, leaving broken links unrendered.
+		for (int i = 0; i < breakLines.Count; i++)
+		{
+			for(int j = 0; j < lineSizes[i]; j++)
+			{
+				Vector3 vertPos = links[startingIndices[i] + j].transform.position;
+				breakLines[i].SetPosition(j, vertPos);
+			}
+			breakLines[i].SetWidth(stats.endsWidth, stats.endsWidth);
 		}
 	}
 
@@ -235,13 +327,13 @@ public class Membrane : Bond {
 		}
 
 		// Setup endpoint links.
-		MembraneLink startLink = links[0] as MembraneLink;
+		MembraneLink startLink = attachment1.attachedLink as MembraneLink;
 		if (startLink != null)
 		{
 			startLink.membrane = this;
 			startPosition1 = startLink.transform.position;
 		}
-		MembraneLink endLink = links[links.Count-1] as MembraneLink;
+		MembraneLink endLink = attachment2.attachedLink as MembraneLink;
 		if (endLink != null)
 		{
 			endLink.membrane = this;
@@ -569,11 +661,12 @@ public class Membrane : Bond {
 
 	private void SmoothToNeighbors()
 	{
-		if (membranePrevious != null && (links[0] != null && links[0].linkNext != null) && (membranePrevious.links[membranePrevious.links.Count - 1] != null && membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious != null))
+		if (membranePrevious != null && (attachment1.attachedLink != null && attachment1.attachedLink.linkNext != null) &&
+			(membranePrevious.attachment2.attachedLink != null && membranePrevious.attachment2.attachedLink.linkPrevious != null))
 		{
 			// Pull the first endpoint of this membrane and the last endpoint of the previous towards an average position that smooths transition between the two.
-			Vector3 thisNearEndPos = links[0].linkNext.transform.position;
-			Vector3 prevNearEndPos = membranePrevious.links[membranePrevious.links.Count - 1].linkPrevious.transform.position;
+			Vector3 thisNearEndPos = attachment1.attachedLink.linkNext.transform.position;
+			Vector3 prevNearEndPos = membranePrevious.attachment2.attachedLink.linkPrevious.transform.position;
 			Vector3 desiredSmoothPos = (thisNearEndPos + prevNearEndPos) / 2;
 			attachment1.attachee.body.AddForce((desiredSmoothPos - attachment1.position).normalized * extraStats.smoothForce);
 			membranePrevious.attachment2.attachee.body.AddForce((desiredSmoothPos - membranePrevious.attachment2.position).normalized * membranePrevious.extraStats.smoothForce);
@@ -602,8 +695,8 @@ public class Membrane : Bond {
 		}
 
 		// Find the needed end points and their adjacent links on each membrane.
-		BondLink thisEnd = links[0];
-		BondLink prevEnd = membranePrevious.links[membranePrevious.links.Count - 1];
+		BondLink thisEnd = attachment1.attachedLink;
+		BondLink prevEnd = membranePrevious.attachment2.attachedLink;
 		Vector3 thisNearEndPos = thisEnd.linkNext.transform.position;
 		Vector3 prevNearEndPos = prevEnd.linkPrevious.transform.position;
 

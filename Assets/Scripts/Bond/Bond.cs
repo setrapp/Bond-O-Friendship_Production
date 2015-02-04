@@ -148,8 +148,15 @@ public class Bond : MonoBehaviour {
 			// Place attachment points with attached characters.
 			if (links.Count > 1)
 			{
-				links[0].transform.position = attachment1.position;
-				links[links.Count - 1].transform.position = attachment2.position;
+				if (attachment1.attachedLink != null)
+				{
+					attachment1.attachedLink.transform.position = attachment1.position;
+				}
+				if (attachment2.attachedLink != null)
+				{
+					attachment2.attachedLink.transform.position = attachment2.position;
+				}
+				
 			}
 
 			// Ensure smooth transition between the two lines at the center.
@@ -174,6 +181,8 @@ public class Bond : MonoBehaviour {
 	{
 		if (links.Count < 2)
 		{
+			attachment1.lineRenderer.SetVertexCount(0);
+			attachment2.lineRenderer.SetVertexCount(0);
 			return;
 		}
 
@@ -237,10 +246,12 @@ public class Bond : MonoBehaviour {
 		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
 
 		attachment1.attachee = attachee1;
+		attachment1.attachedLink = links[0];
 		attachment1.position = attachPoint1;
 		attachment1.offset = attachee1.transform.InverseTransformDirection(attachPoint1 - attachee1.transform.position);
 
 		attachment2.attachee = attachee2;
+		attachment2.attachedLink = links[1];
 		attachment2.position = attachPoint2;
 		attachment2.offset = attachee2.transform.InverseTransformDirection(attachPoint2 - attachee2.transform.position);
 
@@ -251,16 +262,18 @@ public class Bond : MonoBehaviour {
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
-		links[0].transform.position = attachment1.position;
-		links[1].transform.position = attachment2.position;
 
-		if (links[0].jointToNeighbor != null)
+
+		attachment1.attachedLink.transform.position = attachment1.position;
+		attachment2.attachedLink.transform.position = attachment2.position;
+
+		if (attachment1.attachedLink.jointToNeighbor != null)
 		{
-			links[0].jointToNeighbor.connectedBody = links[1].body;
+			attachment1.attachedLink.jointToNeighbor.connectedBody = attachment2.attachedLink.body;
 		}
-		if (links[1].jointToNeighbor != null)
+		if (attachment2.attachedLink.jointToNeighbor != null)
 		{
-			links[1].jointToNeighbor.connectedBody = links[0].body;
+			attachment2.attachedLink.jointToNeighbor.connectedBody = attachment1.attachedLink.body;
 		}
 
 		WeightJoints();
@@ -585,6 +598,7 @@ public class Bond : MonoBehaviour {
 public class BondAttachment
 {
 	public BondAttachable attachee;
+	public BondLink attachedLink;
 	public Vector3 position;
 	public Vector3 offset;
 	public LineRenderer lineRenderer;
