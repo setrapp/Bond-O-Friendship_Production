@@ -1,23 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FadeOut : MonoBehaviour {
-	
+public class TriangleFade : MonoBehaviour {
+
 	private float timer;
 	private Color myColor;
-	public bool fadeNow = false;
-
+	public GameObject waitPad;
+	
 	// Use this for initialization
 	void Start () {
-		timer = 1.0f;
-	
+		timer = 0.7f;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(1.0f, 1.0f, 1.0f, timer);
+		myColor = new Color(0.6f, 0.5f, 0.7f, timer);
 		GetComponent<Renderer>().material.color = myColor;
-		if(fadeNow == true)
+		if(waitPad.GetComponent<WaitPad>().activated)
 		{
 			timer -= Time.deltaTime;
 		}
@@ -25,16 +25,7 @@ public class FadeOut : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
-	
+		
 	}
 
-	void OnTriggerExit(Collider collide)
-	{
-		if(collide.gameObject.name == "EmptyTrigger")
-		{
-			//print ("Fade");
-			fadeNow = true;
-		}
-	}
 }
-

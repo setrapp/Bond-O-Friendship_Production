@@ -24,7 +24,10 @@ public class Paint : MonoBehaviour {
 	void Update () {
 		paintJitter = Random.Range(-0.5f,0.5f);
 		randRot = Random.Range(0,360);
-		paintColor = new Color(0.5f, 0.6f, 0.05f);
+		if(gameObject.name == "Player 1")
+		{
+		paintColor = new Color(0.2f,0.1f,0.9f);
+		}
 		paintPos = new Vector3(transform.position.x+paintJitter, transform.position.y+paintJitter, transform.position.z+5.0f);
 
 		if (painting == true)

@@ -18,15 +18,25 @@ public class ExNode : MonoBehaviour {
 
 	public float ScaleRate;
 	public float LifeTime;
-	
+
+	private float scalerate;
+	private float lifetime;
+	private float alphafade;
+	private float alpha;
+
 	// Use this for initialization
 	void Start () {
 		triggerRipple = true;
 		activated = false;
-		r = 0.0f;
-		g = 0.2f;
-		b = 0.5f;
+		r = 0.25f;
+		g = 0.0f;
+		b = 0.75f;
 		a = 1.0f;
+		GetComponent<Renderer>().material.color = Color.white;
+		scalerate = 10.0f;
+		lifetime = 3.0f;
+		alpha = 1.0f;
+		alphafade = 0.5f;
 
 	}
 	
@@ -37,6 +47,7 @@ public class ExNode : MonoBehaviour {
 		{
 			GetComponent<Renderer>().material.color = myColor;
 			gameObject.GetComponent<Collider>().enabled = false;
+			a -= Time.deltaTime*2.0f;
 		}
 
 	}
@@ -47,43 +58,50 @@ public class ExNode : MonoBehaviour {
 		//print ("General");
 		if(collide.gameObject.name == "Player 1")
 		{
-			FirePulse();
+			FirePulse(scalerate,lifetime,alpha,alphafade);
 			activated = true;
 		}
 		if(collide.gameObject.name == "Player 2")
 		{
-			FirePulse();
+			FirePulse(scalerate,lifetime,alpha,alphafade);
 			activated = true;
 		}
 		if(collide.gameObject.tag == "Pulse")
 		{
-			print ("HIT");
+			//print ("HIT");
 			MiniFire();
 			activated = true;
 		}
-
-
+		if(collide.gameObject.tag == "Bond" )
+		{
+			FirePulse(11.0f,5.0f,1.0f,0.2f);
+			activated = true;
+		}
+		
 
 	}
 
-	void FirePulse()
+	void FirePulse(float a, float b, float c, float d)
 	{
-		rippleObj = Instantiate(ripplePrefab,transform.position,Quaternion.Euler(new Vector3(90,0,0))) as GameObject;
-		rippleObj.GetComponent<RingPulse>().scaleRate = 10.0f;
-		rippleObj.GetComponent<RingPulse>().lifeTime = 3.0f;
-		rippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-		rippleObj.GetComponent<RingPulse>().alphaFade = 0.2f;
+		rippleObj = Instantiate(ripplePrefab,transform.position,Quaternion.identity) as GameObject;
+		rippleObj.GetComponent<RingPulse>().scaleRate = a;
+		rippleObj.GetComponent<RingPulse>().lifeTime = b;
+		rippleObj.GetComponent<RingPulse>().alpha = c;
+		rippleObj.GetComponent<RingPulse>().alphaFade = d;
+		rippleObj.GetComponent<RingPulse>().smallRing = false;
+
 
 		//triggerRipple = false;
 	}
 
 	void MiniFire()
 	{
-		smallrippleObj = Instantiate(smallripplePrefab,transform.position,Quaternion.Euler(new Vector3(90,0,0))) as GameObject;
+		smallrippleObj = Instantiate(smallripplePrefab,transform.position,Quaternion.identity) as GameObject;
 		smallrippleObj.GetComponent<RingPulse>().scaleRate = 8.0f;
 		smallrippleObj.GetComponent<RingPulse>().lifeTime = 1.5f;
 		smallrippleObj.GetComponent<RingPulse>().alpha = 1.0f;
 		smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
+		smallrippleObj.GetComponent<RingPulse>().smallRing = true;
 		//print ("fire!");
 	}
 }

@@ -9,13 +9,14 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
+  - 65: {fileID: 6500000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400000}
-  - 135: {fileID: 13500000}
   - 54: {fileID: 5400000}
-  m_Layer: 0
-  m_Name: ExNode
-  m_TagString: Untagged
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  m_Layer: 23
+  m_Name: PushBlock
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,8 +28,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -55.3569984, y: -26, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 572.840027, y: -201.089996, z: 0}
+  m_LocalScale: {x: 4.80000019, y: 4.80000019, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -46,7 +47,7 @@ MeshRenderer:
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: c82601fa079d4d04591c3d58ee4829c9, type: 2}
+  - {fileID: 2100000, guid: 0956ab0a58af04f4d8c1d99d1ad06ff8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -64,7 +65,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -72,14 +73,26 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: .0500000007
+  m_Mass: 10000
+  m_Drag: 1
+  m_AngularDrag: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 124
   m_CollisionDetection: 0
+--- !u!65 &6500000
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,27 +101,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b593024b6ea6a1b4ca11c4c0de6c189d, type: 3}
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  triggerRipple: 0
-  ripplePrefab: {fileID: 100000, guid: 31b42a407d153854981a21f00a1b2909, type: 2}
-  smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
-  ScaleRate: 0
-  LifeTime: 0
---- !u!135 &13500000
-SphereCollider:
+  pullableBody: {fileID: 5400000}
+  noKinematicOnPull: 0
+  allowSway: 1
+  bodyMassFactor: .5
+  pullMass: -1
+  maxPullForce: 100
+--- !u!114 &11400002
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: .500000119
-  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4257c1de8ef41249b8bb7f7fc362735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeNow: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
