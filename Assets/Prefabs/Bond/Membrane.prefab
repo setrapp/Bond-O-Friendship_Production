@@ -216,7 +216,7 @@ Transform:
   m_Father: {fileID: 400004}
   m_RootOrder: 4
 --- !u!23 &2300002
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -225,18 +225,24 @@ Renderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2300004
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -245,14 +251,20 @@ Renderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300002
@@ -321,6 +333,9 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -337,11 +352,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachment1:
     attachee: {fileID: 0}
+    attachedLink: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000004}
   attachment2:
     attachee: {fileID: 0}
+    attachedLink: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000002}
@@ -360,6 +377,9 @@ MonoBehaviour:
     removeLinkDistance: .150000006
     springForce: 5000
     springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -380,15 +400,20 @@ MonoBehaviour:
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
     smoothForce: 10
+    fluffPrefab: {fileID: 0}
+    destroyedLinksPerFluff: 0
   membranePrevious: {fileID: 0}
   membraneNext: {fileID: 0}
   startPosition1: {x: 0, y: 0, z: 0}
   startPosition2: {x: 0, y: 0, z: 0}
   smoothCornerLine1: {fileID: 12000006}
   smoothCornerLine2: {fileID: 12000000}
+  attachment1FauxLink: {fileID: 0}
+  attachment2FauxLink: {fileID: 0}
   endpointSpring: 0
   fullDetailShapingForce: 0
   fullDetailSmoothForce: 0
+  breakLines: []
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -400,7 +425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removable: 1
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 5400000}
@@ -423,7 +447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removable: 1
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 5400002}
@@ -473,14 +496,20 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -506,14 +535,20 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -539,14 +574,20 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -572,14 +613,20 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
+  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_UseReflectionProbes: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -674,4 +721,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100004}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

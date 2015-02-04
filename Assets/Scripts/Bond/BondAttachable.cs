@@ -89,7 +89,7 @@ public class BondAttachable : MonoBehaviour {
 	{
 		for (int i = 0; i < bonds.Count; )
 		{
-			bonds[i].BreakBond();
+			bonds[i].BreakBond(true);
 		}
 	}
 
