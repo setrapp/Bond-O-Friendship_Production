@@ -23,7 +23,6 @@ public class Membrane : Bond {
 	public float fullDetailShapingForce;
 	public float fullDetailSmoothForce;
 	private bool deconstructing = false;
-	//private float destroyedLinksPerFluff = 0;
 	private List<MembraneLink> breakLinks;
 	private List<LineRenderer> breakLines;
 
@@ -116,9 +115,6 @@ public class Membrane : Bond {
 
 	private IEnumerator DeconstructMembrane(float destroyInterval = 0)
 	{
-		// TODO base destroyedLinksPerFluff off of a percentage of links before the break began.
-		//destroyedLinksPerFluff = links.Count * extraStats.destroyedLinksPerFluff;
-
 		// Prepare neighbors to fill be broken while this is deconstructing.
 		if (extraStats.considerNeighborBonds)
 		{
@@ -186,7 +182,6 @@ public class Membrane : Bond {
 
 			// After releasing and regaining control, destroy all links at the final break stage.
 			yield return new WaitForSeconds(destroyInterval);
-			bool spawnFluff = extraStats.destroyedLinksPerFluff > 0 && (linkDestroyCount % extraStats.destroyedLinksPerFluff == 0);
 			while(linksToDestroy.Count > 0)
 			{
 				MembraneLink destroyeeLink = linksToDestroy[0];
@@ -207,7 +202,7 @@ public class Membrane : Bond {
 		}
 	}
 
-	private void DestroyLink(MembraneLink linkToDestroy, bool spawnFluff = false)
+	private void DestroyLink(MembraneLink linkToDestroy)
 	{
 		int indexToDestroy = links.IndexOf(linkToDestroy);
 		if (linkToDestroy != null && indexToDestroy >= 0 && indexToDestroy < links.Count)
@@ -228,15 +223,6 @@ public class Membrane : Bond {
 					linkToDestroy.linkNext.jointToNeighbor.connectedBody = null;
 				}
 				linkToDestroy.linkNext.linkPrevious = null;
-			}
-
-			// If spawning of a fluff in place of the link is desired, do so.
-			if (spawnFluff && extraStats != null && extraStats.fluffPrefab != null)
-			{
-				if (indexToDestroy != 0 && indexToDestroy != links.Count - 1)
-				{
-					GameObject.Instantiate(extraStats.fluffPrefab, linkToDestroy.transform.position, Quaternion.Euler(linkToDestroy.transform.rotation.eulerAngles + new Vector3(0, 0, 90)));
-				}
 			}
 
 			bool destroyingStartLink = (linkToDestroy == attachment1.attachedLink);
@@ -801,8 +787,6 @@ public class MembraneStats
 	public bool breakDestroyAttachments = true;
 	public bool considerNeighborBonds = true;
 	public float smoothForce = 10;
-	public GameObject fluffPrefab;
-	public int destroyedLinksPerFluff = 0;
 
 	public MembraneStats(MembraneStats original)
 	{
@@ -812,8 +796,6 @@ public class MembraneStats
 		this.breakWithNeighbors = original.breakWithNeighbors;
 		this.considerNeighborBonds = original.considerNeighborBonds;
 		this.smoothForce = original.smoothForce;
-		this.fluffPrefab = original.fluffPrefab;
-		this.destroyedLinksPerFluff = original.destroyedLinksPerFluff;
 	}
 
 	public void Overwrite(MembraneStats replacement, bool fullOverwrite = false)
@@ -829,7 +811,5 @@ public class MembraneStats
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
 		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;						}
-		if (fullOverwrite || replacement.fluffPrefab != null)			{	this.fluffPrefab = replacement.fluffPrefab;						}
-		if (fullOverwrite || replacement.destroyedLinksPerFluff >= 0)		{	this.destroyedLinksPerFluff = replacement.destroyedLinksPerFluff;	}
 	}
 }
