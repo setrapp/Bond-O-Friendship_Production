@@ -228,12 +228,9 @@ public class Bond : MonoBehaviour {
 		if (attachee1 != null)	{ attachee1.bonds.Remove(this); }
 		if (attachee2 != null)	{ attachee2.bonds.Remove(this); }
 
-		if (!quickDestroy)
-		{
-			BondBreaking();
-			if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
-			if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
-		}
+		BondBreaking();
+		if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
+		if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
 
 		if (this != null && gameObject != null)
 		{
@@ -589,7 +586,7 @@ public class Bond : MonoBehaviour {
 
 	// Hooks for subclasses.
 	protected virtual void BondForming() {}
-	protected virtual void BondBreaking() { }
+	protected virtual void BondBreaking(bool quickDestroy = false) { }
 	protected virtual void LinkAdded(BondLink addedLink) {}
 	protected virtual void LinkRemoved(BondLink removedLink) {}
 }

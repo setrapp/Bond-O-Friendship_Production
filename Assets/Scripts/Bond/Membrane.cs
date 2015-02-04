@@ -62,32 +62,44 @@ public class Membrane : Bond {
 
 	public override void BreakBond(bool quickDestroy = false)
 	{
-		if (!deconstructing)
+		if (!quickDestroy)
 		{
-			List<Membrane> ignoreNeighbors = new List<Membrane>();
-			ignoreNeighbors.Add(membranePrevious);
-			ignoreNeighbors.Add(membraneNext);
+			if (!deconstructing)
+			{
+				List<Membrane> ignoreNeighbors = new List<Membrane>();
+				ignoreNeighbors.Add(membranePrevious);
+				ignoreNeighbors.Add(membraneNext);
 
-			// Check for bonds with the players on this membrane only (ignoring neighbors).
-			
-			MembraneLink bondedLink;
-			if (IsBondMade(out bondedLink, Globals.Instance.player1.character.bondAttachable, ignoreNeighbors))
-			{
-				breakLinks.Add(bondedLink);
+				// Check for bonds with the players on this membrane only (ignoring neighbors).
+
+				MembraneLink bondedLink;
+				if (IsBondMade(out bondedLink, Globals.Instance.player1.character.bondAttachable, ignoreNeighbors))
+				{
+					breakLinks.Add(bondedLink);
+				}
+				if (IsBondMade(out bondedLink, Globals.Instance.player2.character.bondAttachable, ignoreNeighbors))
+				{
+					breakLinks.Add(bondedLink);
+				}
 			}
-			if (IsBondMade(out bondedLink, Globals.Instance.player2.character.bondAttachable, ignoreNeighbors))
-			{
-				breakLinks.Add(bondedLink);
-			}
+			BreakMembrane(quickDestroy);
 		}
-		BreakMembrane(quickDestroy);
+		else
+		{
+			base.BreakBond(true);
+		}
 	}
 
 	public void BreakMembrane(bool quickDestroy = false)
 	{
+		if (extraStats.breakDelay < 0)
+		{
+			quickDestroy = true;
+		}
+
 		if (quickDestroy)
 		{
-			base.BreakBond(true);
+			FinalizeBreak();
 			return;
 		}
 
@@ -95,12 +107,18 @@ public class Membrane : Bond {
 		{
 			deconstructing = true;
 			stats.manualLinks = true;
-			StartCoroutine(DeconstructMembrane(0.01f));
+			float breakDelay = (extraStats.breakDelay == 0) ? 0.001f : extraStats.breakDelay;
+			StartCoroutine(DeconstructMembrane(breakDelay, false));
 		}
 	}
 
 	public void BreakMembraneWithNeighbor(Membrane brokenNeighbor, bool quickDestroy = false)
 	{
+		if (brokenNeighbor != membranePrevious && brokenNeighbor != membraneNext)
+		{
+			return;
+		}
+
 		if (brokenNeighbor == membranePrevious)
 		{
 			breakLinks.Add(links[0] as MembraneLink);
@@ -113,89 +131,98 @@ public class Membrane : Bond {
 		BreakMembrane(quickDestroy);
 	}
 
-	private IEnumerator DeconstructMembrane(float destroyInterval = 0)
+	private IEnumerator DeconstructMembrane(float destroyInterval = 0, bool quickDestroy = false)
 	{
-		// Prepare neighbors to fill be broken while this is deconstructing.
-		if (extraStats.considerNeighborBonds)
+		if (!quickDestroy)
 		{
-			if (membranePrevious != null)
+			// Prepare neighbors to fill be broken while this is deconstructing.
+			if (extraStats.considerNeighborBonds)
 			{
-				membranePrevious.forceFullDetail = true;
+				if (membranePrevious != null)
+				{
+					membranePrevious.forceFullDetail = true;
+				}
+				if (membraneNext != null)
+				{
+					membraneNext.forceFullDetail = true;
+				}
 			}
-			if (membraneNext != null)
+
+			// Prepare to draw lines between each break, requiring one more line than break.
+			breakLines = new List<LineRenderer>();
+			breakLines.Add(attachment1.lineRenderer);
+			breakLines.Add(attachment2.lineRenderer);
+			for (int i = 2; i < breakLinks.Count + 1; i++)
 			{
-				membraneNext.forceFullDetail = true;
+				GameObject newLineObject = GameObject.Instantiate(breakLines[0].gameObject);
+				LineRenderer newLineRenderer = newLineObject.GetComponent<LineRenderer>();
+				newLineRenderer.transform.parent = breakLines[0].transform.parent;
+				newLineRenderer.SetVertexCount(0);
+				breakLines.Add(newLineRenderer);
+			}
+
+			// If no other break points have been stored, start breaking from the center.
+			if (breakLinks.Count < 1)
+			{
+				breakLinks.Add(links[links.Count / 2] as MembraneLink);
+			}
+
+			// If an odd number of links exist, prepare to destroy the one closest to the breaking point.
+			List<MembraneLink> linksToDestroy = new List<MembraneLink>();
+
+			// Destroy successive pairs, spanning out from break, of links over time.
+			int linkDestroyCount = 0;
+			while (links.Count > 0)
+			{
+				// Move link about to break to final breaking stage.
+				while (breakLinks.Count > 0)
+				{
+					linksToDestroy.Add(breakLinks[0]);
+					breakLinks.RemoveAt(0);
+				}
+
+				// Create list of links to break after the upcoming group is broken.
+				for (int i = 0; i < linksToDestroy.Count; i++)
+				{
+					if (linksToDestroy[i].linkPrevious != null)
+					{
+						breakLinks.Add(linksToDestroy[i].linkPrevious as MembraneLink);
+					}
+					if (linksToDestroy[i].linkNext != null)
+					{
+						breakLinks.Add(linksToDestroy[i].linkNext as MembraneLink);
+					}
+				}
+
+				// After releasing and regaining control, destroy all links at the final break stage.
+				yield return new WaitForSeconds(destroyInterval);
+				while (linksToDestroy.Count > 0)
+				{
+					MembraneLink destroyeeLink = linksToDestroy[0];
+					linksToDestroy.RemoveAt(0);
+					DestroyLink(destroyeeLink);
+				}
+
+				linkDestroyCount++;
 			}
 		}
 
-		// Prepare to draw lines between each break, requiring one more line than break.
-		breakLines = new List<LineRenderer>();
-		breakLines.Add(attachment1.lineRenderer);
-		breakLines.Add(attachment2.lineRenderer);
-		for (int i = 2; i < breakLinks.Count + 1; i++)
-		{
-			GameObject newLineObject = GameObject.Instantiate(breakLines[0].gameObject);
-			LineRenderer newLineRenderer = newLineObject.GetComponent<LineRenderer>();
-			newLineRenderer.transform.parent = breakLines[0].transform.parent;
-			newLineRenderer.SetVertexCount(0);
-			breakLines.Add(newLineRenderer);
-		}
+		// After all links have been broken finalize breaking procedure and destroy membrane.
+		FinalizeBreak();
+	}
 
-		// If no other break points have been stored, start breaking from the center.
-		if (breakLinks.Count < 1)
-		{
-			breakLinks.Add(links[links.Count / 2] as MembraneLink);
-		}
+	private void FinalizeBreak()
+	{
+		BondBreaking();
 
 		// Drop reference of membrane from the bonded attachments.
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 		if (attachee1 != null) { attachee1.bonds.Remove(this); }
 		if (attachee2 != null) { attachee2.bonds.Remove(this); }
-
-		// If an odd number of links exist, prepare to destroy the one closest to the breaking point.
-		List<MembraneLink> linksToDestroy = new List<MembraneLink>();
-
-		// Destroy successive pairs, spanning out from break, of links over time.
-		int linkDestroyCount = 0;
-		while(links.Count > 0)
-		{
-			// Move link about to break to final breaking stage.
-			while(breakLinks.Count > 0)
-			{
-				linksToDestroy.Add(breakLinks[0]);
-				breakLinks.RemoveAt(0);
-			}
-
-			// Create list of links to break after the upcoming group is broken.
-			for (int i = 0; i < linksToDestroy.Count; i++)
-			{
-				if (linksToDestroy[i].linkPrevious != null)
-				{
-					breakLinks.Add(linksToDestroy[i].linkPrevious as MembraneLink);
-				}
-				if (linksToDestroy[i].linkNext != null)
-				{
-					breakLinks.Add(linksToDestroy[i].linkNext as MembraneLink);
-				}
-			}
-
-			// After releasing and regaining control, destroy all links at the final break stage.
-			yield return new WaitForSeconds(destroyInterval);
-			while(linksToDestroy.Count > 0)
-			{
-				MembraneLink destroyeeLink = linksToDestroy[0];
-				linksToDestroy.RemoveAt(0);
-				DestroyLink(destroyeeLink);
-			}
-
-			linkDestroyCount++;
-		}
-
-		// After all links have been broken finalize breaking procedure and destroy membrane.
-		BondBreaking();
 		if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
 		if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
+
 		if (this != null && gameObject != null)
 		{
 			Destroy(gameObject);
@@ -353,12 +380,11 @@ public class Membrane : Bond {
 		}
 	}
 
-	protected override void BondBreaking()
+	protected override void BondBreaking(bool quickDestroy = false)
 	{
 		base.BondBreaking();
-
-		BreakNeighbor(membranePrevious);
-		BreakNeighbor(membraneNext);
+		BreakNeighbor(membranePrevious, quickDestroy);
+		BreakNeighbor(membraneNext, quickDestroy);
 
 		// If desired, destroy attachments, unless they are used by neighbors.
 		if (extraStats.breakDestroyAttachments)
@@ -389,28 +415,34 @@ public class Membrane : Bond {
 		}
 	}
 
-	private void BreakNeighbor(Membrane neighbor)
+	private void BreakNeighbor(Membrane neighbor, bool quickDestroy = false)
 	{
 		if (neighbor == null || (neighbor != membranePrevious && neighbor != membraneNext))
 		{
 			return;
 		}
 
-		if ((neighbor.membranePrevious == this || neighbor.membraneNext == this))
+		if (neighbor == membranePrevious)
 		{
-			if (neighbor.extraStats.breakWithNeighbors)
-			{
-				neighbor.BreakMembraneWithNeighbor(this);
-			}
+			membranePrevious = null;
+		}
+		if (neighbor == membraneNext)
+		{
+			membranePrevious = null;
+		}
 
-			if (neighbor.membranePrevious == this)
-			{
-				neighbor.membranePrevious = null;
-			}
-			if (neighbor.membraneNext == this)
-			{
-				neighbor.membraneNext = null;
-			}
+		if (neighbor.extraStats.breakWithNeighbors)
+		{
+			neighbor.BreakMembraneWithNeighbor(this, quickDestroy);
+		}
+
+		if (neighbor.membranePrevious == this)
+		{
+			neighbor.membranePrevious = null;
+		}
+		if (neighbor.membraneNext == this)
+		{
+			neighbor.membraneNext = null;
 		}
 	}
 
@@ -787,6 +819,7 @@ public class MembraneStats
 	public bool breakDestroyAttachments = true;
 	public bool considerNeighborBonds = true;
 	public float smoothForce = 10;
+	public float breakDelay = 0;
 
 	public MembraneStats(MembraneStats original)
 	{
@@ -796,6 +829,7 @@ public class MembraneStats
 		this.breakWithNeighbors = original.breakWithNeighbors;
 		this.considerNeighborBonds = original.considerNeighborBonds;
 		this.smoothForce = original.smoothForce;
+		this.breakDelay = original.breakDelay;
 	}
 
 	public void Overwrite(MembraneStats replacement, bool fullOverwrite = false)
@@ -811,5 +845,6 @@ public class MembraneStats
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
 		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;						}
+		if (fullOverwrite || replacement.breakDelay >= 0)				{	this.breakDelay = replacement.breakDelay;						}
 	}
 }
