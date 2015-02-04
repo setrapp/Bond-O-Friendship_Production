@@ -108,7 +108,10 @@ public class Membrane : Bond {
 			deconstructing = true;
 			stats.manualLinks = true;
 			float breakDelay = (extraStats.breakDelay == 0) ? 0.001f : extraStats.breakDelay;
-			StartCoroutine(DeconstructMembrane(breakDelay, false));
+			if (gameObject.activeInHierarchy)
+			{
+				StartCoroutine(DeconstructMembrane(breakDelay, false));
+			}
 		}
 	}
 
@@ -191,6 +194,22 @@ public class Membrane : Bond {
 					if (linksToDestroy[i].linkNext != null)
 					{
 						breakLinks.Add(linksToDestroy[i].linkNext as MembraneLink);
+					}
+				}
+
+				for (int i = 0; i < breakLinks.Count; i++)
+				{
+					if (breakLinks[i].toPreviousCollider != null)
+					{
+						breakLinks[i].toPreviousCollider.enabled = false;
+					}
+					if (breakLinks[i].toNextCollider != null)
+					{
+						breakLinks[i].toNextCollider.enabled = false;
+					}
+					if(breakLinks[i].jointToNeighbor != null)
+					{
+						breakLinks[i].jointToNeighbor.spring = 0;
 					}
 				}
 
