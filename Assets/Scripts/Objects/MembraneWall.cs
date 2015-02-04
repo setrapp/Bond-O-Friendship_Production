@@ -5,9 +5,13 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
 	public float membraneLength;
+	public bool showPosts = false;
+	public GameObject startPost;
+	public GameObject endPost;
 	public float defaultShapingForce = -1;
 	public GameObject shapingPointPrefab;
 	[SerializeField]
@@ -69,6 +73,9 @@ public class MembraneWall : MonoBehaviour {
 		{
 			CreateWall();
 		}
+
+		startPost.SetActive(showPosts);
+		endPost.SetActive(showPosts);
 	}
 
 	void Update()
@@ -76,6 +83,12 @@ public class MembraneWall : MonoBehaviour {
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
 		if (membraneCreator != null && createdMembrane != null)
 		{
+			if (showPosts)
+			{
+				createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
+				createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+			}
+
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
 			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
@@ -161,7 +174,9 @@ public class MembraneWall : MonoBehaviour {
 
 		// Place endpoints.
 		membraneCreator.attachable1.transform.position = startPos;
+		startPost.transform.position = startPos;
 		membraneCreator.attachable2.transform.position = endPos;
+		endPost.transform.position = endPos;
 
 		// Break the membrane track into eigen vectors.
 		Vector3 parallel = membraneTrack;
@@ -208,10 +223,13 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBroken(Membrane brokenMembrane)
 	{
-		if (transform.parent != null)
+		if (destroyWhenBroken)
 		{
-			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			}
+			Destroy(gameObject);
 		}
-		Destroy(gameObject);
 	}
 }

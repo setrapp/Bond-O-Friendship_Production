@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MembraneShell : MonoBehaviour {
+	public bool destroyWhenBroken = true;
 	[SerializeField]
 	public List<MembraneWall> createdWalls;
 	public GameObject membraneWallOriginal;
@@ -69,7 +70,7 @@ public class MembraneShell : MonoBehaviour {
 	private void MembraneBroken(MembraneWall brokenMembrane)
 	{
 		createdWalls.Remove(brokenMembrane);
-		if(createdWalls.Count == 0)
+		if(createdWalls.Count == 0 && destroyWhenBroken)
 		{
 			if (transform.parent != null)
 			{
