@@ -8,6 +8,9 @@ public class MembraneWall : MonoBehaviour {
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
 	public float membraneLength;
+	public bool showPosts = false;
+	public GameObject startPost;
+	public GameObject endPost;
 	public float defaultShapingForce = -1;
 	public GameObject shapingPointPrefab;
 	[SerializeField]
@@ -69,6 +72,9 @@ public class MembraneWall : MonoBehaviour {
 		{
 			CreateWall();
 		}
+
+		startPost.SetActive(showPosts);
+		endPost.SetActive(showPosts);
 	}
 
 	void Update()
@@ -76,6 +82,12 @@ public class MembraneWall : MonoBehaviour {
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
 		if (membraneCreator != null && createdMembrane != null)
 		{
+			if (showPosts)
+			{
+				createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
+				createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+			}
+
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
 			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
@@ -161,7 +173,9 @@ public class MembraneWall : MonoBehaviour {
 
 		// Place endpoints.
 		membraneCreator.attachable1.transform.position = startPos;
+		startPost.transform.position = startPos;
 		membraneCreator.attachable2.transform.position = endPos;
+		endPost.transform.position = endPos;
 
 		// Break the membrane track into eigen vectors.
 		Vector3 parallel = membraneTrack;

@@ -93,11 +93,11 @@ public class FluffThrow : MonoBehaviour {
 		}
 		
 		// If floating propel away from fluff.
-		if (character.floatMove.Floating && passFluffs.Count > 0)
+		/*if (character.floatMove.Floating && passFluffs.Count > 0)
 		{
 			Vector3 recoilForce = -passDirection * floatPushBack;
 			character.mover.body.AddForce(recoilForce);
 			character.mover.velocity += recoilForce * Time.deltaTime;
-		}
+		}*/
 	}
 }
