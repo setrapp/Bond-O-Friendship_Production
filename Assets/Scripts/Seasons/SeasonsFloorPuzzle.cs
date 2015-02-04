@@ -12,12 +12,16 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 	public int totalTargets;
 	public int groupNumber;
 	public int groupTotal;
+	public float gateCloseTime;
 
 	private bool colored = false;
 	private bool puzzleComplete;
 	private Vector3 originalSize;
 	private Color originalColor;
 	private static int[] groups;
+	private bool gateClosing;
+	private float gateCloseSpeed;
+	private float gateXPos;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +31,8 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 		groups = new int[groupTotal];
 		for(int i = 0; i < groupTotal; i++)
 			groups[i] = 0;
+		gateCloseSpeed = gate.transform.localScale.x/(gateCloseTime*120);
+		gateXPos = gate.transform.position.x - gate.transform.localScale.x/2;
 	}
 	
 	// Update is called once per frame
@@ -50,7 +56,8 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 			outerRing.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
 			if(gate != null)
 			{
-				Destroy(gate);
+				gateClosing = true;
+				Destroy(gate, gateCloseTime);
 			}
 			if(emergencyEscapeGate != null)
 			{
@@ -58,6 +65,11 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 			}
 			transform.localScale = originalSize;
 			puzzleComplete = true;
+		}
+		if(gateClosing == true && gate !=null)
+		{
+			gate.transform.localScale = new Vector3(gate.transform.localScale.x - gateCloseSpeed, gate.transform.localScale.y, gate.transform.localScale.z);
+			gate.transform.position = new Vector3(gateXPos + gate.transform.localScale.x/2, gate.transform.position.y, gate.transform.position.z);
 		}
 	}
 
