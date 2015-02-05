@@ -106,10 +106,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 33: {fileID: 3300004}
+  - 135: {fileID: 13500000}
   - 23: {fileID: 2300004}
-  - 135: {fileID: 13500002}
   m_Layer: 26
-  m_Name: Posts
+  m_Name: Start Post
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,10 +124,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   - 33: {fileID: 3300006}
+  - 135: {fileID: 13500002}
   - 23: {fileID: 2300006}
-  - 135: {fileID: 13500000}
   m_Layer: 26
-  m_Name: Posts
+  m_Name: End Post
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,7 +193,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 854.685486, y: -37.118866, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -206,8 +206,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -273.115479, y: -199.161133, z: .0299999993}
-  m_LocalScale: {x: 1.20000005, y: 1.20000005, z: 1.20000005}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 3
@@ -218,8 +218,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -273.115479, y: -199.161133, z: .0299999993}
-  m_LocalScale: {x: 1.20000005, y: 1.20000005, z: 1.20000005}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 4
@@ -485,7 +485,7 @@ MonoBehaviour:
   body: {fileID: 0}
   handleFluffAttachment: 0
   bondAtContactPoint: 1
-  attachmentColor: {r: .463235319, g: .577991843, b: 1, a: 1}
+  attachmentColor: {r: .4627451, g: .576470613, b: 1, a: 1}
   bondPrefab: {fileID: 100004, guid: 4097864aefc711c488ba7a02a05f0f5b, type: 2}
   bondOverrideStats: {fileID: 0}
   bonds: []
@@ -552,6 +552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 11400012}
   createOnStart: 0
+  destroyWhenBroken: 1
   wallIsCentered: 1
   membraneDirection: {x: 1, y: 0, z: 0}
   membraneLength: 25
@@ -578,7 +579,7 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 0
-  relativeMaxDistance: -1
+  relativeMaxDistance: 1.08000004
   relativeRequiredAdd: -1
   currentLength: 0
   relativeActualDistance: 0
@@ -597,15 +598,16 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     maxDistance: -1
-    relativeWarningDistance: .5
+    relativeWarningDistance: -1
     endsWidth: 1
     midWidth: .800000012
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    springForce: 150
+    springForce: 10
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: 10
     sparseDetailFactor: .100000001
@@ -622,12 +624,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     defaultShapingForce: .25
-    bondOnContact: 0
+    bondOnContact: 1
     bondOnFluff: 1
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
     smoothForce: 20
+    breakDelay: 0
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -639,6 +642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff1dda09bb255694bb52ae6dd11c84cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyWhenBroken: 1
   createdWalls: []
   membraneWallOriginal: {fileID: 100002}
   createOnStart: 1
@@ -667,6 +671,7 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -694,6 +699,7 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -721,22 +727,11 @@ MonoBehaviour:
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
+    manualLinks: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
 --- !u!135 &13500000
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: .500000119
-  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
---- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -746,8 +741,20 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .500000119
-  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
+  m_Radius: .5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &13500002
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
