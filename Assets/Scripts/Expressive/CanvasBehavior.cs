@@ -37,13 +37,13 @@ public class CanvasBehavior : MonoBehaviour {
 		{
 			player1 = collide.gameObject;
 			player1.GetComponent<Paint>().painting = false;
-			print ("Paintfalse");
+			//print ("Paintfalse");
 		}
 		if(collide.gameObject.name == "Player 2")
 		{
 			player2 = collide.gameObject;
 			player2.GetComponent<Paint>().painting = false;
-			print ("Paint");
+			//print ("Paint");
 		}
 	}
 }

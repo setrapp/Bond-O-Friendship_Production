@@ -5,23 +5,15 @@ public class WaitPad : MonoBehaviour {
 
 	public bool pOonPad = false;
 	public bool pTonPad = false;
-	public Material activatedSphereColor;
 	private Color mycolor;
 	private float red;
 	private float turnTime;
 	public bool activated = false;
-	private int triggersLit = 0;
-	private int maxTriggers = 3;
-	private bool fullyLit;
-	private GameObject[] usedBlossoms;
-	private GameObject[] activationSpheres;
 
 	// Use this for initialization
 	void Start () {
 		red = 0.1f;
 		turnTime = 0.3f;
-		usedBlossoms = new GameObject[maxTriggers];
-		activationSpheres = GameObject.FindGameObjectsWithTag("Activation Sphere");
 	}
 	
 	// Update is called once per frame
@@ -51,37 +43,16 @@ public class WaitPad : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.name == "Blossom")
+		if(collide.gameObject.name == "Player 1")
 		{
-			for(int i = 0; i < maxTriggers; i++)
-			{
-				if(collide.gameObject == usedBlossoms[i])
-					break;
-				if(usedBlossoms[i] == null)
-				{
-					usedBlossoms[i] = collide.gameObject;
-					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
-					break;
-				}
-			}
-			triggersLit++;
-			if(triggersLit == maxTriggers)
-				fullyLit = true;
+			pOonPad = true;
+			//print("1");
 		}
-		if(fullyLit == true)
+		if(collide.gameObject.name == "Player 2")
 		{
-			if(collide.gameObject.name == "Player 1")
-			{
-				pOonPad = true;
-				//print("1");
-			}
-			if(collide.gameObject.name == "Player 2")
-			{
-				pTonPad = true;
-				//print ("2");
-			}
+			pTonPad = true;
+			//print ("2");
 		}
-
 	}
 	void OnTriggerExit(Collider collide)
 	{
