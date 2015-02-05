@@ -207,10 +207,6 @@ public class Membrane : Bond {
 					{
 						breakLinks[i].toNextCollider.enabled = false;
 					}
-					if(breakLinks[i].jointToNeighbor != null)
-					{
-						breakLinks[i].jointToNeighbor.spring = 0;
-					}
 				}
 
 				// After releasing and regaining control, destroy all links at the final break stage.
@@ -259,6 +255,7 @@ public class Membrane : Bond {
 				if (linkToDestroy.linkPrevious.jointToNeighbor != null && linkToDestroy.linkPrevious.jointToNeighbor.connectedBody == linkToDestroy.body)
 				{
 					linkToDestroy.linkPrevious.jointToNeighbor.connectedBody = null;
+					linkToDestroy.linkPrevious.jointToNeighbor.spring = 0;
 				}
 				linkToDestroy.linkPrevious.linkNext = null;
 			}
@@ -267,6 +264,7 @@ public class Membrane : Bond {
 				if (linkToDestroy.linkNext.jointToNeighbor != null && linkToDestroy.linkNext.jointToNeighbor.connectedBody == linkToDestroy.body)
 				{
 					linkToDestroy.linkNext.jointToNeighbor.connectedBody = null;
+					linkToDestroy.linkNext.jointToNeighbor.spring = 0;
 				}
 				linkToDestroy.linkNext.linkPrevious = null;
 			}
