@@ -5,9 +5,13 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
 	public float membraneLength;
+	public bool showPosts = false;
+	public GameObject startPost;
+	public GameObject endPost;
 	public float defaultShapingForce = -1;
 	public GameObject shapingPointPrefab;
 	[SerializeField]
@@ -20,13 +24,22 @@ public class MembraneWall : MonoBehaviour {
 		{
 			float shapedDistance = 0;
 			Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-			Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
-			for (int i = 1; i < shapingIndices.Count; i++)
+
+			if (createdMembrane.shapingPoints.Count < 3)
 			{
-				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
-				startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+				shapedDistance = (createdMembrane.attachment1.position - createdMembrane.attachment2.position).magnitude;
 			}
-			shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
+			else
+			{
+				Vector3 startPos = createdMembrane.shapingPoints[shapingIndices[0] + 2].transform.position;
+				for (int i = 1; i < shapingIndices.Count; i++)
+				{
+					shapedDistance += (createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position - startPos).magnitude;
+					startPos = createdMembrane.shapingPoints[shapingIndices[i] + 2].transform.position;
+				}
+				shapedDistance += (createdMembrane.shapingPoints[shapingIndices[shapingIndices.Count - 1] + 2].transform.position - startPos).magnitude;
+			}
+
 			return shapedDistance;
 		}
 	}
@@ -52,11 +65,6 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.createOnStart = false;
 		}
-
-		if (shapingIndices.Count != shapingPoints.Count)
-		{
-			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
-		}
 	}
 
 	void Start()
@@ -65,6 +73,9 @@ public class MembraneWall : MonoBehaviour {
 		{
 			CreateWall();
 		}
+
+		startPost.SetActive(showPosts);
+		endPost.SetActive(showPosts);
 	}
 
 	void Update()
@@ -72,6 +83,12 @@ public class MembraneWall : MonoBehaviour {
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
 		if (membraneCreator != null && createdMembrane != null)
 		{
+			if (showPosts)
+			{
+				createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
+				createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+			}
+
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
 			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
@@ -131,6 +148,13 @@ public class MembraneWall : MonoBehaviour {
 			return;
 		}
 
+		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
+		if (shapingIndices.Count != shapingPoints.Count)// && (createdMembrane == null || shapingIndices.Count != createdMembrane.shapingPoints.Count - 2))
+		{
+			Debug.Log(shapingIndices.Count + " " + shapingPoints.Count);
+			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
+		}
+
 		// Update override stats to account for starting distance between endpoints.
 		membraneDirection.Normalize();
 		Vector3 membraneTrack = membraneDirection * membraneLength;
@@ -150,7 +174,9 @@ public class MembraneWall : MonoBehaviour {
 
 		// Place endpoints.
 		membraneCreator.attachable1.transform.position = startPos;
+		startPost.transform.position = startPos;
 		membraneCreator.attachable2.transform.position = endPos;
+		endPost.transform.position = endPos;
 
 		// Break the membrane track into eigen vectors.
 		Vector3 parallel = membraneTrack;
@@ -192,6 +218,18 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator.createdBond != null)
 		{
 			membraneCreator.createdBond.transform.parent = transform;
+		}
+	}
+
+	private void MembraneBroken(Membrane brokenMembrane)
+	{
+		if (destroyWhenBroken)
+		{
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			}
+			Destroy(gameObject);
 		}
 	}
 }
