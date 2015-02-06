@@ -7,6 +7,8 @@ public class PaletteNorm : MonoBehaviour {
 	public GameObject ripplePrefab;
 	private GameObject rippleObj;
 	public Vector3 collidePos;
+	private Vector3 mySize;
+	private float sizeFloat;
 
 	
 	// Use this for initialization
@@ -16,6 +18,13 @@ public class PaletteNorm : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		mySize = new Vector3(sizeFloat,sizeFloat,0.01f);
+		transform.localScale = mySize;
+
+		if(sizeFloat < 1.682f)
+		{
+			sizeFloat += Time.deltaTime;
+		}
 	
 	}
 	
