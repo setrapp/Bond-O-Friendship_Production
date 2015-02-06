@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
 	public float membraneLength;
@@ -217,6 +218,18 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator.createdBond != null)
 		{
 			membraneCreator.createdBond.transform.parent = transform;
+		}
+	}
+
+	private void MembraneBroken(Membrane brokenMembrane)
+	{
+		if (destroyWhenBroken)
+		{
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			}
+			Destroy(gameObject);
 		}
 	}
 }
