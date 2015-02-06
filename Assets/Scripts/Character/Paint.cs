@@ -28,13 +28,22 @@ public class Paint : MonoBehaviour {
 		paintJitter = 0.5f;
 		paintJitter = 0.05f;
 		alpha = 1.0f;
-		painttimeFloat = 0.03f;
+		painttimeFloat = 0.05f;
 		painting = false;
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(Globals.Instance.player1.character.bondAttachable.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+		{
+			painttimeFloat = 0.09f;
+		}
+		else
+		{
+			painttimeFloat = 0.06f;
+		}
+
 		paintJitter = Random.Range(-0.5f,0.5f);
 		colorJitter = Random.Range(-0.05F,0.05F);
 		zJitter = Random.Range(0.5f,0.7f);
@@ -75,5 +84,20 @@ public class Paint : MonoBehaviour {
 		paintCircle = Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot)) as GameObject;
 		paintCircle.GetComponent<Renderer>().material.color = paintColor;
 		paintCircle.GetComponent<PaintCircle>().paintCircColor = paintColor;
+		if(Globals.Instance.player1.character.bondAttachable.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+		{
+			paintCircle.GetComponent<PaintCircle>().rLifemin = 6.0f;
+			paintCircle.GetComponent<PaintCircle>().rLifemax = 7.0f;
+			paintCircle.GetComponent<PaintCircle>().rSizemin = 1.0f;
+			paintCircle.GetComponent<PaintCircle>().rSizemax = 5.0f;
+			//print ("hi!");
+		}
+		else
+		{
+			paintCircle.GetComponent<PaintCircle>().rLifemin = 2.0f;
+			paintCircle.GetComponent<PaintCircle>().rLifemax = 3.0f;
+			paintCircle.GetComponent<PaintCircle>().rSizemin = 0.5f;
+			paintCircle.GetComponent<PaintCircle>().rSizemax = 3.0f;
+		}
 	}
 }
