@@ -38,6 +38,7 @@ public class ExNode : MonoBehaviour {
 		alpha = 1.0f;
 		alphafade = 0.5f;
 
+
 	}
 	
 	// Update is called once per frame
@@ -72,9 +73,14 @@ public class ExNode : MonoBehaviour {
 			MiniFire();
 			activated = true;
 		}
-		if(collide.gameObject.tag == "Bond" )
+		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
 		{
 			FirePulse(11.0f,5.0f,1.0f,0.2f);
+			activated = true;
+		}
+		if(collide.gameObject.tag == "Fluff" && collide.gameObject.GetComponent<Fluff>().moving == true)
+		{
+			MiniFire();
 			activated = true;
 		}
 		
