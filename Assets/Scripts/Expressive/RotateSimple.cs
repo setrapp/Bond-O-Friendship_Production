@@ -7,7 +7,7 @@ public class RotateSimple : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		rotSpeed = 5.0f;
+		//rotSpeed = 5.0f;
 	}
 	
 	// Update is called once per frame
