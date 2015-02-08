@@ -70,13 +70,17 @@ public class MembraneShell : MonoBehaviour {
 	private void MembraneBroken(MembraneWall brokenMembrane)
 	{
 		createdWalls.Remove(brokenMembrane);
-		if(createdWalls.Count == 0 && destroyWhenBroken)
+		
+		if(createdWalls.Count == 0)
 		{
 			if (transform.parent != null)
 			{
 				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
 			}
-			Destroy(gameObject);
+			if (destroyWhenBroken)
+			{
+				Destroy(gameObject);
+			}
 		}
 	}
 }

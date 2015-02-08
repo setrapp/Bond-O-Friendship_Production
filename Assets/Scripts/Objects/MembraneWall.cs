@@ -149,9 +149,8 @@ public class MembraneWall : MonoBehaviour {
 		}
 
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-		if (shapingIndices.Count != shapingPoints.Count)// && (createdMembrane == null || shapingIndices.Count != createdMembrane.shapingPoints.Count - 2))
+		if (shapingIndices.Count != shapingPoints.Count)
 		{
-			Debug.Log(shapingIndices.Count + " " + shapingPoints.Count);
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 
@@ -223,12 +222,12 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBroken(Membrane brokenMembrane)
 	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
 		if (destroyWhenBroken)
 		{
-			if (transform.parent != null)
-			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
-			}
 			Destroy(gameObject);
 		}
 	}

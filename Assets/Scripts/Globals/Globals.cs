@@ -38,6 +38,8 @@ public class Globals : MonoBehaviour {
 
 	public GameObject canvasPaused;
 
+	public bool updatePlayersOnLoad = true;
+
 	public static bool sharing = false;
 	// Use this for initialization
 	void Awake()
