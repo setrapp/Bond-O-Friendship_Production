@@ -42,9 +42,9 @@ public class Palette : MonoBehaviour {
 			collide.gameObject.GetComponent<Paint>().b = b;
 			collide.gameObject.GetComponent<Paint>().a = a;
 			collide.gameObject.GetComponent<Paint>().origColor = false;
-
+			CharacterComponents characterCo = collide.GetComponent<CharacterComponents>();
+			characterCo.midTrail.material.color = characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = palColor;
 		}
-
 	}
 
 	void Fire()
@@ -52,10 +52,10 @@ public class Palette : MonoBehaviour {
 		rippleObj = Instantiate(ripplePrefab,transform.position,Quaternion.identity) as GameObject;
 		rippleObj.GetComponent<Collider>().enabled = false;
 		rippleObj.GetComponent<RingPulse>().smallRing = false;
-		rippleObj.GetComponent<RingPulse>().scaleRate = 18.0f;
+		rippleObj.GetComponent<RingPulse>().scaleRate = 40.0f;
 		rippleObj.GetComponent<RingPulse>().lifeTime = 2.0f;
 		rippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-		rippleObj.GetComponent<RingPulse>().alphaFade = 1.2f;
+		rippleObj.GetComponent<RingPulse>().alphaFade = 1.8f;
 
 		//print ("fire!");
 	}
