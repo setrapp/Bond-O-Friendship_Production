@@ -28,14 +28,13 @@ public class PaletteNorm : MonoBehaviour {
 	
 	}
 	
-	void OnTriggerEnter(Collider collide)
+	void OnTriggerExit(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
 		{
 			collidePos = collide.transform.position;
 			Fire();
 			collide.gameObject.GetComponent<Paint>().origColor = true;
-			
 		}
 		
 	}
