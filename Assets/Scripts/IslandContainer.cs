@@ -3,7 +3,6 @@ using System.Collections;
 
 public class IslandContainer : MonoBehaviour {
 	public EtherRing parentRing;
-	public string parentRingScene;
 	public IslandID islandId;
 	public Island island;
 	[HideInInspector]
@@ -12,7 +11,8 @@ public class IslandContainer : MonoBehaviour {
 	public MembraneShell atmosphere;
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
-	private GameObject playerLanded = null;
+	private GameObject landedPlayer = null;
+	private bool playersLanded = false;
 
 	void Start()
 	{
@@ -55,10 +55,8 @@ public class IslandContainer : MonoBehaviour {
 			}
 			else
 			{
-				// TODO load ether scene?
 				// Load the contents of the ether ring that surrounds this island.
-				//StartCoroutine(LevelHandler.Instance.LoadEtherRing(parentRingScene, this));
-				LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
+				LevelHandler.Instance.LoadEtherRing(parentRing, this);
 			}
 			
 		}
@@ -66,29 +64,28 @@ public class IslandContainer : MonoBehaviour {
 
 	private void IslandLanded(GameObject landingPlayer)
 	{
-		if (playerLanded != null && landingPlayer != null && landingPlayer != playerLanded)
+		if (landedPlayer != null && landingPlayer != null && landingPlayer != landedPlayer)
 		{
 			IsolateIsland();
-			playerLanded = null;
+			landedPlayer = null;
 		}
 		else if (landingPlayer != null)
 		{
-			playerLanded = landingPlayer;
+			landedPlayer = landingPlayer;
 		}
 	}
 
 	private void IslandUnlanded(GameObject unlandingPlayer)
 	{
-		if (unlandingPlayer != null && unlandingPlayer == playerLanded)
+		if (unlandingPlayer != null && unlandingPlayer == landedPlayer)
 		{
-			playerLanded = null;
+			landedPlayer = null;
 		}
 	}
 
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
-		// TODO unload ring?
-		//LevelHandler.Instance.UnloadEtherRing(parentRing, this);
+		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 	}
 }

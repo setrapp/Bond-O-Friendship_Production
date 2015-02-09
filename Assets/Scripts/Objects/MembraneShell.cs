@@ -28,13 +28,6 @@ public class MembraneShell : MonoBehaviour {
 
 		if (createdWalls.Count < wallCount)
 		{
-			/*MembraneWall[] existingWalls = GetComponentsInChildren<MembraneWall>();
-			for (int i = 0; i < existingWalls.Length; i++)
-			{
-				existingWalls[i].createOnStart = false;
-				existingWalls[i].wallIsCentered = true;
-				createdWalls.Add(existingWalls[i]);
-			}*/
 			membraneWallOriginal.SetActive(false);
 
 			for (int i = createdWalls.Count; i < wallCount; i++)
@@ -66,6 +59,22 @@ public class MembraneShell : MonoBehaviour {
 			{
 				createdWalls[i].CreateWall();
 			}
+		}
+	}
+
+	public void SilentBreak()
+	{
+		while (createdWalls.Count > 0)
+		{
+			MembraneWall removeMembrane = createdWalls[0];
+			if (removeMembrane.destroyWhenBroken)
+			{
+				Destroy(removeMembrane.gameObject);
+			}
+			Transform parent = transform.parent;
+			transform.parent = null;
+			MembraneBroken(removeMembrane);
+			transform.parent = parent;
 		}
 	}
 

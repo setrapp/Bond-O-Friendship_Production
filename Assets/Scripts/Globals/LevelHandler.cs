@@ -20,6 +20,7 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 	private List<Island> loadedIslands;
+	private float progressMagicNumber = 0.9f;
 
 	void Awake()
 	{
@@ -69,36 +70,28 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator LoadEtherRing(string ringScene, IslandContainer ignoreIsland = null)
+	public void LoadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
 	{
-		//Debug.Log("start");
-		AsyncOperation ringLoading = Application.LoadLevelAdditiveAsync(ringScene);
-		yield return ringScene;
-		//Debug.Log("end");
-		
-		/*GameObject[] ringObjects = GameObject.FindGameObjectsWithTag("Ether Ring");
-		for (int i = 0; i < ringObjects.Length; i++)
-		{
-			IslandContainer[] islandContainers = ringObjects[i].GetComponentsInChildren<IslandContainer>();
-			for (int j = 0; j < islandContainers.Length; j++)
-			{
-				if (ignoreIsland != null && islandContainers[j].islandId == ignoreIsland.islandId)
-				{
-					ignoreIsland.transform.parent = islandContainers[j].transform.parent;
-					Destroy(islandContainers[i]);
-				}
-			}
-		}*/
+		GenerateIslandAtmospheres(ring, ignoreIsland);
 	}
 
 	public void UnloadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
 	{
-		Debug.Log("unload");
-		if (ignoreIsland != null && ring != null)
+		if (ring != null)
 		{
-			ignoreIsland.transform.parent = ring.transform.parent;
-			Destroy(ring.gameObject);
+			IslandContainer[] islandContainers = ring.GetComponentsInChildren<IslandContainer>();
+			for (int i = 0; i < islandContainers.Length; i++)
+			{
+				if (islandContainers[i] != ignoreIsland)
+				{
+					if (islandContainers[i].atmosphere != null)
+					{
+						islandContainers[i].atmosphere.SilentBreak();
+					}
+				}
+			}
 		}
+		
 	}
 
 	public void GenerateIslandAtmospheres(EtherRing ring, IslandContainer ignoreIsland = null)
