@@ -29,6 +29,7 @@ public class RingPulse : MonoBehaviour {
 		bColor = new Color(0.1f,0.23f,0.25f,alpha);
 		yColor = new Color(0.23f,0.25f,0.1f,alpha);
 		white = new Color(1.0f,1.0f,1.0f,alpha);
+
 		if(smallRing == true)
 		{
 			if(dice == 1)

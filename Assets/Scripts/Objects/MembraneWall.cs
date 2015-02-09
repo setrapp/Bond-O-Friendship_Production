@@ -149,9 +149,8 @@ public class MembraneWall : MonoBehaviour {
 		}
 
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-		if (shapingIndices.Count != shapingPoints.Count)// && (createdMembrane == null || shapingIndices.Count != createdMembrane.shapingPoints.Count - 2))
+		if (shapingIndices.Count != shapingPoints.Count)
 		{
-			Debug.Log(shapingIndices.Count + " " + shapingPoints.Count);
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 
@@ -185,31 +184,30 @@ public class MembraneWall : MonoBehaviour {
 		// Create shaping points and place them relative to the membrane track.
 		if (membraneCreator.shapingPointContainer != null)
 		{
-			while(shapingPoints.Count > 0)
+			for (int i = 0; i < shapingPoints.Count; i++)
 			{
 				GameObject newShapingObject = (GameObject)Instantiate(shapingPointPrefab);
 
 				// Position shaping point relative to membrane track.
-				newShapingObject.transform.position = startPos + (parallel * shapingPoints[0].position.y) + (perpendicular * shapingPoints[0].position.x);
-				
+				newShapingObject.transform.position = startPos + (parallel * shapingPoints[i].position.y) + (perpendicular * shapingPoints[i].position.x);
+
 				// Populate shaping point values, fallback to defaults when necessary.
 				ShapingPoint newShapingPoint = newShapingObject.GetComponent<ShapingPoint>();
 				if (newShapingPoint != null)
 				{
-					if (shapingPoints[0].shapingForce < 0)
+					if (shapingPoints[i].shapingForce < 0)
 					{
-						shapingPoints[0].shapingForce = defaultShapingForce;
+						shapingPoints[i].shapingForce = defaultShapingForce;
 					}
-					newShapingPoint.shapingForce = shapingPoints[0].shapingForce;
+					newShapingPoint.shapingForce = shapingPoints[i].shapingForce;
 				}
 
-				if (shapingPoints[0].pointName != null && shapingPoints[0].pointName != "")
+				if (shapingPoints[i].pointName != null && shapingPoints[i].pointName != "")
 				{
-					newShapingObject.name = shapingPoints[0].pointName;
+					newShapingObject.name = shapingPoints[i].pointName;
 				}
 
 				newShapingObject.transform.parent = membraneCreator.shapingPointContainer.transform;
-				shapingPoints.RemoveAt(0);
 			}
 		}
 
@@ -223,12 +221,17 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBroken(Membrane brokenMembrane)
 	{
+		for (int i = 0; i < membraneCreator.shapingPointContainer.transform.childCount;i ++)
+		{
+			Destroy(membraneCreator.shapingPointContainer.transform.GetChild(i).gameObject);
+		}
+
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
 		if (destroyWhenBroken)
 		{
-			if (transform.parent != null)
-			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
-			}
 			Destroy(gameObject);
 		}
 	}

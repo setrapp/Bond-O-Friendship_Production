@@ -14,6 +14,7 @@ public class CameraSplitter : MonoBehaviour {
 			return instance;
 		}
 	}
+	public bool splittable = true;
 	public bool split = false;
 	private bool wasSplit = false;
 	public float splitDistance;
@@ -45,7 +46,11 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Update()
 	{
-		CheckSplit(false);
+		//if (splittable)
+		{
+			CheckSplit(false);
+		}
+		
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
 	}
