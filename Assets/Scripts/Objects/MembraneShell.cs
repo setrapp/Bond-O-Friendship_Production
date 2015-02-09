@@ -28,13 +28,14 @@ public class MembraneShell : MonoBehaviour {
 
 		if (createdWalls.Count < wallCount)
 		{
-			MembraneWall[] existingWalls = GetComponentsInChildren<MembraneWall>();
+			/*MembraneWall[] existingWalls = GetComponentsInChildren<MembraneWall>();
 			for (int i = 0; i < existingWalls.Length; i++)
 			{
 				existingWalls[i].createOnStart = false;
 				existingWalls[i].wallIsCentered = true;
 				createdWalls.Add(existingWalls[i]);
-			}
+			}*/
+			membraneWallOriginal.SetActive(false);
 
 			for (int i = createdWalls.Count; i < wallCount; i++)
 			{
@@ -47,6 +48,7 @@ public class MembraneShell : MonoBehaviour {
 					createdWalls.Add(newWall);
 				}
 				newWallObject.transform.parent = transform;
+				newWallObject.SetActive(true);
 			}
 
 			float angleStep = -360 / wallCount;
@@ -69,17 +71,20 @@ public class MembraneShell : MonoBehaviour {
 
 	private void MembraneBroken(MembraneWall brokenMembrane)
 	{
-		createdWalls.Remove(brokenMembrane);
-		
-		if(createdWalls.Count == 0)
+		if (createdWalls.Count > 0)
 		{
-			if (transform.parent != null)
+			createdWalls.Remove(brokenMembrane);
+
+			if (createdWalls.Count == 0)
 			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
-			}
-			if (destroyWhenBroken)
-			{
-				Destroy(gameObject);
+				if (transform.parent != null)
+				{
+					transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+				}
+				if (destroyWhenBroken)
+				{
+					Destroy(gameObject);
+				}
 			}
 		}
 	}
