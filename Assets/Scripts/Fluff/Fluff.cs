@@ -93,6 +93,10 @@ public class Fluff : MonoBehaviour {
 				{
 					Attach(attachInfo.collider.gameObject, transform.position, -Vector3.forward);
 				}
+				else
+				{
+					PopFluff();
+				}
 				trail.gameObject.SetActive(false);
 			}
 			else
@@ -194,7 +198,7 @@ public class Fluff : MonoBehaviour {
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
-		// If no potentiall attachee is given, disregard.
+		// If no potential attachee is given, disregard.
 		if (attacheeObject == null)
 		{
 			return;
@@ -270,11 +274,22 @@ public class Fluff : MonoBehaviour {
 		return blocked;
 	}
 
-	public void PopFluff()
+	// Accessible function that does not require coroutine call.
+	public void PopFluff(float secondsDelay = 0)
 	{
+		StartCoroutine(PopAndDestroy(secondsDelay));
+	}
+
+	private IEnumerator PopAndDestroy(float secondsDelay = 0)
+	{
+		if (secondsDelay > 0)
+		{
+			yield return new WaitForSeconds(secondsDelay);
+		}
+
 		if (popAnimation != null)
 		{
-			if(!popAnimation.isPlaying)
+			if (!popAnimation.isPlaying)
 			{
 				popAnimation.Play();
 				Destroy(gameObject, popAnimation.clip.length);
