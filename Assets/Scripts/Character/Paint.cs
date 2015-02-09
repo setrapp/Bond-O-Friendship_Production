@@ -51,13 +51,16 @@ public class Paint : MonoBehaviour {
 
 		if(origColor == true)
 		{
+		CharacterComponents characterCo = GetComponent<CharacterComponents>();
 		if(gameObject.name == "Player 1")
 		{
-		paintColor = new Color(0.1f+colorJitter,0.4f+colorJitter,0.9f+colorJitter,alpha);
+			paintColor = new Color(0.1f+colorJitter,0.4f+colorJitter,0.9f+colorJitter,alpha);
+			characterCo.midTrail.material.color = characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
 		}
 		if(gameObject.name == "Player 2")
 		{
 			paintColor = new Color(0.9f+colorJitter,0.6f+colorJitter,0.1f+colorJitter,alpha);
+			characterCo.midTrail.material.color = characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
 		}
 		}
 		else
