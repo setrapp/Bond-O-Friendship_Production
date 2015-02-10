@@ -38,6 +38,9 @@ public class Globals : MonoBehaviour {
 
 	public GameObject canvasPaused;
 
+    public GameObject depthMaskPrefab;
+    public GameObject depthMaskHolderPrefab;
+
 	public bool updatePlayersOnLoad = true;
 
 	public static bool sharing = false;
