@@ -45,6 +45,7 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	//public AsyncOperation requiredLoading = null;
 	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
@@ -114,7 +115,11 @@ public class MembraneWall : MonoBehaviour {
 				}
 			}
 
-			if (!enoughPlayersBonded)
+			//bool loadingComplete = (requiredLoading == null) || requiredLoading.isDone;
+
+			bool requirementsMet = enoughPlayersBonded;// && loadingComplete;
+
+			if (!requirementsMet)
 			{
 				maxDistance = -1;
 				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
@@ -245,6 +250,14 @@ public class MembraneWall : MonoBehaviour {
 		if (destroyWhenBroken)
 		{
 			Destroy(gameObject);
+		}
+	}
+
+	private void MembraneBonding(Membrane bondingMembrane)
+	{
+		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		{
+			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

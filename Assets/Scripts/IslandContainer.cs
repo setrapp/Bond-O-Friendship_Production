@@ -58,7 +58,6 @@ public class IslandContainer : MonoBehaviour {
 				// Load the contents of the ether ring that surrounds this island.
 				LevelHandler.Instance.LoadEtherRing(parentRing, this);
 			}
-			
 		}
 	}
 

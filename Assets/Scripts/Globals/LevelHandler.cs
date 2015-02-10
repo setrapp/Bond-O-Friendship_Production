@@ -32,8 +32,22 @@ public class LevelHandler : MonoBehaviour {
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
 			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
+			/*if (islandContainer.atmosphere != null)
+			{
+				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
+				{
+					islandContainer.atmosphere.createdWalls[i].requiredLoading = islandLoading;
+				*/
 			yield return islandLoading;
 
+
+			/*if (islandContainer.atmosphere != null)
+			{
+				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
+				{
+					islandContainer.atmosphere.createdWalls[i].requiredLoading = null;
+				}
+			}*/
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
 			Island createdIsland = null;
 			for (int i = 0; i < islandObjects.Length; i++)

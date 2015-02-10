@@ -75,6 +75,21 @@ public class MembraneShell : MonoBehaviour {
 		braking = false;
 	}
 
+	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
+	{
+		bool bondMade = false;
+		if (createdWalls[0] != null && createdWalls[0].membraneCreator != null)
+		{
+			Membrane membrane = createdWalls[0].membraneCreator.createdBond as Membrane;
+			if (membrane != null)
+			{
+				membrane.IsBondMade(partner);
+				bondMade = true;
+			}
+		}
+		return bondMade;
+	}
+
 	public void SilentBreak()
 	{
 		while (createdWalls.Count > 0)
@@ -126,5 +141,14 @@ public class MembraneShell : MonoBehaviour {
 		{
 			Destroy(gameObject);
 		}
+	}
+
+	private void MembraneBonding(MembraneWall bondingMembrane)
+	{
+		if (bondingMembrane != null && createdWalls.Contains(bondingMembrane))
+		{
+			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+		}
+
 	}
 }
