@@ -45,6 +45,7 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
 	public float relativeRequiredAdd = -1;
@@ -116,10 +117,13 @@ public class MembraneWall : MonoBehaviour {
 			if (!enoughPlayersBonded)
 			{
 				maxDistance = -1;
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
 				requirementDistanceAdd = 0;
 			}
 			else
 			{
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce;
+
 				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
 				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
 				{
@@ -216,6 +220,14 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator.createdBond != null)
 		{
 			membraneCreator.createdBond.transform.parent = transform;
+		}
+	}
+
+	private void MembraneBraking(Membrane brakingMembrane)
+	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 

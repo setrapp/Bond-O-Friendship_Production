@@ -48,6 +48,12 @@ public class LevelHandler : MonoBehaviour {
 					createdIsland.container = islandContainer;
 					islandContainer.islandLoading = false;
 					loadedIslands.Add(createdIsland);
+					PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
+					if (playersEstablish != null)
+					{
+						playersEstablish.PlacePlayers();
+					}
+					CameraSplitter.Instance.JumpToPlayers();
 				}
 			}
 		}

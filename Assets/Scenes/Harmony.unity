@@ -570,9 +570,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 68265799}
   - 114: {fileID: 68265800}
+  - 114: {fileID: 68265801}
   m_Layer: 0
   m_Name: Level
-  m_TagString: Untagged
+  m_TagString: Island
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -590,9 +591,9 @@ Transform:
   - {fileID: 499003510}
   - {fileID: 65474230}
   - {fileID: 381216761}
+  - {fileID: 567880926}
   - {fileID: 1656990163}
   - {fileID: 1599920802}
-  - {fileID: 567880926}
   - {fileID: 1335239162}
   - {fileID: 1776495618}
   - {fileID: 845846636}
@@ -611,6 +612,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitPad: {fileID: 0}
+--- !u!114 &68265801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 68265798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8a38124b3ac254e874528c900ad91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  islandId: 2
+  container: {fileID: 0}
 --- !u!1 &90600512
 GameObject:
   m_ObjectHideFlags: 0
@@ -4049,6 +4063,14 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: -2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: targetSceneOverride
+      value: Ether Ring A
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: placeOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
   m_IsPrefabParent: 0
@@ -4519,7 +4541,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 68265799}
-  m_RootOrder: 5
+  m_RootOrder: 3
 --- !u!1 &580551858
 GameObject:
   m_ObjectHideFlags: 0
@@ -10186,7 +10208,7 @@ Transform:
   - {fileID: 257984729}
   - {fileID: 585255908}
   m_Father: {fileID: 68265799}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!114 &1599920803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10449,7 +10471,7 @@ Transform:
   - {fileID: 2073101693}
   - {fileID: 1991207630}
   m_Father: {fileID: 68265799}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1671641973
 GameObject:
   m_ObjectHideFlags: 0

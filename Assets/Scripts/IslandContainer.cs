@@ -31,10 +31,10 @@ public class IslandContainer : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBroken(MembraneShell brokenMembrane)
+	private void MembraneBraking(MembraneShell brakingMembrane)
 	{
 		// Handle breaking of the island's atmosphere.
-		if (brokenMembrane != null && brokenMembrane == atmosphere)
+		if (brakingMembrane != null && brakingMembrane == atmosphere)
 		{
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;
@@ -86,6 +86,6 @@ public class IslandContainer : MonoBehaviour {
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
-		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
+		//LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 	}
 }

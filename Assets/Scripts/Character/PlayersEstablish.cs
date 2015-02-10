@@ -8,8 +8,17 @@ public class PlayersEstablish : MonoBehaviour {
 	public int startFluffCount = -1;
 	private bool setPlayer1Fluff = false;
 	private bool setPlayer2Fluff = false;
+	public bool placeOnAwake = true;
 
 	void Awake()
+	{
+		if (placeOnAwake)
+		{
+			PlacePlayers();
+		}
+	}
+
+	public void PlacePlayers()
 	{
 		if (Globals.Instance != null)
 		{
@@ -84,6 +93,12 @@ public class PlayersEstablish : MonoBehaviour {
 
 			// After the players have been spawned in one level, don't change them when new levels load.
 			Globals.Instance.updatePlayersOnLoad = false;
+
+			// Jump camera to players.
+			if (CameraSplitter.Instance != null)
+			{
+				CameraSplitter.Instance.JumpToPlayers();
+			}
 		}
 
 		if (player1Spawn != null)
