@@ -9,12 +9,15 @@ public class BorderBlock : MonoBehaviour {
 	private Vector3 player2ViewPort;
 	private float borderMin = -0.005f;
 	private float borderMax = 1.005f;
+	private CameraSplitter cameraSplit;
 
 	
 	// Use this for initialization
 	void Start () {
 		player1 = Globals.Instance.player1.gameObject;
 		player2 = Globals.Instance.player2.gameObject;
+		cameraSplit = GameObject.Find("Camera System").GetComponent<CameraSplitter>();
+		cameraSplit.enabled = false;
 	}
 	
 	// Update is called once per frame

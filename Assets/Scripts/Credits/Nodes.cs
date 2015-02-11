@@ -31,12 +31,12 @@ public class Nodes : MonoBehaviour {
 		r = 0.25f;
 		g = 0.0f;
 		b = 0.75f;
-		a = 1.0f;
-		GetComponent<Renderer>().material.color = Color.white;
+		a = 0.0f;
+	//	GetComponent<Renderer>().material.color = Color.white;
 		scalerate = 10.0f;
 		lifetime = 3.0f;
-		alpha = 1.0f;
-		alphafade = 0.5f;
+//		alpha = 1.0f;
+//		alphafade = 0.5f;
 		
 	}
 	
@@ -47,7 +47,7 @@ public class Nodes : MonoBehaviour {
 		{
 			GetComponent<Renderer>().material.color = myColor;
 			gameObject.GetComponent<Collider>().enabled = false;
-			a -= Time.deltaTime*2.0f;
+			a += Time.deltaTime*2.0f;
 		}
 		
 	}
@@ -72,7 +72,7 @@ public class Nodes : MonoBehaviour {
 			MiniFire(collide.transform.position);
 			activated = true;
 		}
-		if(collide.gameObject.tag == "Bond" )
+		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
 		{
 			FirePulse(11.0f,5.0f,1.0f,0.2f, collide.transform.position);
 			activated = true;
