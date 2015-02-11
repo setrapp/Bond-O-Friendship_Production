@@ -15,6 +15,8 @@ public class Fluff : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public GameObject bulb;
+    public GameObject stalk;
+    public GameObject depthMask;
 	[HideInInspector]
 	public CapsuleCollider hull;
 	[HideInInspector]
@@ -367,6 +369,12 @@ public class Fluff : MonoBehaviour {
 			{
 				attacheeFluffContainer.fluffs.Remove(this);
 			}
+		}
+
+		DepthMaskHandler depthMask = GetComponent<DepthMaskHandler>();
+		if (depthMask != null)
+		{
+			Destroy(depthMask.depthMask);
 		}
 	}
 }
