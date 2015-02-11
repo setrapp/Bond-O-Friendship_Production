@@ -34,7 +34,6 @@ public class MenuControl : MonoBehaviour {
 
     public void SetPlayerDevices()
     {
-
         if (InputManager.Devices.Count == 1)
             Globals.playerTwoDevice = InputManager.Devices[0];
         else if (InputManager.Devices.Count > 1)
@@ -44,6 +43,11 @@ public class MenuControl : MonoBehaviour {
     }
     public void MainMenuLoadLevel()
     {
+		CameraSplitter splitter = Globals.Instance.GetComponentInChildren<CameraSplitter>();
+		if (splitter != null)
+		{
+			splitter.splittable = true;
+		}
         Application.LoadLevel(startScene);
     }
 

@@ -14,6 +14,7 @@ public class CameraSplitter : MonoBehaviour {
 			return instance;
 		}
 	}
+	public bool splittable = true;
 	public bool split = false;
 	private bool wasSplit = false;
 	public float splitDistance;
@@ -45,7 +46,11 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Update()
 	{
-		CheckSplit(false);
+		//if (splittable)
+		{
+			CheckSplit(false);
+		}
+		
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
 	}
@@ -114,6 +119,16 @@ public class CameraSplitter : MonoBehaviour {
 		else
 		{
 			return combinedCameraSystem.GetComponentInChildren<Camera>();
+		}
+	}
+
+	public void JumpToPlayers()
+	{
+		if (Globals.Instance != null && Globals.Instance.player1 != null && Globals.Instance.player2 != null)
+		{
+			Vector3 oldCamPos = transform.position;
+			Vector3 newCamPos = ((Globals.Instance.player1.transform.position + Globals.Instance.player2.transform.position) / 2);
+			CameraSplitter.Instance.transform.position = new Vector3(newCamPos.x, newCamPos.y, oldCamPos.z);
 		}
 	}
 }
