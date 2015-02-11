@@ -9,7 +9,8 @@ public class MembraneShell : MonoBehaviour {
 	public GameObject membraneWallOriginal;
 	public bool createOnStart = true;
 	public int wallCount = 4;
-	
+	private bool braking = false;
+	public float buildDelay = -1;
 
 	void Start()
 	{
@@ -20,6 +21,11 @@ public class MembraneShell : MonoBehaviour {
 	}
 
 	public void CreateShell()
+	{
+		StartCoroutine(ConstructShell());
+	}
+
+	private IEnumerator ConstructShell()
 	{
 		if (wallCount < 3)
 		{
@@ -41,7 +47,7 @@ public class MembraneShell : MonoBehaviour {
 					createdWalls.Add(newWall);
 				}
 				newWallObject.transform.parent = transform;
-				newWallObject.SetActive(true);
+				newWallObject.SetActive(false);
 			}
 
 			float angleStep = -360 / wallCount;
@@ -57,9 +63,31 @@ public class MembraneShell : MonoBehaviour {
 
 			for (int i = 0; i < createdWalls.Count; i++)
 			{
+				createdWalls[i].gameObject.SetActive(true);
 				createdWalls[i].CreateWall();
+				if (buildDelay >= 0)
+				{
+					yield return new WaitForSeconds(buildDelay);
+				}
 			}
 		}
+
+		braking = false;
+	}
+
+	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
+	{
+		bool bondMade = false;
+		if (createdWalls[0] != null && createdWalls[0].membraneCreator != null)
+		{
+			Membrane membrane = createdWalls[0].membraneCreator.createdBond as Membrane;
+			if (membrane != null)
+			{
+				membrane.IsBondMade(partner);
+				bondMade = true;
+			}
+		}
+		return bondMade;
 	}
 
 	public void SilentBreak()
@@ -78,23 +106,49 @@ public class MembraneShell : MonoBehaviour {
 		}
 	}
 
+	private void MembraneBraking(MembraneWall brakingMembrane)
+	{
+		if (createdWalls.Contains(brakingMembrane) && !braking)
+		{
+			braking = true;
+			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
 	private void MembraneBroken(MembraneWall brokenMembrane)
 	{
 		if (createdWalls.Count > 0)
 		{
 			createdWalls.Remove(brokenMembrane);
-
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			}
 			if (createdWalls.Count == 0)
 			{
-				if (transform.parent != null)
-				{
-					transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
-				}
-				if (destroyWhenBroken)
-				{
-					Destroy(gameObject);
-				}
+				AllMembranesBroken();
 			}
 		}
+	}
+
+	private void AllMembranesBroken()
+	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("AllMembranesBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
+		if (destroyWhenBroken)
+		{
+			Destroy(gameObject);
+		}
+	}
+
+	private void MembraneBonding(MembraneWall bondingMembrane)
+	{
+		if (bondingMembrane != null && createdWalls.Contains(bondingMembrane))
+		{
+			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+		}
+
 	}
 }

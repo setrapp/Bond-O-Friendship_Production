@@ -45,6 +45,8 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	//public AsyncOperation requiredLoading = null;
+	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
 	public float relativeRequiredAdd = -1;
@@ -113,13 +115,20 @@ public class MembraneWall : MonoBehaviour {
 				}
 			}
 
-			if (!enoughPlayersBonded)
+			//bool loadingComplete = (requiredLoading == null) || requiredLoading.isDone;
+
+			bool requirementsMet = enoughPlayersBonded;// && loadingComplete;
+
+			if (!requirementsMet)
 			{
 				maxDistance = -1;
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
 				requirementDistanceAdd = 0;
 			}
 			else
 			{
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce;
+
 				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
 				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
 				{
@@ -219,6 +228,14 @@ public class MembraneWall : MonoBehaviour {
 		}
 	}
 
+	private void MembraneBraking(Membrane brakingMembrane)
+	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
 	private void MembraneBroken(Membrane brokenMembrane)
 	{
 		for (int i = 0; i < membraneCreator.shapingPointContainer.transform.childCount;i ++)
@@ -233,6 +250,14 @@ public class MembraneWall : MonoBehaviour {
 		if (destroyWhenBroken)
 		{
 			Destroy(gameObject);
+		}
+	}
+
+	private void MembraneBonding(Membrane bondingMembrane)
+	{
+		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		{
+			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

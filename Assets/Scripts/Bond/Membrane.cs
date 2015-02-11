@@ -86,12 +86,21 @@ public class Membrane : Bond {
 		}
 		else
 		{
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+			}
 			base.BreakBond(true);
 		}
 	}
 
 	public void BreakMembrane(bool quickDestroy = false)
 	{
+		if (transform.parent != null && !deconstructing)
+		{
+			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+		}
+
 		if (extraStats.breakDelay < 0)
 		{
 			quickDestroy = true;
@@ -139,7 +148,7 @@ public class Membrane : Bond {
 		if (!quickDestroy)
 		{
 			// Prepare neighbors to fill be broken while this is deconstructing.
-			if (extraStats.considerNeighborBonds)
+			/*if (extraStats.considerNeighborBonds)
 			{
 				if (membranePrevious != null)
 				{
@@ -149,7 +158,7 @@ public class Membrane : Bond {
 				{
 					membraneNext.forceFullDetail = true;
 				}
-			}
+			}*/
 
 			// Prepare to draw lines between each break, requiring one more line than break.
 			breakLines = new List<LineRenderer>();
