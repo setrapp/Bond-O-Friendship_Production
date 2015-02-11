@@ -75,6 +75,10 @@ public class MembraneLink : BondLink {
 				{
 					membrane.forceFullDetail = true;
 					bondAttachable.bonds[bondAttachable.bonds.Count - 1].stats.manualAttachment1 = true;
+					if (membrane.transform.parent != null)
+					{
+						membrane.transform.parent.SendMessage("MembraneBonding", membrane, SendMessageOptions.DontRequireReceiver);
+					}
 				}
 			}
 		}

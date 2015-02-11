@@ -121,4 +121,14 @@ public class CameraSplitter : MonoBehaviour {
 			return combinedCameraSystem.GetComponentInChildren<Camera>();
 		}
 	}
+
+	public void JumpToPlayers()
+	{
+		if (Globals.Instance != null && Globals.Instance.player1 != null && Globals.Instance.player2 != null)
+		{
+			Vector3 oldCamPos = transform.position;
+			Vector3 newCamPos = ((Globals.Instance.player1.transform.position + Globals.Instance.player2.transform.position) / 2);
+			CameraSplitter.Instance.transform.position = new Vector3(newCamPos.x, newCamPos.y, oldCamPos.z);
+		}
+	}
 }

@@ -4,6 +4,8 @@ using System.Collections;
 public class WindForce : MonoBehaviour {
 	
 	public float windStrength;
+	public int xWind;
+	public int yWind;
 	private ConstantForce windForce;
 
 	// Use this for initialization
@@ -20,7 +22,7 @@ public class WindForce : MonoBehaviour {
 		if(col.GetComponent<ConstantForce>() == null)
 		{
 			windForce = col.gameObject.AddComponent<ConstantForce>();
-			windForce.force = new Vector3(-windStrength, 0, 0);
+			windForce.force = new Vector3(windStrength * xWind, windStrength * yWind, 0);
 		}
 	}
 	void OnTriggerExit (Collider col) {

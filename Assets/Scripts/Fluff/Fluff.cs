@@ -371,7 +371,11 @@ public class Fluff : MonoBehaviour {
 			}
 		}
 
-        Destroy(this.GetComponent<DepthMaskHandler>().depthMask);
+		DepthMaskHandler depthMask = GetComponent<DepthMaskHandler>();
+		if (depthMask != null)
+		{
+			Destroy(depthMask.depthMask);
+		}
 	}
 }
 
