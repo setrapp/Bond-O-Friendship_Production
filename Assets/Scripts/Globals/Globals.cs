@@ -44,7 +44,8 @@ public class Globals : MonoBehaviour {
 	// Use this for initialization
 	void Awake()
 	{
-		DontDestroyOnLoad(gameObject);
+		player1.transform.parent = transform;
+		player2.transform.parent = transform;
 	}
 
 }
