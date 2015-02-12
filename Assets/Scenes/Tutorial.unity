@@ -1707,7 +1707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &190379384
 Transform:
   m_ObjectHideFlags: 0
@@ -2218,90 +2218,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: naturalFluffCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: startFluffCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: .5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 525.23999
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -174.669998
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: .5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 547.820007
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -174.669998
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 4.83837684e-05
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 4.83838703e-05
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 4.83838412e-05
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: targetSceneOverride
-      value: Ether Ring A
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: placeOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4102,6 +4018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   islandId: 1
   container: {fileID: 0}
+  levelHelper: {fileID: 1113736596}
 --- !u!1 &363862101
 GameObject:
   m_ObjectHideFlags: 0
@@ -12435,6 +12352,12 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1112651193}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1113736596
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400004, guid: 261165805ff9bf8428c49694d734be3a,
+    type: 2}
+  m_PrefabInternal: {fileID: 237778741}
+  m_Script: {fileID: 11500000, guid: c09afdb53c9d0174d9ecca1c0d0522ba, type: 3}
 --- !u!1001 &1114938491
 Prefab:
   m_ObjectHideFlags: 0

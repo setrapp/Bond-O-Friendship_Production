@@ -684,6 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630d1e12420074340968f5ab32058fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attachedPlayer: 0
   fluffMax: 10
   haloRange: 7
 --- !u!108 &156548837
@@ -1206,6 +1207,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1992938590}
     m_Modifications:
+    - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: triggerables.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: m_LocalPosition.x
       value: 46.2999992
@@ -1238,76 +1243,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.707106829
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .707106829
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -3.0999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -10.8999996
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.707106829
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .707106829
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 2.9000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -10.8999996
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: targetSceneOverride
-      value: Ether Ring A
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
-      propertyPath: placeOnAwake
+    - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: triggerables.Array.data[0]
+      value: 
+      objectReference: {fileID: 156548834}
+    - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: triggerables.Array.data[1]
+      value: 
+      objectReference: {fileID: 1031477991}
+    - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: startEnabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3929,6 +3874,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dce013a29daad574c9e4acbab39554b0, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &743245007
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400004, guid: 261165805ff9bf8428c49694d734be3a,
+    type: 2}
+  m_PrefabInternal: {fileID: 393031449}
+  m_Script: {fileID: 11500000, guid: c09afdb53c9d0174d9ecca1c0d0522ba, type: 3}
 --- !u!1001 &745450085
 Prefab:
   m_ObjectHideFlags: 0
@@ -5837,6 +5788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630d1e12420074340968f5ab32058fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attachedPlayer: 0
   fluffMax: 10
   haloRange: 7
 --- !u!4 &1031477994
@@ -9189,6 +9141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   islandId: 3
   container: {fileID: 0}
+  levelHelper: {fileID: 743245007}
 --- !u!1001 &2022703299
 Prefab:
   m_ObjectHideFlags: 0
