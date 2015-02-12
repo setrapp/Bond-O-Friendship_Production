@@ -204,14 +204,14 @@ namespace InControl
 			lastMousePosition = Input.mousePosition;
 
 			var baseEventData = GetBaseEventData();
-			var gameObject = eventSystem.currentSelectedObject;
+			var gameObject = eventSystem.currentSelectedGameObject;
 			if (gameObject == null)
 			{
-				gameObject = eventSystem.lastSelectedObject;
+				gameObject = eventSystem.lastSelectedGameObject;
 			}
 			if (gameObject == null)
 			{
-				gameObject = eventSystem.firstSelectedObject;
+				gameObject = eventSystem.firstSelectedGameObject;
 			}
 			eventSystem.SetSelectedGameObject( null, baseEventData );
 			eventSystem.SetSelectedGameObject( gameObject, baseEventData );
@@ -258,7 +258,7 @@ namespace InControl
 
 		bool SendButtonEventToSelectedObject()
 		{
-			if (eventSystem.currentSelectedObject == null /*|| currentInputSource != InputSource.InControl*/)
+			if (eventSystem.currentSelectedGameObject == null /*|| currentInputSource != InputSource.InControl*/)
 			{
 				return false;
 			}
@@ -267,12 +267,12 @@ namespace InControl
 
 			if (SubmitWasPressed)
 			{
-				ExecuteEvents.Execute( eventSystem.currentSelectedObject, baseEventData, ExecuteEvents.submitHandler );
+				ExecuteEvents.Execute( eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.submitHandler );
 			}
 
 			if (CancelWasPressed)
 			{
-				ExecuteEvents.Execute( eventSystem.currentSelectedObject, baseEventData, ExecuteEvents.cancelHandler );
+				ExecuteEvents.Execute( eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.cancelHandler );
 			}
 
 			return baseEventData.used;
@@ -299,7 +299,7 @@ namespace InControl
 					}
 				}
 
-				ExecuteEvents.Execute( eventSystem.currentSelectedObject, axisEventData, ExecuteEvents.moveHandler );
+				ExecuteEvents.Execute( eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler );
 
 				SetVectorRepeatTimer();
 			}
@@ -434,7 +434,7 @@ namespace InControl
 			var gameObject = ExecuteEvents.GetEventHandler<ISelectHandler>( rootGameObject );
 			if (gameObject == null)
 			{
-				gameObject = eventSystem.lastSelectedObject;
+				gameObject = eventSystem.lastSelectedGameObject;
 				result = true;
 			}
 			base.eventSystem.SetSelectedGameObject( gameObject, baseEventData );
@@ -444,12 +444,12 @@ namespace InControl
 
 		bool SendUpdateEventToSelectedObject()
 		{
-			if (base.eventSystem.currentSelectedObject == null)
+			if (base.eventSystem.currentSelectedGameObject == null)
 			{
 				return false;
 			}
 			var baseEventData = GetBaseEventData();
-			ExecuteEvents.Execute<IUpdateSelectedHandler>( base.eventSystem.currentSelectedObject, baseEventData, ExecuteEvents.updateSelectedHandler );
+			ExecuteEvents.Execute<IUpdateSelectedHandler>( base.eventSystem.currentSelectedGameObject, baseEventData, ExecuteEvents.updateSelectedHandler );
 			return baseEventData.used;
 		}
 

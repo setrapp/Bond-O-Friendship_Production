@@ -37,8 +37,8 @@ public class SpawnLeaves : MonoBehaviour {
 		halfWidth = GetComponent<Collider>().bounds.extents.x;
 		halfHeight = GetComponent<Collider>().bounds.extents.y;
 
-		player1 = GameObject.Find("Player 1");
-		player2 = GameObject.Find("Player 2");
+		player1 = Globals.Instance.player1.gameObject;
+		player2 = Globals.Instance.player2.gameObject;
 
 		startColor = new Color(0, 0, 0, 0);
 

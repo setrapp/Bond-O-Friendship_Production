@@ -31,8 +31,16 @@ public class LevelHandler : MonoBehaviour {
 	{
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
-			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
-			yield return islandLoading;
+			if (UnityEditorInternal.InternalEditorUtility.HasPro())
+			{
+				AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
+				yield return islandLoading;
+			}
+			else
+			{
+				Application.LoadLevelAdditive(islandName);
+				yield return null;
+			}
 
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
 			Island createdIsland = null;

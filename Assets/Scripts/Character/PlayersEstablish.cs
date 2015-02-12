@@ -21,7 +21,7 @@ public class PlayersEstablish : MonoBehaviour {
 	public void PlacePlayers()
 	{
 		if (Globals.Instance != null)
-		{
+		{			
 			/* TODO check if players already exist in scene.*/
 			PlayerInput player1 = null;
 			PlayerInput player2 = null;
