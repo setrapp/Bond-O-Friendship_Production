@@ -4,7 +4,7 @@
 		_Cutoff ("Base Alpha Cutoff", Float) = 0.5
 	}
 	SubShader {
-        Tags {"Queue" = "Transparent+1" }     
+        Tags {"Queue" = "Transparent-1" }     
         Lighting Off
         ZTest LEqual
         ZWrite On

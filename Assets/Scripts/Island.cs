@@ -6,6 +6,7 @@ public class Island : MonoBehaviour {
 	public IslandID islandId;
 	public IslandContainer container;
 	public LevelHelper levelHelper;
+	public bool forcePlayersEstablish = true;
 
 	void Start()
 	{
@@ -16,6 +17,11 @@ public class Island : MonoBehaviour {
 			{
 				Debug.LogError("Level Helper not attached to " + ((container != null) ? container.name + "'s island" : "an island. Please add one as child of the island level."));
 			}
+		}
+
+		if (forcePlayersEstablish && levelHelper != null && levelHelper.playersEstablish != null)
+		{
+			levelHelper.playersEstablish.PlacePlayers();
 		}
 	}
 }

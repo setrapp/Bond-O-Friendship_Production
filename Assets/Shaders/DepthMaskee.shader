@@ -4,7 +4,7 @@
 		_MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
 	}
     SubShader {
-        Tags {"Queue" = "Transparent+2" "RenderType" = "Transparent" "IgnoreProjector" = "True"}     
+        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = "True"}     
         Lighting Off
         ZTest LEqual
         ZWrite On

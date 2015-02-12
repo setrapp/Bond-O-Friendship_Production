@@ -43,7 +43,8 @@ public class Palette : MonoBehaviour {
 			collide.gameObject.GetComponent<Paint>().a = a;
 			collide.gameObject.GetComponent<Paint>().origColor = false;
 			CharacterComponents characterCo = collide.GetComponent<CharacterComponents>();
-			characterCo.midTrail.material.color = characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = palColor;
+			characterCo.midTrail.material.color = palColor;
+			characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = palColor;
 		}
 	}
 

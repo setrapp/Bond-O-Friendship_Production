@@ -51,19 +51,19 @@ public class Paint : MonoBehaviour {
 
 		if(origColor == true)
 		{
-		CharacterComponents characterCo = GetComponent<CharacterComponents>();
-		if(gameObject.name == "Player 1")
-		{
-			paintColor = new Color(0.1f+colorJitter,0.4f+colorJitter,0.9f+colorJitter,alpha);
-			characterCo.midTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
-			characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().sideTrailMaterial.color;
-		}
-		if(gameObject.name == "Player 2")
-		{
-			paintColor = new Color(0.9f+colorJitter,0.6f+colorJitter,0.1f+colorJitter,alpha);
-			characterCo.midTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
-			characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().sideTrailMaterial.color;
-		}
+			CharacterComponents characterCo = GetComponent<CharacterComponents>();
+			if(gameObject.name == "Player 1")
+			{
+				paintColor = new Color(0.1f+colorJitter,0.4f+colorJitter,0.9f+colorJitter,alpha);
+				characterCo.midTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
+				characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().sideTrailMaterial.color;
+			}
+			if(gameObject.name == "Player 2")
+			{
+				paintColor = new Color(0.9f+colorJitter,0.6f+colorJitter,0.1f+colorJitter,alpha);
+				characterCo.midTrail.material.color = GetComponent<CharacterColors>().trailMaterial.color;
+				characterCo.leftTrail.material.color = characterCo.rightTrail.material.color = GetComponent<CharacterColors>().sideTrailMaterial.color;
+			}
 		}
 		else
 			paintColor = new Color(r+colorJitter,g+colorJitter,b+colorJitter,a);
