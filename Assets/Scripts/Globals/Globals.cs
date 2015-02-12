@@ -42,10 +42,4 @@ public class Globals : MonoBehaviour {
 
 	public static bool sharing = false;
 	// Use this for initialization
-	void Awake()
-	{
-		player1.transform.parent = transform;
-		player2.transform.parent = transform;
-	}
-
 }
