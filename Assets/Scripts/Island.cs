@@ -7,6 +7,7 @@ public class Island : MonoBehaviour {
 	public IslandContainer container;
 	public LevelHelper levelHelper;
 	public bool forcePlayersEstablish = true;
+	public bool visibilityDepthMaskNeeded = false;
 
 	void Start()
 	{
@@ -22,6 +23,11 @@ public class Island : MonoBehaviour {
 		if (forcePlayersEstablish && levelHelper != null && levelHelper.playersEstablish != null)
 		{
 			levelHelper.playersEstablish.PlacePlayers();
+		}
+
+		if (Globals.Instance != null)
+		{
+			Globals.Instance.visibilityDepthMaskNeeded = visibilityDepthMaskNeeded;
 		}
 	}
 }

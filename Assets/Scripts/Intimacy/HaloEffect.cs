@@ -20,11 +20,13 @@ public class HaloEffect : MonoBehaviour {
 		{
 			fluffHandler = Globals.Instance.player1.gameObject.GetComponent<FluffHandler>();
 			transform.parent = Globals.Instance.player1.transform;
+			transform.localPosition = Vector3.zero;
 		}
 		else
 		{
 			fluffHandler = Globals.Instance.player2.gameObject.GetComponent<FluffHandler>();
 			transform.parent = Globals.Instance.player2.transform;
+			transform.localPosition = Vector3.zero;
 		}
 	}
 	

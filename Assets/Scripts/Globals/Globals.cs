@@ -38,6 +38,8 @@ public class Globals : MonoBehaviour {
 
 	public GameObject canvasPaused;
 
+	[Header("Fluff Depth Mask")]
+	public bool visibilityDepthMaskNeeded = false;
     public GameObject depthMaskPrefab;
     public GameObject depthMaskHolderPrefab;
 
