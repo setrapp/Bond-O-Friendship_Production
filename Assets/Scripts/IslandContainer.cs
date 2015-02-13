@@ -60,6 +60,10 @@ public class IslandContainer : MonoBehaviour {
 				LevelHandler.Instance.LoadEtherRing(parentRing, this);
 
 				Globals.Instance.visibilityDepthMaskNeeded = false;
+				if (DepthMaskHolder.Instance != null)
+				{
+					Destroy(DepthMaskHolder.Instance.gameObject);
+				}
 			}
 		}
 	}

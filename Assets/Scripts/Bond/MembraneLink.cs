@@ -70,7 +70,7 @@ public class MembraneLink : BondLink {
 				{
 					membrane.BreakInnerBond(partner);
 				}
-				bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition)/*contactPosition*/, true);
+				bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition), true);
 				if (bonded)
 				{
 					membrane.forceFullDetail = true;

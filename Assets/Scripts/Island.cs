@@ -20,9 +20,16 @@ public class Island : MonoBehaviour {
 			}
 		}
 
-		if (forcePlayersEstablish && levelHelper != null && levelHelper.playersEstablish != null)
+		if (levelHelper != null && levelHelper.playersEstablish != null)
 		{
-			levelHelper.playersEstablish.PlacePlayers();
+			if (levelHelper.playersEstablish.defaultPlayerParent == null)
+			{
+				levelHelper.playersEstablish.defaultPlayerParent = transform;
+			}
+			if (forcePlayersEstablish)
+			{
+				levelHelper.playersEstablish.PlacePlayers();
+			}
 		}
 
 		if (Globals.Instance != null)
