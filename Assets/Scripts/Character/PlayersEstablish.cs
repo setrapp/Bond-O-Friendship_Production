@@ -94,11 +94,11 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 
-			if (player1Holder != null && player1Holder.gameObject != Globals.Instance.gameObject)
+			if (player1Holder != null && player1Holder.gameObject != Globals.Instance.gameObject && player1Holder.gameObject != gameObject)
 			{
 				Destroy(player1Holder.gameObject);
 			}
-			if (player2Holder != null && player2Holder.gameObject != Globals.Instance.gameObject)
+			if (player2Holder != null && player2Holder.gameObject != Globals.Instance.gameObject && player2Holder.gameObject != gameObject)
 			{
 				Destroy(player1Holder.gameObject);
 			}
