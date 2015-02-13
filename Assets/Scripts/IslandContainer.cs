@@ -18,10 +18,15 @@ public class IslandContainer : MonoBehaviour {
 	{
 		if (spawnOnStart)
 		{
-			StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
+            GenerateIsland();
 			IsolateIsland();
 		}
 	}
+
+    public void GenerateIsland()
+    {
+        StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
+    }
 
 	public void GenerateAtmosphere()
 	{
