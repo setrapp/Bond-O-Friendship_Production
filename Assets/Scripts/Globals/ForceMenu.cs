@@ -4,6 +4,7 @@ using System.Collections;
 public class ForceMenu : MonoBehaviour {
 	public GameObject messagePrefab;
 	public string menuSceneName = "Menu";
+	public string targetSceneOverride = null;
 	
 	void Awake()
 	{
@@ -15,7 +16,14 @@ public class ForceMenu : MonoBehaviour {
 			if (levelLoadMessage != null)
 			{
 				levelLoadMessage.messageName = "LevelLoad";
-				levelLoadMessage.message = Application.loadedLevelName;
+				if (targetSceneOverride == null || targetSceneOverride == "")
+				{
+					levelLoadMessage.message = Application.loadedLevelName;
+				}
+				else
+				{
+					levelLoadMessage.message = targetSceneOverride;
+				}
 			}
 			Application.LoadLevel(menuSceneName);
 		}

@@ -5,7 +5,7 @@ public class FadeOut : MonoBehaviour {
 	
 	private float timer;
 	private Color myColor;
-	private bool fadeNow = false;
+	public bool fadeNow = false;
 
 	// Use this for initialization
 	void Start () {

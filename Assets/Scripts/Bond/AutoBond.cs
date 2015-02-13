@@ -65,7 +65,7 @@ public class AutoBond : MonoBehaviour {
 			}
 			if (bondOverrideStats != null && bondOverrideStats.stats != null)
 			{
-				createdBond.stats = bondOverrideStats.stats;
+				createdBond.stats.Overwrite(bondOverrideStats.stats, true);
 			}
 			Vector3 attachPos1 = attachable1.transform.position + attachable1.transform.InverseTransformDirection(bondOffset1);
 			Vector3 attachPos2 = attachable2.transform.position + attachable2.transform.InverseTransformDirection(bondOffset2);
