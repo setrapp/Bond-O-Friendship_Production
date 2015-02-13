@@ -10,6 +10,7 @@ public class FloatMoving : MonoBehaviour {
 	public int maxBondBonuses;
 	public LayerMask ignoreLayers;
 	private bool wasFloating = false;
+	public bool collided;
 	public bool Floating
 	{
 		get { return wasFloating; }
@@ -121,12 +122,14 @@ public class FloatMoving : MonoBehaviour {
 	{
 		if (collision.collider.tag == "Character")
 		{
+			collided = true;
 			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
 			if (Floating && partner != null && !character.bondAttachable.IsBondMade(partner))
 			{
 				character.bondAttachable.AttemptBond(partner, transform.position, true);
 			}
 		}
+
 	}
 
 	private void BondMade(BondAttachable bondPartner)
