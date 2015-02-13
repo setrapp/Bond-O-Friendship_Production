@@ -15,9 +15,16 @@ public class MenuControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Globals.playerOneDevice = InputManager.Devices[0];
-        Globals.startingDevice = InputManager.Devices[0];
-        Globals.numberOfControllers = InputManager.Devices.Count;
+		if(InputManager.Devices.Count > 0)
+		{
+			Globals.playerOneDevice = InputManager.Devices[0];
+			Globals.startingDevice = InputManager.Devices[0];
+			Globals.numberOfControllers = InputManager.Devices.Count;
+		}
+		else
+		{
+			Debug.LogError("No Controllers Detected.");
+		}
     }
 
 

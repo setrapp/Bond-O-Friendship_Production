@@ -31,43 +31,26 @@ public class LevelHandler : MonoBehaviour {
 	{
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
-			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
-			/*if (islandContainer.atmosphere != null)
+			if (UnityEditorInternal.InternalEditorUtility.HasPro())
 			{
-				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
-				{
-					islandContainer.atmosphere.createdWalls[i].requiredLoading = islandLoading;
-				*/
-			yield return islandLoading;
-
-
-			/*if (islandContainer.atmosphere != null)
+				AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
+				yield return islandLoading;
+			}
+			else
 			{
-				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
-				{
-					islandContainer.atmosphere.createdWalls[i].requiredLoading = null;
-				}
-			}*/
+				Application.LoadLevelAdditive(islandName);
+				yield return null;
+			}
+
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
 			Island createdIsland = null;
 			for (int i = 0; i < islandObjects.Length; i++)
 			{
 				Island checkIsland = islandObjects[i].GetComponent<Island>();
-				if (checkIsland != null && checkIsland.islandId == islandContainer.islandId)
+				if (checkIsland != null && checkIsland.islandId == islandContainer.islandId && islandContainer.island == null)
 				{
-					createdIsland = checkIsland;
-					createdIsland.transform.parent = islandContainer.transform;
-					createdIsland.transform.localPosition = Vector3.zero + islandContainer.spawnOffset;
-					islandContainer.island = createdIsland;
-					createdIsland.container = islandContainer;
-					islandContainer.islandLoading = false;
-					loadedIslands.Add(createdIsland);
-					PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
-					if (playersEstablish != null)
-					{
-						playersEstablish.PlacePlayers();
-					}
-					CameraSplitter.Instance.JumpToPlayers();
+					islandContainer.SendMessage("IslandLoaded", checkIsland);
+					loadedIslands.Add(checkIsland);
 				}
 			}
 		}
