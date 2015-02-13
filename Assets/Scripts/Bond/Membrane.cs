@@ -166,7 +166,7 @@ public class Membrane : Bond {
 			breakLines.Add(attachment2.lineRenderer);
 			for (int i = 2; i < breakLinks.Count + 1; i++)
 			{
-				GameObject newLineObject = GameObject.Instantiate(breakLines[0].gameObject);
+				GameObject newLineObject = (GameObject)Instantiate(breakLines[0].gameObject);
 				LineRenderer newLineRenderer = newLineObject.GetComponent<LineRenderer>();
 				newLineRenderer.transform.parent = breakLines[0].transform.parent;
 				newLineRenderer.SetVertexCount(0);

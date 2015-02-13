@@ -45,9 +45,4 @@ public class Globals : MonoBehaviour {
 
 	public static bool sharing = false;
 	// Use this for initialization
-	void Awake()
-	{
-		DontDestroyOnLoad(gameObject);
-	}
-
 }

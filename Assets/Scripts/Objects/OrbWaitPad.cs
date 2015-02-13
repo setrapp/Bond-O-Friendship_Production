@@ -65,7 +65,7 @@ public class OrbWaitPad : MonoBehaviour {
 				{
 					Destroy(collide.gameObject);
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
-					ParticleSystem tempParticle = Instantiate(activatedParticle);
+					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
 					activationSpheres[i] = null;
 					//activatedParticle.Play();

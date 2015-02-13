@@ -13,13 +13,14 @@ public class IslandContainer : MonoBehaviour {
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
 	private bool playersLanded = false;
+	private bool waitingToIsolate = false;
 
 	void Start()
 	{
 		if (spawnOnStart)
 		{
+			waitingToIsolate = true;
 			StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
-			IsolateIsland();
 		}
 	}
 
@@ -80,11 +81,40 @@ public class IslandContainer : MonoBehaviour {
 		{
 			landedPlayer = null;
 		}
+		island.levelHelper.landingEnabledObjects.ToggleObjects(false);
 	}
 
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
 		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
+		if (island != null)
+		{
+			island.levelHelper.landingEnabledObjects.ToggleObjects(true);
+		}
+	}
+
+	private void IslandLoaded(Island createdIsland)
+	{
+		if (createdIsland != null && createdIsland.islandId == islandId)
+		{
+			createdIsland.transform.parent = transform;
+			createdIsland.transform.localPosition = Vector3.zero + spawnOffset;
+			island = createdIsland;
+			createdIsland.container = this;
+			islandLoading = false;
+			
+			PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
+			if (playersEstablish != null)
+			{
+				playersEstablish.PlacePlayers();
+			}
+			CameraSplitter.Instance.JumpToPlayers();
+
+			if (waitingToIsolate)
+			{
+				IsolateIsland();
+			}
+		}
 	}
 }
