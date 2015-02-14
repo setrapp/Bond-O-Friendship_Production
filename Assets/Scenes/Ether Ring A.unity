@@ -242,8 +242,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 200
-    attachSpring2: 10
+    attachSpring1: 100
+    attachSpring2: 20
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -305,8 +305,8 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
-    fullDetailDistance: 5
-    sparseDetailDistance: 10
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
     sparseDetailFactor: .100000001
 --- !u!114 &197445393
 MonoBehaviour:
@@ -989,8 +989,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 200
-    attachSpring2: 10
+    attachSpring1: 100
+    attachSpring2: 20
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -1045,15 +1045,15 @@ MonoBehaviour:
     relativeWarningDistance: -1
     endsWidth: 1
     midWidth: .800000012
-    addLinkDistance: .5
-    removeLinkDistance: .300000012
+    addLinkDistance: 2
+    removeLinkDistance: 1.5
     springForce: 20
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
-    fullDetailDistance: 5
-    sparseDetailDistance: 10
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
     sparseDetailFactor: .100000001
 --- !u!114 &295984404
 MonoBehaviour:
@@ -1205,7 +1205,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.fullDetailDistance
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: createOnStart
@@ -1245,11 +1245,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring2
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring1
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.sparseDetailDistance
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}
@@ -1550,8 +1554,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 200
-    attachSpring2: 10
+    attachSpring1: 100
+    attachSpring2: 20
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -1613,8 +1617,8 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
-    fullDetailDistance: 5
-    sparseDetailDistance: 10
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
     sparseDetailFactor: .100000001
 --- !u!114 &605232520
 MonoBehaviour:
@@ -1779,6 +1783,7 @@ MonoBehaviour:
   naturalFluffCount: -1
   startFluffCount: -1
   placeOnAwake: 0
+  defaultPlayerParent: {fileID: 0}
 --- !u!1001 &721134910
 Prefab:
   m_ObjectHideFlags: 0
@@ -1856,7 +1861,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.fullDetailDistance
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: createOnStart
@@ -1888,11 +1893,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring2
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring1
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.addLinkDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.removeLinkDistance
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.sparseDetailDistance
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}
@@ -2742,7 +2759,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.fullDetailDistance
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: createOnStart
@@ -2782,11 +2799,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring2
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring1
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.sparseDetailDistance
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}

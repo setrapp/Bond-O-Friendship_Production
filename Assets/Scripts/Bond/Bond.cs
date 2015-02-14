@@ -581,7 +581,7 @@ public class Bond : MonoBehaviour {
 			links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
 		}
 		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
-		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
 	}
 	
 	// Hooks for subclasses.

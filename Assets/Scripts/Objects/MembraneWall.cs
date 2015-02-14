@@ -255,7 +255,7 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBonding(Membrane bondingMembrane)
 	{
-		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
 			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
