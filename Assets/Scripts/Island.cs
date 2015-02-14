@@ -6,7 +6,7 @@ public class Island : MonoBehaviour {
 	public IslandID islandId;
 	public IslandContainer container;
 	public LevelHelper levelHelper;
-	public bool forcePlayersEstablish = true;
+	//public bool forcePlayersEstablish = true;
 	public bool visibilityDepthMaskNeeded = false;
 
 	void Start()
@@ -26,7 +26,7 @@ public class Island : MonoBehaviour {
 			{
 				levelHelper.playersEstablish.defaultPlayerParent = transform;
 			}
-			if (forcePlayersEstablish)
+			if (Globals.Instance != null && Globals.Instance.existingEther == null)
 			{
 				levelHelper.playersEstablish.PlacePlayers();
 			}
