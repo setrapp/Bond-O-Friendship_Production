@@ -69,6 +69,7 @@ public class PlayersEstablish : MonoBehaviour {
 					player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
+
 				if (defaultPlayerParent != null)
 				{
 					player1.transform.parent = defaultPlayerParent;
@@ -98,6 +99,7 @@ public class PlayersEstablish : MonoBehaviour {
 					player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
+
 				if (defaultPlayerParent != null)
 				{
 					player2.transform.parent = defaultPlayerParent;
@@ -121,6 +123,8 @@ public class PlayersEstablish : MonoBehaviour {
 			{
 				CameraSplitter.Instance.JumpToPlayers();
 			}
+
+			SetFluffs();
 		}
 
 		if (player1Spawn != null)
@@ -135,7 +139,7 @@ public class PlayersEstablish : MonoBehaviour {
 		}
 	}
 
-	void Start()
+	private void SetFluffs()
 	{
 		if (Globals.Instance != null)
 		{
@@ -144,6 +148,7 @@ public class PlayersEstablish : MonoBehaviour {
 
 			if (setPlayer1Fluff && player1 != null)
 			{
+
 				FluffHandler fluffHandler1 = player1.GetComponent<FluffHandler>();
 				if (naturalFluffCount >= 0)
 				{

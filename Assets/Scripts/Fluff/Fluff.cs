@@ -14,8 +14,8 @@ public class Fluff : MonoBehaviour {
 	public Animation swayAnimation;
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
-	public GameObject bulb;
-    public GameObject stalk;
+	public MeshRenderer bulb;
+	public MeshRenderer stalk;
     public GameObject depthMask;
 	[HideInInspector]
 	public CapsuleCollider hull;
