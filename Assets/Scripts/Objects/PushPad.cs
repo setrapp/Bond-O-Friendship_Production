@@ -23,19 +23,19 @@ public class PushPad : MonoBehaviour {
 	void Start () {
 		timer = 1.0f;
 		doorTimer = 1.0f;
-		red = 0.4f;
+		red = 189.0f/255.0f;
 		alpha = 0.5f;
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		//Debug.Log(red);
 		//print (timer);
-		myColor = new Color(red, 0.1f, 0.3f,1.0f);
-		doorColor = new Color(0.6f,0.6f,0.6f,alpha);
+		myColor = new Color(red, 201.0f/255.0f,254.0f/255.0f,1.0f);
+		doorColor = new Color(1.0f,1.0f,1.0f,alpha);
 		postColor = new Color(1.0f,1.0f,1.0f,1.0f);
-		pad.GetComponent<Renderer>().material.color = doorColor;
+		pad.GetComponent<Renderer>().material.color = postColor;
 		door.GetComponent<Renderer>().material.color = doorColor;
 		track.GetComponent<Renderer>().material.color = doorColor;
 		post1.GetComponent<Renderer>().material.color = postColor;
@@ -55,7 +55,7 @@ public class PushPad : MonoBehaviour {
 			timer = 1.0f;
 			if(red > 0.4f)
 			{
-				red -= Time.deltaTime * 2.0f;
+				//red -= Time.deltaTime * 2.0f;
 			}
 		}
 		if (timer <= 0.0f)
