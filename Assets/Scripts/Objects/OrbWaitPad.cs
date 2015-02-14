@@ -11,17 +11,23 @@ public class OrbWaitPad : MonoBehaviour {
 	private float turnTime;
 	public bool activated = false;
 	private int triggersLit = 0;
-	private int maxTriggers = 3;
+	public int maxTriggers;
 	private bool fullyLit;
-	private GameObject[] usedBlossoms;
-	private GameObject[] activationSpheres;
+	public GameObject[] activationSpheres;
+	public ParticleSystem activatedParticle;
+	public GameObject optionalGate;
 
 	// Use this for initialization
 	void Start () {
 		red = 0.1f;
 		turnTime = 0.3f;
-		usedBlossoms = new GameObject[maxTriggers];
-		activationSpheres = GameObject.FindGameObjectsWithTag("Activation Sphere");
+		activationSpheres = new GameObject[transform.parent.childCount];
+		for(int i = 0; i < transform.parent.childCount; i++)
+		{
+			if(transform.parent.GetChild(i).name == "Activation Sphere" && activationSpheres[i] == null)
+					activationSpheres[i] = transform.parent.GetChild(i).gameObject;
+		}
+		activatedParticle.Stop();
 	}
 	
 	// Update is called once per frame
@@ -53,14 +59,18 @@ public class OrbWaitPad : MonoBehaviour {
 	{
 		if(collide.name == "Blossom")
 		{
-			for(int i = 0; i < maxTriggers; i++)
+			for(int i = 0; i < transform.parent.childCount; i++)
 			{
-				if(collide.gameObject == usedBlossoms[i])
-					break;
-				if(usedBlossoms[i] == null)
+				if(fullyLit == false && activationSpheres[i] != null)
 				{
-					usedBlossoms[i] = collide.gameObject;
+					Destroy(collide.gameObject);
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
+					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
+					tempParticle.transform.position = activationSpheres[i].transform.position;
+					activationSpheres[i] = null;
+					//activatedParticle.Play();
+					if(optionalGate != null)
+						Destroy(optionalGate);
 					break;
 				}
 			}

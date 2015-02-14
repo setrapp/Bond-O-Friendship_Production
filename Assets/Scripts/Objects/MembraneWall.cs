@@ -45,6 +45,8 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	//public AsyncOperation requiredLoading = null;
+	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
 	public float relativeMaxDistance = -1;
 	public float relativeRequiredAdd = -1;
@@ -113,13 +115,20 @@ public class MembraneWall : MonoBehaviour {
 				}
 			}
 
-			if (!enoughPlayersBonded)
+			//bool loadingComplete = (requiredLoading == null) || requiredLoading.isDone;
+
+			bool requirementsMet = enoughPlayersBonded;// && loadingComplete;
+
+			if (!requirementsMet)
 			{
 				maxDistance = -1;
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
 				requirementDistanceAdd = 0;
 			}
 			else
 			{
+				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce;
+
 				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
 				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
 				{
@@ -149,9 +158,8 @@ public class MembraneWall : MonoBehaviour {
 		}
 
 		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
-		if (shapingIndices.Count != shapingPoints.Count)// && (createdMembrane == null || shapingIndices.Count != createdMembrane.shapingPoints.Count - 2))
+		if (shapingIndices.Count != shapingPoints.Count)
 		{
-			Debug.Log(shapingIndices.Count + " " + shapingPoints.Count);
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
 		}
 
@@ -185,31 +193,30 @@ public class MembraneWall : MonoBehaviour {
 		// Create shaping points and place them relative to the membrane track.
 		if (membraneCreator.shapingPointContainer != null)
 		{
-			while(shapingPoints.Count > 0)
+			for (int i = 0; i < shapingPoints.Count; i++)
 			{
 				GameObject newShapingObject = (GameObject)Instantiate(shapingPointPrefab);
 
 				// Position shaping point relative to membrane track.
-				newShapingObject.transform.position = startPos + (parallel * shapingPoints[0].position.y) + (perpendicular * shapingPoints[0].position.x);
-				
+				newShapingObject.transform.position = startPos + (parallel * shapingPoints[i].position.y) + (perpendicular * shapingPoints[i].position.x);
+
 				// Populate shaping point values, fallback to defaults when necessary.
 				ShapingPoint newShapingPoint = newShapingObject.GetComponent<ShapingPoint>();
 				if (newShapingPoint != null)
 				{
-					if (shapingPoints[0].shapingForce < 0)
+					if (shapingPoints[i].shapingForce < 0)
 					{
-						shapingPoints[0].shapingForce = defaultShapingForce;
+						shapingPoints[i].shapingForce = defaultShapingForce;
 					}
-					newShapingPoint.shapingForce = shapingPoints[0].shapingForce;
+					newShapingPoint.shapingForce = shapingPoints[i].shapingForce;
 				}
 
-				if (shapingPoints[0].pointName != null && shapingPoints[0].pointName != "")
+				if (shapingPoints[i].pointName != null && shapingPoints[i].pointName != "")
 				{
-					newShapingObject.name = shapingPoints[0].pointName;
+					newShapingObject.name = shapingPoints[i].pointName;
 				}
 
 				newShapingObject.transform.parent = membraneCreator.shapingPointContainer.transform;
-				shapingPoints.RemoveAt(0);
 			}
 		}
 
@@ -221,15 +228,36 @@ public class MembraneWall : MonoBehaviour {
 		}
 	}
 
+	private void MembraneBraking(Membrane brakingMembrane)
+	{
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
 	private void MembraneBroken(Membrane brokenMembrane)
 	{
+		for (int i = 0; i < membraneCreator.shapingPointContainer.transform.childCount;i ++)
+		{
+			Destroy(membraneCreator.shapingPointContainer.transform.GetChild(i).gameObject);
+		}
+
+		if (transform.parent != null)
+		{
+			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
 		if (destroyWhenBroken)
 		{
-			if (transform.parent != null)
-			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
-			}
 			Destroy(gameObject);
+		}
+	}
+
+	private void MembraneBonding(Membrane bondingMembrane)
+	{
+		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		{
+			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }
