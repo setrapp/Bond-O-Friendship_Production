@@ -1,4 +1,4 @@
-﻿Shader "DepthMask/Masker" {
+﻿Shader "DepthMask/Masker Texture" {
     Properties {
 		_MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
 		_Cutoff ("Base Alpha Cutoff", Float) = 0.5
