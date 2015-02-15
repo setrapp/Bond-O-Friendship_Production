@@ -27,7 +27,10 @@ public class OrbWaitPad : MonoBehaviour {
 			if(transform.parent.GetChild(i).name == "Activation Sphere" && activationSpheres[i] == null)
 					activationSpheres[i] = transform.parent.GetChild(i).gameObject;
 		}
-		activatedParticle.Stop();
+		if (activatedParticle != null)
+		{
+			activatedParticle.Stop();
+		}
 	}
 	
 	// Update is called once per frame

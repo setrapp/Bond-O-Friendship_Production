@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 using InControl;
 
 public class MenuControl : MonoBehaviour {
+
+    public GameObject levelSelectButton;
+    public GameObject startMenu;
+    public GameObject levelSelect;
 
 	public string startScene;
     InputDevice device;
@@ -56,6 +61,30 @@ public class MenuControl : MonoBehaviour {
 			splitter.splittable = true;
 		}
         Application.LoadLevel(startScene);
+    }
+
+    public void MainMenuLoadLevel(string levelName)
+    {
+        if(levelName != null)
+        {
+            Application.LoadLevel(levelName);
+        }
+    }
+
+    public void LevelSelect()
+    {
+        startMenu.SetActive(false);
+        levelSelect.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(levelSelectButton);
+    }
+
+    public void ExitGame()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+		        Application.Quit();
+        #endif
     }
 
 }

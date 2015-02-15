@@ -10,7 +10,10 @@ public class SimpleFluffGen : MonoBehaviour {
 	public float minimumForce = 3.0f;
 	public float maximumForce = 10.0f;
 	public int angleShot;
-	
+	public Color myColor;
+	public float alpha;
+	public GameObject Point;
+
 	//public GameObject generatorTop;
 	
 	private float spawnTimer;
@@ -22,11 +25,22 @@ public class SimpleFluffGen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		spawnTimer = spawnRate;
+		alpha = 1.0f;
 		//baseTarget = generatorTop.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		myColor = new Color(0.6f, 0.6f,1.0f,alpha);
+
+		if(alpha > 0.2f)
+			alpha -= Time.deltaTime * 2.0f;
+
+		if(Point != null)
+		{
+			Point.GetComponent<Renderer>().material.color = myColor;
+		}
+
 		spawnTimer -= Time.deltaTime;
 		//Debug.Log(targetAngle);
 		//if(targetAngle != null && targetAngle != Vector3.zero)
@@ -40,9 +54,12 @@ public class SimpleFluffGen : MonoBehaviour {
 		
 		if(spawnTimer <= 0)
 		{
+			if(alpha < 1.0f)
+				alpha = 1.0f;
 			GenerateFluff();
 			spawnTimer = spawnRate;
 		}
+
 	}
 	
 	void GenerateFluff () {
