@@ -96,11 +96,13 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
-				if (fluffMesh != null)
-				{
-					fluffMaterial = fluffMesh.material;
-				}
+				
+                //old code
+                MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
+                if (fluffMesh != null)
+                {
+                    fluffMaterial = fluffMesh.material;
+                }
 
 				SpawnFluff(true, fluffMaterial);
 
@@ -256,12 +258,19 @@ public class FluffHandler : MonoBehaviour {
 				useMaterial = fluffMaterial;
 			}
 
-			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
+			//MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
 			
-			for (int i = 0; i < meshRenderers.Length; i++)
-			{
-				meshRenderers[i].material = useMaterial;
-			}
+            //for (int i = 0; i < meshRenderers.Length; i++)
+            //{
+            //    meshRenderers[i].material = useMaterial;
+            //}
+
+            if (newFluffInfo.bulb.GetComponent<MeshRenderer>() != null)
+                newFluffInfo.bulb.GetComponent<MeshRenderer>().material = useMaterial;
+
+            if (newFluffInfo.stalk.GetComponent<MeshRenderer>() != null)
+                newFluffInfo.stalk.GetComponent<MeshRenderer>().material = useMaterial;
+
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
