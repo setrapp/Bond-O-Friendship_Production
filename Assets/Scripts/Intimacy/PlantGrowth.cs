@@ -55,7 +55,6 @@ public class PlantGrowth : MonoBehaviour {
 				{
 					blossoms[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.2f);
-
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
 					blossoms[i].transform.position = buds[i].transform.position + buds[i].transform.up*(buds[i].transform.localScale.y/2) - new Vector3(0, 0, 1);
@@ -73,7 +72,9 @@ public class PlantGrowth : MonoBehaviour {
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
 							Light blossomLight = blossoms[j].AddComponent<Light>();
-							blossomLight.range = 30;
+//							blossomLight.range = 30;
+							DepthMaskHandler depth = blossoms[j].AddComponent<DepthMaskHandler>();
+							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
 						}
 					}
 				}
