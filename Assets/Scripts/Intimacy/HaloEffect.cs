@@ -3,6 +3,7 @@ using System.Collections;
 
 public class HaloEffect : MonoBehaviour {
 
+	public PlayerInput.Player attachedPlayer;
 	private FluffHandler fluffHandler;
 	private int fluffCountAdjust;
 	private Light light;
@@ -14,15 +15,18 @@ public class HaloEffect : MonoBehaviour {
 	void Start () {
 
 		light = GetComponent<Light>();
-		if(transform.name == "Player 1 Halo")
+		//TODO attach to attached player rather than using name
+		if(attachedPlayer == PlayerInput.Player.Player1)
 		{
 			fluffHandler = Globals.Instance.player1.gameObject.GetComponent<FluffHandler>();
 			transform.parent = Globals.Instance.player1.transform;
+			transform.localPosition = Vector3.zero;
 		}
 		else
 		{
 			fluffHandler = Globals.Instance.player2.gameObject.GetComponent<FluffHandler>();
 			transform.parent = Globals.Instance.player2.transform;
+			transform.localPosition = Vector3.zero;
 		}
 	}
 	

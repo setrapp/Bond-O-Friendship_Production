@@ -10,6 +10,7 @@ public class CharacterColors : MonoBehaviour {
 	public Material headMaterial;
 	public Material fillMaterial;
 	public Material trailMaterial;
+	public Material sideTrailMaterial;
 	public Material fluffMaterial;
 
 	void Awake()
@@ -37,9 +38,9 @@ public class CharacterColors : MonoBehaviour {
 		character.headRenderer.material = headMaterial;
 		character.fillRenderer.material = fillMaterial;
 		character.flashRenderer.color = attachmentColor;
-		character.leftTrail.material = trailMaterial;
+		character.leftTrail.material = sideTrailMaterial;
 		character.midTrail.material = trailMaterial;
-		character.rightTrail.material = trailMaterial;
+		character.rightTrail.material = sideTrailMaterial;
 		character.fluffHandler.fluffMaterial = fluffMaterial;
 	}
 }

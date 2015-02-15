@@ -27,7 +27,10 @@ public class OrbWaitPad : MonoBehaviour {
 			if(transform.parent.GetChild(i).name == "Activation Sphere" && activationSpheres[i] == null)
 					activationSpheres[i] = transform.parent.GetChild(i).gameObject;
 		}
-		activatedParticle.Stop();
+		if (activatedParticle != null)
+		{
+			activatedParticle.Stop();
+		}
 	}
 	
 	// Update is called once per frame
@@ -65,7 +68,7 @@ public class OrbWaitPad : MonoBehaviour {
 				{
 					Destroy(collide.gameObject);
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
-					ParticleSystem tempParticle = Instantiate(activatedParticle);
+					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
 					activationSpheres[i] = null;
 					//activatedParticle.Play();

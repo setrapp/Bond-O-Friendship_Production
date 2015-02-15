@@ -7,7 +7,6 @@ public class PlantGrowth : MonoBehaviour {
 	public float wiltTimer;
 	public int fluffsRequiredPerBud;
 	public bool collided;
-	public GameObject collidedBud;
 	public Material plantColor;
 
 	private int fluffCount;
@@ -24,7 +23,6 @@ public class PlantGrowth : MonoBehaviour {
 		buds = GetComponentsInChildren<Bud>();
 		blossoms = new GameObject[buds.Length];
 		plantColorCopy = new Material(plantColor);
-		//plantColorCopy.CopyPropertiesFromMaterial(plantColor);
 		MeshRenderer[] childRenders = GetComponentsInChildren<MeshRenderer>();
 		for(int i = 0; i < childRenders.Length; i++)
 		{

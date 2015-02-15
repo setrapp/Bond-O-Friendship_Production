@@ -38,16 +38,18 @@ public class Globals : MonoBehaviour {
 
 	public GameObject canvasPaused;
 
+	[Header("Fluff Depth Mask")]
+	public bool visibilityDepthMaskNeeded = false;
+	[Header("Fluff Depth Mask")]
     public GameObject depthMaskPrefab;
+	[Header("Fluff Depth Mask")]
     public GameObject depthMaskHolderPrefab;
 
 	public bool updatePlayersOnLoad = true;
 
 	public static bool sharing = false;
-	// Use this for initialization
-	void Awake()
-	{
-		DontDestroyOnLoad(gameObject);
-	}
 
+	public EtherRing existingEther = null;
+
+	// Use this for initialization
 }

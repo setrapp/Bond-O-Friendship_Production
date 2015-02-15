@@ -14,7 +14,7 @@ public class NodeMonitor : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		nodeActivated = 0;
-		canvasPos = new Vector3(transform.position.x,transform.position.y,transform.position.z +6.0f);
+		//canvasPos = new Vector3(transform.position.x,transform.position.y,transform.position.z);
 	}
 	
 	// Update is called once per frame
@@ -41,7 +41,9 @@ public class NodeMonitor : MonoBehaviour {
 		if(activated == true)
 		{
 
-			canvas1 = Instantiate(canvas,canvasPos,Quaternion.identity) as GameObject;
+			canvas1 = Instantiate(canvas) as GameObject;
+			canvas1.transform.parent = transform;
+			canvas1.transform.localPosition = new Vector3(0, 0, 5);
 		}
 		}
 	
