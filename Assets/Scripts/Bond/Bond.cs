@@ -135,7 +135,6 @@ public class Bond : MonoBehaviour {
 			float actualMidWidth = (stats.relativeWarningDistance > 0) ? stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1) : stats.midWidth;
 
 			// Place attachment points for each partner.
-			Vector3 betweenPartners = (attachment2.position - attachment1.position).normalized;
 			if (!stats.manualAttachment1)
 			{
 				attachment1.position = attachment1.attachee.transform.position + attachment1.attachee.transform.TransformDirection(attachment1.offset);
@@ -240,8 +239,6 @@ public class Bond : MonoBehaviour {
 
 	public void AttachPartners(BondAttachable attachee1, Vector3 attachPoint1, BondAttachable attachee2, Vector3 attachPoint2)
 	{
-		Vector3 betweenPartners = (attachee2.transform.position - attachee1.transform.position).normalized;
-
 		attachment1.attachee = attachee1;
 		attachment1.attachedLink = links[0];
 		attachment1.position = attachPoint1;
@@ -581,7 +578,7 @@ public class Bond : MonoBehaviour {
 			links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
 		}
 		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
-		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
 	}
 	
 	// Hooks for subclasses.

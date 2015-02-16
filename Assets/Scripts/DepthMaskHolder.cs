@@ -9,6 +9,7 @@ public class DepthMaskHolder : MonoBehaviour {
         {
             if (instance == null && Globals.Instance != null)
             {
+
                 GameObject depthMaskHolderObj = (GameObject)Instantiate(Globals.Instance.depthMaskHolderPrefab);
                 if (depthMaskHolderObj != null)
                 {

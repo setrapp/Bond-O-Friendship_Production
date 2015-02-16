@@ -157,7 +157,6 @@ public class MembraneWall : MonoBehaviour {
 			return;
 		}
 
-		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
 		if (shapingIndices.Count != shapingPoints.Count)
 		{
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
@@ -255,7 +254,7 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBonding(Membrane bondingMembrane)
 	{
-		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
 			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}

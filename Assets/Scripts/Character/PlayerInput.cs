@@ -24,9 +24,7 @@ public class PlayerInput : MonoBehaviour {
 	public bool joystickDetermined = false;
 
 	//private bool paused = false;
-
-	private float i = 0;
-
+	
     InputDevice device;
 
     private bool oneController;
