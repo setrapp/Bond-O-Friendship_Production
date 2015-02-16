@@ -72,7 +72,7 @@ public class PlantGrowth : MonoBehaviour {
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
 							Light blossomLight = blossoms[j].AddComponent<Light>();
-//							blossomLight.range = 30;
+							blossomLight.range = 1;
 							DepthMaskHandler depth = blossoms[j].AddComponent<DepthMaskHandler>();
 							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
 						}
