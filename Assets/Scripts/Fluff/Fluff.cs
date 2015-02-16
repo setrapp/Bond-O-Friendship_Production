@@ -344,13 +344,14 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
+	/* TODO What was this for???
 	void OnTriggerEnter(Collider other)
 	{
 		if ((attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
-	}
+	}*/
 
 	void OnTriggerExit(Collider other)
 	{
