@@ -15,10 +15,9 @@ public class BudCollision : MonoBehaviour {
 	
 	}
 
-	void OnCollisionEnter (Collision col)
+	void AttachFluff (Fluff fluff)
 	{
-		Fluff fluff = col.gameObject.GetComponent<Fluff>();
-		if(col.transform.tag == "Fluff" && fluff != null && fluff.creator != null)
+		if(fluff != null && fluff.creator != null)
 			plant.collided = true;
 	}
 }

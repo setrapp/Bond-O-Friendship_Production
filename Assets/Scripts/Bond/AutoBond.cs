@@ -25,7 +25,7 @@ public class AutoBond : MonoBehaviour {
 	{
 		if (createdBond != null)
 		{
-			return;	
+			return;
 		}
 
 		if (bondToPlayer && Globals.Instance != null)

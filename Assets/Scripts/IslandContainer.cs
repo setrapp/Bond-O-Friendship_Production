@@ -12,7 +12,7 @@ public class IslandContainer : MonoBehaviour {
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
-	private bool playersLanded = false;
+	//private bool playersLanded = false;
 	private bool waitingToIsolate = false;
 
 	void Start()
@@ -58,6 +58,12 @@ public class IslandContainer : MonoBehaviour {
 			{
 				// Load the contents of the ether ring that surrounds this island.
 				LevelHandler.Instance.LoadEtherRing(parentRing, this);
+
+				Globals.Instance.visibilityDepthMaskNeeded = false;
+				if (DepthMaskHolder.Instance != null)
+				{
+					Destroy(DepthMaskHolder.Instance.gameObject);
+				}
 			}
 		}
 	}
