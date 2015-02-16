@@ -32,7 +32,7 @@ public class PushPlayers : MonoBehaviour {
 			p2Vel = player2.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude;
 			GameObject s =  GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			s.transform.position = new Vector3(expPos.x, expPos.y, expPos.z + Random.Range(2.0f, 4.0f));
-			s.GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.4f);
+			s.GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.6f);
 			s.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
 			s.AddComponent<Light>();
 			s.transform.parent = transform;
