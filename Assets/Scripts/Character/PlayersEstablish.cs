@@ -125,6 +125,7 @@ public class PlayersEstablish : MonoBehaviour {
 			}
 
 			SetFluffs();
+			SendMessage("PlayersPlaced", SendMessageOptions.DontRequireReceiver);
 		}
 
 		if (player1Spawn != null)
