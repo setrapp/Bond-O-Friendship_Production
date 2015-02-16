@@ -66,36 +66,36 @@ namespace InControl
 		{
 
 			#if UNITY_ANDROID && INCONTROL_OUYA && !UNITY_EDITOR
-			var lsv = Utility.ApplyCircularDeadZone( 
-				          OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_X ), 
-				          -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_Y ), 
-				          LowerDeadZone, 
-				          UpperDeadZone
-			          );
+			var lsv = Utility.ApplyCircularDeadZone(
+						  OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_X ),
+						  -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_Y ),
+						  LowerDeadZone,
+						  UpperDeadZone
+					  );
 			UpdateWithValue( InputControlType.LeftStickX, lsv.x, updateTick );
 			UpdateWithValue( InputControlType.LeftStickY, lsv.y, updateTick );
 
-			var rsv = Utility.ApplyCircularDeadZone( 
-				          OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_X ), 
-				          -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_Y ), 
-				          LowerDeadZone, 
-				          UpperDeadZone
-			          );
+			var rsv = Utility.ApplyCircularDeadZone(
+						  OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_X ),
+						  -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_Y ),
+						  LowerDeadZone,
+						  UpperDeadZone
+					  );
 			UpdateWithValue( InputControlType.RightStickX, rsv.x, updateTick );
 			UpdateWithValue( InputControlType.RightStickY, rsv.y, updateTick );
 
 			var lt = Utility.ApplyDeadZone(
-				         OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_L2 ),
-				         LowerDeadZone,
-				         UpperDeadZone 
-			         );
+						 OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_L2 ),
+						 LowerDeadZone,
+						 UpperDeadZone
+					 );
 			UpdateWithValue( InputControlType.LeftTrigger, lt, updateTick );
 
 			var rt = Utility.ApplyDeadZone(
-				         OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_R2 ),
-				         LowerDeadZone,
-				         UpperDeadZone 
-			         );
+						 OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_R2 ),
+						 LowerDeadZone,
+						 UpperDeadZone
+					 );
 			UpdateWithValue( InputControlType.RightTrigger, rt, updateTick );
 
 			UpdateWithState( InputControlType.DPadUp, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_UP ), updateTick );
@@ -122,9 +122,9 @@ namespace InControl
 		public bool IsConnected
 		{
 			get
-			{ 
+			{
 				#if UNITY_ANDROID && INCONTROL_OUYA && !UNITY_EDITOR
-				return OuyaSDK.OuyaInput.IsControllerConnected( DeviceIndex ); 
+				return OuyaSDK.OuyaInput.IsControllerConnected( DeviceIndex );
 				#else
 				return false;
 				#endif
