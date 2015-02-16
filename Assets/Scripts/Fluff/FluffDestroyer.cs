@@ -11,20 +11,20 @@ public class FluffDestroyer : MonoBehaviour {
 	public float crossAlpha = 0.5f;
 	private float restAlpha;
 	public float fadeTime = 1;
-	private MeshRenderer renderer;
+	private MeshRenderer targetRenderer;
 	
 
 	void Awake()
 	{
-		renderer = GetComponent<MeshRenderer>();
-		restAlpha = renderer.material.color.a;
+		targetRenderer = GetComponent<MeshRenderer>();
+		restAlpha = targetRenderer.material.color.a;
 	}
 
 	void Update()
 	{
-		if (renderer.material.color.a > restAlpha)
+		if (targetRenderer.material.color.a > restAlpha)
 		{
-			Color fadeColor = renderer.material.color;
+			Color fadeColor = targetRenderer.material.color;
 			if (fadeTime <= 0)
 			{
 				fadeColor.a = restAlpha;
@@ -37,7 +37,7 @@ public class FluffDestroyer : MonoBehaviour {
 					fadeColor.a = restAlpha;
 				}
 			}
-			renderer.material.color = fadeColor;
+			targetRenderer.material.color = fadeColor;
 		}
 
 		if (toDestroy != null)
@@ -121,9 +121,9 @@ public class FluffDestroyer : MonoBehaviour {
 
 		if (crossed)
 		{
-			Color crossColor = renderer.material.color;
+			Color crossColor = targetRenderer.material.color;
 			crossColor.a = crossAlpha;
-			renderer.material.color = crossColor;
+			targetRenderer.material.color = crossColor;
 		}
 	}
 }

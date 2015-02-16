@@ -51,5 +51,19 @@ public class Globals : MonoBehaviour {
 
 	public EtherRing existingEther = null;
 
-	// Use this for initialization
+	void Awake()
+	{
+		if (!Application.isEditor)
+		{
+			Screen.showCursor = false;
+		}
+	}
+
+	void Update()
+	{
+		if (Input.GetKey(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+	}
 }
