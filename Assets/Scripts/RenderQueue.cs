@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class RenderQueue : MonoBehaviour {
-	public Renderer renderer;
+	public Renderer targetRenderer;
 	public RenderBase renderBase = RenderBase.GEOMETRY;
 	public int renderOffset = 0;
 
@@ -17,14 +17,14 @@ public class RenderQueue : MonoBehaviour {
 
 	void Start()
 	{
-		if (renderer == null)
+		if (targetRenderer == null)
 		{
-			renderer = GetComponent<Renderer>();
+			targetRenderer = GetComponent<Renderer>();
 		}
 
-		if (renderer != null && renderer.material != null)
+		if (targetRenderer != null && targetRenderer.material != null)
 		{
-			renderer.material.renderQueue = (int)renderBase + renderOffset;
+			targetRenderer.material.renderQueue = (int)renderBase + renderOffset;
 		}
 	}
 }

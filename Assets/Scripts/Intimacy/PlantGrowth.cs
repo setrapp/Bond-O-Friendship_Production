@@ -8,8 +8,9 @@ public class PlantGrowth : MonoBehaviour {
 	public int fluffsRequiredPerBud;
 	public bool collided;
 	public Material plantColor;
+	public DepthMaskHandler depthMask;
 
-	private int fluffCount;
+	public int fluffCount;
 	private bool wilting;
 	private Bud[] buds;
 	private GameObject[] blossoms;
@@ -32,6 +33,12 @@ public class PlantGrowth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (depthMask != null && depthMask.depthMask != null)
+		{
+			float maskRange = Mathf.Min(fluffCount, buds.Length * fluffsRequiredPerBud);
+			depthMask.depthMask.transform.localScale = new Vector3(maskRange, maskRange, depthMask.depthMask.transform.localScale.z);
+		}
+
 		if(collided == true)
 		{
 			fluffCount++;
@@ -71,10 +78,12 @@ public class PlantGrowth : MonoBehaviour {
 							blossomRigid.drag = 1;
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
-							Light blossomLight = blossoms[j].AddComponent<Light>();
-//							blossomLight.range = 30;
-							DepthMaskHandler depth = blossoms[j].AddComponent<DepthMaskHandler>();
+							/*Light blossomLight = */blossoms[j].AddComponent<Light>();
+							//blossomLight.range = 30;
+							/*DepthMaskHandler depth = */blossoms[j].AddComponent<DepthMaskHandler>();
 							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
+							FluffStick fluffStick = blossoms[j].AddComponent<FluffStick>();
+							fluffStick.maxPullForce = 0.01f;
 						}
 					}
 				}

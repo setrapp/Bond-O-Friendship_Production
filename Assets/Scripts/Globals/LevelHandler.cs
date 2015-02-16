@@ -20,7 +20,7 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 	private List<Island> loadedIslands;
-	private float progressMagicNumber = 0.9f;
+	//private float progressMagicNumber = 0.9f;
 
 	void Awake()
 	{
@@ -31,19 +31,18 @@ public class LevelHandler : MonoBehaviour {
 	{
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
-			if (UnityEditorInternal.InternalEditorUtility.HasPro())
+			//if (UnityEditorInternal.InternalEditorUtility.HasPro())	// TODO: Comment out this line when building to standalone or web.
 			{
 				AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
 				yield return islandLoading;
 			}
-			else
+			/*else														// TODO: Comment out this block out when building to standalone or web.
 			{
 				Application.LoadLevelAdditive(islandName);
 				yield return null;
-			}
+			}*/
 
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
-			Island createdIsland = null;
 			for (int i = 0; i < islandObjects.Length; i++)
 			{
 				Island checkIsland = islandObjects[i].GetComponent<Island>();
