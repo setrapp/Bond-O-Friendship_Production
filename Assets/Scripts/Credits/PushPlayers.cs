@@ -24,6 +24,7 @@ public class PushPlayers : MonoBehaviour {
 	void Update () {
 		if(player1.GetComponent<FloatMoving>().collided == true)
 		{
+			Debug.Log("test");
 			expPos = (player1.transform.position + player2.transform.position)/2;
 			collisionParticle = (ParticleSystem)Instantiate(collisionParticlePrefab);
 			collisionParticle.transform.position = expPos;
