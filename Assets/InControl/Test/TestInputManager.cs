@@ -73,11 +73,6 @@ namespace InControl
 			{
 				Application.LoadLevel( "TestInputManager" );
 			}
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                InputManager.SetupInternal();
-            }
 		}
 
 
