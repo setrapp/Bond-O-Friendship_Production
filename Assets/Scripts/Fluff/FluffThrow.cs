@@ -29,10 +29,16 @@ public class FluffThrow : MonoBehaviour {
 
 		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), character.fluffHandler.fluffs.Count);
 
-
-		if (character.fluffHandler.fluffs == null || character.fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
+		if (character.fluffHandler.fluffs == null)
 		{
 			return;
+		}
+		else if (character.fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
+		{
+			if (character.flufflessPass != null)
+			{
+				character.flufflessPass.Play();
+			}
 		}
 
 		passDirection.Normalize();
