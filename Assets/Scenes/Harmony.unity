@@ -2479,6 +2479,151 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 189921807}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &195473159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 195473160}
+  - 33: {fileID: 195473162}
+  - 136: {fileID: 195473167}
+  - 23: {fileID: 195473161}
+  - 54: {fileID: 195473165}
+  - 114: {fileID: 195473164}
+  - 114: {fileID: 195473163}
+  - 114: {fileID: 195473166}
+  m_Layer: 16
+  m_Name: Ring Breaker
+  m_TagString: Ring Breaker
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &195473160
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66.5199966, y: 4.5999999, z: -2.30999994}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+--- !u!23 &195473161
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 611017b32102a1943bf0c706390bb902, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &195473162
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &195473163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adb3170617d3dce42992bf6f48f655a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRing: {fileID: 1037080330}
+  nearestMembrane: {fileID: 0}
+  slowDistance: 40
+  mover: {fileID: 195473164}
+--- !u!114 &195473164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b0f58affdedc74185d1be54789c64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 100
+  velocity: {x: 0, y: 0, z: 0}
+  acceleration: 50
+  handling: 200
+  cutSpeedThreshold: .100000001
+  externalSpeedMultiplier: 1
+  body: {fileID: 195473165}
+  bodylessDampening: 1
+  slowDown: 0
+--- !u!54 &195473165
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  serializedVersion: 2
+  m_Mass: 100
+  m_Drag: 1
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
+--- !u!114 &195473166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 195473165}
+  handleFluffAttachment: 0
+  bondAtContactPoint: 1
+  attachmentColor: {r: .569853008, g: .225183815, b: .625, a: 0}
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bondOverrideStats: {fileID: 0}
+  bonds: []
+  volleysToBond: 0
+  volleys: 0
+  volleyPartner: {fileID: 0}
+--- !u!136 &195473167
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195473159}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .5
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &199829466
 GameObject:
   m_ObjectHideFlags: 0
@@ -4471,11 +4616,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.springForce
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: requiredPlayersToBreak
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: relativeMaxDistance
@@ -4501,10 +4646,6 @@ Prefab:
       propertyPath: stats.breakDelay
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
-      propertyPath: stats.breakDestroyAttachments
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: membraneLength
       value: 45
@@ -4523,19 +4664,47 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: insufficientDifficulty
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
-      propertyPath: stats.attachSpring2
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.attachSpring2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.attachSpring1
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.sparseDetailDistance
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: requiredSpecialsToBreak
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: specialBreakerTag
+      value: Ring Breaker
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.ignoreBondingLayers.m_Bits
+      value: 4294901759
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.maxDistance
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.relativeWarningDistance
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.endsWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.midWidth
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}
@@ -16283,6 +16452,7 @@ GameObject:
   - 4: {fileID: 1029031495}
   - 23: {fileID: 1029031497}
   - 102: {fileID: 1029031496}
+  - 114: {fileID: 1029031498}
   m_Layer: 28
   m_Name: To Be Continued
   m_TagString: Untagged
@@ -16345,6 +16515,21 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!114 &1029031498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11435158, guid: 4de1196157d7d6048a2ab89989dca2d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 168543489}
+  m_GameObject: {fileID: 1029031494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 1029031497}
+  renderBase: 3000
+  renderOffset: -2
 --- !u!1 &1029387595
 GameObject:
   m_ObjectHideFlags: 0
@@ -19922,6 +20107,7 @@ GameObject:
   - 33: {fileID: 1201458517}
   - 23: {fileID: 1201458516}
   - 114: {fileID: 1201458515}
+  - 114: {fileID: 1201458518}
   m_Layer: 28
   m_Name: Fade Out
   m_TagString: Untagged
@@ -19990,6 +20176,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 168543489}
   m_GameObject: {fileID: 1201458513}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1201458518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11435156, guid: 4de1196157d7d6048a2ab89989dca2d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 168543489}
+  m_GameObject: {fileID: 1201458513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 1201458516}
+  renderBase: 1000
+  renderOffset: -10
 --- !u!1 &1203702144
 GameObject:
   m_ObjectHideFlags: 0
@@ -23388,7 +23589,7 @@ Transform:
   m_PrefabInternal: {fileID: 168543489}
   m_GameObject: {fileID: 1456636596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -67.8000031}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: .00999999978, y: .00999999978, z: 1}
   m_Children:
   - {fileID: 1029031495}
@@ -23420,7 +23621,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 4
-  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -23795,6 +23996,10 @@ Prefab:
       propertyPath: stats.bondOnFluff
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
   m_RootGameObject: {fileID: 2079811926}
@@ -24152,7 +24357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1541472896
 Transform:
   m_ObjectHideFlags: 0
@@ -26742,7 +26947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1836699667
 Transform:
   m_ObjectHideFlags: 0
@@ -27069,12 +27274,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 100
-    attachSpring2: 20
-    maxDistance: 5
-    relativeWarningDistance: .5
-    endsWidth: .5
-    midWidth: .400000006
+    attachSpring1: 0
+    attachSpring2: 0
+    maxDistance: -1
+    relativeWarningDistance: -1
+    endsWidth: 1
+    midWidth: 1
     addLinkDistance: .5
     removeLinkDistance: .300000012
     springForce: 5000
@@ -27101,8 +27306,11 @@ MonoBehaviour:
     defaultShapingForce: .150000006
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 4294901759
     breakWithNeighbors: 1
-    breakDestroyAttachments: 0
+    breakDestroyAttachments: 1
     considerNeighborBonds: 1
     smoothForce: 10
     breakDelay: 0
@@ -27127,7 +27335,7 @@ MonoBehaviour:
     midWidth: .800000012
     addLinkDistance: 2
     removeLinkDistance: 1.5
-    springForce: 20
+    springForce: 5
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
@@ -27202,8 +27410,10 @@ MonoBehaviour:
     position: {x: .100000001, y: .75}
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
-  requiredPlayersToBreak: 2
-  insufficientDifficulty: 5
+  requiredPlayersToBreak: 0
+  specialBreakerTag: Ring Breaker
+  requiredSpecialsToBreak: 1
+  insufficientDifficulty: 20
   relativeMaxDistance: 0
   relativeRequiredAdd: .0299999993
   currentLength: 0
@@ -29510,7 +29720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2079811927
 Transform:
   m_ObjectHideFlags: 0
@@ -29573,6 +29783,9 @@ MonoBehaviour:
     defaultShapingForce: 1
     bondOnContact: 0
     bondOnFluff: 0
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
@@ -29660,6 +29873,8 @@ MonoBehaviour:
   shapingPoints: []
   shapingIndices: 
   requiredPlayersToBreak: 0
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 1
   relativeMaxDistance: -1
   relativeRequiredAdd: -1

@@ -32,10 +32,10 @@ public class IslandContainer : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(MembraneShell brakingMembrane)
+	private void MembraneBreaking(MembraneShell BreakingMembrane)
 	{
 		// Handle breaking of the island's atmosphere.
-		if (brakingMembrane != null && brakingMembrane == atmosphere)
+		if (BreakingMembrane != null && BreakingMembrane == atmosphere)
 		{
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;
