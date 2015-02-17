@@ -1,19 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EmptyTrigger : MonoBehaviour {
-	private int collisions = 0;
+	public int collisions = 0;
 	public GameObject listener;
+	private bool waitFrame;
 
+	void Start()
+	{
+		waitFrame = true;
+	}
+	
 	void Update()
 	{
-		if (collisions == 0)
+		if (collisions == 0 && !waitFrame)
 		{
 			if (listener != null)
 			{
 				listener.SendMessage("TriggerEmpty", gameObject);
 			}
 		}
+		waitFrame = false;
 	}
 
 	void OnTriggerEnter(Collider other)

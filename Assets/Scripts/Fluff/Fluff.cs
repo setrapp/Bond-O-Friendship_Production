@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(SimpleMover))]
@@ -14,8 +14,8 @@ public class Fluff : MonoBehaviour {
 	public Animation swayAnimation;
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
-	public GameObject bulb;
-    public GameObject stalk;
+	public MeshRenderer bulb;
+	public MeshRenderer stalk;
     public GameObject depthMask;
 	[HideInInspector]
 	public CapsuleCollider hull;
@@ -343,10 +343,10 @@ public class Fluff : MonoBehaviour {
 			Attach(newAttachee, collision.contacts[0].point, standingDirection);
 		}
 	}
-
+	
 	void OnTriggerEnter(Collider other)
 	{
-		if ((attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
+		if ((attachee == null || attachee.gameObject != other.gameObject) && moving && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}

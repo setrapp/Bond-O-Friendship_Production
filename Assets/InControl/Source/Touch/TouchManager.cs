@@ -171,6 +171,11 @@ namespace InControl
 			device.AddControl( InputControlType.RightBumper, "RightBumper" );
 			device.AddControl( InputControlType.Menu, "Menu" );
 
+			for (var control = InputControlType.Button0; control <= InputControlType.Button19; control++)
+			{
+				device.AddControl( control, control.ToString() );
+			}
+
 			InputManager.AttachDevice( device );
 		}
 
@@ -380,12 +385,12 @@ namespace InControl
 				return false;
 			}
 
-			if (touchCamera.rect.size == Vector2.zero)
+			if (Mathf.Approximately( touchCamera.rect.width, 0.0f ) && Mathf.Approximately( touchCamera.rect.height, 0.0f ))
 			{
 				return false;
 			}
 
-			if (touchCamera.pixelRect.size == Vector2.zero)
+			if (Mathf.Approximately( touchCamera.pixelRect.width, 0.0f ) && Mathf.Approximately( touchCamera.pixelRect.height, 0.0f ))
 			{
 				return false;
 			}

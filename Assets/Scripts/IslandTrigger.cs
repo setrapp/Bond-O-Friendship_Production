@@ -7,15 +7,29 @@ public class IslandTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (targetIsland != null && targetIsland.container != null && (other.gameObject == Globals.Instance.player1.gameObject || other.gameObject == Globals.Instance.player2.gameObject))
+		if (targetIsland != null && (other.gameObject == Globals.Instance.player1.gameObject || other.gameObject == Globals.Instance.player2.gameObject))
 		{
 			if (toggleLandingOn)
 			{
-				targetIsland.container.SendMessage("IslandLanded", other.gameObject, SendMessageOptions.DontRequireReceiver);
+				if (targetIsland.container != null)
+				{
+					targetIsland.container.SendMessage("IslandLanded", other.gameObject, SendMessageOptions.DontRequireReceiver);
+				}
+				else if (targetIsland.levelHelper != null && targetIsland.levelHelper.landingEnabledObjects != null)
+				{
+					targetIsland.levelHelper.landingEnabledObjects.ToggleObjects(true);
+				}
 			}
 			else
 			{
-				targetIsland.container.SendMessage("IslandUnlanded", other.gameObject, SendMessageOptions.DontRequireReceiver);
+				if (targetIsland.container != null)
+				{
+					targetIsland.container.SendMessage("IslandUnlanded", other.gameObject, SendMessageOptions.DontRequireReceiver);
+				}
+				else if (targetIsland.levelHelper != null && targetIsland.levelHelper.landingEnabledObjects != null)
+				{
+					targetIsland.levelHelper.landingEnabledObjects.ToggleObjects(false);
+				}
 			}
 		}
 	}

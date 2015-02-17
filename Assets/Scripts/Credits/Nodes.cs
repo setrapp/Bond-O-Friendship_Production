@@ -78,7 +78,6 @@ public class Nodes : MonoBehaviour {
 			if(a >= 1.0f)
 				activated = false;
 		}
-		
 	}
 	
 	
@@ -120,8 +119,6 @@ public class Nodes : MonoBehaviour {
 		rippleObj.GetComponent<RingPulse>().alpha = c;
 		rippleObj.GetComponent<RingPulse>().alphaFade = d;
 		rippleObj.GetComponent<RingPulse>().smallRing = false;
-		
-		
 		//triggerRipple = false;
 	}
 	
