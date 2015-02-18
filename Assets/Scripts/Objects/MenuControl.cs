@@ -17,6 +17,7 @@ public class MenuControl : MonoBehaviour {
 	void Start () {
 		if(InputManager.Devices.Count > 0)
 		{
+            Globals.usingController = false;
 			Globals.playerOneDevice = InputManager.Devices[0];
 			Globals.startingDevice = InputManager.Devices[0];
 			Globals.numberOfControllers = InputManager.Devices.Count;
@@ -41,6 +42,21 @@ public class MenuControl : MonoBehaviour {
                 startScene = message.message;
                 Destroy(message.gameObject);
             }
+        }
+
+        if(InputManager.Devices.Count > 0)
+        {
+            InputDevice device = InputManager.ActiveDevice;
+            if (device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            {
+                MainMenuLoadLevel();
+                Globals.usingController = true;
+            }
+        }
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        {
+            MainMenuLoadLevel();
+            Globals.usingController = false;
         }
     }		
 
@@ -67,10 +83,12 @@ public class MenuControl : MonoBehaviour {
     {
         if(levelName != null)
         {
-            Application.LoadLevel(levelName);
+            //Application.LoadLevel(levelName);
+            startScene = levelName;
         }
     }
 
+    
     public void LevelSelect()
     {
         startMenu.SetActive(false);

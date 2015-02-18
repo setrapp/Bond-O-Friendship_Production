@@ -44,12 +44,12 @@ public class PlayerInput : MonoBehaviour {
 
 	void Update () 
     {
-
-        CheckDevices();
-        device = playerNumber == Player.Player1 ? Globals.playerOneDevice : Globals.playerTwoDevice;
-        //device = InputManager.Devices.Count == 1 ? Globals.playerOneDevice : device;
         
-       // Debug.Log(device.Name);
+        //CheckDevices();
+        if(Globals.usingController)
+            device = InputManager.ActiveDevice;
+        
+ 
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
@@ -57,7 +57,7 @@ public class PlayerInput : MonoBehaviour {
 
         
 
-        if ((oneController && playerNumber == Player.Player1) || !oneController)
+        /*if ((oneController && playerNumber == Player.Player1) || !oneController)
         {
             if (device.Action4.WasPressed)
             {
@@ -73,7 +73,7 @@ public class PlayerInput : MonoBehaviour {
                 }
                 Globals.isPaused = !Globals.isPaused;
             }
-        }
+        }*/
 
         
 
@@ -81,8 +81,9 @@ public class PlayerInput : MonoBehaviour {
 		{
 			AttemptFluffThrow();
 			AttemptFluffAttract();
-
 			velocityChange =  PlayerJoystickMovement();
+
+
 			// Movement
 			if (velocityChange.sqrMagnitude > 0)
 			{
@@ -97,6 +98,8 @@ public class PlayerInput : MonoBehaviour {
 			transform.LookAt(transform.position + velocityChange, transform.up);
 		}
 	}
+
+   
     
 	private Vector3 PlayerJoystickMovement()
 	{
@@ -105,7 +108,7 @@ public class PlayerInput : MonoBehaviour {
 
         //Debug.Log(device.LeftStick.Vector.ToString());
 
-        if (oneController)
+        if (Globals.usingController)
         {
             if(playerNumber == Player.Player1)
             {
@@ -120,16 +123,32 @@ public class PlayerInput : MonoBehaviour {
         }
         else
         {
-            stickInput = device.RightStick.Vector;
-
-            stickInput = device.LeftStick.Vector != Vector2.zero ? device.LeftStick.Vector : stickInput;
-
-            if (device.LeftStick.Vector != Vector2.zero)
+            Vector3 keyVector = Vector3.zero;
+            if(playerNumber == Player.Player1)
             {
-                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
+                if (Input.GetKey(KeyCode.W))
+                    keyVector += Vector3.up;
+                if (Input.GetKey(KeyCode.S))
+                    keyVector -= Vector3.up;
+                if (Input.GetKey(KeyCode.A))
+                    keyVector -= Vector3.right;
+                if (Input.GetKey(KeyCode.D))
+                    keyVector += Vector3.right;
             }
-            else
-                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
+
+            if (playerNumber == Player.Player2)
+            {
+                if (Input.GetKey(KeyCode.UpArrow))
+                    keyVector += Vector3.up;
+                if (Input.GetKey(KeyCode.DownArrow))
+                    keyVector -= Vector3.up;
+                if (Input.GetKey(KeyCode.LeftArrow))
+                    keyVector -= Vector3.right;
+                if (Input.GetKey(KeyCode.RightArrow))
+                    keyVector += Vector3.right;
+            }
+
+            return keyVector;
         }
 
         return Vector3.zero;
@@ -139,7 +158,7 @@ public class PlayerInput : MonoBehaviour {
 	{
 		bool canAttract = false;
 
-        if (oneController)
+        if (Globals.usingController)
         {
             if (playerNumber == Player.Player1 && device.LeftBumper.IsPressed)
                 canAttract = true;
@@ -148,7 +167,9 @@ public class PlayerInput : MonoBehaviour {
         }
         else
         {
-            if (device.LeftBumper.IsPressed || device.RightBumper.IsPressed)
+            if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftShift))
+                canAttract = true;
+            else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightShift))
                 canAttract = true;
         }
 
@@ -173,7 +194,7 @@ public class PlayerInput : MonoBehaviour {
         Vector2 lookAt = Vector2.zero;
 		float minToFire = deadZone;
 
-        if (oneController)
+        if (Globals.usingController)
         {
             if (playerNumber == Player.Player1)
             {
@@ -194,7 +215,12 @@ public class PlayerInput : MonoBehaviour {
         }
         else
         {
-            if (device.LeftTrigger.WasPressed || device.RightTrigger.WasPressed)
+            if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftControl))
+            {
+                lookAt = transform.forward;
+                minToFire = 0;
+            }
+            else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightControl))
             {
                 lookAt = transform.forward;
                 minToFire = 0;
@@ -231,7 +257,7 @@ public class PlayerInput : MonoBehaviour {
     private void CheckDevices()
     {
         
-        if (InputManager.Devices.Count != Globals.numberOfControllers)
+        /*if (InputManager.Devices.Count != Globals.numberOfControllers)
         {
             if (Globals.numberOfControllers < InputManager.Devices.Count)
             {
@@ -250,10 +276,10 @@ public class PlayerInput : MonoBehaviour {
             oneController = true;
         }
         else
-            oneController = false;
+            oneController = false;*/
 
 
-        if (InputManager.Devices.Count > 1)
+        /*if (InputManager.Devices.Count > 1)
         {
             Globals.playerOneDevice = InputManager.Devices[0];
             Globals.playerTwoDevice = InputManager.Devices[1];
@@ -262,7 +288,7 @@ public class PlayerInput : MonoBehaviour {
         {
             Globals.playerOneDevice = InputManager.Devices[0];
             Globals.playerTwoDevice = InputManager.Devices[0];
-        }
+        }*/
 
     }
 
