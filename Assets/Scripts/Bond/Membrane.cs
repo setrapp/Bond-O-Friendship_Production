@@ -25,6 +25,7 @@ public class Membrane : Bond {
 	private bool deconstructing = false;
 	private List<MembraneLink> breakLinks;
 	private List<LineRenderer> breakLines;
+	private bool hidingShaping = false;
 
 	protected override void Start()
 	{
@@ -37,11 +38,63 @@ public class Membrane : Bond {
 	protected override void Update()
 	{
 		base.Update();
-
-		if (currentDetail <= stats.sparseDetailFactor && !deconstructing)
+		/*TODO not sure any of this is usable*/
+		/*if (currentDetail <= stats.sparseDetailFactor && !deconstructing)
 		{
-			return;
+			if (!hidingShaping)
+			{
+				for (int i = 0; i < links.Count; i++)
+				{
+					MembraneLink link = links[i] as MembraneLink;
+					for (int j = 0; j < link.jointsShaping.Length; j++)
+					{
+						if (link.jointsShaping[j] != null)
+						{
+							link.jointsShaping[j].spring = 0;
+							//link.jointToNeighbor.spring = 0;
+							//link.jointToAttachment.spring = 0;
+						}
+						link.body.velocity = Vector3.zero;
+						//link.body.isKinematic = true;
+					}
+				}
+				hidingShaping = true;
+			}
+			extraStats.smoothForce = 0;
+			//return;
 		}
+		else if (hidingShaping)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				MembraneLink link = links[i] as MembraneLink;
+				for (int j = 0; j < link.jointsShaping.Length; j++)
+				{
+					if (link.jointsShaping[j] != null && link.jointsShaping[j].connectedBody != null)
+					{
+						ShapingPoint shapingPont = link.jointsShaping[j].connectedBody.GetComponent<ShapingPoint>();
+						if (shapingPont != null && shapingPont.shapingForce >= 0)
+						{
+							link.jointsShaping[j].spring = shapingPont.shapingForce;
+						}
+						else
+						{
+							link.jointsShaping[j].spring = extraStats.defaultShapingForce;
+						}
+						//link.jointToNeighbor.spring = stats.springForce;
+						//link.body.isKinematic = false;
+						link.body.velocity = Vector3.zero;
+					}
+
+				}
+			}
+			if (links.Count > 3)
+			{
+				//links[1].jointToAttachment.spring = stats.attachSpring1;
+				//links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			}
+			hidingShaping = false;
+		}*/
 
 		if (!deconstructing)
 		{

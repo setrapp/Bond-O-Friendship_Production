@@ -30,6 +30,7 @@ public class Bond : MonoBehaviour {
 	public float fullDetailAddDistance = -1;
 	public float fullDetailRemoveDistance = -1;
 	public float currentDetail = 1;
+	private bool disablingLinks = false;
 
 	protected virtual void Start()
 	{
@@ -44,7 +45,32 @@ public class Bond : MonoBehaviour {
 		currentDetail = SetLevelOfDetail();
 		if (currentDetail <= stats.sparseDetailFactor)
 		{
-			return;
+			/*TODO not sure any of this is usable*/
+			if (!disablingLinks)
+			{
+				for (int i = 0; i < links.Count; i++)
+				{
+					links[i].gameObject.SetActive(false);
+				}
+				disablingLinks = true;
+			}
+			if (links.Count >= 4)
+			{
+				for (int i = 2; i < links.Count - 2; i++)
+				{
+					RemoveLink(i, false);
+				}
+				WeightJoints();
+			}
+			//return;
+		}
+		else if (disablingLinks)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].gameObject.SetActive(true);
+			}
+			disablingLinks = false;
 		}
 		
 
@@ -111,7 +137,7 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Direct, scale, and place link colliders to cover the surface of the bond.
-			if (!stats.manualLinks)
+			if (!stats.manualLinks)// && currentDetail > stats.sparseDetailFactor)
 			{
 				Vector3 linkDir = Vector3.zero;
 				Vector3 linkScalePrev = Vector3.zero;
@@ -581,7 +607,10 @@ public class Bond : MonoBehaviour {
 		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
 		for (int i = 0; i < links.Count; i++)
 		{
-			links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
+			if (!links[i].broken)
+			{
+				links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
+			}
 		}
 		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
 		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
