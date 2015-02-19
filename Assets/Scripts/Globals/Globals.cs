@@ -37,6 +37,8 @@ public class Globals : MonoBehaviour {
 
     public static bool isPaused;
 
+    public static bool usingController;
+
 	public GameObject canvasPaused;
 
 	[Header("Fluff Depth Mask")]

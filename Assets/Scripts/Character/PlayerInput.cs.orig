@@ -210,7 +210,7 @@ public class PlayerInput : MonoBehaviour {
                     minToFire = 0;
                 }
             }
-			else if (playerNumber == Player.Player2 || (Globals.Instance.autoAttractor && device.RightBumper.WasPressed))
+			else if (playerNumber == Player.Player2 || (Globals.Instance.autoAttractor && device.RightBumper.WasPressed)))
             {
                 if (device.RightTrigger.WasPressed)
                 {
@@ -221,12 +221,16 @@ public class PlayerInput : MonoBehaviour {
         }
         else
         {
-			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.LeftShift))))
+<<<<<<< HEAD
+			if (device.LeftTrigger.WasPressed || device.RightTrigger.WasPressed  || (Globals.Instance.autoAttractor && (device.LeftBumper.WasPressed || device.RightBumper.WasPressed)))
+=======
+            if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftControl))
             {
                 lookAt = transform.forward;
                 minToFire = 0;
             }
-			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.RightShift))))
+            else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightControl))
+>>>>>>> 8ecf27da8256c8b7b61d38df0f06858966141443
             {
                 lookAt = transform.forward;
                 minToFire = 0;
@@ -261,13 +265,7 @@ public class PlayerInput : MonoBehaviour {
 	{
 		if (col.collider.gameObject.tag == "Character")
 		{
-			CharacterComponents partnerCharacter = col.collider.GetComponent<CharacterComponents>();
-			if (!character.bondAttachable.IsBondMade(partnerCharacter.bondAttachable))
-			{
-				character.SetFlashAndFill(partnerCharacter.colors.attachmentColor);
-				partnerCharacter.SetFlashAndFill(character.colors.attachmentColor);
-				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
-			}
+			character.bondAttachable.AttemptBond(col.collider.GetComponent<BondAttachable>(), col.contacts[0].point, true);
 		}
 	}
 
