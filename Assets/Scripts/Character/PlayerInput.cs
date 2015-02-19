@@ -45,7 +45,7 @@ public class PlayerInput : MonoBehaviour {
 	void Update () 
     {
         
-        //CheckDevices();
+        CheckDevices();
         if(Globals.usingController)
             device = InputManager.ActiveDevice;
         
@@ -256,41 +256,23 @@ public class PlayerInput : MonoBehaviour {
 
     private void CheckDevices()
     {
-        
-        /*if (InputManager.Devices.Count != Globals.numberOfControllers)
-        {
-            if (Globals.numberOfControllers < InputManager.Devices.Count)
-            {
-                Globals.numberOfControllers++;
-            }
-            else
-            {
-                canvasPaused.SetActive(true);
-                Time.timeScale = 0;
-                Globals.isPaused = true;
-            }
-        }
 
-        if (Globals.numberOfControllers == 1)
+        if (Globals.numberOfControllers > 0 && InputManager.controllerCount == 0)
         {
-            oneController = true;
+            canvasPaused.SetActive(true);
+            Time.timeScale = 0;
+            Globals.isPaused = true;
         }
-        else
-            oneController = false;*/
-
-
-        /*if (InputManager.Devices.Count > 1)
-        {
-            Globals.playerOneDevice = InputManager.Devices[0];
-            Globals.playerTwoDevice = InputManager.Devices[1];
-        }
-        else if(InputManager.Devices.Count == 1)
-        {
-            Globals.playerOneDevice = InputManager.Devices[0];
-            Globals.playerTwoDevice = InputManager.Devices[0];
-        }*/
+        //else
+        //  {
+        //    canvasPaused.SetActive(false);
+        //     Time.timeScale = 1;
+        //     Globals.isPaused = false;
+        // }
 
     }
+
+    
 
    
 
