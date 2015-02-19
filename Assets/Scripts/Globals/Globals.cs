@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using InControl;
 
 public class Globals : MonoBehaviour {
@@ -47,6 +48,9 @@ public class Globals : MonoBehaviour {
     public GameObject depthMaskPrefab;
 	[Header("Fluff Depth Mask")]
     public GameObject depthMaskHolderPrefab;
+
+	[SerializeField]
+	public List<Fluff> allFluffs;
 
 	public bool updatePlayersOnLoad = true;
 

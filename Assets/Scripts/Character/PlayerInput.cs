@@ -164,20 +164,20 @@ public class PlayerInput : MonoBehaviour {
 
 		bool canAttract = false;
 
-        if (Globals.usingController)
-        {
-            if (playerNumber == Player.Player1 && device.LeftBumper.IsPressed)
-                canAttract = true;
-            else if (playerNumber == Player.Player2 && device.RightBumper.IsPressed)
-                canAttract = true;
-        }
-        else
-        {
-            if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftShift))
-                canAttract = true;
-            else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightShift))
-                canAttract = true;
-        }
+		if (Globals.usingController)
+		{
+			if (playerNumber == Player.Player1 && device.LeftBumper.IsPressed)
+				canAttract = true;
+			else if (playerNumber == Player.Player2 && device.RightBumper.IsPressed)
+				canAttract = true;
+		}
+		else
+		{
+			if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftShift))
+				canAttract = true;
+			else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightShift))
+				canAttract = true;
+		}
 
 		if (!fireFluffReady)
 		{

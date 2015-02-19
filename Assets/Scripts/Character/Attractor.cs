@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Attractor : MonoBehaviour {
 	public CharacterComponents character;
@@ -97,16 +98,21 @@ public class Attractor : MonoBehaviour {
 
 	private bool AttemptFluffPull()
 	{
+		if (Globals.Instance == null || Globals.Instance.allFluffs == null)
+		{
+			return false;
+		}
+
 		bool pullingFluff = false;
 
-		GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
-		foreach (GameObject liveFluffObject in fluffArray)
+		List<Fluff> allFluffs = Globals.Instance.allFluffs;
+		foreach (Fluff liveFluff in allFluffs)
 		{
-			Fluff liveFluff = liveFluffObject.GetComponent<Fluff>();
 			if (liveFluff != null)
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
-				if (!fluffAttachedToSelf)
+				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
+				if (!fluffAttachedToSelf && !ignoringAttract)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
 					Vector3 attractOffset = Vector3.zero;
@@ -119,8 +125,8 @@ public class Attractor : MonoBehaviour {
 							// Only check bond distance to fluff if the bond is at least as long as the distance from this to the fluff.
 							if (Mathf.Pow(character.bondAttachable.bonds[i].BondLength, 2) >= fluffSqrDist)
 							{
-								Vector3 nearBond = character.bondAttachable.bonds[i].NearestPoint(liveFluffObject.transform.position);
-								float sqrDist = (liveFluffObject.transform.position - nearBond).sqrMagnitude;
+								Vector3 nearBond = character.bondAttachable.bonds[i].NearestPoint(liveFluff.transform.position);
+								float sqrDist = (liveFluff.transform.position - nearBond).sqrMagnitude;
 								if (sqrDist < nearSqrDist)
 								{
 									nearSqrDist = sqrDist;
