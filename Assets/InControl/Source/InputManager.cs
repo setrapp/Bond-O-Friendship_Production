@@ -335,8 +335,18 @@ namespace InControl
 				return;
 			}
 
-			devices.Add( inputDevice );
-			devices.Sort( ( d1, d2 ) => d1.SortOrder.CompareTo( d2.SortOrder ) );
+
+
+            bool alreadyExists = devices.Contains(inputDevice);
+
+            if (!alreadyExists)
+            {
+                devices.Add(inputDevice);
+                devices.Sort((d1, d2) => d1.SortOrder.CompareTo(d2.SortOrder));
+            }
+                
+            
+
 
 			if (OnDeviceAttached != null)
 			{
@@ -354,8 +364,8 @@ namespace InControl
 		{
 			AssertIsSetup();
 
-			devices.Remove( inputDevice );
-			devices.Sort( ( d1, d2 ) => d1.SortOrder.CompareTo( d2.SortOrder ) );
+			//devices.Remove( inputDevice );
+			//devices.Sort( ( d1, d2 ) => d1.SortOrder.CompareTo( d2.SortOrder ) );
 
 			if (ActiveDevice == inputDevice)
 			{
