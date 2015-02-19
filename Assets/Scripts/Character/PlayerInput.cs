@@ -137,6 +137,12 @@ public class PlayerInput : MonoBehaviour {
     
 	private void AttemptFluffAttract()
 	{
+		// If attractor is automatic, skip this input.
+		if (Globals.Instance.autoAttractor)
+		{
+			return;
+		}
+
 		bool canAttract = false;
 
         if (oneController)
@@ -177,13 +183,13 @@ public class PlayerInput : MonoBehaviour {
         {
             if (playerNumber == Player.Player1)
             {
-                if (device.LeftTrigger.WasPressed)
+				if (device.LeftTrigger.WasPressed || (Globals.Instance.autoAttractor && device.LeftBumper.WasPressed))
                 {
                     lookAt = transform.forward;
                     minToFire = 0;
                 }
             }
-            else if (playerNumber == Player.Player2)
+			else if (playerNumber == Player.Player2 || (Globals.Instance.autoAttractor && device.RightBumper.WasPressed)))
             {
                 if (device.RightTrigger.WasPressed)
                 {
@@ -194,7 +200,7 @@ public class PlayerInput : MonoBehaviour {
         }
         else
         {
-            if (device.LeftTrigger.WasPressed || device.RightTrigger.WasPressed)
+			if (device.LeftTrigger.WasPressed || device.RightTrigger.WasPressed  || (Globals.Instance.autoAttractor && (device.LeftBumper.WasPressed || device.RightBumper.WasPressed)))
             {
                 lookAt = transform.forward;
                 minToFire = 0;
@@ -224,6 +230,14 @@ public class PlayerInput : MonoBehaviour {
 			fireFluffReady = true;
 		}
     }
+
+	private void OnCollisionEnter(Collision col)
+	{
+		if (col.collider.gameObject.tag == "Character")
+		{
+			character.bondAttachable.AttemptBond(col.collider.GetComponent<BondAttachable>(), col.contacts[0].point, true);
+		}
+	}
 
 
     #region Helper Methods

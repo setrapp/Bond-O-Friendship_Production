@@ -25,19 +25,35 @@ public class Attractor : MonoBehaviour {
 
 	void Update()
 	{
-		// Slow movement if attracting fluffs.
-		slowing = attracting && !character.floatMove.Floating;
-		if (slowing != wasSlowing)
+
+		if (!Globals.Instance.autoAttractor)
 		{
-			if (slowing)
+			// Slow movement if attracting fluffs.
+			slowing = attracting && !character.floatMove.Floating;
+			if (slowing != wasSlowing)
 			{
-				character.mover.externalSpeedMultiplier -= attractSlowingFactor;
+				if (slowing)
+				{
+					character.mover.externalSpeedMultiplier -= attractSlowingFactor;
+				}
+				else
+				{
+					character.mover.externalSpeedMultiplier += attractSlowingFactor;
+				}
+				wasSlowing = slowing;
 			}
-			else
+		}
+		else
+		{
+			bool pullingFluffs = AttemptFluffPull();
+			if (pullingFluffs && !attracting)
 			{
-				character.mover.externalSpeedMultiplier += attractSlowingFactor;
+				AttractFluffs(false);
 			}
-			wasSlowing = slowing;
+			else if (!pullingFluffs && attracting)
+			{
+				StopAttracting();
+			}
 		}
 
 		// Keep attraction particles in correct position.
@@ -47,7 +63,7 @@ public class Attractor : MonoBehaviour {
 		}
 	}
 
-	public void AttractFluffs()
+	public void AttractFluffs(bool attemptFluffPull = true)
 	{
 		attracting = true;
 		
@@ -60,7 +76,29 @@ public class Attractor : MonoBehaviour {
 			attractParticles.startColor = new Color(attractParticles.startColor.r, attractParticles.startColor.g, attractParticles.startColor.b, 0.1f);
 		}
 
-		// Attempt to pull in fluffs.
+		// If desired, attempt to pull in fluffs.
+		if (attemptFluffPull)
+		{
+			AttemptFluffPull();
+		}
+		
+	}
+	
+	public void StopAttracting()
+	{
+		attracting = false;
+
+		if (attractParticles != null)
+		{
+			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
+			Destroy(attractParticles.gameObject, 1.0f);
+		}
+	}
+
+	private bool AttemptFluffPull()
+	{
+		bool pullingFluff = false;
+
 		GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
 		foreach (GameObject liveFluffObject in fluffArray)
 		{
@@ -95,22 +133,13 @@ public class Attractor : MonoBehaviour {
 					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
 						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
+						pullingFluff = true;
 					}
 				}
 			}
 		}
-		
-	}
-	
-	public void StopAttracting()
-	{
-		attracting = false;
 
-		if (attractParticles != null)
-		{
-			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
-			Destroy(attractParticles.gameObject, 1.0f);
-		}
+		return pullingFluff;
 	}
 
 	void OnDrawGizmos()
