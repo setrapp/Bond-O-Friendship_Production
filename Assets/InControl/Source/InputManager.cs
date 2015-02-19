@@ -37,6 +37,8 @@ namespace InControl
 		static float currentTime;
 		static float lastUpdateTime;
 
+        public static int controllerCount = 0;
+
 		static ulong currentTick;
 
 		static VersionInfo? unityVersion;
@@ -336,13 +338,14 @@ namespace InControl
 			}
 
 
-
+            controllerCount++;
             bool alreadyExists = devices.Contains(inputDevice);
 
             if (!alreadyExists)
             {
                 devices.Add(inputDevice);
                 devices.Sort((d1, d2) => d1.SortOrder.CompareTo(d2.SortOrder));
+                
             }
                 
             
@@ -366,7 +369,7 @@ namespace InControl
 
 			//devices.Remove( inputDevice );
 			//devices.Sort( ( d1, d2 ) => d1.SortOrder.CompareTo( d2.SortOrder ) );
-
+            controllerCount--;
 			if (ActiveDevice == inputDevice)
 			{
 				ActiveDevice = InputDevice.Null;
