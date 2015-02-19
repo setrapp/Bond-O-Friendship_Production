@@ -29,6 +29,7 @@ public class Bond : MonoBehaviour {
 	public bool forceFullDetail = false;
 	public float fullDetailAddDistance = -1;
 	public float fullDetailRemoveDistance = -1;
+	public float currentDetail = 1;
 
 	protected virtual void Start()
 	{
@@ -40,7 +41,12 @@ public class Bond : MonoBehaviour {
 	{
 		lengthFresh = false;
 		
-		SetLevelOfDetail();
+		currentDetail = SetLevelOfDetail();
+		if (currentDetail <= stats.sparseDetailFactor)
+		{
+			return;
+		}
+		
 
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{

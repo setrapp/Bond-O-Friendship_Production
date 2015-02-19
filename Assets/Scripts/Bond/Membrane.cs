@@ -38,6 +38,11 @@ public class Membrane : Bond {
 	{
 		base.Update();
 
+		if (currentDetail <= stats.sparseDetailFactor && !deconstructing)
+		{
+			return;
+		}
+
 		if (!deconstructing)
 		{
 			for (int i = 1; i < links.Count - 1; i++)

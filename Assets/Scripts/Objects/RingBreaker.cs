@@ -6,6 +6,8 @@ public class RingBreaker : MonoBehaviour {
 	public Membrane nearestMembrane;
 	public float slowDistance;
 	public SimpleMover mover;
+	public Collider breakerCollider;
+	public BondAttachable bondAttachable;
 
 	void Awake()
 	{
@@ -41,6 +43,10 @@ public class RingBreaker : MonoBehaviour {
 			else
 			{
 				mover.slowDown = true;
+				if (collider != null)
+				{
+					collider.enabled = true;
+				}
 			}
 		}
 

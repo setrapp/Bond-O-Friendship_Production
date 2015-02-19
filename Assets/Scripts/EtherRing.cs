@@ -10,6 +10,11 @@ public class EtherRing : MonoBehaviour {
 		{
 			Globals.Instance.existingEther = this;
 		}
+
+		if (ringAtmosphere != null)
+		{
+			ringAtmosphere.CreateShell();
+		}
 	}
 
 	void OnDestroy()

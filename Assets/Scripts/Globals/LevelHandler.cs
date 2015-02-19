@@ -88,7 +88,7 @@ public class LevelHandler : MonoBehaviour {
 				{
 					if (islandContainers[i].atmosphere != null)
 					{
-						islandContainers[i].atmosphere.SilentBreak();
+						//islandContainers[i].atmosphere.SilentBreak();
 					}
 				}
 			}
