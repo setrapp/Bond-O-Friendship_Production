@@ -18,8 +18,6 @@ public class MenuControl : MonoBehaviour {
 		if(InputManager.Devices.Count > 0)
 		{
             Globals.usingController = false;
-			Globals.playerOneDevice = InputManager.Devices[0];
-			Globals.startingDevice = InputManager.Devices[0];
 			Globals.numberOfControllers = InputManager.Devices.Count;
 		}
 		else
@@ -60,15 +58,6 @@ public class MenuControl : MonoBehaviour {
         }
     }		
 
-    public void SetPlayerDevices()
-    {
-        if (InputManager.Devices.Count == 1)
-            Globals.playerTwoDevice = InputManager.Devices[0];
-        else if (InputManager.Devices.Count > 1)
-            Globals.playerTwoDevice = InputManager.Devices[1];
-        else
-            Globals.playerTwoDevice = null;
-    }
     public void MainMenuLoadLevel()
     {
 		CameraSplitter splitter = Globals.Instance.GetComponentInChildren<CameraSplitter>();

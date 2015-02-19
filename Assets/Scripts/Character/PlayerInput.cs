@@ -44,22 +44,20 @@ public class PlayerInput : MonoBehaviour {
 
 	void Update () 
     {
-        
-        //CheckDevices();
-        if(Globals.usingController)
+        if(playerNumber == Player.Player1)
+            CheckDevices();
+        if(Globals.usingController && InputManager.controllerCount > 0)
             device = InputManager.ActiveDevice;
         
  
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Application.Quit();
-		}
+		//if (Input.GetKeyDown(KeyCode.Escape))
+		//{
+		//	Application.Quit();
+		//}
 
-        
-
-        /*if ((oneController && playerNumber == Player.Player1) || !oneController)
+        if (Globals.usingController)
         {
-            if (device.Action4.WasPressed)
+            if (device.MenuWasPressed && playerNumber == Player.Player1)
             {
                 if (Globals.isPaused)
                 {
@@ -73,9 +71,24 @@ public class PlayerInput : MonoBehaviour {
                 }
                 Globals.isPaused = !Globals.isPaused;
             }
-        }*/
-
-        
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) && playerNumber == Player.Player1)
+            {
+                if (Globals.isPaused)
+                {
+                    canvasPaused.SetActive(false);
+                    Time.timeScale = 1;
+                }
+                else
+                {
+                    canvasPaused.SetActive(true);
+                    Time.timeScale = 0;
+                }
+                Globals.isPaused = !Globals.isPaused;
+            }
+        }  
 
         if (!Globals.isPaused)
 		{
@@ -97,6 +110,11 @@ public class PlayerInput : MonoBehaviour {
 			// Turn towards velocity change.
 			transform.LookAt(transform.position + velocityChange, transform.up);
 		}
+        else
+        {
+            if(playerNumber == Player.Player1)
+            CheckInputMethod();
+        }
 	}
 
    
@@ -276,41 +294,52 @@ public class PlayerInput : MonoBehaviour {
 
     private void CheckDevices()
     {
-        
-        /*if (InputManager.Devices.Count != Globals.numberOfControllers)
+        //TODO: TEXT for pause menu
+        if (!Globals.usingController && InputManager.controllerCount == 0)
+            Globals.numberOfControllers = InputManager.controllerCount;
+
+        if (Globals.numberOfControllers > 0 && InputManager.controllerCount == 0)
         {
-            if (Globals.numberOfControllers < InputManager.Devices.Count)
-            {
-                Globals.numberOfControllers++;
-            }
-            else
-            {
-                canvasPaused.SetActive(true);
-                Time.timeScale = 0;
-                Globals.isPaused = true;
-            }
+            canvasPaused.SetActive(true);
+            Time.timeScale = 0;
+            Globals.isPaused = true;
+
+            Globals.numberOfControllers = 0;
         }
-
-        if (Globals.numberOfControllers == 1)
+        else if(Globals.numberOfControllers == 0 && InputManager.controllerCount > 0)
         {
-            oneController = true;
+            canvasPaused.SetActive(true);
+            Time.timeScale = 0;
+            Globals.isPaused = true;
+            Globals.numberOfControllers = InputManager.controllerCount;
         }
-        else
-            oneController = false;*/
-
-
-        /*if (InputManager.Devices.Count > 1)
-        {
-            Globals.playerOneDevice = InputManager.Devices[0];
-            Globals.playerTwoDevice = InputManager.Devices[1];
-        }
-        else if(InputManager.Devices.Count == 1)
-        {
-            Globals.playerOneDevice = InputManager.Devices[0];
-            Globals.playerTwoDevice = InputManager.Devices[0];
-        }*/
-
     }
+
+    private void CheckInputMethod()
+    {
+
+        if (InputManager.Devices.Count > 0)
+        {
+            InputDevice device = InputManager.ActiveDevice;
+            if (device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            {
+                Globals.usingController = true;
+                canvasPaused.SetActive(false);
+                Time.timeScale = 1;
+                Globals.isPaused = false;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        {
+            Globals.usingController = false;
+            canvasPaused.SetActive(false);
+            Time.timeScale = 1;
+            Globals.isPaused = false;
+        }
+    }
+
+    
 
    
 
