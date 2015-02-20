@@ -25,6 +25,7 @@ public class Membrane : Bond {
 	private bool deconstructing = false;
 	private List<MembraneLink> breakLinks;
 	private List<LineRenderer> breakLines;
+	private bool hidingShaping = false;
 
 	protected override void Start()
 	{
@@ -37,6 +38,63 @@ public class Membrane : Bond {
 	protected override void Update()
 	{
 		base.Update();
+		/*TODO not sure any of this is usable*/
+		/*if (currentDetail <= stats.sparseDetailFactor && !deconstructing)
+		{
+			if (!hidingShaping)
+			{
+				for (int i = 0; i < links.Count; i++)
+				{
+					MembraneLink link = links[i] as MembraneLink;
+					for (int j = 0; j < link.jointsShaping.Length; j++)
+					{
+						if (link.jointsShaping[j] != null)
+						{
+							link.jointsShaping[j].spring = 0;
+							//link.jointToNeighbor.spring = 0;
+							//link.jointToAttachment.spring = 0;
+						}
+						link.body.velocity = Vector3.zero;
+						//link.body.isKinematic = true;
+					}
+				}
+				hidingShaping = true;
+			}
+			extraStats.smoothForce = 0;
+			//return;
+		}
+		else if (hidingShaping)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				MembraneLink link = links[i] as MembraneLink;
+				for (int j = 0; j < link.jointsShaping.Length; j++)
+				{
+					if (link.jointsShaping[j] != null && link.jointsShaping[j].connectedBody != null)
+					{
+						ShapingPoint shapingPont = link.jointsShaping[j].connectedBody.GetComponent<ShapingPoint>();
+						if (shapingPont != null && shapingPont.shapingForce >= 0)
+						{
+							link.jointsShaping[j].spring = shapingPont.shapingForce;
+						}
+						else
+						{
+							link.jointsShaping[j].spring = extraStats.defaultShapingForce;
+						}
+						//link.jointToNeighbor.spring = stats.springForce;
+						//link.body.isKinematic = false;
+						link.body.velocity = Vector3.zero;
+					}
+
+				}
+			}
+			if (links.Count > 3)
+			{
+				//links[1].jointToAttachment.spring = stats.attachSpring1;
+				//links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			}
+			hidingShaping = false;
+		}*/
 
 		if (!deconstructing)
 		{
@@ -88,7 +146,7 @@ public class Membrane : Bond {
 		{
 			if (transform.parent != null)
 			{
-				transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+				transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
 			}
 			base.BreakBond(true);
 		}
@@ -98,7 +156,7 @@ public class Membrane : Bond {
 	{
 		if (transform.parent != null && !deconstructing)
 		{
-			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 		if (extraStats.breakDelay < 0)
@@ -166,7 +224,7 @@ public class Membrane : Bond {
 			breakLines.Add(attachment2.lineRenderer);
 			for (int i = 2; i < breakLinks.Count + 1; i++)
 			{
-				GameObject newLineObject = GameObject.Instantiate(breakLines[0].gameObject);
+				GameObject newLineObject = (GameObject)Instantiate(breakLines[0].gameObject);
 				LineRenderer newLineRenderer = newLineObject.GetComponent<LineRenderer>();
 				newLineRenderer.transform.parent = breakLines[0].transform.parent;
 				newLineRenderer.SetVertexCount(0);
@@ -568,6 +626,62 @@ public class Membrane : Bond {
 		return bonded;
 	}
 
+	public GameObject[] BondedObjectsWithTag(string targetTag, List<GameObject> knownBondedObjects = null, List<Membrane> ignoreMembranes = null)
+	{
+		GameObject[] bondedObjects;
+		if (knownBondedObjects == null)
+		{
+			knownBondedObjects = new List<GameObject>();
+		}
+
+		// Find all link bonds with objects with the given tag.
+		for (int i = 0; i < links.Count; i++)
+		{
+			MembraneLink link = links[i] as MembraneLink;
+			BondAttachable linkAttachable = FindLinkAttachable(link);
+			if (linkAttachable != null)
+			{
+				for (int j = 0; j < linkAttachable.bonds.Count; j++)
+				{
+					GameObject partner = linkAttachable.bonds[j].OtherPartner(linkAttachable).gameObject;
+					if (partner.tag == targetTag)
+					{
+						knownBondedObjects.Add(partner);
+					}
+				}
+			}
+			
+		}
+
+		// If desired, check bonds of neighbors.
+		if (extraStats.considerNeighborBonds)
+		{
+			if (ignoreMembranes == null)
+			{
+				ignoreMembranes = new List<Membrane>();
+			}
+			ignoreMembranes.Add(this);
+
+			if (membranePrevious != null && !ignoreMembranes.Contains(membranePrevious))
+			{
+				membranePrevious.BondedObjectsWithTag(targetTag, knownBondedObjects, ignoreMembranes);
+			}
+			if (membraneNext != null && !ignoreMembranes.Contains(membraneNext))
+			{
+				membraneNext.BondedObjectsWithTag(targetTag, knownBondedObjects, ignoreMembranes);
+			}
+		}
+
+		// Store bonded object for output.
+		bondedObjects = new GameObject[knownBondedObjects.Count];
+		for (int i = 0; i < bondedObjects.Length; i++)
+		{
+			bondedObjects[i] = knownBondedObjects[i];
+		}
+
+		return bondedObjects;
+	}
+
 	public void BreakInnerBond(BondAttachable partner, List<Membrane> ignoreMembranes = null)
 	{
 		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
@@ -841,6 +955,7 @@ public class MembraneStats
 	public float defaultShapingForce = 5;
 	public bool bondOnContact = true;
 	public bool bondOnFluff = true;
+	public LayerMask ignoreBondingLayers;
 	public bool breakWithNeighbors = true;
 	public bool breakDestroyAttachments = true;
 	public bool considerNeighborBonds = true;
@@ -852,7 +967,9 @@ public class MembraneStats
 		this.defaultShapingForce = original.defaultShapingForce;
 		this.bondOnContact = original.bondOnContact;
 		this.bondOnFluff = original.bondOnFluff;
+		this.ignoreBondingLayers = original.ignoreBondingLayers;
 		this.breakWithNeighbors = original.breakWithNeighbors;
+		this.breakDestroyAttachments = original.breakDestroyAttachments;
 		this.considerNeighborBonds = original.considerNeighborBonds;
 		this.smoothForce = original.smoothForce;
 		this.breakDelay = original.breakDelay;
@@ -868,7 +985,9 @@ public class MembraneStats
 		if (fullOverwrite || replacement.defaultShapingForce >= 0)		{	this.defaultShapingForce = replacement.defaultShapingForce;		}
 		this.bondOnContact = replacement.bondOnContact;
 		this.bondOnFluff = replacement.bondOnFluff;
+		this.ignoreBondingLayers = replacement.ignoreBondingLayers;
 		this.breakWithNeighbors = replacement.breakWithNeighbors;
+		this.breakDestroyAttachments = replacement.breakDestroyAttachments;
 		this.considerNeighborBonds = replacement.considerNeighborBonds;
 		if (fullOverwrite || replacement.smoothForce >= 0)				{	this.smoothForce = replacement.smoothForce;						}
 		if (fullOverwrite || replacement.breakDelay >= 0)				{	this.breakDelay = replacement.breakDelay;						}

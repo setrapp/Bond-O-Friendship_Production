@@ -45,6 +45,8 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	public string specialBreakerTag = "";
+	public int requiredSpecialsToBreak = 0;
 	//public AsyncOperation requiredLoading = null;
 	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
@@ -115,9 +117,17 @@ public class MembraneWall : MonoBehaviour {
 				}
 			}
 
+			// Ensure that enough ring breakers are attempting to break the membrane.
+			bool enoughSpecialsBonded = true;
+			if (requiredSpecialsToBreak > 0)
+			{
+				GameObject[] breakers = createdMembrane.BondedObjectsWithTag(specialBreakerTag);
+				enoughSpecialsBonded = breakers.Length >= requiredSpecialsToBreak;
+			}
+
 			//bool loadingComplete = (requiredLoading == null) || requiredLoading.isDone;
 
-			bool requirementsMet = enoughPlayersBonded;// && loadingComplete;
+			bool requirementsMet = enoughPlayersBonded && enoughSpecialsBonded;// && loadingComplete;
 
 			if (!requirementsMet)
 			{
@@ -157,7 +167,6 @@ public class MembraneWall : MonoBehaviour {
 			return;
 		}
 
-		Membrane createdMembrane = membraneCreator.createdBond as Membrane;
 		if (shapingIndices.Count != shapingPoints.Count)
 		{
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
@@ -228,11 +237,11 @@ public class MembraneWall : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(Membrane brakingMembrane)
+	private void MembraneBreaking(Membrane BreakingMembrane)
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -255,7 +264,7 @@ public class MembraneWall : MonoBehaviour {
 
 	private void MembraneBonding(Membrane bondingMembrane)
 	{
-		if (membraneCreator != null && bondingMembrane != null &&  bondingMembrane == membraneCreator.createdBond)
+		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
 			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
 		}

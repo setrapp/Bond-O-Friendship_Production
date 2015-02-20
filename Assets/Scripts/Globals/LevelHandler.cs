@@ -20,7 +20,7 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 	private List<Island> loadedIslands;
-	private float progressMagicNumber = 0.9f;
+	//private float progressMagicNumber = 0.9f;
 
 	void Awake()
 	{
@@ -32,42 +32,16 @@ public class LevelHandler : MonoBehaviour {
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
 			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
-			/*if (islandContainer.atmosphere != null)
-			{
-				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
-				{
-					islandContainer.atmosphere.createdWalls[i].requiredLoading = islandLoading;
-				*/
 			yield return islandLoading;
 
-
-			/*if (islandContainer.atmosphere != null)
-			{
-				for (int i = 0; i < islandContainer.atmosphere.createdWalls.Count; i++)
-				{
-					islandContainer.atmosphere.createdWalls[i].requiredLoading = null;
-				}
-			}*/
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
-			Island createdIsland = null;
 			for (int i = 0; i < islandObjects.Length; i++)
 			{
 				Island checkIsland = islandObjects[i].GetComponent<Island>();
-				if (checkIsland != null && checkIsland.islandId == islandContainer.islandId)
+				if (checkIsland != null && checkIsland.islandId == islandContainer.islandId && islandContainer.island == null)
 				{
-					createdIsland = checkIsland;
-					createdIsland.transform.parent = islandContainer.transform;
-					createdIsland.transform.localPosition = Vector3.zero + islandContainer.spawnOffset;
-					islandContainer.island = createdIsland;
-					createdIsland.container = islandContainer;
-					islandContainer.islandLoading = false;
-					loadedIslands.Add(createdIsland);
-					PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
-					if (playersEstablish != null)
-					{
-						playersEstablish.PlacePlayers();
-					}
-					CameraSplitter.Instance.JumpToPlayers();
+					islandContainer.SendMessage("IslandLoaded", checkIsland);
+					loadedIslands.Add(checkIsland);
 				}
 			}
 		}
@@ -92,7 +66,11 @@ public class LevelHandler : MonoBehaviour {
 
 	public void LoadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
 	{
-		GenerateIslandAtmospheres(ring, ignoreIsland);
+		if (ring != null)
+		{
+			GenerateIslandAtmospheres(ring, ignoreIsland);
+			ring.LoadExpressiveClouds();
+		}
 	}
 
 	public void UnloadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
@@ -106,10 +84,11 @@ public class LevelHandler : MonoBehaviour {
 				{
 					if (islandContainers[i].atmosphere != null)
 					{
-						islandContainers[i].atmosphere.SilentBreak();
+						//islandContainers[i].atmosphere.SilentBreak();
 					}
 				}
 			}
+			ring.UnloadExpressiveClouds();
 		}
 		
 	}

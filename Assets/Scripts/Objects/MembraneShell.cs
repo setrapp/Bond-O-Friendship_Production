@@ -9,7 +9,7 @@ public class MembraneShell : MonoBehaviour {
 	public GameObject membraneWallOriginal;
 	public bool createOnStart = true;
 	public int wallCount = 4;
-	private bool braking = false;
+	private bool Breaking = false;
 	public float buildDelay = -1;
 
 	void Start()
@@ -72,7 +72,7 @@ public class MembraneShell : MonoBehaviour {
 			}
 		}
 
-		braking = false;
+		Breaking = false;
 	}
 
 	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
@@ -106,12 +106,12 @@ public class MembraneShell : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(MembraneWall brakingMembrane)
+	private void MembraneBreaking(MembraneWall BreakingMembrane)
 	{
-		if (createdWalls.Contains(brakingMembrane) && !braking)
+		if (createdWalls.Contains(BreakingMembrane) && !Breaking)
 		{
-			braking = true;
-			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+			Breaking = true;
+			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 

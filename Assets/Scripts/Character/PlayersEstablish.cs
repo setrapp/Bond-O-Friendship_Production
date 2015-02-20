@@ -9,6 +9,7 @@ public class PlayersEstablish : MonoBehaviour {
 	private bool setPlayer1Fluff = false;
 	private bool setPlayer2Fluff = false;
 	public bool placeOnAwake = true;
+	public Transform defaultPlayerParent;
 
 	void Awake()
 	{
@@ -22,6 +23,9 @@ public class PlayersEstablish : MonoBehaviour {
 	{
 		if (Globals.Instance != null)
 		{
+			Transform player1Holder = Globals.Instance.player1.transform.parent;
+			Transform player2Holder = Globals.Instance.player2.transform.parent;
+
 			/* TODO check if players already exist in scene.*/
 			PlayerInput player1 = null;
 			PlayerInput player2 = null;
@@ -41,7 +45,6 @@ public class PlayersEstablish : MonoBehaviour {
 					}
 				}
 			}
-			
 
 			// Place player 1.
 			if (Globals.Instance.player1 != null)
@@ -65,10 +68,16 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player1 = player1;
 					player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
+
+
+				if (defaultPlayerParent != null)
+				{
+					player1.transform.parent = defaultPlayerParent;
+				}
 			}
 
 			// Place player 2.
-			if (Globals.Instance.player2 != null && Globals.Instance.updatePlayersOnLoad)
+			if (Globals.Instance.player2 != null)
 			{
 				if (player2 == null || !Globals.Instance.updatePlayersOnLoad)
 				{
@@ -89,6 +98,21 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player2 = player2;
 					player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
+
+
+				if (defaultPlayerParent != null)
+				{
+					player2.transform.parent = defaultPlayerParent;
+				}
+			}
+
+			if (player1Holder != null && player1Holder.gameObject != Globals.Instance.gameObject && player1Holder != defaultPlayerParent)
+			{
+				Destroy(player1Holder.gameObject);
+			}
+			if (player2Holder != null && player2Holder.gameObject != Globals.Instance.gameObject && player2Holder != defaultPlayerParent)
+			{
+				Destroy(player1Holder.gameObject);
 			}
 
 			// After the players have been spawned in one level, don't change them when new levels load.
@@ -99,19 +123,24 @@ public class PlayersEstablish : MonoBehaviour {
 			{
 				CameraSplitter.Instance.JumpToPlayers();
 			}
+
+			SetFluffs();
+			SendMessage("PlayersPlaced", SendMessageOptions.DontRequireReceiver);
 		}
 
 		if (player1Spawn != null)
 		{
 			Destroy(player1Spawn);
+			player1Spawn = null;
 		}
 		if (player2Spawn != null)
 		{
 			Destroy(player2Spawn);
+			player2Spawn = null;
 		}
 	}
 
-	void Start()
+	private void SetFluffs()
 	{
 		if (Globals.Instance != null)
 		{
@@ -120,6 +149,7 @@ public class PlayersEstablish : MonoBehaviour {
 
 			if (setPlayer1Fluff && player1 != null)
 			{
+
 				FluffHandler fluffHandler1 = player1.GetComponent<FluffHandler>();
 				if (naturalFluffCount >= 0)
 				{

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using InControl;
 
 public class Globals : MonoBehaviour {
@@ -27,6 +28,7 @@ public class Globals : MonoBehaviour {
 	public PlayerInput player1;
 	public PlayerInput player2;
 
+	public bool autoAttractor = false;
 
     public static InputDevice startingDevice;
     public static InputDevice playerOneDevice;
@@ -36,18 +38,39 @@ public class Globals : MonoBehaviour {
 
     public static bool isPaused;
 
+    public static bool usingController;
+
 	public GameObject canvasPaused;
 
+	[Header("Fluff Depth Mask")]
+	public bool visibilityDepthMaskNeeded = false;
+	[Header("Fluff Depth Mask")]
     public GameObject depthMaskPrefab;
+	[Header("Fluff Depth Mask")]
     public GameObject depthMaskHolderPrefab;
+
+	[SerializeField]
+	public List<Fluff> allFluffs;
 
 	public bool updatePlayersOnLoad = true;
 
 	public static bool sharing = false;
-	// Use this for initialization
+
+	public EtherRing existingEther = null;
+
 	void Awake()
 	{
-		DontDestroyOnLoad(gameObject);
+		if (!Application.isEditor)
+		{
+			Screen.showCursor = false;
+		}
 	}
 
+	void Update()
+	{
+		if (Input.GetKey(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+	}
 }

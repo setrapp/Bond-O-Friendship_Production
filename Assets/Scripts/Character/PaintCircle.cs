@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PaintCircle : MonoBehaviour {
 
+
+    public bool erased;
 	public float myLife;
 	public Vector3 mySize;
 	public float sizeRand;
@@ -16,6 +18,7 @@ public class PaintCircle : MonoBehaviour {
 	void Start () {
 		sizeRand = Random.Range(rSizemin,rSizemax);
 		myLife = Random.Range(rLifemin,rLifemax);
+        erased = false;
 		//paintCircColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
@@ -29,7 +32,10 @@ public class PaintCircle : MonoBehaviour {
 		myLife -= Time.deltaTime;
 		if(myLife <= 0)
 		{
-			sizeRand -= Time.deltaTime*2.0f;
+            if (!erased)
+                sizeRand -= Time.deltaTime * 2.0f;
+            else
+                sizeRand -= Time.deltaTime * 10.0f;
 			//paintCircColor.a -= Time.deltaTime;
 		}
 

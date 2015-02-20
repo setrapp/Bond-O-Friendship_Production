@@ -14,8 +14,6 @@ public class MembraneLink : BondLink {
 			{
 				Bond bond = bondAttachable.bonds[i];
 				MembraneLink nearestLink;
-				Vector3 halfWidthOffset = transform.right * 0.5f;
-				Vector3 currentPos = (bond.attachment1.position - halfWidthOffset);
 				Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
 				bond.attachment1.position = newPos;
 				if (nearestLink != this)
@@ -37,11 +35,12 @@ public class MembraneLink : BondLink {
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (collision.collider.tag == "Character")
+		BondAttachable bondAttachable = collision.collider.GetComponent<BondAttachable>();
+		if (bondAttachable != null)
 		{
 			if (membrane != null && membrane.extraStats.bondOnContact)
 			{
-				AttempBond(collision.collider.GetComponent<BondAttachable>(), collision.contacts[0].point);
+				AttempBond(bondAttachable, collision.contacts[0].point);
 			}
 		}
 	}
@@ -62,22 +61,26 @@ public class MembraneLink : BondLink {
 	{
 		if (membrane != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
 		{
-			// Use the attachable provided by the membrane, to allow endpoint links to be handled differently.
-			BondAttachable linkAttachable = membrane.FindLinkAttachable(this);
-			if (linkAttachable != null)
+			int partnerLayer = (int)Mathf.Pow(2, partner.gameObject.layer);
+			if ((partnerLayer & membrane.extraStats.ignoreBondingLayers) != partnerLayer)
 			{
-				if (membrane.preferNewBonds)
+				// Use the attachable provided by the membrane, to allow endpoint links to be handled differently.
+				BondAttachable linkAttachable = membrane.FindLinkAttachable(this);
+				if (linkAttachable != null)
 				{
-					membrane.BreakInnerBond(partner);
-				}
-				bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition)/*contactPosition*/, true);
-				if (bonded)
-				{
-					membrane.forceFullDetail = true;
-					bondAttachable.bonds[bondAttachable.bonds.Count - 1].stats.manualAttachment1 = true;
-					if (membrane.transform.parent != null)
+					if (membrane.preferNewBonds)
 					{
-						membrane.transform.parent.SendMessage("MembraneBonding", membrane, SendMessageOptions.DontRequireReceiver);
+						membrane.BreakInnerBond(partner);
+					}
+					bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition), true);
+					if (bonded)
+					{
+						membrane.forceFullDetail = true;
+						bondAttachable.bonds[bondAttachable.bonds.Count - 1].stats.manualAttachment1 = true;
+						if (membrane.transform.parent != null)
+						{
+							membrane.transform.parent.SendMessage("MembraneBonding", membrane, SendMessageOptions.DontRequireReceiver);
+						}
 					}
 				}
 			}
