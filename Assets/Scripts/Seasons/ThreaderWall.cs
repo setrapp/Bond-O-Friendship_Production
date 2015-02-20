@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TriggerWall : MonoBehaviour {
+public class ThreaderWall : MonoBehaviour {
 
-	
 	private Color myColor;
 	private float alpha;
 	private bool fadenow;
@@ -18,15 +17,15 @@ public class TriggerWall : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(0.8f,0.8f,0.8f,alpha);
+		myColor = new Color(0.2f,0.0f,0.7f,alpha);
 		GetComponent<Renderer>().material.color = myColor;
-
-		if(trigger1.GetComponent<Trigger>().triggered)
+		
+		if(trigger1.GetComponent<ThreadParent>().solved)
 			if(trigger2 == null)
 		{
 			FadeNow ();
 		}
-		else if( trigger2 != null && trigger2.GetComponent<Trigger>().triggered)
+		else if(trigger2 != null && trigger2.GetComponent<ThreadParent>().solved)
 		{
 			FadeNow ();
 		}
@@ -37,7 +36,7 @@ public class TriggerWall : MonoBehaviour {
 			//alpha = timer;
 		}
 		if(alpha <= 0)
-			GetComponent<Collider>().enabled = false;
+			Destroy(gameObject);
 	}
 	
 	public void FadeNow()

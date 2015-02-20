@@ -18,7 +18,7 @@ public class ManageSeasons : MonoBehaviour {
 	public GameObject leaf7Prefab;
 	public int season;
 	public float seasonLength = 30.0f;
-	public float leafSpawnRange = 30.0f;
+	public float leafSpawnRange = 50.0f;
 
 	public float seasonTimeRemaining;
 
