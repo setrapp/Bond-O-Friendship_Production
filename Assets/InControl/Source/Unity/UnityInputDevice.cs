@@ -132,10 +132,6 @@ namespace InControl
 			return Profile == deviceProfile && JoystickId == joystickId;
 		}
 
-        public int GetJoystickID()
-        {
-            return JoystickId;
-        }
 
 		public override bool IsSupportedOnThisPlatform
 		{

@@ -12,7 +12,7 @@ public class IslandContainer : MonoBehaviour {
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
-	private bool playersLanded = false;
+	//private bool playersLanded = false;
 	private bool waitingToIsolate = false;
 
 	void Start()

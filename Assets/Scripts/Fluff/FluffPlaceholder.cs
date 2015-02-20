@@ -34,7 +34,7 @@ public class FluffPlaceholder : MonoBehaviour {
 			SpawnFluff();
 		}
 		
-		if ((createdFluff == null || createdFluff.transform.position != transform.position) && pickTime < 0)
+		if ((createdFluff == null || createdFluff.moving) && pickTime < 0)
 		{
 			createdFluff = null;
 			pickTime = Time.time;

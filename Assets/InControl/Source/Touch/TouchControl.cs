@@ -30,7 +30,17 @@ namespace InControl
 			Button6 = InputControlType.Button6,
 			Button7 = InputControlType.Button7,
 			Button8 = InputControlType.Button8,
-			Button9 = InputControlType.Button9
+			Button9 = InputControlType.Button9,
+			Button10 = InputControlType.Button10,
+			Button11 = InputControlType.Button11,
+			Button12 = InputControlType.Button12,
+			Button13 = InputControlType.Button13,
+			Button14 = InputControlType.Button14,
+			Button15 = InputControlType.Button15,
+			Button16 = InputControlType.Button16,
+			Button17 = InputControlType.Button17,
+			Button18 = InputControlType.Button18,
+			Button19 = InputControlType.Button19
 		}
 
 

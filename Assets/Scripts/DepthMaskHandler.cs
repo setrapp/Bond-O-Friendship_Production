@@ -5,6 +5,7 @@ public class DepthMaskHandler : MonoBehaviour {
 
 	//[HideInInspector]
 	public GameObject depthMask;
+	public bool autoCreate = true;
 
 	void Update () {
 		if (Globals.Instance.visibilityDepthMaskNeeded)
@@ -13,10 +14,9 @@ public class DepthMaskHandler : MonoBehaviour {
 			{
 				depthMask.transform.position = new Vector3(transform.position.x, transform.position.y, -10.0f);
 			}
-			else
+			else if (autoCreate)
 			{
-				depthMask = (GameObject)Instantiate(Globals.Instance.depthMaskPrefab, new Vector3(transform.position.x, transform.position.y, -10.0f), Quaternion.identity);
-				depthMask.transform.parent = DepthMaskHolder.Instance.transform;
+				CreateDepthMask();
 			}
 		}
 		else
@@ -25,6 +25,23 @@ public class DepthMaskHandler : MonoBehaviour {
 			{
 				Destroy(depthMask);
 			}
+		}
+	}
+
+	public void CreateDepthMask()
+	{
+		if (depthMask == null)
+		{
+			depthMask = (GameObject)Instantiate(Globals.Instance.depthMaskPrefab, new Vector3(transform.position.x, transform.position.y, -10.0f), Quaternion.identity);
+			depthMask.transform.parent = DepthMaskHolder.Instance.transform;
+		}
+	}
+
+	void OnDestroy()
+	{
+		if (depthMask != null)
+		{
+			Destroy(depthMask.gameObject);
 		}
 	}
 }

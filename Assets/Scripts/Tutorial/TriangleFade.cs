@@ -6,19 +6,29 @@ public class TriangleFade : MonoBehaviour {
 	private float timer;
 	private Color myColor;
 	public GameObject waitPad;
-	
-	// Use this for initialization
-	void Start () {
-		timer = 0.7f;
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		myColor = new Color(0.6f, 0.6f, 0.8f, timer);
-		GetComponent<Renderer>().material.color = myColor;
-		if(waitPad.GetComponent<WaitPad>().activated)
+	private WaitPad pad;
+	private Renderer targetRenderer;
+
+	void Start()
+	{
+		if (waitPad != null)
 		{
+			pad = waitPad.GetComponent<WaitPad>();
+			
+		}
+		targetRenderer = GetComponent<Renderer>();
+		timer = 0.7f;
+
+	}
+
+	void Update () {
+		if(pad != null && pad.activated)
+		{
+			myColor = new Color(0.6f, 0.6f, 0.8f, timer);
+			if (targetRenderer != null)
+			{
+				targetRenderer.material.color = myColor;
+			}
 			timer -= Time.deltaTime;
 		}
 		if(timer <= 0)
