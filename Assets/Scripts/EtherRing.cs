@@ -14,6 +14,11 @@ public class EtherRing : MonoBehaviour {
 		{
 			Globals.Instance.existingEther = this;
 		}
+
+		if (ringAtmosphere != null)
+		{
+			ringAtmosphere.CreateShell();
+		}
 		for (int i = 0; i < expressivePlaceholders.Count; i++)
 		{
 			expressivePlaceholders[i].placeholder.SetActive(false);
