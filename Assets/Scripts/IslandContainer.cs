@@ -8,6 +8,7 @@ public class IslandContainer : MonoBehaviour {
 	[HideInInspector]
 	public bool islandLoading = false;
 	public string islandSceneName;
+	public Renderer editorPlaceholder;
 	public MembraneShell atmosphere;
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
@@ -21,6 +22,11 @@ public class IslandContainer : MonoBehaviour {
 		{
 			waitingToIsolate = true;
 			StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
+		}
+
+		if (editorPlaceholder != null)
+		{
+			editorPlaceholder.gameObject.SetActive(false);
 		}
 	}
 
