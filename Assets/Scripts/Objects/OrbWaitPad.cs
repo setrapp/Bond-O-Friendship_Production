@@ -10,6 +10,10 @@ public class OrbWaitPad : WaitPad {
 	public GameObject[] activationSpheres;
 	public ParticleSystem activatedParticle;
 	public GameObject optionalGate;
+	private bool gateClosing;
+	private float gateCloseSpeed;
+	private float gateXPos;
+	public float gateCloseTime = 20;
 
 	override protected void Start () {
 		red = 0.1f;
@@ -23,6 +27,11 @@ public class OrbWaitPad : WaitPad {
 		if (activatedParticle != null)
 		{
 			activatedParticle.Stop();
+		}
+		if(optionalGate != null)
+		{
+			gateCloseSpeed = optionalGate.transform.localScale.x/(gateCloseTime*120);
+			gateXPos = optionalGate.transform.position.x - optionalGate.transform.localScale.x/2;
 		}
 	}
 
@@ -50,6 +59,16 @@ public class OrbWaitPad : WaitPad {
 		{
 			//print ("activated");
 		}
+		if(gateClosing == true)
+		{
+			optionalGate.transform.localScale = new Vector3(optionalGate.transform.localScale.x - gateCloseSpeed, optionalGate.transform.localScale.y, optionalGate.transform.localScale.z);
+			optionalGate.transform.position = new Vector3(gateXPos + optionalGate.transform.localScale.x/2, optionalGate.transform.position.y, optionalGate.transform.position.z);
+			if(optionalGate.transform.localScale.x <= 0)
+			{
+				Destroy(optionalGate);
+				gateClosing = false;
+			}
+		}
 	}
 	void OnTriggerEnter(Collider collide)
 	{
@@ -72,7 +91,7 @@ public class OrbWaitPad : WaitPad {
 					activationSpheres[i] = null;
 					//activatedParticle.Play();
 					if(optionalGate != null)
-						Destroy(optionalGate);
+						gateClosing = true;
 					break;
 				}
 			}
@@ -80,7 +99,6 @@ public class OrbWaitPad : WaitPad {
 			if(triggersLit == maxTriggers)
 				fullyLit = true;
 		}
-
 		if(collide.gameObject.name == "Player 1")
 		{
 			pOonPad = true;
