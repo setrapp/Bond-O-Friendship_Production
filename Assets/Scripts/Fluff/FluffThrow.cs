@@ -11,6 +11,7 @@ public class FluffThrow : MonoBehaviour {
 	public float minShotFactor;
 	public float passForce = 1000;
 	public float movingBonusFactor = 0.3f;
+	public float preventFluffAttractTime = 0.5f;
 
 	void Start()
 	{
@@ -95,7 +96,7 @@ public class FluffThrow : MonoBehaviour {
 			shotAngle += shotSpread / passFluffCount;
             fluff.transform.position = transform.position;
 
-            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
+            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject, preventFluffAttractTime);
 		}
 		
 		// If floating propel away from fluff.

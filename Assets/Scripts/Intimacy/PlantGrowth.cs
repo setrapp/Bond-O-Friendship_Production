@@ -61,6 +61,7 @@ public class PlantGrowth : MonoBehaviour {
 				if(fluffCount/fluffsRequiredPerBud > i + 1 && blossoms[i] == null)
 				{
 					blossoms[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+					blossoms[i].GetComponent<Collider>().enabled = false;
 					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.2f);
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
@@ -75,6 +76,7 @@ public class PlantGrowth : MonoBehaviour {
 						{
 							Rigidbody blossomRigid = blossoms[j].AddComponent<Rigidbody>();
 							blossoms[j].GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+							blossoms[j].GetComponent<Collider>().enabled = true;
 							blossomRigid.drag = 1;
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
@@ -92,6 +94,12 @@ public class PlantGrowth : MonoBehaviour {
 					Destroy(blossoms[i]);
 					blossoms[i] = null;
 				}
+			}
+			if(fullyBloomed == true)
+			{
+				BudCollision[] allChildren = GetComponentsInChildren<BudCollision>();
+				for(int i = 0; i < allChildren.Length; i++)
+					allChildren[i].gameObject.GetComponent<Collider>().enabled = false;
 			}
 			colorValue = (float)fluffCount/(fluffsRequiredPerBud*buds.Length);
 			plantColorCopy.color = new Color(colorValue, colorValue, colorValue);
