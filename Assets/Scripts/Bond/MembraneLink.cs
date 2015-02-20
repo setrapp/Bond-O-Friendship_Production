@@ -14,8 +14,6 @@ public class MembraneLink : BondLink {
 			{
 				Bond bond = bondAttachable.bonds[i];
 				MembraneLink nearestLink;
-				Vector3 halfWidthOffset = transform.right * 0.5f;
-				Vector3 currentPos = (bond.attachment1.position - halfWidthOffset);
 				Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
 				bond.attachment1.position = newPos;
 				if (nearestLink != this)

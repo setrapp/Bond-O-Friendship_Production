@@ -18,10 +18,15 @@ public class TriggerWall : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(0.6f,0.6f,0.6f,alpha);
+		myColor = new Color(0.8f,0.8f,0.8f,alpha);
 		GetComponent<Renderer>().material.color = myColor;
 
-		if(trigger1.GetComponent<Trigger>().triggered && trigger2 != null && trigger2.GetComponent<Trigger>().triggered)
+		if(trigger1.GetComponent<Trigger>().triggered)
+			if(trigger2 == null)
+		{
+			FadeNow ();
+		}
+		else if( trigger2 != null && trigger2.GetComponent<Trigger>().triggered)
 		{
 			FadeNow ();
 		}
