@@ -20,7 +20,7 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 	private List<Island> loadedIslands;
-	private float progressMagicNumber = 0.9f;
+	//private float progressMagicNumber = 0.9f;
 
 	void Awake()
 	{
@@ -31,19 +31,10 @@ public class LevelHandler : MonoBehaviour {
 	{
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
-			if (UnityEditorInternal.InternalEditorUtility.HasPro())
-			{
-				AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
-				yield return islandLoading;
-			}
-			else
-			{
-				Application.LoadLevelAdditive(islandName);
-				yield return null;
-			}
+			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
+			yield return islandLoading;
 
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
-			Island createdIsland = null;
 			for (int i = 0; i < islandObjects.Length; i++)
 			{
 				Island checkIsland = islandObjects[i].GetComponent<Island>();
@@ -75,7 +66,11 @@ public class LevelHandler : MonoBehaviour {
 
 	public void LoadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
 	{
-		GenerateIslandAtmospheres(ring, ignoreIsland);
+		if (ring != null)
+		{
+			GenerateIslandAtmospheres(ring, ignoreIsland);
+			ring.LoadExpressiveClouds();
+		}
 	}
 
 	public void UnloadEtherRing(EtherRing ring, IslandContainer ignoreIsland = null)
@@ -89,10 +84,11 @@ public class LevelHandler : MonoBehaviour {
 				{
 					if (islandContainers[i].atmosphere != null)
 					{
-						islandContainers[i].atmosphere.SilentBreak();
+						//islandContainers[i].atmosphere.SilentBreak();
 					}
 				}
 			}
+			ring.UnloadExpressiveClouds();
 		}
 		
 	}

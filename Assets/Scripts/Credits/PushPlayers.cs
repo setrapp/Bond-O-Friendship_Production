@@ -5,10 +5,8 @@ public class PushPlayers : MonoBehaviour {
 
 	private GameObject player1;
 	private GameObject player2;
-	private float timer = 0.3f;
 	private Vector3 expPos;
 	private bool collided;
-	private bool timerBool;
 	private float p1Vel;
 	private float p2Vel;
 	public ParticleSystem collisionParticlePrefab;
@@ -29,24 +27,18 @@ public class PushPlayers : MonoBehaviour {
 			collisionParticle.transform.position = expPos;
 			p1Vel = player1.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude;
 			p2Vel = player2.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude;
-			player1.GetComponent<Rigidbody>().AddExplosionForce(3000.0f/(p1Vel/200 + 1), expPos, 1000.0f);
-			player2.GetComponent<Rigidbody>().AddExplosionForce(3000.0f/(p2Vel/200 + 1), expPos, 1000.0f);
+			GameObject s =  GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			s.transform.position = new Vector3(expPos.x, expPos.y, expPos.z + Random.Range(2.0f, 4.0f));
+			s.GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.6f);
+			s.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+			s.AddComponent<Light>();
+			s.transform.parent = transform;
+			s.GetComponent<Collider>().enabled = false;
+			s.transform.localScale = new Vector3((p1Vel + p2Vel)/80, (p1Vel + p2Vel)/80, (p1Vel + p2Vel)/80);
 			player1.GetComponent<FloatMoving>().collided = false;
-			timerBool = true;
-			player1.GetComponent<SimpleMover>().enabled = false;
-			player2.GetComponent<SimpleMover>().enabled = false;
+			Destroy(s, 15.0f);
 		}
-		if(timerBool == true)
-		{
-			timer -= Time.deltaTime;
-			if(timer <= 0)
-			{
-				player1.GetComponent<SimpleMover>().enabled = true;
-				player2.GetComponent<SimpleMover>().enabled = true;
-				timer = 0.3f;
-				timerBool = false;
+		if(collisionParticle != null)
 				Destroy(collisionParticle.gameObject, 1.0f);
-			}
-		}
 	}
 }

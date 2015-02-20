@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(SimpleMover))]
@@ -25,6 +25,8 @@ public class Fluff : MonoBehaviour {
 	public Attachee attachee;
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
+	public float nonAttractTime;
+	public bool attractable = true;
 	private bool forgetCreator;
 	public Animation popAnimation;
 	public Vector3 pullForce;
@@ -52,6 +54,12 @@ public class Fluff : MonoBehaviour {
 			attachee = null;
 		}
 
+		// Keep track of this fluff for easy retrieval.
+		if (Globals.Instance != null && Globals.Instance.allFluffs != null)
+		{
+			Globals.Instance.allFluffs.Add(this);
+		}
+
 		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
 		gameObject.tag = "Fluff";
 	}
@@ -70,6 +78,17 @@ public class Fluff : MonoBehaviour {
 			ApplyPullForce();
 			pullForce = Vector3.zero;
 			pullDistance = 0;
+		}
+
+		if (!attractable && nonAttractTime <=0)
+		{
+			attractable = true;
+			nonAttractTime = 0;
+		}
+		else if (nonAttractTime > 0)
+		{
+			nonAttractTime -= Time.deltaTime;
+			attractable = false;
 		}
 
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
@@ -129,9 +148,11 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null)
+	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null, float preventAttractTime = 0)
 	{
 		attachee = null;
+		nonAttractTime = preventAttractTime;
+		attractable = false;
 
 		// If something attachable is already in reach, attach without moving.
 		RaycastHit attemptPassHit;
@@ -229,6 +250,8 @@ public class Fluff : MonoBehaviour {
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
 		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		ignoreCollider = attacheeObject;
+		nonAttractTime = 0;
+		attractable = true;
 
 		// Notify the potential attachee that fluff has been attached.
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
@@ -343,15 +366,14 @@ public class Fluff : MonoBehaviour {
 			Attach(newAttachee, collision.contacts[0].point, standingDirection);
 		}
 	}
-
-	/* TODO What was this for???
+	
 	void OnTriggerEnter(Collider other)
 	{
-		if ((attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
+		if ((attachee == null || attachee.gameObject != other.gameObject) && (attachee == null || !attachee.possessive) && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
-	}*/
+	}
 
 	void OnTriggerExit(Collider other)
 	{
@@ -376,6 +398,12 @@ public class Fluff : MonoBehaviour {
 		if (depthMask != null)
 		{
 			Destroy(depthMask.depthMask);
+		}
+
+		// Keep track of this fluff for easy retrieval.
+		if (Globals.Instance != null && Globals.Instance.allFluffs != null)
+		{
+			Globals.Instance.allFluffs.Remove(this);
 		}
 	}
 }

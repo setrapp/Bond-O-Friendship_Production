@@ -11,6 +11,7 @@ public class FluffThrow : MonoBehaviour {
 	public float minShotFactor;
 	public float passForce = 1000;
 	public float movingBonusFactor = 0.3f;
+	public float preventFluffAttractTime = 0.5f;
 
 	void Start()
 	{
@@ -29,10 +30,16 @@ public class FluffThrow : MonoBehaviour {
 
 		int passFluffCount = Mathf.Min(Random.Range(minShotCount, maxShotCount), character.fluffHandler.fluffs.Count);
 
-
-		if (character.fluffHandler.fluffs == null || character.fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
+		if (character.fluffHandler.fluffs == null)
 		{
 			return;
+		}
+		else if (character.fluffHandler.fluffs.Count < 1 || passFluffCount < 1)
+		{
+			if (character.flufflessPass != null)
+			{
+				character.flufflessPass.Play();
+			}
 		}
 
 		passDirection.Normalize();
@@ -89,7 +96,7 @@ public class FluffThrow : MonoBehaviour {
 			shotAngle += shotSpread / passFluffCount;
             fluff.transform.position = transform.position;
 
-            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject);
+            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject, preventFluffAttractTime);
 		}
 		
 		// If floating propel away from fluff.

@@ -1,24 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OrbWaitPad : MonoBehaviour {
+public class OrbWaitPad : WaitPad {
 
-	public bool pOonPad = false;
-	public bool pTonPad = false;
 	public Material activatedSphereColor;
-	private Color mycolor;
-	private float red;
-	private float turnTime;
-	public bool activated = false;
 	private int triggersLit = 0;
 	public int maxTriggers;
 	private bool fullyLit;
 	public GameObject[] activationSpheres;
 	public ParticleSystem activatedParticle;
 	public GameObject optionalGate;
+	private bool gateClosing;
+	private float gateCloseSpeed;
+	private float gateXPos;
+	public float gateCloseTime = 20;
 
-	// Use this for initialization
-	void Start () {
+	override protected void Start () {
 		red = 0.1f;
 		turnTime = 0.3f;
 		activationSpheres = new GameObject[transform.parent.childCount];
@@ -31,14 +28,19 @@ public class OrbWaitPad : MonoBehaviour {
 		{
 			activatedParticle.Stop();
 		}
+		if(optionalGate != null)
+		{
+			gateCloseSpeed = optionalGate.transform.localScale.x/(gateCloseTime*120);
+			gateXPos = optionalGate.transform.position.x - optionalGate.transform.localScale.x/2;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	override protected void Update()
+	{
 		mycolor = new Color(red,0.3f,0.5f);
 		GetComponent<Renderer>().material.color = mycolor;
 
-	if(pOonPad == true && pTonPad == true)
+	if(pOonPad == true && pTonPad == true && fullyLit)
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
@@ -57,6 +59,16 @@ public class OrbWaitPad : MonoBehaviour {
 		{
 			//print ("activated");
 		}
+		if(gateClosing == true)
+		{
+			optionalGate.transform.localScale = new Vector3(optionalGate.transform.localScale.x - gateCloseSpeed, optionalGate.transform.localScale.y, optionalGate.transform.localScale.z);
+			optionalGate.transform.position = new Vector3(gateXPos + optionalGate.transform.localScale.x/2, optionalGate.transform.position.y, optionalGate.transform.position.z);
+			if(optionalGate.transform.localScale.x <= 0)
+			{
+				Destroy(optionalGate);
+				gateClosing = false;
+			}
+		}
 	}
 	void OnTriggerEnter(Collider collide)
 	{
@@ -66,6 +78,12 @@ public class OrbWaitPad : MonoBehaviour {
 			{
 				if(fullyLit == false && activationSpheres[i] != null)
 				{
+					DepthMaskHandler slotDepthMask = activationSpheres[i].GetComponent<DepthMaskHandler>();
+					if (slotDepthMask != null)
+					{
+						slotDepthMask.CreateDepthMask();
+					}
+
 					Destroy(collide.gameObject);
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
@@ -73,7 +91,7 @@ public class OrbWaitPad : MonoBehaviour {
 					activationSpheres[i] = null;
 					//activatedParticle.Play();
 					if(optionalGate != null)
-						Destroy(optionalGate);
+						gateClosing = true;
 					break;
 				}
 			}
@@ -81,18 +99,15 @@ public class OrbWaitPad : MonoBehaviour {
 			if(triggersLit == maxTriggers)
 				fullyLit = true;
 		}
-		if(fullyLit == true)
+		if(collide.gameObject.name == "Player 1")
 		{
-			if(collide.gameObject.name == "Player 1")
-			{
-				pOonPad = true;
-				//print("1");
-			}
-			if(collide.gameObject.name == "Player 2")
-			{
-				pTonPad = true;
-				//print ("2");
-			}
+			pOonPad = true;
+			//print("1");
+		}
+		if(collide.gameObject.name == "Player 2")
+		{
+			pTonPad = true;
+			//print ("2");
 		}
 
 	}

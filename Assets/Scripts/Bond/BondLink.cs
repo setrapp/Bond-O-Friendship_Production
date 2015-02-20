@@ -10,6 +10,12 @@ public class BondLink : MonoBehaviour {
 	public SpringJoint jointToNeighbor = null;
 	public SpringJoint jointToAttachment = null;
 	public int orderLevel = 0;
+	public bool broken = false;
+
+	void OnDestroy()
+	{
+		broken = true;
+	}
 }
 
 public class BondLinkContainer

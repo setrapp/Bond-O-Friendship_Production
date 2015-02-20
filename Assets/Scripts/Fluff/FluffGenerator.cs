@@ -29,7 +29,7 @@ public class FluffGenerator : MonoBehaviour {
 	void Update () {
 		spawnTimer -= Time.deltaTime;
 		//Debug.Log(targetAngle);
-		if(targetAngle != null && targetAngle != Vector3.zero)
+		if(targetAngle != Vector3.zero)
 		{
 			//Debug.Log(spawnTimer);
 			if(spawnTimer >= spawnRate/2)

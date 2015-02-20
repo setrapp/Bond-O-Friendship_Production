@@ -8,11 +8,12 @@ public class IslandContainer : MonoBehaviour {
 	[HideInInspector]
 	public bool islandLoading = false;
 	public string islandSceneName;
+	public Renderer editorPlaceholder;
 	public MembraneShell atmosphere;
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
-	private bool playersLanded = false;
+	//private bool playersLanded = false;
 	private bool waitingToIsolate = false;
 
 	void Start()
@@ -21,6 +22,11 @@ public class IslandContainer : MonoBehaviour {
 		{
 			waitingToIsolate = true;
 			StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
+		}
+
+		if (editorPlaceholder != null)
+		{
+			editorPlaceholder.gameObject.SetActive(false);
 		}
 	}
 
@@ -32,10 +38,10 @@ public class IslandContainer : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(MembraneShell brakingMembrane)
+	private void MembraneBreaking(MembraneShell BreakingMembrane)
 	{
 		// Handle breaking of the island's atmosphere.
-		if (brakingMembrane != null && brakingMembrane == atmosphere)
+		if (BreakingMembrane != null && BreakingMembrane == atmosphere)
 		{
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;

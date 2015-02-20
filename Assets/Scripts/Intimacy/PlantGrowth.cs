@@ -8,8 +8,9 @@ public class PlantGrowth : MonoBehaviour {
 	public int fluffsRequiredPerBud;
 	public bool collided;
 	public Material plantColor;
+	public DepthMaskHandler depthMask;
 
-	private int fluffCount;
+	public int fluffCount;
 	private bool wilting;
 	private Bud[] buds;
 	private GameObject[] blossoms;
@@ -32,6 +33,12 @@ public class PlantGrowth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (depthMask != null && depthMask.depthMask != null)
+		{
+			float maskRange = Mathf.Min(fluffCount, buds.Length * fluffsRequiredPerBud);
+			depthMask.depthMask.transform.localScale = new Vector3(maskRange, maskRange, depthMask.depthMask.transform.localScale.z);
+		}
+
 		if(collided == true)
 		{
 			fluffCount++;
@@ -54,6 +61,7 @@ public class PlantGrowth : MonoBehaviour {
 				if(fluffCount/fluffsRequiredPerBud > i + 1 && blossoms[i] == null)
 				{
 					blossoms[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+					blossoms[i].GetComponent<Collider>().enabled = false;
 					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.2f);
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
@@ -68,13 +76,16 @@ public class PlantGrowth : MonoBehaviour {
 						{
 							Rigidbody blossomRigid = blossoms[j].AddComponent<Rigidbody>();
 							blossoms[j].GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+							blossoms[j].GetComponent<Collider>().enabled = true;
 							blossomRigid.drag = 1;
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
-							Light blossomLight = blossoms[j].AddComponent<Light>();
-//							blossomLight.range = 30;
-							DepthMaskHandler depth = blossoms[j].AddComponent<DepthMaskHandler>();
+							/*Light blossomLight = */blossoms[j].AddComponent<Light>();
+							//blossomLight.range = 30;
+							/*DepthMaskHandler depth = */blossoms[j].AddComponent<DepthMaskHandler>();
 							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
+							FluffStick fluffStick = blossoms[j].AddComponent<FluffStick>();
+							fluffStick.maxPullForce = 0.01f;
 						}
 					}
 				}
@@ -83,6 +94,12 @@ public class PlantGrowth : MonoBehaviour {
 					Destroy(blossoms[i]);
 					blossoms[i] = null;
 				}
+			}
+			if(fullyBloomed == true)
+			{
+				BudCollision[] allChildren = GetComponentsInChildren<BudCollision>();
+				for(int i = 0; i < allChildren.Length; i++)
+					allChildren[i].gameObject.GetComponent<Collider>().enabled = false;
 			}
 			colorValue = (float)fluffCount/(fluffsRequiredPerBud*buds.Length);
 			plantColorCopy.color = new Color(colorValue, colorValue, colorValue);

@@ -15,6 +15,7 @@ public class FluffHandler : MonoBehaviour {
 	public float spawnTime;
 	private float sinceSpawn;
 	public float startingFluff;
+	public float maxFluffs = 32;
 	public Fluff spawnedFluff;
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
@@ -57,7 +58,7 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		// Attempt to spawn more fluff.
-		if (fluffs.Count < naturalFluffCount)
+		if (fluffs.Count < naturalFluffCount && fluffs.Count < maxFluffs)
 		{
 			if (spawnTime >= 0)
 			{
@@ -253,13 +254,13 @@ public class FluffHandler : MonoBehaviour {
 				useMaterial = fluffMaterial;
 			}
 
-            if (newFluffInfo.bulb != null)
+			if (newFluffInfo.bulb != null)
 			{
-                newFluffInfo.bulb.material = useMaterial;
+				newFluffInfo.bulb.material = useMaterial;
 			}
 
-            if (newFluffInfo.stalk != null)
-                newFluffInfo.stalk.material = useMaterial;
+			if (newFluffInfo.stalk != null)
+				newFluffInfo.stalk.material = useMaterial;
 
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
@@ -289,11 +290,18 @@ public class FluffHandler : MonoBehaviour {
 				character.SetFlashAndFill(fluff.creator.attachmentColor);
 			}
 
-			if (fluffsToAdd == null)
+			if (fluffs.Count < maxFluffs)
 			{
-				fluffsToAdd = new List<Fluff>();
+				if (fluffsToAdd == null)
+				{
+					fluffsToAdd = new List<Fluff>();
+				}
+				fluffsToAdd.Add(fluff);
 			}
-			fluffsToAdd.Add(fluff);
+			else
+			{
+				Destroy(fluff.gameObject);
+			}
 		}
 	}
 
