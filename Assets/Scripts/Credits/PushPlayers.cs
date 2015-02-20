@@ -5,10 +5,8 @@ public class PushPlayers : MonoBehaviour {
 
 	private GameObject player1;
 	private GameObject player2;
-	private float timer = 0.3f;
 	private Vector3 expPos;
 	private bool collided;
-	private bool timerBool;
 	private float p1Vel;
 	private float p2Vel;
 	public ParticleSystem collisionParticlePrefab;
@@ -24,7 +22,6 @@ public class PushPlayers : MonoBehaviour {
 	void Update () {
 		if(player1.GetComponent<FloatMoving>().collided == true)
 		{
-			Debug.Log("test");
 			expPos = (player1.transform.position + player2.transform.position)/2;
 			collisionParticle = (ParticleSystem)Instantiate(collisionParticlePrefab);
 			collisionParticle.transform.position = expPos;
@@ -39,7 +36,7 @@ public class PushPlayers : MonoBehaviour {
 			s.GetComponent<Collider>().enabled = false;
 			s.transform.localScale = new Vector3((p1Vel + p2Vel)/80, (p1Vel + p2Vel)/80, (p1Vel + p2Vel)/80);
 			player1.GetComponent<FloatMoving>().collided = false;
-			timerBool = true;
+			Destroy(s, 15.0f);
 		}
 		if(collisionParticle != null)
 				Destroy(collisionParticle.gameObject, 1.0f);
