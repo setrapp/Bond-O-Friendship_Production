@@ -23,9 +23,6 @@ public class SwarmHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        for (int i = 0; i < fireFlyCount; i++)
-        {
-           
-        }
+   
 	}
 }

@@ -2232,6 +2232,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -2277,6 +2278,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 158446006}
   jointsShaping: []
@@ -4988,6 +4990,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -5007,6 +5010,9 @@ MonoBehaviour:
     defaultShapingForce: .5
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -5038,6 +5044,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .200000003
@@ -5109,6 +5116,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 2
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 5
   relativeMaxDistance: 0
   relativeRequiredAdd: .0299999993
@@ -7740,6 +7749,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -7785,6 +7795,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 657238560}
   jointsShaping: []
@@ -10581,6 +10592,64 @@ Prefab:
   m_RootGameObject: {fileID: 1048103803}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &882255845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 151378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+  m_PrefabInternal: {fileID: 1736569884}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 882255848}
+  - 114: {fileID: 882255847}
+  - 114: {fileID: 882255846}
+  m_Layer: 0
+  m_Name: FliesSwarm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &882255846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11436004, guid: 69b8484d28447ee4198923886c68fb37,
+    type: 2}
+  m_PrefabInternal: {fileID: 1736569884}
+  m_GameObject: {fileID: 882255845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee9e066d9a92fa4184fb4ef33f05f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+--- !u!114 &882255847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11451378, guid: 69b8484d28447ee4198923886c68fb37,
+    type: 2}
+  m_PrefabInternal: {fileID: 1736569884}
+  m_GameObject: {fileID: 882255845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aedbcd78cdf5974fbe5ee89c6175d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireFlyCount: 5
+  fireFlyPrefab: {fileID: 145636, guid: 7763ad9a23d4fb245a6998ce79b6e10e, type: 2}
+  fireFlyList: []
+  fireFly: {fileID: 0}
+--- !u!4 &882255848
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+  m_PrefabInternal: {fileID: 1736569884}
+  m_GameObject: {fileID: 882255845}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .25, y: .25, z: .25}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
 --- !u!1 &885280298
 GameObject:
   m_ObjectHideFlags: 0
@@ -12570,6 +12639,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -12615,6 +12685,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 1062123252}
   jointsShaping: []
@@ -13264,6 +13335,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -13309,6 +13381,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 1178397978}
   jointsShaping: []
@@ -14904,6 +14977,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -14949,6 +15023,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 1362492404}
   jointsShaping: []
@@ -17134,6 +17209,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -17153,6 +17229,9 @@ MonoBehaviour:
     defaultShapingForce: 1
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -17184,6 +17263,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 5
     sparseDetailDistance: 10
     sparseDetailFactor: .100000001
@@ -17255,6 +17335,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 2
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 1
   relativeMaxDistance: 1.29999995
   relativeRequiredAdd: .5
@@ -18692,6 +18774,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -18737,6 +18820,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 1723890441}
   jointsShaping: []
@@ -18873,6 +18957,54 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6bf25ea76c597aa419e3afcdb015fe38, type: 2}
   m_RootGameObject: {fileID: 598723860}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
+--- !u!1001 &1736569884
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11451378, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+      propertyPath: fireFlyCount
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 69b8484d28447ee4198923886c68fb37, type: 2}
+  m_RootGameObject: {fileID: 882255845}
   m_IsPrefabParent: 0
   m_IsExploded: 1
 --- !u!1001 &1741181795
@@ -21230,6 +21362,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -21249,6 +21382,9 @@ MonoBehaviour:
     defaultShapingForce: .5
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -21280,6 +21416,7 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .200000003
@@ -21351,6 +21488,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 3
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 5
   relativeMaxDistance: -1
   relativeRequiredAdd: -1
