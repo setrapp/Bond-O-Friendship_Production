@@ -31,11 +31,8 @@ public class LevelHandler : MonoBehaviour {
 	{
 		if (islandName != null && islandContainer != null && islandContainer.island == null && !islandContainer.islandLoading)
 		{
-			if (UnityEditorInternal.InternalEditorUtility.HasPro())
-			{
-				AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
-				yield return islandLoading;
-			}
+			AsyncOperation islandLoading = Application.LoadLevelAdditiveAsync(islandName);
+			yield return islandLoading;
 
 			GameObject[] islandObjects = GameObject.FindGameObjectsWithTag("Island");
 			for (int i = 0; i < islandObjects.Length; i++)
@@ -87,7 +84,7 @@ public class LevelHandler : MonoBehaviour {
 				{
 					if (islandContainers[i].atmosphere != null)
 					{
-						islandContainers[i].atmosphere.SilentBreak();
+						//islandContainers[i].atmosphere.SilentBreak();
 					}
 				}
 			}
