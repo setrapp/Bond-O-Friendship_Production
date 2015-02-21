@@ -2899,6 +2899,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2000026, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400014, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
     - {fileID: 11400012, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
@@ -4098,6 +4102,7 @@ MonoBehaviour:
   g: 0
   b: 0
   a: 0
+  eraserOn: 0
 --- !u!114 &1530241253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,17 +4214,17 @@ MonoBehaviour:
     attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
-    acceleration: 3
-    handling: 5
+    acceleration: 10
+    handling: 20
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    attractRange: 10
+    attractRange: 5
     maxAbsorbReact: 1
   perBondFloatBonus:
     acceleration: 10
-    handling: 10
+    handling: 40
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
@@ -5138,6 +5143,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1628614324}
   - 114: {fileID: 1628614325}
+  - 114: {fileID: 1628614326}
   m_Layer: 0
   m_Name: Camera System
   m_TagString: CameraSystem
@@ -5183,6 +5189,24 @@ MonoBehaviour:
   player1: {fileID: 0}
   player2: {fileID: 0}
   audioListener: {fileID: 2119224280}
+--- !u!114 &1628614326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1628614323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab18e1e118489634a9d0b7a98f17543b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameras:
+  - {fileID: 1439238990}
+  - {fileID: 1624460402}
+  - {fileID: 874338666}
+  fadeColor: {r: 0, g: 0, b: 0, a: 0}
+  fadeSpeed: 3
+  fading: 0
 --- !u!1 &1636406940
 GameObject:
   m_ObjectHideFlags: 0
@@ -7491,6 +7515,7 @@ MonoBehaviour:
   g: 0
   b: 0
   a: 0
+  eraserOn: 0
 --- !u!114 &2006680896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7602,17 +7627,17 @@ MonoBehaviour:
     attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
-    acceleration: 3
-    handling: 5
+    acceleration: 10
+    handling: 20
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    attractRange: 10
+    attractRange: 5
     maxAbsorbReact: 1
   perBondFloatBonus:
     acceleration: 10
-    handling: 10
+    handling: 40
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
