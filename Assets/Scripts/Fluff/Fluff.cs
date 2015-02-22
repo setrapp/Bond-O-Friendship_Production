@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(SimpleMover))]
@@ -14,7 +14,9 @@ public class Fluff : MonoBehaviour {
 	public Animation swayAnimation;
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
-	public GameObject bulb;
+	public MeshRenderer bulb;
+	public MeshRenderer stalk;
+    public GameObject depthMask;
 	[HideInInspector]
 	public CapsuleCollider hull;
 	[HideInInspector]
@@ -23,6 +25,8 @@ public class Fluff : MonoBehaviour {
 	public Attachee attachee;
 	private Vector3 attachPoint;
 	public GameObject ignoreCollider;
+	public float nonAttractTime;
+	public bool attractable = true;
 	private bool forgetCreator;
 	public Animation popAnimation;
 	public Vector3 pullForce;
@@ -50,6 +54,12 @@ public class Fluff : MonoBehaviour {
 			attachee = null;
 		}
 
+		// Keep track of this fluff for easy retrieval.
+		if (Globals.Instance != null && Globals.Instance.allFluffs != null)
+		{
+			Globals.Instance.allFluffs.Add(this);
+		}
+
 		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
 		gameObject.tag = "Fluff";
 	}
@@ -68,6 +78,17 @@ public class Fluff : MonoBehaviour {
 			ApplyPullForce();
 			pullForce = Vector3.zero;
 			pullDistance = 0;
+		}
+
+		if (!attractable && nonAttractTime <=0)
+		{
+			attractable = true;
+			nonAttractTime = 0;
+		}
+		else if (nonAttractTime > 0)
+		{
+			nonAttractTime -= Time.deltaTime;
+			attractable = false;
 		}
 
 		// If attachee is not controlling movement, reposition and reorient to stay constant in relation to it.
@@ -92,6 +113,10 @@ public class Fluff : MonoBehaviour {
 				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
 				{
 					Attach(attachInfo.collider.gameObject, transform.position, -Vector3.forward);
+				}
+				else
+				{
+					PopFluff();
 				}
 				trail.gameObject.SetActive(false);
 			}
@@ -123,9 +148,11 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null)
+	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null, float preventAttractTime = 0)
 	{
 		attachee = null;
+		nonAttractTime = preventAttractTime;
+		attractable = false;
 
 		// If something attachable is already in reach, attach without moving.
 		RaycastHit attemptPassHit;
@@ -194,7 +221,7 @@ public class Fluff : MonoBehaviour {
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
-		// If no potentiall attachee is given, disregard.
+		// If no potential attachee is given, disregard.
 		if (attacheeObject == null)
 		{
 			return;
@@ -223,6 +250,8 @@ public class Fluff : MonoBehaviour {
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
 		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		ignoreCollider = attacheeObject;
+		nonAttractTime = 0;
+		attractable = true;
 
 		// Notify the potential attachee that fluff has been attached.
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
@@ -270,11 +299,22 @@ public class Fluff : MonoBehaviour {
 		return blocked;
 	}
 
-	public void PopFluff()
+	// Accessible function that does not require coroutine call.
+	public void PopFluff(float secondsDelay = 0)
 	{
+		StartCoroutine(PopAndDestroy(secondsDelay));
+	}
+
+	private IEnumerator PopAndDestroy(float secondsDelay = 0)
+	{
+		if (secondsDelay > 0)
+		{
+			yield return new WaitForSeconds(secondsDelay);
+		}
+
 		if (popAnimation != null)
 		{
-			if(!popAnimation.isPlaying)
+			if (!popAnimation.isPlaying)
 			{
 				popAnimation.Play();
 				Destroy(gameObject, popAnimation.clip.length);
@@ -326,10 +366,10 @@ public class Fluff : MonoBehaviour {
 			Attach(newAttachee, collision.contacts[0].point, standingDirection);
 		}
 	}
-
+	
 	void OnTriggerEnter(Collider other)
 	{
-		if ((attachee == null || attachee.gameObject != other.gameObject) && ignoreCollider != other.gameObject)
+		if ((attachee == null || attachee.gameObject != other.gameObject) && (attachee == null || !attachee.possessive) && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
@@ -352,6 +392,18 @@ public class Fluff : MonoBehaviour {
 			{
 				attacheeFluffContainer.fluffs.Remove(this);
 			}
+		}
+
+		DepthMaskHandler depthMask = GetComponent<DepthMaskHandler>();
+		if (depthMask != null)
+		{
+			Destroy(depthMask.depthMask);
+		}
+
+		// Keep track of this fluff for easy retrieval.
+		if (Globals.Instance != null && Globals.Instance.allFluffs != null)
+		{
+			Globals.Instance.allFluffs.Remove(this);
 		}
 	}
 }

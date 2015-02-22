@@ -8,11 +8,24 @@ public class PlayersEstablish : MonoBehaviour {
 	public int startFluffCount = -1;
 	private bool setPlayer1Fluff = false;
 	private bool setPlayer2Fluff = false;
+	public bool placeOnAwake = true;
+	public Transform defaultPlayerParent;
 
 	void Awake()
 	{
+		if (placeOnAwake)
+		{
+			PlacePlayers();
+		}
+	}
+
+	public void PlacePlayers()
+	{
 		if (Globals.Instance != null)
 		{
+			Transform player1Holder = Globals.Instance.player1.transform.parent;
+			Transform player2Holder = Globals.Instance.player2.transform.parent;
+
 			/* TODO check if players already exist in scene.*/
 			PlayerInput player1 = null;
 			PlayerInput player2 = null;
@@ -32,17 +45,19 @@ public class PlayersEstablish : MonoBehaviour {
 					}
 				}
 			}
-			
 
 			// Place player 1.
 			if (Globals.Instance.player1 != null)
 			{
-				if (player1 == null)
+				if (player1 == null || !Globals.Instance.updatePlayersOnLoad)
 				{
-					Globals.Instance.player1.transform.parent = player1Spawn.transform.parent;
-					Globals.Instance.player1.transform.position = player1Spawn.transform.position;
-					Globals.Instance.player1.transform.rotation = player1Spawn.transform.rotation;
-					Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
+					if (Globals.Instance.updatePlayersOnLoad)
+					{
+						Globals.Instance.player1.transform.parent = player1Spawn.transform.parent;
+						Globals.Instance.player1.transform.position = player1Spawn.transform.position;
+						Globals.Instance.player1.transform.rotation = player1Spawn.transform.rotation;
+						Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
+					}
 					player1 = Globals.Instance.player1;
 					player1.gameObject.SetActive(true);
 					setPlayer1Fluff = true;
@@ -53,17 +68,26 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player1 = player1;
 					player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
+
+
+				if (defaultPlayerParent != null)
+				{
+					player1.transform.parent = defaultPlayerParent;
+				}
 			}
 
 			// Place player 2.
 			if (Globals.Instance.player2 != null)
 			{
-				if (player2 == null)
+				if (player2 == null || !Globals.Instance.updatePlayersOnLoad)
 				{
-					Globals.Instance.player2.transform.parent = player2Spawn.transform.parent;
-					Globals.Instance.player2.transform.position = player2Spawn.transform.position;
-					Globals.Instance.player2.transform.rotation = player2Spawn.transform.rotation;
-					Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
+					if (Globals.Instance.updatePlayersOnLoad)
+					{
+						Globals.Instance.player2.transform.parent = player2Spawn.transform.parent;
+						Globals.Instance.player2.transform.position = player2Spawn.transform.position;
+						Globals.Instance.player2.transform.rotation = player2Spawn.transform.rotation;
+						Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
+					}
 					player2 = Globals.Instance.player2;
 					player2.gameObject.SetActive(true);
 					setPlayer2Fluff = true;
@@ -74,20 +98,46 @@ public class PlayersEstablish : MonoBehaviour {
 					Globals.Instance.player2 = player2;
 					player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
+
+
+				if (defaultPlayerParent != null)
+				{
+					player2.transform.parent = defaultPlayerParent;
+				}
 			}
+
+			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
+			{
+				// Jump camera to players.
+				if (CameraSplitter.Instance != null)
+				{
+					CameraSplitter.Instance.JumpToPlayers();
+				}
+
+				Destroy(Globals.Instance.initialPlayerHolder);
+			}
+			
+
+			// After the players have been spawned in one level, don't change them when new levels load.
+			Globals.Instance.updatePlayersOnLoad = false;
+
+			SetFluffs();
+			SendMessage("PlayersPlaced", SendMessageOptions.DontRequireReceiver);
 		}
 
 		if (player1Spawn != null)
 		{
 			Destroy(player1Spawn);
+			player1Spawn = null;
 		}
 		if (player2Spawn != null)
 		{
 			Destroy(player2Spawn);
+			player2Spawn = null;
 		}
 	}
 
-	void Start()
+	private void SetFluffs()
 	{
 		if (Globals.Instance != null)
 		{
@@ -96,6 +146,7 @@ public class PlayersEstablish : MonoBehaviour {
 
 			if (setPlayer1Fluff && player1 != null)
 			{
+
 				FluffHandler fluffHandler1 = player1.GetComponent<FluffHandler>();
 				if (naturalFluffCount >= 0)
 				{

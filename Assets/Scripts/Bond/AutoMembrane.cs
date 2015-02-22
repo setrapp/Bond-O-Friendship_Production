@@ -24,13 +24,13 @@ public class AutoMembrane : AutoBond {
 			}
 			if (membraneOverrideStats != null && membraneOverrideStats.stats != null)
 			{
-				createdMembrane.extraStats = membraneOverrideStats.stats;
+				createdMembrane.extraStats.Overwrite(membraneOverrideStats.stats, true);
 			}
 
 			// Override membrane's internal bonding stats.
 			if (internalBondStats != null && internalBondStats.stats != null)
 			{
-				createdMembrane.internalBondStats.stats = internalBondStats.stats;
+				createdMembrane.internalBondStats.stats.Overwrite(internalBondStats.stats, true);
 			}
 
 			// Add shaping points to membrane.

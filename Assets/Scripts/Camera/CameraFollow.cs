@@ -55,11 +55,17 @@ public class CameraFollow : MonoBehaviour {
 				ResizeMask();
 				if (isCamera1)
 				{
-					pivot.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));
+					Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));
+					Vector3 rotationEuler = rotation.eulerAngles;
+					rotationEuler.x = rotationEuler.y = 0;
+					pivot.transform.rotation = Quaternion.Euler(rotationEuler);
 				}
 				else
 				{
-					pivot.transform.rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
+					Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
+					Vector3 rotationEuler = rotation.eulerAngles;
+					rotationEuler.x = rotationEuler.y = 0;
+					pivot.transform.rotation = Quaternion.Euler(rotationEuler);
 				}
 			}
 			else

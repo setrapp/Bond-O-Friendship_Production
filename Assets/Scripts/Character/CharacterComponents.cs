@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CharacterComponents : MonoBehaviour {
 	private bool componentsFound = false;
+	public CharacterColors colors;
 	public MeshRenderer headRenderer;
 	public Renderer fillRenderer;
 	public SpriteRenderer flashRenderer;
@@ -18,6 +19,7 @@ public class CharacterComponents : MonoBehaviour {
 	public FloatMoving floatMove;
 	public Rigidbody body;
 	public Attractor attractor;
+	public FlufflessPass flufflessPass;
 	[HideInInspector]
 	public float fillScale = 1;
 	public float flashFadeTime = 1;

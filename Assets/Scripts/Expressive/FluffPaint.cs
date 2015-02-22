@@ -29,13 +29,20 @@ public class FluffPaint : MonoBehaviour {
 		paintJitter = Random.Range(-0.05f,0.05f);
 		zJitter = Random.Range(0.5f,0.7f);
 		randRot = Random.Range(0,360);
-		if(GetComponent<Fluff>().creator.GetComponent<Paint>().paintColor != null)
+		Fluff fluff = GetComponent<Fluff>();
+		Paint creatorPaint = null;
+		if (fluff != null && fluff.creator != null)
 		{
-			paintColor = GetComponent<Fluff>().creator.GetComponent<Paint>().paintColor;
+			creatorPaint = fluff.creator.GetComponent<Paint>();
+		}
+
+		if (creatorPaint != null)
+		{
+			paintColor = creatorPaint.paintColor;
 		}
 		paintPos = new Vector3(transform.position.x+paintJitter, transform.position.y+paintJitter, transform.position.z+zJitter);
 
-		if (GetComponent<Fluff>().creator.GetComponent<Paint>().painting &&  GetComponent<SimpleMover>().velocity.sqrMagnitude != 0)		
+		if ((creatorPaint != null && creatorPaint.painting) && (fluff != null && fluff.moving))
 		{
 			if(paintTime == painttimeFloat)
 			{

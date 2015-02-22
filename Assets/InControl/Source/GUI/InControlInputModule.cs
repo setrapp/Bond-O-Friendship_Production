@@ -1,4 +1,4 @@
-//#if UNITY_4_6
+#if UNITY_4_6 || UNITY_5_0
 using UnityEngine;
 using UnityEngine.EventSystems;
 using InControl;
@@ -239,10 +239,10 @@ namespace InControl
 				SendButtonEventToSelectedObject();
 			}
 
-			//if (allowMouseInput)
-			//{
-			//	ProcessMouseEvent();
-			//}
+			if (allowMouseInput)
+			{
+				ProcessMouseEvent();
+			}
 		}
 
 
@@ -308,7 +308,7 @@ namespace InControl
 		}
 
 
-		/*void ProcessMouseEvent()
+		void ProcessMouseEvent()
 		{
 			var mousePointerEventData = this.GetMousePointerEventData();
 			var pressed = mousePointerEventData.AnyPressesThisFrame();
@@ -420,7 +420,7 @@ namespace InControl
 					base.HandlePointerExitAndEnter( buttonData, gameObject );
 				}
 			}
-		}*/
+		}
 
 
 		bool ResetSelection()
@@ -428,8 +428,11 @@ namespace InControl
 			var baseEventData = GetBaseEventData();
 			var lastPointerEventData = base.GetLastPointerEventData( -1 );
 			var rootGameObject = (lastPointerEventData != null) ? lastPointerEventData.pointerEnter : null;
-			base.HandlePointerExitAndEnter( lastPointerEventData, null );
-			base.eventSystem.SetSelectedGameObject( null, baseEventData );
+			if (lastPointerEventData != null)
+			{
+				HandlePointerExitAndEnter( lastPointerEventData, null );
+			}
+			eventSystem.SetSelectedGameObject( null, baseEventData );
 			var result = false;
 			var gameObject = ExecuteEvents.GetEventHandler<ISelectHandler>( rootGameObject );
 			if (gameObject == null)
@@ -437,7 +440,7 @@ namespace InControl
 				gameObject = eventSystem.lastSelectedGameObject;
 				result = true;
 			}
-			base.eventSystem.SetSelectedGameObject( gameObject, baseEventData );
+			eventSystem.SetSelectedGameObject( gameObject, baseEventData );
 			return result;
 		}
 
@@ -531,5 +534,5 @@ namespace InControl
 		}
 	}
 }
-//#endif
+#endif
 

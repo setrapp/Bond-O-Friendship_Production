@@ -15,6 +15,7 @@ public class FluffHandler : MonoBehaviour {
 	public float spawnTime;
 	private float sinceSpawn;
 	public float startingFluff;
+	public float maxFluffs = 32;
 	public Fluff spawnedFluff;
 	private Vector3 endPosition;
 	public float sproutSpeed = 0.01f;
@@ -57,7 +58,7 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		// Attempt to spawn more fluff.
-		if (fluffs.Count < naturalFluffCount)
+		if (fluffs.Count < naturalFluffCount && fluffs.Count < maxFluffs)
 		{
 			if (spawnTime >= 0)
 			{
@@ -96,11 +97,8 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				MeshRenderer fluffMesh = fluffsToAdd[i].GetComponentInChildren<MeshRenderer>();
-				if (fluffMesh != null)
-				{
-					fluffMaterial = fluffMesh.material;
-				}
+				
+				fluffMaterial = fluffsToAdd[i].bulb.material;
 
 				SpawnFluff(true, fluffMaterial);
 
@@ -256,12 +254,14 @@ public class FluffHandler : MonoBehaviour {
 				useMaterial = fluffMaterial;
 			}
 
-			MeshRenderer[] meshRenderers = newFluff.GetComponentsInChildren<MeshRenderer>();
-			
-			for (int i = 0; i < meshRenderers.Length; i++)
+			if (newFluffInfo.bulb != null)
 			{
-				meshRenderers[i].material = useMaterial;
+				newFluffInfo.bulb.material = useMaterial;
 			}
+
+			if (newFluffInfo.stalk != null)
+				newFluffInfo.stalk.material = useMaterial;
+
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
@@ -290,11 +290,18 @@ public class FluffHandler : MonoBehaviour {
 				character.SetFlashAndFill(fluff.creator.attachmentColor);
 			}
 
-			if (fluffsToAdd == null)
+			if (fluffs.Count < maxFluffs)
 			{
-				fluffsToAdd = new List<Fluff>();
+				if (fluffsToAdd == null)
+				{
+					fluffsToAdd = new List<Fluff>();
+				}
+				fluffsToAdd.Add(fluff);
 			}
-			fluffsToAdd.Add(fluff);
+			else
+			{
+				Destroy(fluff.gameObject);
+			}
 		}
 	}
 
