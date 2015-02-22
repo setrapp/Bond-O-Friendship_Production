@@ -76,7 +76,10 @@ public class Nodes : MonoBehaviour {
 			a += Time.deltaTime*2.0f;
 			myColor = new Color (r,g,b,a);
 			if(a >= 1.0f)
+			{
+				transform.parent.GetComponent<NodeParent>().activeChildren++;
 				activated = false;
+			}
 		}
 	}
 	
