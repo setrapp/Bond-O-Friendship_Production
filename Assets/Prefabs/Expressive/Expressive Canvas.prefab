@@ -1781,7 +1781,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 425354}
-  - 114: {fileID: 11425352}
   m_Layer: 0
   m_Name: Expressive Canvas
   m_TagString: Island
@@ -10880,6 +10879,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 3
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 5
   relativeMaxDistance: -1
   relativeRequiredAdd: -1
@@ -10936,9 +10937,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .200000003
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10954,6 +10957,9 @@ MonoBehaviour:
     defaultShapingForce: .5
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -10984,9 +10990,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11290,6 +11298,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425208}
   jointsShaping: []
@@ -11339,9 +11348,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11578,6 +11589,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 2
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 1
   relativeMaxDistance: 1.29999995
   relativeRequiredAdd: .5
@@ -11634,9 +11647,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 5
     sparseDetailDistance: 10
     sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11652,6 +11667,9 @@ MonoBehaviour:
     defaultShapingForce: 1
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -11682,9 +11700,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11970,6 +11990,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425280}
   jointsShaping: []
@@ -12019,9 +12040,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425284
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12202,6 +12225,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425304}
   jointsShaping: []
@@ -12251,9 +12275,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12328,6 +12354,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425316}
   jointsShaping: []
@@ -12377,9 +12404,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12655,21 +12684,6 @@ MonoBehaviour:
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   ScaleRate: 0
   LifeTime: 0
---- !u!114 &11425352
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 125354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a8a38124b3ac254e874528c900ad91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  islandId: 1
-  container: {fileID: 0}
-  levelHelper: {fileID: 11425222}
-  visibilityDepthMaskNeeded: 0
 --- !u!114 &11425354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12987,6 +13001,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425394}
   jointsShaping: []
@@ -13036,9 +13051,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425398
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13248,6 +13265,8 @@ MonoBehaviour:
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
   requiredPlayersToBreak: 2
+  specialBreakerTag: 
+  requiredSpecialsToBreak: 0
   insufficientDifficulty: 5
   relativeMaxDistance: 0
   relativeRequiredAdd: .0299999993
@@ -13304,9 +13323,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .200000003
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13322,6 +13343,9 @@ MonoBehaviour:
     defaultShapingForce: .5
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -13352,9 +13376,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13650,6 +13676,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 0}
   jointToAttachment: {fileID: 0}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 11425462}
   jointsShaping: []
@@ -13699,9 +13726,11 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11425466
 MonoBehaviour:
   m_ObjectHideFlags: 1

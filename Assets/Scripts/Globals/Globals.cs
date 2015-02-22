@@ -28,6 +28,8 @@ public class Globals : MonoBehaviour {
 	public PlayerInput player1;
 	public PlayerInput player2;
 
+	public GameObject initialPlayerHolder = null;
+
 	public bool autoAttractor = false;
 
     public static InputDevice startingDevice;

@@ -121,7 +121,6 @@ public class IslandContainer : MonoBehaviour {
 			{
 				playersEstablish.PlacePlayers();
 			}
-			CameraSplitter.Instance.JumpToPlayers();
 
 			if (waitingToIsolate)
 			{
