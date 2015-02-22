@@ -2,33 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Threader : MonoBehaviour {
+public class ThreadPadElement : MonoBehaviour {
 
 	public bool activated;
-	private Color myColor;
-	public float r;
-	private float g;
-	private float b;
-	private float a;
-	//public GameObject Exit;
-	//public GameObject Base;
 	public float bondCount;
 	public List<GameObject> bondLinks = new List<GameObject>();
-	//public List<Bond> bonds = new List<Bond>();
 	public Bond threadedbond = null;
-		// Use this for initialization
+	public GameObject Activator;
+
+	// Use this for initialization
 	void Start () {
 		activated = false;
-		r = 0.5f;
-		g = 0.5f;
-		b = 0.5f;
-		a = 1.0f;
-		bondCount = 0; 
-
+		bondCount = 0;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
 		for(int i=0;i<bondLinks.Count;i++)
 		{
 			//Debug.Log(bondLinks[i]);
@@ -38,51 +29,22 @@ public class Threader : MonoBehaviour {
 				i--;
 			}
 		}
-
-
+		
+		
 		bondCount = bondLinks.Count;
-
+		
 		if(bondCount == 0)
 		{
-			activated = false;
+			//activated = false;
 			threadedbond = null;
 		}
 		else if(bondCount > 0)
 		{
-			activated = true;
-		}
-
-		myColor = new Color(r,g,b,a);
-		GetComponent<Renderer>().material.color = myColor;
-
-		if(activated == true)
-		{
-			if(r<0.9)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
-			if(g<0.6)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
-
-		}
-		else if(activated == false)
-		{
-			if(r>0.5)
-			{
-				r -= Time.deltaTime;
-			}
-			if(g>0.5)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
+			//activated = true;
 		}
 	}
-	void OnTriggerEnter(Collider collide)
+
+	void OnCollisionEnter(Collision collide)
 	{
 		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
 		{
@@ -95,13 +57,11 @@ public class Threader : MonoBehaviour {
 				threadedbond = bond;
 			}
 			//print(bondCount);
+			
+		}
 
-		}
-		if(collide.gameObject.tag == "Fluff" && collide.gameObject.GetComponent<Fluff>().moving == true)
-		{
-		}
 	}
-	void OnTriggerExit(Collider collide)
+	void OnCollisionExit(Collision collide)
 	{
 		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
 		{
@@ -111,8 +71,24 @@ public class Threader : MonoBehaviour {
 			}
 			//print(bondCount)
 		}
+
+
+	}
+	void OnTriggerEnter(Collider collide)
+	{
+		if(collide.gameObject == Activator)
+		{
+			activated = true;
+			//print ("Activated");
+		}
 	}
 
-
-
+	void OnTriggerExit(Collider collide)
+	{
+		if(collide.gameObject == Activator)
+		{
+			activated = false;
+			//print ("DeActivated");
+		}
+	}
 }

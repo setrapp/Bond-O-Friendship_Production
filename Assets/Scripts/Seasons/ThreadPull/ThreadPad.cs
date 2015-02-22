@@ -2,34 +2,52 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public class ThreadPad : MonoBehaviour {
 
-public class ThreadParent : MonoBehaviour {
 
 	[SerializeField]
-	public List<Threader> myThreaders;
+	public List<ThreadPadElement> myThreaders;
+	[SerializeField]
+	public List<GameObject> Posts;
+
 	public float desiredbondLength;
-	private float defaultbondlength;
+	public float defaultbondlength;
 	public bool wasThreading;
 	private Bond playerBond = null;
 	public bool solved;
-	public float solvedScore;
+
+	/*
+	public GameObject element1;
+	public GameObject element2;
+	public GameObject element3;*/
+
+	private Color postColor;
+	private float alpha;
+	private float blue;
+	
 	// Use this for initialization
 	void Start () {
 		solved = false;
-		solvedScore = 0;
+		alpha = 0.6f;
+		blue = 0.5f;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		postColor = new Color(0.5f, 0.5f, blue, alpha);
+		renderer.material.color = postColor;
+		
 		bool anyThreader = false;
 		bool allThreaders = true;
-
-
+		
+		
 		for(int i = 0;i < myThreaders.Count; i++)
 		{
+			//Debug.Log("hi");
 			if(myThreaders[i].bondCount > 0)
 			{
+				//Debug.Log ("long");
 				anyThreader = true;
 				if(playerBond == null)
 				{
@@ -41,7 +59,7 @@ public class ThreadParent : MonoBehaviour {
 				allThreaders = false;
 			}
 		}
-
+		
 		if(anyThreader == true && !wasThreading)
 		{
 			if(playerBond != null)
@@ -58,39 +76,35 @@ public class ThreadParent : MonoBehaviour {
 				playerBond = null;
 			}
 		}
-
+		
 		wasThreading = anyThreader;
-
-		for(int i=0;i<myThreaders.Count;i++)
+		
+		if(allThreaders == true)
 		{
-			if(myThreaders[i].activated)
-			{
-				if(solvedScore<myThreaders.Count)
-				solvedScore++;
-			}
-		}
-		for(int i=0;i<myThreaders.Count;i++)
-		{
-			if(myThreaders[i].activated == false)
-			{
-				if(solvedScore>0)
-				solvedScore--;
-			}
+			//solved = true;
 		}
 
-		if(solvedScore == myThreaders.Count)
+		if(myThreaders[0].activated == true && myThreaders[1].activated == true && myThreaders[2].activated == true)
 		{
+			print ("activated");
 			solved = true;
+		}
+
+		for(int i = 0;i < Posts.Count; i++)
+		{
+			Posts[i].renderer.material.color = postColor;
 		}
 
 		if(solved)
 		{
-			//print("Solved");
-			for(int i=0;i<myThreaders.Count;i++)
-			{
-				myThreaders[i].GetComponent<Threader>().r = 0.9f;
-			}
+			blue = 1.0f;
+			alpha -= Time.deltaTime*1.0f;
 		}
 
+		if(alpha <= 0)
+		{
+			gameObject.collider.enabled = false;
+		}
+		
 	}
 }

@@ -38,15 +38,16 @@ public class triggerBlock : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider collide)
+	//void OnTriggerEnter(Collider collide)
+	void AttachFluff(Fluff fluff)
 	{
 		Debug.Log ("hit");
-		if(collide.gameObject.tag == "Fluff")
+		if(fluff.gameObject.tag == "Fluff")
 		{
 			triggered = true;
 			triggerTime = 0.3f;
 		}
-		if(collide.gameObject.tag != "Fluff" && collide.gameObject.tag == "Character")
+		if(fluff.gameObject.tag != "Fluff" && fluff.gameObject.tag == "Character")
 		{
 			stopped = true;
 		}
