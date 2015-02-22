@@ -127,6 +127,11 @@ public class IslandContainer : MonoBehaviour {
 			{
 				IsolateIsland();
 			}
+
+			if (spawnOnStart && CameraColorFade.Instance != null)
+			{
+				CameraColorFade.Instance.JumpToColor(createdIsland.backgroundColor);
+			}
 		}
 	}
 }

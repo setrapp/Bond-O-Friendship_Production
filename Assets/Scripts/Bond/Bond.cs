@@ -43,9 +43,9 @@ public class Bond : MonoBehaviour {
 		lengthFresh = false;
 		
 		currentDetail = SetLevelOfDetail();
-		if (currentDetail <= stats.sparseDetailFactor)
+		/*if (currentDetail <= stats.sparseDetailFactor)
 		{
-			/*TODO not sure any of this is usable*/
+			//TODO not sure any of this is usable
 			if (!disablingLinks)
 			{
 				for (int i = 0; i < links.Count; i++)
@@ -71,7 +71,7 @@ public class Bond : MonoBehaviour {
 				links[i].gameObject.SetActive(true);
 			}
 			disablingLinks = false;
-		}
+		}*/
 		
 
 		if (attachment1.attachee != null || attachment2.attachee != null)
