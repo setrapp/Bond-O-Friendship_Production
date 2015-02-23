@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DoubleNodeMonitor : MonoBehaviour {
+public class MultiNodeMonitor : MonoBehaviour {
 
 	public GameObject canvas1;
 	public GameObject canvas;
 	public int nodeActivated;
 	public int nodeNumber;
+	public int exNodeNum;
+	public int multiNodeNum;
 	public bool activated = false;
 	private Vector3 canvasPos;
-
-	public int doubleNodeNum;
-	public int exNodeNum;
-
+	
 	// Use this for initialization
 	void Start () {
 		nodeActivated = 0;
@@ -27,10 +26,11 @@ public class DoubleNodeMonitor : MonoBehaviour {
 			{
 				
 				nodeNumber = transform.childCount;
-				DoubleNodeTrack[] childDoublenodes = transform.GetComponentsInChildren<DoubleNodeTrack>();
-				doubleNodeNum = childDoublenodes.Length;
+
 				ExNode[] childExnodes = transform.GetComponentsInChildren<ExNode>();
 				exNodeNum = childExnodes.Length;
+				MultiNode[] childMultinodes = transform.GetComponentsInChildren<MultiNode>();
+				multiNodeNum = childMultinodes.Length;
 
 				nodeActivated = 0;
 
@@ -41,16 +41,13 @@ public class DoubleNodeMonitor : MonoBehaviour {
 						nodeActivated++;
 					}
 				}
-
-				for(int i = doubleNodeNum -1;i >= 0;i--)
+				for(int i = multiNodeNum -1;i >= 0;i--)
 				{
-					if(childDoublenodes[i].activated == true)
+					if(childMultinodes[i].allActivated == true)
 					{
 						nodeActivated++;
 					}
 				}
-
-
 				if(nodeActivated == nodeNumber)
 					activated = true;
 			}
