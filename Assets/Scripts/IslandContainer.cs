@@ -121,11 +121,15 @@ public class IslandContainer : MonoBehaviour {
 			{
 				playersEstablish.PlacePlayers();
 			}
-			CameraSplitter.Instance.JumpToPlayers();
 
 			if (waitingToIsolate)
 			{
 				IsolateIsland();
+			}
+
+			if (spawnOnStart && CameraColorFade.Instance != null)
+			{
+				CameraColorFade.Instance.JumpToColor(createdIsland.backgroundColor);
 			}
 		}
 	}

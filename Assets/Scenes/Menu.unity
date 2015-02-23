@@ -348,7 +348,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Level Select
+  m_Text: 'A for Level Select
 
 '
 --- !u!222 &133266915
@@ -372,7 +372,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: .5, y: 0}
-  m_SizeDelta: {x: 81, y: 24}
+  m_SizeDelta: {x: 1120, y: 24}
   m_Pivot: {x: .5, y: .5}
 --- !u!1 &164181612
 GameObject:
@@ -2899,6 +2899,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2000026, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400014, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
     - {fileID: 11400012, guid: 9aad467a9dfb2c8418b452c4309792f6, type: 2}
@@ -3002,6 +3006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 2006680902}
   player2: {fileID: 1530241259}
+  initialPlayerHolder: {fileID: 1735140847}
   autoAttractor: 1
   canvasPaused: {fileID: 991876899}
   visibilityDepthMaskNeeded: 0
@@ -4032,6 +4037,69 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1525352407}
+--- !u!1 &1526517982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1526517983}
+  - 108: {fileID: 1526517984}
+  m_Layer: 0
+  m_Name: Directional light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1526517983
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1526517982}
+  m_LocalRotation: {x: .468470007, y: -.226341993, z: .125525996, w: .844717979}
+  m_LocalPosition: {x: -626.510071, y: -89.1399994, z: 20.0002213}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1628614324}
+  m_RootOrder: 4
+--- !u!108 &1526517984
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1526517982}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_Strength: 1
+    m_Bias: .0500000007
+    m_Softness: 4
+    m_SoftnessFade: 1
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_ActuallyLightmapped: 1
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_ShadowSamples: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_IndirectIntensity: 1
+  m_AreaSize: {x: 1, y: 1}
 --- !u!1 &1530241250
 GameObject:
   m_ObjectHideFlags: 0
@@ -4098,6 +4166,7 @@ MonoBehaviour:
   g: 0
   b: 0
   a: 0
+  eraserOn: 0
 --- !u!114 &1530241253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4117,7 +4186,7 @@ MonoBehaviour:
   bondAttract: 1
   bondOffsetFactor: .899999976
   attractSlowingFactor: .150000006
-  attractionPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
+  attractionPrefab: {fileID: 19895854, guid: 8f0a9a0e165add443ab23d1bba61abd4, type: 2}
 --- !u!114 &1530241254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,17 +4278,17 @@ MonoBehaviour:
     attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
-    acceleration: 3
-    handling: 5
+    acceleration: 10
+    handling: 20
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    attractRange: 10
+    attractRange: 5
     maxAbsorbReact: 1
   perBondFloatBonus:
     acceleration: 10
-    handling: 10
+    handling: 40
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
@@ -4946,10 +5015,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Use Controller: Press Triggers
 
-    Use Keyboard: Press Both CTRL
-
-
-    Use Controller to access level select'
+    Use Keyboard: Press Both CTRL'
 --- !u!222 &1624316368
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5138,6 +5204,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1628614324}
   - 114: {fileID: 1628614325}
+  - 114: {fileID: 1628614326}
   m_Layer: 0
   m_Name: Camera System
   m_TagString: CameraSystem
@@ -5159,6 +5226,7 @@ Transform:
   - {fileID: 1949756370}
   - {fileID: 929461672}
   - {fileID: 2119224279}
+  - {fileID: 1526517983}
   m_Father: {fileID: 948288337}
   m_RootOrder: 0
 --- !u!114 &1628614325
@@ -5183,6 +5251,24 @@ MonoBehaviour:
   player1: {fileID: 0}
   player2: {fileID: 0}
   audioListener: {fileID: 2119224280}
+--- !u!114 &1628614326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1628614323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab18e1e118489634a9d0b7a98f17543b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameras:
+  - {fileID: 1439238990}
+  - {fileID: 1624460402}
+  - {fileID: 874338666}
+  fadeColor: {r: 0, g: 0, b: 0, a: 0}
+  fadeSpeed: 3
+  fading: 0
 --- !u!1 &1636406940
 GameObject:
   m_ObjectHideFlags: 0
@@ -6678,7 +6764,7 @@ RectTransform:
   m_RootOrder: 7
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 1.47497559, y: -152.013321}
+  m_AnchoredPosition: {x: 1.47497559, y: 10}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1778961192
@@ -7210,7 +7296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1978085340
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7491,6 +7577,7 @@ MonoBehaviour:
   g: 0
   b: 0
   a: 0
+  eraserOn: 0
 --- !u!114 &2006680896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7510,7 +7597,7 @@ MonoBehaviour:
   bondAttract: 1
   bondOffsetFactor: .899999976
   attractSlowingFactor: .150000006
-  attractionPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
+  attractionPrefab: {fileID: 19895854, guid: 8f0a9a0e165add443ab23d1bba61abd4, type: 2}
 --- !u!114 &2006680897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7602,17 +7689,17 @@ MonoBehaviour:
     attractRange: 0
     maxAbsorbReact: 0
   loneFloatStats:
-    acceleration: 3
-    handling: 5
+    acceleration: 10
+    handling: 20
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 2
     midTrailTime: 4
-    attractRange: 10
+    attractRange: 5
     maxAbsorbReact: 1
   perBondFloatBonus:
     acceleration: 10
-    handling: 10
+    handling: 40
     bodyDrag: 0
     bodylessDampening: 0
     sideTrailTime: 0
@@ -7777,6 +7864,7 @@ GameObject:
   - 114: {fileID: 2009515948}
   - 114: {fileID: 2009515947}
   - 95: {fileID: 2009515950}
+  - 114: {fileID: 2009515951}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -7799,8 +7887,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .278216869, y: .614000022}
   m_AnchorMax: {x: .673000038, y: .701379955}
-  m_AnchoredPosition: {x: -7.62939453e-06, y: -.0250053406}
-  m_SizeDelta: {x: -0, y: -.0500070006}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 58, y: -.0500070006}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &2009515947
 MonoBehaviour:
@@ -7909,6 +7997,17 @@ Animator:
   m_ApplyRootMotion: 0
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &2009515951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2009515945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ebbd8a6ca4a8a4f8772eaa6a7de3a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2020569886
 Prefab:
   m_ObjectHideFlags: 0

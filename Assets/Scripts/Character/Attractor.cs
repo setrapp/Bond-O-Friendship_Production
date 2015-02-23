@@ -73,8 +73,7 @@ public class Attractor : MonoBehaviour {
 		{
 			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
 			attractParticles.transform.position = transform.position;
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
-			attractParticles.startColor = new Color(attractParticles.startColor.r, attractParticles.startColor.g, attractParticles.startColor.b, 0.1f);
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;
 		}
 
 		// If desired, attempt to pull in fluffs.

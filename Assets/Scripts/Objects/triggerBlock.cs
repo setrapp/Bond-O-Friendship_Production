@@ -4,6 +4,7 @@ using System.Collections;
 public class triggerBlock : MonoBehaviour {
 
 	public bool triggered = false;
+	public bool stopped = false;
 	private Color myColor;
 	private float triggerTime;
 	public bool allDone = false;
@@ -37,12 +38,35 @@ public class triggerBlock : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider collide)
+	//void OnTriggerEnter(Collider collide)
+	void AttachFluff(Fluff fluff)
 	{
-		if(collide.gameObject.tag == "Fluff")
+		Debug.Log ("hit");
+		if(fluff.gameObject.tag == "Fluff")
 		{
 			triggered = true;
 			triggerTime = 0.3f;
+		}
+		if(fluff.gameObject.tag != "Fluff" && fluff.gameObject.tag == "Character")
+		{
+			stopped = true;
+		}
+	}
+
+	void OnTriggerStay(Collider collide)
+	{
+		//Debug.Log ("hi");
+		if(collide.gameObject.tag != "Fluff" && collide.gameObject.tag == "Character")
+		{
+			stopped = true;
+		}
+	}
+
+	void OnTriggerExit(Collider collide)
+	{
+		if(collide.gameObject.tag != "Fluff" && collide.gameObject.tag == "Character")
+		{
+			stopped = false;
 		}
 	}
 
