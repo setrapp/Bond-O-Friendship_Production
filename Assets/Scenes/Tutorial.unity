@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &1102715
 GameObject:
@@ -10202,11 +10203,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeRequiredAdd
-      value: .300000012
+      value: .800000012
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeMaxDistance
-      value: 1.29999995
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: m_IsActive
@@ -10214,11 +10215,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: insufficientDifficulty
-      value: 3
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: requiredPlayersToBreak
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.breakDelay
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
@@ -16411,9 +16416,9 @@ MonoBehaviour:
   requiredPlayersToBreak: 0
   specialBreakerTag: 
   requiredSpecialsToBreak: 0
-  insufficientDifficulty: 0
-  relativeMaxDistance: 1.29999995
-  relativeRequiredAdd: .300000012
+  insufficientDifficulty: 200
+  relativeMaxDistance: 1.5
+  relativeRequiredAdd: .800000012
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &357334398
@@ -17603,7 +17608,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeRequiredAdd
-      value: .300000012
+      value: .800000012
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.springForce
@@ -17611,7 +17616,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeMaxDistance
-      value: 1.29999995
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: showPosts
@@ -17623,11 +17628,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: insufficientDifficulty
-      value: 3
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: requiredPlayersToBreak
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.breakDelay
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
@@ -30120,7 +30129,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeRequiredAdd
-      value: .300000012
+      value: .800000012
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.springForce
@@ -30128,7 +30137,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: relativeMaxDistance
-      value: 1.29999995
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: showPosts
@@ -30140,7 +30149,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: insufficientDifficulty
-      value: 0
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: requiredPlayersToBreak
@@ -30149,6 +30158,10 @@ Prefab:
     - target: {fileID: 11400014, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: destroyWhenBroken
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400018, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.breakDelay
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
@@ -37503,9 +37516,9 @@ MonoBehaviour:
   requiredPlayersToBreak: 2
   specialBreakerTag: 
   requiredSpecialsToBreak: 0
-  insufficientDifficulty: 3
-  relativeMaxDistance: 1.29999995
-  relativeRequiredAdd: .300000012
+  insufficientDifficulty: 200
+  relativeMaxDistance: 1.5
+  relativeRequiredAdd: .800000012
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1 &937041902
@@ -61684,9 +61697,9 @@ MonoBehaviour:
   requiredPlayersToBreak: 2
   specialBreakerTag: 
   requiredSpecialsToBreak: 0
-  insufficientDifficulty: 3
-  relativeMaxDistance: 1.29999995
-  relativeRequiredAdd: .300000012
+  insufficientDifficulty: 200
+  relativeMaxDistance: 1.5
+  relativeRequiredAdd: .800000012
   currentLength: 0
   relativeActualDistance: 0
 --- !u!1001 &1643908991
