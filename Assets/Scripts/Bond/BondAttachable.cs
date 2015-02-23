@@ -111,11 +111,11 @@ public class BondAttachable : MonoBehaviour {
 		return bondAlreadyMade;
 	}
 
-	public void BreakBound(BondAttachable partner)
+	public void BreakBond(BondAttachable partner)
 	{
 		for (int i = 0; i < bonds.Count; i++)
 		{
-			if ((bonds[i].attachment1.attachee == this && bonds[i].attachment2.attachee == partner) || (bonds[i].attachment2.attachee == this && bonds[i].attachment1.attachee == partner))
+			if (partner == null || (bonds[i].attachment1.attachee == this && bonds[i].attachment2.attachee == partner) || (bonds[i].attachment2.attachee == this && bonds[i].attachment1.attachee == partner))
 			{
 				bonds[i].BreakBond();
 			}

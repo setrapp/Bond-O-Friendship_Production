@@ -131,6 +131,7 @@ public class MembraneWall : MonoBehaviour {
 
 			if (!requirementsMet)
 			{
+				
 				maxDistance = -1;
 				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
 				requirementDistanceAdd = 0;
