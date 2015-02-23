@@ -106,23 +106,20 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 
-			if (player1Holder != null && player1Holder.gameObject != Globals.Instance.gameObject && player1Holder != defaultPlayerParent)
+			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
 			{
-				Destroy(player1Holder.gameObject);
+				// Jump camera to players.
+				if (CameraSplitter.Instance != null)
+				{
+					CameraSplitter.Instance.JumpToPlayers();
+				}
+
+				Destroy(Globals.Instance.initialPlayerHolder);
 			}
-			if (player2Holder != null && player2Holder.gameObject != Globals.Instance.gameObject && player2Holder != defaultPlayerParent)
-			{
-				Destroy(player1Holder.gameObject);
-			}
+			
 
 			// After the players have been spawned in one level, don't change them when new levels load.
 			Globals.Instance.updatePlayersOnLoad = false;
-
-			// Jump camera to players.
-			if (CameraSplitter.Instance != null)
-			{
-				CameraSplitter.Instance.JumpToPlayers();
-			}
 
 			SetFluffs();
 			SendMessage("PlayersPlaced", SendMessageOptions.DontRequireReceiver);

@@ -1304,6 +1304,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &17557344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1933,6 +1934,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &51679169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1987,6 +1989,7 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
 --- !u!114 &51679171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2557,6 +2560,7 @@ MonoBehaviour:
   triggerables:
   - {fileID: 750923101}
   - {fileID: 584348922}
+  - {fileID: 1793531534}
   startEnabled: 0
 --- !u!1001 &96380808
 Prefab:
@@ -3189,6 +3193,7 @@ MonoBehaviour:
   container: {fileID: 0}
   levelHelper: {fileID: 335982726}
   visibilityDepthMaskNeeded: 1
+  backgroundColor: {r: 0, g: 0, b: 0, a: .0196078438}
 --- !u!1 &169322683
 GameObject:
   m_ObjectHideFlags: 0
@@ -3836,6 +3841,7 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
 --- !u!114 &215344762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7619,6 +7625,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &467532947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7673,6 +7680,7 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
 --- !u!114 &467532949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9490,6 +9498,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &631338192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10626,7 +10635,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -9.19999981
       objectReference: {fileID: 0}
     - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
       propertyPath: m_LocalRotation.x
@@ -10666,7 +10675,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 103742, guid: f7a07160882ce074f84160620963c59f, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
       propertyPath: layerCount
@@ -12005,6 +12014,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &892686811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19171,6 +19181,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &1313064754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21233,6 +21244,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1398582147}
   - 108: {fileID: 1398582146}
+  - 114: {fileID: 1398582148}
   m_Layer: 0
   m_Name: Directional light
   m_TagString: Untagged
@@ -21287,6 +21299,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 152132842}
   m_RootOrder: 7
+--- !u!114 &1398582148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1398582145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a6cbf6ecd7ff6408d2312495566d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1403477838
 GameObject:
   m_ObjectHideFlags: 0
@@ -22665,7 +22688,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: triggerables.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: m_LocalPosition.x
@@ -22767,6 +22790,10 @@ Prefab:
       propertyPath: triggerables.Array.data[1]
       value: 
       objectReference: {fileID: 584348922}
+    - target: {fileID: 11400006, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: triggerables.Array.data[2]
+      value: 
+      objectReference: {fileID: 1793531534}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
   m_RootGameObject: {fileID: 335982724}
@@ -22933,6 +22960,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &1568383377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24402,6 +24430,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &1684076145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25867,7 +25896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1793531535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25892,7 +25921,7 @@ Transform:
   m_PrefabInternal: {fileID: 711868511}
   m_GameObject: {fileID: 1793531534}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.5, y: 152.800003, z: -10}
+  m_LocalPosition: {x: -24.5, y: 152.800003, z: -9.19999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2055253007}
@@ -30111,6 +30140,7 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &2083422158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30165,6 +30195,7 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
 --- !u!114 &2083422160
 MonoBehaviour:
   m_ObjectHideFlags: 0
