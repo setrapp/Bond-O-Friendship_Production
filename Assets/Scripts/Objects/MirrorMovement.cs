@@ -27,7 +27,7 @@ public class MirrorMovement : MonoBehaviour {
     {
         if (objectToMirror != null)
         {
-            otmLastPosition = startTracking == true ? objectToMirror.transform.position : otmLastPosition;
+			otmLastPosition = startTracking == true ? objectToMirror.transform.localPosition : otmLastPosition;
 
             if(startTracking)
                 gameObject.GetComponent<MirrorPaint>().playerToMirror = objectToMirror;
@@ -36,7 +36,7 @@ public class MirrorMovement : MonoBehaviour {
             {
                 Vector3 otmCurrentPosition;
                 Vector3 modifyPosition;
-                otmCurrentPosition = objectToMirror.transform.position;
+				otmCurrentPosition = objectToMirror.transform.localPosition;
                 modifyPosition = otmCurrentPosition - otmLastPosition;
 
                // Debug.Log("Last Pos: " + otmLastPosition);
@@ -52,15 +52,15 @@ public class MirrorMovement : MonoBehaviour {
                 }
                 if (mirrorZ)
                 {
-                    modifyPosition.y = -modifyPosition.y;
+                    modifyPosition.z = -modifyPosition.z;
                 }
 
-                
-                    transform.position += modifyPosition;
-                    if (startTracking)
-                        transform.position = new Vector3(transform.position.x, objectToMirror.transform.position.y, transform.position.z);
 
-                otmLastPosition = objectToMirror.transform.position;
+				transform.localPosition += modifyPosition;
+                    if (startTracking)
+						transform.localPosition = new Vector3(transform.localPosition.x, objectToMirror.transform.localPosition.y, transform.localPosition.z);
+
+					otmLastPosition = objectToMirror.transform.localPosition;
                 startTracking = false;
             }
         }

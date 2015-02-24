@@ -9,7 +9,10 @@ public class DoubleNodeMonitor : MonoBehaviour {
 	public int nodeNumber;
 	public bool activated = false;
 	private Vector3 canvasPos;
-	
+
+	public int doubleNodeNum;
+	public int exNodeNum;
+
 	// Use this for initialization
 	void Start () {
 		nodeActivated = 0;
@@ -24,15 +27,30 @@ public class DoubleNodeMonitor : MonoBehaviour {
 			{
 				
 				nodeNumber = transform.childCount;
-				DoubleNodeTrack[] childExnodes = transform.GetComponentsInChildren<DoubleNodeTrack>();
+				DoubleNodeTrack[] childDoublenodes = transform.GetComponentsInChildren<DoubleNodeTrack>();
+				doubleNodeNum = childDoublenodes.Length;
+				ExNode[] childExnodes = transform.GetComponentsInChildren<ExNode>();
+				exNodeNum = childExnodes.Length;
+
 				nodeActivated = 0;
-				for(int i = nodeNumber-1;i >= 0;i--)
+
+				for(int i = exNodeNum -1;i >= 0;i--)
 				{
 					if(childExnodes[i].activated == true)
 					{
 						nodeActivated++;
 					}
 				}
+
+				for(int i = doubleNodeNum -1;i >= 0;i--)
+				{
+					if(childDoublenodes[i].activated == true)
+					{
+						nodeActivated++;
+					}
+				}
+
+
 				if(nodeActivated == nodeNumber)
 					activated = true;
 			}

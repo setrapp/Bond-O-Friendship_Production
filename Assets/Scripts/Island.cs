@@ -8,6 +8,7 @@ public class Island : MonoBehaviour {
 	public LevelHelper levelHelper;
 	//public bool forcePlayersEstablish = true;
 	public bool visibilityDepthMaskNeeded = false;
+	public bool fadeBackgroundColor = true;
 	public Color backgroundColor;
 
 	void Start()
@@ -38,7 +39,7 @@ public class Island : MonoBehaviour {
 			Globals.Instance.visibilityDepthMaskNeeded = visibilityDepthMaskNeeded;
 		}
 
-		if (CameraColorFade.Instance != null)
+		if (fadeBackgroundColor && CameraColorFade.Instance != null)
 		{
 			CameraColorFade.Instance.FadeToColor(backgroundColor);
 		}
