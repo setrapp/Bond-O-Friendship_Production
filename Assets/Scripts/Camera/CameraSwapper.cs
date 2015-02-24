@@ -27,13 +27,13 @@ public class CameraSwapper : MonoBehaviour {
 		switch (swapBasedOn)
 		{
 			case SwapBasis.PLAYERS_X:
-				if (cameraPlayer2.position.x > cameraPlayer1.position.x)
+				if (cameraPlayer2.localPosition.x > cameraPlayer1.localPosition.x)
 				{
 					swap = true;
 				}
 				break;
 			case SwapBasis.PLAYERS_Y:
-				if (cameraPlayer2.position.y > cameraPlayer1.position.y)
+				if (cameraPlayer2.localPosition.y > cameraPlayer1.localPosition.y)
 				{
 					swap = true;
 				}
