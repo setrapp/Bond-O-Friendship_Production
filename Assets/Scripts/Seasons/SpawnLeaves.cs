@@ -92,19 +92,19 @@ public class SpawnLeaves : MonoBehaviour {
 
 				leafSelector = Random.Range(1, 8);
 				if(leafSelector == 1)
-					leaf = (GameObject)Instantiate(leaf1Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf1Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 2)
-					leaf = (GameObject)Instantiate(leaf2Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf2Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 3)
-					leaf = (GameObject)Instantiate(leaf3Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf3Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 4)
-					leaf = (GameObject)Instantiate(leaf4Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf4Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 5)
-					leaf = (GameObject)Instantiate(leaf5Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf5Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 6)
-					leaf = (GameObject)Instantiate(leaf6Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf6Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 				if(leafSelector == 7)
-					leaf = (GameObject)Instantiate(leaf7Prefab,new Vector3(xPos, yPos, -1.0f),Quaternion.Euler(0,0,randRot));
+					leaf = (GameObject)Instantiate(leaf7Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
 
 				//leaf.transform.position = new Vector3(xPos, yPos, -1.0f); 
 				//leaf.transform.position = new Vector3(xPos, yPos, -2); 

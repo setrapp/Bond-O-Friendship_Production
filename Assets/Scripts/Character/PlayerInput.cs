@@ -239,12 +239,12 @@ public class PlayerInput : MonoBehaviour {
 		}
 		else
 		{
-			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.LeftShift))))
+			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Space))))
 			{
 				lookAt = transform.forward;
 				minToFire = 0;
 			}
-			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.RightShift))))
+			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Return))))
 			{
 				lookAt = transform.forward;
 				minToFire = 0;

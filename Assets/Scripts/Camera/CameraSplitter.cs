@@ -22,6 +22,12 @@ public class CameraSplitter : MonoBehaviour {
 	public CameraFollow combinedCameraSystem;
 	public CameraFollow player1CameraSystem;
 	public CameraFollow player2CameraSystem;
+	//[HideInInspector]
+	public Camera combinedCamera;
+	//[HideInInspector]
+	public Camera splitCamera1;
+	//[HideInInspector]
+	public Camera splitCamera2;
 	public GameObject player1;
 	public GameObject player2;
 	private bool justAltered;
@@ -39,6 +45,10 @@ public class CameraSplitter : MonoBehaviour {
 
 			combinedCameraSystem.player1 = player1CameraSystem.player1 = player2CameraSystem.player2 = player1.transform;
 			combinedCameraSystem.player2 = player1CameraSystem.player2 = player2CameraSystem.player1 = player2.transform;
+
+			combinedCamera = combinedCameraSystem.GetComponentInChildren<Camera>();
+			splitCamera1 = player1CameraSystem.GetComponentInChildren<Camera>();
+			splitCamera2 = player2CameraSystem.GetComponentInChildren<Camera>();
 		}
 		wasSplit = split;
 		CheckSplit(true);
