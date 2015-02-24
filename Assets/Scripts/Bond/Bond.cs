@@ -646,8 +646,9 @@ public class Bond : MonoBehaviour {
 			return;
 		}
 
-		stats.addLinkDistance = fullDetailAddDistance / detailFraction;
-		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
+		float maxLinkDistance = BondLength / 4;
+		stats.addLinkDistance = Mathf.Min(fullDetailAddDistance / detailFraction, maxLinkDistance);
+		stats.removeLinkDistance = Mathf.Min(fullDetailRemoveDistance / detailFraction, maxLinkDistance / 2);
 		for (int i = 0; i < links.Count; i++)
 		{
 			if (!links[i].broken)
