@@ -41,7 +41,6 @@ public class triggerBlock : MonoBehaviour {
 	//void OnTriggerEnter(Collider collide)
 	void AttachFluff(Fluff fluff)
 	{
-		Debug.Log ("hit");
 		if(fluff.gameObject.tag == "Fluff")
 		{
 			triggered = true;

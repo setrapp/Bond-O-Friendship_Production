@@ -104,7 +104,6 @@ public class Paint : MonoBehaviour {
 			paintCircle.GetComponent<PaintCircle>().rLifemax = 7.0f;
 			paintCircle.GetComponent<PaintCircle>().rSizemin = 1.0f;
 			paintCircle.GetComponent<PaintCircle>().rSizemax = 5.0f;
-			//print ("hi!");
 		}
 		else
 		{
@@ -122,7 +121,6 @@ public class Paint : MonoBehaviour {
 
         foreach (var hit in hits)
         {
-            //Debug.Log(hit.transform.gameObject.name);
             if (hit.transform.gameObject.GetComponent<PaintCircle>() != null)
             {
                 hit.transform.gameObject.GetComponent<PaintCircle>().erased = true;
