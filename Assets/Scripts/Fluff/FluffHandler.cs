@@ -217,7 +217,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			Vector3 fluffRotation = FindOpenFluffAngle();
 
-			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
+			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, fluffContainer.transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;

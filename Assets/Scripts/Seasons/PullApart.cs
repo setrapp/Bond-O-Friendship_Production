@@ -25,8 +25,18 @@ public class PullApart : MonoBehaviour {
 
 		Vector3 toOther = transform.position - otherSphere.transform.position;
 		toOther.z = 0;
+		//transform.forward = otherSphere.transform.forward = Vector3.forward;
 		transform.right = -toOther;
+
 		otherSphere.transform.right = toOther;
+		Vector3 otherRot = otherSphere.transform.rotation.eulerAngles;
+		if (otherRot.y == 180)
+		{
+			otherRot.z = otherRot.y;
+			otherRot.y = 0;
+			otherSphere.transform.rotation = Quaternion.Euler(otherRot);
+		}
+
 
 		if(currentDistance > breakDistance)
 		{
