@@ -35,7 +35,7 @@ public class PushPad : MonoBehaviour {
 		myColor = new Color(red, 201.0f/255.0f,254.0f/255.0f,1.0f);
 		doorColor = new Color(1.0f,1.0f,1.0f,alpha);
 		postColor = new Color(1.0f,1.0f,1.0f,1.0f);
-		pad.GetComponent<Renderer>().material.color = postColor;
+		pad.GetComponent<Renderer>().material.color = Color.white;
 		door.GetComponent<Renderer>().material.color = doorColor;
         if(track != null)
 		    track.GetComponent<Renderer>().material.color = doorColor;

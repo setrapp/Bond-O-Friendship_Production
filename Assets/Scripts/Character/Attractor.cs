@@ -90,7 +90,7 @@ public class Attractor : MonoBehaviour {
 
 		if (attractParticles != null)
 		{
-			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
+			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 1.0f);
 			Destroy(attractParticles.gameObject, 1.0f);
 		}
 	}
