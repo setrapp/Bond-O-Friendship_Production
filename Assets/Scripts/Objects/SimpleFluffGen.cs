@@ -75,7 +75,7 @@ public class SimpleFluffGen : MonoBehaviour {
 		}
 		else
 		{
-			Debug.LogError("HEY ADD THE PARTICLE SYSTEM");
+			//Debug.LogError("HEY ADD THE PARTICLE SYSTEM");
 		}
 
 		GameObject fluffObject = (GameObject)Instantiate(fluffPrefab);

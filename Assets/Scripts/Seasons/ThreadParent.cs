@@ -63,6 +63,7 @@ public class ThreadParent : MonoBehaviour {
 		if(allThreaders == true)
 		{
 			solved = true;
+			BroadcastMessage("MiniFire", SendMessageOptions.DontRequireReceiver);
 		}
 	
 
