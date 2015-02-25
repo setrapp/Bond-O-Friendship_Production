@@ -51,6 +51,8 @@ public class Globals : MonoBehaviour {
 	[Header("Fluff Depth Mask")]
     public GameObject depthMaskHolderPrefab;
 
+	public GameObject orphanFluffHolderPrefab;
+
 	[SerializeField]
 	public List<Fluff> allFluffs;
 

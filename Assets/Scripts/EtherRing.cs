@@ -11,6 +11,8 @@ public class EtherRing : MonoBehaviour {
 
 	void Start()
 	{
+		
+
 		if (Globals.Instance != null)
 		{
 			Globals.Instance.existingEther = this;
@@ -18,6 +20,7 @@ public class EtherRing : MonoBehaviour {
 
 		if (ringAtmosphere != null && (!Application.isEditor || forceAtmosphere))
 		{
+			Debug.Log("hi");
 			ringAtmosphere.CreateShell();
 		}
 		for (int i = 0; i < expressivePlaceholders.Count; i++)
@@ -25,6 +28,10 @@ public class EtherRing : MonoBehaviour {
 			expressivePlaceholders[i].placeholder.SetActive(false);
 		}
 		expressiveClouds = new List<GameObject>();
+
+		// TODO REMOVE
+		//LevelHandler.Instance.LoadEtherRing(this, null);
+		//LoadExpressiveClouds();
 	}
 
 	public void LoadExpressiveClouds()
