@@ -86,7 +86,6 @@ public class ThreadPad : MonoBehaviour {
 
 		if(myThreaders[0].activated == true && myThreaders[1].activated == true && myThreaders[2].activated == true)
 		{
-			print ("activated");
 			solved = true;
 		}
 

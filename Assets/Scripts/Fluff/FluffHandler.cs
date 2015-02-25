@@ -54,7 +54,14 @@ public class FluffHandler : MonoBehaviour {
 	{
 		if (fluffs.Count >= naturalFluffCount)
 		{
-			character.fillScale = 1;
+			if (naturalFluffCount <= 0)
+			{
+				character.fillScale = 0;
+			}
+			else
+			{
+				character.fillScale = 1;
+			}
 		}
 
 		// Attempt to spawn more fluff.
