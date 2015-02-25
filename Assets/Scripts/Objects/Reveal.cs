@@ -11,6 +11,7 @@ public class Reveal : MonoBehaviour {
 	public Vector3 originalPos;
 	public Vector3 pushPos;
 	public Rigidbody body = null;
+	public float limit;
 	
 	// Use this for initialization
 	void Start () {
@@ -31,6 +32,7 @@ public class Reveal : MonoBehaviour {
 		transform.localPosition = pushPos;
 		if(trigger1.GetComponent<triggerBlock>().triggered || trigger2.GetComponent<triggerBlock>().triggered)
 		{
+			if(pushPos.y<limit)
 				pushPos.y += moveSpeed*Time.deltaTime;
 		}
 		else
