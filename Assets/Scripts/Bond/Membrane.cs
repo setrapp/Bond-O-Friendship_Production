@@ -23,6 +23,7 @@ public class Membrane : Bond {
 	public float fullDetailShapingForce;
 	public float fullDetailSmoothForce;
 	private bool deconstructing = false;
+	public bool Breaking { get { return deconstructing; } }
 	private List<MembraneLink> breakLinks;
 	private List<LineRenderer> breakLines;
 	private bool hidingShaping = false;

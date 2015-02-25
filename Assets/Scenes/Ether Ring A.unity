@@ -4444,7 +4444,7 @@ MonoBehaviour:
   destroyWhenBroken: 1
   wallIsCentered: 1
   membraneDirection: {x: 1, y: 0, z: 0}
-  membraneLength: 50
+  membraneLength: 55
   showPosts: 0
   startPost: {fileID: 1225847186}
   endPost: {fileID: 1572184872}
@@ -11303,7 +11303,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: membraneLength
-      value: 50
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: wallCount
@@ -13603,7 +13603,7 @@ MonoBehaviour:
   waitBeforeFade: 3
   fadeSpeed: .00499999989
   attachedLevel: {fileID: 1090932175}
-  endingLoadScene: Menu
+  endingLoadScene: Credits
   destroyOnLoad: 1
 --- !u!23 &537242552
 Renderer:
@@ -19545,6 +19545,10 @@ Prefab:
       propertyPath: attachedLevel
       value: 
       objectReference: {fileID: 1090932175}
+    - target: {fileID: 11421754, guid: 4de1196157d7d6048a2ab89989dca2d5, type: 2}
+      propertyPath: endingLoadScene
+      value: Credits
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4de1196157d7d6048a2ab89989dca2d5, type: 2}
   m_RootGameObject: {fileID: 537242549}
@@ -32645,7 +32649,7 @@ MonoBehaviour:
   islandSceneName: Harmony
   editorPlaceholder: {fileID: 843909726}
   atmosphere: {fileID: 1412051256}
-  spawnOffset: {x: 31, y: -32, z: 0}
+  spawnOffset: {x: -24, y: 40, z: 0}
   spawnOnStart: 0
 --- !u!1 &1255120027
 GameObject:
@@ -36636,7 +36640,7 @@ MonoBehaviour:
   islandSceneName: Asymmetry
   editorPlaceholder: {fileID: 1144293436}
   atmosphere: {fileID: 151314638}
-  spawnOffset: {x: 9.10000038, y: -52.4000015, z: -2.0999999}
+  spawnOffset: {x: -10, y: 50, z: -2.0999999}
   spawnOnStart: 0
 --- !u!1 &1376741335
 GameObject:
@@ -43376,18 +43380,18 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
-    maxDistance: -1
+    maxDistance: 10
     relativeWarningDistance: -1
     endsWidth: 0
     midWidth: 0
-    addLinkDistance: .5
-    removeLinkDistance: .300000012
+    addLinkDistance: 4
+    removeLinkDistance: 3
     springForce: 5000
     springDamper: 5
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
-    disableColliders: 0
+    disableColliders: 1
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
@@ -43410,7 +43414,7 @@ MonoBehaviour:
     bondOnFluff: 1
     ignoreBondingLayers:
       serializedVersion: 2
-      m_Bits: 4294901759
+      m_Bits: 4294893567
     breakWithNeighbors: 1
     breakDestroyAttachments: 0
     considerNeighborBonds: 1
@@ -43514,7 +43518,7 @@ MonoBehaviour:
     position: {x: .100000001, y: .75}
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
-  requiredPlayersToBreak: 0
+  requiredPlayersToBreak: 1
   specialBreakerTag: Ring Breaker
   requiredSpecialsToBreak: 1
   insufficientDifficulty: 200
@@ -45704,11 +45708,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400008, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: m_LocalPosition.z
@@ -45760,7 +45764,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: requiredPlayersToBreak
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400014, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: relativeMaxDistance
@@ -45796,7 +45800,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: wallCount
-      value: 25
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.addLinkDistance
@@ -45836,7 +45840,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.maxDistance
-      value: -1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.endsWidth
@@ -45860,7 +45864,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400018, guid: 13402bd93e069ec49904724e1412438f, type: 2}
       propertyPath: stats.ignoreBondingLayers.m_Bits
-      value: 4294901759
+      value: 4294893567
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.disableColliders
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.addLinkDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 13402bd93e069ec49904724e1412438f, type: 2}
+      propertyPath: stats.removeLinkDistance
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13402bd93e069ec49904724e1412438f, type: 2}
@@ -59064,7 +59080,7 @@ Transform:
   m_PrefabInternal: {fileID: 1587690991}
   m_GameObject: {fileID: 2112130992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 22, y: 46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1545455442}
@@ -59086,7 +59102,7 @@ MonoBehaviour:
   createdWalls: []
   membraneWallOriginal: {fileID: 1545455441}
   createOnStart: 0
-  wallCount: 25
+  wallCount: 26
   buildDelay: -1
 --- !u!1001 &2122013372
 Prefab:
