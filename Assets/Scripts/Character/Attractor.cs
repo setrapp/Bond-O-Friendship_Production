@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Attractor : MonoBehaviour {
 	public CharacterComponents character;
@@ -25,19 +26,35 @@ public class Attractor : MonoBehaviour {
 
 	void Update()
 	{
-		// Slow movement if attracting fluffs.
-		slowing = attracting && !character.floatMove.Floating;
-		if (slowing != wasSlowing)
+
+		if (!Globals.Instance.autoAttractor)
 		{
-			if (slowing)
+			// Slow movement if attracting fluffs.
+			slowing = attracting && !character.floatMove.Floating;
+			if (slowing != wasSlowing)
 			{
-				character.mover.externalSpeedMultiplier -= attractSlowingFactor;
+				if (slowing)
+				{
+					character.mover.externalSpeedMultiplier -= attractSlowingFactor;
+				}
+				else
+				{
+					character.mover.externalSpeedMultiplier += attractSlowingFactor;
+				}
+				wasSlowing = slowing;
 			}
-			else
+		}
+		else
+		{
+			bool pullingFluffs = AttemptFluffPull();
+			if (pullingFluffs)
 			{
-				character.mover.externalSpeedMultiplier += attractSlowingFactor;
+				AttractFluffs(false);
 			}
-			wasSlowing = slowing;
+			else if (!pullingFluffs && attracting)
+			{
+				StopAttracting();
+			}
 		}
 
 		// Keep attraction particles in correct position.
@@ -47,7 +64,7 @@ public class Attractor : MonoBehaviour {
 		}
 	}
 
-	public void AttractFluffs()
+	public void AttractFluffs(bool attemptFluffPull = true)
 	{
 		attracting = true;
 		
@@ -55,20 +72,46 @@ public class Attractor : MonoBehaviour {
 		if (attractParticles == null)
 		{
 			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
-			attractParticles.transform.position = transform.position;
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
-			attractParticles.startColor = new Color(attractParticles.startColor.r, attractParticles.startColor.g, attractParticles.startColor.b, 0.1f);
+			attractParticles.transform.position = transform.position + new Vector3(0, 0, 0.2f);
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;
 		}
 
-		// Attempt to pull in fluffs.
-		GameObject[] fluffArray = GameObject.FindGameObjectsWithTag("Fluff");
-		foreach (GameObject liveFluffObject in fluffArray)
+		// If desired, attempt to pull in fluffs.
+		if (attemptFluffPull)
 		{
-			Fluff liveFluff = liveFluffObject.GetComponent<Fluff>();
+			AttemptFluffPull();
+		}
+		
+	}
+	
+	public void StopAttracting()
+	{
+		attracting = false;
+
+		if (attractParticles != null)
+		{
+			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 1.0f);
+			Destroy(attractParticles.gameObject, 1.0f);
+		}
+	}
+
+	private bool AttemptFluffPull()
+	{
+		if (Globals.Instance == null || Globals.Instance.allFluffs == null)
+		{
+			return false;
+		}
+
+		bool pullingFluff = false;
+
+		List<Fluff> allFluffs = Globals.Instance.allFluffs;
+		foreach (Fluff liveFluff in allFluffs)
+		{
 			if (liveFluff != null)
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
-				if (!fluffAttachedToSelf)
+				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
+				if (!fluffAttachedToSelf && !ignoringAttract)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
 					Vector3 attractOffset = Vector3.zero;
@@ -81,8 +124,8 @@ public class Attractor : MonoBehaviour {
 							// Only check bond distance to fluff if the bond is at least as long as the distance from this to the fluff.
 							if (Mathf.Pow(character.bondAttachable.bonds[i].BondLength, 2) >= fluffSqrDist)
 							{
-								Vector3 nearBond = character.bondAttachable.bonds[i].NearestPoint(liveFluffObject.transform.position);
-								float sqrDist = (liveFluffObject.transform.position - nearBond).sqrMagnitude;
+								Vector3 nearBond = character.bondAttachable.bonds[i].NearestPoint(liveFluff.transform.position);
+								float sqrDist = (liveFluff.transform.position - nearBond).sqrMagnitude;
 								if (sqrDist < nearSqrDist)
 								{
 									nearSqrDist = sqrDist;
@@ -95,22 +138,13 @@ public class Attractor : MonoBehaviour {
 					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
 						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
+						pullingFluff = true;
 					}
 				}
 			}
 		}
-		
-	}
-	
-	public void StopAttracting()
-	{
-		attracting = false;
 
-		if (attractParticles != null)
-		{
-			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
-			Destroy(attractParticles.gameObject, 1.0f);
-		}
+		return pullingFluff;
 	}
 
 	void OnDrawGizmos()

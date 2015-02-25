@@ -61,7 +61,9 @@ public class PlantGrowth : MonoBehaviour {
 				if(fluffCount/fluffsRequiredPerBud > i + 1 && blossoms[i] == null)
 				{
 					blossoms[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+					blossoms[i].GetComponent<Collider>().enabled = false;
 					blossoms[i].GetComponent<Renderer>().material.color = new Color(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f), 0.2f);
+					blossoms[i].GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
 					blossoms[i].transform.localScale = new Vector3(2, 2, 2);
 					blossoms[i].transform.parent = transform;
 					blossoms[i].transform.position = buds[i].transform.position + buds[i].transform.up*(buds[i].transform.localScale.y/2) - new Vector3(0, 0, 1);
@@ -74,14 +76,17 @@ public class PlantGrowth : MonoBehaviour {
 						for(int j = 0; j < blossoms.Length; j++)
 						{
 							Rigidbody blossomRigid = blossoms[j].AddComponent<Rigidbody>();
-							blossoms[j].GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+							
+							blossoms[j].GetComponent<Collider>().enabled = true;
 							blossomRigid.drag = 1;
 							blossomRigid.useGravity = false;
 							blossomRigid.constraints = RigidbodyConstraints.FreezePositionZ;
+							blossomRigid.AddForce(buds[j].transform.up * 10, ForceMode.Impulse);
 							/*Light blossomLight = */blossoms[j].AddComponent<Light>();
 							//blossomLight.range = 30;
 							/*DepthMaskHandler depth = */blossoms[j].AddComponent<DepthMaskHandler>();
 							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
+							blossoms[j].AddComponent<FluffPopper>();
 							FluffStick fluffStick = blossoms[j].AddComponent<FluffStick>();
 							fluffStick.maxPullForce = 0.01f;
 						}
@@ -92,6 +97,12 @@ public class PlantGrowth : MonoBehaviour {
 					Destroy(blossoms[i]);
 					blossoms[i] = null;
 				}
+			}
+			if(fullyBloomed == true)
+			{
+				BudCollision[] allChildren = GetComponentsInChildren<BudCollision>();
+				for(int i = 0; i < allChildren.Length; i++)
+					allChildren[i].gameObject.GetComponent<Collider>().enabled = false;
 			}
 			colorValue = (float)fluffCount/(fluffsRequiredPerBud*buds.Length);
 			plantColorCopy.color = new Color(colorValue, colorValue, colorValue);

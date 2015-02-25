@@ -52,6 +52,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &170230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 470230}
+  - 114: {fileID: 11470236}
+  - 114: {fileID: 11470234}
+  - 114: {fileID: 11470232}
+  - 114: {fileID: 11470230}
+  m_Layer: 0
+  m_Name: Ring Breaker Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -59,11 +78,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 510.899994, y: -41.5999985, z: 0}
+  m_LocalPosition: {x: -801.787048, y: -716.269836, z: -1}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 400004}
   - {fileID: 400002}
+  - {fileID: 470230}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400002
@@ -73,7 +93,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .49437499}
+  m_LocalPosition: {x: 0, y: 0, z: .600000024}
   m_LocalScale: {x: 6, y: 6, z: 5.19999981}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -85,13 +105,25 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .484375}
+  m_LocalPosition: {x: 0, y: 0, z: .400000006}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 0
+--- !u!4 &470230
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170230}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: .5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
+  m_RootOrder: 2
 --- !u!23 &2300000
-MeshRenderer:
+Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -100,24 +132,18 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 6f5a1bfdc5d4d5d42a4e70a44c3ae89a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2300002
-MeshRenderer:
+Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -126,20 +152,14 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 41443bff166cd04418a937155080cfc7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300000
@@ -170,6 +190,97 @@ MonoBehaviour:
   pOonPad: 0
   pTonPad: 0
   activated: 0
+--- !u!114 &11470230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61bffc622b818e1439d56d2e8a7b066d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    attachSpring1: 0
+    attachSpring2: 0
+    maxDistance: -1
+    relativeWarningDistance: -1
+    endsWidth: 5
+    midWidth: 7
+    addLinkDistance: 2
+    removeLinkDistance: 1.79999995
+    springForce: 5000
+    springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
+    disableColliders: 1
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
+    sparseDetailFactor: .100000001
+    sparseDetailLinksCheck: 1
+--- !u!114 &11470232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 0}
+  handleFluffAttachment: 1
+  bondAtContactPoint: 1
+  attachmentColor: {r: .666666687, g: .831372559, b: .835294127, a: .65882355}
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bondOverrideStats: {fileID: 0}
+  bonds: []
+  volleysToBond: 0
+  volleys: 0
+  volleyPartner: {fileID: 0}
+--- !u!114 &11470234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2bcfbf7b5f9544a8fd0639a28982ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createdBond: {fileID: 0}
+  createOnStart: 0
+  attachable1: {fileID: 0}
+  attachable2: {fileID: 0}
+  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
+  bondOffset1: {x: 0, y: 0, z: 0}
+  bondOffset2: {x: 0, y: 0, z: 0}
+  bondOverrideStats: {fileID: 11470230}
+  bondToPlayer: 0
+  playerNumber: 0
+--- !u!114 &11470236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b98d0b861d8e21448ecb2ea4a1047bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ringBreakerPrefab: {fileID: 129982, guid: 61f744c65551f18458992cc0eca82424, type: 2}
+  triggerPad: {fileID: 11400000}
+  delay: .200000003
+  offset: {x: 0, y: 0, z: 0}
+  createdRingBreaker: {fileID: 0}
+  bondCreator: {fileID: 11470234}
+  bondAttachable: {fileID: 11470232}
+  attachedIsland: {fileID: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -207,3 +318,4 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
+  m_IsExploded: 1

@@ -16,7 +16,7 @@ public class SlideWall : MonoBehaviour {
 		pullApart = puzzleTrigger.GetComponent<PullApart>();
 		puzzleBreakDistance = pullApart.breakDistance;
 		originalYScale = transform.localScale.y;
-		originalYPos = transform.position.y;
+		originalYPos = transform.localPosition.y;
 	}
 	
 	// Update is called once per frame
@@ -27,9 +27,9 @@ public class SlideWall : MonoBehaviour {
 		transform.localScale = new Vector3(transform.localScale.x, originalYScale*(1 - scaling), transform.localScale.z);
 
 		if(name == "Stone Gate")
-			transform.position = new Vector3(transform.position.x, originalYPos + (originalYScale*0.5f*scaling), transform.position.z);
+			transform.localPosition = new Vector3(transform.localPosition.x, originalYPos + (originalYScale * 0.5f * scaling), transform.localPosition.z);
 
 		if(name == "Stone Gate 2")
-			transform.position = new Vector3(transform.position.x, originalYPos - (originalYScale*0.5f*scaling), transform.position.z);
+			transform.localPosition = new Vector3(transform.localPosition.x, originalYPos - (originalYScale * 0.5f * scaling), transform.localPosition.z);
 	}
 }

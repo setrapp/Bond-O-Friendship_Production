@@ -13,7 +13,7 @@ public class TriggerWall : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		fadenow = false;
-		alpha = 0.5f;
+		alpha = 0.7f;
 	}
 	
 	// Update is called once per frame

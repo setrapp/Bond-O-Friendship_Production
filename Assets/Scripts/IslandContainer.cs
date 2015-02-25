@@ -8,6 +8,7 @@ public class IslandContainer : MonoBehaviour {
 	[HideInInspector]
 	public bool islandLoading = false;
 	public string islandSceneName;
+	public Renderer editorPlaceholder;
 	public MembraneShell atmosphere;
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
@@ -22,6 +23,11 @@ public class IslandContainer : MonoBehaviour {
 			waitingToIsolate = true;
 			StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
 		}
+
+		if (editorPlaceholder != null)
+		{
+			editorPlaceholder.gameObject.SetActive(false);
+		}
 	}
 
 	public void GenerateAtmosphere()
@@ -32,10 +38,10 @@ public class IslandContainer : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(MembraneShell brakingMembrane)
+	private void MembraneBreaking(MembraneShell BreakingMembrane)
 	{
 		// Handle breaking of the island's atmosphere.
-		if (brakingMembrane != null && brakingMembrane == atmosphere)
+		if (BreakingMembrane != null && BreakingMembrane == atmosphere)
 		{
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;
@@ -93,6 +99,7 @@ public class IslandContainer : MonoBehaviour {
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
+		//TODO uncomment.
 		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 		if (island != null)
 		{
@@ -115,11 +122,15 @@ public class IslandContainer : MonoBehaviour {
 			{
 				playersEstablish.PlacePlayers();
 			}
-			CameraSplitter.Instance.JumpToPlayers();
 
 			if (waitingToIsolate)
 			{
 				IsolateIsland();
+			}
+
+			if (spawnOnStart && CameraColorFade.Instance != null)
+			{
+				CameraColorFade.Instance.JumpToColor(createdIsland.backgroundColor);
 			}
 		}
 	}

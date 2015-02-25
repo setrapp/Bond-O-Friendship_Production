@@ -6,7 +6,7 @@ public class Palette : MonoBehaviour {
 	public GameObject ripplePrefab;
 	private GameObject rippleObj;
 	private Vector3 mySize;
-	private float sizeScale;
+	public float sizeScale = 0;
 	private Color palColor;
 	public float r;
 	public float g;
@@ -16,7 +16,7 @@ public class Palette : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		sizeScale = 0.0f;
+		//sizeScale = 0.0f;
 	}
 	
 	// Update is called once per frame

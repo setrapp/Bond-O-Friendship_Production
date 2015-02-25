@@ -19,11 +19,36 @@ public class ManageSeasons : MonoBehaviour {
 	public int season;
 	public float seasonLength = 30.0f;
 	public float leafSpawnRange = 30.0f;
+	public float leafDensity = 0.5f;
+	public Island island;
+	public Color fallBackground;
+	public Color winterBackground;
+	public Color springBackground;
+	public Color summerBackground;
+	private Color[] seasonBackgrounds;
 
 	public float seasonTimeRemaining;
 
+	void Awake()
+	{
+		seasonBackgrounds = new Color[4];
+		seasonBackgrounds[0] = fallBackground;
+		seasonBackgrounds[1] = winterBackground;
+		seasonBackgrounds[2] = springBackground;
+		seasonBackgrounds[3] = summerBackground;
+		if (CameraColorFade.Instance != null)
+		{
+			CameraColorFade.Instance.FadeToColor(seasonBackgrounds[season]);
+		}
+		if (island != null)
+		{
+			island.backgroundColor = seasonBackgrounds[season];
+		}
+	}
+
 	public void Start () {
 		seasonTimeRemaining = seasonLength;
+		
 	}
 
 	public void Update() {
@@ -34,7 +59,12 @@ public class ManageSeasons : MonoBehaviour {
 			if(season == 4)
 				season = 0;
 			seasonTimeRemaining = seasonLength;
+			if (CameraColorFade.Instance != null)
+			{
+				CameraColorFade.Instance.FadeToColor(seasonBackgrounds[season]);
+			}
 		}
+
 		if(season == 3)
 		{
 			rain.enableEmission = true;

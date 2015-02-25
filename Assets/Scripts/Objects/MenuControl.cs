@@ -17,8 +17,7 @@ public class MenuControl : MonoBehaviour {
 	void Start () {
 		if(InputManager.Devices.Count > 0)
 		{
-			Globals.playerOneDevice = InputManager.Devices[0];
-			Globals.startingDevice = InputManager.Devices[0];
+            Globals.usingController = false;
 			Globals.numberOfControllers = InputManager.Devices.Count;
 		}
 		else
@@ -42,17 +41,23 @@ public class MenuControl : MonoBehaviour {
                 Destroy(message.gameObject);
             }
         }
+
+        if(InputManager.Devices.Count > 0)
+        {
+            InputDevice device = InputManager.ActiveDevice;
+            if (device.Action1.IsPressed || device.MenuWasPressed)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            {
+                MainMenuLoadLevel();
+                Globals.usingController = true;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Return))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        {
+            MainMenuLoadLevel();
+            Globals.usingController = false;
+        }
     }		
 
-    public void SetPlayerDevices()
-    {
-        if (InputManager.Devices.Count == 1)
-            Globals.playerTwoDevice = InputManager.Devices[0];
-        else if (InputManager.Devices.Count > 1)
-            Globals.playerTwoDevice = InputManager.Devices[1];
-        else
-            Globals.playerTwoDevice = null;
-    }
     public void MainMenuLoadLevel()
     {
 		CameraSplitter splitter = Globals.Instance.GetComponentInChildren<CameraSplitter>();
@@ -67,10 +72,12 @@ public class MenuControl : MonoBehaviour {
     {
         if(levelName != null)
         {
-            Application.LoadLevel(levelName);
+            //Application.LoadLevel(levelName);
+            startScene = levelName;
         }
     }
 
+    
     public void LevelSelect()
     {
         startMenu.SetActive(false);

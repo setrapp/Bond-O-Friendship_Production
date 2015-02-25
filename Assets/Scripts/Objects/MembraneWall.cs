@@ -45,6 +45,8 @@ public class MembraneWall : MonoBehaviour {
 	}
 	[Header("Breaking Requirements")]
 	public int requiredPlayersToBreak = 0;
+	public string specialBreakerTag = "";
+	public int requiredSpecialsToBreak = 0;
 	//public AsyncOperation requiredLoading = null;
 	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
@@ -76,8 +78,14 @@ public class MembraneWall : MonoBehaviour {
 			CreateWall();
 		}
 
-		startPost.SetActive(showPosts);
-		endPost.SetActive(showPosts);
+		if (startPost != null)
+		{
+			startPost.SetActive(showPosts);
+		}
+		if (endPost != null)
+		{
+			endPost.SetActive(showPosts);
+		}
 	}
 
 	void Update()
@@ -87,8 +95,14 @@ public class MembraneWall : MonoBehaviour {
 		{
 			if (showPosts)
 			{
-				createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
-				createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+				if (startPost != null)
+				{
+					createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
+				}
+				if (endPost != null)
+				{
+					createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+				}
 			}
 
 			currentLength = createdMembrane.BondLength;
@@ -115,12 +129,21 @@ public class MembraneWall : MonoBehaviour {
 				}
 			}
 
+			// Ensure that enough ring breakers are attempting to break the membrane.
+			bool enoughSpecialsBonded = true;
+			if (requiredSpecialsToBreak > 0)
+			{
+				GameObject[] breakers = createdMembrane.BondedObjectsWithTag(specialBreakerTag);
+				enoughSpecialsBonded = breakers.Length >= requiredSpecialsToBreak;
+			}
+
 			//bool loadingComplete = (requiredLoading == null) || requiredLoading.isDone;
 
-			bool requirementsMet = enoughPlayersBonded;// && loadingComplete;
+			bool requirementsMet = enoughPlayersBonded && enoughSpecialsBonded;// && loadingComplete;
 
 			if (!requirementsMet)
 			{
+				
 				maxDistance = -1;
 				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
 				requirementDistanceAdd = 0;
@@ -181,9 +204,15 @@ public class MembraneWall : MonoBehaviour {
 
 		// Place endpoints.
 		membraneCreator.attachable1.transform.position = startPos;
-		startPost.transform.position = startPos;
+		if (startPost != null)
+		{
+			startPost.transform.position = startPos;
+		}
 		membraneCreator.attachable2.transform.position = endPos;
-		endPost.transform.position = endPos;
+		if (endPost != null)
+		{
+			endPost.transform.position = endPos;
+		}
 
 		// Break the membrane track into eigen vectors.
 		Vector3 parallel = membraneTrack;
@@ -227,11 +256,11 @@ public class MembraneWall : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBraking(Membrane brakingMembrane)
+	private void MembraneBreaking(Membrane BreakingMembrane)
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBraking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
