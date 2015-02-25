@@ -44,15 +44,10 @@ public class SpawnLeaves : MonoBehaviour {
 
 		startColor = new Color(0, 0, 0, 0);
 
-		//area = halfWidth*halfHeight*2;
-		area = (halfWidth*halfHeight)/5;
-
-		leafArraySize = Mathf.RoundToInt(area) + 1;
-
-		leaves = new GameObject[leafArraySize];
-
 		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ();
-
+		area = (halfWidth * halfHeight) * manager.leafDensity;
+		leafArraySize = Mathf.RoundToInt(area) + 1;
+		leaves = new GameObject[leafArraySize];
 
 		leaf1Prefab =manager.leaf1Prefab;
 		leaf2Prefab =manager.leaf2Prefab;
@@ -90,28 +85,31 @@ public class SpawnLeaves : MonoBehaviour {
 				xPos = Random.Range(transform.position.x - halfWidth, transform.position.x + halfWidth);
 				yPos = Random.Range(transform.position.y - halfHeight, transform.position.y + halfHeight);
 
-				leafSelector = Random.Range(1, 8);
-				if(leafSelector == 1)
-					leaf = (GameObject)Instantiate(leaf1Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 2)
-					leaf = (GameObject)Instantiate(leaf2Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 3)
-					leaf = (GameObject)Instantiate(leaf3Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 4)
-					leaf = (GameObject)Instantiate(leaf4Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 5)
-					leaf = (GameObject)Instantiate(leaf5Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 6)
-					leaf = (GameObject)Instantiate(leaf6Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
-				if(leafSelector == 7)
-					leaf = (GameObject)Instantiate(leaf7Prefab,new Vector3(xPos, yPos, -1.5f),Quaternion.Euler(0,0,randRot));
+				if (Physics.Raycast(new Vector3(xPos, yPos, -1.5f), Vector3.forward, Mathf.Infinity))
+				{
+					leafSelector = Random.Range(1, 8);
+					if (leafSelector == 1)
+						leaf = (GameObject)Instantiate(leaf1Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 2)
+						leaf = (GameObject)Instantiate(leaf2Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 3)
+						leaf = (GameObject)Instantiate(leaf3Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 4)
+						leaf = (GameObject)Instantiate(leaf4Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 5)
+						leaf = (GameObject)Instantiate(leaf5Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 6)
+						leaf = (GameObject)Instantiate(leaf6Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
+					if (leafSelector == 7)
+						leaf = (GameObject)Instantiate(leaf7Prefab, new Vector3(xPos, yPos, -1.5f), Quaternion.Euler(0, 0, randRot));
 
-				//leaf.transform.position = new Vector3(xPos, yPos, -1.0f); 
-				//leaf.transform.position = new Vector3(xPos, yPos, -2); 
-				leaves[leafCount] = leaf;
-				leafCount++;
-				leaf.transform.parent = GameObject.Find ("Objects").transform;
-				leaf.GetComponent<Renderer>().material.color = startColor;
+					//leaf.transform.position = new Vector3(xPos, yPos, -1.0f); 
+					//leaf.transform.position = new Vector3(xPos, yPos, -2); 
+					leaves[leafCount] = leaf;
+					leafCount++;
+					leaf.transform.parent = GameObject.Find("Objects").transform;
+					leaf.GetComponent<Renderer>().material.color = startColor;
+				}
 			}
 
 		}

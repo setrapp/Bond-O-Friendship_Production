@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class EtherRing : MonoBehaviour {
 	public MembraneShell ringAtmosphere;
+	public bool forceAtmosphere = false;
 	[SerializeField]
 	public List<ExpressivePlaceholder> expressivePlaceholders;
 	private List<GameObject> expressiveClouds;
@@ -15,7 +16,7 @@ public class EtherRing : MonoBehaviour {
 			Globals.Instance.existingEther = this;
 		}
 
-		if (ringAtmosphere != null)
+		if (ringAtmosphere != null && (!Application.isEditor || forceAtmosphere))
 		{
 			ringAtmosphere.CreateShell();
 		}

@@ -19,6 +19,7 @@ public class ManageSeasons : MonoBehaviour {
 	public int season;
 	public float seasonLength = 30.0f;
 	public float leafSpawnRange = 30.0f;
+	public float leafDensity = 0.5f;
 	public Island island;
 	public Color fallBackground;
 	public Color winterBackground;
