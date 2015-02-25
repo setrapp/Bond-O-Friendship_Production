@@ -73,8 +73,9 @@ public class SimpleFluffGen : MonoBehaviour {
 				meshRenderers[i].material = greenFluffMaterial;
 			}
 		}
-        fluffObject.transform.position = transform.position;
-        fluffObject.transform.parent = gameObject.transform;
+		fluffObject.transform.parent = gameObject.transform;
+		fluffObject.transform.localPosition = Vector3.zero;
+        
         Fluff fluff = fluffObject.GetComponent<Fluff>();
 		velocity = maximumForce;
 		//if(Random.Range(0,2) == 1)

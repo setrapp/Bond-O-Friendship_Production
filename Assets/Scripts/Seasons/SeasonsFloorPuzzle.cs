@@ -75,14 +75,18 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 
 	void OnCollisionEnter (Collision col) {
 		Fluff fluff = col.gameObject.GetComponent<Fluff>();
-		if(col.transform.tag == "Fluff" && fluff != null && fluff.creator != null)
+		if(col.transform.tag == "Fluff" && fluff != null)
 		{
-			GetComponent<Renderer>().material.color = fluff.creator.attachmentColor;
+			if (fluff.creator != null)
+			{
+				GetComponent<Renderer>().material.color = fluff.creator.attachmentColor;
+			}
 			if(groups[groupNumber] < totalTargets  && colored == false)
 				groups[groupNumber]++;
 			if(puzzleComplete == true)
 				outerRing.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
 			colored = true;
+			fluff.PopFluff();
 		}
 	}
 }
