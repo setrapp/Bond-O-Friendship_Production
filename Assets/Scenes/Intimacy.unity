@@ -1277,7 +1277,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
       propertyPath: m_Name
@@ -1287,6 +1287,42 @@ Prefab:
       propertyPath: gate
       value: 
       objectReference: {fileID: 541327819}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: outerRing
+      value: 
+      objectReference: {fileID: 1233885798}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: timer
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: maxTime
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: totalTargets
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: groupNumber
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: groupTotal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: gateCloseTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
   m_RootGameObject: {fileID: 184508603}
@@ -3609,12 +3645,12 @@ Transform:
   m_GameObject: {fileID: 184508603}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9, y: 12.3000002, z: -.200000003}
-  m_LocalScale: {x: 1, y: 1, z: .00999999698}
+  m_LocalScale: {x: 3, y: 3, z: .00999999698}
   m_Children:
   - {fileID: 2003537312}
   - {fileID: 1233885799}
   m_Father: {fileID: 354390345}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!114 &184508605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3630,12 +3666,12 @@ MonoBehaviour:
   outerRing: {fileID: 1233885798}
   gate: {fileID: 541327819}
   emergencyEscapeGate: {fileID: 0}
-  timer: 5
-  maxTime: 5
-  totalTargets: 3
-  groupNumber: 2
-  groupTotal: 4
-  gateCloseTime: .00999999978
+  timer: .699999988
+  maxTime: .699999988
+  totalTargets: 2
+  groupNumber: 0
+  groupTotal: 1
+  gateCloseTime: 20
 --- !u!23 &184508606
 Renderer:
   m_ObjectHideFlags: 0
@@ -5708,8 +5744,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1871711552}
-  - {fileID: 1183416427}
   - {fileID: 184508604}
+  - {fileID: 1715361614}
   - {fileID: 629104052}
   - {fileID: 750923102}
   - {fileID: 584348923}
@@ -6361,6 +6397,79 @@ Prefab:
   m_RootGameObject: {fileID: 226734923}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &413721754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100004, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 413721755}
+  - 33: {fileID: 413721758}
+  - 23: {fileID: 413721757}
+  - 136: {fileID: 413721756}
+  m_Layer: 15
+  m_Name: Floor Puzzle Middle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &413721755
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400004, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 413721754}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 1.33333337, y: 1.33333337, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1715361614}
+  m_RootOrder: 0
+--- !u!136 &413721756
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13630040, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 413721754}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .500000238
+  m_Height: 10
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &413721757
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300004, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 413721754}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 7d0ab41fdc6036d4d9541b7d1921a242, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &413721758
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300004, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 413721754}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &431107943
 GameObject:
   m_ObjectHideFlags: 0
@@ -14026,6 +14135,64 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1044241976}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1046049030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1046049031}
+  - 33: {fileID: 1046049033}
+  - 23: {fileID: 1046049032}
+  m_Layer: 15
+  m_Name: Floor Puzzle Outer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1046049031
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1046049030}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalScale: {x: 1.66666675, y: 1.66666675, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1715361614}
+  m_RootOrder: 1
+--- !u!23 &1046049032
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1046049030}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 855bc0cfe4bcf5840bc3a8da94eb4ddc, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1046049033
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1046049030}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1048254619
 Prefab:
   m_ObjectHideFlags: 0
@@ -15339,98 +15506,6 @@ Prefab:
   m_RootGameObject: {fileID: 592320779}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!1 &1183416426
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1183416427}
-  - 33: {fileID: 1183416431}
-  - 135: {fileID: 1183416430}
-  - 23: {fileID: 1183416429}
-  - 114: {fileID: 1183416428}
-  m_Layer: 21
-  m_Name: Floor Puzzle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1183416427
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1183416426}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 12.3000002, z: -.200000003}
-  m_LocalScale: {x: 3, y: 3, z: .00999999978}
-  m_Children:
-  - {fileID: 1370708764}
-  - {fileID: 1225579168}
-  m_Father: {fileID: 354390345}
-  m_RootOrder: 1
---- !u!114 &1183416428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1183416426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0722da1c2d0512141a6d530fff2a5801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outerRing: {fileID: 1225579167}
-  gate: {fileID: 541327819}
-  emergencyEscapeGate: {fileID: 0}
-  timer: .699999988
-  maxTime: .699999988
-  totalTargets: 2
-  groupNumber: 0
-  groupTotal: 1
-  gateCloseTime: 20
---- !u!23 &1183416429
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1183416426}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: 855bc0cfe4bcf5840bc3a8da94eb4ddc, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!135 &1183416430
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1183416426}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: .5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &1183416431
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1183416426}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1187465021
 GameObject:
   m_ObjectHideFlags: 0
@@ -16880,62 +16955,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 227314084}
   m_GameObject: {fileID: 1220918586}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1225579167
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1225579168}
-  - 33: {fileID: 1225579170}
-  - 23: {fileID: 1225579169}
-  m_Layer: 15
-  m_Name: Floor Puzzle Outer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1225579168
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1225579167}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
-  m_LocalScale: {x: 1.66666675, y: 1.66666675, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1183416427}
-  m_RootOrder: 1
---- !u!23 &1225579169
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1225579167}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: 855bc0cfe4bcf5840bc3a8da94eb4ddc, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &1225579170
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1225579167}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1232670495
 GameObject:
   m_ObjectHideFlags: 0
@@ -19777,75 +19796,6 @@ MonoBehaviour:
   waitPad: {fileID: 1822989349}
   waitPad2: {fileID: 0}
   waitPad3: {fileID: 0}
---- !u!1 &1370708763
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1370708764}
-  - 33: {fileID: 1370708766}
-  - 23: {fileID: 1370708765}
-  - 135: {fileID: 1370708767}
-  m_Layer: 15
-  m_Name: Floor Puzzle Middle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1370708764
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1370708763}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 1.33333337, y: 1.33333337, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1183416427}
-  m_RootOrder: 0
---- !u!23 &1370708765
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1370708763}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: 7d0ab41fdc6036d4d9541b7d1921a242, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &1370708766
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1370708763}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!135 &1370708767
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1370708763}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: .500000119
-  m_Center: {x: 5.96046448e-08, y: 0, z: -1.04308128e-06}
 --- !u!1 &1372713240
 GameObject:
   m_ObjectHideFlags: 0
@@ -25569,6 +25519,103 @@ MeshFilter:
   m_PrefabInternal: {fileID: 53759628}
   m_GameObject: {fileID: 1713398275}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1715361613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1715361614}
+  - 33: {fileID: 1715361618}
+  - 23: {fileID: 1715361617}
+  - 114: {fileID: 1715361616}
+  - 136: {fileID: 1715361615}
+  m_Layer: 21
+  m_Name: Floor Puzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1715361614
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1715361613}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9, y: 12.3000002, z: -.200000003}
+  m_LocalScale: {x: 3, y: 3, z: .00999999978}
+  m_Children:
+  - {fileID: 413721755}
+  - {fileID: 1046049031}
+  m_Father: {fileID: 354390345}
+  m_RootOrder: 2
+--- !u!136 &1715361615
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13630038, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1715361613}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .5
+  m_Height: 5
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1715361616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1715361613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0722da1c2d0512141a6d530fff2a5801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outerRing: {fileID: 1046049030}
+  gate: {fileID: 541327819}
+  emergencyEscapeGate: {fileID: 0}
+  timer: .699999988
+  maxTime: .699999988
+  totalTargets: 2
+  groupNumber: 0
+  groupTotal: 1
+  gateCloseTime: 20
+--- !u!23 &1715361617
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1715361613}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 855bc0cfe4bcf5840bc3a8da94eb4ddc, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1715361618
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 2008710914}
+  m_GameObject: {fileID: 1715361613}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1728665583
 GameObject:
   m_ObjectHideFlags: 0
@@ -29421,6 +29468,98 @@ CapsuleCollider:
   m_Height: 10
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2008710914
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 354390345}
+    m_Modifications:
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -9
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 12.3000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -.200000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_Name
+      value: Floor Puzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: gate
+      value: 
+      objectReference: {fileID: 541327819}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalScale.z
+      value: .00999999978
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: outerRing
+      value: 
+      objectReference: {fileID: 1046049030}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: timer
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: maxTime
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: totalTargets
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: groupNumber
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: groupTotal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: gateCloseTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa, type: 2}
+  m_RootGameObject: {fileID: 1715361613}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &2010899704
 GameObject:
   m_ObjectHideFlags: 0
