@@ -4,7 +4,8 @@ using System.Collections;
 public class FlufflessPass : MonoBehaviour {
 
 	public ParticleSystem particles;
-	public CharacterColors characterColors;
+	public CharacterComponents characterComponents;
+	private float defaultParticleSpeed = 0;
 
 	void Awake()
 	{
@@ -13,14 +14,16 @@ public class FlufflessPass : MonoBehaviour {
 			particles = GetComponent<ParticleSystem>();
 		}
 		
-		if (particles != null && characterColors != null)
+		if (particles != null && characterComponents != null)
 		{
-			particles.startColor = characterColors.attachmentColor;
+			defaultParticleSpeed = particles.startSpeed;
+			particles.startColor = characterComponents.colors.attachmentColor;
 		}
 	}
 
 	public void Play()
 	{
+		particles.startSpeed = defaultParticleSpeed + characterComponents.mover.velocity.magnitude;
 		if (particles != null)
 		{
 			particles.Play();

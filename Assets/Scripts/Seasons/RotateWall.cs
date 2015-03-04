@@ -24,7 +24,7 @@ public class RotateWall : MonoBehaviour {
 		wallRotation.eulerAngles = new Vector3(0, 0, currentZRotation);
 		transform.rotation = wallRotation;
 
-		if(puzzleTrigger == null)
+		if(puzzleTrigger == null || puzzleTrigger.GetComponent<PullApart>().extended == true)
 		{
 			wallRotation.eulerAngles = new Vector3(0, 0, -45);
 			transform.rotation = wallRotation;

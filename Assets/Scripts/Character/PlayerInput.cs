@@ -25,9 +25,9 @@ public class PlayerInput : MonoBehaviour {
 
 	//private bool paused = false;
 	
-    InputDevice device;
+	InputDevice device;
 
-    private bool oneController;
+	private bool oneController;
 
 	void Awake()
 	{
@@ -43,54 +43,54 @@ public class PlayerInput : MonoBehaviour {
 	}
 
 	void Update () 
-    {
-        if(playerNumber == Player.Player1)
-            CheckDevices();
-        if(Globals.usingController && InputManager.controllerCount > 0)
-            device = InputManager.ActiveDevice;
-        
+	{
+		if(playerNumber == Player.Player1)
+			CheckDevices();
+		if(Globals.usingController && InputManager.controllerCount > 0)
+			device = InputManager.ActiveDevice;
+		
  
 		//if (Input.GetKeyDown(KeyCode.Escape))
 		//{
 		//	Application.Quit();
 		//}
 
-        if (Globals.usingController)
-        {
-            if (device.MenuWasPressed && playerNumber == Player.Player1)
-            {
-                if (Globals.isPaused)
-                {
-                    canvasPaused.SetActive(false);
-                    Time.timeScale = 1;
-                }
-                else
-                {
-                    canvasPaused.SetActive(true);
-                    Time.timeScale = 0;
-                }
-                Globals.isPaused = !Globals.isPaused;
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Escape) && playerNumber == Player.Player1)
-            {
-                if (Globals.isPaused)
-                {
-                    canvasPaused.SetActive(false);
-                    Time.timeScale = 1;
-                }
-                else
-                {
-                    canvasPaused.SetActive(true);
-                    Time.timeScale = 0;
-                }
-                Globals.isPaused = !Globals.isPaused;
-            }
-        }  
+		if (Globals.usingController)
+		{
+			if (device.MenuWasPressed && playerNumber == Player.Player1)
+			{
+				if (Globals.isPaused)
+				{
+					canvasPaused.SetActive(false);
+					Time.timeScale = 1;
+				}
+				else
+				{
+					canvasPaused.SetActive(true);
+					Time.timeScale = 0;
+				}
+				Globals.isPaused = !Globals.isPaused;
+			}
+		}
+		else
+		{
+			if (Input.GetKeyDown(KeyCode.Escape) && playerNumber == Player.Player1)
+			{
+				if (Globals.isPaused)
+				{
+					canvasPaused.SetActive(false);
+					Time.timeScale = 1;
+				}
+				else
+				{
+					canvasPaused.SetActive(true);
+					Time.timeScale = 0;
+				}
+				Globals.isPaused = !Globals.isPaused;
+			}
+		}  
 
-        if (!Globals.isPaused)
+		if (!Globals.isPaused)
 		{
 			AttemptFluffThrow();
 			AttemptFluffAttract();
@@ -110,68 +110,68 @@ public class PlayerInput : MonoBehaviour {
 			// Turn towards velocity change.
 			transform.LookAt(transform.position + velocityChange, transform.up);
 		}
-        else
-        {
-            if(playerNumber == Player.Player1)
-            CheckInputMethod();
-        }
+		else
+		{
+			if(playerNumber == Player.Player1)
+			CheckInputMethod();
+		}
 	}
 
    
-    
+	
 	private Vector3 PlayerJoystickMovement()
 	{
 
-        Vector2 stickInput = Vector2.zero;
+		Vector2 stickInput = Vector2.zero;
 
-        //Debug.Log(device.LeftStick.Vector.ToString());
+		//Debug.Log(device.LeftStick.Vector.ToString());
 
-        if (Globals.usingController)
-        {
-            if(playerNumber == Player.Player1)
-            {
-                stickInput = device.LeftStick.Vector;
-                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
-            }
-            if (playerNumber == Player.Player2)
-            {
-                stickInput = device.RightStick.Vector;
-                return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
-            }
-        }
-        else
-        {
-            Vector3 keyVector = Vector3.zero;
-            if(playerNumber == Player.Player1)
-            {
-                if (Input.GetKey(KeyCode.W))
-                    keyVector += Vector3.up;
-                if (Input.GetKey(KeyCode.S))
-                    keyVector -= Vector3.up;
-                if (Input.GetKey(KeyCode.A))
-                    keyVector -= Vector3.right;
-                if (Input.GetKey(KeyCode.D))
-                    keyVector += Vector3.right;
-            }
+		if (Globals.usingController)
+		{
+			if(playerNumber == Player.Player1)
+			{
+				stickInput = device.LeftStick.Vector;
+				return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
+			}
+			if (playerNumber == Player.Player2)
+			{
+				stickInput = device.RightStick.Vector;
+				return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
+			}
+		}
+		else
+		{
+			Vector3 keyVector = Vector3.zero;
+			if(playerNumber == Player.Player1)
+			{
+				if (Input.GetKey(KeyCode.W))
+					keyVector += Vector3.up;
+				if (Input.GetKey(KeyCode.S))
+					keyVector -= Vector3.up;
+				if (Input.GetKey(KeyCode.A))
+					keyVector -= Vector3.right;
+				if (Input.GetKey(KeyCode.D))
+					keyVector += Vector3.right;
+			}
 
-            if (playerNumber == Player.Player2)
-            {
-                if (Input.GetKey(KeyCode.UpArrow))
-                    keyVector += Vector3.up;
-                if (Input.GetKey(KeyCode.DownArrow))
-                    keyVector -= Vector3.up;
-                if (Input.GetKey(KeyCode.LeftArrow))
-                    keyVector -= Vector3.right;
-                if (Input.GetKey(KeyCode.RightArrow))
-                    keyVector += Vector3.right;
-            }
+			if (playerNumber == Player.Player2)
+			{
+				if (Input.GetKey(KeyCode.UpArrow))
+					keyVector += Vector3.up;
+				if (Input.GetKey(KeyCode.DownArrow))
+					keyVector -= Vector3.up;
+				if (Input.GetKey(KeyCode.LeftArrow))
+					keyVector -= Vector3.right;
+				if (Input.GetKey(KeyCode.RightArrow))
+					keyVector += Vector3.right;
+			}
 
-            return keyVector;
-        }
+			return keyVector;
+		}
 
-        return Vector3.zero;
+		return Vector3.zero;
 	}
-    
+	
 	private void AttemptFluffAttract()
 	{
 		// If attractor is automatic, skip this input.
@@ -212,44 +212,44 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-    
+	
 	private void AttemptFluffThrow()
 	{
-        Vector2 lookAt = Vector2.zero;
+		Vector2 lookAt = Vector2.zero;
 		float minToFire = deadZone;
 
-        if (Globals.usingController)
-        {
-            if (playerNumber == Player.Player1)
-            {
+		if (Globals.usingController)
+		{
+			if (playerNumber == Player.Player1)
+			{
 				if (device.LeftTrigger.WasPressed || (Globals.Instance.autoAttractor && device.LeftBumper.WasPressed))
-                {
-                    lookAt = transform.forward;
-                    minToFire = 0;
-                }
-            }
+				{
+					lookAt = transform.forward;
+					minToFire = 0;
+				}
+			}
 			else if (playerNumber == Player.Player2 || (Globals.Instance.autoAttractor && device.RightBumper.WasPressed))
-            {
-                if (device.RightTrigger.WasPressed)
-                {
-                    lookAt = transform.forward;
-                    minToFire = 0;
-                }
-            }
-        }
-        else
-        {
-			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.LeftShift))))
-            {
-                lookAt = transform.forward;
-                minToFire = 0;
-            }
-			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.RightShift))))
-            {
-                lookAt = transform.forward;
-                minToFire = 0;
-            }
-        }
+			{
+				if (device.RightTrigger.WasPressed)
+				{
+					lookAt = transform.forward;
+					minToFire = 0;
+				}
+			}
+		}
+		else
+		{
+			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Space))))
+			{
+				lookAt = transform.forward;
+				minToFire = 0;
+			}
+			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Return))))
+			{
+				lookAt = transform.forward;
+				minToFire = 0;
+			}
+		}
 		
 
 		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
@@ -265,7 +265,7 @@ public class PlayerInput : MonoBehaviour {
 				{
 					velocityBoost += character.mover.velocity;
 				}
-                character.fluffThrow.Throw(throwDirection, velocityBoost);
+				character.fluffThrow.Throw(throwDirection, velocityBoost);
 				fireFluffReady = false;
 			}
 		}
@@ -273,7 +273,7 @@ public class PlayerInput : MonoBehaviour {
 		{
 			fireFluffReady = true;
 		}
-    }
+	}
 
 	private void OnCollisionEnter(Collision col)
 	{
@@ -282,7 +282,9 @@ public class PlayerInput : MonoBehaviour {
 			CharacterComponents partnerCharacter = col.collider.GetComponent<CharacterComponents>();
 			if (!character.bondAttachable.IsBondMade(partnerCharacter.bondAttachable))
 			{
+				character.bondAttachable.volleyPartner = partnerCharacter.bondAttachable;
 				character.SetFlashAndFill(partnerCharacter.colors.attachmentColor);
+				partnerCharacter.bondAttachable.volleyPartner = character.bondAttachable;
 				partnerCharacter.SetFlashAndFill(character.colors.attachmentColor);
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
@@ -290,61 +292,61 @@ public class PlayerInput : MonoBehaviour {
 	}
 
 
-    #region Helper Methods
+	#region Helper Methods
 
-    private void CheckDevices()
-    {
-        //TODO: TEXT for pause menu
-        if (!Globals.usingController && InputManager.controllerCount == 0)
-            Globals.numberOfControllers = InputManager.controllerCount;
+	private void CheckDevices()
+	{
+		//TODO: TEXT for pause menu
+		if (!Globals.usingController && InputManager.controllerCount == 0)
+			Globals.numberOfControllers = InputManager.controllerCount;
 
-        if (Globals.numberOfControllers > 0 && InputManager.controllerCount == 0)
-        {
-            canvasPaused.SetActive(true);
-            Time.timeScale = 0;
-            Globals.isPaused = true;
+		if (Globals.numberOfControllers > 0 && InputManager.controllerCount == 0)
+		{
+			canvasPaused.SetActive(true);
+			Time.timeScale = 0;
+			Globals.isPaused = true;
 
-            Globals.numberOfControllers = 0;
-        }
-        else if(Globals.numberOfControllers == 0 && InputManager.controllerCount > 0)
-        {
-            canvasPaused.SetActive(true);
-            Time.timeScale = 0;
-            Globals.isPaused = true;
-            Globals.numberOfControllers = InputManager.controllerCount;
-        }
-    }
+			Globals.numberOfControllers = 0;
+		}
+		else if(Globals.numberOfControllers == 0 && InputManager.controllerCount > 0)
+		{
+			canvasPaused.SetActive(true);
+			Time.timeScale = 0;
+			Globals.isPaused = true;
+			Globals.numberOfControllers = InputManager.controllerCount;
+		}
+	}
 
-    private void CheckInputMethod()
-    {
+	private void CheckInputMethod()
+	{
 
-        if (InputManager.Devices.Count > 0)
-        {
-            InputDevice device = InputManager.ActiveDevice;
-            if (device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
-            {
-                Globals.usingController = true;
-                canvasPaused.SetActive(false);
-                Time.timeScale = 1;
-                Globals.isPaused = false;
-            }
-        }
+		if (InputManager.Devices.Count > 0)
+		{
+			InputDevice device = InputManager.ActiveDevice;
+			if (device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+			{
+				Globals.usingController = true;
+				canvasPaused.SetActive(false);
+				Time.timeScale = 1;
+				Globals.isPaused = false;
+			}
+		}
 
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
-        {
-            Globals.usingController = false;
-            canvasPaused.SetActive(false);
-            Time.timeScale = 1;
-            Globals.isPaused = false;
-        }
-    }
+		if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+		{
+			Globals.usingController = false;
+			canvasPaused.SetActive(false);
+			Time.timeScale = 1;
+			Globals.isPaused = false;
+		}
+	}
 
-    
+	
 
    
 
-    
-    #endregion
+	
+	#endregion
 
 
 
