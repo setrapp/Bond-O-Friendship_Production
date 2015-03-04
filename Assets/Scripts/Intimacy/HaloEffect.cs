@@ -6,7 +6,7 @@ public class HaloEffect : MonoBehaviour {
 	public PlayerInput.Player attachedPlayer;
 	private FluffHandler fluffHandler;
 	private int fluffCountAdjust;
-	//private Light targetLight;
+	private Light targetLight;
 	private DepthMaskHandler targetMask;
 
 	public int fluffMax = 10;
@@ -16,7 +16,7 @@ public class HaloEffect : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//targetLight = GetComponent<Light>();
+		targetLight = GetComponent<Light>();
 		targetMask = GetComponent<DepthMaskHandler>();
 		//TODO attach to attached player rather than using name
 		if(attachedPlayer == PlayerInput.Player.Player1)
@@ -41,7 +41,7 @@ public class HaloEffect : MonoBehaviour {
 			fluffCountAdjust = 1;
 		fluffHandler.naturalFluffCount = fluffCountAdjust;
 		float maskRange = Mathf.Max(minRange, (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position)));
-		//targetLight.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
+		targetLight.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
 		if (targetMask != null && targetMask.depthMask != null)
 		{
 			

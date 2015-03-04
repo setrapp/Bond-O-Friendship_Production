@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3321754}
   - 23: {fileID: 2321752}
   - 114: {fileID: 11421754}
+  - 114: {fileID: 11435156}
   m_Layer: 28
   m_Name: Fade Out
   m_TagString: Untagged
@@ -46,6 +47,7 @@ GameObject:
   - 4: {fileID: 421754}
   - 23: {fileID: 2321754}
   - 102: {fileID: 10221754}
+  - 114: {fileID: 11435158}
   m_Layer: 28
   m_Name: To Be Continued
   m_TagString: Untagged
@@ -60,7 +62,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.375261128, y: 3.84250259, z: -54.3604279}
+  m_LocalPosition: {x: -.375261009, y: 3.84250307, z: -54.3604126}
   m_LocalScale: {x: 99.9999771, y: 100, z: 1}
   m_Children:
   - {fileID: 421752}
@@ -73,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -67.8000031}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: .00999999978, y: .00999999978, z: 1}
   m_Children:
   - {fileID: 421754}
@@ -100,7 +102,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 4
-  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -216,6 +218,34 @@ MonoBehaviour:
   attachedLevel: {fileID: 0}
   endingLoadScene: Menu
   destroyOnLoad: 1
+--- !u!114 &11435156
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2321752}
+  renderBase: 1000
+  renderOffset: -10
+--- !u!114 &11435158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2321754}
+  renderBase: 3000
+  renderOffset: -2
 --- !u!124 &12421754
 Behaviour:
   m_ObjectHideFlags: 1
