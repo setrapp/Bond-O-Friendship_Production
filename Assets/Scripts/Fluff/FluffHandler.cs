@@ -65,12 +65,14 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		// Attempt to spawn more fluff.
+		
 		if (fluffs.Count < naturalFluffCount && fluffs.Count < maxFluffs)
 		{
 			if (spawnTime >= 0)
 			{
 				if (sinceSpawn >= spawnTime)
 				{
+					Debug.Log(fluffs.Count);
 					SpawnFluff();
 					sinceSpawn = 0;
 					character.fillScale = 1;

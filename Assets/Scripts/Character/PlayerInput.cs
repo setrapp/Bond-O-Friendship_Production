@@ -320,7 +320,7 @@ public class PlayerInput : MonoBehaviour {
 			for (int i = 0; i < character.fluffHandler.fluffs.Count; i++)
 			{
 				float fluffDotCol = Vector3.Dot(character.fluffHandler.fluffs[i].transform.position - transform.position, col.contacts[0].point - transform.position);
-				if (fluffDotCol >= bestDot)
+				if (fluffDotCol >= bestDot && character.fluffHandler.fluffs[i] != character.fluffHandler.spawnedFluff)
 				{
 					bestDot = fluffDotCol;
 					leavee = character.fluffHandler.fluffs[i];
@@ -330,11 +330,11 @@ public class PlayerInput : MonoBehaviour {
 			if (leavee != null)
 			{
 				bool tooClose = false;
-				for (int i = 0; i < Globals.Instance.allFluffs.Count; i++)
+				for (int i = 0; i < Globals.Instance.allFluffs.Count && !tooClose; i++)
 				{
 					Fluff checkFluff = Globals.Instance.allFluffs[i];
 					if (checkFluff.attachee != null && checkFluff.attachee.gameObject == col.collider.gameObject
-					    && (col.contacts[0].point - checkFluff.transform.position).sqrMagnitude < Mathf.Pow(Globals.Instance.fluffLeaveDistance, 2))
+						&& (col.contacts[0].point - checkFluff.transform.position).sqrMagnitude < Mathf.Pow(Globals.Instance.fluffLeaveDistance, 2))
 					{
 						tooClose = true;
 					}
