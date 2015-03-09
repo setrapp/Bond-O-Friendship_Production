@@ -23,6 +23,11 @@ public class FluffThrow : MonoBehaviour {
 
 	public void Throw(Vector3 passDirection, Vector3 velocityBoost)
 	{
+		if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		{
+			return;
+		}
+
 		if (Time.deltaTime <= 0)
 		{
 			return;

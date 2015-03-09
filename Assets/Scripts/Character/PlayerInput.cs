@@ -289,7 +289,67 @@ public class PlayerInput : MonoBehaviour {
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
 		}
+		else if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		{
+			LeaveFluff(col);
+		}
 	}
+
+	private void OnCollisionStay(Collision col)
+	{
+		if (col.collider.gameObject.tag != "Character" && Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		{
+			LeaveFluff(col);
+		}
+	}
+
+	private void LeaveFluff(Collision col)
+	{
+		// Check if any fluffs are on the character.
+		Fluff firstFluff = null;
+		if (character.fluffHandler.fluffs.Count > 0)
+		{
+			firstFluff = character.fluffHandler.fluffs[0];
+		}
+		
+		
+		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, col.collider.gameObject.layer))
+		{
+			Fluff leavee = null;
+			float bestDot = 0;
+			for (int i = 0; i < character.fluffHandler.fluffs.Count; i++)
+			{
+				float fluffDotCol = Vector3.Dot(character.fluffHandler.fluffs[i].transform.position - transform.position, col.contacts[0].point - transform.position);
+				if (fluffDotCol >= bestDot)
+				{
+					bestDot = fluffDotCol;
+					leavee = character.fluffHandler.fluffs[i];
+				}
+			}
+
+			if (leavee != null)
+			{
+				bool tooClose = false;
+				for (int i = 0; i < Globals.Instance.allFluffs.Count; i++)
+				{
+					Fluff checkFluff = Globals.Instance.allFluffs[i];
+					if (checkFluff.attachee != null && checkFluff.attachee.gameObject == col.collider.gameObject
+					    && (col.contacts[0].point - checkFluff.transform.position).sqrMagnitude < Mathf.Pow(Globals.Instance.fluffLeaveDistance, 2))
+					{
+						tooClose = true;
+					}
+				}
+
+				if (!tooClose)
+				{
+					character.fluffHandler.fluffs.Remove(leavee);
+					leavee.transform.parent = transform.parent;
+					leavee.Pass((col.contacts[0].point - transform.position), gameObject, Globals.Instance.fluffLeaveAttractWait);
+				}
+			}
+		}
+	}
+
 
 
 	#region Helper Methods

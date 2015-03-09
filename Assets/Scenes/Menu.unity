@@ -73,7 +73,6 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
-    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &2468432
 GameObject:
@@ -456,8 +455,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  ignoreReversedGraphics: 1
+  blockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2050,8 +2049,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  ignoreReversedGraphics: 1
+  blockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2975,6 +2974,9 @@ MonoBehaviour:
   player2: {fileID: 1530241259}
   initialPlayerHolder: {fileID: 1735140847}
   autoAttractor: 1
+  fluffsThrowable: 0
+  fluffLeaveDistance: 1
+  fluffLeaveAttractWait: 3
   canvasPaused: {fileID: 991876899}
   visibilityDepthMaskNeeded: 0
   depthMaskPrefab: {fileID: 100000, guid: eee34cdc27d68d34c8d79e97b72a5238, type: 2}
@@ -3165,8 +3167,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  ignoreReversedGraphics: 1
+  blockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -3373,8 +3375,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  ignoreReversedGraphics: 1
+  blockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -3853,6 +3855,14 @@ Prefab:
       propertyPath: initialPlayerHolder
       value: 
       objectReference: {fileID: 1735140847}
+    - target: {fileID: 11400000, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
+      propertyPath: fluffsThrowable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
+      propertyPath: autoAttractor
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
   m_RootGameObject: {fileID: 948288336}
@@ -4696,8 +4706,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  ignoreReversedGraphics: 1
+  blockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
