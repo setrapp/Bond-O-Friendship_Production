@@ -20,10 +20,6 @@ public class MenuControl : MonoBehaviour {
             Globals.usingController = false;
 			Globals.numberOfControllers = InputManager.Devices.Count;
 		}
-		else
-		{
-			Debug.LogError("No Controllers Detected.");
-		}
     }
 
 
