@@ -654,10 +654,6 @@ Prefab:
       propertyPath: initialPlayerHolder
       value: 
       objectReference: {fileID: 1735140847}
-    - target: {fileID: 11400000, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
-      propertyPath: fluffsThrowable
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
   m_RootGameObject: {fileID: 948288336}
@@ -4071,6 +4067,7 @@ GameObject:
   - 114: {fileID: 1530241256}
   - 114: {fileID: 1530241255}
   - 114: {fileID: 1530241254}
+  - 114: {fileID: 1530241265}
   - 114: {fileID: 1530241253}
   - 114: {fileID: 1530241252}
   m_Layer: 13
@@ -4156,7 +4153,7 @@ MonoBehaviour:
   bondAtContactPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
   bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  bondOverrideStats: {fileID: 0}
+  bondOverrideStats: {fileID: 1530241265}
   bonds: []
   volleysToBond: 2
   volleys: 0
@@ -4393,6 +4390,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1530241265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11443356, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 2020569886}
+  m_GameObject: {fileID: 1530241250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61bffc622b818e1439d56d2e8a7b066d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    attachSpring1: 0
+    attachSpring2: 0
+    pullApartMaxFactor: 0
+    maxDistance: 50
+    relativeWarningDistance: .5
+    endsWidth: .0199999996
+    midWidth: .5
+    addLinkDistance: .5
+    removeLinkDistance: .300000012
+    springForce: 5000
+    springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
+    disableColliders: 0
+    fullDetailDistance: -1
+    sparseDetailDistance: -1
+    sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!1 &1531071013
 GameObject:
   m_ObjectHideFlags: 0
@@ -7263,6 +7292,7 @@ GameObject:
   - 114: {fileID: 2006680899}
   - 114: {fileID: 2006680898}
   - 114: {fileID: 2006680897}
+  - 114: {fileID: 2006680908}
   - 114: {fileID: 2006680896}
   - 114: {fileID: 2006680895}
   m_Layer: 13
@@ -7348,7 +7378,7 @@ MonoBehaviour:
   bondAtContactPoint: 0
   attachmentColor: {r: 0, g: 0, b: .996078432, a: 1}
   bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  bondOverrideStats: {fileID: 0}
+  bondOverrideStats: {fileID: 2006680908}
   bonds: []
   volleysToBond: 2
   volleys: 0
@@ -7585,6 +7615,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2006680908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11443356, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 627076188}
+  m_GameObject: {fileID: 2006680893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61bffc622b818e1439d56d2e8a7b066d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    attachSpring1: 0
+    attachSpring2: 0
+    pullApartMaxFactor: 0
+    maxDistance: 50
+    relativeWarningDistance: .5
+    endsWidth: .0199999996
+    midWidth: .5
+    addLinkDistance: .5
+    removeLinkDistance: .300000012
+    springForce: 5000
+    springDamper: 5
+    manualAttachment1: 0
+    manualAttachment2: 0
+    manualLinks: 0
+    disableColliders: 0
+    fullDetailDistance: -1
+    sparseDetailDistance: -1
+    sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!1 &2009515945
 GameObject:
   m_ObjectHideFlags: 0
