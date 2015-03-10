@@ -73,9 +73,9 @@ public class SeasonsFloorPuzzle : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter (Collision col) {
-		Fluff fluff = col.gameObject.GetComponent<Fluff>();
-		if(col.transform.tag == "Fluff" && fluff != null)
+	void AttachFluff(Fluff fluff)
+	{
+		if(fluff.transform.tag == "Fluff" && fluff != null)
 		{
 			if (fluff.creator != null)
 			{
