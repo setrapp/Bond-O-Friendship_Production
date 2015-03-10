@@ -77,6 +77,22 @@ public class Bond : MonoBehaviour {
 			}
 			disablingLinks = false;
 		}*/
+
+		if (stats.pullApartMaxFactor > 0)
+		{
+			if (pullSpring1 == null || pullSpring2 == null)
+			{
+				CreatePullers();
+			}
+		}
+		else
+		{
+			if (pullSpring1 != null || pullSpring2 != null)
+			{
+				DestroyPullers();
+			}
+		}
+
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
 			StartCoroutine(UpdateBondCount(atSparseDetail));
@@ -359,16 +375,6 @@ public class Bond : MonoBehaviour {
 			attachment2.attachedLink.jointToNeighbor.connectedBody = attachment1.attachedLink.body;
 		}
 
-		if (stats.pullApartMaxFactor > 0 && bondPullPrefab != null)
-		{
-			pullSpring1 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
-			pullSpring1.transform.parent = transform;
-			pullSpring1.connectedBody = attachment1.attachee.body;
-			pullSpring2 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
-			pullSpring2.transform.parent = transform;
-			pullSpring2.connectedBody = attachment2.attachee.body;
-		}
-
 		WeightJoints();
 
 		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
@@ -566,6 +572,37 @@ public class Bond : MonoBehaviour {
 		}
 	}
 
+	private void CreatePullers()
+	{
+		if (bondPullPrefab != null)
+		{
+			pullSpring1 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring1.transform.parent = transform;
+			pullSpring1.connectedBody = attachment1.attachee.body;
+			pullSpring2 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring2.transform.parent = transform;
+			pullSpring2.connectedBody = attachment2.attachee.body;
+		}
+
+		WeightJoints();
+	}
+
+	private void DestroyPullers()
+	{
+		if (pullSpring1 != null)
+		{
+			Destroy(pullSpring1.gameObject);
+			pullSpring1 = null;
+		}
+		if (pullSpring2 != null)
+		{
+			Destroy(pullSpring2.gameObject);
+			pullSpring2 = null;
+		}
+
+		WeightJoints();
+	}
+
 	public Vector3 NearestPoint(Vector3 checkPoint)
 	{
 		BondLink nearestLink;
@@ -754,6 +791,7 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
 		if (fullOverwrite || replacement.endsWidth >= 0)				{	this.endsWidth = replacement.endsWidth;								}
