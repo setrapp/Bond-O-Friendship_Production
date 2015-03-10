@@ -65,14 +65,12 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		// Attempt to spawn more fluff.
-		
 		if (fluffs.Count < naturalFluffCount && fluffs.Count < maxFluffs)
 		{
 			if (spawnTime >= 0)
 			{
 				if (sinceSpawn >= spawnTime)
 				{
-					Debug.Log(fluffs.Count);
 					SpawnFluff();
 					sinceSpawn = 0;
 					character.fillScale = 1;
@@ -106,13 +104,15 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				
-				fluffMaterial = fluffsToAdd[i].bulb.material;
+				if (fluffsToAdd != null)
+				{
+					fluffMaterial = fluffsToAdd[i].bulb.material;
 
-				SpawnFluff(true, fluffMaterial);
+					SpawnFluff(true, fluffMaterial);
 
-				Destroy(fluffsToAdd[i].gameObject);
-				fluffsToAdd.RemoveAt(i);
+					Destroy(fluffsToAdd[i].gameObject);
+					fluffsToAdd.RemoveAt(i);
+				}
 			}
 
 			fluffsToAdd.Clear();

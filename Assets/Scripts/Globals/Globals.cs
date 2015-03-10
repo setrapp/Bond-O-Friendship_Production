@@ -34,6 +34,7 @@ public class Globals : MonoBehaviour {
 	public bool fluffsThrowable = true;
 	public float fluffLeaveDistance = 1.0f;
 	public float fluffLeaveAttractWait = 3.0f;
+	public float fluffLeaveEmbed = 1.0f;
 
     public static InputDevice startingDevice;
     public static InputDevice playerOneDevice;

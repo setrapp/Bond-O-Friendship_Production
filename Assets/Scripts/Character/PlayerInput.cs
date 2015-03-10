@@ -313,7 +313,7 @@ public class PlayerInput : MonoBehaviour {
 		}
 		
 		
-		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, col.collider.gameObject.layer))
+		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, col.collider.gameObject.layer) && col.contacts.Length > 0)
 		{
 			Fluff leavee = null;
 			float bestDot = 0;
@@ -343,7 +343,14 @@ public class PlayerInput : MonoBehaviour {
 				if (!tooClose)
 				{
 					character.fluffHandler.fluffs.Remove(leavee);
-					leavee.transform.parent = transform.parent;
+					if (OrphanFluffHolder.Instance != null)
+					{
+						leavee.transform.parent = OrphanFluffHolder.Instance.transform;
+					}
+					else
+					{
+						leavee.transform.parent = transform.parent;
+					}
 					leavee.Pass((col.contacts[0].point - transform.position), gameObject, Globals.Instance.fluffLeaveAttractWait);
 				}
 			}

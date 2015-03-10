@@ -16,7 +16,7 @@ public class Fluff : MonoBehaviour {
 	public Vector3 oldBulbPos;
 	public MeshRenderer bulb;
 	public MeshRenderer stalk;
-    public GameObject depthMask;
+	public GameObject geometry;
 	[HideInInspector]
 	public CapsuleCollider hull;
 	[HideInInspector]
@@ -80,7 +80,7 @@ public class Fluff : MonoBehaviour {
 			pullDistance = 0;
 		}
 
-		if (!attractable && nonAttractTime <=0)
+		if (!neverAttractable && !attractable && nonAttractTime <= 0)
 		{
 			attractable = true;
 			nonAttractTime = 0;
@@ -145,6 +145,27 @@ public class Fluff : MonoBehaviour {
 			}
 
 			transform.Rotate(0.0f, 0.0f, rotationSpeed * Time.deltaTime);
+		}
+		else
+		{
+			// Sprouting.
+			if (!Globals.Instance.fluffsThrowable && Vector3.Dot(geometry.transform.localPosition, Vector3.up) < 0)
+			{
+				geometry.transform.localPosition += Vector3.up * Globals.Instance.fluffLeaveEmbed / Globals.Instance.fluffLeaveAttractWait * Time.deltaTime;
+				if (Vector3.Dot(geometry.transform.localPosition, Vector3.up) >= 0)
+				{
+					geometry.transform.localPosition = Vector3.zero;
+					FluffStick attacheeStick = null;
+					if (attachee != null && attachee.gameObject != null)
+					{
+						attacheeStick = attachee.gameObject.GetComponent<FluffStick>();
+					}
+					if (attacheeStick == null || attacheeStick.allowSway)
+					{
+						ToggleSwayAnimation(true);
+					}
+				}
+			}
 		}
 	}
 
@@ -221,6 +242,11 @@ public class Fluff : MonoBehaviour {
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
+		if (Globals.Instance == null)
+		{
+			return;
+		}
+
 		// If no potential attachee is given, disregard.
 		if (attacheeObject == null)
 		{
@@ -234,27 +260,37 @@ public class Fluff : MonoBehaviour {
 		}
 
 		FluffStick attacheeStick = attacheeObject.GetComponent<FluffStick>();
-		
+
 		// Position and orient.
 		transform.position = position;
 		transform.up = standDirection;
 
-		// If desired, start swaying. 
-		if (attacheeStick == null || attacheeStick.allowSway)
-		{
-			ToggleSwayAnimation(sway);
-		}
-
 		// Actaully attach to target and record relationship to attachee.
-		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
+		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(position - attacheeObject.transform.position);
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
 		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		ignoreCollider = attacheeObject;
-		nonAttractTime = 0;
-		attractable = true;
+		if (Globals.Instance.fluffsThrowable)
+		{
+			nonAttractTime = 0;
+			attractable = true;
+		}
 
 		// Notify the potential attachee that fluff has been attached.
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
+
+		// If fluffs are not throwable and the attachee is not controlling, embed the fluff to sprout out.
+		bool sprouting = false;
+		if (!Globals.Instance.fluffsThrowable && attachee != null && !attachee.controlling)
+		{
+			geometry.transform.position -= standDirection.normalized * Globals.Instance.fluffLeaveEmbed;
+			sprouting = true;
+		}
+		// If desired, start swaying. 
+		if ((attacheeStick == null || attacheeStick.allowSway) && !sprouting)
+		{
+			ToggleSwayAnimation(sway);
+		}
 
 		// Stop moving.
 		mover.Stop();
