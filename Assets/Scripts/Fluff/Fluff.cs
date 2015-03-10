@@ -80,7 +80,7 @@ public class Fluff : MonoBehaviour {
 			pullDistance = 0;
 		}
 
-		if (!neverAttractable && !attractable && nonAttractTime <= 0)
+		if (!attractable && nonAttractTime <= 0)
 		{
 			attractable = true;
 			nonAttractTime = 0;
