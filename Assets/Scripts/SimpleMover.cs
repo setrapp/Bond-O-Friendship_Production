@@ -9,6 +9,7 @@ public class SimpleMover : MonoBehaviour {
 	public float acceleration;
 	public float handling;
 	public float handlingAcceleration = 0;
+	public float minHandlingFactor = 1.0f;
 	private float currentHandling;
 	public float cutSpeedThreshold = 0.1f;
 	public float externalSpeedMultiplier = 1;
@@ -200,13 +201,23 @@ public class SimpleMover : MonoBehaviour {
 
 		currentHandling += handlingAcceleration * Time.deltaTime * handlingDirectionFactor;
 
-			if (currentHandling > handling)
-			{
-				currentHandling = handling;
-			}
-			else if (currentHandling < -handling)
-			{
-				currentHandling = -handling;
-			}
+		float speedBasedHandling = handling;
+		if (minHandlingFactor > 1)
+		{
+			minHandlingFactor = 1;
+		}
+		else if (minHandlingFactor < 1)
+		{
+			speedBasedHandling = Mathf.Min((minHandlingFactor * handling) + ((velocity.magnitude / maxSpeed) * ((1 - minHandlingFactor) * handling)), handling);
+		}
+
+		if (currentHandling > speedBasedHandling)
+		{
+			currentHandling = speedBasedHandling;
+		}
+		else if (currentHandling < -speedBasedHandling)
+		{
+			currentHandling = -speedBasedHandling;
+		}
 	}
 }

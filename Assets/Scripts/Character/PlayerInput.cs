@@ -107,8 +107,14 @@ public class PlayerInput : MonoBehaviour {
 			{
 				character.mover.slowDown = true;
 			}
+
 			// Turn towards velocity change.
-			transform.LookAt(transform.position + character.mover.velocity + (velocityChange * Time.deltaTime), transform.up);
+			Vector3 moveDir = character.mover.velocity;
+			if (moveDir.sqrMagnitude <= 0)
+			{
+				moveDir = transform.forward + (velocityChange.normalized * Time.deltaTime);
+			}
+			transform.LookAt(transform.position + moveDir, transform.up);
 		}
 		else
 		{
@@ -117,14 +123,10 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-   
-	
 	private Vector3 PlayerJoystickMovement()
 	{
 
 		Vector2 stickInput = Vector2.zero;
-
-		//Debug.Log(device.LeftStick.Vector.ToString());
 
 		if (Globals.usingController)
 		{
