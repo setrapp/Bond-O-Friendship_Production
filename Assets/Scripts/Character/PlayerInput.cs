@@ -88,19 +88,19 @@ public class PlayerInput : MonoBehaviour {
 				}
 				Globals.isPaused = !Globals.isPaused;
 			}
-		}  
+		}
 
 		if (!Globals.isPaused)
 		{
 			AttemptFluffThrow();
 			AttemptFluffAttract();
 			velocityChange =  PlayerJoystickMovement();
-
+			velocityChange = character.mover.ClampMovementChange(velocityChange, true, true);
 
 			// Movement
 			if (velocityChange.sqrMagnitude > 0)
 			{
-				character.mover.Accelerate(velocityChange, true, true);
+				character.mover.Accelerate(velocityChange, false);
 				character.mover.slowDown = false;
 			}
 			else
@@ -108,7 +108,7 @@ public class PlayerInput : MonoBehaviour {
 				character.mover.slowDown = true;
 			}
 			// Turn towards velocity change.
-			transform.LookAt(transform.position + velocityChange, transform.up);
+			transform.LookAt(transform.position + character.mover.velocity + (velocityChange * Time.deltaTime), transform.up);
 		}
 		else
 		{

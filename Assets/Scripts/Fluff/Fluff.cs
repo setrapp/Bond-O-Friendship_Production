@@ -236,7 +236,7 @@ public class Fluff : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, false, true);
+			mover.Accelerate(pullForce, true, false, true);
 		}
 	}
 
