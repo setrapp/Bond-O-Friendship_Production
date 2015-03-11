@@ -16,14 +16,24 @@ public class Threader : MonoBehaviour {
 	public List<GameObject> bondLinks = new List<GameObject>();
 	//public List<Bond> bonds = new List<Bond>();
 	public Bond threadedbond = null;
+
+	public GameObject smallripplePrefab;
+	private GameObject smallrippleObj;
+
+	public bool rippleShot;
+
 		// Use this for initialization
 	void Start () {
+
+		rippleShot = false;
 		activated = false;
 		r = 0.5f;
 		g = 0.5f;
 		b = 0.5f;
 		a = 1.0f;
 		bondCount = 0; 
+
+
 
 	}
 	
@@ -113,6 +123,21 @@ public class Threader : MonoBehaviour {
 		}
 	}
 
+	void MiniFire()
+	{
+		if(rippleShot == false)
+		{
+			smallrippleObj = Instantiate(smallripplePrefab,transform.position,Quaternion.identity) as GameObject;
+			smallrippleObj.GetComponent<RingPulse>().scaleRate = 8.0f;
+			smallrippleObj.GetComponent<RingPulse>().lifeTime = 1.5f;
+			smallrippleObj.GetComponent<RingPulse>().alpha = 1.0f;
+			smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
+			smallrippleObj.GetComponent<RingPulse>().mycolor = Color.white;
+			//smallrippleObj.GetComponent<RingPulse>().smallRing = true;
+			rippleShot = true;
+		}
+		//print ("fire!");
+	}
 
 
 }

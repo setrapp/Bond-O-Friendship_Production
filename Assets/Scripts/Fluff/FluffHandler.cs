@@ -104,13 +104,15 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				
-				fluffMaterial = fluffsToAdd[i].bulb.material;
+				if (fluffsToAdd != null)
+				{
+					fluffMaterial = fluffsToAdd[i].bulb.material;
 
-				SpawnFluff(true, fluffMaterial);
+					SpawnFluff(true, fluffMaterial);
 
-				Destroy(fluffsToAdd[i].gameObject);
-				fluffsToAdd.RemoveAt(i);
+					Destroy(fluffsToAdd[i].gameObject);
+					fluffsToAdd.RemoveAt(i);
+				}
 			}
 
 			fluffsToAdd.Clear();
@@ -224,7 +226,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			Vector3 fluffRotation = FindOpenFluffAngle();
 
-			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
+			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, fluffContainer.transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;

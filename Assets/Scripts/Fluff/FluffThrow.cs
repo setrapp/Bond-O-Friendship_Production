@@ -23,6 +23,11 @@ public class FluffThrow : MonoBehaviour {
 
 	public void Throw(Vector3 passDirection, Vector3 velocityBoost)
 	{
+		if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		{
+			return;
+		}
+
 		if (Time.deltaTime <= 0)
 		{
 			return;
@@ -91,12 +96,19 @@ public class FluffThrow : MonoBehaviour {
 			Vector3 rotatedPassDir = Quaternion.Euler(0, 0, shotAngle) * passDirection;
 
 			Fluff fluff = passFluffs[i].GetComponent<Fluff>();
-            fluff.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
-            fluff.transform.parent = transform.parent;
+			fluff.transform.rotation = Quaternion.LookRotation(rotatedPassDir, Vector3.Cross(rotatedPassDir, -Vector3.forward));
+			if (OrphanFluffHolder.Instance != null)
+			{
+				fluff.transform.parent = OrphanFluffHolder.Instance.transform;
+			}
+			else
+			{
+				fluff.transform.parent = transform.parent;
+			}
 			shotAngle += shotSpread / passFluffCount;
-            fluff.transform.position = transform.position;
+			fluff.transform.position = transform.position;
 
-            fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject, preventFluffAttractTime);
+			fluff.Pass((rotatedPassDir * passForce * Random.Range(minShotFactor, 1.0f)) + (velocityBoost / Time.deltaTime) * movingBonusFactor, gameObject, preventFluffAttractTime);
 		}
 		
 		// If floating propel away from fluff.

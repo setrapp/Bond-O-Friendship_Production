@@ -72,7 +72,7 @@ public class BondAttachable : MonoBehaviour {
 					}
 					if (bondOverrideStats != null && bondOverrideStats.stats != null)
 					{
-						newBond.stats = bondOverrideStats.stats;
+						newBond.stats.Overwrite(bondOverrideStats.stats);
 					}
 
 					newBond.AttachPartners(this, bondPoint, bondPartner, bondPartner.transform.position);

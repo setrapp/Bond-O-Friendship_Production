@@ -99,6 +99,7 @@ public class IslandContainer : MonoBehaviour {
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
+		//TODO uncomment.
 		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 		if (island != null)
 		{

@@ -78,8 +78,14 @@ public class MembraneWall : MonoBehaviour {
 			CreateWall();
 		}
 
-		startPost.SetActive(showPosts);
-		endPost.SetActive(showPosts);
+		if (startPost != null)
+		{
+			startPost.SetActive(showPosts);
+		}
+		if (endPost != null)
+		{
+			endPost.SetActive(showPosts);
+		}
 	}
 
 	void Update()
@@ -89,8 +95,14 @@ public class MembraneWall : MonoBehaviour {
 		{
 			if (showPosts)
 			{
-				createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
-				createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+				if (startPost != null)
+				{
+					createdMembrane.attachment1.attachee.transform.position = startPost.transform.position;
+				}
+				if (endPost != null)
+				{
+					createdMembrane.attachment2.attachee.transform.position = endPost.transform.position;
+				}
 			}
 
 			currentLength = createdMembrane.BondLength;
@@ -192,9 +204,15 @@ public class MembraneWall : MonoBehaviour {
 
 		// Place endpoints.
 		membraneCreator.attachable1.transform.position = startPos;
-		startPost.transform.position = startPos;
+		if (startPost != null)
+		{
+			startPost.transform.position = startPos;
+		}
 		membraneCreator.attachable2.transform.position = endPos;
-		endPost.transform.position = endPos;
+		if (endPost != null)
+		{
+			endPost.transform.position = endPos;
+		}
 
 		// Break the membrane track into eigen vectors.
 		Vector3 parallel = membraneTrack;
