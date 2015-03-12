@@ -8,7 +8,7 @@ public class NodeParent : MonoBehaviour {
 	public static int activeParents;
 	public Color childZeroColor;
 	public FadeToBeContinued fadeTarget = null;
-	private bool active;
+	private bool activated;
 	
 	private void SendFade()
 	{
@@ -23,10 +23,10 @@ public class NodeParent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(activeChildren == transform.childCount && active == false)
+		if(activeChildren == transform.childCount && activated == false)
 		{
 			activeParents++;
-			active = true;
+			activated = true;
 			if(activeParents == transform.parent.childCount)
 				SendFade();
 		}
