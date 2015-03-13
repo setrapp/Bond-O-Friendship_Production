@@ -38,19 +38,32 @@ public class SpinPad : WaitPad
 		pushStartDistance = transform.position.y - player1Pushee.transform.position.y;
 		player1PusheeAnchor = new GameObject();
 		player1PusheeAnchor.transform.parent = transform;
-		player1PusheeAnchor.transform.position = transform.position + ((player1Pushee.transform.position - transform.position) + (transform.up * pushStartDistance));
+		player1PusheeAnchor.transform.position = transform.position + ((player1Pushee.transform.position - transform.position) - (transform.right * pushStartDistance));
 		player1PusheeAnchor.name = "Player 1 Pushee Anchor";
 		
 		player2PusheeAnchor = new GameObject();
 		player2PusheeAnchor.transform.parent = transform;
-		player2PusheeAnchor.transform.position = transform.position + ((player2Pushee.transform.position - transform.position) - (transform.up * pushStartDistance));
+		player2PusheeAnchor.transform.position = transform.position + ((player2Pushee.transform.position - transform.position) + (transform.right * pushStartDistance));
 		player2PusheeAnchor.name = "Player 2 Pushee Anchor";
 		
-		player1Pushee.transform.position = player1PusheeAnchor.transform.position - (transform.up * pushStartDistance);
-		player2Pushee.transform.position = player2PusheeAnchor.transform.position + (transform.up * pushStartDistance);
+		player1Pushee.transform.position = player1PusheeAnchor.transform.position + (transform.right * pushStartDistance);
+		player2Pushee.transform.position = player2PusheeAnchor.transform.position - (transform.right * pushStartDistance);
 
 		startRotation = transform.rotation.eulerAngles.z;
 		oldRotation = startRotation;
+
+		if (!autoSpin)
+		{
+			player1Pushee.SetActive(true);
+			player2Pushee.SetActive(true);
+			Destroy(player1Pad.GetComponent<Rigidbody>());
+			Destroy(player2Pad.GetComponent<Rigidbody>());
+		}
+		else
+		{
+			player1Pushee.SetActive(false);
+			player2Pushee.SetActive(false);
+		}
 	}
 
 	protected override void Update()
@@ -62,7 +75,7 @@ public class SpinPad : WaitPad
 		{
 			if (autoSpin)
 			{
-				//transform.Rotate(new Vector3(0, 0, spinSpeed * Time.deltaTime));
+				transform.Rotate(new Vector3(0, 0, spinSpeed * Time.deltaTime));
 				currentRotation += spinSpeed * Time.deltaTime;
 			}
 			else
@@ -81,7 +94,10 @@ public class SpinPad : WaitPad
 
 			if (currentRotation >= goalRotation)
 			{
-				body.angularVelocity = Vector3.zero;
+				if (!body.isKinematic)
+				{
+					body.angularVelocity = Vector3.zero;
+				}
 				transform.rotation = Quaternion.Euler(0, 0, startRotation + goalRotation);
 				body.isKinematic = true;
 				currentRotation = goalRotation;
@@ -96,8 +112,8 @@ public class SpinPad : WaitPad
 			if (!autoSpin)
 			{
 				float pusheeDist = ((pushStartDistance * (1 - portionComplete)) + (pushEndDistance * portionComplete));
-				player1Pushee.transform.position = player1PusheeAnchor.transform.position - (transform.up * pusheeDist);
-				player2Pushee.transform.position = player2PusheeAnchor.transform.position + (transform.up * pusheeDist);
+				player1Pushee.transform.position = player1PusheeAnchor.transform.position + (transform.right * pusheeDist);
+				player2Pushee.transform.position = player2PusheeAnchor.transform.position - (transform.right * pusheeDist);
 			}
 		}
 		else
@@ -121,7 +137,7 @@ public class SpinPad : WaitPad
 			GameObject rippleObj = Instantiate(ripplePrefab, transform.position, Quaternion.identity) as GameObject;
 			RingPulse ripple = rippleObj.GetComponent<RingPulse>();
 			ripple.transform.localScale = new Vector3(10, 10, 10);
-			ripple.scaleRate = 8.0f;
+			ripple.scaleRate = 9.5f;
 			ripple.lifeTime = 0.5f;
 			ripple.alpha = 1.0f;
 			ripple.alphaFade = 2.1f;
