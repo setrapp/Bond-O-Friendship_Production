@@ -2,34 +2,32 @@
 using System.Collections;
 
 public class SpinPadPushee : MonoBehaviour {
-	public bool pushing = false;
 	public SpinPadSide targetSidePad;
+	public SpinPad targetSpinPad;
 
 	void OnTriggerEnter(Collider col)
 	{
-		GameObject targetObject = Globals.Instance.player1.gameObject;
-		if (targetSidePad.targetPlayer == PlayerInput.Player.Player2)
+		Debug.Log(col.gameObject.name);
+		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
 		{
-			targetObject = Globals.Instance.player2.gameObject;
+			targetSpinPad.player1Pushing = true;
 		}
-
-		if (col.gameObject == targetObject)
+		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
 		{
-			targetSidePad.activating = true;
+			targetSpinPad.player2Pushing = true;
 		}
 	}
 
 	void OnTriggerExit(Collider col)
 	{
-		GameObject targetObject = Globals.Instance.player1.gameObject;
-		if (targetSidePad.targetPlayer == PlayerInput.Player.Player2)
+		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
 		{
-			targetObject = Globals.Instance.player2.gameObject;
+			Debug.Log("bye");
+			targetSpinPad.player1Pushing = false;
 		}
-
-		if (col.gameObject == targetObject)
+		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
 		{
-			targetSidePad.activating = false;
+			targetSpinPad.player2Pushing = false;
 		}
 	}
 }
