@@ -1,4 +1,4 @@
-﻿Shader "Shader Tutorials/ 2a - Lambert" {
+﻿Shader "Shader Tutorials/ 2b - Ambient" {
 	Properties {
 		_Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
 	}
@@ -35,9 +35,10 @@
 
 				lightDirection = normalize(_WorldSpaceLightPos0.xyz);
 
-				float3 diffuseReflection = atten * _LightColor0.xyz * _Color.rgb * max(0.0, dot(normalDirection, lightDirection)) ;
+				float3 diffuseReflection = atten * _LightColor0.xyz *_Color.rgb * max(0.0, dot(normalDirection, lightDirection)) ;
+				float3 lightFinal = diffuseReflection + UNITY_LIGHTMODEL_AMBIENT.xyz;
 
-				vo.col = float4(diffuseReflection, 1.0);
+				vo.col = float4(lightFinal, 1.0);
 				vo.pos = mul(UNITY_MATRIX_MVP, vi.vertex);
 				return vo;
 			}

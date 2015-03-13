@@ -1,4 +1,4 @@
-﻿Shader "Shader Tutorials/ 2a - Lambert" {
+﻿Shader "Shader Tutorials/ 2 - Lambert" {
 	Properties {
 		_Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
 	}
