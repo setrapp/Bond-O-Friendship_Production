@@ -108,8 +108,8 @@ public class SpinPad : WaitPad
 		{
 			centerPushee.SetActive(false);
 		}
-		player1Pushee.gameObject.SetActive(false);
-		player2Pushee.gameObject.SetActive(false);
+		//player1Pushee.gameObject.SetActive(false);
+		//player2Pushee.gameObject.SetActive(false);
 
 
 	}
@@ -182,6 +182,7 @@ public class SpinPad : WaitPad
 				}
 				else
 				{
+					// Fade out player starting pushees.
 					float disappearComplete = portionComplete / pusheeDisappearInterval;
 
 					Color pusheeColor1 = player1Pushee.material.color;
@@ -215,6 +216,7 @@ public class SpinPad : WaitPad
 			}
 		}
 
+		// Only enable player starter pushees when the side pads are in use.
 		if (currentRotation / goalRotation < pusheeDisappearInterval)
 		{
 			if ((player1Pad.activating || player1Pad.activated))
@@ -224,7 +226,7 @@ public class SpinPad : WaitPad
 					player1Pushee.gameObject.SetActive(true);
 				}
 			}
-			else if (player1Pushee.gameObject.activeSelf)
+			else if (player1Pushee.gameObject.activeSelf && player1Pad.timeActivating <= 0)
 			{
 				player1Pushee.gameObject.SetActive(false);
 			}
@@ -236,7 +238,7 @@ public class SpinPad : WaitPad
 					player2Pushee.gameObject.SetActive(true);
 				}
 			}
-			else if (player2Pushee.gameObject.activeSelf)
+			else if (player2Pushee.gameObject.activeSelf && player2Pad.timeActivating <= 0)
 			{
 				player2Pushee.gameObject.SetActive(false);
 			}
