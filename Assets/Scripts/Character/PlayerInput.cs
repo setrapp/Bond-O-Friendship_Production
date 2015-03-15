@@ -353,7 +353,7 @@ public class PlayerInput : MonoBehaviour {
 					{
 						leavee.transform.parent = transform.parent;
 					}
-					leavee.Pass((col.contacts[0].point - transform.position), gameObject, Globals.Instance.fluffLeaveAttractWait);
+					leavee.Pass((col.contacts[0].point - transform.position) * character.fluffThrow.passForce, gameObject, Globals.Instance.fluffLeaveAttractWait);
 				}
 			}
 		}
