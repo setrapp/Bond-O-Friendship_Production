@@ -33,7 +33,7 @@ public class SpinPad : WaitPad
 	public bool spiralPushees = true;
 	private float pushStartDistance = 0;
 	public float pushEndDistance = 0.0f;
-	private float oldRotation = 0;
+	public float oldRotation = 0;
 	public Rigidbody body;
 	private Vector3 startRotation;
 
@@ -108,9 +108,6 @@ public class SpinPad : WaitPad
 		{
 			centerPushee.SetActive(false);
 		}
-		//player1Pushee.gameObject.SetActive(false);
-		//player2Pushee.gameObject.SetActive(false);
-
 
 	}
 
@@ -131,7 +128,7 @@ public class SpinPad : WaitPad
 			else
 			{
 				// Track rotation caused by torque, if not an auto spin pad.
-				float rotation = transform.rotation.eulerAngles.z;
+				float newRotation = transform.rotation.eulerAngles.z;
 				if (player1Pushing && player2Pushing)
 				{
 					if (body.isKinematic)
@@ -139,8 +136,12 @@ public class SpinPad : WaitPad
 						body.isKinematic = false;
 					}
 						
-					float rotChange = body.angularVelocity.z;
-					currentRotation += rotChange * rotatingDirection;
+					float rotChange = newRotation - oldRotation;
+					if (rotChange < 0)
+					{
+						rotChange = (360 - oldRotation) + newRotation;
+					}
+					currentRotation += rotChange;
 				}
 				else
 				{
@@ -150,8 +151,8 @@ public class SpinPad : WaitPad
 					}
 				}
 
-				transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, rotation);
-				oldRotation = rotation;
+				//transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, newRotation);
+				oldRotation = newRotation;
 			}
 
 			// Snap to finish and produce success feedback when goal rotation is reached.
@@ -161,7 +162,7 @@ public class SpinPad : WaitPad
 				{
 					body.angularVelocity = Vector3.zero;
 				}
-				transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, startRotation.z + goalRotation);
+				//transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, startRotation.z + goalRotation);
 				body.isKinematic = true;
 				currentRotation = goalRotation;
 				FireRipple();

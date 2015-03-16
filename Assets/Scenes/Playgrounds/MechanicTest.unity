@@ -444,11 +444,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 430882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 430882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -4.37113883e-08
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 430882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: m_RootOrder
@@ -468,7 +468,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11430894, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: flipDirection
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11430894, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
+      propertyPath: goalRotation
+      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
@@ -3186,7 +3190,7 @@ Transform:
   m_PrefabParentObject: {fileID: 430882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
   m_PrefabInternal: {fileID: 187664080}
   m_GameObject: {fileID: 1672674990}
-  m_LocalRotation: {x: 0, y: 0, z: -1, w: -4.37113883e-08}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 80.5999985, y: -30.1499996, z: -1}
   m_LocalScale: {x: 10, y: 10, z: 2}
   m_Children:
@@ -3216,7 +3220,7 @@ MonoBehaviour:
   pTonPad: 0
   activated: 0
   autoSpin: 0
-  flipDirection: 1
+  flipDirection: 0
   player1Pad: {fileID: 1013162452}
   player2Pad: {fileID: 1521757398}
   finishRing: {fileID: 1213230975}
@@ -3237,6 +3241,7 @@ MonoBehaviour:
   torqueDecay: 1
   spiralPushees: 0
   pushEndDistance: .129999995
+  oldRotation: 0
   body: {fileID: 1672674993}
 --- !u!54 &1672674993
 Rigidbody:
