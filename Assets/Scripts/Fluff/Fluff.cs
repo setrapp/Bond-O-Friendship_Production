@@ -241,7 +241,7 @@ public class Fluff : MonoBehaviour {
 			pullForce = newPullForce;
 			pullDistance = newPullDistance;
 
-			// TODO no drawing when pulling off wall
+			// Draw line from attractor to fluff.
 			if (lineToAttractor != null)
 			{
 				lineToAttractor.SetVertexCount(2);

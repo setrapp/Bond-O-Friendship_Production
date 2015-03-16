@@ -3,39 +3,34 @@ using System.Collections;
 
 public class SpinPad : WaitPad
 {
-	public bool autoSpin = true;
 	public bool flipDirection = false;
-	private float rotatingDirection = 1;
+	public Rigidbody body;
 	public SpinPadSide player1Pad;
 	public SpinPadSide player2Pad;
 	public GameObject finishRing;
 	public GameObject ripplePrefab;
-	private float spinSpeed = 0;
-	public float maxSpinSpeed = 60.0f;
-	public float spinAcceleration = 1.0f;
+	private float rotatingDirection = 1;
 	public float goalRotation = 360.0f;
 	public float currentRotation = 0;
 	public float ringMinSize = 0.01f;
 	public float rinMaxSize = 1.15f;
 	private bool rippleFired = false;
-	private Vector3 torque;
+	[HideInInspector]
 	public bool player1Pushing = false;
+	[HideInInspector]
 	public bool player2Pushing = false;
 	public GameObject centerPushee;
 	public Renderer player1Pushee;
 	public Renderer player2Pushee;
 	public float pusheeDisappearInterval = 0.1f;
 	private float pusheeStartAlpha = 1;
-	private GameObject player1PusheeAnchor;
-	private GameObject player2PusheeAnchor;
-	public float maxTorque;
-	public float torqueDecay;
-	public bool spiralPushees = true;
-	private float pushStartDistance = 0;
-	public float pushEndDistance = 0.0f;
-	private float oldRotation = 0;
-	public Rigidbody body;
 	private Vector3 startRotation;
+	public float oldRotation = 0;
+	public float resetDelay = 0.0f;
+	public float resetAcceleration = 10.0f;
+	public float resetMaxSpeed = 100.0f;
+	public float resetSpeed = 0f;
+	public bool resetting = false;
 
 	protected override void Start()
 	{
@@ -65,53 +60,22 @@ public class SpinPad : WaitPad
 			centralPushees[i].gameObject.SetActive(false);
 		}
 
-		// Setup anchor for player 1's pushee to move towards or away from (non-auto, spiraling pads).
-		pushStartDistance = transform.position.y - player1Pushee.transform.position.y;
-		player1PusheeAnchor = new GameObject();
-		player1PusheeAnchor.transform.parent = transform;
-		player1PusheeAnchor.transform.position = transform.position + ((player1Pushee.transform.position - transform.position) - (transform.right * pushStartDistance * rotatingDirection));
-		player1PusheeAnchor.name = "Player 1 Pushee Anchor";
-
-		// Setup anchor for player 2's pushee to move towards or away from (non-auto, spiraling pads).
-		player2PusheeAnchor = new GameObject();
-		player2PusheeAnchor.transform.parent = transform;
-		player2PusheeAnchor.transform.position = transform.position + ((player2Pushee.transform.position - transform.position) + (transform.right * pushStartDistance * rotatingDirection));
-		player2PusheeAnchor.name = "Player 2 Pushee Anchor";
-
-		// Place pushable handles into place (non-auto pads).
-		player1Pushee.transform.position = player1PusheeAnchor.transform.position + (transform.right * pushStartDistance * rotatingDirection);
-		player2Pushee.transform.position = player2PusheeAnchor.transform.position - (transform.right * pushStartDistance * rotatingDirection);
-
 		// Store initial rotation.
 		startRotation = transform.rotation.eulerAngles;
 		oldRotation = startRotation.z;
 
-		// Alter components based on whether the pad is auto spin or not.
-		if (!autoSpin)
+		// Set color tints for player starter pushees.
+		CopyPlayerColor copier1 = player1Pushee.GetComponent<CopyPlayerColor>();
+		if (copier1 != null)
 		{
-			centerPushee.SetActive(true);
-			CopyPlayerColor copier1 = player1Pushee.GetComponent<CopyPlayerColor>();
-			if (copier1 != null)
-			{
-				copier1.tint = player1Pad.startTint;
-			}
-			CopyPlayerColor copier2 = player2Pushee.GetComponent<CopyPlayerColor>();
-			if (copier2 != null)
-			{
-				copier2.tint = player2Pad.startTint;
-			}
-			pusheeStartAlpha = player1Pushee.material.color.a;
-			Destroy(player1Pad.GetComponent<Rigidbody>());
-			Destroy(player2Pad.GetComponent<Rigidbody>());
+			copier1.tint = player1Pad.startTint;
 		}
-		else
+		CopyPlayerColor copier2 = player2Pushee.GetComponent<CopyPlayerColor>();
+		if (copier2 != null)
 		{
-			centerPushee.SetActive(false);
+			copier2.tint = player2Pad.startTint;
 		}
-		//player1Pushee.gameObject.SetActive(false);
-		//player2Pushee.gameObject.SetActive(false);
-
-
+		pusheeStartAlpha = player1Pushee.material.color.a;
 	}
 
 	protected override void Update()
@@ -121,38 +85,34 @@ public class SpinPad : WaitPad
 
 		if (pOonPad && pTonPad && !activated)
 		{
-			if (autoSpin)
+			resetSpeed = 0;
+
+			// Track the new rotation and set to kinematic if not being pushed.
+			float newRotation = transform.rotation.eulerAngles.z;
+			if (player1Pushing && player2Pushing)
 			{
-				// Auto spinning with acceleration.
-				spinSpeed = Mathf.Min(spinSpeed + spinAcceleration * Time.deltaTime, maxSpinSpeed);
-				transform.Rotate(new Vector3(0, 0, spinSpeed * Time.deltaTime));
-				currentRotation += spinSpeed * Time.deltaTime;
+				if (body.isKinematic)
+				{
+					body.isKinematic = false;
+				}
+				
+				float rotChange = newRotation - oldRotation;
+				if (rotChange < -180)
+				{
+					rotChange = (360 - oldRotation) + newRotation;
+				}
+				currentRotation += rotChange;
 			}
 			else
 			{
-				// Track rotation caused by torque, if not an auto spin pad.
-				float rotation = transform.rotation.eulerAngles.z;
-				if (player1Pushing && player2Pushing)
+				if (!body.isKinematic)
 				{
-					if (body.isKinematic)
-					{
-						body.isKinematic = false;
-					}
-						
-					float rotChange = body.angularVelocity.z;
-					currentRotation += rotChange * rotatingDirection;
+					body.isKinematic = true;
 				}
-				else
-				{
-					if (!body.isKinematic)
-					{
-						body.isKinematic = true;
-					}
-				}
-
-				transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, rotation);
-				oldRotation = rotation;
 			}
+
+			// Save the current rotation for comparison next frame.
+			oldRotation = newRotation;
 
 			// Snap to finish and produce success feedback when goal rotation is reached.
 			if (currentRotation >= goalRotation)
@@ -167,52 +127,48 @@ public class SpinPad : WaitPad
 				FireRipple();
 				activated = true;
 			}
-
-			// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
-			float portionComplete = currentRotation / goalRotation;
-			float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
-			finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
-			if (!autoSpin)
-			{
-				if (spiralPushees)
-				{
-					float pusheeDist = ((pushStartDistance * (1 - portionComplete)) + (pushEndDistance * portionComplete));
-					player1Pushee.transform.position = player1PusheeAnchor.transform.position + (transform.right * pusheeDist * rotatingDirection);
-					player2Pushee.transform.position = player2PusheeAnchor.transform.position - (transform.right * pusheeDist * rotatingDirection);
-				}
-				else
-				{
-					// Fade out player starting pushees.
-					float disappearComplete = portionComplete / pusheeDisappearInterval;
-
-					Color pusheeColor1 = player1Pushee.material.color;
-					pusheeColor1.a = pusheeStartAlpha * (1 - disappearComplete);
-					player1Pushee.material.color = pusheeColor1;
-
-					Color pusheeColor2 = player2Pushee.material.color;
-					pusheeColor2.a = pusheeStartAlpha * (1 - disappearComplete);
-					player2Pushee.material.color = pusheeColor2;
-
-					if (disappearComplete >= 1)
-					{
-						player1Pushee.gameObject.SetActive(false);
-						player2Pushee.gameObject.SetActive(false);
-
-						SpinPadPushee[] centralPushees = centerPushee.GetComponentsInChildren<SpinPadPushee>();
-						for (int i = 0; i < centralPushees.Length; i++)
-						{
-							centralPushees[i].gameObject.SetActive(false);
-						}
-					}
-				}
-			}
 		}
 		else
 		{
-			spinSpeed = 0;
 			if (!body.isKinematic)
 			{
 				body.isKinematic = true;
+			}
+
+			// Return to starting orientation when not in use and incomplete.
+			if (!activated && !resetting && currentRotation > 0)
+			{
+				resetting = true;
+				resetSpeed = 0;
+				StartCoroutine(ResetToStart());
+			}
+		}
+
+		// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
+		float portionComplete = currentRotation / goalRotation;
+		float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
+		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
+		
+		// Fade out player starting pushees.
+		float disappearComplete = portionComplete / pusheeDisappearInterval;
+
+		Color pusheeColor1 = player1Pushee.material.color;
+		pusheeColor1.a = pusheeStartAlpha * (1 - disappearComplete);
+		player1Pushee.material.color = pusheeColor1;
+
+		Color pusheeColor2 = player2Pushee.material.color;
+		pusheeColor2.a = pusheeStartAlpha * (1 - disappearComplete);
+		player2Pushee.material.color = pusheeColor2;
+
+		if (disappearComplete >= 1)
+		{
+			player1Pushee.gameObject.SetActive(false);
+			player2Pushee.gameObject.SetActive(false);
+
+			SpinPadPushee[] centralPushees = centerPushee.GetComponentsInChildren<SpinPadPushee>();
+			for (int i = 0; i < centralPushees.Length; i++)
+			{
+				centralPushees[i].gameObject.SetActive(false);
 			}
 		}
 
@@ -243,13 +199,6 @@ public class SpinPad : WaitPad
 				player2Pushee.gameObject.SetActive(false);
 			}
 		}
-		
-
-		torque.z -= torqueDecay * Time.deltaTime;
-		if (torque.z < 0)
-		{
-			torque.z = 0;
-		}
 	}
 
 	private void FireRipple()
@@ -268,6 +217,34 @@ public class SpinPad : WaitPad
 
 			rippleFired = true;
 		}
+	}
+
+	private IEnumerator ResetToStart()
+	{
+		resetting = true;
+		yield return new WaitForSeconds(resetDelay);
+
+		while (currentRotation > 0 && (!pOonPad || !pTonPad))
+		{
+			resetSpeed += resetAcceleration * Time.deltaTime;
+			if (resetSpeed > resetMaxSpeed)
+			{
+				resetSpeed = resetMaxSpeed;
+			}
+
+			float backspin = resetSpeed * Time.deltaTime;
+			if (currentRotation - backspin < 0)
+			{
+				backspin = currentRotation;
+			}
+
+			transform.Rotate(new Vector3(0, 0, -backspin));
+			currentRotation -= backspin;
+			oldRotation = transform.rotation.eulerAngles.z;
+
+			yield return null;
+		}
+		resetting = false;
 	}
 
 	// Force pad to defer collision handling to side pads.
