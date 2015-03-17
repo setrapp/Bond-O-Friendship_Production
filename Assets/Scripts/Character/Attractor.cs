@@ -111,6 +111,7 @@ public class Attractor : MonoBehaviour {
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
 				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
+				Color pullColor = character.colors.attachmentColor;
 				if (!fluffAttachedToSelf && !ignoringAttract)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
@@ -130,6 +131,7 @@ public class Attractor : MonoBehaviour {
 								{
 									nearSqrDist = sqrDist;
 									attractOffset = (nearBond - transform.position) * bondOffsetFactor;
+									pullColor = new Color(1, 1, 1, 0);
 								}
 							}
 						}
@@ -137,7 +139,7 @@ public class Attractor : MonoBehaviour {
 					}
 					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
-						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
+						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime, pullColor);
 						pullingFluff = true;
 					}
 				}

@@ -7,6 +7,9 @@ public class Bond : MonoBehaviour {
 	public BondAttachment attachment2;
 	public GameObject linkPrefab;
 	public List<BondLink> links;
+	public GameObject bondPullPrefab;
+	private SpringJoint pullSpring1;
+	private SpringJoint pullSpring2;
 	private float bondLength;
 	public float BondLength
 	{
@@ -74,6 +77,22 @@ public class Bond : MonoBehaviour {
 			}
 			disablingLinks = false;
 		}*/
+
+		if (stats.pullApartMaxFactor > 0)
+		{
+			if (pullSpring1 == null || pullSpring2 == null)
+			{
+				CreatePullers();
+			}
+		}
+		else
+		{
+			if (pullSpring1 != null || pullSpring2 != null)
+			{
+				DestroyPullers();
+			}
+		}
+
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
 			StartCoroutine(UpdateBondCount(atSparseDetail));
@@ -145,6 +164,19 @@ public class Bond : MonoBehaviour {
 					attachment2.attachedLink.transform.position = attachment2.position;
 				}
 				
+			}
+
+			if (pullSpring1 != null && pullSpring2 != null)
+			{
+				float pullSpringDist = 1;
+				if (stats.maxDistance >= 0)
+				{
+					pullSpringDist = Mathf.Max((stats.maxDistance * stats.pullApartMaxFactor) - bondLength, 0);
+				}
+
+				Vector3 betweenAttachments = (attachment2.position - attachment1.position).normalized;
+				pullSpring1.transform.position = attachment1.position - (betweenAttachments * pullSpringDist);
+				pullSpring2.transform.position = attachment2.position + (betweenAttachments * pullSpringDist);
 			}
 
 			// Ensure smooth transition between the two lines at the center.
@@ -330,8 +362,6 @@ public class Bond : MonoBehaviour {
 		midColor.a = (color1.a + color2.a) / 2;
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
-
-
 
 		attachment1.attachedLink.transform.position = attachment1.position;
 		attachment2.attachedLink.transform.position = attachment2.position;
@@ -529,9 +559,48 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Attach near end links to attachments to allow pulling.
-			links[1].jointToAttachment.spring = stats.attachSpring1;
-			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			if (pullSpring1 != null && pullSpring2 != null)
+			{
+				pullSpring1.spring = stats.attachSpring1;
+				pullSpring2.spring = stats.attachSpring2;
+			}
+			else
+			{
+				links[1].jointToAttachment.spring = stats.attachSpring1;
+				links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			}
 		}
+	}
+
+	private void CreatePullers()
+	{
+		if (bondPullPrefab != null)
+		{
+			pullSpring1 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring1.transform.parent = transform;
+			pullSpring1.connectedBody = attachment1.attachee.body;
+			pullSpring2 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring2.transform.parent = transform;
+			pullSpring2.connectedBody = attachment2.attachee.body;
+		}
+
+		WeightJoints();
+	}
+
+	private void DestroyPullers()
+	{
+		if (pullSpring1 != null)
+		{
+			Destroy(pullSpring1.gameObject);
+			pullSpring1 = null;
+		}
+		if (pullSpring2 != null)
+		{
+			Destroy(pullSpring2.gameObject);
+			pullSpring2 = null;
+		}
+
+		WeightJoints();
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
@@ -656,8 +725,17 @@ public class Bond : MonoBehaviour {
 				links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
 			}
 		}
-		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
-		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+
+		if (pullSpring1 != null && pullSpring2 != null)
+		{
+			pullSpring1.spring = stats.attachSpring1 * detailFraction;
+			pullSpring2.spring = stats.attachSpring2 * detailFraction;
+		}
+		else
+		{
+			links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+		}
 	}
 	
 	// Hooks for subclasses.
@@ -682,6 +760,7 @@ public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
+	public float pullApartMaxFactor;
 	public float maxDistance = 25;
 	public float relativeWarningDistance = 0.5f;
 	public float endsWidth = 0.02f;
@@ -712,6 +791,7 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
 		if (fullOverwrite || replacement.endsWidth >= 0)				{	this.endsWidth = replacement.endsWidth;								}

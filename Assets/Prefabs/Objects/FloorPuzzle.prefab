@@ -29,7 +29,8 @@ GameObject:
   - 23: {fileID: 2300002}
   - 114: {fileID: 11400000}
   - 136: {fileID: 13630038}
-  m_Layer: 21
+  - 136: {fileID: 13659886}
+  m_Layer: 16
   m_Name: FloorPuzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,8 +74,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 446.660522, y: -160.740005, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: .00999999698}
+  m_LocalPosition: {x: 527.099976, y: -224.5, z: 1}
+  m_LocalScale: {x: 2.49999952, y: 2.5, z: .00999999698}
   m_Children:
   - {fileID: 400004}
   - {fileID: 400000}
@@ -187,10 +188,10 @@ MonoBehaviour:
   outerRing: {fileID: 100000}
   gate: {fileID: 0}
   emergencyEscapeGate: {fileID: 0}
-  timer: 5
-  maxTime: 5
-  totalTargets: 3
-  groupNumber: 2
+  timer: 2
+  maxTime: 2
+  totalTargets: 2
+  groupNumber: 3
   groupTotal: 4
   gateCloseTime: .00999999978
 --- !u!136 &13630038
@@ -214,9 +215,22 @@ CapsuleCollider:
   m_GameObject: {fileID: 100004}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: .500000238
   m_Height: 10
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &13659886
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .5
+  m_Height: 5
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000

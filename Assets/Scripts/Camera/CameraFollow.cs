@@ -8,85 +8,106 @@ public class CameraFollow : MonoBehaviour {
 	//[HideInInspector]
 	public Transform player2;
 	public float smoothness = 20;
+    private float smoothCombine = 8f;
 	private Vector3 mainTargetPosition;
-	private Vector3 splitTargetPosition;
 
 
-	//public GameObject splitScreenCam;
 	public Camera childMainCamera;
+    public Camera otherCamera;
 	public bool splitScreen = false;
 	private float centeringDistance = 10f;
+    private float splitterDistance = .75f;
 	private Vector3 cameraOffset = new Vector3(0, 0, -100);
 
 	public GameObject pivot;
+    private GameObject line;
 	private float currentCamHeight = 0f;
 	private float currentCamAspect = 0f;
 	public bool isCamera1;
-	//public bool splitting;
 
-	void FixedUpdate()
-	{
-		//create the offset
-		Vector3 betweenPlayers = (player2.position - player1.position);
+    private float playerDistanceX = 0f;
+    private float playerDistanceY = 0f;
+    private Vector3 betweenPlayers = Vector3.zero;
 
-		//mainTargetPosition = player1.position + (betweenPlayers / 2);
-		//transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothness);
-		//transform.position = mainTargetPosition + cameraOffset;
+    private float largerPlayerDistance = 0f;
+    private Color lineColor = Color.white;
 
-		//if (CameraSplitter.Instance.split)
-		{
-			if (splitScreen)
-			{
-				//Vector3 playerOneVC = childMainCamera.WorldToViewportPoint(player1.transform.position);
+    void Start()
+    {
+        line = pivot.transform.FindChild("Line").gameObject;
+    }
 
-				mainTargetPosition = player1.position + (betweenPlayers.normalized * centeringDistance);
-				if (betweenPlayers.magnitude <= CameraSplitter.Instance.splitDistance * 2)
-				{
-					mainTargetPosition = (player1.position + player2.position) / 2;
-					transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothness);
-				}
-				else
-				{
-					transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothness);
-				}
+    void FixedUpdate()
+    {
+        playerDistanceX = CameraSplitter.Instance.playerDistanceX;
+        playerDistanceY = CameraSplitter.Instance.playerDistanceY;
+        largerPlayerDistance = playerDistanceX > playerDistanceY ? playerDistanceX : playerDistanceY;
 
+        //create the offset
+        betweenPlayers = player2.position - player1.position;
+        mainTargetPosition = player1.position + (betweenPlayers.normalized * centeringDistance);
 
+        #region Change This
+        if (largerPlayerDistance < .5f)
+        {
+            if(!CameraSplitter.Instance.split)
+                lineColor.a = 0;
+        }
+        else if((largerPlayerDistance > .5f) && (largerPlayerDistance < 1f))
+        {
+            if (largerPlayerDistance < .6f)
+                lineColor.a = .2f;
+            if (largerPlayerDistance > .6f && largerPlayerDistance < .7f)
+                lineColor.a = .4f;
+            if (largerPlayerDistance > .8f && largerPlayerDistance < .9f)
+                lineColor.a = .6f;
+            if (largerPlayerDistance > .9f)
+                lineColor.a = .8f;
+        }
+        else
+        {
+            lineColor.a = 1.0f;
+        }
+        line.renderer.material.color = lineColor;
+        //Debug.Log(line.renderer.material.color);
+        #endregion
 
-				ResizeMask();
-				if (isCamera1)
-				{
-					Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));
-					Vector3 rotationEuler = rotation.eulerAngles;
-					rotationEuler.x = rotationEuler.y = 0;
-					pivot.transform.rotation = Quaternion.Euler(rotationEuler);
-				}
-				else
-				{
-					Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
-					Vector3 rotationEuler = rotation.eulerAngles;
-					rotationEuler.x = rotationEuler.y = 0;
-					pivot.transform.rotation = Quaternion.Euler(rotationEuler);
-				}
-			}
-			else
-			{
-				mainTargetPosition = (player1.position + player2.position) / 2;
-				transform.position = mainTargetPosition + cameraOffset;
-			}
-		}
-		if (!CameraSplitter.Instance.split)
-		{
-			if (splitScreen)
-			{
-				transform.position = Vector3.Lerp(transform.position, CameraSplitter.Instance.combinedCameraSystem.transform.position, 1 / smoothness);
-			}
-			else
-			{
-				mainTargetPosition = player1.position + (betweenPlayers / 2);
-				transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothness);
-			}
-		}
-	}
+        if (largerPlayerDistance > splitterDistance)
+        {
+            transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothness);
+        }
+        else
+        {
+            mainTargetPosition = (player1.position + player2.position) / 2;
+            transform.position = Vector3.Lerp(transform.position, mainTargetPosition + cameraOffset, 1 / smoothCombine);
+            
+        }
+
+        #region Layer Masks
+        //Resize and Rotate Masks////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ResizeMask();
+        if (isCamera1)
+        {
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));
+            Vector3 rotationEuler = rotation.eulerAngles;
+            rotationEuler.x = rotationEuler.y = 0;
+            pivot.transform.rotation = Quaternion.Euler(rotationEuler);
+        }
+        else
+        {
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
+            Vector3 rotationEuler = rotation.eulerAngles;
+            rotationEuler.x = rotationEuler.y = 0;
+            pivot.transform.rotation = Quaternion.Euler(rotationEuler);
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #endregion
+    }
+
+    void FadeLine()
+    {
+        
+    }
 
 	void ResizeMask()
 	{
@@ -97,14 +118,7 @@ public class CameraFollow : MonoBehaviour {
 			currentCamHeight = camHeight;
 			currentCamAspect = camAspect;
 
-			//Vector3 viewPort = new Vector3(0, 0, -10);
-			//Vector3 bottomLeft = childMainCamera.ViewportToWorldPoint(viewPort);
-			//viewPort = new Vector3(1, 1, -10);
-			//Vector3 topRight = childMainCamera.ViewportToWorldPoint(viewPort);
-
-			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;
-
-	
+			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;	
 
 			if (isCamera1)
 			{
