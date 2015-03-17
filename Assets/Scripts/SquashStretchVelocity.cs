@@ -46,13 +46,6 @@ public class SquashStretchVelocity : MonoBehaviour {
 			velocityStretch = velocity.z;
 		}
 
-		if (velocity.sqrMagnitude < oldVelocity.sqrMagnitude && velocity.magnitude < oldVelocity.magnitude * squashDrag)
-		{
-			//stretchX *= -1;
-			//stretchZ *= -1;
-			//velocity = oldVelocity * squashDrag;
-		}
-
 		Vector3 newScale = baseScale + new Vector3(velocityStretch * stretchX, 0, velocityStretch * stretchZ);
 		squashStretchTarget.transform.localScale = newScale;
 
@@ -63,6 +56,11 @@ public class SquashStretchVelocity : MonoBehaviour {
 		/* TODO maybe do a fake drag factor for old velocity that applies when velocity is falling*/
 
 		/* TODO allow for arbitrary squash and stretch vectors*/
-		/* TODO squash when velocity is decreasing*/
+		/* TODO squash when velocity is decreasing, maybe handle on collision*/
+	}
+
+	void OnCollisionEnter(Collision col)
+	{
+		/*TODO squash the charcter on the side that is collided on ... probably a shader thing*/
 	}
 }
