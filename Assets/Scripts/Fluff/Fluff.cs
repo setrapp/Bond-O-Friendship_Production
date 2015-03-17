@@ -17,6 +17,7 @@ public class Fluff : MonoBehaviour {
 	public MeshRenderer bulb;
 	public MeshRenderer stalk;
 	public GameObject geometry;
+	public LineRenderer lineToAttractor;
 	[HideInInspector]
 	public CapsuleCollider hull;
 	[HideInInspector]
@@ -62,6 +63,11 @@ public class Fluff : MonoBehaviour {
 
 		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
 		gameObject.tag = "Fluff";
+
+		if (lineToAttractor != null)
+		{
+			lineToAttractor.SetVertexCount(0);
+		}
 	}
 
 	// Update is called once per frame
@@ -78,6 +84,13 @@ public class Fluff : MonoBehaviour {
 			ApplyPullForce();
 			pullForce = Vector3.zero;
 			pullDistance = 0;
+		}
+		else
+		{
+			if (lineToAttractor != null)
+			{
+				lineToAttractor.SetVertexCount(0);
+			}
 		}
 
 		if (!attractable && nonAttractTime <= 0)
@@ -167,6 +180,8 @@ public class Fluff : MonoBehaviour {
 				}
 			}
 		}
+
+		
 	}
 
 	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null, float preventAttractTime = 0)
@@ -178,6 +193,7 @@ public class Fluff : MonoBehaviour {
 		// If something attachable is already in reach, attach without moving.
 		RaycastHit attemptPassHit;
 		float blockingTestDistance = Mathf.Max(hull.height, hull.radius);
+		ignoreCollider = ignoreColliderTemporary;
 		bool blocked = TestForBlocking(passForce, blockingTestDistance, out attemptPassHit);
 		if (blocked)
 		{
@@ -190,15 +206,18 @@ public class Fluff : MonoBehaviour {
 		if (body != null)
 		{
 			body.isKinematic = false;
-
 		}
-		ignoreCollider = ignoreColliderTemporary;
 
 		float passForceMag = passForce.magnitude;
 		mover.Move(passForce / passForceMag, passForceMag * Time.deltaTime, false);
 	}
 
 	public void Pull(GameObject puller, Vector3 pullOffset, float pullMagnitude)
+	{
+		Pull(puller, pullOffset, pullMagnitude, Color.white);
+	}
+
+	public void Pull(GameObject puller, Vector3 pullOffset, float pullMagnitude, Color pullColor)
 	{
 		// If something is blocking the path to the puller, do not move.
 		RaycastHit attemptPullHit;
@@ -221,6 +240,15 @@ public class Fluff : MonoBehaviour {
 		{
 			pullForce = newPullForce;
 			pullDistance = newPullDistance;
+
+			// Draw line from attractor to fluff.
+			if (lineToAttractor != null)
+			{
+				lineToAttractor.SetVertexCount(2);
+				lineToAttractor.SetPosition(0, puller.transform.position + pullOffset);
+				lineToAttractor.SetPosition(1, transform.position);
+				lineToAttractor.material.color = pullColor;
+			}
 		}
 	}
 
@@ -236,7 +264,7 @@ public class Fluff : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, false, true);
+			mover.Accelerate(pullForce, true, false, true);
 		}
 	}
 

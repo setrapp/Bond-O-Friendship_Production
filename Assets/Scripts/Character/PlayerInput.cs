@@ -88,27 +88,33 @@ public class PlayerInput : MonoBehaviour {
 				}
 				Globals.isPaused = !Globals.isPaused;
 			}
-		}  
+		}
 
 		if (!Globals.isPaused)
 		{
 			AttemptFluffThrow();
 			AttemptFluffAttract();
 			velocityChange =  PlayerJoystickMovement();
-
+			velocityChange = character.mover.ClampMovementChange(velocityChange, true, true);
 
 			// Movement
 			if (velocityChange.sqrMagnitude > 0)
 			{
-				character.mover.Accelerate(velocityChange, true, true);
+				character.mover.Accelerate(velocityChange, false);
 				character.mover.slowDown = false;
 			}
 			else
 			{
 				character.mover.slowDown = true;
 			}
+
 			// Turn towards velocity change.
-			transform.LookAt(transform.position + velocityChange, transform.up);
+			Vector3 moveDir = character.mover.velocity;
+			if (moveDir.sqrMagnitude <= 0)
+			{
+				moveDir = transform.forward + (velocityChange.normalized * Time.deltaTime);
+			}
+			transform.LookAt(transform.position + moveDir, transform.up);
 		}
 		else
 		{
@@ -117,14 +123,10 @@ public class PlayerInput : MonoBehaviour {
 		}
 	}
 
-   
-	
 	private Vector3 PlayerJoystickMovement()
 	{
 
 		Vector2 stickInput = Vector2.zero;
-
-		//Debug.Log(device.LeftStick.Vector.ToString());
 
 		if (Globals.usingController)
 		{
@@ -351,7 +353,7 @@ public class PlayerInput : MonoBehaviour {
 					{
 						leavee.transform.parent = transform.parent;
 					}
-					leavee.Pass((col.contacts[0].point - transform.position), gameObject, Globals.Instance.fluffLeaveAttractWait);
+					leavee.Pass((col.contacts[0].point - transform.position) * character.fluffThrow.passForce, gameObject, Globals.Instance.fluffLeaveAttractWait);
 				}
 			}
 		}
