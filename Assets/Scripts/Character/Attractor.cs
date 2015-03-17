@@ -47,7 +47,7 @@ public class Attractor : MonoBehaviour {
 		else
 		{
 			bool pullingFluffs = AttemptFluffPull();
-			if (pullingFluffs && !attracting)
+			if (pullingFluffs)
 			{
 				AttractFluffs(false);
 			}
@@ -72,9 +72,8 @@ public class Attractor : MonoBehaviour {
 		if (attractParticles == null)
 		{
 			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
-			attractParticles.transform.position = transform.position;
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
-			attractParticles.startColor = new Color(attractParticles.startColor.r, attractParticles.startColor.g, attractParticles.startColor.b, 0.1f);
+			attractParticles.transform.position = transform.position + new Vector3(0, 0, 0.2f);
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;
 		}
 
 		// If desired, attempt to pull in fluffs.
@@ -91,7 +90,7 @@ public class Attractor : MonoBehaviour {
 
 		if (attractParticles != null)
 		{
-			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
+			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 1.0f);
 			Destroy(attractParticles.gameObject, 1.0f);
 		}
 	}

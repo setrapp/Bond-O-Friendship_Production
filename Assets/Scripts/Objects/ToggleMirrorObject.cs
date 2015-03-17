@@ -17,18 +17,21 @@ public class ToggleMirrorObject : MonoBehaviour {
 
     void OnTriggerEnter(Collider collide)
     {
-        if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
-        {
-            mirrorObject.GetComponent<MirrorMovement>().objectToMirror = collide.gameObject;
-            //mirrorObject.transform.position = new Vector3(mirrorObject.transform.position.x, collide.gameObject.transform.position.y, mirrorObject.transform.position.z);
-        }
+
+            if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
+            {
+                mirrorObject.GetComponent<MirrorMovement>().objectToMirror = collide.gameObject;
+                //mirrorObject.transform.position = new Vector3(mirrorObject.transform.position.x, collide.gameObject.transform.position.y, mirrorObject.transform.position.z);
+            }
+        
+       
     }
 
-    void OnTriggerExit(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
-        {
-            mirrorObject.GetComponent<MirrorMovement>().objectToMirror = null;
-        }
-    }
+   // void OnTriggerExit(Collider collide)
+    //{
+     //   if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
+     //   {
+     //       mirrorObject.GetComponent<MirrorMovement>().objectToMirror = null;
+     //   }
+   // }
 }

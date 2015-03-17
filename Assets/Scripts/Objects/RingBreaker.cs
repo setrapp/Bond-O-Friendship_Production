@@ -8,6 +8,8 @@ public class RingBreaker : MonoBehaviour {
 	public SimpleMover mover;
 	public Collider breakerCollider;
 	public BondAttachable bondAttachable;
+	public float fadeRate = 1.0f;
+	private MeshRenderer meshRenderer;
 
 	void Awake()
 	{
@@ -15,6 +17,7 @@ public class RingBreaker : MonoBehaviour {
 		{
 			mover = GetComponent<SimpleMover>();
 		}
+		meshRenderer = GetComponent<MeshRenderer>();
 	}
 
 	void Update()
@@ -36,9 +39,15 @@ public class RingBreaker : MonoBehaviour {
 		if (nearestMembrane != null && mover != null)
 		{
 			Vector3 target = nearestMembrane.NearestNeighboredPoint(transform.position);
-			if ((target - transform.position).sqrMagnitude > Mathf.Pow(slowDistance, 2))
+			if ((target - transform.position).sqrMagnitude > Mathf.Pow(slowDistance, 2) && !nearestMembrane.Breaking)
 			{
 				mover.Accelerate(target - transform.position);
+				Vector3 oldRot = transform.rotation.eulerAngles;
+				transform.up = target - transform.position;
+				if (transform.rotation.eulerAngles.x != oldRot.x || transform.rotation.eulerAngles.y != oldRot.y)
+				{
+					transform.rotation = Quaternion.Euler(new Vector3(oldRot.x, oldRot.y, transform.rotation.eulerAngles.z));
+				}
 			}
 			else
 			{
@@ -50,7 +59,14 @@ public class RingBreaker : MonoBehaviour {
 			}
 		}
 
-		if (nearestMembrane != null && targetRing.createdWalls.Count != targetRing.wallCount)
+		if (nearestMembrane != null && (nearestMembrane.Breaking || targetRing.createdWalls.Count != targetRing.wallCount))
+		{
+			Color fadeColor = meshRenderer.material.color;
+			fadeColor.a -= fadeRate * Time.deltaTime;
+			meshRenderer.material.color = fadeColor;
+		}
+
+		if (meshRenderer.material.color.a <= 0)
 		{
 			Destroy(gameObject);
 		}

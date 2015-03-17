@@ -7,6 +7,7 @@ public class CanvasBehavior : MonoBehaviour {
 	public GameObject player2;
 	private Color canvasColor;
 	private float alpha;
+	public bool changeColor = true;
 
 	public GameObject pal1;
 	public GameObject pal2;
@@ -43,7 +44,10 @@ public class CanvasBehavior : MonoBehaviour {
 	void Start () {
 		alpha = 0.0f;
 		canvasColor = new Color(0.0f,0.0f,0.0f,alpha);
-		gameObject.GetComponent<Renderer>().material.color = canvasColor;
+		if (changeColor)
+		{
+			gameObject.GetComponent<Renderer>().material.color = canvasColor;
+		}
 
 	}
 	
@@ -72,12 +76,14 @@ public class CanvasBehavior : MonoBehaviour {
 
 
 
-
-		canvasColor = new Color(0.8f,0.9f,0.8f,alpha);
-		gameObject.GetComponent<Renderer>().material.color = canvasColor;
-		if(alpha<1.0f)
+		if (changeColor)
 		{
-			alpha += Time.deltaTime*0.5f;
+			canvasColor = new Color(0.8f, 0.9f, 0.8f, alpha);
+			gameObject.GetComponent<Renderer>().material.color = canvasColor;
+			if (alpha < 1.0f)
+			{
+				alpha += Time.deltaTime * 0.5f;
+			}
 		}
 	
 	}

@@ -61,8 +61,8 @@ public class MirrorPaint : MonoBehaviour
     void Blot()
     {
         paintCircle = Instantiate(paintPrefab, paintPos, Quaternion.Euler(0, 0, randRot)) as GameObject;
-        paintCircle.GetComponent<Renderer>().material.color = Color.black;
-        paintCircle.GetComponent<PaintCircle>().paintCircColor = Color.black;
+        paintCircle.GetComponent<Renderer>().material.color = paintColor;
+		paintCircle.GetComponent<PaintCircle>().paintCircColor = paintColor;
         paintCircle.GetComponent<PaintCircle>().rLifemin = 5.0f;
         paintCircle.GetComponent<PaintCircle>().rLifemax = 10.0f;
         paintCircle.GetComponent<PaintCircle>().rSizemin = 0.5f;

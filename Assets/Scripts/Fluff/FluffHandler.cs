@@ -54,7 +54,14 @@ public class FluffHandler : MonoBehaviour {
 	{
 		if (fluffs.Count >= naturalFluffCount)
 		{
-			character.fillScale = 1;
+			if (naturalFluffCount <= 0)
+			{
+				character.fillScale = 0;
+			}
+			else
+			{
+				character.fillScale = 1;
+			}
 		}
 
 		// Attempt to spawn more fluff.
@@ -217,7 +224,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			Vector3 fluffRotation = FindOpenFluffAngle();
 
-			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, transform.position, Quaternion.identity);
+			GameObject newFluff = (GameObject)Instantiate(fluffPrefab, fluffContainer.transform.position, Quaternion.identity);
 			newFluff.transform.parent = fluffContainer.transform;
 			newFluff.GetComponent<Rigidbody>().isKinematic = true;
 			newFluff.transform.localEulerAngles = fluffRotation;

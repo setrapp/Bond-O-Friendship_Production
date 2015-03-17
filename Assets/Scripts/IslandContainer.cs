@@ -99,6 +99,7 @@ public class IslandContainer : MonoBehaviour {
 	private void IsolateIsland()
 	{
 		GenerateAtmosphere();
+		//TODO uncomment.
 		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 		if (island != null)
 		{
@@ -121,11 +122,15 @@ public class IslandContainer : MonoBehaviour {
 			{
 				playersEstablish.PlacePlayers();
 			}
-			CameraSplitter.Instance.JumpToPlayers();
 
 			if (waitingToIsolate)
 			{
 				IsolateIsland();
+			}
+
+			if (spawnOnStart && CameraColorFade.Instance != null)
+			{
+				CameraColorFade.Instance.JumpToColor(createdIsland.backgroundColor);
 			}
 		}
 	}

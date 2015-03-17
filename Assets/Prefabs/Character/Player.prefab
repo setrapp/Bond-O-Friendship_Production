@@ -321,7 +321,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.100000001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
@@ -448,7 +448,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 196068}
   m_LocalRotation: {x: 0, y: 0, z: -0, w: -1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: .330000013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
@@ -885,8 +885,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreReversedGraphics: 1
-  blockingObjects: 0
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -943,12 +943,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 11400004}
   attracting: 0
-  attractRange: 2
+  attractRange: 3
   attractSpeed: 1000
   bondAttract: 1
   bondOffsetFactor: .899999976
   attractSlowingFactor: .150000006
-  attractionPrefab: {fileID: 19800000, guid: 7a44a7c036b08284ba9ae9cfb4549912, type: 2}
+  attractionPrefab: {fileID: 19895854, guid: 8f0a9a0e165add443ab23d1bba61abd4, type: 2}
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -970,6 +970,7 @@ MonoBehaviour:
   g: 0
   b: 0
   a: 0
+  eraserOn: 0
 --- !u!114 &11416626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -994,7 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 19896068}
-  characterColors: {fileID: 11400020}
+  characterComponents: {fileID: 11400004}
 --- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1024,7 +1025,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: .959999979
+      scalar: .540000021
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1039,7 +1040,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .739583313
+          value: .481481433
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -1174,7 +1175,7 @@ ParticleSystem:
         rgba: 4294936651
       minMaxState: 0
     startSize:
-      scalar: .800000012
+      scalar: .319999993
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1247,7 +1248,7 @@ ParticleSystem:
     enabled: 1
     type: 4
     radius: .100000001
-    angle: 29.9699993
+    angle: 50.2999992
     length: 5
     boxX: 1
     boxY: 1
@@ -1301,7 +1302,7 @@ ParticleSystem:
     time3: 0
     m_BurstCount: 0
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       scalar: 1
       maxCurve:
@@ -2031,7 +2032,7 @@ ParticleSystemRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b5296085e512d0409e5dc7fcae66d4d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

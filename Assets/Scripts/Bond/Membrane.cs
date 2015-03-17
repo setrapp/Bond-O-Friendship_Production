@@ -23,6 +23,7 @@ public class Membrane : Bond {
 	public float fullDetailShapingForce;
 	public float fullDetailSmoothForce;
 	private bool deconstructing = false;
+	public bool Breaking { get { return deconstructing; } }
 	private List<MembraneLink> breakLinks;
 	private List<LineRenderer> breakLines;
 	private bool hidingShaping = false;
@@ -129,7 +130,6 @@ public class Membrane : Bond {
 				ignoreNeighbors.Add(membraneNext);
 
 				// Check for bonds with the players on this membrane only (ignoring neighbors).
-
 				MembraneLink bondedLink;
 				if (IsBondMade(out bondedLink, Globals.Instance.player1.character.bondAttachable, ignoreNeighbors))
 				{
@@ -170,6 +170,11 @@ public class Membrane : Bond {
 			return;
 		}
 
+		List<Membrane> ignoreNeighbors = new List<Membrane>();
+		ignoreNeighbors.Add(membranePrevious);
+		ignoreNeighbors.Add(membraneNext);
+		BreakInnerBond(null, ignoreNeighbors);
+
 		if (!deconstructing)
 		{
 			deconstructing = true;
@@ -178,6 +183,22 @@ public class Membrane : Bond {
 			if (gameObject.activeInHierarchy)
 			{
 				StartCoroutine(DeconstructMembrane(breakDelay, false));
+			}
+		}
+
+		if (extraStats.considerNeighborBonds)
+		{
+			List<Membrane> ignoreThis = new List<Membrane>();
+			ignoreThis.Add(this);
+			if (membranePrevious != null)
+			{
+				MembraneLink prevLinkBreak;
+				membranePrevious.IsBondMade(out prevLinkBreak, null, ignoreThis);
+				if (prevLinkBreak != null && prevLinkBreak.membrane != null)
+				{
+					prevLinkBreak.membrane.breakLinks.Add(prevLinkBreak);
+					prevLinkBreak.membrane.BreakMembrane(quickDestroy);
+				}
 			}
 		}
 	}
@@ -686,18 +707,18 @@ public class Membrane : Bond {
 	{
 		if (attachment1FauxLink != null && attachment1FauxLink.bondAttachable != null && attachment1FauxLink.bondAttachable.IsBondMade(partner))
 		{
-			attachment1FauxLink.bondAttachable.BreakBound(partner);
+			attachment1FauxLink.bondAttachable.BreakBond(partner);
 		}
 		if (attachment2FauxLink != null && attachment2FauxLink.bondAttachable != null && attachment2FauxLink.bondAttachable.IsBondMade(partner))
 		{
-			attachment2FauxLink.bondAttachable.BreakBound(partner);
+			attachment2FauxLink.bondAttachable.BreakBond(partner);
 		}
 		for (int i = 0; i < links.Count; i++)
 		{
 			MembraneLink membraneLink = links[i] as MembraneLink;
 			if (membraneLink != null && membraneLink.bondAttachable != null && membraneLink.bondAttachable.IsBondMade(partner))
 			{
-				membraneLink.bondAttachable.BreakBound(partner);
+				membraneLink.bondAttachable.BreakBond(partner);
 			}
 		}
 

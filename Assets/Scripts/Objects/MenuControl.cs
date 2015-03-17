@@ -45,13 +45,13 @@ public class MenuControl : MonoBehaviour {
         if(InputManager.Devices.Count > 0)
         {
             InputDevice device = InputManager.ActiveDevice;
-            if (device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            if (device.Action1.IsPressed || device.MenuWasPressed)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
             {
                 MainMenuLoadLevel();
                 Globals.usingController = true;
             }
         }
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        if (Input.GetKeyDown(KeyCode.Return))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
         {
             MainMenuLoadLevel();
             Globals.usingController = false;

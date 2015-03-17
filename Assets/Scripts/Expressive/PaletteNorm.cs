@@ -9,23 +9,24 @@ public class PaletteNorm : MonoBehaviour {
 	public Vector3 collidePos;
 	private Vector3 mySize;
 	private float sizeFloat;
+	public float maxSize = 1.682f;
+	public float growSpeed = 1.0f;
 
 	
 	// Use this for initialization
 	void Start () {
-
+		sizeFloat = transform.localScale.x;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		mySize = new Vector3(sizeFloat,sizeFloat,0.01f);
-		transform.localScale = mySize;
-
-		if(sizeFloat < 1.682f)
+		if (sizeFloat < maxSize)
 		{
-			sizeFloat += Time.deltaTime;
+			mySize = new Vector3(sizeFloat,sizeFloat,0.01f);
+			transform.localScale = mySize;
+
+			sizeFloat += growSpeed * Time.deltaTime;
 		}
-	
 	}
 	
 	void OnTriggerExit(Collider collide)
@@ -34,13 +35,23 @@ public class PaletteNorm : MonoBehaviour {
 		{
 			collidePos = collide.transform.position;
 			Fire();
-			collide.gameObject.GetComponent<Paint>().origColor = true;
+			Paint painter = collide.gameObject.GetComponent<Paint>();
+			if (painter != null)
+			{
+				painter.origColor = true;
+				painter.eraserOn = false;
+			}
 		}
 		
 	}
 	
 	void Fire()
 	{
+		if (ripplePrefab == null)
+		{
+			return;
+		}
+
 		rippleObj = Instantiate(ripplePrefab,collidePos,Quaternion.identity) as GameObject;
 		rippleObj.GetComponent<Collider>().enabled = false;
 		rippleObj.GetComponent<RingPulse>().smallRing = false;
