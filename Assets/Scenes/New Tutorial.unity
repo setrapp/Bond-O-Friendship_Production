@@ -288,12 +288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &31703589
 Renderer:
   m_ObjectHideFlags: 0
@@ -600,12 +598,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &64680581
 Renderer:
   m_ObjectHideFlags: 0
@@ -944,12 +940,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &113423753
 Renderer:
   m_ObjectHideFlags: 0
@@ -1177,12 +1171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &133870128
 Renderer:
   m_ObjectHideFlags: 0
@@ -2623,12 +2615,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &193923353
 Renderer:
   m_ObjectHideFlags: 0
@@ -8055,6 +8045,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613d467ecd0e13645ab3d1974e99879f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stopAngle: 237
+  speed: 8
+  rotateDireciton: 1
 --- !u!1 &354229467
 GameObject:
   m_ObjectHideFlags: 0
@@ -8926,6 +8919,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 477140474}
+  - 114: {fileID: 477140475}
   m_Layer: 0
   m_Name: Nodes
   m_TagString: Untagged
@@ -8965,6 +8959,41 @@ Transform:
   - {fileID: 1104584115}
   m_Father: {fileID: 435658201}
   m_RootOrder: 3
+--- !u!114 &477140475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 477140473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02be0c16bf6e24a4eaa00af14c8b2f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 113423752}
+  - {fileID: 1277572296}
+  - {fileID: 1674613357}
+  - {fileID: 2061961976}
+  - {fileID: 64680580}
+  - {fileID: 562693041}
+  - {fileID: 1230829395}
+  - {fileID: 1649368477}
+  - {fileID: 1427086361}
+  - {fileID: 1429906871}
+  - {fileID: 969494309}
+  - {fileID: 2088370974}
+  - {fileID: 843073194}
+  - {fileID: 31703588}
+  - {fileID: 590411218}
+  - {fileID: 193923352}
+  - {fileID: 133870127}
+  - {fileID: 1223309850}
+  listeners:
+  - {fileID: 339577896}
+  - {fileID: 1104584114}
+  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
+  solved: 0
 --- !u!1 &481782884
 GameObject:
   m_ObjectHideFlags: 0
@@ -9733,12 +9762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &562693042
 Renderer:
   m_ObjectHideFlags: 0
@@ -9932,12 +9959,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &590411219
 Renderer:
   m_ObjectHideFlags: 0
@@ -14196,12 +14221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &843073195
 Renderer:
   m_ObjectHideFlags: 0
@@ -15364,12 +15387,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &969494310
 Renderer:
   m_ObjectHideFlags: 0
@@ -18315,6 +18336,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613d467ecd0e13645ab3d1974e99879f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stopAngle: 56
+  speed: 8
+  rotateDireciton: 1
 --- !u!1 &1104620536
 GameObject:
   m_ObjectHideFlags: 0
@@ -19078,12 +19102,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1223309851
 Renderer:
   m_ObjectHideFlags: 0
@@ -19261,12 +19283,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1230829396
 Renderer:
   m_ObjectHideFlags: 0
@@ -19827,12 +19847,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1277572297
 Renderer:
   m_ObjectHideFlags: 0
@@ -23181,12 +23199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1427086362
 Renderer:
   m_ObjectHideFlags: 0
@@ -23255,6 +23271,22 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11408378, guid: a877bc54e6a24fe4ca426729aa1aabec, type: 2}
+      propertyPath: nodePuzzle
+      value: 
+      objectReference: {fileID: 477140475}
+    - target: {fileID: 11408376, guid: a877bc54e6a24fe4ca426729aa1aabec, type: 2}
+      propertyPath: nodePuzzle
+      value: 
+      objectReference: {fileID: 477140475}
+    - target: {fileID: 11408378, guid: a877bc54e6a24fe4ca426729aa1aabec, type: 2}
+      propertyPath: stopAngle
+      value: 237
+      objectReference: {fileID: 0}
+    - target: {fileID: 11408376, guid: a877bc54e6a24fe4ca426729aa1aabec, type: 2}
+      propertyPath: stopAngle
+      value: 56
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a877bc54e6a24fe4ca426729aa1aabec, type: 2}
   m_RootGameObject: {fileID: 477140473}
@@ -23317,12 +23349,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1429906872
 Renderer:
   m_ObjectHideFlags: 0
@@ -25297,12 +25327,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1649368478
 Renderer:
   m_ObjectHideFlags: 0
@@ -25501,12 +25529,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &1674613358
 Renderer:
   m_ObjectHideFlags: 0
@@ -30522,12 +30548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &2061961977
 Renderer:
   m_ObjectHideFlags: 0
@@ -30705,12 +30729,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35fbb207727414bb8665ba2e969440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPuzzle: {fileID: 0}
   cooldownTime: 7.5
-  nodeParticle: {fileID: 19827486, guid: f217e9610078c3647b8aaba10c3c9297, type: 2}
-  nodeGate: {fileID: 1358102700}
-  nodeGate2: {fileID: 852786221}
+  lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
-  solved: 0
 --- !u!23 &2088370975
 Renderer:
   m_ObjectHideFlags: 0
