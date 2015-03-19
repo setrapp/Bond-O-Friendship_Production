@@ -4,6 +4,7 @@ using System.Collections;
 public class SpinPad : WaitPad
 {
 	public bool flipDirection = false;
+	public int spinInhibitors = 0;
 	public Rigidbody body;
 	public SpinPadSide player1Pad;
 	public SpinPadSide player2Pad;
@@ -31,6 +32,7 @@ public class SpinPad : WaitPad
 	public float resetMaxSpeed = 100.0f;
 	public float resetSpeed = 0f;
 	public bool resetting = false;
+	public float portionComplete;
 
 	protected override void Start()
 	{
@@ -91,7 +93,7 @@ public class SpinPad : WaitPad
 			float newRotation = transform.rotation.eulerAngles.z;
 			if (player1Pushing && player2Pushing)
 			{
-				if (body.isKinematic)
+				if (body.isKinematic && spinInhibitors <= 0)
 				{
 					body.isKinematic = false;
 				}
@@ -109,6 +111,16 @@ public class SpinPad : WaitPad
 				{
 					body.isKinematic = true;
 				}
+			}
+
+			// Don't allow movement when spin is inhibited.
+			if (spinInhibitors > 0 && !body.isKinematic)
+			{
+				body.isKinematic = true;
+			}
+			else if (spinInhibitors < 0)
+			{
+				spinInhibitors = 0;
 			}
 
 			// Save the current rotation for comparison next frame.
@@ -145,7 +157,7 @@ public class SpinPad : WaitPad
 		}
 
 		// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
-		float portionComplete = currentRotation / goalRotation;
+		portionComplete = currentRotation / goalRotation;
 		float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
 		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
 		
@@ -226,21 +238,24 @@ public class SpinPad : WaitPad
 
 		while (currentRotation > 0 && (!pOonPad || !pTonPad))
 		{
-			resetSpeed += resetAcceleration * Time.deltaTime;
-			if (resetSpeed > resetMaxSpeed)
+			if (spinInhibitors <= 0)
 			{
-				resetSpeed = resetMaxSpeed;
-			}
+				resetSpeed += resetAcceleration * Time.deltaTime;
+				if (resetSpeed > resetMaxSpeed)
+				{
+					resetSpeed = resetMaxSpeed;
+				}
 
-			float backspin = resetSpeed * Time.deltaTime;
-			if (currentRotation - backspin < 0)
-			{
-				backspin = currentRotation;
-			}
+				float backspin = resetSpeed * Time.deltaTime;
+				if (currentRotation - backspin < 0)
+				{
+					backspin = currentRotation;
+				}
 
-			transform.Rotate(new Vector3(0, 0, -backspin));
-			currentRotation -= backspin;
-			oldRotation = transform.rotation.eulerAngles.z;
+				transform.Rotate(new Vector3(0, 0, -backspin));
+				currentRotation -= backspin;
+				oldRotation = transform.rotation.eulerAngles.z;
+			}
 
 			yield return null;
 		}

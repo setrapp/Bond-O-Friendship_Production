@@ -8,22 +8,27 @@ public class NodePuzzle : MonoBehaviour {
 	private bool lit;
 	public ParticleSystem nodeParticle;
 	private static int litCount;
-	private GameObject nodeGate;
+	public GameObject nodeGate;
+	public GameObject nodeGate2;
 	private LineRenderer line;
 	public Material lineMaterial;
 	private Color fadeColor;
 	private float colorCheck;
+	private Color startingcolor;
+	public bool solved;
 
 	// Use this for initialization
 	void Start () {
-		nodeGate = GameObject.Find("NodeGate");
+		startingcolor = GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if((transform.parent.childCount - 2) <= litCount)
+			solved = true;
 		if(lit == true)
 		{
-			if(line == null && (transform.parent.childCount - 1) > litCount)
+			if(line == null && solved)
 			{
 				line = gameObject.AddComponent<LineRenderer>();
 				line.SetWidth(0.2f, 0.02f);
@@ -31,7 +36,7 @@ public class NodePuzzle : MonoBehaviour {
 				line.SetPosition(0, transform.position);
 				line.SetPosition(1, nodeGate.transform.position);
 			}
-			if((transform.parent.childCount - 1) > litCount)
+			if(solved)
 				timer -= Time.deltaTime;
 			if(timer <= 0)
 			{
@@ -39,21 +44,16 @@ public class NodePuzzle : MonoBehaviour {
 				timer = cooldownTime;
 				lit = false;
 				litCount--;
-				GetComponent<Renderer>().material.color = Color.white;
+				GetComponent<Renderer>().material.color = startingcolor;
 			}
-			if((transform.parent.childCount - 1) <= litCount && line != null)
+			if(solved && line != null)
 				Destroy(line);
 		}
 
-		if((transform.parent.childCount - 1) <= litCount)
+		if(solved)
 		{
-		//	GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, fadeColor, Time.deltaTime);
-		//	colorCheck = GetComponent<Renderer>().material.color.a;
 			fadeColor.a -= Time.deltaTime;
 			GetComponent<Renderer>().material.color = fadeColor;
-			if(nodeGate != null)
-				Destroy(nodeGate);
-
 			if(GetComponent<Renderer>().material.color.a <= 0.01f)
 				Destroy(gameObject);
 		}
