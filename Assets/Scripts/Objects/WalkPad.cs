@@ -27,8 +27,8 @@ public class WalkPad : WaitPad {
 		
 			Vector3 toEnd = endPoint.transform.position - startPoint.transform.position;
 			/*TODO something is wrong with vector projection here.*/
-			float player1Progress = (Helper.ProjectVector(player1.transform.position - startPoint.transform.position, toEnd)).magnitude;
-			float player2Progress = (Helper.ProjectVector(player2.transform.position - startPoint.transform.position, toEnd)).magnitude;
+			float player1Progress = (Helper.ProjectVector(toEnd, player1.transform.position - startPoint.transform.position)).magnitude;
+			float player2Progress = (Helper.ProjectVector(toEnd, player2.transform.position - startPoint.transform.position)).magnitude;
 
 			portionComplete = player1Progress ;
 			if (player2Progress < player1Progress)
@@ -44,7 +44,6 @@ public class WalkPad : WaitPad {
 			}
 
 			padRenderer.material.color = (startColor * (1 - portionComplete)) + (endColor * portionComplete);
-			Debug.Log(portionComplete);
 		}
 	}
 }
