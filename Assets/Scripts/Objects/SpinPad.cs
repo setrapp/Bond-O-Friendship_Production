@@ -5,6 +5,7 @@ public class SpinPad : WaitPad
 {
 	public bool flipDirection = false;
 	public int spinInhibitors = 0;
+	public int backSpinInhibitors = 0;
 	public Rigidbody body;
 	public SpinPadSide player1Pad;
 	public SpinPadSide player2Pad;
@@ -123,6 +124,11 @@ public class SpinPad : WaitPad
 				spinInhibitors = 0;
 			}
 
+			if (backSpinInhibitors < 0)
+			{
+				backSpinInhibitors = 0;
+			}
+
 			// Save the current rotation for comparison next frame.
 			oldRotation = newRotation;
 
@@ -231,14 +237,14 @@ public class SpinPad : WaitPad
 		}
 	}
 
-	private IEnumerator ResetToStart()
+	public IEnumerator ResetToStart()
 	{
 		resetting = true;
 		yield return new WaitForSeconds(resetDelay);
 
 		while (currentRotation > 0 && (!pOonPad || !pTonPad))
 		{
-			if (spinInhibitors <= 0)
+			if (backSpinInhibitors <= 0)
 			{
 				resetSpeed += resetAcceleration * Time.deltaTime;
 				if (resetSpeed > resetMaxSpeed)

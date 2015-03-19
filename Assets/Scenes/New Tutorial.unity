@@ -1097,6 +1097,7 @@ MonoBehaviour:
   activated: 0
   flipDirection: 0
   spinInhibitors: 0
+  backSpinInhibitors: 0
   body: {fileID: 124159831}
   player1Pad: {fileID: 1532467644}
   player2Pad: {fileID: 1356740397}
@@ -4374,6 +4375,7 @@ GameObject:
   - 65: {fileID: 286236655}
   - 23: {fileID: 286236654}
   - 114: {fileID: 286236658}
+  - 54: {fileID: 286236659}
   m_Layer: 0
   m_Name: Door Key Left
   m_TagString: Untagged
@@ -4445,6 +4447,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spinPad: {fileID: 1885769319}
   moveDistance: 10
+--- !u!54 &286236659
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 286236653}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 124
+  m_CollisionDetection: 0
 --- !u!1 &292366269
 GameObject:
   m_ObjectHideFlags: 0
@@ -8661,6 +8678,8 @@ Transform:
   - {fileID: 1819921907}
   - {fileID: 481782885}
   - {fileID: 1201007237}
+  - {fileID: 727737417}
+  - {fileID: 671107797}
   m_Father: {fileID: 2020380835}
   m_RootOrder: 6
 --- !u!1 &446801276
@@ -8864,15 +8883,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 482028, guid: 9f555d2859624274ebda5a183cf6f8f6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 66.0663147
+      value: 66.0699997
       objectReference: {fileID: 0}
     - target: {fileID: 482028, guid: 9f555d2859624274ebda5a183cf6f8f6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 34.9552231
+      value: 34.9599991
       objectReference: {fileID: 0}
     - target: {fileID: 482028, guid: 9f555d2859624274ebda5a183cf6f8f6, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 482028, guid: 9f555d2859624274ebda5a183cf6f8f6, type: 2}
       propertyPath: m_LocalRotation.x
@@ -8958,6 +8977,7 @@ GameObject:
   - 65: {fileID: 481782887}
   - 23: {fileID: 481782886}
   - 54: {fileID: 481782889}
+  - 114: {fileID: 481782890}
   m_Layer: 0
   m_Name: Door Key
   m_TagString: Untagged
@@ -9024,13 +9044,33 @@ Rigidbody:
   m_GameObject: {fileID: 481782884}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: .0500000007
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 124
   m_CollisionDetection: 0
+--- !u!114 &481782890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481782884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15cbfdba2c123544b25b1b9cf196819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinPad: {fileID: 1885769319}
+  spinIgnoreCollisions:
+  - {fileID: 286236655}
+  - {fileID: 1632646862}
+  backSpinIgnoreCollisions:
+  - {fileID: 286236655}
+  - {fileID: 1632646862}
+  - {fileID: 727737419}
+  - {fileID: 671107799}
 --- !u!1 &485348403
 GameObject:
   m_ObjectHideFlags: 0
@@ -9285,6 +9325,7 @@ MonoBehaviour:
   activated: 0
   flipDirection: 1
   spinInhibitors: 0
+  backSpinInhibitors: 0
   body: {fileID: 517368151}
   player1Pad: {fileID: 1648043018}
   player2Pad: {fileID: 446801280}
@@ -11645,6 +11686,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 862909604}
   m_RootOrder: 1
+--- !u!1 &671107796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 671107797}
+  - 33: {fileID: 671107800}
+  - 65: {fileID: 671107799}
+  - 23: {fileID: 671107798}
+  m_Layer: 0
+  m_Name: Door Key Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &671107797
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 671107796}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -89.3000031, y: 2.0999999, z: 1}
+  m_LocalScale: {x: 1, y: 4.67000008, z: 1}
+  m_Children: []
+  m_Father: {fileID: 435658201}
+  m_RootOrder: 22
+--- !u!23 &671107798
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 671107796}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &671107799
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 671107796}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &671107800
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 671107796}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &680222033
 GameObject:
   m_ObjectHideFlags: 0
@@ -12178,6 +12288,75 @@ MonoBehaviour:
   respawnDelayMin: 0
   respawnDelayMax: 0
   dropParent: 0
+--- !u!1 &727737416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 727737417}
+  - 33: {fileID: 727737420}
+  - 65: {fileID: 727737419}
+  - 23: {fileID: 727737418}
+  m_Layer: 0
+  m_Name: Door Key Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &727737417
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 727737416}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -32, y: 2.0999999, z: 1}
+  m_LocalScale: {x: 1, y: 4.67000008, z: 1}
+  m_Children: []
+  m_Father: {fileID: 435658201}
+  m_RootOrder: 21
+--- !u!23 &727737418
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 727737416}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &727737419
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 727737416}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &727737420
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 727737416}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &735732218
 GameObject:
   m_ObjectHideFlags: 0
@@ -18541,6 +18720,7 @@ GameObject:
   - 65: {fileID: 1201007239}
   - 23: {fileID: 1201007238}
   - 54: {fileID: 1201007241}
+  - 114: {fileID: 1201007242}
   m_Layer: 0
   m_Name: Door Key
   m_TagString: Untagged
@@ -18607,13 +18787,33 @@ Rigidbody:
   m_GameObject: {fileID: 1201007236}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: .0500000007
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 124
   m_CollisionDetection: 0
+--- !u!114 &1201007242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1201007236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15cbfdba2c123544b25b1b9cf196819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinPad: {fileID: 1885769319}
+  spinIgnoreCollisions:
+  - {fileID: 286236655}
+  - {fileID: 1632646862}
+  backSpinIgnoreCollisions:
+  - {fileID: 286236655}
+  - {fileID: 1632646862}
+  - {fileID: 727737419}
+  - {fileID: 671107799}
 --- !u!1 &1208507898
 GameObject:
   m_ObjectHideFlags: 0
@@ -24567,6 +24767,7 @@ MonoBehaviour:
   activated: 0
   flipDirection: 0
   spinInhibitors: 0
+  backSpinInhibitors: 0
   body: {fileID: 1616846109}
   player1Pad: {fileID: 1308571402}
   player2Pad: {fileID: 779947762}
@@ -24675,6 +24876,7 @@ GameObject:
   - 65: {fileID: 1632646862}
   - 23: {fileID: 1632646861}
   - 114: {fileID: 1632646864}
+  - 54: {fileID: 1632646865}
   m_Layer: 0
   m_Name: Door Key Right
   m_TagString: Untagged
@@ -24746,6 +24948,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spinPad: {fileID: 1885769319}
   moveDistance: 10
+--- !u!54 &1632646865
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1632646859}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 124
+  m_CollisionDetection: 0
 --- !u!1 &1634164720
 GameObject:
   m_ObjectHideFlags: 0
@@ -26309,7 +26526,7 @@ Transform:
   m_PrefabInternal: {fileID: 467212756}
   m_GameObject: {fileID: 1819921906}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.0663147, y: 34.9552231, z: 0}
+  m_LocalPosition: {x: 66.0699997, y: 34.9599991, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1300950105}
@@ -26935,6 +27152,7 @@ MonoBehaviour:
   activated: 0
   flipDirection: 0
   spinInhibitors: 0
+  backSpinInhibitors: 0
   body: {fileID: 1885769318}
   player1Pad: {fileID: 1654342762}
   player2Pad: {fileID: 2046984765}
