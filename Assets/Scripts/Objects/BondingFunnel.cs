@@ -3,13 +3,17 @@ using System.Collections;
 
 public class BondingFunnel : MonoBehaviour {
 
-	public GameObject pushee;
+	public Rigidbody pushee;
 	public GameObject pusheeCap1;
 	public GameObject pusheeCap2;
 	public GameObject bearingPusher;
 	public GameObject scaleBearing1;
 	public GameObject scaleBearing2;
 	public GameObject pusheeBackStop;
+	public Rigidbody noBacktrackBody1;
+	public Rigidbody noBacktrackBody2;
+	//public SpringJoint noBacktrackSpring;
+	//public float noBacktrackSpringForce = 10;
 	public float scaleModification = 0;
 	public float destroyBearingDistance = 3.5f;
 	public float destroyBackupDistance = 24;
@@ -20,7 +24,8 @@ public class BondingFunnel : MonoBehaviour {
 	void Start()
 	{
 		pusheeLocalY = pushee.transform.localPosition.y;
-		//pusheeBackStop.SetActive(false);
+		noBacktrackBody1.centerOfMass = Vector3.zero;
+		noBacktrackBody2.centerOfMass = Vector3.zero;
 	}
 
 	void Update()
@@ -43,7 +48,14 @@ public class BondingFunnel : MonoBehaviour {
 				Destroy(bearingPusher);
 				bearingPusher = null;
 
-				//pusheeBackStop.SetActive(true);
+				SpringJoint[] nonCollisionSprings = GetComponentsInChildren<SpringJoint>();
+				for (int i = 0; i < nonCollisionSprings.Length; i++)
+				{
+					if (nonCollisionSprings[i].connectedBody == pushee)
+					{
+						Destroy(nonCollisionSprings[i]);
+					}
+				}
 			}
 
 			pushee.transform.localScale = pusheeScale;
@@ -56,6 +68,11 @@ public class BondingFunnel : MonoBehaviour {
 
 		Vector3 pusheePos = pushee.transform.localPosition;
 		pusheePos.y = pusheeLocalY;
-		//pushee.transform.localPosition = pusheePos;
+	}
+
+	public void StopBackTracking()
+	{
+		noBacktrackBody1.isKinematic = false;
+		noBacktrackBody2.isKinematic = false;
 	}
 }
