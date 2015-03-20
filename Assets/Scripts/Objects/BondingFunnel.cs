@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BondingFunnel : MonoBehaviour {
 
@@ -11,6 +12,9 @@ public class BondingFunnel : MonoBehaviour {
 	public GameObject scaleBearing2;
 	public Rigidbody noBacktrackBody1;
 	public Rigidbody noBacktrackBody2;
+	public bool solved = false;
+	[SerializeField]
+	public List<GameObject> solveListeners;
 	public float scaleModification = 0;
 	public float destroyBearingDistance = 3.5f;
 	public float destroyBackupDistance = 24;
@@ -61,6 +65,17 @@ public class BondingFunnel : MonoBehaviour {
 			capScale.z = (capScale.x * pusheeScale.x) / pusheeScale.y;
 			pusheeCap1.transform.localScale = capScale;
 			pusheeCap2.transform.localScale = capScale;
+
+			
+		}
+
+		if (!solved && pushee.isKinematic)
+		{
+			solved = true;
+			for (int i = 0; i < solveListeners.Count; i++)
+			{
+				solveListeners[i].SendMessage("FunnelSolved", this, SendMessageOptions.DontRequireReceiver);
+			}
 		}
 
 		Vector3 pusheePos = pushee.transform.localPosition;

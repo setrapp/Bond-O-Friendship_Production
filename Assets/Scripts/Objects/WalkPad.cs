@@ -44,6 +44,8 @@ public class WalkPad : WaitPad {
 			}
 
 			padRenderer.material.color = (startColor * (1 - portionComplete)) + (endColor * portionComplete);
+
+			/* TODO breaks when players don't progress together*/
 		}
 	}
 }
