@@ -9,6 +9,7 @@ public class InhibitSpinPad : MonoBehaviour {
 	public List<Collider> spinIgnoreCollisions;
 	[SerializeField]
 	public List<Collider> backSpinIgnoreCollisions;
+	public bool collided;
 
 	void OnCollisionEnter(Collision col)
 	{
@@ -20,6 +21,8 @@ public class InhibitSpinPad : MonoBehaviour {
 		{
 			spinPad.backSpinInhibitors++;
 		}
+		if(col.transform.name == "Door Key Collider")
+			collided = true;
 	}
 	
 	void OnCollisionExit(Collision col)
