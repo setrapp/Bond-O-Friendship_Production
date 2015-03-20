@@ -9,11 +9,8 @@ public class BondingFunnel : MonoBehaviour {
 	public GameObject bearingPusher;
 	public GameObject scaleBearing1;
 	public GameObject scaleBearing2;
-	public GameObject pusheeBackStop;
 	public Rigidbody noBacktrackBody1;
 	public Rigidbody noBacktrackBody2;
-	//public SpringJoint noBacktrackSpring;
-	//public float noBacktrackSpringForce = 10;
 	public float scaleModification = 0;
 	public float destroyBearingDistance = 3.5f;
 	public float destroyBackupDistance = 24;
