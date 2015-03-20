@@ -5,20 +5,26 @@ public class ClusterNode : MonoBehaviour {
 
 	[HideInInspector]
 	public ClusterNodePuzzle targetPuzzle;
-	public float cooldownTime = 5.0f;
-	private float timer;
+	public bool disappearOnSolve = true;
+	public Renderer nodeRenderer = null;
+	public float cooldownTime = -1;
+	protected float timer;
 	public bool lit;
 	
 	private LineRenderer line;
 	public Material lineMaterial;
-	private Color fadeColor;
-	private float colorCheck;
-	private Color startingcolor;
-	
+	protected Color fadeColor;
+	protected float colorCheck;
+	protected Color startingcolor;
+	protected Collider lighter = null;
 
 	// Use this for initialization
-	void Start () {
-		startingcolor = GetComponent<Renderer>().material.color;
+	virtual protected void Start () {
+		if (nodeRenderer == null)
+		{
+			nodeRenderer = gameObject.GetComponent<Renderer>();
+		}
+		startingcolor = nodeRenderer.material.color;
 	}
 	
 	// Update is called once per frame
@@ -46,25 +52,42 @@ public class ClusterNode : MonoBehaviour {
 			}
 			if(solved && line != null)
 				Destroy(line);*/
+
+			if (!targetPuzzle.solved && cooldownTime > 0 && lighter == null)
+			{
+				timer -= Time.deltaTime;
+				if (timer <= 0)
+				{
+					lit = false;
+					nodeRenderer.material.color = startingcolor;
+				}
+			}
 		}
 
-		/*if(solved)
+		if(targetPuzzle.solved && disappearOnSolve)
 		{
 			fadeColor.a -= Time.deltaTime;
-			GetComponent<Renderer>().material.color = fadeColor;
-			if(GetComponent<Renderer>().material.color.a <= 0.01f)
+			nodeRenderer.material.color = fadeColor;
+			if (nodeRenderer.material.color.a <= 0.01f)
+			{
 				Destroy(gameObject);
-		}*/
+			}
+		}
 	}
 
-	void OnTriggerEnter (Collider col) {
-		
+	virtual protected void OnTriggerEnter (Collider col)
+	{
+		if (targetPuzzle.solved)
+		{
+			return;
+		}
+
 		Color playerColor = new Color();
-		if (col == Globals.Instance.player1.character.collider)
+		if (col == Globals.Instance.player1.character.bodyCollider)
 		{
 			playerColor = Globals.Instance.player1.character.colors.attachmentColor;
 		}
-		else if (col == Globals.Instance.player2.character.collider)
+		else if (col == Globals.Instance.player2.character.bodyCollider)
 		{
 			playerColor = Globals.Instance.player2.character.colors.attachmentColor;
 		}
@@ -74,19 +97,30 @@ public class ClusterNode : MonoBehaviour {
 		}
 
 
-		GetComponent<Renderer>().material.color = playerColor;
-		
-		timer = cooldownTime;
+		nodeRenderer.material.color = playerColor;
+		fadeColor = nodeRenderer.material.color;
+
 		ParticleSystem part = (ParticleSystem)Instantiate(targetPuzzle.nodeParticle);
 		part.transform.position = transform.position;
 		part.startColor = playerColor;
+		part.transform.parent = transform;
+		part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 		Destroy(part.gameObject, 2.0f);
-		fadeColor = GetComponent<Renderer>().material.color;
 
+		lighter = col;
+		timer = cooldownTime;
 		if (!lit)
 		{
 			lit = true;
 			targetPuzzle.NodeColored();
+		}
+	}
+
+	void OnTriggerExit(Collider col)
+	{
+		if (col == lighter)
+		{
+			lighter = null;
 		}
 	}
 }

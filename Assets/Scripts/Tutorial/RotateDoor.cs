@@ -10,24 +10,34 @@ public class RotateDoor : MonoBehaviour {
 
 	void Start()
 	{
-		if (transform.localRotation.eulerAngles.z > stopAngle % 360)
-		{
-			rotateDireciton = -1;
-		}
+		stopAngle = stopAngle % 360;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if(rotating == true)
 		{
-			if ((rotateDireciton > 0 && transform.localRotation.eulerAngles.z < stopAngle) || (rotateDireciton < 0 && transform.localRotation.eulerAngles.z > stopAngle))
+			float currentRotation = transform.localRotation.eulerAngles.z;
+			if (stopAngle < 0)
 			{
-				transform.Rotate(Vector3.forward * Time.deltaTime * speed *rotateDireciton);
+				currentRotation -= 360;
 			}
-			/*if(name == "Gate Hinge" && transform.localRotation.eulerAngles.z < 237.0f)
-				transform.Rotate(Vector3.forward * Time.deltaTime * speed);
-			if(name == "Gate Hinge 2" && transform.localRotation.eulerAngles.z > 56.0f)
-				transform.Rotate(-Vector3.forward * Time.deltaTime * speed);*/
+
+			if (Mathf.Abs(currentRotation) > Mathf.Abs(stopAngle))
+			{
+				rotateDireciton = -1;
+			}
+
+			if (currentRotation != stopAngle)
+			{
+				float rotationAmount = Time.deltaTime * speed ;
+				if (rotationAmount > Mathf.Abs(stopAngle - currentRotation))
+				{
+					rotationAmount = Mathf.Abs(stopAngle - currentRotation);
+					rotating = false;
+				}
+				transform.Rotate(Vector3.forward * rotationAmount * rotateDireciton);
+			}
 		}
 	}
 

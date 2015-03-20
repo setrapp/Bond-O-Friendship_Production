@@ -30,7 +30,7 @@ public class ClusterNodePuzzle : MonoBehaviour {
 			}
 		}
 
-		if (allLit)
+		if (allLit && !solved)
 		{
 			solved = true;
 			for (int i = 0; i < listeners.Count; i++)
