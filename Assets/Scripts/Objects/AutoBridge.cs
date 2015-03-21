@@ -12,7 +12,6 @@ public class AutoBridge : MonoBehaviour {
 	{
 		if (extending && !fullyExtended)
 		{
-			Debug.Log(transform.localScale);
 			Vector3 extendedScale = transform.localScale;
 			float scaleIncrement = scaleRate * Time.deltaTime;
 			if ((endingTarget.transform.position - startingPos).magnitude < (transform.localScale.z + scaleIncrement) / 2)
