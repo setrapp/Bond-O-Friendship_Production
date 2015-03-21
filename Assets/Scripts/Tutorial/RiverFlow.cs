@@ -15,10 +15,10 @@ public class RiverFlow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(inhibitSpinPad.collided == true && spinPad.resetting == true && flowing == false)
+		/*if(inhibitSpinPad.collided == true && spinPad.resetting == true && flowing == false)
 		{
 			particle.startLifetime += 3;
 			flowing = true;
-		}
+		}*/
 	}
 }
