@@ -168,7 +168,11 @@ public class SpinPad : WaitPad
 		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
 		
 		// Fade out player starting pushees.
-		float disappearComplete = portionComplete / pusheeDisappearInterval;
+		float disappearComplete = 1;
+		if (pusheeDisappearInterval > 0)
+		{
+			disappearComplete = portionComplete / pusheeDisappearInterval;
+		}
 
 		Color pusheeColor1 = player1Pushee.material.color;
 		pusheeColor1.a = pusheeStartAlpha * (1 - disappearComplete);
@@ -178,15 +182,14 @@ public class SpinPad : WaitPad
 		pusheeColor2.a = pusheeStartAlpha * (1 - disappearComplete);
 		player2Pushee.material.color = pusheeColor2;
 
-		if (disappearComplete >= 1)
+		if (disappearComplete >= 1 && (player1Pushee.gameObject.activeSelf || player2Pushee.gameObject.activeSelf))
 		{
 			player1Pushee.gameObject.SetActive(false);
 			player2Pushee.gameObject.SetActive(false);
 
-			SpinPadPushee[] centralPushees = centerPushee.GetComponentsInChildren<SpinPadPushee>();
-			for (int i = 0; i < centralPushees.Length; i++)
+			for (int i = 0; i < centerPushee.transform.childCount; i++)
 			{
-				centralPushees[i].gameObject.SetActive(false);
+				centerPushee.transform.GetChild(i).gameObject.SetActive(true);
 			}
 		}
 
