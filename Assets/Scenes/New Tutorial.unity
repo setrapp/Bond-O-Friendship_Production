@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &5673719
 GameObject:
@@ -7696,7 +7697,7 @@ Transform:
   m_LocalScale: {x: .600000024, y: .5, z: 5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!114 &286236658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9345,8 +9346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ec86f54441e974dba89e68b40f6b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinPad: {fileID: 1885769319}
-  inhibitSpinPad: {fileID: 1201007242}
+  stream: {fileID: 0}
+  addStreamLifeTime: 0
 --- !u!1 &314209806
 GameObject:
   m_ObjectHideFlags: 0
@@ -13033,6 +13034,85 @@ Transform:
   - {fileID: 286291323}
   m_Father: {fileID: 240966809}
   m_RootOrder: 1
+--- !u!1 &416629451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 416629452}
+  - 33: {fileID: 416629456}
+  - 65: {fileID: 416629455}
+  - 114: {fileID: 416629454}
+  - 114: {fileID: 416629453}
+  m_Layer: 0
+  m_Name: Stream Empty Trigger Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &416629452
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 416629451}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: -4.37113883e-08}
+  m_LocalPosition: {x: 2.24900031, y: .064999193, z: 0}
+  m_LocalScale: {x: .16232942, y: .5, z: 5}
+  m_Children: []
+  m_Father: {fileID: 1088604995}
+  m_RootOrder: 5
+--- !u!114 &416629453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 416629451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ec86f54441e974dba89e68b40f6b79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stream: {fileID: 1020117761}
+  addStreamLifeTime: 3
+--- !u!114 &416629454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 416629451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca1669e333a0124f8d9e92e38dd8f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkedColliders:
+  - {fileID: 481782887}
+  - {fileID: 286236655}
+  collisions: 0
+  listener: {fileID: 416629451}
+--- !u!65 &416629455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 416629451}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &416629456
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 416629451}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &422816419
 GameObject:
   m_ObjectHideFlags: 0
@@ -14156,7 +14236,7 @@ GameObject:
   - 54: {fileID: 481782889}
   - 114: {fileID: 481782890}
   m_Layer: 0
-  m_Name: Door Key
+  m_Name: Stream Blocker Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14173,7 +14253,7 @@ Transform:
   m_LocalScale: {x: .600000024, y: .5, z: 5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 7
+  m_RootOrder: 1
 --- !u!23 &481782886
 Renderer:
   m_ObjectHideFlags: 0
@@ -16079,7 +16159,7 @@ Transform:
   m_LocalScale: {x: .100000001, y: .100000001, z: .5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!23 &605232018
 Renderer:
   m_ObjectHideFlags: 0
@@ -25878,8 +25958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ec86f54441e974dba89e68b40f6b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinPad: {fileID: 1885769319}
-  inhibitSpinPad: {fileID: 481782890}
+  stream: {fileID: 0}
+  addStreamLifeTime: 0
 --- !u!1 &1020741697
 GameObject:
   m_ObjectHideFlags: 0
@@ -27631,14 +27711,16 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 2}
   m_Children:
   - {fileID: 1885769317}
+  - {fileID: 481782885}
   - {fileID: 286236657}
   - {fileID: 605232017}
   - {fileID: 2089910492}
+  - {fileID: 416629452}
+  - {fileID: 1201007237}
   - {fileID: 1632646860}
   - {fileID: 1611668246}
   - {fileID: 1822527464}
-  - {fileID: 481782885}
-  - {fileID: 1201007237}
+  - {fileID: 1921912571}
   m_Father: {fileID: 435658201}
   m_RootOrder: 7
 --- !u!1 &1092364970
@@ -28721,7 +28803,7 @@ GameObject:
   - 54: {fileID: 1201007241}
   - 114: {fileID: 1201007242}
   m_Layer: 0
-  m_Name: Door Key
+  m_Name: Stream Blocker Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28738,7 +28820,7 @@ Transform:
   m_LocalScale: {x: .600000024, y: .5, z: 5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 8
+  m_RootOrder: 6
 --- !u!23 &1201007238
 Renderer:
   m_ObjectHideFlags: 0
@@ -37038,7 +37120,7 @@ Transform:
   m_LocalScale: {x: .100000001, y: .100000001, z: .5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 5
+  m_RootOrder: 8
 --- !u!23 &1611668247
 Renderer:
   m_ObjectHideFlags: 0
@@ -37392,7 +37474,7 @@ Transform:
   m_LocalScale: {x: .600000024, y: .5, z: 5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 4
+  m_RootOrder: 7
 --- !u!23 &1632646861
 Renderer:
   m_ObjectHideFlags: 0
@@ -40518,7 +40600,7 @@ Transform:
   m_LocalScale: {x: .100000001, y: .100000001, z: .5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 6
+  m_RootOrder: 9
 --- !u!23 &1822527465
 Renderer:
   m_ObjectHideFlags: 0
@@ -41947,6 +42029,85 @@ Transform:
   - {fileID: 387215513}
   m_Father: {fileID: 2105230147}
   m_RootOrder: 0
+--- !u!1 &1921912570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1921912571}
+  - 33: {fileID: 1921912573}
+  - 65: {fileID: 1921912572}
+  - 114: {fileID: 1921912575}
+  - 114: {fileID: 1921912574}
+  m_Layer: 0
+  m_Name: Stream Empty Trigger Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1921912571
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921912570}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: -4.37113883e-08}
+  m_LocalPosition: {x: -2.24900007, y: .0649999976, z: 0}
+  m_LocalScale: {x: .16232942, y: .5, z: 5}
+  m_Children: []
+  m_Father: {fileID: 1088604995}
+  m_RootOrder: 10
+--- !u!65 &1921912572
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921912570}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1921912573
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921912570}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1921912574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921912570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ec86f54441e974dba89e68b40f6b79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stream: {fileID: 310786211}
+  addStreamLifeTime: 3
+--- !u!114 &1921912575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921912570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca1669e333a0124f8d9e92e38dd8f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkedColliders:
+  - {fileID: 1201007239}
+  - {fileID: 1632646862}
+  collisions: 0
+  listener: {fileID: 1921912570}
 --- !u!1 &1922068880
 GameObject:
   m_ObjectHideFlags: 0
@@ -46601,7 +46762,7 @@ Transform:
   m_LocalScale: {x: .100000001, y: .100000001, z: .5}
   m_Children: []
   m_Father: {fileID: 1088604995}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!23 &2089910493
 Renderer:
   m_ObjectHideFlags: 0
