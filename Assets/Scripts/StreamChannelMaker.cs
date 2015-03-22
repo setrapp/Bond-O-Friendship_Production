@@ -111,6 +111,7 @@ public class StreamChannelMaker : MonoBehaviour {
 		if (channelSeries != null)
 		{
 			newChannel.transform.parent = channelSeries.transform;
+			newChannel.parentSeries = channelSeries;
 			channelSeries.channels.Add(newChannel);
 		}
 	}
