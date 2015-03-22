@@ -18,6 +18,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 		}
 		neededCollider = neededCharacter.collider;
 		nodeRenderer.material.color = neededCharacter.colors.attachmentColor - colorDesaturation;
+		startingcolor = nodeRenderer.material.color;
 	}
 
 	protected override void OnTriggerEnter(Collider col)
