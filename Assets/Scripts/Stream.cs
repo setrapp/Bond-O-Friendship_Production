@@ -44,6 +44,7 @@ public class Stream : MonoBehaviour {
 				SeekNextChannel();
 			}
 
+			mover.velocity = mover.rigidbody.velocity;
 			mover.Accelerate(toTarget);
 		}
 		else if (mover.velocity.sqrMagnitude > 0)

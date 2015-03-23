@@ -24,6 +24,7 @@ public class StreamChannelMaker : MonoBehaviour {
 			guide = GetComponent<Tracer>();
 		}
 
+		guide.CreateLineMaker(true);
 		StartChannelSeries();
 
 		MakeChannels();

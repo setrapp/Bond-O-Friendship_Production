@@ -47,7 +47,6 @@ public class StreamChannelSeries : MonoBehaviour {
 		{
 			if (streamChanges[i].preChangeChannel == currentChannel && streamChanges[i].nextSeries.channels.Count > 0)
 			{
-				Debug.Log(streamChanges[i].nextSeries.gameObject.name);
 				nextChannelList.Add(streamChanges[i].nextSeries.channels[0]);
 			}
 		}
