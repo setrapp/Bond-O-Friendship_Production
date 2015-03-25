@@ -97,6 +97,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11441812}
   - 114: {fileID: 11400018}
   - 114: {fileID: 11443356}
   - 114: {fileID: 11400022}
@@ -725,7 +726,8 @@ MonoBehaviour:
   rightTrail: {fileID: 9600000}
   fluffHandler: {fileID: 11400008}
   fluffThrow: {fileID: 11400002}
-  fluffStick: {fileID: 11400010}
+  fluffStickRoot: {fileID: 11400010}
+  fluffStick: {fileID: 11441812}
   bondAttachable: {fileID: 11400018}
   mover: {fileID: 11400012}
   floatMove: {fileID: 11400000}
@@ -788,9 +790,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 8155d4f73c56703429676501f6fde240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allChildSticks: 1
+  attachedSticks: []
   pullableBody: {fileID: 5400000}
   noKinematicOnPull: 0
   allowSway: 0
@@ -928,6 +932,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 300
+--- !u!114 &11441812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  stuckFluff: {fileID: 0}
+  stickingCollider: {fileID: 0}
 --- !u!114 &11443356
 MonoBehaviour:
   m_ObjectHideFlags: 1

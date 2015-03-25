@@ -173,7 +173,7 @@ public class Fluff : MonoBehaviour {
 					{
 						attacheeStick = attachee.gameObject.GetComponent<FluffStick>();
 					}
-					if (attacheeStick == null || attacheeStick.allowSway)
+					if (attacheeStick == null || attacheeStick.root == null || attacheeStick.root.allowSway)
 					{
 						ToggleSwayAnimation(true);
 					}
@@ -254,7 +254,7 @@ public class Fluff : MonoBehaviour {
 
 	private void ApplyPullForce()
 	{
-		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.pullableBody != null)
+		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.root != null && attachee.attachInfo.root.pullableBody != null)
 		{
 			attachee.attachInfo.AddPullForce(pullForce, transform.position);
 		}
@@ -315,7 +315,7 @@ public class Fluff : MonoBehaviour {
 			sprouting = true;
 		}
 		// If desired, start swaying. 
-		if ((attacheeStick == null || attacheeStick.allowSway) && !sprouting)
+		if ((attacheeStick == null || attacheeStick.root == null || attacheeStick.root.allowSway) && !sprouting)
 		{
 			ToggleSwayAnimation(sway);
 		}
@@ -398,16 +398,17 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision)
+	void OnTriggerEnter(Collider collider)
 	{
 		// Attempt to attach to collided object.
-		bool sameLayer = (collision.collider.gameObject.layer == gameObject.layer);
-		bool alreadyAttachee = (attachee != null && collision.collider.gameObject == attachee.gameObject);
-		bool shouldIgnore = collision.collider.gameObject == ignoreCollider;
-		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
+		bool sameLayer = (collider.gameObject.layer == gameObject.layer);
+		bool alreadyAttachee = (attachee != null && collider.gameObject == attachee.gameObject);
+		bool shouldIgnore = collider.gameObject == ignoreCollider;
+		FluffStick fluffStick = collider.GetComponent<FluffStick>();
+		if (fluffStick != null && !((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
 		{
 			// Ensure the standing direction is the surface normal of the collided object.
-			Vector3 standingDirection = collision.contacts[0].normal;
+			/*Vector3 standingDirection = collision.contacts[0].normal;
 			RaycastHit[] hits = Physics.RaycastAll(collision.contacts[0].point + collision.contacts[0].normal, -collision.contacts[0].normal, Mathf.Infinity);
 			bool hitFound = false;
 			for (int i = 0; i < hits.Length && !hitFound; i++)
@@ -418,26 +419,26 @@ public class Fluff : MonoBehaviour {
 					hitFound = true;
 				}
 			}
-			standingDirection.z = 0;
+			standingDirection.z = 0;*/
 
-			GameObject newAttachee = collision.collider.gameObject;
+			GameObject newAttachee = collider.gameObject;
 			FluffAttachDelgator fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
 			while (fluffAttachDelegator != null && fluffAttachDelegator.attachDelegatee != null && fluffAttachDelegator.attachDelegatee != newAttachee)
 			{
 				newAttachee = fluffAttachDelegator.attachDelegatee;
 				fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
 			}
-			Attach(newAttachee, collision.contacts[0].point, standingDirection);
+			Attach(newAttachee, fluffStick.transform.position + fluffStick.transform.TransformDirection(fluffStick.stickOffset), fluffStick.transform.TransformDirection(fluffStick.stickDirection));
 		}
 	}
 	
-	void OnTriggerEnter(Collider other)
+	/*void OnTriggerEnter(Collider other)
 	{
 		if ((attachee == null || attachee.gameObject != other.gameObject) && (attachee == null || !attachee.possessive) && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
-	}
+	}*/
 
 	void OnTriggerExit(Collider other)
 	{

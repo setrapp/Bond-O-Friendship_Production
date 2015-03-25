@@ -88,7 +88,7 @@ public class PlantGrowth : MonoBehaviour {
 							//blossoms[j].GetComponent<DepthMaskHandler>().depthMask.transform.localScale = new Vector3(2,2,2);
 							blossoms[j].AddComponent<FluffPopper>();
 							FluffStick fluffStick = blossoms[j].AddComponent<FluffStick>();
-							fluffStick.maxPullForce = 0.01f;
+							fluffStick.root.maxPullForce = 0.01f;
 						}
 					}
 				}
