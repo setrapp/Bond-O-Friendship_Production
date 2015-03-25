@@ -10,9 +10,15 @@ public class InhibitSpinPad : MonoBehaviour {
 	[SerializeField]
 	public List<Collider> backSpinIgnoreCollisions;
 	//public bool collided;
+	public bool ignoreStream = true;
 
 	void OnCollisionEnter(Collision col)
 	{
+		if (ignoreStream && LayerMask.LayerToName(col.gameObject.layer) == "Water")
+		{
+			return;
+		}
+
 		if (!spinIgnoreCollisions.Contains(col.collider))
 		{
 			spinPad.spinInhibitors++;
@@ -27,6 +33,11 @@ public class InhibitSpinPad : MonoBehaviour {
 	
 	void OnCollisionExit(Collision col)
 	{
+		if (ignoreStream && LayerMask.LayerToName(col.gameObject.layer) == "Water")
+		{
+			return;
+		}
+
 		if (!spinIgnoreCollisions.Contains(col.collider))
 		{
 			spinPad.spinInhibitors--;

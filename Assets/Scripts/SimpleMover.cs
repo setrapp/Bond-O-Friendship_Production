@@ -20,6 +20,7 @@ public class SimpleMover : MonoBehaviour {
 	public Rigidbody body;
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
+	public bool jumpToMaxSpeed = false;
 
 	void Awake()
 	{
@@ -30,6 +31,12 @@ public class SimpleMover : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+
+		if (jumpToMaxSpeed && unfixedVelocity.sqrMagnitude > 0)
+		{
+			//unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
+			//jumpToMaxSpeed = false;
+		}
 
 		if (unfixedVelocity != velocity)
 		{
