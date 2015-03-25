@@ -291,21 +291,26 @@ public class PlayerInput : MonoBehaviour {
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
 		}
-		else if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		/*else if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
 		{
 			LeaveFluff(col);
-		}
+		}*/
 	}
 
-	private void OnCollisionStay(Collision col)
+	private void OnTriggerStay(Collider col)
 	{
 		if (col.collider.gameObject.tag != "Character" && Globals.Instance != null && !Globals.Instance.fluffsThrowable)
 		{
-			LeaveFluff(col);
+			FluffStick fluffStick = col.collider.GetComponent<FluffStick>();
+			if (fluffStick != null && fluffStick.CanStick())
+			{
+				LeaveFluff(fluffStick);
+			}
+			
 		}
 	}
 
-	private void LeaveFluff(Collision col)
+	private void LeaveFluff(FluffStick fluffStick)
 	{
 		// Check if any fluffs are on the character.
 		Fluff firstFluff = null;
@@ -313,15 +318,16 @@ public class PlayerInput : MonoBehaviour {
 		{
 			firstFluff = character.fluffHandler.fluffs[0];
 		}
-		
-		
-		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, col.collider.gameObject.layer) && col.contacts.Length > 0)
+
+		Vector3 leavePos = fluffStick.transform.position + fluffStick.transform.TransformDirection(fluffStick.stickOffset);
+
+		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, fluffStick.gameObject.layer))
 		{
 			Fluff leavee = null;
 			float bestDot = 0;
 			for (int i = 0; i < character.fluffHandler.fluffs.Count; i++)
 			{
-				float fluffDotCol = Vector3.Dot(character.fluffHandler.fluffs[i].transform.position - transform.position, col.contacts[0].point - transform.position);
+				float fluffDotCol = Vector3.Dot(character.fluffHandler.fluffs[i].transform.position - transform.position, leavePos - transform.position);
 				if (fluffDotCol >= bestDot && character.fluffHandler.fluffs[i] != character.fluffHandler.spawnedFluff)
 				{
 					bestDot = fluffDotCol;
@@ -331,7 +337,7 @@ public class PlayerInput : MonoBehaviour {
 
 			if (leavee != null)
 			{
-				bool tooClose = false;
+				/*bool tooClose = false;
 				for (int i = 0; i < Globals.Instance.allFluffs.Count && !tooClose; i++)
 				{
 					Fluff checkFluff = Globals.Instance.allFluffs[i];
@@ -340,11 +346,14 @@ public class PlayerInput : MonoBehaviour {
 					{
 						tooClose = true;
 					}
-				}
+				}*/
 
-				if (!tooClose)
-				{
+				//if (!tooClose)
+				//{
 					character.fluffHandler.fluffs.Remove(leavee);
+					leavee.attachee = null;
+					leavee.nonAttractTime = Globals.Instance.fluffLeaveAttractWait;
+					leavee.attractable = false;
 					if (OrphanFluffHolder.Instance != null)
 					{
 						leavee.transform.parent = OrphanFluffHolder.Instance.transform;
@@ -353,8 +362,9 @@ public class PlayerInput : MonoBehaviour {
 					{
 						leavee.transform.parent = transform.parent;
 					}
-					leavee.Pass((col.contacts[0].point - transform.position) * character.fluffThrow.passForce, gameObject, Globals.Instance.fluffLeaveAttractWait);
-				}
+					//leavee.Pass((leavePos - transform.position) * character.fluffThrow.passForce, gameObject, Globals.Instance.fluffLeaveAttractWait);
+					leavee.Attach(fluffStick, true);
+				//}
 			}
 		}
 	}

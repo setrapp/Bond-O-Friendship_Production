@@ -7,7 +7,8 @@ public class FluffStick : MonoBehaviour {
 	public Fluff stuckFluff;
 	public Collider stickingCollider;
 	public Vector3 stickOffset = Vector3.zero;
-	public Vector3 stickDirection = Vector3.up;
+	public Vector3 stickDirection = Vector3.forward;
+	
 
 	public void Awake()
 	{
@@ -19,9 +20,14 @@ public class FluffStick : MonoBehaviour {
 
 	public void AddPullForce(Vector3 pullForce, Vector3 position)
 	{
-		if (root != null)
+		if (root != null && !root.fluffsDetachable)
 		{
 			root.AddPullForce(pullForce, position);
 		}
+	}
+
+	public bool CanStick()
+	{
+		return (stuckFluff == null || (root != null && !root.trackStuckFluffs));
 	}
 }

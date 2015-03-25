@@ -7,6 +7,8 @@ public class FluffStickRoot : MonoBehaviour {
 	public bool allChildSticks = true;
 	[SerializeField]
 	public List<FluffStick> attachedSticks;
+	public bool trackStuckFluffs = true;
+	public bool fluffsDetachable = true;
 	public Rigidbody pullableBody;
 	public bool noKinematicOnPull;
 	public bool allowSway = true;
@@ -15,21 +17,18 @@ public class FluffStickRoot : MonoBehaviour {
 	public float maxPullForce = 0;
 	private float currentPullForce = 0;
 
-	/*TODO 
-	 * split this up in to two classes, one that can be put on children and one put on parent to track children
-	 * only objects with fluff sticks on them should let fluffs stick to them
-	 * in the parent class, add a list of colliders for stuck fluffs to ignore
-	 * add pull force should start at children but be delegated to parent for proper clamping
-	 * fluff stick children should mask a niche in the stickable object to show that fluffs go there
-	 * pullable body should not be required
-	 */
-
 	void Start()
 	{
 		if (pullableBody == null)
 		{
 			pullableBody = GetComponent<Rigidbody>();
 		}
+
+		if (pullableBody == null)
+		{
+			fluffsDetachable = true;
+		}
+
 		if (pullMass < 0 && pullableBody != null)
 		{
 			pullMass = pullableBody.mass * bodyMassFactor;
@@ -49,7 +48,7 @@ public class FluffStickRoot : MonoBehaviour {
 
 		for (int i = 0; i < attachedSticks.Count; i++)
 		{
-			/*TODO set this as the root of sticks and make fluffs ignore a list of colliders*/
+			attachedSticks[i].root = this;
 		}
 	}
 

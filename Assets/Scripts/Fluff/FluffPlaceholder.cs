@@ -4,7 +4,7 @@ using System.Collections;
 public class FluffPlaceholder : MonoBehaviour {
 	public GameObject fluffPrefab;
 	public Renderer materialSource;
-	public GameObject attachee;
+	public FluffStick attachee;
 	public Fluff createdFluff = null;
 	public int fluffRespawns = 0;
 	private float respawnDelay = 0;
@@ -64,7 +64,7 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee, transform.position, transform.up);
+					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/);
 				}
 				else
 				{
