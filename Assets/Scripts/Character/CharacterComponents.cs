@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class CharacterComponents : MonoBehaviour {
 	private bool componentsFound = false;
 	public CharacterColors colors;
+	public GameObject geometryContainer;
 	public MeshRenderer headRenderer;
 	public Renderer fillRenderer;
 	public SpriteRenderer flashRenderer;
@@ -17,6 +18,7 @@ public class CharacterComponents : MonoBehaviour {
 	public BondAttachable bondAttachable;
 	public SimpleMover mover;
 	public FloatMoving floatMove;
+	public SphereCollider bodyCollider;
 	public Rigidbody body;
 	public Attractor attractor;
 	public FlufflessPass flufflessPass;
@@ -51,6 +53,9 @@ public class CharacterComponents : MonoBehaviour {
 		}
 
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
+
+		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch;
+		bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
 	}
 
 	// Set color of indication flash and fluff spawn fill.
@@ -89,6 +94,10 @@ public class CharacterComponents : MonoBehaviour {
 			if (floatMove == null)
 			{
 				floatMove = GetComponent<FloatMoving>();
+			}
+			if (bodyCollider == null)
+			{
+				bodyCollider = GetComponent<SphereCollider>();
 			}
 			if (body == null)
 			{

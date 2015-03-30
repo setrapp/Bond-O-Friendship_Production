@@ -71,9 +71,9 @@ public class Attractor : MonoBehaviour {
 		// If the attraction feedback is not already being presented, present it.
 		if (attractParticles == null)
 		{
-			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
+			/*attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
 			attractParticles.transform.position = transform.position + new Vector3(0, 0, 0.2f);
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;*/
 		}
 
 		// If desired, attempt to pull in fluffs.
