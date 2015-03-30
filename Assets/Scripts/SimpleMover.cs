@@ -8,6 +8,8 @@ public class SimpleMover : MonoBehaviour {
 	private Vector3 unfixedVelocity;
 	public float acceleration;
 	public float handling;
+	public float minHandlingFactor = 1.0f;
+	private float currentHandling;
 	public float cutSpeedThreshold = 0.1f;
 	public float externalSpeedMultiplier = 1;
 	private bool moving;
@@ -18,6 +20,7 @@ public class SimpleMover : MonoBehaviour {
 	public Rigidbody body;
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
+	public bool jumpToMaxSpeed = false;
 
 	void Awake()
 	{
@@ -28,6 +31,12 @@ public class SimpleMover : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+
+		if (jumpToMaxSpeed && unfixedVelocity.sqrMagnitude > 0)
+		{
+			//unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
+			//jumpToMaxSpeed = false;
+		}
 
 		if (unfixedVelocity != velocity)
 		{
@@ -74,6 +83,7 @@ public class SimpleMover : MonoBehaviour {
 			}			
 			moving = false;
 			slowDown = false;
+			currentHandling = 0;
 		}
 		else
 		{
@@ -92,7 +102,7 @@ public class SimpleMover : MonoBehaviour {
 		moving = false;
 	}
 
-	public void Accelerate(Vector3 velocityChange, bool forceFullAcceleration = true, bool forceFullTurning = true)
+	public void Accelerate(Vector3 velocityChange, bool clamp = true, bool forceFullAcceleration = true, bool forceFullTurning = true)
 	{
 		// Dividing by deltaTime later so avoid even trying to change velocity if time has not changed.
 		if (Time.deltaTime <= 0)
@@ -100,41 +110,13 @@ public class SimpleMover : MonoBehaviour {
 			return;
 		}
 
-		Vector3 parallel = velocityChange;
-		Vector3 perpendicular = Vector3.zero;
-
-		// If already moving separate acceleration into components parallel and perpendicular to velocity.
-		if (velocity.sqrMagnitude > 0)
+		if (clamp)
 		{
-			parallel = Helper.ProjectVector(velocity, velocityChange);
-			perpendicular = velocityChange - parallel;
-		}
-
-		// If forcing full acceleration or attempting to accelerate beyond limits, clamp to max acceleration.
-		if (forceFullAcceleration || parallel.sqrMagnitude > Mathf.Pow(acceleration, 2))
-		{
-			parallel = parallel.normalized * acceleration;
-		}
-
-		// If forcing full turning or attempting to turn beyond limits, clamp to max handling.
-		if (forceFullTurning || perpendicular.sqrMagnitude > Mathf.Pow(handling, 2))
-		{
-			perpendicular = perpendicular.normalized * handling;
-			// Avoid overshooting desired direction.
-			if (forceFullTurning)
-			{
-				Vector3 oldVelPerpAcceleration = velocity - Helper.ProjectVector(velocityChange, velocity);
-				Vector3 newVelocity = velocity + perpendicular * Time.deltaTime;
-				Vector3 newVelPerpAcceleration = newVelocity - Helper.ProjectVector(velocityChange, newVelocity);
-				if (Vector3.Dot(oldVelPerpAcceleration, newVelPerpAcceleration) < 0)
-				{
-					perpendicular = -oldVelPerpAcceleration / Time.deltaTime;
-				}
-			}
+			velocityChange = ClampMovementChange(velocityChange, forceFullAcceleration, forceFullTurning);
 		}
 
 		// Accelerate by recombining parallel and perpendicular components.
-		unfixedVelocity += (parallel + perpendicular) * Time.deltaTime;
+		unfixedVelocity += velocityChange * Time.deltaTime;
 
 		// Clamp down to max speed and if a rigid body is attached, update it.
 		if (unfixedVelocity.sqrMagnitude > Mathf.Pow(maxSpeed, 2))
@@ -155,5 +137,76 @@ public class SimpleMover : MonoBehaviour {
 			speed = maxSpeed;
 		}
 		unfixedVelocity = direction * speed * Mathf.Max(externalSpeedMultiplier, 0);
+	}
+
+	public Vector3 ClampMovementChange(Vector3 moveVector, bool forceFullAcceleration = true, bool forceFullTurning = true)
+	{
+		Vector3 parallel = Vector3.zero;
+		Vector3 perpendicular = Vector3.zero;
+
+		// If already moving separate acceleration into components parallel and perpendicular to velocity.
+		Vector3 baseDirection = velocity;
+		if (velocity.sqrMagnitude <= 0)
+		{
+			baseDirection = transform.forward;
+		}
+
+		/*TODO make player not turn instantly when stationary*/
+
+		parallel = Helper.ProjectVector(baseDirection, moveVector);
+		perpendicular = moveVector - parallel;
+
+		// If forcing full acceleration or attempting to accelerate beyond limits, clamp to max acceleration.
+		if (forceFullAcceleration || parallel.sqrMagnitude > Mathf.Pow(acceleration, 2))
+		{
+			parallel = parallel.normalized * acceleration;
+		}
+
+		SetCurrentHandling(moveVector);
+
+		// If forcing full turning or attempting to turn beyond limits, clamp to max handling.
+		float absoluteHandling = Mathf.Abs(currentHandling);
+		if (forceFullTurning || perpendicular.sqrMagnitude > Mathf.Pow(absoluteHandling, 2))
+		{
+			perpendicular = perpendicular.normalized * absoluteHandling;
+
+			// Avoid overshooting desired direction.
+			if (forceFullTurning)
+			{
+				Vector3 oldVelPerpAcceleration = velocity - Helper.ProjectVector(moveVector, baseDirection);
+				Vector3 newVelocity = velocity + perpendicular * Time.deltaTime;
+				Vector3 newVelPerpAcceleration = newVelocity - Helper.ProjectVector(moveVector, newVelocity);
+				if (Vector3.Dot(oldVelPerpAcceleration, newVelPerpAcceleration) < 0)
+				{
+					perpendicular = -oldVelPerpAcceleration / Time.deltaTime;
+				}
+			}
+		}
+
+		return parallel + perpendicular;
+	}
+
+	private void SetCurrentHandling(Vector3 turningDirection)
+	{
+		currentHandling = handling;
+
+		float speedBasedHandling = handling;
+		if (minHandlingFactor > 1)
+		{
+			minHandlingFactor = 1;
+		}
+		else if (minHandlingFactor < 1)
+		{
+			speedBasedHandling = Mathf.Min((minHandlingFactor * handling) + ((velocity.magnitude / maxSpeed) * ((1 - minHandlingFactor) * handling)), handling);
+		}
+
+		if (currentHandling > speedBasedHandling)
+		{
+			currentHandling = speedBasedHandling;
+		}
+		else if (currentHandling < -speedBasedHandling)
+		{
+			currentHandling = -speedBasedHandling;
+		}
 	}
 }

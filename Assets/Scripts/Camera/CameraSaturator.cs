@@ -14,7 +14,7 @@ public class CameraSaturator : MonoBehaviour {
 			return;
 		}
 
-		Camera targetCamera = CameraSplitter.Instance.combinedCamera;
+		Camera targetCamera = CameraSplitter.Instance.splitCamera1;
 		if (targetCameraType == TargetCamera.PLAYER_1)
 		{
 			targetCamera = CameraSplitter.Instance.splitCamera1;

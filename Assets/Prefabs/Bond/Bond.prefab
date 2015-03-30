@@ -265,9 +265,11 @@ MonoBehaviour:
   links:
   - {fileID: 11400006}
   - {fileID: 11400004}
+  bondPullPrefab: {fileID: 196338, guid: 6d554e9a852ad2745a548f8ced2807d9, type: 2}
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -279,12 +281,15 @@ MonoBehaviour:
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
   forceFullDetail: 0
   fullDetailAddDistance: -1
   fullDetailRemoveDistance: -1
+  currentDetail: 1
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -304,6 +309,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 14500002}
   jointToAttachment: {fileID: 14500010}
   orderLevel: 0
+  broken: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -323,6 +329,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 14500000}
   jointToAttachment: {fileID: 14500008}
   orderLevel: 0
+  broken: 0
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1
