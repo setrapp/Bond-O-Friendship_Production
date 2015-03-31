@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3330886}
   - 23: {fileID: 2330886}
   - 114: {fileID: 11430892}
-  - 54: {fileID: 5483346}
   - 114: {fileID: 11483336}
   - 64: {fileID: 6483346}
   m_Layer: 15
@@ -276,7 +275,6 @@ GameObject:
   - 33: {fileID: 3383338}
   - 23: {fileID: 2383338}
   - 114: {fileID: 11483332}
-  - 54: {fileID: 5483344}
   - 114: {fileID: 11483330}
   - 64: {fileID: 6483340}
   m_Layer: 15
@@ -306,7 +304,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130882}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
-  m_LocalPosition: {x: -80.5999985, y: 30.149992, z: -1}
+  m_LocalPosition: {x: -19.0049496, y: -80.7754059, z: 1}
   m_LocalScale: {x: 10, y: 10, z: 2}
   m_Children:
   - {fileID: 430880}
@@ -724,36 +722,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 62
   m_CollisionDetection: 0
---- !u!54 &5483344
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183328}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: .0500000007
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!54 &5483346
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 130880}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: .0500000007
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!64 &6431532
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -929,15 +897,15 @@ MonoBehaviour:
   pOonPad: 0
   pTonPad: 0
   activated: 0
-  autoSpin: 0
   flipDirection: 0
+  spinInhibitors: 0
+  backSpinInhibitors: 0
+  body: {fileID: 5450830}
   player1Pad: {fileID: 11430892}
   player2Pad: {fileID: 11483332}
   finishRing: {fileID: 130896}
   ripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
-  maxSpinSpeed: 90
-  spinAcceleration: 10
-  goalRotation: 1080
+  goalRotation: 360
   currentRotation: 0
   ringMinSize: .100000001
   rinMaxSize: 1.20000005
@@ -947,17 +915,13 @@ MonoBehaviour:
   player1Pushee: {fileID: 2350828}
   player2Pushee: {fileID: 2350830}
   pusheeDisappearInterval: .25
-  maxTorque: 60
-  torqueDecay: 1
-  spiralPushees: 0
-  pushEndDistance: .129999995
   oldRotation: 0
-  body: {fileID: 5450830}
   resetDelay: 0
-  resetAcceleration: 10
-  resetMaxSpeed: 100
+  resetAcceleration: 100
+  resetMaxSpeed: 1000
   resetSpeed: 0
   resetting: 0
+  portionComplete: 0
 --- !u!114 &11431530
 MonoBehaviour:
   m_ObjectHideFlags: 1

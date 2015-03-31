@@ -3,7 +3,10 @@ using System.Collections;
 
 public class SpinPad : WaitPad
 {
+	public bool infinteSpin = false;
 	public bool flipDirection = false;
+	public int spinInhibitors = 0;
+	public int backSpinInhibitors = 0;
 	public Rigidbody body;
 	public SpinPadSide player1Pad;
 	public SpinPadSide player2Pad;
@@ -31,6 +34,7 @@ public class SpinPad : WaitPad
 	public float resetMaxSpeed = 100.0f;
 	public float resetSpeed = 0f;
 	public bool resetting = false;
+	public float portionComplete;
 
 	protected override void Start()
 	{
@@ -91,7 +95,7 @@ public class SpinPad : WaitPad
 			float newRotation = transform.rotation.eulerAngles.z;
 			if (player1Pushing && player2Pushing)
 			{
-				if (body.isKinematic)
+				if (body.isKinematic && spinInhibitors <= 0)
 				{
 					body.isKinematic = false;
 				}
@@ -111,11 +115,26 @@ public class SpinPad : WaitPad
 				}
 			}
 
+			// Don't allow movement when spin is inhibited.
+			if (spinInhibitors > 0 && !body.isKinematic)
+			{
+				body.isKinematic = true;
+			}
+			else if (spinInhibitors < 0)
+			{
+				spinInhibitors = 0;
+			}
+
+			if (backSpinInhibitors < 0)
+			{
+				backSpinInhibitors = 0;
+			}
+
 			// Save the current rotation for comparison next frame.
 			oldRotation = newRotation;
 
 			// Snap to finish and produce success feedback when goal rotation is reached.
-			if (currentRotation >= goalRotation)
+			if (currentRotation >= goalRotation && !infinteSpin)
 			{
 				if (!body.isKinematic)
 				{
@@ -145,12 +164,16 @@ public class SpinPad : WaitPad
 		}
 
 		// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
-		float portionComplete = currentRotation / goalRotation;
+		portionComplete = Mathf.Clamp(currentRotation / goalRotation, 0, 1);
 		float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
 		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
 		
 		// Fade out player starting pushees.
-		float disappearComplete = portionComplete / pusheeDisappearInterval;
+		float disappearComplete = 1;
+		if (pusheeDisappearInterval > 0)
+		{
+			disappearComplete = portionComplete / pusheeDisappearInterval;
+		}
 
 		Color pusheeColor1 = player1Pushee.material.color;
 		pusheeColor1.a = pusheeStartAlpha * (1 - disappearComplete);
@@ -160,15 +183,14 @@ public class SpinPad : WaitPad
 		pusheeColor2.a = pusheeStartAlpha * (1 - disappearComplete);
 		player2Pushee.material.color = pusheeColor2;
 
-		if (disappearComplete >= 1)
+		if (disappearComplete >= 1 && (player1Pushee.gameObject.activeSelf || player2Pushee.gameObject.activeSelf))
 		{
 			player1Pushee.gameObject.SetActive(false);
 			player2Pushee.gameObject.SetActive(false);
 
-			SpinPadPushee[] centralPushees = centerPushee.GetComponentsInChildren<SpinPadPushee>();
-			for (int i = 0; i < centralPushees.Length; i++)
+			for (int i = 0; i < centerPushee.transform.childCount; i++)
 			{
-				centralPushees[i].gameObject.SetActive(false);
+				centerPushee.transform.GetChild(i).gameObject.SetActive(true);
 			}
 		}
 
@@ -219,28 +241,31 @@ public class SpinPad : WaitPad
 		}
 	}
 
-	private IEnumerator ResetToStart()
+	public IEnumerator ResetToStart()
 	{
 		resetting = true;
 		yield return new WaitForSeconds(resetDelay);
 
 		while (currentRotation > 0 && (!pOonPad || !pTonPad))
 		{
-			resetSpeed += resetAcceleration * Time.deltaTime;
-			if (resetSpeed > resetMaxSpeed)
+			if (backSpinInhibitors <= 0)
 			{
-				resetSpeed = resetMaxSpeed;
-			}
+				resetSpeed += resetAcceleration * Time.deltaTime;
+				if (resetSpeed > resetMaxSpeed)
+				{
+					resetSpeed = resetMaxSpeed;
+				}
 
-			float backspin = resetSpeed * Time.deltaTime;
-			if (currentRotation - backspin < 0)
-			{
-				backspin = currentRotation;
-			}
+				float backspin = resetSpeed * Time.deltaTime;
+				if (currentRotation - backspin < 0)
+				{
+					backspin = currentRotation;
+				}
 
-			transform.Rotate(new Vector3(0, 0, -backspin));
-			currentRotation -= backspin;
-			oldRotation = transform.rotation.eulerAngles.z;
+				transform.Rotate(new Vector3(0, 0, -backspin));
+				currentRotation -= backspin;
+				oldRotation = transform.rotation.eulerAngles.z;
+			}
 
 			yield return null;
 		}

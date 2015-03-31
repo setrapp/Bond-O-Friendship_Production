@@ -8,7 +8,6 @@ public class SimpleMover : MonoBehaviour {
 	private Vector3 unfixedVelocity;
 	public float acceleration;
 	public float handling;
-	public float handlingAcceleration = 0;
 	public float minHandlingFactor = 1.0f;
 	private float currentHandling;
 	public float cutSpeedThreshold = 0.1f;
@@ -21,6 +20,7 @@ public class SimpleMover : MonoBehaviour {
 	public Rigidbody body;
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
+	public bool jumpToMaxSpeed = false;
 
 	void Awake()
 	{
@@ -31,6 +31,12 @@ public class SimpleMover : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+
+		if (jumpToMaxSpeed && unfixedVelocity.sqrMagnitude > 0)
+		{
+			//unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
+			//jumpToMaxSpeed = false;
+		}
 
 		if (unfixedVelocity != velocity)
 		{
@@ -182,24 +188,7 @@ public class SimpleMover : MonoBehaviour {
 
 	private void SetCurrentHandling(Vector3 turningDirection)
 	{
-		if (handlingAcceleration <= 0)
-		{
-			currentHandling = handling;
-			return;
-		}
-		
-		float handlingDirectionFactor = 1;
-		if (Vector3.Dot(transform.right, turningDirection) == 0)
-		{
-			currentHandling = 0;
-			return;
-		}
-		else if (Vector3.Dot(transform.right, turningDirection) < 0)
-		{
-			handlingDirectionFactor = -1;
-		}
-
-		currentHandling += handlingAcceleration * Time.deltaTime * handlingDirectionFactor;
+		currentHandling = handling;
 
 		float speedBasedHandling = handling;
 		if (minHandlingFactor > 1)
