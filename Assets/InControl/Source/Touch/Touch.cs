@@ -71,7 +71,7 @@ namespace InControl
 			}
 
 			var mousePosition = new Vector2( Mathf.Round( Input.mousePosition.x ), Mathf.Round( Input.mousePosition.y ) );
-
+			
 			if (Input.GetMouseButtonDown( 0 ))
 			{
 				phase = TouchPhase.Began;
@@ -89,7 +89,7 @@ namespace InControl
 
 			if (Input.GetMouseButtonUp( 0 ))
 			{
-				phase = TouchPhase.Ended;
+				phase = TouchPhase.Ended;	
 
 				tapCount = 1;
 

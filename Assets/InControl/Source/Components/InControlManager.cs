@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace InControl
 {
-	public class InControlManager : MonoBehaviour
+	public class InControlManager : SingletonMonoBehavior<InControlManager>
 	{
 		public bool logDebugInfo = false;
 		public bool invertYAxis = false;
@@ -19,10 +19,12 @@ namespace InControl
 
 		void OnEnable()
 		{
+			SetupSingleton();
+
 			if (logDebugInfo)
 			{
 				Debug.Log( "InControl (version " + InputManager.Version + ")" );
-				Logger.OnLogMessage += HandleOnLogMessage;
+				Logger.OnLogMessage += LogMessage;
 			}
 
 			InputManager.InvertYAxis = invertYAxis;
@@ -38,7 +40,7 @@ namespace InControl
 				}
 				else
 				{
-					var customProfileInstance = Activator.CreateInstance( classType ) as UnityInputDeviceProfile;
+					var customProfileInstance = Activator.CreateInstance( classType ) as InputDeviceProfile;
 					InputManager.AttachDevice( new UnityInputDevice( customProfileInstance ) );
 				}
 			}
@@ -65,10 +67,14 @@ namespace InControl
 
 		IEnumerator CheckForOuyaEverywhereSupport()
 		{
+			Debug.Log( "[InControl] Checking for OUYA Everywhere support..." );
+
 			while (!OuyaSDK.isIAPInitComplete())
 			{
 				yield return null;
 			}
+
+			Debug.Log( "[InControl] OUYA SDK IAP initialization has completed." );
 
 			OuyaEverywhereDeviceManager.Enable();
 		}
@@ -111,7 +117,7 @@ namespace InControl
 		}
 
 
-		void HandleOnLogMessage( LogMessage logMessage )
+		void LogMessage( LogMessage logMessage )
 		{
 			switch (logMessage.type)
 			{

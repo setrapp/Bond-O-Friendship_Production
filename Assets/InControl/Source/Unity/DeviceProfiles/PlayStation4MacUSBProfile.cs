@@ -58,7 +58,7 @@ namespace InControl
 				},
 				new InputControlMapping {
 					Handle = "Options",
-					Target = InputControlType.Select,
+					Target = InputControlType.Options,
 					Source = Button9
 				},
 				new InputControlMapping {
@@ -84,74 +84,26 @@ namespace InControl
 			};
 
 			AnalogMappings = new[] {
-				new InputControlMapping {
-					Handle = "Left Stick X",
-					Target = InputControlType.LeftStickX,
-					Source = Analog0
-				},
-				new InputControlMapping {
-					Handle = "Left Stick Y",
-					Target = InputControlType.LeftStickY,
-					Source = Analog1,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "Right Stick X",
-					Target = InputControlType.RightStickX,
-					Source = Analog2
-				},
-				new InputControlMapping {
-					Handle = "Right Stick Y",
-					Target = InputControlType.RightStickY,
-					Source = Analog3,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "Left Trigger",
-					Target = InputControlType.LeftTrigger,
-					Source = Analog4,
-					TargetRange = InputControlMapping.Range.Positive,
-					IgnoreInitialZeroValue = true
-				},
-				new InputControlMapping {
-					Handle = "Right Trigger",
-					Target = InputControlType.RightTrigger,
-					Source = Analog5,
-					TargetRange = InputControlMapping.Range.Positive,
-					IgnoreInitialZeroValue = true
-				},
-				new InputControlMapping {
-					Handle = "DPad Left",
-					Target = InputControlType.DPadLeft,
-					Source = Analog6,
-					SourceRange = InputControlMapping.Range.Negative,
-					TargetRange = InputControlMapping.Range.Negative,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "DPad Right",
-					Target = InputControlType.DPadRight,
-					Source = Analog6,
-					SourceRange = InputControlMapping.Range.Positive,
-					TargetRange = InputControlMapping.Range.Positive
-				},
-				new InputControlMapping {
-					Handle = "DPad Down",
-					Target = InputControlType.DPadDown,
-					Source = Analog7,
-					SourceRange = InputControlMapping.Range.Positive,
-					TargetRange = InputControlMapping.Range.Positive
-				},
-				new InputControlMapping {
-					Handle = "DPad Up",
-					Target = InputControlType.DPadUp,
-					Source = Analog7,
-					SourceRange = InputControlMapping.Range.Negative,
-					TargetRange = InputControlMapping.Range.Negative,
-					Invert = true
-				},
+				LeftStickLeftMapping( Analog0 ),
+				LeftStickRightMapping( Analog0 ),
+				LeftStickUpMapping( Analog1 ),
+				LeftStickDownMapping( Analog1 ),
+
+				RightStickLeftMapping( Analog2 ),
+				RightStickRightMapping( Analog2 ),
+				RightStickUpMapping( Analog3 ),
+				RightStickDownMapping( Analog3 ),
+
+				LeftTriggerMapping( Analog4 ),
+				RightTriggerMapping( Analog5 ),
+
+				DPadLeftMapping( Analog6 ),
+				DPadRightMapping( Analog6 ),
+				DPadUpMapping( Analog7 ),
+				DPadDownMapping( Analog7 ),
 			};
 		}
 	}
+	// @endcond
 }
 
