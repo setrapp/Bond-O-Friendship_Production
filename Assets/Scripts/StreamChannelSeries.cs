@@ -14,20 +14,29 @@ public class StreamChannelSeries : MonoBehaviour {
 	{
 		for(int i = 0; i < channels.Count; i++)
 		{
-			Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
-			if (bedRenderer != null)
+			if(channels[i].bed != null)
 			{
-				bedRenderer.enabled = renderBeds;
+				Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
+				if (bedRenderer != null)
+				{
+					bedRenderer.enabled = renderBeds;
+				}
 			}
-			Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
-			if (bank1Renderer != null)
+			if(channels[i].bank1 != null)
 			{
-				bank1Renderer.enabled = renderBanks;
+				Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
+				if (bank1Renderer != null)
+				{
+					bank1Renderer.enabled = renderBanks;
+				}
 			}
-			Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
-			if (bank2Renderer != null)
+			if(channels[i].bank2 != null)
 			{
-				bank2Renderer.enabled = renderBanks;
+				Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
+				if (bank2Renderer != null)
+				{
+					bank2Renderer.enabled = renderBanks;
+				}
 			}
 		}
 	}
@@ -36,19 +45,26 @@ public class StreamChannelSeries : MonoBehaviour {
 	{
 		List<StreamChannel> nextChannelList = new List<StreamChannel>();
 
-		int currentIndex = channels.IndexOf(currentChannel);
-		if (currentIndex >= 0 && currentIndex < channels.Count - 1)
-		{
-			nextChannelList.Add(channels[currentIndex + 1]);
-		}
-
 
 		for (int i = 0; i < streamChanges.Count; i++)
 		{
 			if (streamChanges[i].preChangeChannel == currentChannel && streamChanges[i].nextSeries.channels.Count > 0)
 			{
-				nextChannelList.Add(streamChanges[i].nextSeries.channels[0]);
+				if (streamChanges[i].postChangeChannel == null || streamChanges[i].postChangeChannel.parentSeries != streamChanges[i].nextSeries)
+				{
+					nextChannelList.Add(streamChanges[i].nextSeries.channels[0]);
+				}
+				else
+				{
+					nextChannelList.Add(streamChanges[i].postChangeChannel);
+				}
 			}
+		}
+
+		int currentIndex = channels.IndexOf(currentChannel);
+		if (currentIndex >= 0 && currentIndex < channels.Count - 1)
+		{
+			nextChannelList.Add(channels[currentIndex + 1]);
 		}
 
 		if (nextChannelList.Count <= 0)
@@ -71,4 +87,5 @@ public class StreamChannelChange
 {
 	public StreamChannel preChangeChannel;
 	public StreamChannelSeries nextSeries;
+	public StreamChannel postChangeChannel;
 }
