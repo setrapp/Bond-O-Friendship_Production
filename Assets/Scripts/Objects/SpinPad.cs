@@ -34,7 +34,6 @@ public class SpinPad : WaitPad
 	public float resetMaxSpeed = 100.0f;
 	public float resetSpeed = 0f;
 	public bool resetting = false;
-	public float portionComplete;
 
 	protected override void Start()
 	{
