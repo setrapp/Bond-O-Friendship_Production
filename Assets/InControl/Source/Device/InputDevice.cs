@@ -6,7 +6,7 @@ namespace InControl
 {
 	public class InputDevice
 	{
-		public static readonly InputDevice Null = new InputDevice( "NullInputDevice" );
+		public static readonly InputDevice Null = new InputDevice( "None" );
 
 		internal int SortOrder = int.MaxValue;
 
@@ -17,9 +17,21 @@ namespace InControl
 
 		public InputControl[] Controls { get; protected set; }
 
+		public OneAxisInputControl LeftStickX { get; protected set; }
+		public OneAxisInputControl LeftStickY { get; protected set; }
 		public TwoAxisInputControl LeftStick { get; protected set; }
+
+		public OneAxisInputControl RightStickX { get; protected set; }
+		public OneAxisInputControl RightStickY { get; protected set; }
 		public TwoAxisInputControl RightStick { get; protected set; }
+
+		public OneAxisInputControl DPadX { get; protected set; }
+		public OneAxisInputControl DPadY { get; protected set; }
 		public TwoAxisInputControl DPad { get; protected set; }
+
+		public InputControl Command { get; protected set; }
+
+		public bool IsAttached { get; internal set; }
 
 
 		public InputDevice( string name )
@@ -32,27 +44,46 @@ namespace InControl
 			const int numInputControlTypes = (int) InputControlType.Count + 1;
 			Controls = new InputControl[numInputControlTypes];
 
+			LeftStickX = new OneAxisInputControl();
+			LeftStickY = new OneAxisInputControl();
 			LeftStick = new TwoAxisInputControl();
+			LeftStick.LowerDeadZone = 0.2f;
+
+			RightStickX = new OneAxisInputControl();
+			RightStickY = new OneAxisInputControl();
 			RightStick = new TwoAxisInputControl();
+			RightStick.LowerDeadZone = 0.2f;
+
+			DPadX = new OneAxisInputControl();
+			DPadY = new OneAxisInputControl();
 			DPad = new TwoAxisInputControl();
+			DPad.LowerDeadZone = 0.2f;
+
+			Command = AddControl( InputControlType.Command, "Command" );
+		}
+
+
+		public bool HasControl( InputControlType inputControlType )
+		{
+			return Controls[(int) inputControlType] != null;
 		}
 
 
 		public InputControl GetControl( InputControlType inputControlType )
 		{
-			var control = Controls[ (int) inputControlType ];
+			var control = Controls[(int) inputControlType];
 			return control ?? InputControl.Null;
 		}
 
 
-		// Warning: this is not efficient. Don't use it unless you have to, m'kay?
+		// Warning: this is super inefficient. Don't use it unless you have to, m'kay?
 		public static InputControlType GetInputControlTypeByName( string inputControlName )
 		{
 			return (InputControlType) Enum.Parse( typeof(InputControlType), inputControlName );
 		}
 
 
-		// Warning: this is not efficient. Don't use it unless you have to, m'kay?
+		// Warning: this is super inefficient. Don't use it unless you have to, m'kay?
 		public InputControl GetControlByName( string inputControlName )
 		{
 			var inputControlType = GetInputControlTypeByName( inputControlName );
@@ -63,33 +94,55 @@ namespace InControl
 		public InputControl AddControl( InputControlType inputControlType, string handle )
 		{
 			var inputControl = new InputControl( handle, inputControlType );
-			Controls[ (int) inputControlType ] = inputControl;
+			Controls[(int) inputControlType] = inputControl;
 			return inputControl;
 		}
 
 
-		public void UpdateWithState( InputControlType inputControlType, bool state, ulong updateTick )
+		internal void UpdateWithState( InputControlType inputControlType, bool state, ulong updateTick, float deltaTime )
 		{
-			GetControl( inputControlType ).UpdateWithState( state, updateTick );
+			GetControl( inputControlType ).UpdateWithState( state, updateTick, deltaTime );
 		}
 
 
-		public void UpdateWithValue( InputControlType inputControlType, float value, ulong updateTick )
+		internal void UpdateWithValue( InputControlType inputControlType, float value, ulong updateTick, float deltaTime )
 		{
-			GetControl( inputControlType ).UpdateWithValue( value, updateTick );
+			GetControl( inputControlType ).UpdateWithValue( value, updateTick, deltaTime );
 		}
 
 
-		public void PreUpdate( ulong updateTick, float deltaTime )
+		internal void UpdateLeftStickWithValue( Vector2 value, ulong updateTick, float deltaTime )
 		{
-			int controlCount = Controls.GetLength( 0 );
-			for (int i = 0; i < controlCount; i++)
+			LeftStickLeft.UpdateWithValue( Mathf.Max( 0.0f, -value.x ), updateTick, deltaTime );
+			LeftStickRight.UpdateWithValue( Mathf.Max( 0.0f, value.x ), updateTick, deltaTime );
+
+			if (InputManager.InvertYAxis)
 			{
-				var control = Controls[i];
-				if (control != null)
-				{
-					control.PreUpdate( updateTick );
-				}
+				LeftStickUp.UpdateWithValue( Mathf.Max( 0.0f, -value.y ), updateTick, deltaTime );
+				LeftStickDown.UpdateWithValue( Mathf.Max( 0.0f, value.y ), updateTick, deltaTime );
+			}
+			else
+			{
+				LeftStickUp.UpdateWithValue( Mathf.Max( 0.0f, value.y ), updateTick, deltaTime );
+				LeftStickDown.UpdateWithValue( Mathf.Max( 0.0f, -value.y ), updateTick, deltaTime );
+			}
+		}
+
+
+		internal void UpdateRightStickWithValue( Vector2 value, ulong updateTick, float deltaTime )
+		{
+			RightStickLeft.UpdateWithValue( Mathf.Max( 0.0f, -value.x ), updateTick, deltaTime );
+			RightStickRight.UpdateWithValue( Mathf.Max( 0.0f, value.x ), updateTick, deltaTime );
+
+			if (InputManager.InvertYAxis)
+			{
+				RightStickUp.UpdateWithValue( Mathf.Max( 0.0f, -value.y ), updateTick, deltaTime );
+				RightStickDown.UpdateWithValue( Mathf.Max( 0.0f, value.y ), updateTick, deltaTime );
+			}
+			else
+			{
+				RightStickUp.UpdateWithValue( Mathf.Max( 0.0f, value.y ), updateTick, deltaTime );
+				RightStickDown.UpdateWithValue( Mathf.Max( 0.0f, -value.y ), updateTick, deltaTime );
 			}
 		}
 
@@ -100,26 +153,30 @@ namespace InControl
 		}
 
 
-		public void PostUpdate( ulong updateTick, float deltaTime )
+		bool AnyCommandControlIsPressed()
 		{
-			// Apply post-processing to controls.
-			int controlCount = Controls.GetLength( 0 );
+			for (int i = (int) InputControlType.Back; i <= (int) InputControlType.View; i++)
+			{
+				var control = Controls[i];
+				if (control != null && control.IsPressed)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
+		public void Commit( ulong updateTick, float deltaTime )
+		{
+			int controlCount = Controls.Length;
 			for (int i = 0; i < controlCount; i++)
 			{
 				var control = Controls[i];
 				if (control != null)
 				{
-					if (control.RawValue.HasValue)
-					{
-						control.UpdateWithValue( control.RawValue.Value, updateTick );
-					}
-					else
-					if (control.PreValue.HasValue)
-					{
-						control.UpdateWithValue( ProcessAnalogControlValue( control, deltaTime ), updateTick );
-					}
-
-					control.PostUpdate( updateTick );
+					control.Commit();
 
 					if (control.HasChanged)
 					{
@@ -128,88 +185,25 @@ namespace InControl
 				}
 			}
 
-			// Update two-axis controls.
-			LeftStick.Update( LeftStickX, LeftStickY, updateTick );
-			RightStick.Update( RightStickX, RightStickY, updateTick );
-
-			var dpv = DPadVector;
-			DPad.Update( dpv.x, dpv.y, updateTick );
-		}
-
-
-		float ProcessAnalogControlValue( InputControl control, float deltaTime )
-		{
-			var analogValue = control.PreValue.Value;
-
-			var obverseTarget = control.Obverse;
-			if (obverseTarget.HasValue)
+			if (IsKnown)
 			{
-				var obverseControl = GetControl( obverseTarget.Value );
-				if (obverseControl.PreValue.HasValue)
-				{
-					analogValue = ApplyCircularDeadZone( analogValue, obverseControl.PreValue.Value, control.LowerDeadZone, control.UpperDeadZone );
-				}
-				else
-				{
-					analogValue = ApplyDeadZone( analogValue, control.LowerDeadZone, control.UpperDeadZone );
-				}
-			}
-			else
-			{
-				analogValue = ApplyDeadZone( analogValue, control.LowerDeadZone, control.UpperDeadZone );
+				GetControl( InputControlType.Command ).CommitWithState( AnyCommandControlIsPressed(), updateTick, deltaTime );
 			}
 
-			return ApplySmoothing( analogValue, control.LastValue, deltaTime, control.Sensitivity );
+			LeftStickX.CommitWithSides( LeftStickLeft, LeftStickRight, updateTick, deltaTime );
+			LeftStickY.CommitWithSides( LeftStickDown, LeftStickUp, updateTick, deltaTime, InputManager.InvertYAxis );
+			LeftStick.UpdateWithAxes( LeftStickX, LeftStickY, updateTick, deltaTime );
+
+			RightStickX.CommitWithSides( RightStickLeft, RightStickRight, updateTick, deltaTime );
+			RightStickY.CommitWithSides( RightStickDown, RightStickUp, updateTick, deltaTime, InputManager.InvertYAxis );
+			RightStick.UpdateWithAxes( RightStickX, RightStickY, updateTick, deltaTime );
+
+			DPadX.CommitWithSides( DPadLeft, DPadRight, updateTick, deltaTime );
+			DPadY.CommitWithSides( DPadDown, DPadUp, updateTick, deltaTime, InputManager.InvertYAxis );
+			DPad.UpdateWithAxes( DPadX, DPadY, updateTick, deltaTime );
 		}
 
 
-		float ApplyDeadZone( float value, float lowerDeadZone, float upperDeadZone )
-		{
-			return Mathf.InverseLerp( lowerDeadZone, upperDeadZone, Mathf.Abs( value ) ) * Mathf.Sign( value );
-		}
-
-
-		float ApplyCircularDeadZone( float axisValue1, float axisValue2, float lowerDeadZone, float upperDeadZone )
-		{
-			var axisVector = new Vector2( axisValue1, axisValue2 );
-			var magnitude = Mathf.InverseLerp( lowerDeadZone, upperDeadZone, axisVector.magnitude );
-			return (axisVector.normalized * magnitude).x;
-		}
-
-
-		float ApplySmoothing( float thisValue, float lastValue, float deltaTime, float sensitivity )
-		{
-			// 1.0f and above is instant (no smoothing).
-			if (Mathf.Approximately( sensitivity, 1.0f ))
-			{
-				return thisValue;
-			}
-
-			// Apply sensitivity (how quickly the value adapts to changes).
-			var maxDelta = deltaTime * sensitivity * 100.0f;
-
-			// Snap to zero when changing direction quickly.
-			if (Mathf.Sign( lastValue ) != Mathf.Sign( thisValue ))
-			{
-				lastValue = 0.0f;
-			}
-
-			return Mathf.MoveTowards( lastValue, thisValue, maxDelta );
-		}
-
-
-		Vector2 DPadVector
-		{
-			get 
-			{
-				var x = DPadLeft.State ? -DPadLeft.Value : DPadRight.Value;
-				var t = DPadUp.State ? DPadUp.Value : -DPadDown.Value;
-				var y = InputManager.InvertYAxis ? -t : t;
-				return new Vector2( x, y ).normalized;
-			}
-		}
-		
-		
 		public bool LastChangedAfter( InputDevice otherDevice )
 		{
 			return LastChangeTick > otherDevice.LastChangeTick;
@@ -243,12 +237,7 @@ namespace InControl
 		{
 			get
 			{
-				return GetControl( InputControlType.Back ).WasPressed ||
-					GetControl( InputControlType.Start ).WasPressed ||
-					GetControl( InputControlType.Select ).WasPressed ||
-					GetControl( InputControlType.System ).WasPressed ||
-					GetControl( InputControlType.Pause ).WasPressed ||
-					GetControl( InputControlType.Menu ).WasPressed;
+				return GetControl( InputControlType.Command ).WasPressed;
 			}
 		}
 
@@ -271,12 +260,15 @@ namespace InControl
 			}
 		}
 
+		public InputControl LeftStickUp { get { return GetControl( InputControlType.LeftStickUp ); } }
+		public InputControl LeftStickDown { get { return GetControl( InputControlType.LeftStickDown ); } }
+		public InputControl LeftStickLeft { get { return GetControl( InputControlType.LeftStickLeft ); } }
+		public InputControl LeftStickRight { get { return GetControl( InputControlType.LeftStickRight ); } }
 
-		public InputControl LeftStickX { get { return GetControl( InputControlType.LeftStickX ); } }
-		public InputControl LeftStickY { get { return GetControl( InputControlType.LeftStickY ); } }
-
-		public InputControl RightStickX { get { return GetControl( InputControlType.RightStickX ); } }
-		public InputControl RightStickY { get { return GetControl( InputControlType.RightStickY ); } }
+		public InputControl RightStickUp { get { return GetControl( InputControlType.RightStickUp ); } }
+		public InputControl RightStickDown { get { return GetControl( InputControlType.RightStickDown ); } }
+		public InputControl RightStickLeft { get { return GetControl( InputControlType.RightStickLeft ); } }
+		public InputControl RightStickRight { get { return GetControl( InputControlType.RightStickRight ); } }
 
 		public InputControl DPadUp { get { return GetControl( InputControlType.DPadUp ); } }
 		public InputControl DPadDown { get { return GetControl( InputControlType.DPadDown ); } }
@@ -298,29 +290,11 @@ namespace InControl
 		public InputControl RightStickButton { get { return GetControl( InputControlType.RightStickButton ); } }
 
 
-		public float DPadX
-		{
-			get 
-			{ 
-				return DPad.X; 
-			}
-		}
-
-
-		public float DPadY
-		{
-			get 
-			{ 
-				return DPad.Y; 
-			}
-		}
-
-
 		public TwoAxisInputControl Direction
 		{
-			get 
-			{ 
-				return DPad.UpdateTick > LeftStick.UpdateTick ? DPad : LeftStick; 
+			get
+			{
+				return DPad.UpdateTick > LeftStick.UpdateTick ? DPad : LeftStick;
 			}
 		}
 	}

@@ -33,12 +33,34 @@ namespace TouchExample
 				return Color.red;
 			}
 
-			if (inputDevice.GetControl( InputControlType.Button0 ))
+			if (inputDevice.Action3)
+			{
+				return Color.blue;
+			}
+
+			if (inputDevice.Action4)
 			{
 				return Color.yellow;
 			}
 
 			return Color.white;
+		}
+
+
+		void OnGUI()
+		{
+			var y = 10.0f;
+
+			var touchCount = TouchManager.TouchCount;
+//			var touchCount = Input.touchCount;
+			for (int i = 0; i < touchCount; i++)
+			{
+				var touch = TouchManager.GetTouch( i );
+//				var touch = Input.GetTouch( i );
+
+				GUI.Label( new Rect( 10, y, 500, y + 15.0f ), "" + i + ": fingerId = " + touch.fingerId + ", phase = " + touch.phase.ToString() + ", position = " + touch.position );
+				y += 20.0f;
+			}
 		}
 	}
 }
