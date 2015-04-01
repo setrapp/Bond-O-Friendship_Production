@@ -219,7 +219,7 @@ public class PlayerInput : MonoBehaviour {
 			{
 				moveDir = transform.forward + (velocityChange.normalized * Time.deltaTime);
 			}
-			transform.LookAt(transform.position + moveDir, transform.up);
+			transform.LookAt(transform.position + moveDir, -Vector3.forward);
 		}
 		else
 		{

@@ -101,6 +101,7 @@ GameObject:
   - 114: {fileID: 11443356}
   - 114: {fileID: 11400022}
   - 114: {fileID: 11400024}
+  - 114: {fileID: 11405788}
   m_Layer: 13
   m_Name: Player
   m_TagString: Character
@@ -189,7 +190,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &162210
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -277,9 +278,8 @@ Transform:
   - {fileID: 469776}
   - {fileID: 400000}
   - {fileID: 400004}
-  - {fileID: 462210}
   m_Father: {fileID: 400012}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -291,7 +291,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -311,9 +311,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: -98.3475494, y: 20.4547787, z: 0}
+  m_LocalPosition: {x: -70.5389633, y: 20.3055058, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 462210}
   - {fileID: 400006}
   - {fileID: 400014}
   - {fileID: 400008}
@@ -331,7 +332,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &400016
 Transform:
   m_ObjectHideFlags: 1
@@ -387,14 +388,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 162210}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.25, z: 0}
+  m_LocalPosition: {x: 0, y: -.250000119, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400022}
   - {fileID: 400020}
   - {fileID: 400018}
-  m_Father: {fileID: 400006}
-  m_RootOrder: 4
+  m_Father: {fileID: 400012}
+  m_RootOrder: 0
 --- !u!4 &469776
 Transform:
   m_ObjectHideFlags: 1
@@ -418,7 +419,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -508,7 +509,7 @@ Rigidbody:
   m_GameObject: {fileID: 100012}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 5
+  m_Drag: 2
   m_AngularDrag: .0500000007
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -681,7 +682,7 @@ MonoBehaviour:
   maxBondBonuses: 0
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 536870912
   collided: 0
 --- !u!114 &11400002
 MonoBehaviour:
@@ -715,6 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors: {fileID: 11400020}
+  geometryContainer: {fileID: 100006}
   headRenderer: {fileID: 2300006}
   fillRenderer: {fileID: 2369776}
   flashRenderer: {fileID: 21200000}
@@ -727,6 +729,7 @@ MonoBehaviour:
   bondAttachable: {fileID: 11400018}
   mover: {fileID: 11400012}
   floatMove: {fileID: 11400000}
+  bodyCollider: {fileID: 13500002}
   body: {fileID: 5400000}
   attractor: {fileID: 11400022}
   flufflessPass: {fileID: 11496068}
@@ -807,15 +810,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   velocity: {x: 0, y: 0, z: 0}
-  acceleration: 30
-  handling: 50
-  handlingAcceleration: 200
+  acceleration: 10
+  handling: 80
   minHandlingFactor: 1
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
   body: {fileID: 0}
   bodylessDampening: 1
   slowDown: 0
+  jumpToMaxSpeed: 0
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -869,7 +872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 11400004}
   attracting: 0
-  attractRange: 3
+  attractRange: 4
   attractSpeed: 1000
   bondAttract: 1
   bondOffsetFactor: .899999976
@@ -897,6 +900,22 @@ MonoBehaviour:
   b: 0
   a: 0
   eraserOn: 0
+--- !u!114 &11405788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145d04c57959cfc4fb6588e843ae4d12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 5400000}
+  squashStretchTarget: {fileID: 100006}
+  squashStretchFactor: .0199999996
+  directionRotation: {x: 0, y: 0, z: 0}
+  squashDrag: .5
 --- !u!114 &11416626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -924,7 +943,7 @@ MonoBehaviour:
     attachSpring1: 0
     attachSpring2: 0
     pullApartMaxFactor: 0
-    maxDistance: 50
+    maxDistance: 35
     relativeWarningDistance: .5
     endsWidth: .0199999996
     midWidth: .5

@@ -3,28 +3,49 @@ using System.Collections;
 
 public class RotateDoor : MonoBehaviour {
 
-	private NodePuzzle nodePuzzle;
+	public float stopAngle;
+	public float speed = 8;
 	private bool rotating;
+	public float rotateDireciton = 1;
 
-	// Use this for initialization
-	void Start () {
-		nodePuzzle = transform.parent.GetChild(0).GetComponent<NodePuzzle>();
+	void Start()
+	{
+		stopAngle = stopAngle % 360;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if(nodePuzzle != null)
-		{
-			if(nodePuzzle.solved == true)
-				rotating = true;
-		}
-
 		if(rotating == true)
 		{
-			if(name == "Gate Hinge" && transform.localRotation.eulerAngles.z < 237.0f)
-				transform.Rotate(Vector3.forward * Time.deltaTime * 8.0f);
-			if(name == "Gate Hinge 2" && transform.localRotation.eulerAngles.z > 56.0f)
-				transform.Rotate(-Vector3.forward * Time.deltaTime * 8.0f);
+			float currentRotation = transform.localRotation.eulerAngles.z;
+			if (stopAngle < 0)
+			{
+				currentRotation -= 360;
+			}
+
+			if (Mathf.Abs(currentRotation) > Mathf.Abs(stopAngle))
+			{
+				rotateDireciton = -1;
+			}
+
+			if (currentRotation != stopAngle)
+			{
+				float rotationAmount = Time.deltaTime * speed ;
+				if (rotationAmount > Mathf.Abs(stopAngle - currentRotation))
+				{
+					rotationAmount = Mathf.Abs(stopAngle - currentRotation);
+					rotating = false;
+				}
+				transform.Rotate(Vector3.forward * rotationAmount * rotateDireciton);
+			}
+		}
+	}
+
+	public void ClusterNodesSolved(ClusterNodePuzzle puzzle)
+	{
+		if (puzzle != null && puzzle.solved)
+		{
+			rotating = true;
 		}
 	}
 }
