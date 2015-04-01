@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(SimpleMover))]
 public class Fluff : MonoBehaviour {
 	[HideInInspector]
-	private SimpleMover mover;
+	public SimpleMover mover;
 	public BondAttachable creator;
 	public float rotationSpeed = 50.0f;
 	public TrailRenderer trail;
@@ -32,6 +32,7 @@ public class Fluff : MonoBehaviour {
 	public Animation popAnimation;
 	public Vector3 pullForce;
 	public float pullDistance;
+	public GameObject soleAttractor = null;
 
 	void Awake()
 	{
@@ -364,12 +365,17 @@ public class Fluff : MonoBehaviour {
 	}
 
 	// Accessible function that does not require coroutine call.
-	public void PopFluff(float secondsDelay = 0)
+	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false)
 	{
-		StartCoroutine(PopAndDestroy(secondsDelay));
+		if (slowMultiplier >= 0)
+		{
+			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));
+		}
+
+		StartCoroutine(PopAndDestroy(secondsDelay, fakeDestroy));
 	}
 
-	private IEnumerator PopAndDestroy(float secondsDelay = 0)
+	private IEnumerator PopAndDestroy(float secondsDelay = 0, bool fakeDestroy = false)
 	{
 		if (secondsDelay > 0)
 		{
@@ -381,13 +387,60 @@ public class Fluff : MonoBehaviour {
 			if (!popAnimation.isPlaying)
 			{
 				popAnimation.Play();
-				Destroy(gameObject, popAnimation.clip.length);
+				if (fakeDestroy)
+				{
+					StartCoroutine(HideOnPop(bulb.transform.localScale, popAnimation.clip.length));
+				}
+				else
+				{
+					Destroy(gameObject, popAnimation.clip.length);
+				}
 			}
 		}
 		else
 		{
-			Destroy(gameObject);
+			if (fakeDestroy)
+			{
+				StartCoroutine(HideOnPop(bulb.transform.localScale));
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 		}
+	}
+
+	private IEnumerator HideOnPop (Vector3 bulbScale, float secondsDelay = 0)
+	{
+		yield return new WaitForSeconds(secondsDelay);
+		bulb.transform.localScale = bulbScale;
+		gameObject.SetActive(false);
+	}
+
+	private IEnumerator SlowBeforePop(float endSpeedMultiplier, float timeUntilPop)
+	{
+		float startMultiplier = mover.externalSpeedMultiplier;
+		float normalCutSpeed = mover.cutSpeedThreshold;
+		Vector3 normalVelocity = mover.velocity;
+		float slowingTime = 0;
+		float slowingProgress = 0;
+
+		mover.cutSpeedThreshold = 0;
+
+		while(slowingProgress < 1)
+		{
+			yield return null;
+			slowingTime += Time.deltaTime;
+			if (timeUntilPop <= 0) { slowingProgress = 1; }
+			else { slowingProgress = slowingTime / timeUntilPop; }
+			slowingProgress = Mathf.Min(slowingProgress, 1);
+
+			mover.externalSpeedMultiplier = (startMultiplier * (1 - slowingProgress)) + (endSpeedMultiplier * slowingProgress);
+		}
+
+		mover.externalSpeedMultiplier = startMultiplier;
+		mover.velocity = normalVelocity;
+		mover.cutSpeedThreshold = normalCutSpeed;
 	}
 
 	public void StopMoving()
