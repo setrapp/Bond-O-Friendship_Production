@@ -12,11 +12,11 @@ public class ZoomCamera : MonoBehaviour {
 	public float endZoomPortion = 1;
 	private float oldPortionComplete;
 	[Header("Resetting Controls")]
-	private bool resetting = false;
 	public float resetDelay = 0.5f;
 	public float resetAcceleration = 1;
 	public float resetMaxSpeed = 5;
 	public float resetSpeed = 0f;
+	private bool resetting = false;
 
 	void Start()
 	{
