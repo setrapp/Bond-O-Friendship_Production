@@ -7,9 +7,9 @@ using InControl;
 namespace GyroExample
 {
 	// This custom profile is enabled by adding it to the Custom Profiles list
-	// on the InControlManager script, which is attached to the InControl 
+	// on the InControlManager script, which is attached to the InControl
 	// game object in this example scene.
-	// 
+	//
 	public class GyroProfile : UnityInputDeviceProfile
 	{
 		public GyroProfile()
@@ -18,33 +18,47 @@ namespace GyroExample
 			Meta = "Gyroscope on iOS.";
 
 			// This profile only works on mobile.
-			SupportedPlatforms = new[]
-			{
+			SupportedPlatforms = new[] {
 				"iPhone",
 				"Android"
 			};
 
-			ButtonMappings = new InputControlMapping[]
-			{
-			};
-
-			AnalogMappings = new[]
-			{
-				new InputControlMapping
-				{
-					Handle = "Move X",
-					Target = InputControlType.LeftStickX,
+			AnalogMappings = new[] {
+				new InputControlMapping {
+					Handle = "Move Left",
+					Target = InputControlType.LeftStickLeft,
 					Source = new UnityGyroAxisSource( UnityGyroAxisSource.GyroAxis.X ),
-					Raw    = true,
-					Scale  = 3.0f
+					SourceRange = InputRange.ZeroToMinusOne,
+					TargetRange = InputRange.ZeroToOne,
+					Raw = true,
+					Scale = 3.0f
 				},
-				new InputControlMapping
-				{
-					Handle = "Move Y",
-					Target = InputControlType.LeftStickY,
-					Source = new UnityGyroAxisSource( UnityGyroAxisSource.GyroAxis.Y ),
-					Raw    = true,
-					Scale  = 3.0f
+				new InputControlMapping {
+					Handle = "Move Right",
+					Target = InputControlType.LeftStickRight,
+					Source = new UnityGyroAxisSource( UnityGyroAxisSource.GyroAxis.X ),
+					SourceRange = InputRange.ZeroToOne,
+					TargetRange = InputRange.ZeroToOne,
+					Raw = true,
+					Scale = 3.0f
+				},
+				new InputControlMapping {
+					Handle = "Move Up",
+					Target = InputControlType.LeftStickUp,
+					Source = new UnityGyroAxisSource( UnityGyroAxisSource.GyroAxis.X ),
+					SourceRange = InputRange.ZeroToMinusOne,
+					TargetRange = InputRange.ZeroToOne,
+					Raw = true,
+					Scale = 3.0f
+				},
+				new InputControlMapping {
+					Handle = "Move Down",
+					Target = InputControlType.LeftStickDown,
+					Source = new UnityGyroAxisSource( UnityGyroAxisSource.GyroAxis.X ),
+					SourceRange = InputRange.ZeroToOne,
+					TargetRange = InputRange.ZeroToOne,
+					Raw = true,
+					Scale = 3.0f
 				},
 			};
 		}

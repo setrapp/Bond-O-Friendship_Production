@@ -126,7 +126,7 @@ namespace InControl
 			spriteGameObject.transform.parent = parentTransform;
 			spriteGameObject.transform.localPosition = Vector3.zero;
 			spriteGameObject.transform.localScale = Vector3.one;
-			spriteGameObject.layer = LayerMask.NameToLayer( "UI" );
+			spriteGameObject.layer = parentTransform.gameObject.layer;
 			return spriteGameObject;
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using InControl;
@@ -16,6 +17,8 @@ using InControl;
  * It can also be used for create new device profiles as it will
  * show the default Unity mappings for unknown devices.
  **/
+
+
 namespace InControl
 {
 	public class TestInputManager : MonoBehaviour
@@ -40,13 +43,13 @@ namespace InControl
 			InputManager.OnDeviceDetached += inputDevice => Debug.Log( "Detached: " + inputDevice.Name );
 			InputManager.OnActiveDeviceChanged += inputDevice => Debug.Log( "Active device changed to: " + inputDevice.Name );
 
-			TestInputMappings();
+			InputManager.OnUpdate += HandleInputUpdate;
 
-//			Debug.Log( "Unity Version: " + InputManager.UnityVersion );
+//			UnityInputDeviceManager.DumpSystemDeviceProfiles();
 		}
 
 
-		void FixedUpdate()
+		void HandleInputUpdate( ulong updateTick, float deltaTime )
 		{
 			CheckForPauseButton();
 
@@ -62,13 +65,15 @@ namespace InControl
 		}
 
 
+		void Start()
+		{
+			var unityDeviceManager = InputManager.GetDeviceManager<UnityInputDeviceManager>();
+			unityDeviceManager.ReloadDevices();
+		}
+
+
 		void Update()
 		{
-			if (isPaused)
-			{
-				CheckForPauseButton();
-			}
-
 			if (Input.GetKeyDown( KeyCode.R ))
 			{
 				Application.LoadLevel( "TestInputManager" );
@@ -164,6 +169,48 @@ namespace InControl
 					}
 				}
 
+				y += lineHeight;
+
+				color = active ? new Color( 1.0f, 0.7f, 0.2f ) : Color.white;
+				if (inputDevice.IsKnown)
+				{
+					var control = inputDevice.LeftStickX;
+					SetColor( control.State ? Color.green : color );
+					var label = string.Format( "{0} {1}", "Left Stick X", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					control = inputDevice.LeftStickY;
+					SetColor( control.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "Left Stick Y", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					control = inputDevice.RightStickX;
+					SetColor( control.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "Right Stick X", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					control = inputDevice.RightStickY;
+					SetColor( control.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "Right Stick Y", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					control = inputDevice.DPadX;
+					SetColor( control.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "DPad X", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					control = inputDevice.DPadY;
+					SetColor( control.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "DPad Y", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+				}
+
 				SetColor( Color.cyan );
 				var anyButton = inputDevice.AnyButton;
 				if (anyButton)
@@ -194,92 +241,19 @@ namespace InControl
 
 		void OnDrawGizmos()
 		{
-			Vector3 delta = InputManager.ActiveDevice.Direction.Vector * 4.0f;
-			Gizmos.color = Color.yellow;
-			Gizmos.DrawSphere( delta, 1 );
-		}
+			Gizmos.color = Color.blue;
+			var lz = new Vector2( -3.0f, -1.0f );
+			var lp = lz + (InputManager.ActiveDevice.Direction.Vector * 2.0f);
+			Gizmos.DrawSphere( lz, 0.1f );
+			Gizmos.DrawLine( lz, lp );
+			Gizmos.DrawSphere( lp, 1.0f );
 
-
-		void TestInputMappings()
-		{
-			var complete = InputControlMapping.Range.Complete;
-			var positive = InputControlMapping.Range.Positive;
-			var negative = InputControlMapping.Range.Negative;
-			var noInvert = false;
-			var doInvert = true;
-
-			TestInputMapping( complete, complete, noInvert, -1.0f, 0.0f, 1.0f );
-			TestInputMapping( complete, negative, noInvert, -1.0f, -0.5f, 0.0f );
-			TestInputMapping( complete, positive, noInvert, 0.0f, 0.5f, 1.0f );
-
-			TestInputMapping( negative, complete, noInvert, -1.0f, 1.0f, 0.0f );
-			TestInputMapping( negative, negative, noInvert, -1.0f, 0.0f, 0.0f );
-			TestInputMapping( negative, positive, noInvert, 0.0f, 1.0f, 0.0f );
-
-			TestInputMapping( positive, complete, noInvert, 0.0f, -1.0f, 1.0f );
-			TestInputMapping( positive, negative, noInvert, 0.0f, -1.0f, 0.0f );
-			TestInputMapping( positive, positive, noInvert, 0.0f, 0.0f, 1.0f );
-
-			TestInputMapping( complete, complete, doInvert, 1.0f, 0.0f, -1.0f );
-			TestInputMapping( complete, negative, doInvert, 1.0f, 0.5f, 0.0f );
-			TestInputMapping( complete, positive, doInvert, 0.0f, -0.5f, -1.0f );
-
-			TestInputMapping( negative, complete, doInvert, 1.0f, -1.0f, 0.0f );
-			TestInputMapping( negative, negative, doInvert, 1.0f, 0.0f, 0.0f );
-			TestInputMapping( negative, positive, doInvert, 0.0f, -1.0f, 0.0f );
-
-			TestInputMapping( positive, complete, doInvert, 0.0f, 1.0f, -1.0f );
-			TestInputMapping( positive, negative, doInvert, 0.0f, 1.0f, 0.0f );
-			TestInputMapping( positive, positive, doInvert, 0.0f, 0.0f, -1.0f );
-		}
-
-
-		void TestInputMapping( InputControlMapping.Range sourceRange, InputControlMapping.Range targetRange, bool invert, float expectA, float expectB, float expectC )
-		{
-			var mapping = new InputControlMapping() {
-				SourceRange = sourceRange,
-				TargetRange = targetRange,
-				Invert = invert
-			};
-
-			float input;
-			float value;
-
-			string sr = "Complete";
-			if (sourceRange == InputControlMapping.Range.Negative)
-				sr = "Negative";
-			else
-			if (sourceRange == InputControlMapping.Range.Positive)
-				sr = "Positive";
-
-			string tr = "Complete";
-			if (targetRange == InputControlMapping.Range.Negative)
-				tr = "Negative";
-			else
-			if (targetRange == InputControlMapping.Range.Positive)
-				tr = "Positive";
-
-
-			input = -1.0f;
-			value = mapping.MapValue( input );
-			if (Mathf.Abs( value - expectA ) > Single.Epsilon)
-			{
-				Debug.LogError( "Input of " + input + " got value of " + value + " instead of " + expectA + " (SR = " + sr + ", TR = " + tr + ")" );
-			}
-
-			input = 0.0f;
-			value = mapping.MapValue( input );
-			if (Mathf.Abs( value - expectB ) > Single.Epsilon)
-			{
-				Debug.LogError( "Input of " + input + " got value of " + value + " instead of " + expectB + " (SR = " + sr + ", TR = " + tr + ")" );
-			}
-
-			input = 1.0f;
-			value = mapping.MapValue( input );
-			if (Mathf.Abs( value - expectC ) > Single.Epsilon)
-			{
-				Debug.LogError( "Input of " + input + " got value of " + value + " instead of " + expectC + " (SR = " + sr + ", TR = " + tr + ")" );
-			}
+			Gizmos.color = Color.red;
+			var rz = new Vector2( +3.0f, -1.0f );
+			var rp = rz + (InputManager.ActiveDevice.RightStick.Vector * 2.0f);
+			Gizmos.DrawSphere( rz, 0.1f );
+			Gizmos.DrawLine( rz, rp );
+			Gizmos.DrawSphere( rp, 1.0f );
 		}
 	}
 }

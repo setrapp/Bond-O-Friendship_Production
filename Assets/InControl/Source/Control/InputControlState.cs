@@ -8,14 +8,16 @@ namespace InControl
 {
 	public struct InputControlState
 	{
-		public bool  State;
+		public bool State;
 		public float Value;
+		public float RawValue;
 
 
 		public void Reset()
 		{
-			Value = 0.0f;
 			State = false;
+			Value = 0.0f;
+			RawValue = 0.0f;
 		}
 
 
@@ -37,6 +39,7 @@ namespace InControl
 		{
 			State = state;
 			Value = state ? 1.0f : 0.0f;
+			RawValue = Value;
 		}
 
 
@@ -64,3 +67,4 @@ namespace InControl
 		}
 	}
 }
+

@@ -83,7 +83,7 @@ namespace InControl
 		}
 
 
-		public override void SubmitControlState( ulong updateTick )
+		public override void SubmitControlState( ulong updateTick, float deltaTime )
 		{
 			if (currentTouch == null && allowSlideToggle)
 			{
@@ -95,7 +95,13 @@ namespace InControl
 				}
 			}
 
-			SubmitButtonState( target, ButtonState, updateTick );
+			SubmitButtonState( target, ButtonState, updateTick, deltaTime );
+		}
+
+
+		public override void CommitControlState( ulong updateTick, float deltaTime )
+		{
+			CommitButton( target );
 		}
 
 

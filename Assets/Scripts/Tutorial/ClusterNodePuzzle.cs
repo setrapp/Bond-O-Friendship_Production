@@ -9,6 +9,12 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	public ParticleSystem nodeParticle;
 	public bool solved;
 
+	public GameObject streamBlocker;
+	public GameObject streamBlocker2;
+
+	private float startingSize;
+	private int litCount;
+
 
 	void Awake()
 	{
@@ -17,10 +23,25 @@ public class ClusterNodePuzzle : MonoBehaviour {
 			nodes[i].lit = false;
 			nodes[i].targetPuzzle = this;
 		}
+
+		if(streamBlocker != null && streamBlocker2 != null)
+			startingSize = streamBlocker.transform.localScale.x;
 	}
 	
 	public void NodeColored()
 	{
+		if(streamBlocker != null && streamBlocker2 != null)
+		{
+			for(int i = 0; i < nodes.Count; i++)
+			{
+				if(nodes[i].lit)
+					litCount++;
+			}
+			streamBlocker.transform.localScale = new Vector3(startingSize - (startingSize/nodes.Count)*litCount, streamBlocker.transform.localScale.y, streamBlocker.transform.localScale.z);
+			streamBlocker2.transform.localScale = new Vector3(startingSize - (startingSize/nodes.Count)*litCount, streamBlocker2.transform.localScale.y, streamBlocker2.transform.localScale.z);
+			litCount = 0;
+		}
+
 		bool allLit = true;
 		for (int i = 0; i < nodes.Count && allLit; i++)
 		{
@@ -33,6 +54,8 @@ public class ClusterNodePuzzle : MonoBehaviour {
 		if (allLit && !solved)
 		{
 			solved = true;
+			Destroy(streamBlocker);
+			Destroy(streamBlocker2);
 			for (int i = 0; i < listeners.Count; i++)
 			{
 				listeners[i].SendMessage("ClusterNodesSolved", this, SendMessageOptions.DontRequireReceiver);
