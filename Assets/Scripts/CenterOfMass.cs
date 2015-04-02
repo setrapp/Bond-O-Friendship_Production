@@ -24,6 +24,6 @@ public class CenterOfMass : MonoBehaviour {
 			centerOfMass = gameObject;
 		}
 
-		body.centerOfMass = transform.InverseTransformPoint(centerOfMass.transform.position + centerOfMass.transform.TransformDirection(localOffset));
+		body.centerOfMass = transform.InverseTransformPoint(centerOfMass.transform.position);// transform.InverseTransformPoint(centerOfMass.transform.position + centerOfMass.transform.TransformDirection(localOffset));
 	}
 }

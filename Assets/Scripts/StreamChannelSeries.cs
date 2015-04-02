@@ -14,20 +14,31 @@ public class StreamChannelSeries : MonoBehaviour {
 	{
 		for(int i = 0; i < channels.Count; i++)
 		{
-			Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
-			if (bedRenderer != null)
+			if (channels[i].bed != null)
 			{
-				bedRenderer.enabled = renderBeds;
+				Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
+				if (bedRenderer != null)
+				{
+					bedRenderer.enabled = renderBeds;
+				}
 			}
-			Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
-			if (bank1Renderer != null)
+
+			if (channels[i].bank1 != null)
 			{
-				bank1Renderer.enabled = renderBanks;
+				Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
+				if (bank1Renderer != null)
+				{
+					bank1Renderer.enabled = renderBanks;
+				}
 			}
-			Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
-			if (bank2Renderer != null)
+
+			if (channels[i].bank2 != null)
 			{
-				bank2Renderer.enabled = renderBanks;
+				Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
+				if (bank2Renderer != null)
+				{
+					bank2Renderer.enabled = renderBanks;
+				}
 			}
 		}
 	}
