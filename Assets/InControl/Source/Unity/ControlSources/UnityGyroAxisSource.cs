@@ -6,7 +6,7 @@ namespace InControl
 {
 	// This is kind of "beta"... while it works on iOS, gyro controls are
 	// inconsistent and are usually fine tuned to the games that use them
-	// which is somewhat beyond the scope of this project. But, if you 
+	// which is somewhat beyond the scope of this project. But, if you
 	// are curious how to go about it, here you go.
 	//
 	public class UnityGyroAxisSource : InputControlSource
@@ -17,21 +17,26 @@ namespace InControl
 			Y = 1,
 		}
 
-		int axis;
-
 		static Quaternion zeroAttitude;
+		public int Axis;
+
+
+		public UnityGyroAxisSource()
+		{
+			Calibrate();
+		}
 
 		
 		public UnityGyroAxisSource( GyroAxis axis )
 		{
-			this.axis = (int) axis;
+			Axis = (int) axis;
 			Calibrate();
 		}
 		
 		
 		public float GetValue( InputDevice inputDevice )
 		{
-			return GetAxis()[ (int) axis ];
+			return GetAxis()[(int) Axis];
 		}
 		
 		
