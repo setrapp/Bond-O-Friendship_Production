@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        player = Globals.Instance.player1.gameObject;
+        player = Globals.Instance.player2.gameObject;
 	}
 	
 	// Update is called once per frame

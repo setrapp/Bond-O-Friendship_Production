@@ -28,7 +28,13 @@ public class Globals : MonoBehaviour {
 	public PlayerInput player1;
 	public PlayerInput player2;
 
+	public GameObject initialPlayerHolder = null;
+
 	public bool autoAttractor = false;
+	public bool fluffsThrowable = true;
+	public float fluffLeaveDistance = 1.0f;
+	public float fluffLeaveAttractWait = 3.0f;
+	public float fluffLeaveEmbed = 1.0f;
 
     public static InputDevice startingDevice;
     public static InputDevice playerOneDevice;
@@ -48,6 +54,8 @@ public class Globals : MonoBehaviour {
     public GameObject depthMaskPrefab;
 	[Header("Fluff Depth Mask")]
     public GameObject depthMaskHolderPrefab;
+
+	public GameObject orphanFluffHolderPrefab;
 
 	[SerializeField]
 	public List<Fluff> allFluffs;

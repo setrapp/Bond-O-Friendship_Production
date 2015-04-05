@@ -7,6 +7,9 @@ public class Bond : MonoBehaviour {
 	public BondAttachment attachment2;
 	public GameObject linkPrefab;
 	public List<BondLink> links;
+	public GameObject bondPullPrefab;
+	private SpringJoint pullSpring1;
+	private SpringJoint pullSpring2;
 	private float bondLength;
 	public float BondLength
 	{
@@ -43,9 +46,11 @@ public class Bond : MonoBehaviour {
 		lengthFresh = false;
 		
 		currentDetail = SetLevelOfDetail();
-		if (currentDetail <= stats.sparseDetailFactor)
+		bool atSparseDetail = currentDetail <= stats.sparseDetailFactor;
+		float frameTime = Time.time;
+		/*if (currentDetail <= stats.sparseDetailFactor)
 		{
-			/*TODO not sure any of this is usable*/
+			//TODO not sure any of this is usable
 			if (!disablingLinks)
 			{
 				for (int i = 0; i < links.Count; i++)
@@ -71,74 +76,28 @@ public class Bond : MonoBehaviour {
 				links[i].gameObject.SetActive(true);
 			}
 			disablingLinks = false;
+		}*/
+
+		if (stats.pullApartMaxFactor > 0)
+		{
+			if (pullSpring1 == null || pullSpring2 == null)
+			{
+				CreatePullers();
+			}
 		}
-		
+		else
+		{
+			if (pullSpring1 != null || pullSpring2 != null)
+			{
+				DestroyPullers();
+			}
+		}
 
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
+			StartCoroutine(UpdateBondCount(atSparseDetail));
+
 			bool isCountEven = links.Count % 2 == 0;
-
-			// Mainting desired length of links by adding and removing.
-			if (!stats.disableColliders)
-			{
-				if (!stats.manualLinks)
-				{
-					if (links.Count < 4)
-					{
-						AddLink();
-					}
-					else
-					{
-						bool bondChanged = false;
-						float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
-						float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
-						if (stats.addLinkDistance >= 0)
-						{
-							for (int i = 1; i < links.Count - 2; i++)
-							{
-								float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
-								if (sqrDist > sqrAddDist)
-								{
-									AddLink(i + 1, false);
-									bondChanged = true;
-								}
-							}
-						}
-						if (stats.removeLinkDistance >= 0)
-						{
-							for (int i = 1; i < links.Count - 2; i++)
-							{
-								float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
-								if (sqrDist < sqrRemoveDist)
-								{
-									RemoveLink(i, false);
-									bondChanged = true;
-								}
-							}
-						}
-						if (bondChanged)
-						{
-							WeightJoints();
-						}
-					}
-				}
-			}
-			else
-			{
-				for (int i = 0; i < links.Count; i++)
-				{
-					if (links[i].toNextCollider != null)
-					{
-						links[i].toNextCollider.enabled = false;
-					}
-					if (links[i].toPreviousCollider != null)
-					{
-						links[i].toPreviousCollider.enabled = false;
-					}
-				}
-			}
-
-			isCountEven = links.Count % 2 == 0;
 
 			// Ensure that links with unconnected joints are not applying spring forces.
 			for (int i = 0; i < links.Count; i++)
@@ -154,7 +113,7 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Direct, scale, and place link colliders to cover the surface of the bond.
-			if (!stats.manualLinks)// && currentDetail > stats.sparseDetailFactor)
+			if (!stats.manualLinks && !atSparseDetail)
 			{
 				Vector3 linkDir = Vector3.zero;
 				Vector3 linkScalePrev = Vector3.zero;
@@ -207,6 +166,19 @@ public class Bond : MonoBehaviour {
 				
 			}
 
+			if (pullSpring1 != null && pullSpring2 != null)
+			{
+				float pullSpringDist = 1;
+				if (stats.maxDistance >= 0)
+				{
+					pullSpringDist = Mathf.Max((stats.maxDistance * stats.pullApartMaxFactor) - bondLength, 0);
+				}
+
+				Vector3 betweenAttachments = (attachment2.position - attachment1.position).normalized;
+				pullSpring1.transform.position = attachment1.position - (betweenAttachments * pullSpringDist);
+				pullSpring2.transform.position = attachment2.position + (betweenAttachments * pullSpringDist);
+			}
+
 			// Ensure smooth transition between the two lines at the center.
 			if (!isCountEven && links.Count > 2)
 			{
@@ -215,12 +187,98 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Draw lines between bond points.
-			RenderBond(actualMidWidth, isCountEven);
+			if (!atSparseDetail)
+			{
+				RenderBond(actualMidWidth, isCountEven);
+			}
+			else
+			{
+				attachment1.lineRenderer.SetVertexCount(0);
+				attachment2.lineRenderer.SetVertexCount(0);
+			}
 
 			// Disconnect if too far apart.
 			if (stats.maxDistance > 0 && BondLength >= stats.maxDistance)
 			{
 				BreakBond();
+			}
+		}
+	}
+
+	private IEnumerator UpdateBondCount(bool atSparseDetail)
+	{
+		bool isCountEven = links.Count % 2 == 0;
+
+		// Mainting desired length of links by adding and removing.
+		if (!stats.disableColliders)
+		{
+			if (!stats.manualLinks)
+			{
+				if (links.Count < 4)
+				{
+					AddLink();
+				}
+				else
+				{
+					int linksCheckedOnFrame = 0;
+					bool bondChanged = false;
+					float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
+					float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
+					if (stats.addLinkDistance >= 0)
+					{
+						for (int i = 1; i < links.Count - 2; i++)
+						{
+							float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+							if (sqrDist > sqrAddDist)
+							{
+								AddLink(i + 1, false);
+								bondChanged = true;
+							}
+
+							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+							{
+								linksCheckedOnFrame = 0;
+								yield return null;
+							}
+						}
+					}
+					if (stats.removeLinkDistance >= 0)
+					{
+						for (int i = 1; i < links.Count - 2; i++)
+						{
+							float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+							if (sqrDist < sqrRemoveDist)
+							{
+								RemoveLink(i, false);
+								bondChanged = true;
+							}
+
+							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+							{
+								linksCheckedOnFrame = 0;
+								yield return null;
+							}
+						}
+					}
+					if (bondChanged)
+					{
+						WeightJoints();
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				if (links[i].toNextCollider != null)
+				{
+					links[i].toNextCollider.enabled = false;
+				}
+				if (links[i].toPreviousCollider != null)
+				{
+					links[i].toPreviousCollider.enabled = false;
+				}
 			}
 		}
 	}
@@ -304,8 +362,6 @@ public class Bond : MonoBehaviour {
 		midColor.a = (color1.a + color2.a) / 2;
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
-
-
 
 		attachment1.attachedLink.transform.position = attachment1.position;
 		attachment2.attachedLink.transform.position = attachment2.position;
@@ -503,9 +559,48 @@ public class Bond : MonoBehaviour {
 			}
 
 			// Attach near end links to attachments to allow pulling.
-			links[1].jointToAttachment.spring = stats.attachSpring1;
-			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			if (pullSpring1 != null && pullSpring2 != null)
+			{
+				pullSpring1.spring = stats.attachSpring1;
+				pullSpring2.spring = stats.attachSpring2;
+			}
+			else
+			{
+				links[1].jointToAttachment.spring = stats.attachSpring1;
+				links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+			}
 		}
+	}
+
+	private void CreatePullers()
+	{
+		if (bondPullPrefab != null)
+		{
+			pullSpring1 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring1.transform.parent = transform;
+			pullSpring1.connectedBody = attachment1.attachee.body;
+			pullSpring2 = ((GameObject)Instantiate(bondPullPrefab, attachment1.position, Quaternion.identity)).GetComponent<SpringJoint>();
+			pullSpring2.transform.parent = transform;
+			pullSpring2.connectedBody = attachment2.attachee.body;
+		}
+
+		WeightJoints();
+	}
+
+	private void DestroyPullers()
+	{
+		if (pullSpring1 != null)
+		{
+			Destroy(pullSpring1.gameObject);
+			pullSpring1 = null;
+		}
+		if (pullSpring2 != null)
+		{
+			Destroy(pullSpring2.gameObject);
+			pullSpring2 = null;
+		}
+
+		WeightJoints();
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
@@ -620,8 +715,9 @@ public class Bond : MonoBehaviour {
 			return;
 		}
 
-		stats.addLinkDistance = fullDetailAddDistance / detailFraction;
-		stats.removeLinkDistance = fullDetailRemoveDistance / detailFraction;
+		float maxLinkDistance = BondLength / 4;
+		stats.addLinkDistance = Mathf.Min(fullDetailAddDistance / detailFraction, maxLinkDistance);
+		stats.removeLinkDistance = Mathf.Min(fullDetailRemoveDistance / detailFraction, maxLinkDistance / 2);
 		for (int i = 0; i < links.Count; i++)
 		{
 			if (!links[i].broken)
@@ -629,8 +725,17 @@ public class Bond : MonoBehaviour {
 				links[i].jointToNeighbor.spring = stats.springForce * detailFraction;
 			}
 		}
-		links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
-		links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+
+		if (pullSpring1 != null && pullSpring2 != null)
+		{
+			pullSpring1.spring = stats.attachSpring1 * detailFraction;
+			pullSpring2.spring = stats.attachSpring2 * detailFraction;
+		}
+		else
+		{
+			links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+		}
 	}
 	
 	// Hooks for subclasses.
@@ -655,6 +760,7 @@ public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
+	public float pullApartMaxFactor;
 	public float maxDistance = 25;
 	public float relativeWarningDistance = 0.5f;
 	public float endsWidth = 0.02f;
@@ -673,6 +779,8 @@ public class BondStats
 	public float sparseDetailDistance = -1;
 	[Header("Level of Detail")]
 	public float sparseDetailFactor = -1;
+	[Header("Level of Detail")]
+	public float sparseDetailLinksCheck = 1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
 	{
@@ -683,6 +791,7 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
 		if (fullOverwrite || replacement.endsWidth >= 0)				{	this.endsWidth = replacement.endsWidth;								}

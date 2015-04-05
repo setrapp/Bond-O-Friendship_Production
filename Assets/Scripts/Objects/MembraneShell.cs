@@ -111,7 +111,10 @@ public class MembraneShell : MonoBehaviour {
 		if (createdWalls.Contains(BreakingMembrane) && !Breaking)
 		{
 			Breaking = true;
-			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
+			if (transform.parent != null)
+			{
+				transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
+			}
 		}
 	}
 

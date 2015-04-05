@@ -47,7 +47,7 @@ public class Attractor : MonoBehaviour {
 		else
 		{
 			bool pullingFluffs = AttemptFluffPull();
-			if (pullingFluffs && !attracting)
+			if (pullingFluffs)
 			{
 				AttractFluffs(false);
 			}
@@ -71,10 +71,9 @@ public class Attractor : MonoBehaviour {
 		// If the attraction feedback is not already being presented, present it.
 		if (attractParticles == null)
 		{
-			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
-			attractParticles.transform.position = transform.position;
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor / 2;
-			attractParticles.startColor = new Color(attractParticles.startColor.r, attractParticles.startColor.g, attractParticles.startColor.b, 0.1f);
+			/*attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
+			attractParticles.transform.position = transform.position + new Vector3(0, 0, 0.2f);
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;*/
 		}
 
 		// If desired, attempt to pull in fluffs.
@@ -91,7 +90,7 @@ public class Attractor : MonoBehaviour {
 
 		if (attractParticles != null)
 		{
-			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 0.5f);
+			attractParticles.startColor = Color.Lerp(attractParticles.startColor, new Color(0, 0, 0, 0), 1.0f);
 			Destroy(attractParticles.gameObject, 1.0f);
 		}
 	}
@@ -112,6 +111,7 @@ public class Attractor : MonoBehaviour {
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
 				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
+				Color pullColor = character.colors.attachmentColor;
 				if (!fluffAttachedToSelf && !ignoringAttract)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
@@ -131,6 +131,7 @@ public class Attractor : MonoBehaviour {
 								{
 									nearSqrDist = sqrDist;
 									attractOffset = (nearBond - transform.position) * bondOffsetFactor;
+									pullColor = new Color(1, 1, 1, 0);
 								}
 							}
 						}
@@ -138,7 +139,7 @@ public class Attractor : MonoBehaviour {
 					}
 					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
-						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
+						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime, pullColor);
 						pullingFluff = true;
 					}
 				}

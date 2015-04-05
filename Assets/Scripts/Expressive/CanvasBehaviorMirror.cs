@@ -4,7 +4,7 @@ using System.Collections;
 public class CanvasBehaviorMirror : MonoBehaviour
 {
     public GameObject mirrorPaint;
-    private Color canvasColor;
+    //private Color canvasColor;
     private float alpha;
 
 
@@ -14,20 +14,20 @@ public class CanvasBehaviorMirror : MonoBehaviour
     void Start()
     {
         alpha = 0.0f;
-        canvasColor = new Color(0.0f, 0.0f, 0.0f, alpha);
-        gameObject.GetComponent<Renderer>().material.color = canvasColor;
+        //canvasColor = new Color(0.0f, 0.0f, 0.0f, alpha);
+        //gameObject.GetComponent<Renderer>().material.color = canvasColor;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        canvasColor = Color.white;
-        gameObject.GetComponent<Renderer>().material.color = canvasColor;
-        if (alpha < 1.0f)
-        {
-            alpha += Time.deltaTime * 0.5f;
-        }
+        //canvasColor = Color.white;
+       // gameObject.GetComponent<Renderer>().material.color = canvasColor;
+        //if (alpha < 1.0f)
+        //{
+        //    alpha += Time.deltaTime * 0.5f;
+       // }
 
     }
 

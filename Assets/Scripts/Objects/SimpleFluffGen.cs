@@ -13,6 +13,8 @@ public class SimpleFluffGen : MonoBehaviour {
 	public Color myColor;
 	public float alpha;
 	public GameObject Point;
+	public Animation genAnimation;
+	public ParticleSystem genParticles;
 
 	//public GameObject generatorTop;
 	
@@ -31,9 +33,9 @@ public class SimpleFluffGen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		myColor = new Color(0.6f, 0.6f,1.0f,alpha);
+		myColor = new Color(0.3f, 1.0f, 0.3f,alpha);
 
-		if(alpha > 0.2f)
+		if(alpha > 0.3f)
 			alpha -= Time.deltaTime * 2.0f;
 
 		if(Point != null)
@@ -63,6 +65,19 @@ public class SimpleFluffGen : MonoBehaviour {
 	}
 	
 	void GenerateFluff () {
+		if (genAnimation != null && !genAnimation.isPlaying)
+		{
+			genAnimation.Play();
+		}
+		if (genParticles != null)
+		{
+			genParticles.Play();
+		}
+		else
+		{
+			//Debug.LogError("HEY ADD THE PARTICLE SYSTEM");
+		}
+
 		GameObject fluffObject = (GameObject)Instantiate(fluffPrefab);
 		colorPicker = Random.Range(0, 2);
 		if(colorPicker == 1)
@@ -73,8 +88,9 @@ public class SimpleFluffGen : MonoBehaviour {
 				meshRenderers[i].material = greenFluffMaterial;
 			}
 		}
-        fluffObject.transform.position = transform.position;
-        fluffObject.transform.parent = gameObject.transform;
+		fluffObject.transform.parent = gameObject.transform;
+		fluffObject.transform.localPosition = Vector3.zero;
+        
         Fluff fluff = fluffObject.GetComponent<Fluff>();
 		velocity = maximumForce;
 		//if(Random.Range(0,2) == 1)

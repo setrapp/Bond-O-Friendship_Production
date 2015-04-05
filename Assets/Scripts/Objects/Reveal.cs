@@ -5,43 +5,52 @@ public class Reveal : MonoBehaviour {
 
 	public GameObject trigger1;
 	public GameObject trigger2;
+	public GameObject stopBlock;
 	public float moveSpeed;
 	public float returnSpeed;
 	public Vector3 originalPos;
 	public Vector3 pushPos;
+	public Rigidbody body = null;
+	public float limit;
 	
 	// Use this for initialization
 	void Start () {
-		moveSpeed = 0.6f;
+		moveSpeed = 4.0f;
 		returnSpeed = 0.5f;
 		originalPos = transform.localPosition;
 		pushPos = originalPos;
+		body = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.localPosition = pushPos;
-	if(trigger1.GetComponent<triggerBlock>().triggered)
+		if (Time.deltaTime <= 0)
 		{
-			if(pushPos.x > originalPos.x - 0.8)
-			{
-				pushPos.x -= moveSpeed*Time.deltaTime;
-			}
+			return;
+		}
+
+		transform.localPosition = pushPos;
+		if(trigger1.GetComponent<triggerBlock>().triggered || trigger2.GetComponent<triggerBlock>().triggered)
+		{
+			if(pushPos.y<limit)
+				pushPos.y += moveSpeed*Time.deltaTime;
 		}
 		else
 		{
-			if(pushPos.x < originalPos.x)
+			if(pushPos.y > originalPos.y)
 			{
-				pushPos.x += returnSpeed*Time.deltaTime;
+				pushPos.y -= returnSpeed*Time.deltaTime;
 			}
 		}
-	if(trigger2.GetComponent<triggerBlock>().triggered)
+		if(stopBlock.GetComponent<triggerBlock>().stopped)
 		{
-			pushPos = transform.localPosition;
-			returnSpeed = 0;
-			trigger1.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
-			trigger2.SendMessage("AllDone",SendMessageOptions.DontRequireReceiver);
-			GetComponent<Renderer>().material.color = Color.cyan;
+			returnSpeed = 0.0f;
+			//print("Stopped");
+		}
+		else
+		{
+			//print ("returning");
+			returnSpeed = 0.5f;
 		}
 	}
 }

@@ -4,19 +4,23 @@ using System.Collections.Generic;
 
 public class EtherRing : MonoBehaviour {
 	public MembraneShell ringAtmosphere;
+	public bool forceAtmosphere = false;
 	[SerializeField]
 	public List<ExpressivePlaceholder> expressivePlaceholders;
 	private List<GameObject> expressiveClouds;
 
 	void Start()
 	{
+		
+
 		if (Globals.Instance != null)
 		{
 			Globals.Instance.existingEther = this;
 		}
 
-		if (ringAtmosphere != null)
+		if (ringAtmosphere != null && (!Application.isEditor || forceAtmosphere))
 		{
+			Debug.Log("hi");
 			ringAtmosphere.CreateShell();
 		}
 		for (int i = 0; i < expressivePlaceholders.Count; i++)
@@ -24,6 +28,10 @@ public class EtherRing : MonoBehaviour {
 			expressivePlaceholders[i].placeholder.SetActive(false);
 		}
 		expressiveClouds = new List<GameObject>();
+
+		// TODO REMOVE
+		//LevelHandler.Instance.LoadEtherRing(this, null);
+		//LoadExpressiveClouds();
 	}
 
 	public void LoadExpressiveClouds()

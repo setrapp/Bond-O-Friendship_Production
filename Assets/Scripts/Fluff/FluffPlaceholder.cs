@@ -11,6 +11,7 @@ public class FluffPlaceholder : MonoBehaviour {
 	public float respawnDelayMin = 0;
 	public float respawnDelayMax = 0;
 	private float pickTime = -1;
+	public bool dropParent = false;
 
 	void Awake()
 	{
@@ -67,9 +68,22 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				else
 				{
-					newFluff.ToggleSwayAnimation(true);
+					// Fake movement to allow fluff update to handle attachment to floor.
+					newFluff.moving = true;
 				}
 				createdFluff = newFluff;
+
+				if (dropParent)
+				{
+					if (OrphanFluffHolder.Instance != null)
+					{
+						createdFluff.transform.parent = OrphanFluffHolder.Instance.transform;
+					}
+					else
+					{
+						createdFluff.transform.parent = null;
+					}
+				}
 			}
 		}
 		else
