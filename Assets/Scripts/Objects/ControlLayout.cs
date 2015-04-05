@@ -33,16 +33,26 @@ public class ControlLayout : MonoBehaviour {
 	void Start () {
         useController = Globals.usingController;
 
-       if(useController)
-       {
-           keyboard.SetActive(false);
-           controller.SetActive(true);
-       }
-       else
-       {
-           keyboard.SetActive(true);
-           controller.SetActive(false);
-       }	
+		if(useController)
+		{
+			keyboard.SetActive(false);
+			controller.SetActive(true);
+			if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+			{
+				playerOneShootController.SetActive(false);
+				playerTwoShootController.SetActive(false);
+			}
+		}
+		else
+		{
+			keyboard.SetActive(true);
+			controller.SetActive(false);
+			if (Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+			{
+				playerOneShootKeyboard.SetActive(false);
+				playerTwoShootKeyboard.SetActive(false);
+			}
+		}	
 	}
 	
 	// Update is called once per frame

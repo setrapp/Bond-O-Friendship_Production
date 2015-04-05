@@ -11,15 +11,15 @@ namespace InControl
 		{
 			Name = "Logitech F310 Controller";
 			Meta = "Logitech F310 Controller on Mac (Mode X)";
-			
+
 			SupportedPlatforms = new[] {
 				"OS X"
 			};
-			
+
 			JoystickNames = new[] {
 				"Logitech Gamepad F310"
 			};
-			
+
 			ButtonMappings = new[] {
 				new InputControlMapping {
 					Handle = "A",
@@ -97,46 +97,23 @@ namespace InControl
 					Source = Button15
 				}
 			};
-			
+
 			AnalogMappings = new[] {
-				new InputControlMapping {
-					Handle = "Left Stick X",
-					Target = InputControlType.LeftStickX,
-					Source = Analog0
-				},
-				new InputControlMapping {
-					Handle = "Left Stick Y",
-					Target = InputControlType.LeftStickY,
-					Source = Analog1,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "Right Stick X",
-					Target = InputControlType.RightStickX,
-					Source = Analog2
-				},
-				new InputControlMapping {
-					Handle = "Right Stick Y",
-					Target = InputControlType.RightStickY,
-					Source = Analog3,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "Left Trigger",
-					Target = InputControlType.LeftTrigger,
-					Source = Analog4,
-					TargetRange = InputControlMapping.Range.Positive,
-					IgnoreInitialZeroValue = true
-				},
-				new InputControlMapping {
-					Handle = "Right Trigger",
-					Target = InputControlType.RightTrigger,
-					Source = Analog5,
-					TargetRange = InputControlMapping.Range.Positive,
-					IgnoreInitialZeroValue = true
-				}
+				LeftStickLeftMapping( Analog0 ),
+				LeftStickRightMapping( Analog0 ),
+				LeftStickUpMapping( Analog1 ),
+				LeftStickDownMapping( Analog1 ),
+
+				RightStickLeftMapping( Analog2 ),
+				RightStickRightMapping( Analog2 ),
+				RightStickUpMapping( Analog3 ),
+				RightStickDownMapping( Analog3 ),
+
+				LeftTriggerMapping( Analog4 ),
+				RightTriggerMapping( Analog5 ),
 			};
 		}
 	}
+	// @endcond
 }
 

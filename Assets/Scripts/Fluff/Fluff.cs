@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(SimpleMover))]
 public class Fluff : MonoBehaviour {
 	[HideInInspector]
-	private SimpleMover mover;
+	public SimpleMover mover;
 	public BondAttachable creator;
 	public float rotationSpeed = 50.0f;
 	public TrailRenderer trail;
@@ -16,7 +16,8 @@ public class Fluff : MonoBehaviour {
 	public Vector3 oldBulbPos;
 	public MeshRenderer bulb;
 	public MeshRenderer stalk;
-    public GameObject depthMask;
+	public GameObject geometry;
+	public LineRenderer lineToAttractor;
 	[HideInInspector]
 	public CapsuleCollider hull;
 	[HideInInspector]
@@ -31,6 +32,7 @@ public class Fluff : MonoBehaviour {
 	public Animation popAnimation;
 	public Vector3 pullForce;
 	public float pullDistance;
+	public GameObject soleAttractor = null;
 
 	void Awake()
 	{
@@ -62,6 +64,11 @@ public class Fluff : MonoBehaviour {
 
 		//TODO This fixes a unity tag changing bug that was fixed in a newer version of unity 5
 		gameObject.tag = "Fluff";
+
+		if (lineToAttractor != null)
+		{
+			lineToAttractor.SetVertexCount(0);
+		}
 	}
 
 	// Update is called once per frame
@@ -79,8 +86,15 @@ public class Fluff : MonoBehaviour {
 			pullForce = Vector3.zero;
 			pullDistance = 0;
 		}
+		else
+		{
+			if (lineToAttractor != null)
+			{
+				lineToAttractor.SetVertexCount(0);
+			}
+		}
 
-		if (!attractable && nonAttractTime <=0)
+		if (!attractable && nonAttractTime <= 0)
 		{
 			attractable = true;
 			nonAttractTime = 0;
@@ -146,6 +160,29 @@ public class Fluff : MonoBehaviour {
 
 			transform.Rotate(0.0f, 0.0f, rotationSpeed * Time.deltaTime);
 		}
+		else
+		{
+			// Sprouting.
+			if (!Globals.Instance.fluffsThrowable && Vector3.Dot(geometry.transform.localPosition, Vector3.up) < 0)
+			{
+				geometry.transform.localPosition += Vector3.up * Globals.Instance.fluffLeaveEmbed / Globals.Instance.fluffLeaveAttractWait * Time.deltaTime;
+				if (Vector3.Dot(geometry.transform.localPosition, Vector3.up) >= 0)
+				{
+					geometry.transform.localPosition = Vector3.zero;
+					FluffStick attacheeStick = null;
+					if (attachee != null && attachee.gameObject != null)
+					{
+						attacheeStick = attachee.gameObject.GetComponent<FluffStick>();
+					}
+					if (attacheeStick == null || attacheeStick.allowSway)
+					{
+						ToggleSwayAnimation(true);
+					}
+				}
+			}
+		}
+
+		
 	}
 
 	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null, float preventAttractTime = 0)
@@ -157,6 +194,7 @@ public class Fluff : MonoBehaviour {
 		// If something attachable is already in reach, attach without moving.
 		RaycastHit attemptPassHit;
 		float blockingTestDistance = Mathf.Max(hull.height, hull.radius);
+		ignoreCollider = ignoreColliderTemporary;
 		bool blocked = TestForBlocking(passForce, blockingTestDistance, out attemptPassHit);
 		if (blocked)
 		{
@@ -169,15 +207,18 @@ public class Fluff : MonoBehaviour {
 		if (body != null)
 		{
 			body.isKinematic = false;
-
 		}
-		ignoreCollider = ignoreColliderTemporary;
 
 		float passForceMag = passForce.magnitude;
 		mover.Move(passForce / passForceMag, passForceMag * Time.deltaTime, false);
 	}
 
 	public void Pull(GameObject puller, Vector3 pullOffset, float pullMagnitude)
+	{
+		Pull(puller, pullOffset, pullMagnitude, Color.white);
+	}
+
+	public void Pull(GameObject puller, Vector3 pullOffset, float pullMagnitude, Color pullColor)
 	{
 		// If something is blocking the path to the puller, do not move.
 		RaycastHit attemptPullHit;
@@ -200,6 +241,15 @@ public class Fluff : MonoBehaviour {
 		{
 			pullForce = newPullForce;
 			pullDistance = newPullDistance;
+
+			// Draw line from attractor to fluff.
+			if (lineToAttractor != null)
+			{
+				lineToAttractor.SetVertexCount(2);
+				lineToAttractor.SetPosition(0, puller.transform.position + pullOffset);
+				lineToAttractor.SetPosition(1, transform.position);
+				lineToAttractor.material.color = pullColor;
+			}
 		}
 	}
 
@@ -215,12 +265,17 @@ public class Fluff : MonoBehaviour {
 			{
 				body.isKinematic = false;
 			}
-			mover.Accelerate(pullForce, false, true);
+			mover.Accelerate(pullForce, true, false, true);
 		}
 	}
 
 	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
 	{
+		if (Globals.Instance == null)
+		{
+			return;
+		}
+
 		// If no potential attachee is given, disregard.
 		if (attacheeObject == null)
 		{
@@ -234,27 +289,37 @@ public class Fluff : MonoBehaviour {
 		}
 
 		FluffStick attacheeStick = attacheeObject.GetComponent<FluffStick>();
-		
+
 		// Position and orient.
 		transform.position = position;
 		transform.up = standDirection;
 
-		// If desired, start swaying. 
-		if (attacheeStick == null || attacheeStick.allowSway)
-		{
-			ToggleSwayAnimation(sway);
-		}
-
 		// Actaully attach to target and record relationship to attachee.
-		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(transform.position - attacheeObject.transform.position);
+		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(position - attacheeObject.transform.position);
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
 		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
 		ignoreCollider = attacheeObject;
-		nonAttractTime = 0;
-		attractable = true;
+		if (Globals.Instance.fluffsThrowable)
+		{
+			nonAttractTime = 0;
+			attractable = true;
+		}
 
 		// Notify the potential attachee that fluff has been attached.
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
+
+		// If fluffs are not throwable and the attachee is not controlling, embed the fluff to sprout out.
+		bool sprouting = false;
+		if (!Globals.Instance.fluffsThrowable && attachee != null && !attachee.controlling)
+		{
+			geometry.transform.position -= standDirection.normalized * Globals.Instance.fluffLeaveEmbed;
+			sprouting = true;
+		}
+		// If desired, start swaying. 
+		if ((attacheeStick == null || attacheeStick.allowSway) && !sprouting)
+		{
+			ToggleSwayAnimation(sway);
+		}
 
 		// Stop moving.
 		mover.Stop();
@@ -300,12 +365,17 @@ public class Fluff : MonoBehaviour {
 	}
 
 	// Accessible function that does not require coroutine call.
-	public void PopFluff(float secondsDelay = 0)
+	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false)
 	{
-		StartCoroutine(PopAndDestroy(secondsDelay));
+		if (slowMultiplier >= 0)
+		{
+			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));
+		}
+
+		StartCoroutine(PopAndDestroy(secondsDelay, fakeDestroy));
 	}
 
-	private IEnumerator PopAndDestroy(float secondsDelay = 0)
+	private IEnumerator PopAndDestroy(float secondsDelay = 0, bool fakeDestroy = false)
 	{
 		if (secondsDelay > 0)
 		{
@@ -317,13 +387,60 @@ public class Fluff : MonoBehaviour {
 			if (!popAnimation.isPlaying)
 			{
 				popAnimation.Play();
-				Destroy(gameObject, popAnimation.clip.length);
+				if (fakeDestroy)
+				{
+					StartCoroutine(HideOnPop(bulb.transform.localScale, popAnimation.clip.length));
+				}
+				else
+				{
+					Destroy(gameObject, popAnimation.clip.length);
+				}
 			}
 		}
 		else
 		{
-			Destroy(gameObject);
+			if (fakeDestroy)
+			{
+				StartCoroutine(HideOnPop(bulb.transform.localScale));
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 		}
+	}
+
+	private IEnumerator HideOnPop (Vector3 bulbScale, float secondsDelay = 0)
+	{
+		yield return new WaitForSeconds(secondsDelay);
+		bulb.transform.localScale = bulbScale;
+		gameObject.SetActive(false);
+	}
+
+	private IEnumerator SlowBeforePop(float endSpeedMultiplier, float timeUntilPop)
+	{
+		float startMultiplier = mover.externalSpeedMultiplier;
+		float normalCutSpeed = mover.cutSpeedThreshold;
+		Vector3 normalVelocity = mover.velocity;
+		float slowingTime = 0;
+		float slowingProgress = 0;
+
+		mover.cutSpeedThreshold = 0;
+
+		while(slowingProgress < 1)
+		{
+			yield return null;
+			slowingTime += Time.deltaTime;
+			if (timeUntilPop <= 0) { slowingProgress = 1; }
+			else { slowingProgress = slowingTime / timeUntilPop; }
+			slowingProgress = Mathf.Min(slowingProgress, 1);
+
+			mover.externalSpeedMultiplier = (startMultiplier * (1 - slowingProgress)) + (endSpeedMultiplier * slowingProgress);
+		}
+
+		mover.externalSpeedMultiplier = startMultiplier;
+		mover.velocity = normalVelocity;
+		mover.cutSpeedThreshold = normalCutSpeed;
 	}
 
 	public void StopMoving()

@@ -9,6 +9,7 @@ public class WaitPad : MonoBehaviour {
 	protected float red;
 	protected float turnTime;
 	public bool activated = false;
+	public float portionComplete;
 
 	// Use this for initialization
 	virtual protected void Start()
@@ -43,7 +44,7 @@ public class WaitPad : MonoBehaviour {
 			//print ("activated");
 		}
 	}
-	void OnTriggerEnter(Collider collide)
+	virtual protected void OnTriggerEnter(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1")
 		{
@@ -56,7 +57,7 @@ public class WaitPad : MonoBehaviour {
 			//print ("2");
 		}
 	}
-	void OnTriggerExit(Collider collide)
+	virtual protected void OnTriggerExit(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1")
 		{

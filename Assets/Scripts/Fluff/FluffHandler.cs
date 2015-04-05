@@ -104,13 +104,15 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				
-				fluffMaterial = fluffsToAdd[i].bulb.material;
+				if (fluffsToAdd != null)
+				{
+					fluffMaterial = fluffsToAdd[i].bulb.material;
 
-				SpawnFluff(true, fluffMaterial);
+					SpawnFluff(true, fluffMaterial);
 
-				Destroy(fluffsToAdd[i].gameObject);
-				fluffsToAdd.RemoveAt(i);
+					Destroy(fluffsToAdd[i].gameObject);
+					fluffsToAdd.RemoveAt(i);
+				}
 			}
 
 			fluffsToAdd.Clear();
@@ -392,5 +394,63 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		return new Vector3(0, 0, fluffAngle);
+	}
+
+	public void SendFluffToBond(Bond bondRequesting)
+	{
+
+
+		if (fluffs.Count <= 0 || bondRequesting == null)
+		{
+			return;
+		}
+
+		Rigidbody fluffPullTarget = null;
+		if (character.bondAttachable == bondRequesting.attachment1.attachee)
+		{
+			fluffPullTarget = bondRequesting.attachment1.fluffPullTarget;
+		}
+		else if (character.bondAttachable == bondRequesting.attachment2.attachee)
+		{
+			fluffPullTarget = bondRequesting.attachment2.fluffPullTarget;
+		}
+
+		if (fluffPullTarget == null)
+		{
+			return;
+		}
+
+		BondAttachable partner = bondRequesting.OtherPartner(character.bondAttachable);
+		if (partner == null)
+		{
+			return;
+		}
+
+		Fluff fluffToSend = fluffs[0];
+
+		character.fluffHandler.fluffs.Remove(fluffToSend);
+		if (OrphanFluffHolder.Instance != null)
+		{
+			fluffToSend .transform.parent = OrphanFluffHolder.Instance.transform;
+		}
+		else
+		{
+			fluffToSend .transform.parent = transform.parent;
+		}
+
+		SpringJoint springToBond = fluffToSend.gameObject.AddComponent<SpringJoint>();
+		springToBond.autoConfigureConnectedAnchor = false;
+		springToBond.anchor = Vector3.zero;
+		springToBond.connectedAnchor = Vector3.zero;
+		springToBond.connectedBody = fluffPullTarget;
+		
+		if (bondRequesting.stats.fluffPullForce >= 0)
+		{
+			springToBond.spring = bondRequesting.stats.fluffPullForce;
+		}
+
+		fluffToSend.soleAttractor = partner.gameObject;
+		fluffToSend.Pass(Vector3.zero, gameObject, 0);
+		bondRequesting.AddFluff(fluffToSend);
 	}
 }

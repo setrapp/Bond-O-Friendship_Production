@@ -1,6 +1,7 @@
 ﻿#if UNITY_STANDALONE_WIN || UNITY_EDITOR
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 
 namespace XInputDotNetPure
@@ -147,22 +148,26 @@ namespace XInputDotNetPure
 	{
 		public struct StickValue
 		{
-			float x, y;
+			Vector2 vector;
 
 			internal StickValue( float x, float y )
 			{
-				this.x = x;
-				this.y = y;
+				vector = new Vector2( x, y );
 			}
 
 			public float X
 			{
-				get { return x; }
+				get { return vector.x; }
 			}
 
 			public float Y
 			{
-				get { return y; }
+				get { return vector.y; }
+			}
+
+			public Vector2 Vector
+			{
+				get { return vector; }
 			}
 		}
 

@@ -88,6 +88,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &174166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 474166}
+  - 120: {fileID: 12074166}
+  m_Layer: 17
+  m_Name: Line To Attractor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -95,11 +111,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -8.41033554, y: 6.7096014, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
   - {fileID: 400004}
+  - {fileID: 474166}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400002
@@ -152,6 +169,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400004}
   m_RootOrder: 0
+--- !u!4 &474166
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174166}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
+  m_RootOrder: 2
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -313,7 +342,8 @@ MonoBehaviour:
   oldBulbPos: {x: 0, y: 0, z: 0}
   bulb: {fileID: 2300000}
   stalk: {fileID: 2300002}
-  depthMask: {fileID: 0}
+  geometry: {fileID: 100004}
+  lineToAttractor: {fileID: 12074166}
   hull: {fileID: 0}
   body: {fileID: 0}
   attacheePullRate: .100000001
@@ -324,6 +354,8 @@ MonoBehaviour:
     possessive: 0
     controlling: 0
   ignoreCollider: {fileID: 0}
+  nonAttractTime: 0
+  attractable: 1
   popAnimation: {fileID: 11100000}
   pullForce: {x: 0, y: 0, z: 0}
   pullDistance: 0
@@ -342,6 +374,8 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 10
   handling: 10000
+  handlingAcceleration: 0
+  minHandlingFactor: 1
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
   body: {fileID: 5400000}
@@ -373,6 +407,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   depthMask: {fileID: 0}
+  autoCreate: 1
+--- !u!120 &12074166
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174166}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    startWidth: .200000003
+    endWidth: 0
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 1694498815
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 855638015
+  m_UseWorldSpace: 1
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
