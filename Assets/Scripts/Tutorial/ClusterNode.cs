@@ -18,6 +18,7 @@ public class ClusterNode : MonoBehaviour {
 	protected Color startingcolor;
 	protected Collider lighter = null;
 
+
 	// Use this for initialization
 	virtual protected void Start () {
 		if (nodeRenderer == null)
@@ -25,6 +26,7 @@ public class ClusterNode : MonoBehaviour {
 			nodeRenderer = gameObject.GetComponent<Renderer>();
 		}
 		startingcolor = nodeRenderer.material.color;
+
 	}
 	
 	// Update is called once per frame

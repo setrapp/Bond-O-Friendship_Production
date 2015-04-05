@@ -11,7 +11,7 @@ public class MenuControl : MonoBehaviour {
 
 	public string startScene;
     InputDevice device;
-	
+    private int deviceCount;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +26,10 @@ public class MenuControl : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
+        //device = InputManager.ActiveDevice;
+        //Debug.Log(device.Name);
+        deviceCount = InputManager.controllerCount;
+
         GameObject[] messages = GameObject.FindGameObjectsWithTag("TranslevelMessage");
         bool levelLoadFound = false;
         for (int i = 0; i < messages.Length && !levelLoadFound; i++)
@@ -38,19 +42,46 @@ public class MenuControl : MonoBehaviour {
             }
         }
 
-        if(InputManager.Devices.Count > 0)
+        if(deviceCount > 0)
         {
-            InputDevice device = InputManager.ActiveDevice;
-            if (device.Action1.IsPressed || device.MenuWasPressed)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            device = InputManager.ActiveDevice;
+            if (device.AnyButton)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
             {
+                Globals.Instance.player1Device = InputManager.Devices.IndexOf(device);
+                Globals.Instance.player2Device = deviceCount == 1 ? InputManager.Devices.IndexOf(device) : -2;
+
+                if(deviceCount == 1)
+                {
+                    Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSharedLeft;
+                    Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSharedRight;
+                    Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.LeftController;
+                }
+                else
+                {
+                    Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSolo;
+                    Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSolo;
+                    Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.RightController;
+                }
+
+                //Debug.Log(Globals.Instance.player1ControlScheme);
                 MainMenuLoadLevel();
-                Globals.usingController = true;
+                return;
+               // Globals.usingController = true;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Return))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
         {
+            Globals.Instance.player1Device = -1;
+            Globals.Instance.player2Device = -1;
+
+            Globals.Instance.player1ControlScheme = Globals.ControlScheme.KeyboardSharedLeft;
+            Globals.Instance.player2ControlScheme = Globals.ControlScheme.KeyboardSharedRight;
+            Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.Keyboard;
+            Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.Keyboard;
             MainMenuLoadLevel();
-            Globals.usingController = false;
+           // Globals.usingController = false;
         }
     }		
 

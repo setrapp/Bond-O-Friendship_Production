@@ -118,7 +118,7 @@ public class CameraFollow : MonoBehaviour {
 			currentCamHeight = camHeight;
 			currentCamAspect = camAspect;
 
-			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 3;	
+			float maskHeight = Mathf.Sqrt(1 + Mathf.Pow(childMainCamera.aspect, 2)) * 5;	
 
 			if (isCamera1)
 			{

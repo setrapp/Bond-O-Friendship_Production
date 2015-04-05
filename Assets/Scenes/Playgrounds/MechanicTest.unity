@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &14490134
 GameObject:
@@ -3568,6 +3569,7 @@ MonoBehaviour:
   body: {fileID: 443816123}
   bodylessDampening: 1
   slowDown: 0
+  jumpToMaxSpeed: 0
 --- !u!54 &443816123
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3598,7 +3600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mover: {fileID: 443816122}
   tracer: {fileID: 443816125}
-  gameCamera: {fileID: 0}
+  gameCamera: {fileID: 553436394}
   geometry: {fileID: 443816119}
   directVelocity: 0
   toggleSeek: 0
@@ -3632,7 +3634,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.9399996, y: 5.92999983, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 553436395}
   m_Father: {fileID: 0}
   m_RootOrder: 7
 --- !u!114 &443816127
@@ -4425,9 +4428,88 @@ MonoBehaviour:
   player1Spawn: {fileID: 1672965897}
   player2Spawn: {fileID: 1897814214}
   naturalFluffCount: -1
-  startFluffCount: -1
+  startFluffCount: 8
   placeOnAwake: 0
   defaultPlayerParent: {fileID: 0}
+--- !u!1 &553436393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 127742, guid: 77847987daed728449a18107892e2155, type: 2}
+  m_PrefabInternal: {fileID: 1355636002}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 553436395}
+  - 20: {fileID: 553436394}
+  - 124: {fileID: 553436397}
+  - 92: {fileID: 553436396}
+  m_Layer: 0
+  m_Name: Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &553436394
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2027742, guid: 77847987daed728449a18107892e2155,
+    type: 2}
+  m_PrefabInternal: {fileID: 1355636002}
+  m_GameObject: {fileID: 553436393}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: .300000012
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 20
+  m_Depth: 3
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
+--- !u!4 &553436395
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 427742, guid: 77847987daed728449a18107892e2155, type: 2}
+  m_PrefabInternal: {fileID: 1355636002}
+  m_GameObject: {fileID: 553436393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 443816126}
+  m_RootOrder: 0
+--- !u!92 &553436396
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 9227742, guid: 77847987daed728449a18107892e2155,
+    type: 2}
+  m_PrefabInternal: {fileID: 1355636002}
+  m_GameObject: {fileID: 553436393}
+  m_Enabled: 1
+--- !u!124 &553436397
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 12427742, guid: 77847987daed728449a18107892e2155,
+    type: 2}
+  m_PrefabInternal: {fileID: 1355636002}
+  m_GameObject: {fileID: 553436393}
+  m_Enabled: 1
 --- !u!1 &562224743
 GameObject:
   m_ObjectHideFlags: 0
@@ -9956,6 +10038,14 @@ Prefab:
       propertyPath: m_LocalPosition.x
       value: -32.6500015
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: naturalFluffCount
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: startFluffCount
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
   m_RootGameObject: {fileID: 1069035780}
@@ -11255,8 +11345,8 @@ Transform:
   m_PrefabInternal: {fileID: 434402871}
   m_GameObject: {fileID: 1575445407}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -1, y: .5, z: -.5}
-  m_LocalScale: {x: 1, y: 1, z: 2}
+  m_LocalPosition: {x: -1, y: -3.5, z: -.5}
+  m_LocalScale: {x: 1.00000048, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 589411566}
   m_RootOrder: 2
@@ -12286,6 +12376,7 @@ MonoBehaviour:
   pOonPad: 0
   pTonPad: 0
   activated: 0
+  infinteSpin: 0
   flipDirection: 0
   spinInhibitors: 0
   backSpinInhibitors: 0
@@ -12294,7 +12385,7 @@ MonoBehaviour:
   player2Pad: {fileID: 1521757398}
   finishRing: {fileID: 1213230975}
   ripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
-  goalRotation: 1080
+  goalRotation: 360
   currentRotation: 0
   ringMinSize: .100000001
   rinMaxSize: 1.20000005
@@ -12306,8 +12397,8 @@ MonoBehaviour:
   pusheeDisappearInterval: .25
   oldRotation: 0
   resetDelay: 0
-  resetAcceleration: 10
-  resetMaxSpeed: 100
+  resetAcceleration: 100
+  resetMaxSpeed: 1000
   resetSpeed: 0
   resetting: 0
   portionComplete: 0
@@ -12392,8 +12483,8 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   maxVertices: -1
   lineMakerPrefab: {fileID: 108704, guid: 5cd7e5da51977f44fb7cc987a9214dcd, type: 2}
-  trailNearWidth: 1
-  trailFarWidth: 1
+  trailNearWidth: 2.5
+  trailFarWidth: 2.5
   zOffset: 0
   minVertexDistance: .200000003
 --- !u!23 &1678332402
@@ -12446,7 +12537,7 @@ Transform:
   m_GameObject: {fileID: 1678332400}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 18.9726658, y: -1.99538314, z: -1.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -12462,16 +12553,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b0f58affdedc74185d1be54789c64e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 10
+  maxSpeed: 20
   velocity: {x: 0, y: 0, z: 0}
-  acceleration: 10
-  handling: 10
+  acceleration: 40
+  handling: 20
   minHandlingFactor: 1
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
   body: {fileID: 1678332407}
   bodylessDampening: 1
   slowDown: 0
+  jumpToMaxSpeed: 1
 --- !u!54 &1678332407
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12480,7 +12572,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 368268807}
   m_GameObject: {fileID: 1678332400}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 1
   m_AngularDrag: .0500000007
   m_UseGravity: 0
@@ -12502,7 +12594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetChannel: {fileID: 1407099433}
   mover: {fileID: 1678332406}
-  tracer: {fileID: 0}
+  tracer: {fileID: 1678332401}
   showTarget: 0
 --- !u!1 &1684428059
 GameObject:
@@ -15569,8 +15661,8 @@ Transform:
   m_PrefabInternal: {fileID: 434402871}
   m_GameObject: {fileID: 1943569117}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 1, y: .5, z: -.5}
-  m_LocalScale: {x: 1, y: 1, z: 2}
+  m_LocalPosition: {x: 1, y: -3.5, z: -.5}
+  m_LocalScale: {x: 1.00000048, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 589411566}
   m_RootOrder: 1

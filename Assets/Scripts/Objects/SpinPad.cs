@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SpinPad : WaitPad
 {
+	public bool infinteSpin = false;
 	public bool flipDirection = false;
 	public int spinInhibitors = 0;
 	public int backSpinInhibitors = 0;
@@ -33,7 +34,6 @@ public class SpinPad : WaitPad
 	public float resetMaxSpeed = 100.0f;
 	public float resetSpeed = 0f;
 	public bool resetting = false;
-	public float portionComplete;
 
 	protected override void Start()
 	{
@@ -133,7 +133,7 @@ public class SpinPad : WaitPad
 			oldRotation = newRotation;
 
 			// Snap to finish and produce success feedback when goal rotation is reached.
-			if (currentRotation >= goalRotation)
+			if (currentRotation >= goalRotation && !infinteSpin)
 			{
 				if (!body.isKinematic)
 				{
@@ -163,7 +163,7 @@ public class SpinPad : WaitPad
 		}
 
 		// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
-		portionComplete = currentRotation / goalRotation;
+		portionComplete = Mathf.Clamp(currentRotation / goalRotation, 0, 1);
 		float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
 		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
 		
