@@ -52,7 +52,7 @@ public class SpinPadSide : MonoBehaviour {
 			padRenderer.material.color = ((startTint * (1 - portionComplete)) + (activeTint * portionComplete)) * playerColor;
 		}
 
-		activated = (timeActivating >= totalActivateTime) || spinPad.activated;
+		activated = (timeActivating >= totalActivateTime) || (spinPad != null && spinPad.activated);
 	}
 
 	void OnTriggerEnter(Collider col)
