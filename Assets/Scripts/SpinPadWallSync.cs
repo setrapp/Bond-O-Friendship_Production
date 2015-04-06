@@ -56,23 +56,24 @@ public class SpinPadWallSync : MonoBehaviour {
 			}
 		}
 
+		CheckHelmets();
+
 		if (membrane1 != null && membrane2 != null)
 		{
 			if (PlayersPushing())
 			{
-				wallEnd1.isKinematic = wallEnd2.isKinematic = false;
-				//membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
+				//wallEnd1.isKinematic = wallEnd2.isKinematic = false;
+				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
 			}
 			else
 			{
-				wallEnd1.isKinematic = wallEnd2.isKinematic = true;
-				//membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
+				//wallEnd1.isKinematic = wallEnd2.isKinematic = true;
+				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
 			}
 
 			// Handle rotation of the pad.
 			UpdatePadRotation();
 		}
-		
 	}
 
 	private void UpdatePadRotation()
@@ -148,15 +149,20 @@ public class SpinPadWallSync : MonoBehaviour {
 	{
 		bool bondedInOrder = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) && membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
 		bool bondedReverseOrder = membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable) && membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable);
+		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeSelf && helmet1.gameObject.activeSelf);
 
-		bool helmetsPushing = false;
+		return (bondedInOrder || bondedReverseOrder) && !helmetsExist;
+	}
+
+	private void CheckHelmets()
+	{
 		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeSelf && helmet1.gameObject.activeSelf)
 		{
-			helmetsPushing = helmet1.pushing && helmet2.pushing;
-			Debug.Log(helmetsPushing);
+			if (helmet1.pushing && helmet2.pushing)
+			{
+				helmet1.DestroyAndRipple();
+				helmet2.DestroyAndRipple();
+			}
 		}
-
-		return bondedInOrder || bondedReverseOrder || helmetsPushing;
-		//TODO destroy the pushees when both are pushed.
 	}
 }

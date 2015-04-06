@@ -73,7 +73,6 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
-    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &14490134
 GameObject:
@@ -1759,7 +1758,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1487644187}
   targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &233894192
 GameObject:
   m_ObjectHideFlags: 0
@@ -2561,7 +2564,7 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
-    linkMass: .00100000005
+    linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
     maxDistance: 3
@@ -2570,7 +2573,7 @@ MonoBehaviour:
     midWidth: 0
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    springForce: 5
+    springForce: 5000
     springDamper: 5
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -2837,7 +2840,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1521757398}
   targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &347895286
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,10 +3312,10 @@ MonoBehaviour:
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
-    maxDistance: 25
-    relativeWarningDistance: .5
-    endsWidth: .0199999996
-    midWidth: .5
+    maxDistance: 3
+    relativeWarningDistance: -1
+    endsWidth: 0
+    midWidth: 0
     addLinkDistance: .5
     removeLinkDistance: .300000012
     springForce: 5000
@@ -3398,7 +3405,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 400086197}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: .5
   m_Height: 5
   m_Direction: 2
@@ -3558,7 +3565,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1521757398}
   targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &415649388
 GameObject:
   m_ObjectHideFlags: 0
@@ -5081,7 +5092,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 542774285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -3, z: 0}
+  m_LocalPosition: {x: -1.5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 2.20000005}
   m_Children:
   - {fileID: 1136074959}
@@ -6455,7 +6466,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.linkMass
-      value: .00100000005
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.maxDistance
@@ -6463,7 +6474,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.springForce
-      value: 5
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.relativeWarningDistance
@@ -6474,6 +6485,26 @@ Prefab:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.midWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.maxDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.relativeWarningDistance
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.endsWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.midWidth
       value: 0
       objectReference: {fileID: 0}
@@ -7062,7 +7093,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1013162452}
   targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &901072884
 GameObject:
   m_ObjectHideFlags: 0
@@ -7252,7 +7287,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1487644187}
   targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &914699092
 GameObject:
   m_ObjectHideFlags: 0
@@ -7883,7 +7922,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1324458665}
   targetSpinPad: {fileID: 0}
   pusheeCollider: {fileID: 1682066955}
+  pusheeRenderer: {fileID: 1682066956}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 11400000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
 --- !u!1 &1003388572
 GameObject:
   m_ObjectHideFlags: 0
@@ -9151,7 +9194,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1362706866}
   targetSpinPad: {fileID: 0}
   pusheeCollider: {fileID: 542774288}
+  pusheeRenderer: {fileID: 542774289}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 11400000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
 --- !u!1 &1143557048
 GameObject:
   m_ObjectHideFlags: 0
@@ -10098,10 +10145,10 @@ MonoBehaviour:
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
-    maxDistance: 25
-    relativeWarningDistance: .5
-    endsWidth: .0199999996
-    midWidth: .5
+    maxDistance: 3
+    relativeWarningDistance: -1
+    endsWidth: 0
+    midWidth: 0
     addLinkDistance: .5
     removeLinkDistance: .300000012
     springForce: 5000
@@ -10191,7 +10238,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1277455892}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: .5
   m_Height: 5
   m_Direction: 2
@@ -10730,7 +10777,7 @@ Transform:
   m_PrefabInternal: {fileID: 1913460672}
   m_GameObject: {fileID: 1324458655}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.5, z: 0}
+  m_LocalPosition: {x: 5.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 320732602}
@@ -15196,7 +15243,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1682066953}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
-  m_LocalPosition: {x: 2, y: 3, z: 0}
+  m_LocalPosition: {x: 1.5, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 2.20000005}
   m_Children:
   - {fileID: 998116773}
@@ -16066,7 +16113,7 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
-    linkMass: .00100000005
+    linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
     maxDistance: 3
@@ -16075,7 +16122,7 @@ MonoBehaviour:
     midWidth: 0
     addLinkDistance: .5
     removeLinkDistance: .300000012
-    springForce: 5
+    springForce: 5000
     springDamper: 5
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -18095,7 +18142,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1458801932}
   targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &1820135318
 GameObject:
   m_ObjectHideFlags: 0
@@ -18849,7 +18900,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: m_Enabled
@@ -18897,7 +18948,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.linkMass
-      value: .00100000005
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.maxDistance
@@ -18905,7 +18956,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.springForce
-      value: 5
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.relativeWarningDistance
@@ -18916,6 +18967,30 @@ Prefab:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400020, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.midWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.maxDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.relativeWarningDistance
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: stats.endsWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
       propertyPath: stats.midWidth
       value: 0
       objectReference: {fileID: 0}
@@ -20181,7 +20256,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1458801932}
   targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &2050168048
 GameObject:
   m_ObjectHideFlags: 0
@@ -20889,7 +20968,11 @@ MonoBehaviour:
   targetSidePad: {fileID: 1013162452}
   targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
+  pusheeRenderer: {fileID: 0}
+  pusheeColorer: {fileID: 0}
+  pushingTintFactor: .600000024
   pushing: 0
+  ripplePrefab: {fileID: 0}
 --- !u!1 &2090556359
 GameObject:
   m_ObjectHideFlags: 0
