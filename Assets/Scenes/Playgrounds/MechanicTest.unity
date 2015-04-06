@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &14490134
 GameObject:
@@ -1756,7 +1757,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1487644187}
-  targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -2838,7 +2838,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1521757398}
-  targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -3563,7 +3562,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1521757398}
-  targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -4188,7 +4186,7 @@ Transform:
   m_Children:
   - {fileID: 553436395}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!114 &443816127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7091,7 +7089,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1013162452}
-  targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -7285,7 +7282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1487644187}
-  targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -7467,7 +7463,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 430882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 130882, guid: 83dd3c98254b06448a1b9d07d1b979ab, type: 2}
       propertyPath: m_IsActive
@@ -7876,7 +7872,7 @@ GameObject:
   - 114: {fileID: 998116775}
   - 65: {fileID: 998116774}
   m_Layer: 16
-  m_Name: Small Push Trigger 1
+  m_Name: Helmet Push Trigger 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7920,10 +7916,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1324458665}
-  targetSpinPad: {fileID: 0}
   pusheeCollider: {fileID: 1682066955}
   pusheeRenderer: {fileID: 1682066956}
-  pusheeColorer: {fileID: 0}
+  pusheeColorer: {fileID: 1682066954}
   pushingTintFactor: .600000024
   pushing: 0
   ripplePrefab: {fileID: 11400000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
@@ -8126,9 +8121,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1014467318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9df884fc66cea3b429c44a300bd967b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f3c2eb310c729741bb57c1744702990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pOonPad: 0
+  pTonPad: 0
+  activated: 0
+  portionComplete: 0
   membraneWall1: {fileID: 320732607}
   membraneWall2: {fileID: 1736231875}
   wallEnd1: {fileID: 1324458660}
@@ -8137,12 +8136,16 @@ MonoBehaviour:
   helmet1: {fileID: 998116775}
   helmet2: {fileID: 1136074961}
   spinRadius: 5.5
+  fullInRotation: 0
+  fullOutRotation: -360
+  currentRotation: 0
   rotationProgress: 0
   maxDrag: 100
   minDrag: 1.5
-  dragDecreaseSpeed: 300
+  dragDecreaseSpeed: 500
   dragIncreaseSpeed: 50
   membraneAttachmentSpring: 50
+  spinInhibitors: 0
 --- !u!1 &1019591792
 GameObject:
   m_ObjectHideFlags: 0
@@ -9148,7 +9151,7 @@ GameObject:
   - 114: {fileID: 1136074961}
   - 65: {fileID: 1136074960}
   m_Layer: 16
-  m_Name: Small Push Trigger 2
+  m_Name: Helmet Push Trigger 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9192,10 +9195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1362706866}
-  targetSpinPad: {fileID: 0}
   pusheeCollider: {fileID: 542774288}
   pusheeRenderer: {fileID: 542774289}
-  pusheeColorer: {fileID: 0}
+  pusheeColorer: {fileID: 542774287}
   pushingTintFactor: .600000024
   pushing: 0
   ripplePrefab: {fileID: 11400000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
@@ -13152,7 +13154,7 @@ Transform:
   m_LocalScale: {x: 100, y: 1, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
 --- !u!1 &1501501553
 GameObject:
   m_ObjectHideFlags: 0
@@ -14895,7 +14897,7 @@ GameObject:
   - 114: {fileID: 1672674992}
   - 54: {fileID: 1672674993}
   m_Layer: 15
-  m_Name: Spin Pad
+  m_Name: Spin Pad Mechanical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14928,38 +14930,51 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 929591157}
   m_GameObject: {fileID: 1672674990}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf86a3dc06b1458468b3d4232335e9e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 758d7a1a0aab8c14ab9c7cabf5d711e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pOonPad: 0
   pTonPad: 0
   activated: 0
   portionComplete: 0
+  membraneWall1: {fileID: 0}
+  membraneWall2: {fileID: 0}
+  wallEnd1: {fileID: 0}
+  wallEnd2: {fileID: 0}
+  rotatee: {fileID: 0}
+  helmet1: {fileID: 0}
+  helmet2: {fileID: 0}
+  spinRadius: 5.5
+  goalRotation: 0
+  currentRotation: 0
+  maxDrag: 100
+  minDrag: 1.5
+  dragDecreaseSpeed: 500
+  dragIncreaseSpeed: 50
+  membraneAttachmentSpring: 50
+  spinInhibitors: 0
   infinteSpin: 0
   flipDirection: 0
-  spinInhibitors: 0
   backSpinInhibitors: 0
-  body: {fileID: 1672674993}
-  player1Pad: {fileID: 1013162452}
-  player2Pad: {fileID: 1521757398}
-  finishRing: {fileID: 1213230975}
-  ripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
-  goalRotation: 360
-  currentRotation: 0
-  ringMinSize: .100000001
-  rinMaxSize: 1.20000005
+  body: {fileID: 0}
+  player1Pad: {fileID: 0}
+  player2Pad: {fileID: 0}
+  finishRing: {fileID: 0}
+  ripplePrefab: {fileID: 0}
+  ringMinSize: .00999999978
+  rinMaxSize: 1.14999998
   player1Pushing: 0
   player2Pushing: 0
-  centerPushee: {fileID: 1223638642}
-  player1Pushee: {fileID: 1537302702}
-  player2Pushee: {fileID: 1208982230}
-  pusheeDisappearInterval: .25
+  centerPushee: {fileID: 0}
+  player1Pushee: {fileID: 0}
+  player2Pushee: {fileID: 0}
+  pusheeDisappearInterval: .100000001
   oldRotation: 0
   resetDelay: 0
-  resetAcceleration: 2500
-  resetMaxSpeed: 2500
+  resetAcceleration: 10
+  resetMaxSpeed: 100
   resetSpeed: 0
   resetting: 0
 --- !u!54 &1672674993
@@ -15100,7 +15115,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!114 &1678332406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18140,7 +18155,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1458801932}
-  targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -20254,7 +20268,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1458801932}
-  targetSpinPad: {fileID: 2131075383}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -20966,7 +20979,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSidePad: {fileID: 1013162452}
-  targetSpinPad: {fileID: 1672674992}
   pusheeCollider: {fileID: 0}
   pusheeRenderer: {fileID: 0}
   pusheeColorer: {fileID: 0}
@@ -22502,7 +22514,7 @@ GameObject:
   - 114: {fileID: 2131075383}
   - 54: {fileID: 2131075384}
   m_Layer: 15
-  m_Name: Spin Pad
+  m_Name: Spin Pad Mechanical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22535,38 +22547,51 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1444929656}
   m_GameObject: {fileID: 2131075381}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf86a3dc06b1458468b3d4232335e9e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 758d7a1a0aab8c14ab9c7cabf5d711e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pOonPad: 0
   pTonPad: 0
   activated: 0
   portionComplete: 0
+  membraneWall1: {fileID: 0}
+  membraneWall2: {fileID: 0}
+  wallEnd1: {fileID: 0}
+  wallEnd2: {fileID: 0}
+  rotatee: {fileID: 0}
+  helmet1: {fileID: 0}
+  helmet2: {fileID: 0}
+  spinRadius: 5.5
+  goalRotation: 0
+  currentRotation: 0
+  maxDrag: 100
+  minDrag: 1.5
+  dragDecreaseSpeed: 500
+  dragIncreaseSpeed: 50
+  membraneAttachmentSpring: 50
+  spinInhibitors: 0
   infinteSpin: 0
   flipDirection: 0
-  spinInhibitors: 0
   backSpinInhibitors: 0
-  body: {fileID: 2131075384}
-  player1Pad: {fileID: 1487644187}
-  player2Pad: {fileID: 1458801932}
-  finishRing: {fileID: 484655839}
-  ripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
-  goalRotation: 360
-  currentRotation: 0
-  ringMinSize: .100000001
-  rinMaxSize: 1.20000005
+  body: {fileID: 0}
+  player1Pad: {fileID: 0}
+  player2Pad: {fileID: 0}
+  finishRing: {fileID: 0}
+  ripplePrefab: {fileID: 0}
+  ringMinSize: .00999999978
+  rinMaxSize: 1.14999998
   player1Pushing: 0
   player2Pushing: 0
-  centerPushee: {fileID: 1768312222}
-  player1Pushee: {fileID: 2090556361}
-  player2Pushee: {fileID: 2062027571}
-  pusheeDisappearInterval: .25
+  centerPushee: {fileID: 0}
+  player1Pushee: {fileID: 0}
+  player2Pushee: {fileID: 0}
+  pusheeDisappearInterval: .100000001
   oldRotation: 0
   resetDelay: 0
-  resetAcceleration: 2500
-  resetMaxSpeed: 2500
+  resetAcceleration: 10
+  resetMaxSpeed: 100
   resetSpeed: 0
   resetting: 0
 --- !u!54 &2131075384

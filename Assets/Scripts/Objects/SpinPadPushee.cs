@@ -3,7 +3,6 @@ using System.Collections;
 
 public class SpinPadPushee : MonoBehaviour {
 	public SpinPadSide targetSidePad;
-	public SpinPad targetSpinPad;
 	private bool exitting = false;
 	public Collider pusheeCollider;
 	public Renderer pusheeRenderer;
@@ -46,20 +45,23 @@ public class SpinPadPushee : MonoBehaviour {
 
 	public void DestroyAndRipple()
 	{
-		if (ripplePrefab == null || rippleFired)
+		if (rippleFired)
 		{
 			return;
 		}
 
-		GameObject rippleObj = Instantiate(ripplePrefab.gameObject,transform.position,Quaternion.identity) as GameObject;
-		RingPulse ripple = rippleObj.GetComponent<RingPulse>();
-		ripple.scaleRate = 8;
-		ripple.lifeTime = 1;
-		ripple.alpha = 1;
-		ripple.alphaFade = 1;
-		ripple.smallRing = false;
-		rippleFired = true;
+		if (ripplePrefab != null)
+		{
+			GameObject rippleObj = Instantiate(ripplePrefab.gameObject, transform.position, Quaternion.identity) as GameObject;
+			RingPulse ripple = rippleObj.GetComponent<RingPulse>();
+			ripple.scaleRate = 8;
+			ripple.lifeTime = 1;
+			ripple.alpha = 1;
+			ripple.alphaFade = 1;
+			ripple.smallRing = false;
+		}
 
+		rippleFired = true;
 		StartCoroutine(FadeToDestroy());
 	}
 
@@ -81,10 +83,6 @@ public class SpinPadPushee : MonoBehaviour {
 	{
 		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
 		{
-			if (targetSpinPad != null)
-			{
-				targetSpinPad.player1Pushing = true;
-			}
 			if (pusheeColorer != null)
 			{
 				pusheeColorer.ApplyTint(pushingTintFactor);
@@ -93,10 +91,6 @@ public class SpinPadPushee : MonoBehaviour {
 		}
 		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
 		{
-			if (targetSpinPad != null)
-			{
-				targetSpinPad.player2Pushing = true;
-			}
 			if (pusheeColorer != null)
 			{
 				pusheeColorer.ApplyTint(pushingTintFactor);
@@ -109,10 +103,6 @@ public class SpinPadPushee : MonoBehaviour {
 	{
 		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
 		{
-			if (targetSpinPad != null)
-			{
-				targetSpinPad.player1Pushing = false;
-			}
 			if (pusheeColorer != null)
 			{
 				pusheeColorer.ApplyTint(1);
@@ -121,10 +111,6 @@ public class SpinPadPushee : MonoBehaviour {
 		}
 		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
 		{
-			if (targetSpinPad != null)
-			{
-				targetSpinPad.player2Pushing = false;
-			}
 			if (pusheeColorer != null)
 			{
 				pusheeColorer.ApplyTint(1);
