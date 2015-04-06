@@ -48,7 +48,7 @@ public class BondingFunnel : MonoBehaviour {
 
 				if (pusheeScale.y <= destroyBearingDistance)
 				{
-					Vector3 bearingPusherPos = bearingPusher.transform.localPosition;
+					/*Vector3 bearingPusherPos = bearingPusher.transform.localPosition;
 					Vector3 bearingPusherScale = bearingPusher.transform.localScale;
 					bearingPusher.transform.parent = outPushee.transform;
 					bearingPusher.transform.localPosition = bearingPusherPos;
@@ -83,7 +83,16 @@ public class BondingFunnel : MonoBehaviour {
 						{
 							Destroy(nonCollisionSprings[i]);
 						}
-					}
+					}*/
+
+					Destroy(pushee.gameObject);
+					pushee = null;
+					Destroy(scaleBearing1);
+					scaleBearing1 = null;
+					Destroy(scaleBearing2);
+					scaleBearing2 = null;
+					Destroy(bearingPusher);
+					bearingPusher = null;
 
 					funnelingOut = true;
 				}
@@ -107,17 +116,20 @@ public class BondingFunnel : MonoBehaviour {
 				}
 			}
 
-			pushee.transform.localScale = pusheeScale;
+			if (pushee != null)
+			{
+				pushee.transform.localScale = pusheeScale;
 
-			Vector3 capScale = pusheeCap1.transform.localScale;
-			capScale.z = (capScale.x * pusheeScale.x) / pusheeScale.y;
-			pusheeCap1.transform.localScale = capScale;
-			pusheeCap2.transform.localScale = capScale;
+				Vector3 capScale = pusheeCap1.transform.localScale;
+				capScale.z = (capScale.x * pusheeScale.x) / pusheeScale.y;
+				pusheeCap1.transform.localScale = capScale;
+				pusheeCap2.transform.localScale = capScale;
+			}
 
 			
 		}
 
-		if (!solved && pushee.isKinematic)
+		if (!solved && pushee != null && pushee.isKinematic)
 		{
 			solved = true;
 			for (int i = 0; i < solveListeners.Count; i++)
@@ -126,8 +138,11 @@ public class BondingFunnel : MonoBehaviour {
 			}
 		}
 
-		Vector3 pusheePos = pushee.transform.localPosition;
-		pusheePos.y = pusheeLocalY;
+		if (pushee != null)
+		{
+			Vector3 pusheePos = pushee.transform.localPosition;
+			pusheePos.y = pusheeLocalY;
+		}
 	}
 
 	public void StopBackTracking()
