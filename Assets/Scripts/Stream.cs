@@ -71,6 +71,34 @@ public class Stream : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionStay(Collision col)
+	{
+		ProvokeReaction(col.collider);
+	}
+
+	void OnTriggerStay(Collider col)
+	{
+		ProvokeReaction(col);
+	}
+
+	private void ProvokeReaction(Collider reactionCollider)
+	{
+		StreamReaction reaction = reactionCollider.GetComponent<StreamReaction>();
+		if (reaction == null)
+		{
+			StreamReactionDelegate reactionDelegate = reactionCollider.GetComponent<StreamReactionDelegate>();
+			if (reactionDelegate != null)
+			{
+				reaction = reactionDelegate.reaction;
+			}
+		}
+
+		if (reaction != null)
+		{
+			reaction.React(this);
+		}
+	}
+
 	void OnDrawGizmos()
 	{
 		if (showTarget)
