@@ -441,7 +441,8 @@ public class Fluff : MonoBehaviour {
 		bool sameLayer = (col.gameObject.layer == gameObject.layer);
 		bool alreadyAttachee = (attachee != null && collider.gameObject == attachee.gameObject);
 		bool shouldIgnore = col.gameObject == ignoreCollider;
-		if ((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore)
+		bool nonDetachable = (attachee != null && attachee.attachInfo != null && attachee.attachInfo.root != null && !attachee.attachInfo.root.fluffsDetachable);
+		if ((attachee != null && attachee.possessive) || nonDetachable || sameLayer || alreadyAttachee || shouldIgnore)
 		{
 			return;
 		}

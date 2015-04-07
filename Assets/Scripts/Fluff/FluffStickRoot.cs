@@ -16,6 +16,10 @@ public class FluffStickRoot : MonoBehaviour {
 	public float pullMass = -1;
 	public float maxPullForce = 0;
 	private float currentPullForce = 0;
+	//[Header("Fluff Consumption")]
+	//public float fluffSproutTime;
+
+
 
 	void Start()
 	{

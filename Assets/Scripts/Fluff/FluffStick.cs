@@ -8,7 +8,6 @@ public class FluffStick : MonoBehaviour {
 	public Collider stickingCollider;
 	public Vector3 stickOffset = Vector3.zero;
 	public Vector3 stickDirection = Vector3.forward;
-	
 
 	public void Awake()
 	{
