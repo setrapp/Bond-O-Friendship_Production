@@ -8,15 +8,26 @@ public class KinematicAndFixed : MonoBehaviour {
 	public bool willKinematic = false;
 	public WaitPad triggerPad;
 	private bool triggered = false;
+	public SpinPad.SpinLimit triggerSpinLimit = SpinPad.SpinLimit.PULL_END;
 
 	public void Update()
 	{
-		if (triggerPad.activated && !triggered)
+		if (!triggered)
 		{
-			triggered = true;
-			body1.isKinematic = body2.isKinematic = willKinematic;
-			FixedJoint bodyJoint = body2.gameObject.AddComponent<FixedJoint>();
-			bodyJoint.connectedBody = body1;
+			bool padTriggered = triggerPad.activated;
+			if (triggerPad as SpinPad != null)
+			{
+				padTriggered = ((SpinPad)triggerPad).IsAtLimit(triggerSpinLimit);
+			}
+
+			if (padTriggered)
+			{
+				triggered = true;
+				body1.isKinematic = body2.isKinematic = willKinematic;
+				FixedJoint bodyJoint = body2.gameObject.AddComponent<FixedJoint>();
+				bodyJoint.connectedBody = body1;
+			}
 		}
+		
 	}
 }

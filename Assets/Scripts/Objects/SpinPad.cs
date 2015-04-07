@@ -201,4 +201,24 @@ public class SpinPad : WaitPad {
 
 		rotationProgress = Mathf.Clamp((currentRotation - midRotation) / (rotationRange / 2), -1, 1);
 	}
+
+	public bool IsAtLimit(SpinLimit desiredLimit)
+	{
+		bool atLimit = false;
+		if ((desiredLimit & SpinLimit.PULL_END) == SpinLimit.PULL_END && rotationProgress >= 1)
+		{
+			atLimit = true;
+		}
+		if ((desiredLimit & SpinLimit.PUSH_END) == SpinLimit.PUSH_END && rotationProgress <= -1)
+		{
+			atLimit = true;
+		}
+		return atLimit;
+	}
+
+	public enum SpinLimit
+	{
+		PULL_END = 1,
+		PUSH_END = 2
+	}
 }
