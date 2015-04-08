@@ -10,6 +10,7 @@ public class Stream : MonoBehaviour {
 	private StreamChannel oldChannel;
 	private bool ending;
 	public float actionRate = 1;
+	public LayerMask ignoreReactionLayers;
 
 	/*TODO handle streams merging back together*/
 
@@ -74,20 +75,45 @@ public class Stream : MonoBehaviour {
 
 	void OnCollisionStay(Collision col)
 	{
-		ProvokeReaction(col.collider);
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
+		{
+			
+			Rigidbody body = col.rigidbody;
+			if (body != null)
+			{
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.collider.gameObject);
+			}
+		}
 	}
 
 	void OnTriggerStay(Collider col)
 	{
-		ProvokeReaction(col);
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
+		{
+			Rigidbody body = col.GetComponent<Rigidbody>();
+			if (body != null)
+			{
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.gameObject);
+			}
+		}
 	}
 
-	private void ProvokeReaction(Collider reactionCollider)
+	private void ProvokeReaction(GameObject reactionObject)
 	{
-		StreamReaction reaction = reactionCollider.GetComponent<StreamReaction>();
+		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
 		if (reaction == null)
 		{
-			StreamReactionDelegate reactionDelegate = reactionCollider.GetComponent<StreamReactionDelegate>();
+			StreamReactionDelegate reactionDelegate = reactionObject.GetComponent<StreamReactionDelegate>();
 			if (reactionDelegate != null)
 			{
 				reaction = reactionDelegate.reaction;
@@ -96,7 +122,7 @@ public class Stream : MonoBehaviour {
 
 		if (reaction != null)
 		{
-			reaction.React(actionRate);
+			reaction.React(actionRate * Time.deltaTime);
 		}
 	}
 

@@ -13,6 +13,7 @@ public class FluffPlaceholder : MonoBehaviour {
 	private float pickTime = -1;
 	public bool dropParent = false;
 	public bool spawnFakeMoving = false;
+	public bool sproutFluff = false;
 
 	void Awake()
 	{
@@ -65,7 +66,7 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/);
+					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/, true, sproutFluff);
 				}
 				else 
 				{

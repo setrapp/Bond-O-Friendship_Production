@@ -33,6 +33,8 @@ public class Fluff : MonoBehaviour {
 	public Vector3 pullForce;
 	public float pullDistance;
 	public GameObject soleAttractor = null;
+	public Vector3 minFluffScale = Vector3.zero;
+	public Vector3 maxFluffScale = new Vector3(1, 1, 1);
 
 	void Awake()
 	{
@@ -230,7 +232,7 @@ public class Fluff : MonoBehaviour {
 		Vector3 toPuller = (puller.transform.position + pullOffset) - transform.position;
 		float toPullerDist = toPuller.magnitude;
 		toPuller /= toPullerDist;
-		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, false, puller);
+		bool blocked = false;// TestForBlocking(toPuller, toPullerDist, out attemptPullHit, false, puller);
 		if (blocked)
 		{
 			return;
@@ -274,7 +276,7 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	public void Attach(FluffStick attacheeStick/*, Vector3 position, Vector3 standDirection*/, bool sway = true)
+	public void Attach(FluffStick attacheeStick/*, Vector3 position, Vector3 standDirection*/, bool sway = true, bool sprouting = false)
 	{
 		if (Globals.Instance == null)
 		{
@@ -321,11 +323,9 @@ public class Fluff : MonoBehaviour {
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 
 		// If fluffs are not throwable and the attachee is not controlling, embed the fluff to sprout out.
-		bool sprouting = false;
-		if (!Globals.Instance.fluffsThrowable && attachee != null && !attachee.controlling)
+		if (sprouting && attachee != null && !attachee.controlling)
 		{
 			geometry.transform.position -= standDirection.normalized * Globals.Instance.fluffLeaveEmbed;
-			sprouting = true;
 		}
 		// If desired, start swaying. 
 		if ((attacheeStick.root == null || attacheeStick.root.allowSway) && !sprouting)
@@ -374,6 +374,25 @@ public class Fluff : MonoBehaviour {
 			}
 		}
 		return blocked;
+	}
+
+	public void Inflate(Vector3 inflation)
+	{
+		transform.localScale += inflation;
+		if (transform.localScale.x >= maxFluffScale.x || transform.localScale.y >= maxFluffScale.y || transform.localScale.z >= maxFluffScale.z)
+		{
+			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x, maxFluffScale.x), Mathf.Min(transform.localScale.y, maxFluffScale.y), Mathf.Min(transform.localScale.z, maxFluffScale.z));
+		}
+	}
+
+	public void Deflate(Vector3 deflation)
+	{
+		transform.localScale -= deflation;
+		if (transform.localScale.x <= minFluffScale.x || transform.localScale.y <= minFluffScale.y || transform.localScale.z <= minFluffScale.z)
+		{
+			transform.localScale = new Vector3(Mathf.Max(transform.localScale.x, minFluffScale.x), Mathf.Max(transform.localScale.y, minFluffScale.y), Mathf.Max(transform.localScale.z, minFluffScale.z));
+			PopFluff();
+		}
 	}
 
 	// Accessible function that does not require coroutine call.
@@ -543,6 +562,11 @@ public class Fluff : MonoBehaviour {
 			if (attacheeFluffContainer != null)
 			{
 				attacheeFluffContainer.fluffs.Remove(this);
+			}
+
+			if (attachee.attachInfo != null && attachee.attachInfo.stuckFluff == this)
+			{
+				attachee.attachInfo.stuckFluff = null;
 			}
 		}
 

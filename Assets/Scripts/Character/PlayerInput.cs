@@ -448,9 +448,9 @@ public class PlayerInput : MonoBehaviour {
 
 	private void OnTriggerStay(Collider col)
 	{
-		if (col.collider.gameObject.tag != "Character" && Globals.Instance != null && !Globals.Instance.fluffsThrowable)
+		if (col.gameObject.tag != "Character" && Globals.Instance != null && !Globals.Instance.fluffsThrowable)
 		{
-			FluffStick fluffStick = col.collider.GetComponent<FluffStick>();
+			FluffStick fluffStick = col.GetComponent<FluffStick>();
 			if (fluffStick != null && fluffStick.CanStick())
 			{
 				LeaveFluff(fluffStick);

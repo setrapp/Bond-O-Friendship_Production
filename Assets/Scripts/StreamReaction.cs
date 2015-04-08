@@ -8,6 +8,6 @@ public class StreamReaction : MonoBehaviour {
 
 	public virtual void React(float actionRate)
 	{
-		reactionProgress = Mathf.Clamp01(reactionProgress + actionRate * reactionRate * Time.deltaTime);
+		reactionProgress = Mathf.Clamp01(reactionProgress + actionRate * reactionRate);
 	}
 }

@@ -8,7 +8,7 @@ public class FluffStickRoot : MonoBehaviour {
 	[SerializeField]
 	public List<FluffStick> attachedSticks;
 	public bool trackStuckFluffs = true;
-	public bool fluffsDetachable = true;
+	public bool fluffsDetachable = false;
 	public Rigidbody pullableBody;
 	public bool noKinematicOnPull;
 	public bool allowSway = true;
@@ -16,8 +16,11 @@ public class FluffStickRoot : MonoBehaviour {
 	public float pullMass = -1;
 	public float maxPullForce = 0;
 	private float currentPullForce = 0;
-	//[Header("Fluff Consumption")]
-	//public float fluffSproutTime;
+	[Header("Fluff Consumption")]
+	public StreamReaction fluffReaction;
+	public float fluffSproutRate = 1;
+	public float fluffConsumeRate = 1;
+	public float fluffActionRate = 1;
 
 
 
@@ -26,11 +29,6 @@ public class FluffStickRoot : MonoBehaviour {
 		if (pullableBody == null)
 		{
 			pullableBody = GetComponent<Rigidbody>();
-		}
-
-		if (pullableBody == null)
-		{
-			fluffsDetachable = true;
 		}
 
 		if (pullMass < 0 && pullableBody != null)
@@ -59,10 +57,16 @@ public class FluffStickRoot : MonoBehaviour {
 	void Update()
 	{
 		currentPullForce = 0;
+		ConsumeFluffs();
 	}
 
 	public void AddPullForce(Vector3 pullForce, Vector3 position)
 	{
+		if (pullableBody == null)
+		{
+			return;
+		}
+
 		if (pullableBody.isKinematic && noKinematicOnPull)
 		{
 			pullableBody.velocity = Vector3.zero;
@@ -81,6 +85,38 @@ public class FluffStickRoot : MonoBehaviour {
 			currentPullForce += pullForceMag;
 			pullableBody.AddForceAtPosition(pullForce / pullMass, position, ForceMode.VelocityChange);
 		}
+	}
 
+	public void ConsumeFluffs()
+	{
+		// Provoke reactions based on fluffs attached.
+		if (fluffReaction != null && fluffActionRate > 0)
+		{
+			int fluffCount = 0;
+			for (int i = 0; i < attachedSticks.Count; i++)
+			{
+				if (attachedSticks[i].stuckFluff != null)
+				{
+					fluffCount++;
+				}
+			}
+			if (fluffCount > 0)
+			{
+				fluffReaction.React(fluffCount * fluffActionRate * Time.deltaTime);
+			}
+			
+		}
+
+		// Deflate the fluffs
+		if (fluffConsumeRate > 0)
+		{
+			for (int i = 0; i < attachedSticks.Count; i++)
+			{
+				if (attachedSticks[i].stuckFluff != null)
+				{
+					attachedSticks[i].stuckFluff.Deflate(new Vector3(fluffConsumeRate, fluffConsumeRate, fluffConsumeRate) * Time.deltaTime);
+				}
+			}
+		}
 	}
 }
