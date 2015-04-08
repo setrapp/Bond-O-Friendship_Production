@@ -12,6 +12,7 @@ public class FluffPlaceholder : MonoBehaviour {
 	public float respawnDelayMax = 0;
 	private float pickTime = -1;
 	public bool dropParent = false;
+	public bool spawnFakeMoving = false;
 
 	void Awake()
 	{
@@ -66,10 +67,14 @@ public class FluffPlaceholder : MonoBehaviour {
 				{
 					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/);
 				}
-				else
+				else 
 				{
-					// Fake movement to allow fluff update to handle attachment to floor.
-					newFluff.moving = true;
+					// If desired, fake movement to allow fluff update to handle attachment to floor.
+					if (spawnFakeMoving)
+					{
+						newFluff.moving = true;
+					}
+					newFluff.ToggleSwayAnimation(true);
 				}
 				createdFluff = newFluff;
 
