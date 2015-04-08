@@ -133,9 +133,15 @@ namespace InControl
 		}
 
 
-		public override void SubmitControlState( ulong updateTick )
+		public override void SubmitControlState( ulong updateTick, float deltaTime )
 		{
-			SubmitAnalogValue( target, value, lowerDeadZone, upperDeadZone, updateTick );
+			SubmitAnalogValue( target, value, lowerDeadZone, upperDeadZone, updateTick, deltaTime );
+		}
+
+
+		public override void CommitControlState( ulong updateTick, float deltaTime )
+		{
+			CommitAnalog( target );
 		}
 
 

@@ -105,7 +105,7 @@ public class CameraSplitter : MonoBehaviour {
         //Toggle split screen on and off
 		if (split != wasSplit || forceCheck)
 		{
-            player1CameraSystem.transform.FindChild("Player 1 Main Camera/Pivot").gameObject.SetActive(split);
+            player1CameraSystem.pivot.gameObject.SetActive(split);
 			for (int i = 0; i < player2CameraSystem.transform.childCount; i++)
 			{
 				player2CameraSystem.transform.GetChild(i).gameObject.SetActive(split);

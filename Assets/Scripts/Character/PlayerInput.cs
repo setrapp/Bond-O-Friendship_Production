@@ -6,6 +6,9 @@ public class PlayerInput : MonoBehaviour {
 	public CharacterComponents character;
 	public enum Player{Player1, Player2};
 
+    public Globals.ControlScheme controlScheme;
+    public Globals.ControlScheme otherPlayerControlScheme;
+
 	public Player playerNumber;
 	public GameObject canvasStart;
 
@@ -16,13 +19,16 @@ public class PlayerInput : MonoBehaviour {
 
 	private bool fireFluffReady = true;
 	private Vector3 velocityChange;
-
-
-
 	private Vector3 target;
 	public Vector3 desiredLook;
 	public bool joystickDetermined = false;
 
+    SharedKeyboard sharedKeyboard;
+    SharedController sharedController;
+    SeparateController separateController;
+    SeparateKeyboard separateKeyboard;
+
+    public bool allowPreviousController = true;
 	//private bool paused = false;
 	
 	InputDevice device;
@@ -35,29 +41,122 @@ public class PlayerInput : MonoBehaviour {
 		{
 			character = GetComponent<CharacterComponents>();
 		}
-	}
 
-	void Start()
-	{
+        sharedKeyboard = new SharedKeyboard();
+        sharedController = new SharedController();
+        separateController = new SeparateController();
+        separateKeyboard = new SeparateKeyboard();
 
+        //Shared Keyboard
+        sharedKeyboard.LUp.AddDefaultBinding(Key.W);
+        sharedKeyboard.LDown.AddDefaultBinding(Key.S);
+        sharedKeyboard.LLeft.AddDefaultBinding(Key.A);
+        sharedKeyboard.LRight.AddDefaultBinding(Key.D);
+        sharedKeyboard.RUp.AddDefaultBinding(Key.UpArrow);
+        sharedKeyboard.RDown.AddDefaultBinding(Key.DownArrow);
+        sharedKeyboard.RLeft.AddDefaultBinding(Key.LeftArrow);
+        sharedKeyboard.RRight.AddDefaultBinding(Key.RightArrow);
+
+        //Shared Controller
+        sharedController.LUp.AddDefaultBinding(InputControlType.LeftStickUp);
+        sharedController.LDown.AddDefaultBinding(InputControlType.LeftStickDown);
+        sharedController.LLeft.AddDefaultBinding(InputControlType.LeftStickLeft);
+        sharedController.LRight.AddDefaultBinding(InputControlType.LeftStickRight);
+        sharedController.RUp.AddDefaultBinding(InputControlType.RightStickUp);
+        sharedController.RDown.AddDefaultBinding(InputControlType.RightStickDown);
+        sharedController.RLeft.AddDefaultBinding(InputControlType.RightStickLeft);
+        sharedController.RRight.AddDefaultBinding(InputControlType.RightStickRight);
+
+        //Separate Controller
+        separateController.Up.AddDefaultBinding(InputControlType.LeftStickUp);
+        separateController.Down.AddDefaultBinding(InputControlType.LeftStickDown);
+        separateController.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
+        separateController.Right.AddDefaultBinding(InputControlType.LeftStickRight);
+        separateController.Up.AddDefaultBinding(InputControlType.RightStickUp);
+        separateController.Down.AddDefaultBinding(InputControlType.RightStickDown);
+        separateController.Left.AddDefaultBinding(InputControlType.RightStickLeft);
+        separateController.Right.AddDefaultBinding(InputControlType.RightStickRight);
+
+        //Sepatate Keyboard
+        separateKeyboard.Up.AddDefaultBinding(Key.W);
+        separateKeyboard.Down.AddDefaultBinding(Key.S);
+        separateKeyboard.Left.AddDefaultBinding(Key.A);
+        separateKeyboard.Right.AddDefaultBinding(Key.D);
+        separateKeyboard.Up.AddDefaultBinding(Key.UpArrow);
+        separateKeyboard.Down.AddDefaultBinding(Key.DownArrow);
+        separateKeyboard.Left.AddDefaultBinding(Key.LeftArrow);
+        separateKeyboard.Right.AddDefaultBinding(Key.RightArrow);
 	}
 
 	void Update () 
 	{
+        /*This is for debug purposes, will be cleaned up and moved elsewhere later*
+        if ((Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedLeft || Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedRight) && Globals.Instance.player2ControlScheme == Globals.Instance.player1ControlScheme)
+        {
+            Globals.Instance.player2ControlScheme = Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedLeft ? Globals.ControlScheme.ControllerSharedRight : Globals.ControlScheme.ControllerSharedLeft;
+        }
+        if ((Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedLeft || Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedRight) && Globals.Instance.player2ControlScheme == Globals.Instance.player1ControlScheme)
+        {
+            Globals.Instance.player2ControlScheme = Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedLeft ? Globals.ControlScheme.KeyboardSharedRight : Globals.ControlScheme.KeyboardSharedLeft;
+        }
+        //End Debug comment area*/
+
+       // Debug.Log(Globals.Instance.player1ControlScheme);
+
+        controlScheme = playerNumber == Player.Player1 ? Globals.Instance.player1ControlScheme : Globals.Instance.player2ControlScheme;
+        otherPlayerControlScheme = playerNumber == Player.Player1 ? Globals.Instance.player2ControlScheme : Globals.Instance.player1ControlScheme;
+
+        if((controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight) && (otherPlayerControlScheme != Globals.ControlScheme.ControllerSharedLeft && otherPlayerControlScheme != Globals.ControlScheme.ControllerSharedRight))
+        {
+            if (playerNumber == Player.Player1)
+                Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSolo;
+            else
+                Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSolo;
+        }
+        
+
 		if(playerNumber == Player.Player1)
 			CheckDevices();
-		if(Globals.usingController && InputManager.controllerCount > 0)
-			device = InputManager.ActiveDevice;
-		
- 
-		//if (Input.GetKeyDown(KeyCode.Escape))
-		//{
-		//	Application.Quit();
-		//}
 
-		if (Globals.usingController)
+
+        WaitForInput(playerNumber);
+
+        if(playerNumber == Player.Player1)
+            device = Globals.Instance.player1Device >= 0 ? InputManager.Devices[Globals.Instance.player1Device] : null;
+        if (playerNumber == Player.Player2)
+            device = Globals.Instance.player2Device >= 0 ? InputManager.Devices[Globals.Instance.player2Device] : null;
+
+        if(device != null)
+        {
+            sharedController.Device = device;
+            separateController.Device = device;
+            if(device.Name == "")
+            {
+                if (playerNumber == Player.Player1)
+                    Globals.Instance.player1Device = -2;
+                if (playerNumber == Player.Player2)
+                    Globals.Instance.player2Device = -2;
+            }
+                
+        }
+        //device = playerNumber == Player.Player1 ? InputManager.Devices[Globals.Instance.playerOneDevice] : InputManager.Devices[Globals.Instance.playerTwoDevice];
+        /*
+        if (InputManager.Devices.Count > 0 && (controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight))
+            device = InputManager.ActiveDevice;
+        if (InputManager.Devices.Count > 0 && (controlScheme == Globals.ControlScheme.ControllerSolo) && (otherPlayerControlScheme == Globals.ControlScheme.KeyboardSolo))
+            device = InputManager.ActiveDevice;
+        if (InputManager.Devices.Count > 1 && (controlScheme == Globals.ControlScheme.ControllerSolo) && (otherPlayerControlScheme == Globals.ControlScheme.ControllerSolo))
+        {
+            if(playerNumber == Player.Player1)
+                device = InputManager.Devices[0];
+            if (playerNumber == Player.Player2)
+                device = InputManager.Devices[1];
+        }*/
+
+        #region Pause
+        if (controlScheme == Globals.ControlScheme.ControllerSolo)//Globals.usingController)
 		{
-			if (device.MenuWasPressed && playerNumber == Player.Player1)
+			if (playerNumber == Player.Player1 && device != null && device.MenuWasPressed)
 			{
 				if (Globals.isPaused)
 				{
@@ -88,13 +187,19 @@ public class PlayerInput : MonoBehaviour {
 				}
 				Globals.isPaused = !Globals.isPaused;
 			}
-		}
+        }
+        #endregion
 
-		if (!Globals.isPaused)
+        if (!Globals.isPaused && (device != null || controlScheme == Globals.ControlScheme.KeyboardSolo || controlScheme == Globals.ControlScheme.KeyboardSharedLeft || controlScheme == Globals.ControlScheme.KeyboardSharedRight))
 		{
-			AttemptFluffThrow();
+			//AttemptFluffThrow();
 			AttemptFluffAttract();
-			velocityChange =  PlayerJoystickMovement();
+
+            if(controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight || controlScheme == Globals.ControlScheme.ControllerSolo)
+                velocityChange = controlScheme == Globals.ControlScheme.ControllerSolo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
+            else
+                velocityChange = controlScheme == Globals.ControlScheme.KeyboardSolo ? PlayerKeyboardSoloMovement() : PlayerKeyboardSharedMovement();//PlayerJoystickMovement();
+
 			velocityChange = character.mover.ClampMovementChange(velocityChange, true, true);
 
 			// Movement
@@ -118,11 +223,55 @@ public class PlayerInput : MonoBehaviour {
 		}
 		else
 		{
-			if(playerNumber == Player.Player1)
-			CheckInputMethod();
+			//if(playerNumber == Player.Player1)
+			//CheckInputMethod();
 		}
 	}
 
+   
+    private Vector3 PlayerControllerSharedMovement()
+    {
+        Vector2 stickInput = Vector2.zero;
+        if(controlScheme == Globals.ControlScheme.ControllerSharedLeft)
+        {
+            stickInput = sharedController.LMove;
+            return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.LMove.X, sharedController.LMove.Y, 0) : Vector3.zero;
+        }
+        else if(controlScheme == Globals.ControlScheme.ControllerSharedRight)
+        {
+            stickInput = sharedController.RMove;
+            return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.RMove.X, sharedController.RMove.Y, 0) : Vector3.zero;
+        }
+
+        return Vector3.zero;
+    }
+
+    private Vector3 PlayerControllerSoloMovement()
+    {
+        Vector2 stickInput = Vector2.zero;
+        stickInput = separateController.Move;
+        return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(separateController.Move.X, separateController.Move.Y, 0) : Vector3.zero;
+    }
+
+    private Vector3 PlayerKeyboardSharedMovement()
+    {
+        if (controlScheme == Globals.ControlScheme.KeyboardSharedLeft)
+        {
+            return new Vector3(sharedKeyboard.LMove.X, sharedKeyboard.LMove.Y, 0);
+        }
+        else if (controlScheme == Globals.ControlScheme.KeyboardSharedRight)
+        {
+            return new Vector3(sharedKeyboard.RMove.X, sharedKeyboard.RMove.Y, 0);
+        }
+        return Vector3.zero;
+    }
+
+    private Vector3 PlayerKeyboardSoloMovement()
+    {
+        return new Vector3(separateKeyboard.Move.X, separateKeyboard.Move.Y,0);
+    }
+
+    /*No longer Needed
 	private Vector3 PlayerJoystickMovement()
 	{
 
@@ -172,7 +321,7 @@ public class PlayerInput : MonoBehaviour {
 		}
 
 		return Vector3.zero;
-	}
+	}*/
 	
 	private void AttemptFluffAttract()
 	{
@@ -375,11 +524,12 @@ public class PlayerInput : MonoBehaviour {
 
 	private void CheckDevices()
 	{
+        /*
 		//TODO: TEXT for pause menu
-		if (!Globals.usingController && InputManager.controllerCount == 0)
-			Globals.numberOfControllers = InputManager.controllerCount;
+        if (!Globals.usingController && InputManager.Devices.Count == 0)
+            Globals.numberOfControllers = InputManager.Devices.Count;
 
-		if (Globals.numberOfControllers > 0 && InputManager.controllerCount == 0)
+        if (Globals.numberOfControllers > 0 && InputManager.Devices.Count == 0)
 		{
 			canvasPaused.SetActive(true);
 			Time.timeScale = 0;
@@ -387,14 +537,52 @@ public class PlayerInput : MonoBehaviour {
 
 			Globals.numberOfControllers = 0;
 		}
-		else if(Globals.numberOfControllers == 0 && InputManager.controllerCount > 0)
+        else if (Globals.numberOfControllers == 0 && InputManager.Devices.Count > 0)
 		{
 			canvasPaused.SetActive(true);
 			Time.timeScale = 0;
 			Globals.isPaused = true;
-			Globals.numberOfControllers = InputManager.controllerCount;
-		}
+            Globals.numberOfControllers = InputManager.Devices.Count;
+		}*/
 	}
+
+    private void WaitForInput(Player playerNumber)
+    {
+        if(playerNumber == Player.Player1)
+        {
+            if(Globals.Instance.player1Device == -2)
+            {
+                //Debug.Log("Here 1");
+                device = InputManager.ActiveDevice;
+
+                if(InputManager.Devices.IndexOf(device) != Globals.Instance.player2Device)
+                {
+                    if (InputManager.Devices.IndexOf(device) == Globals.Instance.player1PreviousDevice && !allowPreviousController)
+                    { 
+                    }
+                    else
+                        Globals.Instance.player1Device = InputManager.Devices.IndexOf(device);
+                }
+            }
+        }
+        if (playerNumber == Player.Player2)
+        {
+           // Debug.Log("Here 2");
+            if (Globals.Instance.player2Device == -2)
+            {
+                device = InputManager.ActiveDevice;
+               // Debug.Log(InputManager.Devices.IndexOf(device));
+                if (InputManager.Devices.IndexOf(device) != Globals.Instance.player1Device)
+                {
+                    if (InputManager.Devices.IndexOf(device) == Globals.Instance.player2PreviousDevice && !allowPreviousController)
+                    {
+                    }
+                    else
+                    Globals.Instance.player2Device = InputManager.Devices.IndexOf(device);
+                }
+            }
+        }
+    }
 
 	private void CheckInputMethod()
 	{

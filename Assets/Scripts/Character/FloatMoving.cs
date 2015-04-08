@@ -77,10 +77,10 @@ public class FloatMoving : MonoBehaviour {
 			ApplyFloatStats();
 
 			// Ensure that players have fluffs while floating.
-			if (character.fluffHandler.naturalFluffCount <= 0)
+			/*if (character.fluffHandler.naturalFluffCount <= 0)
 			{
 				character.fluffHandler.naturalFluffCount = 1;
-			}
+			}*/
 		}
 	}
 

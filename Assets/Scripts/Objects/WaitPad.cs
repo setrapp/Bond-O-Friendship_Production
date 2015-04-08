@@ -9,6 +9,7 @@ public class WaitPad : MonoBehaviour {
 	protected float red;
 	protected float turnTime;
 	public bool activated = false;
+	public float portionComplete;
 
 	// Use this for initialization
 	virtual protected void Start()

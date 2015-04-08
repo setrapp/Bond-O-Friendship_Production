@@ -9,6 +9,7 @@ public class Stream : MonoBehaviour {
 	public bool showTarget = false;
 	private StreamChannel oldChannel;
 	private bool ending;
+	public float actionRate = 1;
 
 	/*TODO handle streams merging back together*/
 
@@ -68,6 +69,34 @@ public class Stream : MonoBehaviour {
 		else
 		{
 			ending = true;
+		}
+	}
+
+	void OnCollisionStay(Collision col)
+	{
+		ProvokeReaction(col.collider);
+	}
+
+	void OnTriggerStay(Collider col)
+	{
+		ProvokeReaction(col);
+	}
+
+	private void ProvokeReaction(Collider reactionCollider)
+	{
+		StreamReaction reaction = reactionCollider.GetComponent<StreamReaction>();
+		if (reaction == null)
+		{
+			StreamReactionDelegate reactionDelegate = reactionCollider.GetComponent<StreamReactionDelegate>();
+			if (reactionDelegate != null)
+			{
+				reaction = reactionDelegate.reaction;
+			}
+		}
+
+		if (reaction != null)
+		{
+			reaction.React(actionRate);
 		}
 	}
 

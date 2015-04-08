@@ -34,6 +34,9 @@ public class Bond : MonoBehaviour {
 	public float fullDetailRemoveDistance = -1;
 	public float currentDetail = 1;
 	private bool disablingLinks = false;
+	[SerializeField]
+	public List<GameObject> fluffsHeld;
+	private float fluffRequestTime;
 
 	protected virtual void Start()
 	{
@@ -48,35 +51,6 @@ public class Bond : MonoBehaviour {
 		currentDetail = SetLevelOfDetail();
 		bool atSparseDetail = currentDetail <= stats.sparseDetailFactor;
 		float frameTime = Time.time;
-		/*if (currentDetail <= stats.sparseDetailFactor)
-		{
-			//TODO not sure any of this is usable
-			if (!disablingLinks)
-			{
-				for (int i = 0; i < links.Count; i++)
-				{
-					links[i].gameObject.SetActive(false);
-				}
-				disablingLinks = true;
-			}
-			if (links.Count >= 4)
-			{
-				for (int i = 2; i < links.Count - 2; i++)
-				{
-					RemoveLink(i, false);
-				}
-				WeightJoints();
-			}
-			//return;
-		}
-		else if (disablingLinks)
-		{
-			for (int i = 0; i < links.Count; i++)
-			{
-				links[i].gameObject.SetActive(true);
-			}
-			disablingLinks = false;
-		}*/
 
 		if (stats.pullApartMaxFactor > 0)
 		{
@@ -141,6 +115,23 @@ public class Bond : MonoBehaviour {
 			// Base the width of the bond on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
 			float actualMidWidth = (stats.relativeWarningDistance > 0) ? stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1) : stats.midWidth;
+
+			// If stretching enough request fluffs to extend.
+			if (stats.relativeRequestDistance >= 0 && stats.maxDistance * stats.relativeRequestDistance < BondLength && Time.time - fluffRequestTime >= stats.fluffRequestDelay)
+			{
+				if (stats.maxFluffCapacity > fluffsHeld.Count)
+				{
+					if (Random.Range(0.0f, 1.0f) < 0.5f)
+					{
+						attachment1.attachee.RequestFluff(this);
+					}
+					else
+					{
+						attachment2.attachee.RequestFluff(this);
+					}
+					fluffRequestTime = Time.time;
+				}
+			}
 
 			// Place attachment points for each partner.
 			if (!stats.manualAttachment1)
@@ -281,6 +272,19 @@ public class Bond : MonoBehaviour {
 				}
 			}
 		}
+
+		if (links.Count > 0 && attachment1.fluffPullTarget != null && attachment2.fluffPullTarget != null)
+		{
+			if (stats.fluffPullLinks < 0 || links.Count < stats.fluffPullLinks * 2 + 1)
+			{
+				attachment1.fluffPullTarget.transform.position = attachment2.fluffPullTarget.transform.position = links[links.Count / 2].transform.position;
+			}
+			else
+			{
+				attachment1.fluffPullTarget.transform.position = links[stats.fluffPullLinks].transform.position;
+				attachment2.fluffPullTarget.transform.position = links[(links.Count - 1) - stats.fluffPullLinks].transform.position;
+			}
+		}
 	}
 
 	public virtual void RenderBond(float actualMidWidth, bool isCountEven)
@@ -328,6 +332,38 @@ public class Bond : MonoBehaviour {
 
 	public virtual void BreakBond(bool quickDestroy = false)
 	{
+		if (fluffsHeld.Count > 0)
+		{
+			float linksPerFluffSpawn = links.Count / (fluffsHeld.Count + 2);
+			for (int i = 0; i < fluffsHeld.Count; i++)
+			{
+				int linkToSpawnAt = (int)((i + 1) * linksPerFluffSpawn);
+				if (linkToSpawnAt > 0 && linkToSpawnAt < links.Count)
+				{
+					if(fluffsHeld[i] != null && links[i] != null)
+					{
+						fluffsHeld[i].SetActive(true);
+						fluffsHeld[i].transform.position = links[linkToSpawnAt].transform.position;
+						Fluff fluff = fluffsHeld[i].GetComponent<Fluff>();
+						if (fluff != null)
+						{
+							fluff.soleAttractor = null;
+							fluff.nonAttractTime = 0;
+							fluff.attractable = true;
+							fluff.mover.externalSpeedMultiplier = 1.0f;
+						}
+
+						SpringJoint fluffSpring = fluff.GetComponent<SpringJoint>();
+						if(fluffSpring != null)
+						{
+							Destroy(fluffSpring);
+						}
+					}
+					
+				}
+			}
+		}
+
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 
@@ -517,6 +553,22 @@ public class Bond : MonoBehaviour {
 			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
 		}
 
+		// Set mass and drag of links.
+		if (stats.linkMass >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.mass = stats.linkMass;
+			}
+		}
+		if (stats.linkDrag >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.drag = stats.linkDrag;
+			}
+		}
+
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
 		if (links.Count > 2)
 		{
@@ -601,6 +653,25 @@ public class Bond : MonoBehaviour {
 		}
 
 		WeightJoints();
+	}
+
+	public bool AddFluff(Fluff fluff)
+	{
+		if (fluff == null || (stats.maxFluffCapacity >= 0 && fluffsHeld.Count >= stats.maxFluffCapacity))
+		{
+			return false;
+		}
+
+		if (stats.maxDistance >= 0 && stats.extensionPerFluff >= 0)
+		{
+			stats.maxDistance += stats.extensionPerFluff;
+		}
+
+		fluffsHeld.Add(fluff.gameObject);
+
+		fluff.PopFluff(0.5f, -1, true);
+
+		return true;
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
@@ -753,6 +824,7 @@ public class BondAttachment
 	public Vector3 position;
 	public Vector3 offset;
 	public LineRenderer lineRenderer;
+	public Rigidbody fluffPullTarget;
 }
 
 [System.Serializable]
@@ -760,6 +832,8 @@ public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
+	public float linkMass = -1;
+	public float linkDrag = -1;
 	public float pullApartMaxFactor;
 	public float maxDistance = 25;
 	public float relativeWarningDistance = 0.5f;
@@ -769,17 +843,22 @@ public class BondStats
 	public float removeLinkDistance = 0.3f;
 	public float springForce = 5000;
 	public float springDamper = 5;
+	[Header("Fluff Boosting")]
+	public float relativeRequestDistance = -1;
+	public float fluffRequestDelay = -1;
+	public float fluffPullForce = -1;
+	public int fluffPullLinks = -1;
+	public float maxFluffCapacity = -1;
+	public float extensionPerFluff = -1;
+	[Header("Manual Controls")]
 	public bool manualAttachment1 = false;
 	public bool manualAttachment2 = false;
 	public bool manualLinks = false;
 	public bool disableColliders = false;
 	[Header("Level of Detail")]
 	public float fullDetailDistance = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailDistance = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailFactor = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailLinksCheck = 1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
@@ -791,6 +870,8 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.linkMass >= 0)					{	this.linkMass = replacement.linkMass;								}
+		if (fullOverwrite || replacement.linkDrag >= 0)					{	this.linkDrag = replacement.linkDrag;								}
 		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
@@ -800,6 +881,12 @@ public class BondStats
 		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
 		if (fullOverwrite || replacement.springForce >= 0)				{	this.springForce = replacement.springForce;							}
 		if (fullOverwrite || replacement.springDamper >= 0)				{	this.springDamper = replacement.springDamper;						}
+		if (fullOverwrite || replacement.relativeRequestDistance >= 0)	{	this.relativeRequestDistance = replacement.relativeRequestDistance;	}
+		if (fullOverwrite || replacement.fluffRequestDelay >= 0)		{	this.fluffRequestDelay = replacement.fluffRequestDelay;				}
+		if (fullOverwrite || replacement.fluffPullForce >= 0)			{	this.fluffPullForce = replacement.fluffPullForce;					}
+		if (fullOverwrite || replacement.fluffPullLinks >= 0)			{	this.fluffPullLinks = replacement.fluffPullLinks;					}
+		if (fullOverwrite || replacement.maxFluffCapacity >= 0)			{	this.maxFluffCapacity = replacement.maxFluffCapacity;				}
+		if (fullOverwrite || replacement.extensionPerFluff >= 0)		{	this.extensionPerFluff = replacement.extensionPerFluff;				}
 		manualAttachment1 = replacement.manualAttachment1;
 		manualAttachment2 = replacement.manualAttachment2;
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}

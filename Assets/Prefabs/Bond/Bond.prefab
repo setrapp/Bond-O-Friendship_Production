@@ -90,6 +90,38 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &131306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 431306}
+  - 54: {fileID: 5431306}
+  m_Layer: 0
+  m_Name: Fluff Pull Target 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &132202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 432202}
+  - 54: {fileID: 5432202}
+  m_Layer: 0
+  m_Name: Fluff Pull Target 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -121,13 +153,15 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.32933903, y: 0, z: 3.57627869e-07}
+  m_LocalPosition: {x: -46.7837029, y: -18.996954, z: 3.57627869e-07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
   - {fileID: 400002}
   - {fileID: 400008}
   - {fileID: 400000}
+  - {fileID: 432202}
+  - {fileID: 431306}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400008
@@ -154,6 +188,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400004}
   m_RootOrder: 0
+--- !u!4 &431306
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131306}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
+  m_RootOrder: 5
+--- !u!4 &432202
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132202}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400004}
+  m_RootOrder: 4
 --- !u!23 &2300002
 Renderer:
   m_ObjectHideFlags: 1
@@ -238,6 +296,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!54 &5431306
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131306}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!54 &5432202
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132202}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -255,12 +343,14 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000004}
+    fluffPullTarget: {fileID: 5432202}
   attachment2:
     attachee: {fileID: 0}
     attachedLink: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000000}
+    fluffPullTarget: {fileID: 5431306}
   linkPrefab: {fileID: 100000, guid: 23d9ea671d3c7ef409e997ba69b48801, type: 2}
   links:
   - {fileID: 11400006}
@@ -278,6 +368,12 @@ MonoBehaviour:
     removeLinkDistance: .449999988
     springForce: 4000
     springDamper: 2
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -290,6 +386,7 @@ MonoBehaviour:
   fullDetailAddDistance: -1
   fullDetailRemoveDistance: -1
   currentDetail: 1
+  fluffsHeld: []
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

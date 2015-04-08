@@ -26,10 +26,15 @@ namespace InControl
 
 			Meta = "OUYA Everywhere Device #" + deviceIndex;
 
-			AddControl( InputControlType.LeftStickX, "LeftStickX" );
-			AddControl( InputControlType.LeftStickY, "LeftStickY" );
-			AddControl( InputControlType.RightStickX, "RightStickX" );
-			AddControl( InputControlType.RightStickY, "RightStickY" );
+			AddControl( InputControlType.LeftStickLeft, "LeftStickLeft" );
+			AddControl( InputControlType.LeftStickRight, "LeftStickRight" );
+			AddControl( InputControlType.LeftStickUp, "LeftStickUp" );
+			AddControl( InputControlType.LeftStickDown, "LeftStickDown" );
+
+			AddControl( InputControlType.RightStickLeft, "RightStickLeft" );
+			AddControl( InputControlType.RightStickRight, "RightStickRight" );
+			AddControl( InputControlType.RightStickUp, "RightStickUp" );
+			AddControl( InputControlType.RightStickDown, "RightStickDown" );
 
 			AddControl( InputControlType.LeftTrigger, "LeftTrigger" );
 			AddControl( InputControlType.RightTrigger, "RightTrigger" );
@@ -64,57 +69,56 @@ namespace InControl
 
 		public override void Update( ulong updateTick, float deltaTime )
 		{
-
 			#if UNITY_ANDROID && INCONTROL_OUYA && !UNITY_EDITOR
-			var lsv = Utility.ApplyCircularDeadZone(
-						  OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_X ),
-						  -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_Y ),
-						  LowerDeadZone,
-						  UpperDeadZone
-					  );
-			UpdateWithValue( InputControlType.LeftStickX, lsv.x, updateTick );
-			UpdateWithValue( InputControlType.LeftStickY, lsv.y, updateTick );
+			var lsv = Utility.ApplyCircularDeadZone( 
+				          OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_X ), 
+				          -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_LS_Y ), 
+				          LowerDeadZone, 
+				          UpperDeadZone
+			          );
+			UpdateLeftStickWithValue( lsv, updateTick, deltaTime );
 
-			var rsv = Utility.ApplyCircularDeadZone(
-						  OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_X ),
-						  -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_Y ),
-						  LowerDeadZone,
-						  UpperDeadZone
-					  );
-			UpdateWithValue( InputControlType.RightStickX, rsv.x, updateTick );
-			UpdateWithValue( InputControlType.RightStickY, rsv.y, updateTick );
+			var rsv = Utility.ApplyCircularDeadZone( 
+				          OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_X ), 
+				          -OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_RS_Y ), 
+				          LowerDeadZone, 
+				          UpperDeadZone
+			          );
+			UpdateRightStickWithValue( rsv, updateTick, deltaTime );
 
 			var lt = Utility.ApplyDeadZone(
-						 OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_L2 ),
-						 LowerDeadZone,
-						 UpperDeadZone
-					 );
-			UpdateWithValue( InputControlType.LeftTrigger, lt, updateTick );
+				         OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_L2 ),
+				         LowerDeadZone,
+				         UpperDeadZone 
+			         );
+			UpdateWithValue( InputControlType.LeftTrigger, lt, updateTick, deltaTime );
 
 			var rt = Utility.ApplyDeadZone(
-						 OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_R2 ),
-						 LowerDeadZone,
-						 UpperDeadZone
-					 );
-			UpdateWithValue( InputControlType.RightTrigger, rt, updateTick );
+				         OuyaSDK.OuyaInput.GetAxisRaw( DeviceIndex, OuyaController.AXIS_R2 ),
+				         LowerDeadZone,
+				         UpperDeadZone 
+			         );
+			UpdateWithValue( InputControlType.RightTrigger, rt, updateTick, deltaTime );
 
-			UpdateWithState( InputControlType.DPadUp, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_UP ), updateTick );
-			UpdateWithState( InputControlType.DPadDown, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_DOWN ), updateTick );
-			UpdateWithState( InputControlType.DPadLeft, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_LEFT ), updateTick );
-			UpdateWithState( InputControlType.DPadRight, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_RIGHT ), updateTick );
+			UpdateWithState( InputControlType.DPadUp, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_UP ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.DPadDown, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_DOWN ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.DPadLeft, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_LEFT ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.DPadRight, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_DPAD_RIGHT ), updateTick, deltaTime );
 
-			UpdateWithState( InputControlType.Action1, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_O ), updateTick );
-			UpdateWithState( InputControlType.Action2, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_A ), updateTick );
-			UpdateWithState( InputControlType.Action3, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_U ), updateTick );
-			UpdateWithState( InputControlType.Action4, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_Y ), updateTick );
+			UpdateWithState( InputControlType.Action1, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_O ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.Action2, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_A ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.Action3, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_U ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.Action4, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_Y ), updateTick, deltaTime );
 
-			UpdateWithState( InputControlType.LeftBumper, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_L1 ), updateTick );
-			UpdateWithState( InputControlType.RightBumper, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_R1 ), updateTick );
+			UpdateWithState( InputControlType.LeftBumper, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_L1 ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.RightBumper, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_R1 ), updateTick, deltaTime );
 
-			UpdateWithState( InputControlType.LeftStickButton, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_L3 ), updateTick );
-			UpdateWithState( InputControlType.RightStickButton, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_R3 ), updateTick );
+			UpdateWithState( InputControlType.LeftStickButton, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_L3 ), updateTick, deltaTime );
+			UpdateWithState( InputControlType.RightStickButton, OuyaSDK.OuyaInput.GetButton( DeviceIndex, OuyaController.BUTTON_R3 ), updateTick, deltaTime );
 
-			UpdateWithState( InputControlType.Menu, OuyaSDK.OuyaInput.GetButtonDown( DeviceIndex, OuyaController.BUTTON_MENU ), updateTick );
+			UpdateWithState( InputControlType.Menu, OuyaSDK.OuyaInput.GetButtonDown( DeviceIndex, OuyaController.BUTTON_MENU ), updateTick, deltaTime );
+
+			Commit( updateTick, deltaTime );
 			#endif
 		}
 
@@ -122,9 +126,9 @@ namespace InControl
 		public bool IsConnected
 		{
 			get
-			{
+			{ 
 				#if UNITY_ANDROID && INCONTROL_OUYA && !UNITY_EDITOR
-				return OuyaSDK.OuyaInput.IsControllerConnected( DeviceIndex );
+				return OuyaSDK.OuyaInput.IsControllerConnected( DeviceIndex ); 
 				#else
 				return false;
 				#endif
