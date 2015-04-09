@@ -125,6 +125,10 @@ public class BondAttachable : MonoBehaviour {
 				bonds[i].BreakBond();
 			}
 		}
-		
+	}
+
+	public void RequestFluff(Bond bondRequesting)
+	{
+		SendMessage("SendFluffToBond", bondRequesting, SendMessageOptions.DontRequireReceiver);
 	}
 }
