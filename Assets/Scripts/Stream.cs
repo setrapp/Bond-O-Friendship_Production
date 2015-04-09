@@ -9,6 +9,8 @@ public class Stream : MonoBehaviour {
 	public bool showTarget = false;
 	private StreamChannel oldChannel;
 	private bool ending;
+	public float actionRate = 1;
+	public LayerMask ignoreReactionLayers;
 
 	/*TODO handle streams merging back together*/
 
@@ -68,6 +70,59 @@ public class Stream : MonoBehaviour {
 		else
 		{
 			ending = true;
+		}
+	}
+
+	void OnCollisionStay(Collision col)
+	{
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
+		{
+			
+			Rigidbody body = col.rigidbody;
+			if (body != null)
+			{
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.collider.gameObject);
+			}
+		}
+	}
+
+	void OnTriggerStay(Collider col)
+	{
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
+		{
+			Rigidbody body = col.GetComponent<Rigidbody>();
+			if (body != null)
+			{
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.gameObject);
+			}
+		}
+	}
+
+	private void ProvokeReaction(GameObject reactionObject)
+	{
+		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
+		if (reaction == null)
+		{
+			StreamReactionDelegate reactionDelegate = reactionObject.GetComponent<StreamReactionDelegate>();
+			if (reactionDelegate != null)
+			{
+				reaction = reactionDelegate.reaction;
+			}
+		}
+
+		if (reaction != null)
+		{
+			reaction.React(actionRate * Time.deltaTime);
 		}
 	}
 

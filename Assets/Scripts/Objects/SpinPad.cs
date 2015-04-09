@@ -7,8 +7,8 @@ public class SpinPad : WaitPad {
 	public MembraneWall membraneWall2;
 	private Membrane membrane1;
 	private Membrane membrane2;
-	public Rigidbody wallEnd1;
-	public Rigidbody wallEnd2;
+	public SpinPadSide wallEnd1;
+	public SpinPadSide wallEnd2;
 	public GameObject rotatee;
 	public SpinPadPushee helmet1;
 	public SpinPadPushee helmet2;
@@ -38,8 +38,8 @@ public class SpinPad : WaitPad {
 		oldWallEndPos1 = wallEnd1.transform.position;
 		oldWallEndPos2 = wallEnd2.transform.position;
 
-		wallEnd1.drag = maxDrag;
-		wallEnd2.drag = maxDrag;
+		wallEnd1.body.drag = maxDrag;
+		wallEnd2.body.drag = maxDrag;
 	}
 
 	void Update()
@@ -67,12 +67,10 @@ public class SpinPad : WaitPad {
 		{
 			if (PlayersPushing())
 			{
-				//wallEnd1.isKinematic = wallEnd2.isKinematic = false;
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
 			}
 			else
 			{
-				//wallEnd1.isKinematic = wallEnd2.isKinematic = true;
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
 			}
 
@@ -116,7 +114,7 @@ public class SpinPad : WaitPad {
 		Vector3 centerToPlayer1 = Helper.ProjectVector(rotatee.transform.right, Globals.Instance.player1.transform.position - center);
 		Vector3 centerToPlayer2 = Helper.ProjectVector(rotatee.transform.right, Globals.Instance.player2.transform.position - center);
 		bool correctPushDirections = Vector3.Dot(centerToPlayer1, centerToPlayer2) < 0;
-		float drag = wallEnd1.drag;
+		float drag = wallEnd1.body.drag;
 		if (correctPushDirections && rotating)
 		{
 			drag -= dragDecreaseSpeed * Time.deltaTime;
@@ -125,7 +123,7 @@ public class SpinPad : WaitPad {
 		{
 			drag += dragIncreaseSpeed * Time.deltaTime;
 		}
-		wallEnd1.drag = wallEnd2.drag = Mathf.Clamp(drag, minDrag, maxDrag);
+		wallEnd1.body.drag = wallEnd2.body.drag = Mathf.Clamp(drag, minDrag, maxDrag);
 
 		// Maintain continuity of the rotation tracking by handling the crossing of the 360/0 degrees threshold.
 		float rotationChange = newRotateeRotation - oldRotateeRotation;
@@ -158,17 +156,35 @@ public class SpinPad : WaitPad {
 
 	private bool PlayersPushing()
 	{
-		bool bondedInOrder = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) && membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
-		bool bondedReverseOrder = membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable) && membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable);
-		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeSelf && helmet1.gameObject.activeSelf);
+		bool wall1Bonded = false;
+		if (wallEnd1.playerDependent)
+		{
+			wall1Bonded = membrane1.IsBondMade(wallEnd1.TargetPlayer.bondAttachable);
+		}
+		else
+		{
+			wall1Bonded = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+		}
+
+		bool wall2Bonded = false;
+		if (wallEnd2.playerDependent)
+		{
+			wall2Bonded = membrane2.IsBondMade(wallEnd2.TargetPlayer.bondAttachable);
+		}
+		else
+		{
+			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+		}
+
+		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy);
 		bool spinInhibited = spinInhibitors > 0;
 
-		return (bondedInOrder || bondedReverseOrder) && !helmetsExist && !spinInhibited;
+		return wall1Bonded && wall2Bonded && !helmetsExist && !spinInhibited;
 	}
 
 	private void CheckHelmets()
 	{
-		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeSelf && helmet1.gameObject.activeSelf)
+		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy)
 		{
 			if (helmet1.pushing && helmet2.pushing)
 			{
@@ -184,5 +200,25 @@ public class SpinPad : WaitPad {
 		float midRotation = (fullInRotation + fullOutRotation) / 2;
 
 		rotationProgress = Mathf.Clamp((currentRotation - midRotation) / (rotationRange / 2), -1, 1);
+	}
+
+	public bool IsAtLimit(SpinLimit desiredLimit)
+	{
+		bool atLimit = false;
+		if ((desiredLimit & SpinLimit.PULL_END) == SpinLimit.PULL_END && rotationProgress >= 1)
+		{
+			atLimit = true;
+		}
+		if ((desiredLimit & SpinLimit.PUSH_END) == SpinLimit.PUSH_END && rotationProgress <= -1)
+		{
+			atLimit = true;
+		}
+		return atLimit;
+	}
+
+	public enum SpinLimit
+	{
+		PULL_END = 1,
+		PUSH_END = 2
 	}
 }

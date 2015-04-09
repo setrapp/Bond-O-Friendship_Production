@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
+  - 114: {fileID: 11496336}
   m_Layer: 13
   m_Name: Mask
   m_TagString: Untagged
@@ -97,6 +98,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11441812}
   - 114: {fileID: 11400018}
   - 114: {fileID: 11443356}
   - 114: {fileID: 11400022}
@@ -149,6 +151,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400018}
   - 96: {fileID: 9600000}
+  - 114: {fileID: 11496332}
   m_Layer: 13
   m_Name: Right Trail
   m_TagString: Untagged
@@ -165,6 +168,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400020}
   - 96: {fileID: 9600002}
+  - 114: {fileID: 11496330}
   m_Layer: 13
   m_Name: Mid Trail
   m_TagString: Untagged
@@ -181,6 +185,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400022}
   - 96: {fileID: 9600004}
+  - 114: {fileID: 11496334}
   m_Layer: 13
   m_Name: Left Trail
   m_TagString: Untagged
@@ -311,7 +316,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: -70.5389633, y: 20.3055058, z: 0}
+  m_LocalPosition: {x: 64.6005936, y: 176.541077, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 462210}
@@ -725,7 +730,8 @@ MonoBehaviour:
   rightTrail: {fileID: 9600000}
   fluffHandler: {fileID: 11400008}
   fluffThrow: {fileID: 11400002}
-  fluffStick: {fileID: 11400010}
+  fluffStickRoot: {fileID: 11400010}
+  fluffStick: {fileID: 11441812}
   bondAttachable: {fileID: 11400018}
   mover: {fileID: 11400012}
   floatMove: {fileID: 11400000}
@@ -747,6 +753,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 11400004}
+  controlScheme: 0
+  otherPlayerControlScheme: 0
   playerNumber: 0
   canvasStart: {fileID: 0}
   canvasPaused: {fileID: 0}
@@ -754,6 +762,7 @@ MonoBehaviour:
   deadZone: .75
   desiredLook: {x: 0, y: 0, z: 0}
   joystickDetermined: 0
+  allowPreviousController: 1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -788,9 +797,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 8155d4f73c56703429676501f6fde240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allChildSticks: 1
+  attachedSticks: []
+  trackStuckFluffs: 0
+  fluffsDetachable: 0
   pullableBody: {fileID: 5400000}
   noKinematicOnPull: 0
   allowSway: 0
@@ -928,6 +941,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 300
+--- !u!114 &11441812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  stuckFluff: {fileID: 0}
+  stickingCollider: {fileID: 0}
+  stickOffset: {x: 0, y: 0, z: 0}
+  stickDirection: {x: 0, y: 0, z: 1}
 --- !u!114 &11443356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -942,6 +971,8 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
     pullApartMaxFactor: 0
     maxDistance: 35
     relativeWarningDistance: .5
@@ -978,6 +1009,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particles: {fileID: 19896068}
   characterComponents: {fileID: 11400004}
+--- !u!114 &11496330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 9600002}
+  renderBase: 3000
+  renderOffset: 100
+--- !u!114 &11496332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 9600000}
+  renderBase: 3000
+  renderOffset: 100
+--- !u!114 &11496334
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 9600004}
+  renderBase: 3000
+  renderOffset: 100
+--- !u!114 &11496336
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2300000}
+  renderBase: 3000
+  renderOffset: 99
 --- !u!135 &13500002
 SphereCollider:
   m_ObjectHideFlags: 1
