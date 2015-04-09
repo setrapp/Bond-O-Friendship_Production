@@ -51,7 +51,7 @@ public class Fluff : MonoBehaviour {
 
 		if (attachee != null && attachee.attachInfo != null)
 		{
-			Attach(attachee.attachInfo/*, transform.position, transform.up*/, true);
+			Attach(attachee.attachInfo, true);
 		}
 		else
 		{
@@ -125,15 +125,6 @@ public class Fluff : MonoBehaviour {
 		{
 			if (!mover.Moving)
 			{
-				/*RaycastHit attachInfo;
-				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
-				{
-					Attach(attachInfo.collider.gameObject, transform.position, -Vector3.forward);
-				}
-				else
-				{
-					PopFluff();
-				}*/
 				PopFluff();
 				trail.gameObject.SetActive(false);
 			}
@@ -276,7 +267,7 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	public void Attach(FluffStick attacheeStick/*, Vector3 position, Vector3 standDirection*/, bool sway = true, bool sprouting = false)
+	public void Attach(FluffStick attacheeStick, bool sway = true, bool sprouting = false)
 	{
 		if (Globals.Instance == null)
 		{
@@ -524,20 +515,7 @@ public class Fluff : MonoBehaviour {
 		{
 			return;
 		}
-
-		// Ensure the standing direction is the surface normal of the collided object.
-		/*Vector3 standingDirection = collision.contacts[0].normal;
-		RaycastHit[] hits = Physics.RaycastAll(collision.contacts[0].point + collision.contacts[0].normal, -collision.contacts[0].normal, Mathf.Infinity);
-		bool hitFound = false;
-		for (int i = 0; i < hits.Length && !hitFound; i++)
-		{
-			if (hits[i].collider == collision.collider)
-			{
-				standingDirection = hits[i].normal;
-				hitFound = true;
-			}
-		}
-		standingDirection.z = 0;*/
+		
 		if (fluffStick.root == null || fluffStick.root.trackStuckFluffs)
 		{
 			fluffStick.stuckFluff = this;
@@ -551,7 +529,7 @@ public class Fluff : MonoBehaviour {
 			fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
 		}
 
-		Attach(fluffStick/*, fluffStick.transform.position + fluffStick.transform.TransformDirection(fluffStick.stickOffset), fluffStick.transform.TransformDirection(fluffStick.stickDirection)*/);
+		Attach(fluffStick);
 	}
 
 	void OnDestroy()
