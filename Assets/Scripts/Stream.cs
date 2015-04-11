@@ -12,6 +12,7 @@ public class Stream : MonoBehaviour {
 	public float actionRate = 1;
 	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
+	public ParticleSystem diffusionParticles;
 
 	/*TODO handle streams merging back together*/
 
@@ -31,10 +32,21 @@ public class Stream : MonoBehaviour {
 	{
 		transform.position = targetChannel.transform.position;
 		tracer.CreateLineMaker(true);
-		if (lineMaterial != null && tracer.lineRenderer != null)
+		if (lineMaterial != null)
 		{
-			tracer.lineRenderer.material = lineMaterial;
+			if (tracer.lineRenderer != null)
+			{
+				tracer.lineRenderer.material = lineMaterial;
+			}
+
+			if (diffusionParticles != null)
+			{
+				diffusionParticles.renderer.material.color = lineMaterial.color;
+				diffusionParticles.gameObject.SetActive(false);
+			}
 		}
+
+		
 
 		SeekNextChannel();
 	}
@@ -43,6 +55,11 @@ public class Stream : MonoBehaviour {
 	{
 		if (!ending)
 		{
+			if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
+			{
+				diffusionParticles.gameObject.SetActive(false);
+			}
+
 			Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
 			Vector3 toTarget = targetChannel.transform.position - transform.position;
 
@@ -54,9 +71,19 @@ public class Stream : MonoBehaviour {
 			mover.velocity = mover.rigidbody.velocity;
 			mover.Accelerate(toTarget);
 		}
-		else if (mover.velocity.sqrMagnitude > 0)
+		else
 		{
-			mover.slowDown = true;
+			if (mover.velocity.sqrMagnitude > 0)
+			{
+				mover.Stop();
+				mover.body.angularVelocity = Vector3.zero;
+				transform.up = targetChannel.transform.forward;
+			}
+			if (diffusionParticles != null && !diffusionParticles.gameObject.activeSelf)
+			{
+				diffusionParticles.gameObject.SetActive(true);
+			}
+			SeekNextChannel();
 		}
 
 		tracer.AddVertex(transform.position);
@@ -69,6 +96,7 @@ public class Stream : MonoBehaviour {
 		{
 			oldChannel = targetChannel;
 			targetChannel = nextChannels[0];
+			ending = false;
 
 			/*TODO spawn new steram and reset it when a split is found*/
 		}
