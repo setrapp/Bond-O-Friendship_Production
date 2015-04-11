@@ -6,6 +6,7 @@ public class Stream : MonoBehaviour {
 	public StreamChannel targetChannel;
 	public SimpleMover mover;
 	public Tracer tracer;
+	public bool startAtTarget = true;
 	public bool showTarget = false;
 	private StreamChannel oldChannel;
 	private bool ending;
@@ -13,6 +14,7 @@ public class Stream : MonoBehaviour {
 	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
 	public ParticleSystem diffusionParticles;
+	public Stream streamSplittingPrefab;
 
 	/*TODO handle streams merging back together*/
 
@@ -30,7 +32,11 @@ public class Stream : MonoBehaviour {
 
 	void Start()
 	{
-		transform.position = targetChannel.transform.position;
+		if (targetChannel != null && startAtTarget)
+		{
+			transform.position = targetChannel.transform.position;
+		}
+
 		tracer.CreateLineMaker(true);
 		if (lineMaterial != null)
 		{
@@ -45,8 +51,6 @@ public class Stream : MonoBehaviour {
 				diffusionParticles.gameObject.SetActive(false);
 			}
 		}
-
-		
 
 		SeekNextChannel();
 	}
@@ -91,6 +95,11 @@ public class Stream : MonoBehaviour {
 
 	private void SeekNextChannel()
 	{
+		if (targetChannel == null)
+		{
+			return;
+		}
+
 		StreamChannel[] nextChannels = targetChannel.parentSeries.GetNextChannels(targetChannel);
 		if (nextChannels != null && nextChannels.Length > 0)
 		{
@@ -98,7 +107,15 @@ public class Stream : MonoBehaviour {
 			targetChannel = nextChannels[0];
 			ending = false;
 
-			/*TODO spawn new steram and reset it when a split is found*/
+			if (streamSplittingPrefab != null)
+			{
+				for (int i = 1; i < nextChannels.Length; i++)
+				{
+					Stream splitStream = ((GameObject)Instantiate(streamSplittingPrefab.gameObject, transform.position, transform.rotation)).GetComponent<Stream>();
+					splitStream.targetChannel = nextChannels[i];
+					splitStream.startAtTarget = false;
+				}
+			}
 		}
 		else
 		{
@@ -111,8 +128,6 @@ public class Stream : MonoBehaviour {
 		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
 		if ((layer & ignoreReactionLayers.value) != layer)
 		{
-
-			
 			Rigidbody body = col.rigidbody;
 			if (body != null)
 			{
