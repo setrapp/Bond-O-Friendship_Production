@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StreamReactionDelegate : MonoBehaviour {
 
-	public StreamReaction reaction;
+	public List<StreamReaction> reactions;
 }

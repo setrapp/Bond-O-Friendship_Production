@@ -8,7 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 441620}
+  - 114: {fileID: 11483572}
   - 114: {fileID: 11441630}
+  - 114: {fileID: 11483574}
+  - 114: {fileID: 11413866}
+  - 114: {fileID: 11411622}
   m_Layer: 0
   m_Name: Stream Unlock Gate
   m_TagString: Untagged
@@ -43,7 +47,7 @@ GameObject:
   - 4: {fileID: 441624}
   - 65: {fileID: 6541628}
   - 114: {fileID: 11441626}
-  m_Layer: 29
+  m_Layer: 0
   m_Name: Stream Fill Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,6 +100,7 @@ GameObject:
   - 4: {fileID: 441630}
   - 54: {fileID: 5441630}
   - 114: {fileID: 11441624}
+  - 114: {fileID: 11411618}
   m_Layer: 0
   m_Name: Gate Hinge
   m_TagString: Untagged
@@ -124,7 +129,7 @@ Transform:
   m_GameObject: {fileID: 141622}
   m_LocalRotation: {x: .707106829, y: 2.44160759e-07, z: 2.44160759e-07, w: .707106829}
   m_LocalPosition: {x: 1.91999996, y: 0, z: -1.91999996}
-  m_LocalScale: {x: 1.99999988, y: 6, z: 1.99999988}
+  m_LocalScale: {x: 2, y: 6, z: 1.99999988}
   m_Children: []
   m_Father: {fileID: 441630}
   m_RootOrder: 1
@@ -134,12 +139,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141624}
-  m_LocalRotation: {x: 0, y: 6.68080524e-09, z: 0, w: 1}
-  m_LocalPosition: {x: -.0270000007, y: 0, z: 0}
-  m_LocalScale: {x: .521302998, y: 1, z: .521303415}
+  m_LocalRotation: {x: .707106829, y: 4.72404205e-09, z: 4.72404205e-09, w: .707106829}
+  m_LocalPosition: {x: 1.75160456, y: 8.00544171e-07, z: 7.69999981}
+  m_LocalScale: {x: 3.25136232, y: 2, z: 3.25136137}
   m_Children: []
-  m_Father: {fileID: 441626}
-  m_RootOrder: 0
+  m_Father: {fileID: 441630}
+  m_RootOrder: 3
 --- !u!4 &441626
 Transform:
   m_ObjectHideFlags: 1
@@ -149,8 +154,7 @@ Transform:
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
   m_LocalPosition: {x: 1.91999996, y: 0, z: 7.69999981}
   m_LocalScale: {x: 6.23699141, y: 2, z: 6.23698473}
-  m_Children:
-  - {fileID: 441624}
+  m_Children: []
   m_Father: {fileID: 441630}
   m_RootOrder: 2
 --- !u!4 &441628
@@ -178,6 +182,7 @@ Transform:
   - {fileID: 441628}
   - {fileID: 441622}
   - {fileID: 441626}
+  - {fileID: 441624}
   m_Father: {fileID: 441620}
   m_RootOrder: 0
 --- !u!23 &2341626
@@ -300,6 +305,65 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11411618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactions:
+  - {fileID: 11483572}
+--- !u!114 &11411622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155d4f73c56703429676501f6fde240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allChildSticks: 1
+  attachedSticks: []
+  trackStuckFluffs: 1
+  fluffsDetachable: 0
+  pullableBody: {fileID: 0}
+  noKinematicOnPull: 0
+  allowSway: 1
+  bodyMassFactor: 1
+  pullMass: -1
+  maxPullForce: .100000001
+  fluffReaction: {fileID: 11483572}
+  fluffSproutRate: 1
+  fluffConsumeRate: .200000003
+  fluffActionRate: .0299999993
+--- !u!114 &11413866
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  canReact: 1
+  scalees:
+  - scalee: {fileID: 441622}
+    unscaled: {x: 1.5, y: 6, z: 1.5}
+    scaled: {x: 2, y: 6, z: 2}
+  - scalee: {fileID: 441626}
+    unscaled: {x: 4, y: 2, z: 4}
+    scaled: {x: 6.23699093, y: 2, z: 6.23699093}
 --- !u!114 &11441624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -325,7 +389,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reaction: {fileID: 11441630}
+  reactions:
+  - {fileID: 11483572}
 --- !u!114 &11441628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -337,7 +402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reaction: {fileID: 11441630}
+  reactions:
+  - {fileID: 11483572}
 --- !u!114 &11441630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -349,16 +415,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa2a748e2d2754ba8b88ad12bcb4fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reactionCollider: {fileID: 6541628}
-  reactionBody: {fileID: 5441630}
-  fillProgress: 0
-  fillRate: 1
+  reactionProgress: 0
+  reactionRate: 1
+  canReact: 1
   fillTargetRenderers:
   - {fileID: 2341630}
   - {fileID: 2341628}
   - {fileID: 2341626}
   unfilledTint: {r: .301470578, g: .301470578, b: .301470578, a: 1}
   filledTint: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &11483572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc488f88d5fdef9439b95b53cda86cee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  canReact: 1
+  streamReactions: []
+  trackObjectReactions: 1
+  trackChildReactions: 1
+  forceAllToLeast: 0
+--- !u!114 &11483574
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d62f6d899aef8d4192978274531be7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  canReact: 1
+  collidersEnabled: 0
+  reactionColliders:
+  - {fileID: 6541628}
+  bodiesKinematic: 0
+  reactionBodies:
+  - {fileID: 5441630}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
