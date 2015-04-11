@@ -9,6 +9,9 @@ public class Stream : MonoBehaviour {
 	public bool showTarget = false;
 	private StreamChannel oldChannel;
 	private bool ending;
+	public float actionRate = 1;
+	public LayerMask ignoreReactionLayers;
+	public Material lineMaterial;
 
 	/*TODO handle streams merging back together*/
 
@@ -28,6 +31,10 @@ public class Stream : MonoBehaviour {
 	{
 		transform.position = targetChannel.transform.position;
 		tracer.CreateLineMaker(true);
+		if (lineMaterial != null && tracer.lineRenderer != null)
+		{
+			tracer.lineRenderer.material = lineMaterial;
+		}
 
 		SeekNextChannel();
 	}
@@ -73,29 +80,55 @@ public class Stream : MonoBehaviour {
 
 	void OnCollisionStay(Collision col)
 	{
-		ProvokeReaction(col.collider);
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
+		{
+
+			
+			Rigidbody body = col.rigidbody;
+			if (body != null)
+			{
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.collider.gameObject);
+			}
+		}
 	}
 
 	void OnTriggerStay(Collider col)
 	{
-		ProvokeReaction(col);
-	}
-
-	private void ProvokeReaction(Collider reactionCollider)
-	{
-		StreamReaction reaction = reactionCollider.GetComponent<StreamReaction>();
-		if (reaction == null)
+		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
+		if ((layer & ignoreReactionLayers.value) != layer)
 		{
-			StreamReactionDelegate reactionDelegate = reactionCollider.GetComponent<StreamReactionDelegate>();
-			if (reactionDelegate != null)
+			Rigidbody body = col.GetComponent<Rigidbody>();
+			if (body != null)
 			{
-				reaction = reactionDelegate.reaction;
+				ProvokeReaction(body.gameObject);
+			}
+			else
+			{
+				ProvokeReaction(col.gameObject);
 			}
 		}
+	}
 
+	private void ProvokeReaction(GameObject reactionObject)
+	{
+		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
 		if (reaction != null)
 		{
-			reaction.React(this);
+			reaction.React(actionRate * Time.deltaTime);
+		}
+
+		StreamReactionDelegate reactionDelegate = reactionObject.GetComponent<StreamReactionDelegate>();
+		if (reactionDelegate != null)
+		{
+			for (int i = 0; i < reactionDelegate.reactions.Count; i++)
+			{
+				reactionDelegate.reactions[i].React(actionRate * Time.deltaTime);
+			}
 		}
 	}
 

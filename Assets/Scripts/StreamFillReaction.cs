@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class StreamFillReaction : StreamReaction {
 
-	public float fillProgress = 0;
-	public float fillRate = 1;
-
 	[SerializeField]
 	public List<Renderer> fillTargetRenderers;
 	public Color unfilledTint = Color.grey;
@@ -24,31 +21,19 @@ public class StreamFillReaction : StreamReaction {
 		ApplyTint();
 	}
 
-	public override void React(Stream stream)
+	public override bool React(float actionRate)
 	{
-		if (fillProgress < 1)
+		bool reacted = base.React(actionRate);
+		if (reacted)
 		{
-			fillProgress = Mathf.Clamp01(fillProgress + fillRate * Time.deltaTime);
-
-			if (fillProgress >= 1)
-			{
-				if (reactionCollider != null)
-				{
-					reactionCollider.enabled = false;
-				}
-				if (reactionBody != null)
-				{
-					reactionBody.isKinematic = false;
-				}
-			}
-
 			ApplyTint();
 		}
+		return reacted;
 	}
 
 	private void ApplyTint()
 	{
-		Color tint = (unfilledTint * (1 - fillProgress)) + (filledTint * fillProgress);
+		Color tint = (unfilledTint * (1 - reactionProgress)) + (filledTint * reactionProgress);
 		for (int i = 0; i < fillTargetRenderers.Count && i < baseColors.Count; i++)
 		{
 			fillTargetRenderers[i].material.color = baseColors[i] * tint;

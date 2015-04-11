@@ -332,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4490095133bb46942ac3925693de175d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mover: {fileID: 0}
   creator: {fileID: 0}
   rotationSpeed: 45
   trail: {fileID: 9600002}
@@ -359,6 +360,9 @@ MonoBehaviour:
   popAnimation: {fileID: 11100000}
   pullForce: {x: 0, y: 0, z: 0}
   pullDistance: 0
+  soleAttractor: {fileID: 0}
+  minFluffScale: {x: .25, y: .25, z: .25}
+  maxFluffScale: {x: 1, y: 1, z: 1}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -374,13 +378,13 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   acceleration: 10
   handling: 10000
-  handlingAcceleration: 0
   minHandlingFactor: 1
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
   body: {fileID: 5400000}
   bodylessDampening: 1
   slowDown: 1
+  jumpToMaxSpeed: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

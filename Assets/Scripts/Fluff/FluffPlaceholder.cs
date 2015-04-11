@@ -4,7 +4,7 @@ using System.Collections;
 public class FluffPlaceholder : MonoBehaviour {
 	public GameObject fluffPrefab;
 	public Renderer materialSource;
-	public GameObject attachee;
+	public FluffStick attachee;
 	public Fluff createdFluff = null;
 	public int fluffRespawns = 0;
 	private float respawnDelay = 0;
@@ -12,6 +12,8 @@ public class FluffPlaceholder : MonoBehaviour {
 	public float respawnDelayMax = 0;
 	private float pickTime = -1;
 	public bool dropParent = false;
+	public bool spawnFakeMoving = false;
+	public bool sproutFluff = false;
 
 	void Awake()
 	{
@@ -64,12 +66,16 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee, transform.position, transform.up);
+					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/, true, sproutFluff);
 				}
-				else
+				else 
 				{
-					// Fake movement to allow fluff update to handle attachment to floor.
-					newFluff.moving = true;
+					// If desired, fake movement to allow fluff update to handle attachment to floor.
+					if (spawnFakeMoving)
+					{
+						newFluff.moving = true;
+					}
+					newFluff.ToggleSwayAnimation(true);
 				}
 				createdFluff = newFluff;
 
