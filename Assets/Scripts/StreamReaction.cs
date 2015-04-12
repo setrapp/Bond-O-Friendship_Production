@@ -10,6 +10,7 @@ public class StreamReaction : MonoBehaviour {
 	public bool reactable = true;
 	[SerializeField]
 	public List<StreamReaction> superiors;
+	public float streamAlterSpeed = -1;
 
 	void Start()
 	{

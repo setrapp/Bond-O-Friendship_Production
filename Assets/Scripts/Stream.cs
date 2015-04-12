@@ -114,6 +114,8 @@ public class Stream : MonoBehaviour {
 					Stream splitStream = ((GameObject)Instantiate(streamSplittingPrefab.gameObject, transform.position, transform.rotation)).GetComponent<Stream>();
 					splitStream.targetChannel = nextChannels[i];
 					splitStream.startAtTarget = false;
+					splitStream.transform.parent = transform.parent;
+					splitStream.mover.maxSpeed = mover.maxSpeed;
 				}
 			}
 		}
@@ -159,10 +161,16 @@ public class Stream : MonoBehaviour {
 
 	private void ProvokeReaction(GameObject reactionObject)
 	{
+		float minAlterSpeed = -1;
+
 		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
 		if (reaction != null)
 		{
 			reaction.React(actionRate * Time.deltaTime);
+			if (reaction.streamAlterSpeed >= 0 && (reaction.streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
+			{
+				minAlterSpeed = reaction.streamAlterSpeed;
+			}
 		}
 
 		StreamReactionDelegate reactionDelegate = reactionObject.GetComponent<StreamReactionDelegate>();
@@ -171,7 +179,16 @@ public class Stream : MonoBehaviour {
 			for (int i = 0; i < reactionDelegate.reactions.Count; i++)
 			{
 				reactionDelegate.reactions[i].React(actionRate * Time.deltaTime);
+				if (reactionDelegate.reactions[i].streamAlterSpeed >= 0 && (reactionDelegate.reactions[i].streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
+				{
+					minAlterSpeed = reactionDelegate.reactions[i].streamAlterSpeed;
+				}
 			}
+		}
+
+		if (minAlterSpeed >= 0)
+		{
+			mover.maxSpeed = minAlterSpeed;
 		}
 	}
 
