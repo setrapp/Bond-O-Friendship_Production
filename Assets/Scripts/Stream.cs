@@ -69,7 +69,12 @@ public class Stream : MonoBehaviour {
 
 			if (Vector3.Dot(oldToTarget, toTarget) < 0)
 			{
-				SeekNextChannel();
+				Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
+				Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
+				if (Vector3.Dot(toBank1, toBank2) < 0)
+				{
+					SeekNextChannel();
+				}
 			}
 
 			mover.velocity = mover.rigidbody.velocity;
@@ -116,6 +121,8 @@ public class Stream : MonoBehaviour {
 					splitStream.startAtTarget = false;
 					splitStream.transform.parent = transform.parent;
 					splitStream.mover.maxSpeed = mover.maxSpeed;
+					//splitStream.transform.up = targetChannel.transform.position - splitStream.transform.position;
+					//splitStream.mover.Move(splitStream.transform.up, splitStream.mover.velocity.magnitude);
 				}
 			}
 		}
@@ -166,8 +173,8 @@ public class Stream : MonoBehaviour {
 		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
 		if (reaction != null)
 		{
-			reaction.React(actionRate * Time.deltaTime);
-			if (reaction.streamAlterSpeed >= 0 && (reaction.streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
+			bool reacted = reaction.React(actionRate * Time.deltaTime);
+			if (!reacted && reaction.streamAlterSpeed >= 0 && (reaction.streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
 			{
 				minAlterSpeed = reaction.streamAlterSpeed;
 			}
@@ -178,8 +185,8 @@ public class Stream : MonoBehaviour {
 		{
 			for (int i = 0; i < reactionDelegate.reactions.Count; i++)
 			{
-				reactionDelegate.reactions[i].React(actionRate * Time.deltaTime);
-				if (reactionDelegate.reactions[i].streamAlterSpeed >= 0 && (reactionDelegate.reactions[i].streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
+				bool reacted = reactionDelegate.reactions[i].React(actionRate * Time.deltaTime);
+				if (!reacted && reactionDelegate.reactions[i].streamAlterSpeed >= 0 && (reactionDelegate.reactions[i].streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
 				{
 					minAlterSpeed = reactionDelegate.reactions[i].streamAlterSpeed;
 				}

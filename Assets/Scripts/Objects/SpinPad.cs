@@ -5,8 +5,8 @@ public class SpinPad : WaitPad {
 
 	public MembraneWall membraneWall1;
 	public MembraneWall membraneWall2;
-	private Membrane membrane1;
-	private Membrane membrane2;
+	public Membrane membrane1;
+	public Membrane membrane2;
 	public SpinPadSide wallEnd1;
 	public SpinPadSide wallEnd2;
 	public GameObject rotatee;
@@ -63,20 +63,23 @@ public class SpinPad : WaitPad {
 
 		CheckHelmets();
 
-		if (membrane1 != null && membrane2 != null)
-		{
-			if (PlayersPushing())
-			{
+		if (membrane1 != null && membrane2 != null) {
+
+			if (PlayersPushing ()) {
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
-			}
-			else
-			{
+			} else {
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
 			}
 
 			// Handle rotation of the pad.
-			UpdatePadRotation();
-			CalculateRotationProgress();
+			UpdatePadRotation ();
+			CalculateRotationProgress ();
+		} 
+		else if (membrane1 != null && membrane2 == null) {
+			membrane1.stats.attachSpring2 = 0;
+		}
+		else if (membrane2 != null && membrane1 == null) {
+			membrane2.stats.attachSpring2 = 0;
 		}
 	}
 
