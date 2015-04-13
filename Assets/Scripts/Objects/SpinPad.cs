@@ -193,6 +193,8 @@ public class SpinPad : WaitPad {
 			if (rotationChange != 0)
 			{
 				SetLineColors();
+
+				membrane1.extraStats.defaultShapingForce = membrane2.extraStats.defaultShapingForce = 0;
 			}
 
 			// Update rotation progress.
