@@ -71,7 +71,7 @@ public class Stream : MonoBehaviour {
 			{
 				Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
 				Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
-				if (Vector3.Dot(toBank1, toBank2) < 0)
+				//if (Vector3.Dot(toBank1, toBank2) < 0)
 				{
 					SeekNextChannel();
 				}

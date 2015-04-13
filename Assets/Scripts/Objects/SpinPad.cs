@@ -13,7 +13,11 @@ public class SpinPad : WaitPad {
 	public SpinPadPushee helmet1;
 	public SpinPadPushee helmet2;
 	private float oldRotateeRotation;
-	public float spinRadius = 5.5f;
+	public bool completeOnIn = false;
+	public bool completeOnOut = false;
+	public float inRadius = 5.5f;
+	public float outRadius = 5.5f;
+	public float currentRadius = 5.5f;
 	private Vector3 center;
 	private Vector3 oldWallEndPos1;
 	private Vector3 oldWallEndPos2;
@@ -27,7 +31,11 @@ public class SpinPad : WaitPad {
 	public float dragIncreaseSpeed = 50;
 	public float membraneAttachmentSpring = 50;
 	public int spinInhibitors = 0;
-	
+	public LineRenderer innerLine;
+	public LineRenderer outerLine;
+	public Color lineInactiveColor = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+	public Color lineNotCompletedColor = new Color(0.75f, 0.75f, 0.75f, 0.5f);
+	public Color lineCompletedColor = new Color(1.0f, 1.0f, 1.0f, 0.8f);
 
 	void Start()
 	{
@@ -40,6 +48,24 @@ public class SpinPad : WaitPad {
 
 		wallEnd1.body.drag = maxDrag;
 		wallEnd2.body.drag = maxDrag;
+
+		
+
+		if (innerLine != null)
+		{
+			Helper.DrawCircle(innerLine, gameObject, Vector3.zero, inRadius);
+		}
+		if (outerLine != null)
+		{
+			Helper.DrawCircle(outerLine, gameObject, Vector3.zero, outRadius);
+		}
+
+		CalculateRotationProgress();
+		float progress = (rotationProgress / 2) + 0.5f;
+		currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
+		membraneWall1.membraneLength = membraneWall2.membraneLength = currentRadius;
+
+		SetLineColors();
 	}
 
 	void Update()
@@ -63,23 +89,41 @@ public class SpinPad : WaitPad {
 
 		CheckHelmets();
 
-		if (membrane1 != null && membrane2 != null) {
+		if (membrane1 != null && membrane2 != null)
+		{
 
-			if (PlayersPushing ()) {
+			if (PlayersPushing())
+			{
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
-			} else {
+			}
+			else
+			{
 				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
 			}
 
 			// Handle rotation of the pad.
-			UpdatePadRotation ();
-			CalculateRotationProgress ();
-		} 
-		else if (membrane1 != null && membrane2 == null) {
+			UpdatePadRotation();
+		}
+		else if (membrane1 != null && membrane2 == null)
+		{
 			membrane1.stats.attachSpring2 = 0;
 		}
-		else if (membrane2 != null && membrane1 == null) {
+		else if (membrane2 != null && membrane1 == null)
+		{
 			membrane2.stats.attachSpring2 = 0;
+		}
+
+		if (!activated)
+		{
+			CalculateRotationProgress();
+			float progress = (rotationProgress / 2) + 0.5f;
+			currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
+
+			if ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END)))
+			{
+				activated = true;
+				SetLineColors();
+			}
 		}
 	}
 
@@ -88,11 +132,11 @@ public class SpinPad : WaitPad {
 		// Calculate the vectors from the center to the edges of the pad where the walls ends are.
 		Vector3 toWallEnd1 = wallEnd1.transform.position - center;
 		toWallEnd1.z = 0;
-		toWallEnd1 = toWallEnd1.normalized * (spinRadius);
+		toWallEnd1 = toWallEnd1.normalized * (currentRadius);
 
 		Vector3 toWallEnd2 = wallEnd2.transform.position - center;
 		toWallEnd2.z = 0;
-		toWallEnd2 = toWallEnd2.normalized * (spinRadius);
+		toWallEnd2 = toWallEnd2.normalized * (currentRadius);
 
 
 		// Keep the wall ends moving exactly opposite each other, moving only as fast as the slower of the two.
@@ -128,25 +172,33 @@ public class SpinPad : WaitPad {
 		}
 		wallEnd1.body.drag = wallEnd2.body.drag = Mathf.Clamp(drag, minDrag, maxDrag);
 
-		// Maintain continuity of the rotation tracking by handling the crossing of the 360/0 degrees threshold.
-		float rotationChange = newRotateeRotation - oldRotateeRotation;
-		if (rotationChange > 180)
+		if (!activated)
 		{
-			rotationChange -= 360;
-		}
-		else if (rotationChange < -180)
-		{
-			rotationChange += 360;
-		}
+			// Maintain continuity of the rotation tracking by handling the crossing of the 360/0 degrees threshold.
+			float rotationChange = newRotateeRotation - oldRotateeRotation;
+			if (rotationChange > 180)
+			{
+				rotationChange -= 360;
+			}
+			else if (rotationChange < -180)
+			{
+				rotationChange += 360;
+			}
 
-		if ((currentRotation >= fullInRotation && rotationChange > 0) || (currentRotation <= fullOutRotation && rotationChange < 0))
-		{
-			rotationChange = 0;
-		}
+			if ((currentRotation >= fullInRotation && rotationChange > 0) || (currentRotation <= fullOutRotation && rotationChange < 0))
+			{
+				rotationChange = 0;
+			}
 
-		// Update rotation progress.
-		currentRotation += rotationChange;
-		oldRotateeRotation = newRotateeRotation;
+			if (rotationChange != 0)
+			{
+				SetLineColors();
+			}
+
+			// Update rotation progress.
+			currentRotation += rotationChange;
+			oldRotateeRotation = newRotateeRotation;
+		}
 
 		// Move wall ends to new positions.
 		wallEnd1.transform.position = new Vector3(newWallEndPos1.x, newWallEndPos1.y, wallEnd1.transform.position.z);
@@ -217,6 +269,44 @@ public class SpinPad : WaitPad {
 			atLimit = true;
 		}
 		return atLimit;
+	}
+
+	public void SetLineColors()
+	{
+		/*TODO use inactive color if pushing this direction will no complete the puzzle*/
+
+		if (innerLine != null)
+		{
+			if (!completeOnIn)
+			{
+				innerLine.material.color = lineInactiveColor;
+			}
+			else if (IsAtLimit(SpinLimit.PULL_END))
+			{
+				innerLine.material.color = lineCompletedColor;
+			}
+			else
+			{
+				innerLine.material.color = lineNotCompletedColor;
+			}
+		}
+
+		if (outerLine != null)
+		{
+			if (!completeOnOut)
+			{
+				outerLine.material.color = lineInactiveColor;
+			}
+			else if (IsAtLimit(SpinLimit.PUSH_END))
+			{
+				outerLine.material.color = lineCompletedColor;
+			}
+			else
+			{
+				outerLine.material.color = lineNotCompletedColor;
+			}
+		}
+		
 	}
 
 	public enum SpinLimit

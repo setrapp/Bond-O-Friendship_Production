@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &121736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 421736}
+  - 120: {fileID: 12021738}
+  m_Layer: 0
+  m_Name: Outer Line
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &121738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 421738}
+  - 120: {fileID: 12021736}
+  m_Layer: 0
+  m_Name: Inner Line
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &155970
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +88,7 @@ GameObject:
   - 33: {fileID: 3355972}
   - 23: {fileID: 2355972}
   - 54: {fileID: 5455972}
+  - 136: {fileID: 13697230}
   m_Layer: 15
   m_Name: Rotatee
   m_TagString: Untagged
@@ -430,6 +463,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &421736
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121736}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 29.5, y: 29.5, z: 5.5}
+  m_Children: []
+  m_Father: {fileID: 455980}
+  m_RootOrder: 6
+--- !u!4 &421738
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121738}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 12.5, y: 12.5, z: 5.5}
+  m_Children: []
+  m_Father: {fileID: 455980}
+  m_RootOrder: 5
 --- !u!4 &455970
 Transform:
   m_ObjectHideFlags: 1
@@ -505,7 +562,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.2000008, y: 114.400002, z: 1}
+  m_LocalPosition: {x: 49.9000015, y: 27.5, z: -79.3000031}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455970}
@@ -513,6 +570,8 @@ Transform:
   - {fileID: 455974}
   - {fileID: 455998}
   - {fileID: 455976}
+  - {fileID: 421738}
+  - {fileID: 421736}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &455982
@@ -1380,17 +1439,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     attachSpring1: 0
-    attachSpring2: 20
-    linkMass: 1.5
-    linkDrag: .200000003
+    attachSpring2: 60
+    linkMass: 1
+    linkDrag: 1
     pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
     midWidth: 1
-    addLinkDistance: .5
-    removeLinkDistance: .300000012
-    springForce: 300
+    addLinkDistance: .800000012
+    removeLinkDistance: .5
+    springForce: 80
     springDamper: 5
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -1625,7 +1684,11 @@ MonoBehaviour:
   rotatee: {fileID: 155974}
   helmet1: {fileID: 11455990}
   helmet2: {fileID: 11455994}
-  spinRadius: 5.5
+  completeOnIn: 0
+  completeOnOut: 0
+  inRadius: 5.5
+  outRadius: 8
+  currentRadius: 5.5
   fullInRotation: 0
   fullOutRotation: -360
   currentRotation: 0
@@ -1636,6 +1699,11 @@ MonoBehaviour:
   dragIncreaseSpeed: 50
   membraneAttachmentSpring: 20
   spinInhibitors: 0
+  innerLine: {fileID: 12021736}
+  outerLine: {fileID: 12021738}
+  lineInactiveColor: {r: .5, g: .5, b: .5, a: .392156869}
+  lineNotCompletedColor: {r: .75, g: .75, b: .75, a: .501960814}
+  lineCompletedColor: {r: 1, g: 1, b: 1, a: .784313738}
 --- !u!114 &11455994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2100,17 +2168,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     attachSpring1: 0
-    attachSpring2: 20
-    linkMass: 1.5
-    linkDrag: .200000003
+    attachSpring2: 60
+    linkMass: 1
+    linkDrag: 1
     pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
     midWidth: 1
-    addLinkDistance: .5
-    removeLinkDistance: .300000012
-    springForce: 300
+    addLinkDistance: .800000012
+    removeLinkDistance: .5
+    springForce: 80
     springDamper: 5
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -2280,7 +2348,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155988}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
   m_Name: 
@@ -2342,7 +2410,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155994}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
   m_Name: 
@@ -2410,6 +2478,68 @@ MonoBehaviour:
   reactions:
   - {fileID: 11469998}
   - {fileID: 11469994}
+--- !u!120 &12021736
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121738}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: faea4895f184afc4592d9d4112e55db0, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions: []
+  m_Parameters:
+    startWidth: .5
+    endWidth: .5
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 4294967295
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  m_UseWorldSpace: 1
+--- !u!120 &12021738
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121736}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: faea4895f184afc4592d9d4112e55db0, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions: []
+  m_Parameters:
+    startWidth: .5
+    endWidth: .5
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 4294967295
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  m_UseWorldSpace: 1
 --- !u!135 &13555970
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -2510,6 +2640,19 @@ CapsuleCollider:
   m_Height: 10
   m_Direction: 1
   m_Center: {x: 0, y: -4.5, z: 0}
+--- !u!136 &13697230
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 155974}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: .500000119
+  m_Height: 5
+  m_Direction: 2
+  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
 --- !u!138 &13870012
 FixedJoint:
   m_ObjectHideFlags: 1
