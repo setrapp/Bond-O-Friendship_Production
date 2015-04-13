@@ -119,7 +119,7 @@ public class SpinPad : WaitPad {
 			float progress = (rotationProgress / 2) + 0.5f;
 			currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
 
-			if ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END)))
+			if (!neverActivate && ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END))))
 			{
 				activated = true;
 				SetLineColors();
