@@ -3,25 +3,17 @@ using System.Collections;
 using InControl;
 
 public class PlayerInput : MonoBehaviour {
+
 	public CharacterComponents character;
-	public enum Player{Player1, Player2};
 
-    public Globals.ControlScheme controlScheme;
-    public Globals.ControlScheme otherPlayerControlScheme;
+    public enum Player { Player1, Player2 };
+    public Player playerNumber;
 
-	public Player playerNumber;
-	public GameObject canvasStart;
+    public ControlsAndInput controlScheme;
 
-	public GameObject canvasPaused;
-
-	public GameObject geometry;
 	public float deadZone = .75f;
 
-	private bool fireFluffReady = true;
 	private Vector3 velocityChange;
-	private Vector3 target;
-	public Vector3 desiredLook;
-	public bool joystickDetermined = false;
 
     SharedKeyboard sharedKeyboard;
     SharedController sharedController;
@@ -29,11 +21,11 @@ public class PlayerInput : MonoBehaviour {
     SeparateKeyboard separateKeyboard;
 
     public bool allowPreviousController = true;
-	//private bool paused = false;
-	
-	InputDevice device;
 
-	private bool oneController;
+    public int deviceNumber;
+
+
+	InputDevice device;
 
 	void Awake()
 	{
@@ -90,73 +82,45 @@ public class PlayerInput : MonoBehaviour {
 
 	void Update () 
 	{
-        /*This is for debug purposes, will be cleaned up and moved elsewhere later*
-        if ((Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedLeft || Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedRight) && Globals.Instance.player2ControlScheme == Globals.Instance.player1ControlScheme)
-        {
-            Globals.Instance.player2ControlScheme = Globals.Instance.player1ControlScheme == Globals.ControlScheme.ControllerSharedLeft ? Globals.ControlScheme.ControllerSharedRight : Globals.ControlScheme.ControllerSharedLeft;
-        }
-        if ((Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedLeft || Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedRight) && Globals.Instance.player2ControlScheme == Globals.Instance.player1ControlScheme)
-        {
-            Globals.Instance.player2ControlScheme = Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSharedLeft ? Globals.ControlScheme.KeyboardSharedRight : Globals.ControlScheme.KeyboardSharedLeft;
-        }
-        //End Debug comment area*/
+        controlScheme = playerNumber == Player.Player1 ? Globals.Instance.player1Controls : Globals.Instance.player2Controls;
 
-       // Debug.Log(Globals.Instance.player1ControlScheme);
+        if (controlScheme.inputNameSelected == Globals.InputNameSelected.LeftController)
+            deviceNumber = Globals.Instance.leftControllerIndex;
+        else if (controlScheme.inputNameSelected == Globals.InputNameSelected.RightController)
+            deviceNumber = Globals.Instance.rightContollerIndex;
+        else
+            deviceNumber = -1;
 
-        controlScheme = playerNumber == Player.Player1 ? Globals.Instance.player1ControlScheme : Globals.Instance.player2ControlScheme;
-        otherPlayerControlScheme = playerNumber == Player.Player1 ? Globals.Instance.player2ControlScheme : Globals.Instance.player1ControlScheme;
+        device = deviceNumber >= 0 ? InputManager.Devices[deviceNumber] : null;
 
-        if((controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight) && (otherPlayerControlScheme != Globals.ControlScheme.ControllerSharedLeft && otherPlayerControlScheme != Globals.ControlScheme.ControllerSharedRight))
-        {
-            if (playerNumber == Player.Player1)
-                Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSolo;
-            else
-                Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSolo;
-        }
-        
-
-		if(playerNumber == Player.Player1)
-			CheckDevices();
-
-
-        WaitForInput(playerNumber);
-
-        if(playerNumber == Player.Player1)
-            device = Globals.Instance.player1Device >= 0 ? InputManager.Devices[Globals.Instance.player1Device] : null;
-        if (playerNumber == Player.Player2)
-            device = Globals.Instance.player2Device >= 0 ? InputManager.Devices[Globals.Instance.player2Device] : null;
-
-        if(device != null)
+        if (device != null)
         {
             sharedController.Device = device;
             separateController.Device = device;
-            if(device.Name == "")
-            {
-                if (playerNumber == Player.Player1)
-                    Globals.Instance.player1Device = -2;
-                if (playerNumber == Player.Player2)
-                    Globals.Instance.player2Device = -2;
-            }
-                
         }
-        //device = playerNumber == Player.Player1 ? InputManager.Devices[Globals.Instance.playerOneDevice] : InputManager.Devices[Globals.Instance.playerTwoDevice];
-        /*
-        if (InputManager.Devices.Count > 0 && (controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight))
-            device = InputManager.ActiveDevice;
-        if (InputManager.Devices.Count > 0 && (controlScheme == Globals.ControlScheme.ControllerSolo) && (otherPlayerControlScheme == Globals.ControlScheme.KeyboardSolo))
-            device = InputManager.ActiveDevice;
-        if (InputManager.Devices.Count > 1 && (controlScheme == Globals.ControlScheme.ControllerSolo) && (otherPlayerControlScheme == Globals.ControlScheme.ControllerSolo))
+
+        if(deviceNumber == -3)
         {
-            if(playerNumber == Player.Player1)
-                device = InputManager.Devices[0];
+            if (playerNumber == Player.Player1)
+            {
+                Globals.Instance.player1Controls = new ControlsAndInput { controlScheme = Globals.ControlScheme.SharedLeft, inputNameSelected = Globals.InputNameSelected.Keyboard };
+                Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+                Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+                Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+            }
             if (playerNumber == Player.Player2)
-                device = InputManager.Devices[1];
-        }*/
+            {
+                Globals.Instance.player2Controls = new ControlsAndInput { controlScheme = Globals.ControlScheme.SharedRight, inputNameSelected = Globals.InputNameSelected.Keyboard };
+                Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+                Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+                Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+            }
+        }
 
         #region Pause
-        if (controlScheme == Globals.ControlScheme.ControllerSolo)//Globals.usingController)
+        /*if (player1ControlScheme == Globals.ControlScheme.ControllerSolo)//Globals.usingController)
 		{
-			if (playerNumber == Player.Player1 && device != null && device.MenuWasPressed)
+			if (device != null && device.MenuWasPressed)
 			{
 				if (Globals.isPaused)
 				{
@@ -173,7 +137,7 @@ public class PlayerInput : MonoBehaviour {
 		}
 		else
 		{
-			if (Input.GetKeyDown(KeyCode.Escape) && playerNumber == Player.Player1)
+			if (Input.GetKeyDown(KeyCode.Escape))
 			{
 				if (Globals.isPaused)
 				{
@@ -187,18 +151,15 @@ public class PlayerInput : MonoBehaviour {
 				}
 				Globals.isPaused = !Globals.isPaused;
 			}
-        }
+        }*/
         #endregion
 
-        if (!Globals.isPaused && (device != null || controlScheme == Globals.ControlScheme.KeyboardSolo || controlScheme == Globals.ControlScheme.KeyboardSharedLeft || controlScheme == Globals.ControlScheme.KeyboardSharedRight))
+        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard))
 		{
-			//AttemptFluffThrow();
-			AttemptFluffAttract();
-
-            if(controlScheme == Globals.ControlScheme.ControllerSharedLeft || controlScheme == Globals.ControlScheme.ControllerSharedRight || controlScheme == Globals.ControlScheme.ControllerSolo)
-                velocityChange = controlScheme == Globals.ControlScheme.ControllerSolo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
+            if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
+                velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
             else
-                velocityChange = controlScheme == Globals.ControlScheme.KeyboardSolo ? PlayerKeyboardSoloMovement() : PlayerKeyboardSharedMovement();//PlayerJoystickMovement();
+                velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerKeyboardSoloMovement() : PlayerKeyboardSharedMovement();
 
 			velocityChange = character.mover.ClampMovementChange(velocityChange, true, true);
 
@@ -221,23 +182,18 @@ public class PlayerInput : MonoBehaviour {
 			}
 			transform.LookAt(transform.position + moveDir, -Vector3.forward);
 		}
-		else
-		{
-			//if(playerNumber == Player.Player1)
-			//CheckInputMethod();
-		}
 	}
 
    
     private Vector3 PlayerControllerSharedMovement()
     {
         Vector2 stickInput = Vector2.zero;
-        if(controlScheme == Globals.ControlScheme.ControllerSharedLeft)
+        if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
         {
             stickInput = sharedController.LMove;
             return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.LMove.X, sharedController.LMove.Y, 0) : Vector3.zero;
         }
-        else if(controlScheme == Globals.ControlScheme.ControllerSharedRight)
+        else if (controlScheme.controlScheme == Globals.ControlScheme.SharedRight)
         {
             stickInput = sharedController.RMove;
             return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.RMove.X, sharedController.RMove.Y, 0) : Vector3.zero;
@@ -255,11 +211,11 @@ public class PlayerInput : MonoBehaviour {
 
     private Vector3 PlayerKeyboardSharedMovement()
     {
-        if (controlScheme == Globals.ControlScheme.KeyboardSharedLeft)
+        if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
         {
             return new Vector3(sharedKeyboard.LMove.X, sharedKeyboard.LMove.Y, 0);
         }
-        else if (controlScheme == Globals.ControlScheme.KeyboardSharedRight)
+        else if (controlScheme.controlScheme == Globals.ControlScheme.SharedRight)
         {
             return new Vector3(sharedKeyboard.RMove.X, sharedKeyboard.RMove.Y, 0);
         }
@@ -269,163 +225,8 @@ public class PlayerInput : MonoBehaviour {
     private Vector3 PlayerKeyboardSoloMovement()
     {
         return new Vector3(separateKeyboard.Move.X, separateKeyboard.Move.Y,0);
-    }
-
-    /*No longer Needed
-	private Vector3 PlayerJoystickMovement()
-	{
-
-		Vector2 stickInput = Vector2.zero;
-
-		if (Globals.usingController)
-		{
-			if(playerNumber == Player.Player1)
-			{
-				stickInput = device.LeftStick.Vector;
-				return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.LeftStick.X, device.LeftStick.Y, 0) : Vector3.zero;
-			}
-			if (playerNumber == Player.Player2)
-			{
-				stickInput = device.RightStick.Vector;
-				return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(device.RightStick.X, device.RightStick.Y, 0) : Vector3.zero;
-			}
-		}
-		else
-		{
-			Vector3 keyVector = Vector3.zero;
-			if(playerNumber == Player.Player1)
-			{
-				if (Input.GetKey(KeyCode.W))
-					keyVector += Vector3.up;
-				if (Input.GetKey(KeyCode.S))
-					keyVector -= Vector3.up;
-				if (Input.GetKey(KeyCode.A))
-					keyVector -= Vector3.right;
-				if (Input.GetKey(KeyCode.D))
-					keyVector += Vector3.right;
-			}
-
-			if (playerNumber == Player.Player2)
-			{
-				if (Input.GetKey(KeyCode.UpArrow))
-					keyVector += Vector3.up;
-				if (Input.GetKey(KeyCode.DownArrow))
-					keyVector -= Vector3.up;
-				if (Input.GetKey(KeyCode.LeftArrow))
-					keyVector -= Vector3.right;
-				if (Input.GetKey(KeyCode.RightArrow))
-					keyVector += Vector3.right;
-			}
-
-			return keyVector;
-		}
-
-		return Vector3.zero;
-	}*/
+    }	
 	
-	private void AttemptFluffAttract()
-	{
-		// If attractor is automatic, skip this input.
-		if (Globals.Instance.autoAttractor)
-		{
-			return;
-		}
-
-		bool canAttract = false;
-
-		if (Globals.usingController)
-		{
-			if (playerNumber == Player.Player1 && device.LeftBumper.IsPressed)
-				canAttract = true;
-			else if (playerNumber == Player.Player2 && device.RightBumper.IsPressed)
-				canAttract = true;
-		}
-		else
-		{
-			if (playerNumber == Player.Player1 && Input.GetKey(KeyCode.LeftShift))
-				canAttract = true;
-			else if (playerNumber == Player.Player2 && Input.GetKey(KeyCode.RightShift))
-				canAttract = true;
-		}
-
-		if (!fireFluffReady)
-		{
-			canAttract = false;
-		}
-
-		if (canAttract)
-		{
-			character.attractor.AttractFluffs();
-		}
-		else
-		{
-			character.attractor.StopAttracting();
-		}
-	}
-
-	
-	private void AttemptFluffThrow()
-	{
-		Vector2 lookAt = Vector2.zero;
-		float minToFire = deadZone;
-
-		if (Globals.usingController)
-		{
-			if (playerNumber == Player.Player1)
-			{
-				if (device.LeftTrigger.WasPressed || (Globals.Instance.autoAttractor && device.LeftBumper.WasPressed))
-				{
-					lookAt = transform.forward;
-					minToFire = 0;
-				}
-			}
-			else if (playerNumber == Player.Player2 || (Globals.Instance.autoAttractor && device.RightBumper.WasPressed))
-			{
-				if (device.RightTrigger.WasPressed)
-				{
-					lookAt = transform.forward;
-					minToFire = 0;
-				}
-			}
-		}
-		else
-		{
-			if (playerNumber == Player.Player1 && (Input.GetKey(KeyCode.LeftControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Space))))
-			{
-				lookAt = transform.forward;
-				minToFire = 0;
-			}
-			else if (playerNumber == Player.Player2 && (Input.GetKey(KeyCode.RightControl) || (Globals.Instance.autoAttractor && Input.GetKey(KeyCode.Return))))
-			{
-				lookAt = transform.forward;
-				minToFire = 0;
-			}
-		}
-		
-
-		if(lookAt.sqrMagnitude > Mathf.Pow(minToFire, 2f))
-		{
-			lookAt.Normalize();
-
-			if(fireFluffReady)
-			{
-				Vector3 throwDirection = new Vector3(lookAt.x, lookAt.y, 0);
-				Vector3 velocityBoost = Vector3.zero;
-
-				if (Vector3.Dot(character.mover.velocity, throwDirection) > 0)
-				{
-					velocityBoost += character.mover.velocity;
-				}
-				character.fluffThrow.Throw(throwDirection, velocityBoost);
-				fireFluffReady = false;
-			}
-		}
-		else
-		{
-			fireFluffReady = true;
-		}
-	}
-
 	private void OnCollisionEnter(Collision col)
 	{
 		if (col.collider.gameObject.tag == "Character")
@@ -546,7 +347,7 @@ public class PlayerInput : MonoBehaviour {
 		}*/
 	}
 
-    private void WaitForInput(Player playerNumber)
+  /*  private void WaitForInput(Player playerNumber)
     {
         if(playerNumber == Player.Player1)
         {
@@ -582,9 +383,9 @@ public class PlayerInput : MonoBehaviour {
                 }
             }
         }
-    }
+    }*/
 
-	private void CheckInputMethod()
+	/*private void CheckInputMethod()
 	{
 
 		if (InputManager.Devices.Count > 0)
@@ -606,9 +407,22 @@ public class PlayerInput : MonoBehaviour {
 			Time.timeScale = 1;
 			Globals.isPaused = false;
 		}
-	}
+	}*/
 
-	
+    /*private void ResetDeviceNumber()
+    {
+        Globals.Instance.player2Device = -2;
+        if (InputManager.controllerCount < 2)
+        {
+            Globals.Instance.player2Device = -1;
+            Globals.Instance.player2ControlScheme = Globals.ControlScheme.KeyboardSharedRight;
+            Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.Keyboard;
+
+            if (Globals.Instance.player1ControlScheme == Globals.ControlScheme.KeyboardSolo)
+                Globals.Instance.player1ControlScheme = Globals.ControlScheme.KeyboardSharedLeft;
+        }
+    }*/
+
 
    
 

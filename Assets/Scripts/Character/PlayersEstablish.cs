@@ -66,7 +66,7 @@ public class PlayersEstablish : MonoBehaviour {
 				{
 					Destroy(Globals.Instance.player1.gameObject);
 					Globals.Instance.player1 = player1;
-					player1.canvasPaused = Globals.Instance.canvasPaused;
+					//player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
 
@@ -96,7 +96,7 @@ public class PlayersEstablish : MonoBehaviour {
 				{
 					Destroy(Globals.Instance.player2.gameObject);
 					Globals.Instance.player2 = player2;
-					player2.canvasPaused = Globals.Instance.canvasPaused;
+					//player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
 
