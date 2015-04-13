@@ -72,7 +72,7 @@ public class OrbWaitPad : WaitPad {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.name == "Blossom")
+		if(collide.name == "Blossom(Clone)")
 		{
 			for(int i = 0; i < transform.parent.childCount; i++)
 			{
@@ -88,6 +88,7 @@ public class OrbWaitPad : WaitPad {
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
+					Destroy(tempParticle.gameObject, 2.0f);
 					activationSpheres[i] = null;
 					//activatedParticle.Play();
 					if(optionalGate != null)
