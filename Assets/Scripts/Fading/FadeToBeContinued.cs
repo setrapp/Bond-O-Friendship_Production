@@ -11,6 +11,10 @@ public class FadeToBeContinued : MonoBehaviour {
 	public string endingLoadScene = "Menu";
 	public bool destroyOnLoad = true;
 
+	public GameObject messagePrefab;
+	public string menuSceneName = "Menu";
+	public string targetSceneOverride = null;
+
 	void Update()
 	{
 		if (fade != null)
@@ -61,7 +65,28 @@ public class FadeToBeContinued : MonoBehaviour {
 	private IEnumerator FadeIn()
 	{
 		yield return new WaitForSeconds(waitBeforeFade / 2);
-		Application.LoadLevel(endingLoadScene);
+		//Debug.Log(endingLoadScene);
+		//Application.LoadLevel(endingLoadScene);
+
+		/*TODO make this work without going back to menu*/
+		GameObject levelLoadObject = (GameObject)Instantiate(messagePrefab);
+		levelLoadObject.name = "Level Load Message Insant";
+		TranslevelMessage levelLoadMessage = levelLoadObject.GetComponent<TranslevelMessage>();
+		if (levelLoadMessage != null)
+		{
+			levelLoadMessage.messageName = "LevelLoadInstant";
+			if (targetSceneOverride == null || targetSceneOverride == "")
+			{
+				levelLoadMessage.message = Application.loadedLevelName;
+			}
+			else
+			{
+				levelLoadMessage.message = targetSceneOverride;
+			}
+		}
+		Application.LoadLevel(menuSceneName);
+
+
 		if (destroyOnLoad)
 		{
 			Destroy(gameObject);

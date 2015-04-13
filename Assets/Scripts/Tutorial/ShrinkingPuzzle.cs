@@ -52,7 +52,7 @@ public class ShrinkingPuzzle : MonoBehaviour {
 		if(transform.childCount == 0 && plantParticle == null)
 		{
 			plantParticle = (GameObject)Instantiate(particlePrefab);
-			plantParticle.transform.position = transform.position;
+			plantParticle.transform.position = transform.position + new Vector3(0, 0, -20.0f);
 		}
 
 	}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class OrbWaitPad : WaitPad {
@@ -17,7 +17,7 @@ public class OrbWaitPad : WaitPad {
 
 	override protected void Start () {
 		red = 0.1f;
-		turnTime = 0.3f;
+		waitRate = 0.3f;
 		activationSpheres = new GameObject[transform.parent.childCount];
 		for(int i = 0; i < transform.parent.childCount; i++)
 		{
@@ -44,7 +44,7 @@ public class OrbWaitPad : WaitPad {
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
-			red += Time.deltaTime*turnTime;
+			red += Time.deltaTime*waitRate;
 		}
 		if(pOonPad == false || pTonPad == false)
 		{
@@ -72,7 +72,7 @@ public class OrbWaitPad : WaitPad {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.name == "Blossom")
+		if(collide.name == "Blossom(Clone)")
 		{
 			for(int i = 0; i < transform.parent.childCount; i++)
 			{
@@ -88,6 +88,7 @@ public class OrbWaitPad : WaitPad {
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
+					Destroy(tempParticle.gameObject, 2.0f);
 					activationSpheres[i] = null;
 					//activatedParticle.Play();
 					if(optionalGate != null)

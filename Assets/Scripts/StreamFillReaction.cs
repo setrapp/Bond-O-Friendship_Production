@@ -10,14 +10,17 @@ public class StreamFillReaction : StreamReaction {
 	public Color filledTint = Color.white;
 	private List<Color> baseColors;
 
-	void Start()
+	void Awake()
 	{
 		baseColors = new List<Color>();
 		for (int i = 0; i < fillTargetRenderers.Count; i++)
 		{
 			baseColors.Add(fillTargetRenderers[i].material.color);
 		}
-			
+	}
+
+	void Start()
+	{
 		ApplyTint();
 	}
 
