@@ -147,7 +147,7 @@ public class InputFill : MonoBehaviour {
         GetCurrentPlayerControls();
         SetControlsToUse();
 
-        Debug.Log(player1ControlsToUse.inputNameSelected);
+       // Debug.Log(player1ControlsToUse.inputNameSelected);
         Player1InputFill(player1ControlsToUse, player2ControlsToUse);
 
 
