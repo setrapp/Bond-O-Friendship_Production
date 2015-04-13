@@ -86,11 +86,12 @@ public class Globals : MonoBehaviour {
 		{
 			Screen.showCursor = false;
 		}
+        Debug.Log(leftControllerIndex);
 	}
 
 	void Update()
 	{
-
+        
         leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
         rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
         ResetDeviceIndex();
@@ -189,11 +190,11 @@ public class Globals : MonoBehaviour {
                     return -2;
             }
         }
-        if(deviceIndex == -2)
+        /*if(deviceIndex == -2)
         {
             if (InputManager.controllerCount < 2)
                 return -3;
-        }
+        }*/
         return deviceIndex;
     }
 
