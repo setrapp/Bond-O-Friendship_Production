@@ -40,6 +40,12 @@ public class MenuControl : MonoBehaviour {
                 startScene = message.message;
                 Destroy(message.gameObject);
             }
+			if (message != null && message.messageName == "LevelLoadInstant")
+			{
+				startScene = message.message;
+				Destroy(message.gameObject);
+				MainMenuLoadLevel();
+			}
         }
 
         if(deviceCount > 0)
