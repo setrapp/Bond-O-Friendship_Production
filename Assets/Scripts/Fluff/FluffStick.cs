@@ -1,52 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FluffStick : MonoBehaviour {
-	public Rigidbody pullableBody;
-	public bool noKinematicOnPull;
-	public bool allowSway = true;
-	public float bodyMassFactor = 1;
-	public float pullMass = -1;
-	public float maxPullForce = 0;
-	private float currentPullForce = 0;
+	public FluffStickRoot root;
+	public Fluff stuckFluff;
+	public Collider stickingCollider;
+	public Vector3 stickOffset = Vector3.zero;
+	public Vector3 stickDirection = Vector3.forward;
 
-	void Start()
+	public void Awake()
 	{
-		if (pullableBody == null)
+		if (stickingCollider == null)
 		{
-			pullableBody = GetComponent<Rigidbody>();
+			stickingCollider = GetComponent<Collider>();
 		}
-		if (pullMass < 0 && pullableBody != null)
-		{
-			pullMass = pullableBody.mass * bodyMassFactor;
-		}
-	}
-
-	void Update()
-	{
-		currentPullForce = 0;
 	}
 
 	public void AddPullForce(Vector3 pullForce, Vector3 position)
 	{
-		if (pullableBody.isKinematic && noKinematicOnPull)
+		if (root != null && !root.fluffsDetachable)
 		{
-			pullableBody.velocity = Vector3.zero;
-			pullableBody.isKinematic = false;
+			root.AddPullForce(pullForce, position);
 		}
+	}
 
-		if ((currentPullForce < maxPullForce || maxPullForce < 0) && pullableBody != null)
-		{
-			float pullForceMag = pullForce.magnitude;
-			if (currentPullForce + pullForceMag > maxPullForce && maxPullForce >= 0)
-			{
-				pullForce = (pullForce / pullForceMag) * (maxPullForce - currentPullForce);
-				pullForceMag += (maxPullForce - currentPullForce);
-			}
-
-			currentPullForce += pullForceMag;
-			pullableBody.AddForceAtPosition(pullForce / pullMass, position, ForceMode.VelocityChange);
-		}
-		
+	public bool CanStick()
+	{
+		return (stuckFluff == null || (root != null && !root.trackStuckFluffs));
 	}
 }

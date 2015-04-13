@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(SimpleMover))]
 public class Fluff : MonoBehaviour {
 	[HideInInspector]
-	private SimpleMover mover;
+	public SimpleMover mover;
 	public BondAttachable creator;
 	public float rotationSpeed = 50.0f;
 	public TrailRenderer trail;
@@ -32,6 +32,9 @@ public class Fluff : MonoBehaviour {
 	public Animation popAnimation;
 	public Vector3 pullForce;
 	public float pullDistance;
+	public GameObject soleAttractor = null;
+	public Vector3 minFluffScale = Vector3.zero;
+	public Vector3 maxFluffScale = new Vector3(1, 1, 1);
 
 	void Awake()
 	{
@@ -46,9 +49,9 @@ public class Fluff : MonoBehaviour {
 		}
 		mover = GetComponent<SimpleMover>();
 
-		if (attachee != null && attachee.gameObject != null)
+		if (attachee != null && attachee.attachInfo != null)
 		{
-			Attach(attachee.gameObject, transform.position, transform.up, true);
+			Attach(attachee.attachInfo, true);
 		}
 		else
 		{
@@ -122,19 +125,15 @@ public class Fluff : MonoBehaviour {
 		{
 			if (!mover.Moving)
 			{
-				RaycastHit attachInfo;
-				if (Physics.Raycast(transform.position, Vector3.forward, out attachInfo, Mathf.Infinity))
-				{
-					Attach(attachInfo.collider.gameObject, transform.position, -Vector3.forward);
-				}
-				else
-				{
-					PopFluff();
-				}
+				PopFluff();
 				trail.gameObject.SetActive(false);
 			}
 			else
 			{
+				if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.stuckFluff == this)
+				{
+					attachee.attachInfo.stuckFluff = null;
+				}
 				attachee = null;
 
 				// If fluff is pointing more in the z direction than the other directions, rotate into the correct plane.
@@ -173,7 +172,7 @@ public class Fluff : MonoBehaviour {
 					{
 						attacheeStick = attachee.gameObject.GetComponent<FluffStick>();
 					}
-					if (attacheeStick == null || attacheeStick.allowSway)
+					if (attacheeStick == null || attacheeStick.root == null || attacheeStick.root.allowSway)
 					{
 						ToggleSwayAnimation(true);
 					}
@@ -198,7 +197,7 @@ public class Fluff : MonoBehaviour {
 		if (blocked)
 		{
 			moving = true;
-			Attach(attemptPassHit.collider.gameObject, attemptPassHit.point, attemptPassHit.normal, true);
+			Attach(attemptPassHit.collider.GetComponent<FluffStick>()/*.gameObject, attemptPassHit.point, attemptPassHit.normal*/, true);
 			return;
 		}
 
@@ -224,7 +223,7 @@ public class Fluff : MonoBehaviour {
 		Vector3 toPuller = (puller.transform.position + pullOffset) - transform.position;
 		float toPullerDist = toPuller.magnitude;
 		toPuller /= toPullerDist;
-		bool blocked = TestForBlocking(toPuller, toPullerDist, out attemptPullHit, false, puller);
+		bool blocked = false;// TestForBlocking(toPuller, toPullerDist, out attemptPullHit, false, puller);
 		if (blocked)
 		{
 			return;
@@ -254,7 +253,7 @@ public class Fluff : MonoBehaviour {
 
 	private void ApplyPullForce()
 	{
-		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.pullableBody != null)
+		if (attachee != null && attachee.attachInfo != null && attachee.attachInfo.root != null && !attachee.attachInfo.root.fluffsDetachable)
 		{
 			attachee.attachInfo.AddPullForce(pullForce, transform.position);
 		}
@@ -268,7 +267,7 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	public void Attach(GameObject attacheeObject, Vector3 position, Vector3 standDirection, bool sway = true)
+	public void Attach(FluffStick attacheeStick, bool sway = true, bool sprouting = false)
 	{
 		if (Globals.Instance == null)
 		{
@@ -276,10 +275,12 @@ public class Fluff : MonoBehaviour {
 		}
 
 		// If no potential attachee is given, disregard.
-		if (attacheeObject == null)
+		if (attacheeStick == null)
 		{
 			return;
 		}
+
+		GameObject attacheeObject = attacheeStick.gameObject;
 
 		// If already attached to a possessive attachee, do not attempt to attach.
 		if (attachee != null && attachee.possessive)
@@ -287,7 +288,8 @@ public class Fluff : MonoBehaviour {
 			return;
 		}
 
-		FluffStick attacheeStick = attacheeObject.GetComponent<FluffStick>();
+		Vector3 position = attacheeStick.transform.TransformPoint(attacheeStick.stickOffset);
+		Vector3 standDirection = attacheeStick.transform.TransformDirection(attacheeStick.stickDirection);
 
 		// Position and orient.
 		transform.position = position;
@@ -296,7 +298,11 @@ public class Fluff : MonoBehaviour {
 		// Actaully attach to target and record relationship to attachee.
 		Vector3 attachPoint = attacheeObject.transform.InverseTransformDirection(position - attacheeObject.transform.position);
 		attachee = new Attachee(attacheeObject, attacheeStick, attachPoint, false, false);
-		baseDirection = attacheeObject.transform.InverseTransformDirection(standDirection);
+		if (attacheeStick.root == null || attacheeStick.root.trackStuckFluffs)
+		{
+			attacheeStick.stuckFluff = this;
+		}
+		baseDirection = attacheeStick.stickDirection;
 		ignoreCollider = attacheeObject;
 		if (Globals.Instance.fluffsThrowable)
 		{
@@ -308,14 +314,12 @@ public class Fluff : MonoBehaviour {
 		attacheeObject.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 
 		// If fluffs are not throwable and the attachee is not controlling, embed the fluff to sprout out.
-		bool sprouting = false;
-		if (!Globals.Instance.fluffsThrowable && attachee != null && !attachee.controlling)
+		if (sprouting && attachee != null && !attachee.controlling)
 		{
 			geometry.transform.position -= standDirection.normalized * Globals.Instance.fluffLeaveEmbed;
-			sprouting = true;
 		}
 		// If desired, start swaying. 
-		if ((attacheeStick == null || attacheeStick.allowSway) && !sprouting)
+		if ((attacheeStick.root == null || attacheeStick.root.allowSway) && !sprouting)
 		{
 			ToggleSwayAnimation(sway);
 		}
@@ -363,13 +367,37 @@ public class Fluff : MonoBehaviour {
 		return blocked;
 	}
 
-	// Accessible function that does not require coroutine call.
-	public void PopFluff(float secondsDelay = 0)
+	public void Inflate(Vector3 inflation)
 	{
-		StartCoroutine(PopAndDestroy(secondsDelay));
+		transform.localScale += inflation;
+		if (transform.localScale.x >= maxFluffScale.x || transform.localScale.y >= maxFluffScale.y || transform.localScale.z >= maxFluffScale.z)
+		{
+			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x, maxFluffScale.x), Mathf.Min(transform.localScale.y, maxFluffScale.y), Mathf.Min(transform.localScale.z, maxFluffScale.z));
+		}
 	}
 
-	private IEnumerator PopAndDestroy(float secondsDelay = 0)
+	public void Deflate(Vector3 deflation)
+	{
+		transform.localScale -= deflation;
+		if (transform.localScale.x <= minFluffScale.x || transform.localScale.y <= minFluffScale.y || transform.localScale.z <= minFluffScale.z)
+		{
+			transform.localScale = new Vector3(Mathf.Max(transform.localScale.x, minFluffScale.x), Mathf.Max(transform.localScale.y, minFluffScale.y), Mathf.Max(transform.localScale.z, minFluffScale.z));
+			PopFluff();
+		}
+	}
+
+	// Accessible function that does not require coroutine call.
+	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false)
+	{
+		if (slowMultiplier >= 0)
+		{
+			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));
+		}
+
+		StartCoroutine(PopAndDestroy(secondsDelay, fakeDestroy));
+	}
+
+	private IEnumerator PopAndDestroy(float secondsDelay = 0, bool fakeDestroy = false)
 	{
 		if (secondsDelay > 0)
 		{
@@ -381,13 +409,60 @@ public class Fluff : MonoBehaviour {
 			if (!popAnimation.isPlaying)
 			{
 				popAnimation.Play();
-				Destroy(gameObject, popAnimation.clip.length);
+				if (fakeDestroy)
+				{
+					StartCoroutine(HideOnPop(bulb.transform.localScale, popAnimation.clip.length));
+				}
+				else
+				{
+					Destroy(gameObject, popAnimation.clip.length);
+				}
 			}
 		}
 		else
 		{
-			Destroy(gameObject);
+			if (fakeDestroy)
+			{
+				StartCoroutine(HideOnPop(bulb.transform.localScale));
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 		}
+	}
+
+	private IEnumerator HideOnPop (Vector3 bulbScale, float secondsDelay = 0)
+	{
+		yield return new WaitForSeconds(secondsDelay);
+		bulb.transform.localScale = bulbScale;
+		gameObject.SetActive(false);
+	}
+
+	private IEnumerator SlowBeforePop(float endSpeedMultiplier, float timeUntilPop)
+	{
+		float startMultiplier = mover.externalSpeedMultiplier;
+		float normalCutSpeed = mover.cutSpeedThreshold;
+		Vector3 normalVelocity = mover.velocity;
+		float slowingTime = 0;
+		float slowingProgress = 0;
+
+		mover.cutSpeedThreshold = 0;
+
+		while(slowingProgress < 1)
+		{
+			yield return null;
+			slowingTime += Time.deltaTime;
+			if (timeUntilPop <= 0) { slowingProgress = 1; }
+			else { slowingProgress = slowingTime / timeUntilPop; }
+			slowingProgress = Mathf.Min(slowingProgress, 1);
+
+			mover.externalSpeedMultiplier = (startMultiplier * (1 - slowingProgress)) + (endSpeedMultiplier * slowingProgress);
+		}
+
+		mover.externalSpeedMultiplier = startMultiplier;
+		mover.velocity = normalVelocity;
+		mover.cutSpeedThreshold = normalCutSpeed;
 	}
 
 	public void StopMoving()
@@ -398,46 +473,23 @@ public class Fluff : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision)
+	void OnCollisionEnter(Collision col)
 	{
-		// Attempt to attach to collided object.
-		bool sameLayer = (collision.collider.gameObject.layer == gameObject.layer);
-		bool alreadyAttachee = (attachee != null && collision.collider.gameObject == attachee.gameObject);
-		bool shouldIgnore = collision.collider.gameObject == ignoreCollider;
-		if (!((attachee != null && attachee.possessive) || sameLayer || alreadyAttachee || shouldIgnore))
-		{
-			// Ensure the standing direction is the surface normal of the collided object.
-			Vector3 standingDirection = collision.contacts[0].normal;
-			RaycastHit[] hits = Physics.RaycastAll(collision.contacts[0].point + collision.contacts[0].normal, -collision.contacts[0].normal, Mathf.Infinity);
-			bool hitFound = false;
-			for (int i = 0; i < hits.Length && !hitFound; i++)
-			{
-				if (hits[i].collider == collision.collider)
-				{
-					standingDirection = hits[i].normal;
-					hitFound = true;
-				}
-			}
-			standingDirection.z = 0;
+		AttemptColliderAttach(col.collider);
+	}
 
-			GameObject newAttachee = collision.collider.gameObject;
-			FluffAttachDelgator fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
-			while (fluffAttachDelegator != null && fluffAttachDelegator.attachDelegatee != null && fluffAttachDelegator.attachDelegatee != newAttachee)
-			{
-				newAttachee = fluffAttachDelegator.attachDelegatee;
-				fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
-			}
-			Attach(newAttachee, collision.contacts[0].point, standingDirection);
-		}
+	void OnTriggerEnter(Collider col)
+	{
+		AttemptColliderAttach(col);
 	}
 	
-	void OnTriggerEnter(Collider other)
+	/*void OnTriggerEnter(Collider other)
 	{
 		if ((attachee == null || attachee.gameObject != other.gameObject) && (attachee == null || !attachee.possessive) && ignoreCollider != other.gameObject)
 		{
 			other.SendMessage("AttachFluff", this, SendMessageOptions.DontRequireReceiver);
 		}
-	}
+	}*/
 
 	void OnTriggerExit(Collider other)
 	{
@@ -445,6 +497,39 @@ public class Fluff : MonoBehaviour {
 		{
 			ignoreCollider = null;
 		}
+	}
+
+	private void AttemptColliderAttach(Collider col)
+	{
+		bool sameLayer = (col.gameObject.layer == gameObject.layer);
+		bool alreadyAttachee = (attachee != null && collider.gameObject == attachee.gameObject);
+		bool shouldIgnore = col.gameObject == ignoreCollider;
+		bool nonDetachable = (attachee != null && attachee.attachInfo != null && attachee.attachInfo.root != null && !attachee.attachInfo.root.fluffsDetachable);
+		if ((attachee != null && attachee.possessive) || nonDetachable || sameLayer || alreadyAttachee || shouldIgnore)
+		{
+			return;
+		}
+
+		FluffStick fluffStick = col.GetComponent<FluffStick>();
+		if (fluffStick == null || !fluffStick.CanStick())
+		{
+			return;
+		}
+		
+		if (fluffStick.root == null || fluffStick.root.trackStuckFluffs)
+		{
+			fluffStick.stuckFluff = this;
+		}
+
+		GameObject newAttachee = collider.gameObject;
+		FluffAttachDelgator fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
+		while (fluffAttachDelegator != null && fluffAttachDelegator.attachDelegatee != null && fluffAttachDelegator.attachDelegatee != newAttachee)
+		{
+			newAttachee = fluffAttachDelegator.attachDelegatee;
+			fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
+		}
+
+		Attach(fluffStick);
 	}
 
 	void OnDestroy()
@@ -455,6 +540,11 @@ public class Fluff : MonoBehaviour {
 			if (attacheeFluffContainer != null)
 			{
 				attacheeFluffContainer.fluffs.Remove(this);
+			}
+
+			if (attachee.attachInfo != null && attachee.attachInfo.stuckFluff == this)
+			{
+				attachee.attachInfo.stuckFluff = null;
 			}
 		}
 

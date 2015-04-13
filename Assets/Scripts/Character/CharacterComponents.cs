@@ -14,6 +14,7 @@ public class CharacterComponents : MonoBehaviour {
 	public TrailRenderer rightTrail;
 	public FluffHandler fluffHandler;
 	public FluffThrow fluffThrow;
+	public FluffStickRoot fluffStickRoot;
 	public FluffStick fluffStick;
 	public BondAttachable bondAttachable;
 	public SimpleMover mover;
@@ -78,6 +79,10 @@ public class CharacterComponents : MonoBehaviour {
 			if (fluffThrow == null)
 			{
 				fluffThrow = GetComponent<FluffThrow>();
+			}
+			if (fluffStickRoot == null)
+			{
+				fluffStickRoot = GetComponent<FluffStickRoot>();
 			}
 			if (fluffStick == null)
 			{

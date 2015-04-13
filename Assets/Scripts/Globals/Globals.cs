@@ -78,6 +78,8 @@ public class Globals : MonoBehaviour {
 
 	public EtherRing existingEther = null;
 
+	public bool playersBonded = false;
+
 	void Awake()
 	{
 		if (!Application.isEditor)
@@ -105,6 +107,26 @@ public class Globals : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Escape))
 		{
 			Application.Quit();
+		}
+	}
+	
+	public void BondFormed(Bond bond)
+	{
+		// Track if a bond between the players has been formed.
+		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
+		    && bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		{
+			playersBonded = true;
+		}
+	}
+
+	public void BondBroken(Bond bond)
+	{
+		// Track if a bond between the players has been broken.
+		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
+		    && bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		{
+			playersBonded = false;
 		}
 	}
 
