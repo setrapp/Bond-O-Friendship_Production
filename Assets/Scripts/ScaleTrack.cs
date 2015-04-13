@@ -8,15 +8,8 @@ public class ScaleTrack : MonoBehaviour {
 
 	void Update()
 	{
-		float portionComplete = targetPad.currentRotation / targetPad.goalRotation;
-		if (targetPad.flipDirection)
-		{
-			transform.localScale = (maxScale * (1 - portionComplete)) + (minScale * portionComplete);
-		}
-		else
-		{
-			transform.localScale = (minScale * (1 - portionComplete)) + (maxScale * portionComplete);
-		}
+		float portionComplete = (targetPad.rotationProgress / 2) + 0.5f;
+		transform.localScale = (maxScale * (1 - portionComplete)) + (minScale * portionComplete);
 	}
 
 }

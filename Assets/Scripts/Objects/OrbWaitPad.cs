@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class OrbWaitPad : WaitPad {
@@ -17,7 +17,7 @@ public class OrbWaitPad : WaitPad {
 
 	override protected void Start () {
 		red = 0.1f;
-		turnTime = 0.3f;
+		waitRate = 0.3f;
 		activationSpheres = new GameObject[transform.parent.childCount];
 		for(int i = 0; i < transform.parent.childCount; i++)
 		{
@@ -44,7 +44,7 @@ public class OrbWaitPad : WaitPad {
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
-			red += Time.deltaTime*turnTime;
+			red += Time.deltaTime*waitRate;
 		}
 		if(pOonPad == false || pTonPad == false)
 		{
