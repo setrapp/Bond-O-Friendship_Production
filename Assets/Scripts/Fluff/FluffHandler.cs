@@ -56,7 +56,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			if (naturalFluffCount <= 0)
 			{
-				character.fillScale = 0;
+				//character.fillScale = 0;
 			}
 			else
 			{
@@ -290,7 +290,7 @@ public class FluffHandler : MonoBehaviour {
 
 	public void AttachFluff(Fluff fluff)
 	{
-		if (fluff != null && (character.attractor.attracting || fluff.moving) && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
+		if (fluff != null && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
 		{
 			character.bondAttachable.AttemptBond(fluff.creator, fluff.transform.position);
 

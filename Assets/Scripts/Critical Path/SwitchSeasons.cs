@@ -6,6 +6,7 @@ public class SwitchSeasons : MonoBehaviour {
 	public ParticleSystem winterParticle;
 	public ParticleSystem fallParticle;
 	public ParticleSystem summerParticle;
+	public float seasonDuration;
 
 	private ParticleSystem winter;
 	private ParticleSystem fall;
@@ -26,19 +27,19 @@ public class SwitchSeasons : MonoBehaviour {
 		{
 			winter = (ParticleSystem)Instantiate(winterParticle);
 			winter.transform.position = transform.position + new Vector3(0, 0, -15.0f);
-			Destroy(winter.gameObject, 5.0f);
+			Destroy(winter.gameObject, seasonDuration);
 		}
 		if(name == "Fall Switch" && fall == null)
 		{
 			fall = (ParticleSystem)Instantiate(fallParticle);
 			fall.transform.position = transform.position + new Vector3(0, 0, -15.0f);
-			Destroy(fall.gameObject, 5.0f);
+			Destroy(fall.gameObject, seasonDuration);
 		}
 		if(name == "Summer Switch" && summer == null)
 		{
 			summer = (ParticleSystem)Instantiate(summerParticle);
 			summer.transform.position = transform.position + new Vector3(0, 0, -15.0f);
-			Destroy(summer.gameObject, 5.0f);
+			Destroy(summer.gameObject, seasonDuration);
 		}
 
 	}

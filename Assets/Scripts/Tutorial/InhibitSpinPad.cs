@@ -23,12 +23,6 @@ public class InhibitSpinPad : MonoBehaviour {
 		{
 			spinPad.spinInhibitors++;
 		}
-		if (!backSpinIgnoreCollisions.Contains(col.collider))
-		{
-			spinPad.backSpinInhibitors++;
-		}
-		//if(col.transform.name == "Door Key Collider")
-		//	collided = true;
 	}
 	
 	void OnCollisionExit(Collision col)
@@ -41,10 +35,6 @@ public class InhibitSpinPad : MonoBehaviour {
 		if (!spinIgnoreCollisions.Contains(col.collider))
 		{
 			spinPad.spinInhibitors--;
-		}
-		if (!backSpinIgnoreCollisions.Contains(col.collider))
-		{
-			spinPad.backSpinInhibitors--;
 		}
 	}
 }
