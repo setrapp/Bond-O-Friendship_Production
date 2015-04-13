@@ -97,7 +97,6 @@ public class OrbWaitPad : WaitPad {
 				}
 			}
 			triggersLit++;
-			Debug.Log(triggersLit + " "+  maxTriggers);
 			if(triggersLit >= maxTriggers)
 				fullyLit = true;
 		}

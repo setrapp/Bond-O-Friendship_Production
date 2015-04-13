@@ -5,16 +5,18 @@ public class SpawnBud : MonoBehaviour {
 
 	public ParticleSystem part;
 	public GameObject bud;
+	public bool spawned;
+	public Color parentColor;
 
 	private float fadeTimer = 1.0f;
 	private bool fading;
-	private bool spawned;
 	private Color playerColor;
 	private GameObject newBud;
+	private bool scaling;
 
 	// Use this for initialization
 	void Start () {
-
+		parentColor = GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
@@ -22,11 +24,19 @@ public class SpawnBud : MonoBehaviour {
 		if(fading == true)
 		{
 			fadeTimer -= Time.deltaTime;
-			newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2, 2.0f - fadeTimer*2, 2.0f - fadeTimer*2);
+			if(!scaling)
+				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2, 2.0f - fadeTimer*2, 2.0f - fadeTimer*2);
 			GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
 
 			if(fadeTimer <= 0)
-				Destroy(gameObject);
+			{
+				fading = false;
+				scaling = false;
+				newBud.transform.parent = transform;
+				fadeTimer = 1.0f;
+			}
+			//	Destroy(gameObject);
+
 		}
 	}
 
