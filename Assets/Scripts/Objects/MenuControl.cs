@@ -15,11 +15,6 @@ public class MenuControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if(InputManager.Devices.Count > 0)
-		{
-            Globals.usingController = false;
-			Globals.numberOfControllers = InputManager.Devices.Count;
-		}
     }
 
 
@@ -47,22 +42,24 @@ public class MenuControl : MonoBehaviour {
             device = InputManager.ActiveDevice;
             if (device.AnyButton)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
             {
-                Globals.Instance.player1Device = InputManager.Devices.IndexOf(device);
-                Globals.Instance.player2Device = deviceCount == 1 ? InputManager.Devices.IndexOf(device) : -2;
+                Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
+                Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
+                Globals.Instance.rightContollerIndex = -2;
+                Globals.Instance.rightControllerPreviousIndex = -2;
 
                 if(deviceCount == 1)
                 {
-                    Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSharedLeft;
-                    Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSharedRight;
-                    Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.LeftController;
-                    Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+                    Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                    Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
                 }
                 else
                 {
-                    Globals.Instance.player1ControlScheme = Globals.ControlScheme.ControllerSolo;
-                    Globals.Instance.player2ControlScheme = Globals.ControlScheme.ControllerSolo;
-                    Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.LeftController;
-                    Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.RightController;
+                    Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.Solo;
+                    Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.Solo;
+                    Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
                 }
 
                 //Debug.Log(Globals.Instance.player1ControlScheme);
@@ -73,13 +70,26 @@ public class MenuControl : MonoBehaviour {
         }
         if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
         {
-            Globals.Instance.player1Device = -1;
-            Globals.Instance.player2Device = -1;
+            if (deviceCount == 0)
+            {
+                Globals.Instance.leftControllerIndex = -3;
+                Globals.Instance.rightContollerIndex = -3;
+            }
+            else if(deviceCount == 1)
+            {
+                Globals.Instance.leftControllerIndex = -2;
+                Globals.Instance.rightContollerIndex = -3;
+            }
+            else
+            {
+                Globals.Instance.leftControllerIndex = -2;
+                Globals.Instance.rightContollerIndex = -2;
+            }
 
-            Globals.Instance.player1ControlScheme = Globals.ControlScheme.KeyboardSharedLeft;
-            Globals.Instance.player2ControlScheme = Globals.ControlScheme.KeyboardSharedRight;
-            Globals.Instance.player1InputNameSelected = Globals.InputNameSelected.Keyboard;
-            Globals.Instance.player2InputNameSelected = Globals.InputNameSelected.Keyboard;
+            Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+            Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+            Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
+            Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
             MainMenuLoadLevel();
            // Globals.usingController = false;
         }
