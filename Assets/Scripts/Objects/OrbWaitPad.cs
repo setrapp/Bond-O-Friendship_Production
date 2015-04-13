@@ -6,7 +6,7 @@ public class OrbWaitPad : WaitPad {
 	public Material activatedSphereColor;
 	private int triggersLit = 0;
 	public int maxTriggers;
-	private bool fullyLit;
+	public bool fullyLit;
 	public GameObject[] activationSpheres;
 	public ParticleSystem activatedParticle;
 	public GameObject optionalGate;
@@ -97,7 +97,8 @@ public class OrbWaitPad : WaitPad {
 				}
 			}
 			triggersLit++;
-			if(triggersLit == maxTriggers)
+			Debug.Log(triggersLit + " "+  maxTriggers);
+			if(triggersLit >= maxTriggers)
 				fullyLit = true;
 		}
 		if(collide.gameObject.name == "Player 1")
