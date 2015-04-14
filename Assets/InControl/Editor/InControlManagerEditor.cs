@@ -45,6 +45,8 @@ namespace InControl
 			GUILayout.Space( headerRect.height );
 			GUI.DrawTexture( headerRect, headerTexture );
 
+			GUILayout.Box( "Version " + InputManager.Version.ToString(), GUILayout.ExpandWidth( true ) );
+
 			logDebugInfo.boolValue = EditorGUILayout.ToggleLeft( "Log Debug Info", logDebugInfo.boolValue );
 			invertYAxis.boolValue = EditorGUILayout.ToggleLeft( "Invert Y Axis", invertYAxis.boolValue );
 			enableXInput.boolValue = EditorGUILayout.ToggleLeft( "Enable XInput (Windows)", enableXInput.boolValue );

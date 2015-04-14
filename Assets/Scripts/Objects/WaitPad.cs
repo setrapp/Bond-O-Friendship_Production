@@ -7,34 +7,40 @@ public class WaitPad : MonoBehaviour {
 	public bool pTonPad = false;
 	protected Color mycolor;
 	protected float red;
-	protected float turnTime;
+	public float waitRate = 1;
+	public bool neverActivate = false;
 	public bool activated = false;
+	public float portionComplete;
+	private Renderer renderer;
 
 	// Use this for initialization
 	virtual protected void Start()
 	{
 		red = 0.1f;
-		turnTime = 0.3f;
+		//turnTime = 0.3f;
+		renderer = GetComponent<Renderer> ();
 	}
 	
 	// Update is called once per frame
 	virtual protected void Update()
 	{
-		mycolor = new Color(red,0.3f,0.5f);
-		GetComponent<Renderer>().material.color = mycolor;
+		mycolor = new Color(red,0.3f,0.5f, renderer.material.color.a);
+		renderer.material.color = mycolor;
 
-	if(pOonPad == true && pTonPad == true)
+		if(pOonPad == true && pTonPad == true)
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
-			red += Time.deltaTime*turnTime;
+				red += Time.deltaTime*waitRate;
+			portionComplete += Time.deltaTime*waitRate;
 		}
 		if(pOonPad == false || pTonPad == false)
 		{
 			if(red > 0.1f)
-			red -= Time.deltaTime;
+				red -= Time.deltaTime*waitRate;
+			portionComplete -= Time.deltaTime*waitRate;
 		}
-		if(red >= 1)
+		if(red >= 1 && !neverActivate)
 		{
 			activated = true;
 		}
@@ -42,8 +48,10 @@ public class WaitPad : MonoBehaviour {
 		{
 			//print ("activated");
 		}
+
+		portionComplete = Mathf.Clamp01(portionComplete);
 	}
-	void OnTriggerEnter(Collider collide)
+	virtual protected void OnTriggerEnter(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1")
 		{
@@ -56,7 +64,7 @@ public class WaitPad : MonoBehaviour {
 			//print ("2");
 		}
 	}
-	void OnTriggerExit(Collider collide)
+	virtual protected void OnTriggerExit(Collider collide)
 	{
 		if(collide.gameObject.name == "Player 1")
 		{

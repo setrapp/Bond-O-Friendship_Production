@@ -37,7 +37,7 @@ public class FloatMoving : MonoBehaviour {
 		startingStats.sideTrailTime = character.leftTrail.time;
 		startingStats.midTrailTime = character.midTrail.time;
 		startingStats.attractRange = character.attractor.attractRange;
-		startingStats.maxAbsorbReact = character.fluffStick.maxPullForce;
+		startingStats.maxAbsorbReact = character.fluffStickRoot.maxPullForce;
 	}
 
 	void Update()
@@ -67,7 +67,7 @@ public class FloatMoving : MonoBehaviour {
 				}
 				character.mover.bodylessDampening = startingStats.bodylessDampening;
 				character.attractor.attractRange = startingStats.attractRange;
-				character.fluffStick.maxPullForce = startingStats.maxAbsorbReact;
+				character.fluffStickRoot.maxPullForce = startingStats.maxAbsorbReact;
 				wasFloating = false;
 			}
 		}
@@ -77,10 +77,10 @@ public class FloatMoving : MonoBehaviour {
 			ApplyFloatStats();
 
 			// Ensure that players have fluffs while floating.
-			if (character.fluffHandler.naturalFluffCount <= 0)
+			/*if (character.fluffHandler.naturalFluffCount <= 0)
 			{
 				character.fluffHandler.naturalFluffCount = 1;
-			}
+			}*/
 		}
 	}
 
@@ -98,7 +98,7 @@ public class FloatMoving : MonoBehaviour {
 			character.leftTrail.time = character.rightTrail.time = loneFloatStats.sideTrailTime;
 			character.midTrail.time = loneFloatStats.midTrailTime;
 			character.attractor.attractRange = loneFloatStats.attractRange;
-			character.fluffStick.maxPullForce = loneFloatStats.maxAbsorbReact;
+			character.fluffStickRoot.maxPullForce = loneFloatStats.maxAbsorbReact;
 
 			int bondBonusCount = Mathf.Min(character.bondAttachable.bonds.Count, maxBondBonuses);
 			if (bondBonusCount > 0)
@@ -113,7 +113,7 @@ public class FloatMoving : MonoBehaviour {
 				character.leftTrail.time = character.rightTrail.time += perBondFloatBonus.sideTrailTime * bondBonusCount;
 				character.midTrail.time += perBondFloatBonus.midTrailTime * bondBonusCount;
 				character.attractor.attractRange = perBondFloatBonus.attractRange * bondBonusCount;
-				character.fluffStick.maxPullForce = perBondFloatBonus.maxAbsorbReact * bondBonusCount;
+				character.fluffStickRoot.maxPullForce = perBondFloatBonus.maxAbsorbReact * bondBonusCount;
 			}
 		}
 	}

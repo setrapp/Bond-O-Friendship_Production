@@ -71,9 +71,9 @@ public class Attractor : MonoBehaviour {
 		// If the attraction feedback is not already being presented, present it.
 		if (attractParticles == null)
 		{
-			attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
+			/*attractParticles = (ParticleSystem)Instantiate(attractionPrefab);
 			attractParticles.transform.position = transform.position + new Vector3(0, 0, 0.2f);
-			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;
+			attractParticles.startColor = GetComponent<BondAttachable>().attachmentColor;*/
 		}
 
 		// If desired, attempt to pull in fluffs.
@@ -111,10 +111,14 @@ public class Attractor : MonoBehaviour {
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
 				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
-				if (!fluffAttachedToSelf && !ignoringAttract)
+				Color pullColor = character.colors.attachmentColor;
+				if (!fluffAttachedToSelf && !ignoringAttract && liveFluff.gameObject.activeSelf)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;
 					Vector3 attractOffset = Vector3.zero;
+
+					bool foundRequiredAttractor = liveFluff.soleAttractor == null || liveFluff.soleAttractor == gameObject;
+
 					// If the fluff is too far to be absorbed directly and absorption through the bond is enabled, attempt bond absorption.
 					if (fluffSqrDist > Mathf.Pow(character.attractor.attractRange, 2) && bondAttract)
 					{
@@ -130,14 +134,15 @@ public class Attractor : MonoBehaviour {
 								{
 									nearSqrDist = sqrDist;
 									attractOffset = (nearBond - transform.position) * bondOffsetFactor;
+									pullColor = new Color(1, 1, 1, 0);
 								}
 							}
 						}
 						fluffSqrDist = nearSqrDist;
 					}
-					if (fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
+					if (foundRequiredAttractor && fluffSqrDist <= Mathf.Pow(character.attractor.attractRange, 2))
 					{
-						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime);
+						liveFluff.Pull(gameObject, attractOffset, attractSpeed * Time.deltaTime, pullColor);
 						pullingFluff = true;
 					}
 				}

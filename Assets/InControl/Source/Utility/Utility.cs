@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.IO;
+using UnityEngine;
 
 
 namespace InControl
@@ -31,7 +32,7 @@ namespace InControl
 			new Vector2( -0.7071f, +0.7071f ),
 			new Vector2( -0.5000f, +0.8660f ),
 			new Vector2( -0.2588f, +0.9659f ),
-			new Vector2( +0.0000f, +1.0000f )
+			new Vector2( +0.0000f, +1.0000f )			
 		};
 
 
@@ -40,7 +41,7 @@ namespace InControl
 			var p = (circleVertexList[0] * radius) + center;
 			var c = circleVertexList.Length;
 			for (int i = 1; i < c; i++)
-			{
+			{ 
 				Gizmos.DrawLine( p, p = (circleVertexList[i] * radius) + center );
 			}
 		}
@@ -59,7 +60,7 @@ namespace InControl
 			var p = Vector2.Scale( circleVertexList[0], r ) + center;
 			var c = circleVertexList.Length;
 			for (int i = 1; i < c; i++)
-			{
+			{ 
 				Gizmos.DrawLine( p, p = Vector2.Scale( circleVertexList[i], r ) + center );
 			}
 		}
@@ -136,17 +137,83 @@ namespace InControl
 		}
 
 
-		public static Vector2 ApplyCircularDeadZone( Vector2 axisVector, float lowerDeadZone, float upperDeadZone )
+		public static Vector2 ApplyCircularDeadZone( Vector2 v, float lowerDeadZone, float upperDeadZone )
 		{
-			var magnitude = Mathf.InverseLerp( lowerDeadZone, upperDeadZone, axisVector.magnitude );
-			return axisVector.normalized * magnitude;
+			var magnitude = Mathf.InverseLerp( lowerDeadZone, upperDeadZone, v.magnitude );
+			return v.normalized * magnitude;
 		}
 
 
-		public static Vector2 ApplyCircularDeadZone( float axisX, float axisY, float lowerDeadZone, float upperDeadZone )
+		public static Vector2 ApplyCircularDeadZone( float x, float y, float lowerDeadZone, float upperDeadZone )
 		{
-			return ApplyCircularDeadZone( new Vector2( axisX, axisY ), lowerDeadZone, upperDeadZone );
+			return ApplyCircularDeadZone( new Vector2( x, y ), lowerDeadZone, upperDeadZone );
+		}
+
+
+		//		public static Vector2 ApplyCircularDeadZone( Vector2 v, float lowerDeadZone )
+		//		{
+		//			if (Mathf.Approximately( lowerDeadZone, 0.0f ))
+		//			{
+		//				return v;
+		//			}
+		//
+		//			var scale = 1.0f / lowerDeadZone;
+		//			var magnitude = Mathf.Max( 0.0f, v.magnitude - lowerDeadZone ) * scale;
+		//			return v.normalized * magnitude;
+		//		}
+		//
+		//
+		//		public static Vector2 ApplyCircularDeadZone( float x, float y, float lowerDeadZone )
+		//		{
+		//			return ApplyCircularDeadZone( new Vector2( x, y ), lowerDeadZone );
+		//		}
+
+
+		public static float ApplySmoothing( float thisValue, float lastValue, float deltaTime, float sensitivity )
+		{
+			// 1.0f and above is instant (no smoothing).
+			if (Mathf.Approximately( sensitivity, 1.0f ))
+			{
+				return thisValue;
+			}
+
+			// Apply sensitivity (how quickly the value adapts to changes).
+			var maxDelta = deltaTime * sensitivity * 100.0f;
+
+			// Snap to zero when changing direction quickly.
+			if (Mathf.Sign( lastValue ) != Mathf.Sign( thisValue ))
+			{
+				lastValue = 0.0f;
+			}
+
+			return Mathf.MoveTowards( lastValue, thisValue, maxDelta );
+		}
+
+
+		public static bool TargetIsButton( InputControlType target )
+		{
+			return (target >= InputControlType.Action1 && target <= InputControlType.Action4) || (target >= InputControlType.Button0 && target <= InputControlType.Button19);
+		}
+
+
+		public static string ReadFromFile( string path )
+		{			
+			var streamReader = new StreamReader( path );
+			var data = streamReader.ReadToEnd();
+			streamReader.Close();
+			return data;
+		}
+
+
+		public static void WriteToFile( string path, string data )
+		{
+			var streamWriter = new StreamWriter( path );
+			streamWriter.Write( data );
+			streamWriter.Flush();
+			streamWriter.Close();
 		}
 	}
 }
+
+
 
