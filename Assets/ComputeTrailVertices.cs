@@ -51,7 +51,7 @@ public class ComputeTrailVertices : MonoBehaviour {
 
         lineRenderer.SetVertexCount(tail.Count);
 
-        for (int i = 0; i < atail.Count; i++)
+        for (int i = 0; i < tail.Count; i++)
            lineRenderer.SetPosition(i, tail[i]);
 
 	}
