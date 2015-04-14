@@ -17,6 +17,7 @@ public class ClusterNode : MonoBehaviour {
 	protected float colorCheck;
 	protected Color startingcolor;
 	protected Collider lighter = null;
+	public Color bondColor;
 
 
 	// Use this for initialization
@@ -92,6 +93,10 @@ public class ClusterNode : MonoBehaviour {
 		else if (col == Globals.Instance.player2.character.bodyCollider)
 		{
 			playerColor = Globals.Instance.player2.character.colors.attachmentColor;
+		}
+		else if (col.gameObject.layer == LayerMask.NameToLayer("Bond"))
+		{
+			playerColor = bondColor;
 		}
 		else
 		{

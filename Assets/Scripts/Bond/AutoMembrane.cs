@@ -10,7 +10,7 @@ public class AutoMembrane : AutoBond {
 	private Membrane membranePrevious;
 	private Membrane membraneNext;
 
-	public override void CreateBond()
+	public override Bond CreateBond()
 	{
 		base.CreateBond();
 
@@ -69,6 +69,8 @@ public class AutoMembrane : AutoBond {
 				neighborNext.AttachMembranePrevious(createdMembrane);
 			}
 		}
+
+		return createdMembrane;
 	}
 
 	public void AttachMembranePrevious(Membrane previous)

@@ -12,7 +12,7 @@ public class ResetSpinPad : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(spinPad.portionComplete >= 1.0f)
-			StartCoroutine(spinPad.ResetToStart());
+		//if(spinPad.portionComplete >= 1.0f)
+		//	StartCoroutine(spinPad.ResetToStart());
 	}
 }

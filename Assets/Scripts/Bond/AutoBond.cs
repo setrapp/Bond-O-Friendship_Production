@@ -21,11 +21,11 @@ public class AutoBond : MonoBehaviour {
 		}
 	}
 
-	public virtual void CreateBond()
+	public virtual Bond CreateBond()
 	{
 		if (createdBond != null)
 		{
-			return;
+			return null;
 		}
 
 		if (bondToPlayer && Globals.Instance != null)
@@ -71,5 +71,7 @@ public class AutoBond : MonoBehaviour {
 			Vector3 attachPos2 = attachable2.transform.position + attachable2.transform.InverseTransformDirection(bondOffset2);
 			createdBond.AttachPartners(attachable1, attachPos1, attachable2, attachPos2);
 		}
+
+		return createdBond;
 	}
 }

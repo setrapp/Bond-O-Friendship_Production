@@ -5,6 +5,10 @@ using System.Collections.Generic;
 public class StreamChannelSeries : MonoBehaviour {
 	public bool renderBeds = true;
 	public bool renderBanks = true;
+	public bool maskBeds = true;
+	public Material overlayMaterial;
+	public Material maskMaterial;
+	public int maskRenderOffset = -1;
 	[SerializeField]
 	public List<StreamChannel> channels;
 	[SerializeField]
@@ -20,6 +24,34 @@ public class StreamChannelSeries : MonoBehaviour {
 				if (bedRenderer != null)
 				{
 					bedRenderer.enabled = renderBeds;
+				}
+
+				if (maskBeds)
+				{
+					GameObject bedOverlay = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
+					bedOverlay.transform.position += new Vector3(0, 0, 3) - new Vector3(0, 0, bedOverlay.transform.position.z);
+					Renderer bedOverlayRenderer = bedOverlay.GetComponent<Renderer>();
+					if (bedOverlayRenderer != null)
+					{
+						bedOverlayRenderer.enabled = true;
+						bedOverlayRenderer.material = overlayMaterial;
+					}
+
+					GameObject bedMask = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
+					bedMask.transform.position += new Vector3(0, 0, 4) - new Vector3(0, 0, bedMask.transform.position.z);
+					Renderer bedMaskRenderer = bedMask.GetComponent<Renderer>();
+					if (bedMaskRenderer != null)
+					{
+						bedMaskRenderer.enabled = true;
+						bedMaskRenderer.material = maskMaterial;
+						RenderQueue maskQueue = bedMask.AddComponent<RenderQueue>();
+						maskQueue.targetRenderer = bedMaskRenderer;
+						maskQueue.renderBase = RenderQueue.RenderBase.TRANSPARENT;
+						maskQueue.renderOffset = maskRenderOffset;
+					}
+
+					bedOverlay.transform.parent = channels[i].bed.transform;
+					bedMask.transform.parent = channels[i].bed.transform;
 				}
 			}
 			if(channels[i].bank1 != null)

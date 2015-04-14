@@ -14,21 +14,26 @@ public class CopyPlayerColor : MonoBehaviour {
 			renderer = GetComponent<Renderer>();
 		}
 
+		ApplyTint();
+	}
+
+	public void ApplyTint(float tintFactor = 1)
+	{
 		Color renderColor = Globals.Instance.player1.character.colors.attachmentColor;
 		if (targetPlayer == PlayerInput.Player.Player2)
 		{
 			renderColor = Globals.Instance.player2.character.colors.attachmentColor;
 		}
-
+		
 		if (isAdditive)
 		{
-			renderColor += tint;
+			renderColor += tint * tintFactor;
 		}
-		else
+		else if (tintFactor > 0)
 		{
-			renderColor *= tint;
+			renderColor *= tint / tintFactor;
 		}
-
+		
 		renderer.material.color = renderColor;
 	}
 }

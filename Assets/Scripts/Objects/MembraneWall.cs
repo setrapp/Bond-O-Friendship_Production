@@ -173,11 +173,11 @@ public class MembraneWall : MonoBehaviour {
 		}
 	}
 
-	public void CreateWall()
+	public Membrane CreateWall()
 	{
 		if (membraneCreator == null || membraneCreator.attachable1 == null || membraneCreator.attachable2 == null)
 		{
-			return;
+			return null;
 		}
 
 		if (shapingIndices.Count != shapingPoints.Count)
@@ -254,6 +254,8 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.createdBond.transform.parent = transform;
 		}
+
+		return membraneCreator.createdBond as Membrane;
 	}
 
 	private void MembraneBreaking(Membrane BreakingMembrane)

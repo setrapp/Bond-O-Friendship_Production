@@ -31,7 +31,7 @@ public class ControlLayout : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        useController = Globals.usingController;
+        useController = true;// Globals.usingController;
 
 		if(useController)
 		{

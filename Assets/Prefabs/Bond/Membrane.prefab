@@ -216,7 +216,7 @@ Transform:
   m_Father: {fileID: 400004}
   m_RootOrder: 4
 --- !u!23 &2300002
-MeshRenderer:
+Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -225,24 +225,18 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2300004
-MeshRenderer:
+Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -251,20 +245,14 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300002
@@ -325,6 +313,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 100
     attachSpring2: 50
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -333,12 +324,20 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -356,19 +355,25 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000004}
+    fluffPullTarget: {fileID: 0}
   attachment2:
     attachee: {fileID: 0}
     attachedLink: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     lineRenderer: {fileID: 12000002}
+    fluffPullTarget: {fileID: 0}
   linkPrefab: {fileID: 100000, guid: 52e3492505dd14d439f2ae6e66a54f3e, type: 2}
   links:
   - {fileID: 11400006}
   - {fileID: 11400004}
+  bondPullPrefab: {fileID: 0}
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 15
     relativeWarningDistance: .5
     endsWidth: 1
@@ -377,16 +382,26 @@ MonoBehaviour:
     removeLinkDistance: .150000006
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
+    disableColliders: 0
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+    sparseDetailLinksCheck: 1
   forceFullDetail: 0
   fullDetailAddDistance: -1
   fullDetailRemoveDistance: -1
-  attachmentColor: {r: .4627451, g: .576470613, b: 1, a: 1}
+  currentDetail: 1
+  fluffsHeld: []
+  attachmentColor: {r: .325557768, g: 1, b: .301470578, a: 1}
   internalBondStats: {fileID: 11400000}
   preferNewBonds: 1
   shapingPoints:
@@ -396,6 +411,9 @@ MonoBehaviour:
     defaultShapingForce: 5
     bondOnContact: 1
     bondOnFluff: 1
+    ignoreBondingLayers:
+      serializedVersion: 2
+      m_Bits: 0
     breakWithNeighbors: 1
     breakDestroyAttachments: 1
     considerNeighborBonds: 1
@@ -431,6 +449,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 14500002}
   jointToAttachment: {fileID: 14500010}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 0}
   jointsShaping: []
@@ -453,6 +472,7 @@ MonoBehaviour:
   jointToNeighbor: {fileID: 14500000}
   jointToAttachment: {fileID: 14500008}
   orderLevel: 0
+  broken: 0
   membrane: {fileID: 0}
   bondAttachable: {fileID: 0}
   jointsShaping: []
@@ -494,20 +514,14 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -533,20 +547,14 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -557,10 +565,10 @@ LineRenderer:
     endWidth: 1
     m_StartColor:
       serializedVersion: 2
-      rgba: 16776960
+      rgba: 16777215
     m_EndColor:
       serializedVersion: 2
-      rgba: 4281269558
+      rgba: 4294967295
   m_UseWorldSpace: 1
 --- !u!120 &12000004
 LineRenderer:
@@ -572,20 +580,14 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -596,10 +598,10 @@ LineRenderer:
     endWidth: 1
     m_StartColor:
       serializedVersion: 2
-      rgba: 4294475595
+      rgba: 4294967295
     m_EndColor:
       serializedVersion: 2
-      rgba: 16776960
+      rgba: 16777215
   m_UseWorldSpace: 1
 --- !u!120 &12000006
 LineRenderer:
@@ -611,20 +613,14 @@ LineRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
-  m_LightmapIndexDynamic: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_LightmapTilingOffsetDynamic: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: d67c56189416cf04dbf512028b98e880, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_UseReflectionProbes: 1
-  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Positions:
@@ -719,3 +715,4 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100004}
   m_IsPrefabParent: 1
+  m_IsExploded: 1

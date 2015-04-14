@@ -60,4 +60,24 @@ public class Helper {
 		}
 		return newCurrent;
 	}
+
+	public static void DrawCircle(LineRenderer renderer, GameObject parentObject, Vector3 offset, float radius, float thetaDelta = 0.01f)
+	{
+		Vector3 center = offset;
+		if (parentObject != null)
+		{
+			center = parentObject.transform.TransformPoint(offset);
+		}
+
+		int vertexCount = (int)((Mathf.PI * 2) / thetaDelta) + 2;
+		renderer.SetVertexCount(vertexCount);
+		for (int i = 0; i < vertexCount - 1; i++)
+		{
+			float theta = i * thetaDelta;
+			Vector3 unitCirclePoint = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);
+
+			renderer.SetPosition(i, center + (unitCirclePoint * radius));
+		}
+		renderer.SetPosition(vertexCount - 1, center + new Vector3(radius, 0, 0));
+	}
 }
