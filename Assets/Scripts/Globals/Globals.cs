@@ -86,7 +86,7 @@ public class Globals : MonoBehaviour {
 		{
 			Screen.showCursor = false;
 		}
-        Debug.Log(leftControllerIndex);
+        //Debug.Log(leftControllerIndex);
 	}
 
 	void Update()

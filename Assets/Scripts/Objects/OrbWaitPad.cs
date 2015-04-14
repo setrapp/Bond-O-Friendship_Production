@@ -97,8 +97,8 @@ public class OrbWaitPad : WaitPad {
 				}
 			}
 			triggersLit++;
-			if(triggersLit >= maxTriggers)
-				fullyLit = true;
+			//if(triggersLit >= maxTriggers)
+			//	fullyLit = true;
 		}
 		if(collide.gameObject.name == "Player 1")
 		{
