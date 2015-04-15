@@ -61,6 +61,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 499956}
   - 81: {fileID: 8199990}
+  - 82: {fileID: 8225506}
   m_Layer: 0
   m_Name: Audio Listener
   m_TagString: Untagged
@@ -315,7 +316,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.70819092, y: -378.813385, z: 0}
+  m_LocalPosition: {x: 15.0109749, y: 75.7971039, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499962}
@@ -747,6 +748,129 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199956}
   m_Enabled: 1
+--- !u!82 &8225506
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 199956}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: 9ae5d2480a3ccce4b9234e8df05dd30e, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: .200000003
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 3.74298591e-39
+      inSlope: 1.72617252e+25
+      outSlope: 3.03381637e+32
+      tangentMode: 0
+    - time: .100000001
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .200000003
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .400000006
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .800000012
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1.60000002
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 3.20000005
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 6.4000001
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 12.8000002
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 25.6000004
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 51.2000008
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 102.400002
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 204.800003
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 409.600006
+      value: 3.74298591e-39
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 500
+      value: 3.74298591e-39
+      inSlope: 1.72617252e+25
+      outSlope: 3.03381637e+32
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!92 &9299986
 Behaviour:
   m_ObjectHideFlags: 1
@@ -807,30 +931,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60f4494396a1174186619de5cf4a73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftKeyboardUp: 0
-  leftKeyboardDown: 0
-  leftKeyboardLeft: 0
-  leftKeyboardRight: 0
-  rightKeyboardUp: 0
-  rightKeyboardDown: 0
-  rightKeyboardLeft: 0
-  rightKeyboardRight: 0
-  player1ControlScheme: 0
-  player2ControlScheme: 0
+  player1Controls:
+    controlScheme: 0
+    inputNameSelected: 0
+  player2Controls:
+    controlScheme: 0
+    inputNameSelected: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
-  player1InputNameSelected: 0
-  player2InputNameSelected: 0
   initialPlayerHolder: {fileID: 0}
   autoAttractor: 1
   fluffsThrowable: 0
   fluffLeaveDistance: 1
   fluffLeaveAttractWait: 3
   fluffLeaveEmbed: .5
-  player1Device: 0
-  player2Device: 0
-  player1PreviousDevice: -2
-  player2PreviousDevice: -2
+  leftControllerIndex: 0
+  rightContollerIndex: 0
+  leftControllerPreviousIndex: -2
+  rightControllerPreviousIndex: -2
+  allowPreviousController: 0
   canvasPaused: {fileID: 100004}
   visibilityDepthMaskNeeded: 0
   depthMaskPrefab: {fileID: 100000, guid: eee34cdc27d68d34c8d79e97b72a5238, type: 2}
@@ -841,6 +960,7 @@ MonoBehaviour:
   allFluffs: []
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
+  playersBonded: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
