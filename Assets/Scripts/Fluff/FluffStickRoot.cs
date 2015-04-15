@@ -19,7 +19,7 @@ public class FluffStickRoot : MonoBehaviour {
 	[Header("Fluff Consumption")]
 	public StreamReaction fluffReaction;
 	public float fluffSproutRate = 1;
-	public float fluffConsumeRate = 1;
+	public float fluffConsumeRate = 0;
 	public float fluffActionRate = 1;
 
 
