@@ -7,6 +7,7 @@ public class SmartAudioSource : MonoBehaviour {
 	public LayerMask triggerLayers;
 	public Vector3 placementOffset;
 	public bool moveToCollsion = false;
+	public bool playMultiple = false;
 
 	void Awake()
 	{
@@ -25,6 +26,7 @@ public class SmartAudioSource : MonoBehaviour {
 				audioTrigger.triggerLayers = triggerLayers;
 				audioTrigger.audioMover = this;
 				audioTrigger.moveToCollsion = moveToCollsion;
+				audioTrigger.playMultiple = playMultiple;
 			}
 		}
 	}
