@@ -9,6 +9,8 @@ public class StoreTailVertices : StoreCustomMeshLocus {
     //public int currentIndex = -1;
     public bool renderLine = false;
     public List <Vector3> tailVertices;
+    public List <Vector3> rightVectors;
+    private Vector3 right;
     //public Vector3[] right;
 
     //Debug stuff
@@ -17,6 +19,7 @@ public class StoreTailVertices : StoreCustomMeshLocus {
 	// Use this for initialization
 	void Start () {
 
+        right = new Vector3(1f, 0f, 0f);
         lr = GetComponent<LineRenderer>();
 	
 	}
@@ -29,18 +32,26 @@ public class StoreTailVertices : StoreCustomMeshLocus {
         if (currentSize < maxSize-1)
         {
             tailVertices.Insert(0, transform.position);
+            rightVectors.Insert(0, transform.rotation * right); 
         }
 
         else if (currentSize == maxSize - 1)
         {
+            //Remove from the end
             tailVertices.RemoveAt(tailVertices.Count-1);
+            rightVectors.RemoveAt(rightVectors.Count - 1);
+            //Add at the beginning
             tailVertices.Insert(0, transform.position);
+            rightVectors.Insert(0, transform.rotation * right);
         }
 
         else //extra points
         {
             while (tailVertices.Count > maxSize)
-                tailVertices.RemoveAt(tailVertices.Count-1);
+            {
+                tailVertices.RemoveAt(tailVertices.Count - 1);
+                rightVectors.RemoveAt(rightVectors.Count - 1);
+            }
         }
 
         if (renderLine)
@@ -50,6 +61,7 @@ public class StoreTailVertices : StoreCustomMeshLocus {
             for (int i = 0; i < currentSize; i++)
             {
                 lr.SetPosition(i, tailVertices[i]);
+                //lr.SetPosition(i, rightVectors[i]);
             }
         }
 
