@@ -754,11 +754,11 @@ Light:
   m_GameObject: {fileID: 328143679}
   m_Enabled: 1
   serializedVersion: 3
-  m_Type: 0
+  m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 8
-  m_Range: 41.5900002
-  m_SpotAngle: 1
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -769,13 +769,13 @@ Light:
     m_SoftnessFade: 1
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
-  m_ActuallyLightmapped: 0
+  m_ActuallyLightmapped: 1
   m_Flare: {fileID: 0}
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  m_Lightmapping: 1
+    m_Bits: 4278190079
+  m_Lightmapping: 4
   m_ShadowSamples: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -787,8 +787,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 328143679}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -26.2299995}
+  m_LocalRotation: {x: .468470007, y: -.226341993, z: .125525996, w: .844717979}
+  m_LocalPosition: {x: -626.510071, y: -89.1399994, z: 20.0002213}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -841,6 +841,7 @@ MonoBehaviour:
   startFluffCount: 0
   placeOnAwake: 0
   defaultPlayerParent: {fileID: 0}
+  destroyPlayerHolder: 0
 --- !u!1 &371928203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1051,10 @@ MonoBehaviour:
   attachedLevel: {fileID: 2020380834}
   endingLoadScene: Menu
   destroyOnLoad: 1
+  forceFromMenu: 0
+  messagePrefab: {fileID: 0}
+  menuSceneName: Menu
+  targetSceneOverride: 
 --- !u!23 &404215239
 Renderer:
   m_ObjectHideFlags: 0
@@ -2676,6 +2681,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: startFluffCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
+      propertyPath: destroyPlayerHolder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

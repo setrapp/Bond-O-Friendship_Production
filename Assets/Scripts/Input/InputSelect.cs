@@ -90,14 +90,14 @@ public class InputSelect : MonoBehaviour {
     {
         if (collide.gameObject.name == "Player 1")
         {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             inputFill.player1FutureControls.controlScheme = inputNameAndControlScheme.controlScheme;
             inputFill.player1FutureControls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
             InvokeRepeating("PlayerOneTimer", 1f, 1f);
         }
         if (collide.gameObject.name == "Player 2")
         {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             inputFill.player2FutureControls.controlScheme = inputNameAndControlScheme.controlScheme;
             inputFill.player2FutureControls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
             InvokeRepeating("PlayerTwoTimer", 1f, 1f);
