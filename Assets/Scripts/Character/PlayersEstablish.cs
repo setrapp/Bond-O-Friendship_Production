@@ -33,17 +33,20 @@ public class PlayersEstablish : MonoBehaviour {
 			for (int i = 0; i < characters.Length; i++)
 			{
 				PlayerInput player = characters[i].GetComponent<PlayerInput>();
-				if (player != null)
-				{
-					if (player.playerNumber == PlayerInput.Player.Player1)
-					{
-						player1 = player;
-					}
-					else if (player.playerNumber == PlayerInput.Player.Player2)
-					{
-						player2 = player;
-					}
-				}
+                if (player != Globals.Instance.player1 && player != Globals.Instance.player2)
+                {
+                    if (player != null)
+                    {
+                        if (player.playerNumber == PlayerInput.Player.Player1)
+                        {
+                            player1 = player;
+                        }
+                        else if (player.playerNumber == PlayerInput.Player.Player2)
+                        {
+                            player2 = player;
+                        }
+                    }
+                }
 			}
 
 			// Place player 1.
@@ -105,6 +108,16 @@ public class PlayersEstablish : MonoBehaviour {
 					player2.transform.parent = defaultPlayerParent;
 				}
 			}
+
+            if (!Globals.Instance.transform.FindChild("Camera System").gameObject.activeSelf)
+            {
+                Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(true);
+                if (CameraSplitter.Instance != null)
+                {
+                    CameraSplitter.Instance.JumpToPlayers();
+                }
+            }
+           
 
 			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
 			{

@@ -26,12 +26,12 @@ public class SpawnLand : MonoBehaviour {
 			}
 			else if(land.transform.localScale.x <= maxLandSize)
 			{
-				land.transform.localScale += new Vector3(Time.deltaTime*2, Time.deltaTime*2, 0);
+				land.transform.localScale += new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
 			}
 		}
 		else if(land != null && land.transform.localScale.x > 1.0f && transform.GetComponentInParent<ThreadParent>().solved == false)
 		{
-			land.transform.localScale -= new Vector3(Time.deltaTime*2, Time.deltaTime*2, 0);
+			land.transform.localScale -= new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
 		}
 
 	}

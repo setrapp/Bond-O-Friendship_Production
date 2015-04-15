@@ -220,7 +220,6 @@ public class Globals : MonoBehaviour {
         }
         return playerCAI.controlScheme;
     }
-
     
 }
 
