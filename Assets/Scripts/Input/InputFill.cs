@@ -4,14 +4,13 @@ using System.Collections.Generic;
 
 public class InputFill : MonoBehaviour {
 
-
+    //Player1
     public GameObject LL;
     public GameObject LR;
     public GameObject RL;
     public GameObject RR;
     public GameObject LK;
     public GameObject RK;
-
 
     private float LLF;
     private float LRF;
@@ -20,6 +19,13 @@ public class InputFill : MonoBehaviour {
     private float LKF;
     private float RKF;
 
+    private float previousLLF;
+    private float previousLRF;
+    private float previousRLF;
+    private float previousRRF;
+    private float previousLKF;
+    private float previousRKF;
+
     private bool LLFilling = false;
     private bool LRFilling = false;
     private bool RLFilling = false;
@@ -27,116 +33,179 @@ public class InputFill : MonoBehaviour {
     private bool LKFilling = false;
     private bool RKFilling = false;
 
-    private Color LLColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
-    private Color LRColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
-    private Color RLColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
-    private Color RRColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
-    private Color LKColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
-    private Color RKColor = new Color(70f / 255f, 130f / 255f, 192f / 255f);
+    //Player 2
+    public GameObject LL2;
+    public GameObject LR2;
+    public GameObject RL2;
+    public GameObject RR2;
+    public GameObject LK2;
+    public GameObject RK2;
 
+    private float LLF2;
+    private float LRF2;
+    private float RLF2;
+    private float RRF2;
+    private float LKF2;
+    private float RKF2;
 
-    private ControlsAndInput player1ControlsToUse = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
-    ControlsAndInput player1CurrentControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
+    private float previousLLF2;
+    private float previousLRF2;
+    private float previousRLF2;
+    private float previousRRF2;
+    private float previousLKF2;
+    private float previousRKF2;
+
+    private bool LLFilling2 = false;
+    private bool LRFilling2 = false;
+    private bool RLFilling2 = false;
+    private bool RRFilling2 = false;
+    private bool LKFilling2 = false;
+    private bool RKFilling2 = false;
+
     public ControlsAndInput player1FutureControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
-
-    private ControlsAndInput player2ControlsToUse = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
-    ControlsAndInput player2CurrentControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
     public ControlsAndInput player2FutureControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
 
-
-
     private float duration = 5f;
-    private float f = 0;
-    private float e = 1;
-    //private float 
-
-
-
     
-    private Vector3 filledInController = new Vector3(3f, 3f, 1f);
+    private Vector3 filledInLeft = new Vector3(2.8f, 3f, 1f);
+    private Vector3 filledInRight = new Vector3(2.9f, 3f, 1f);
+    private Vector3 filledKey = new Vector3(2.45f, 1.8f, 1f);
+    private Vector3 emptyKey = new Vector3(0f, 1.8f, 1f);
     private Vector3 emptyController = new Vector3(0f, 3f, 1f);
 
     private Color player1Color = new Color(70f/255f, 130f/255f, 192f/255f);
     private Color player2Color = new Color(225f/255f, 123f/255f, 63f/255f);
+    private Color defaultColor = Color.black;
     
 	// Use this for initialization
 	void Start () 
     {
-       /* //Player 1
-        switch(Globals.Instance.player1Controls.inputNameSelected)
+        switch (Globals.Instance.player1Controls.inputNameSelected)
         {
             case Globals.InputNameSelected.LeftController:
-                switch(Globals.Instance.player1Controls.controlScheme)
+                switch (Globals.Instance.player1Controls.controlScheme)
                 {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        LCLTP1.transform.localScale = new Vector3(2.8f, 3f, 1f);
+                    case Globals.ControlScheme.SharedLeft:
+                        LL.transform.localScale = filledInLeft;
+                        LLF = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        LCRTP1.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.SharedRight:
+                        LR.transform.localScale = filledInRight;
+                        LRF = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        LCLTP1.transform.localScale = new Vector3(2.8f, 3f, 1f);
-                        LCRTP1.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.Solo:
+                        LL.transform.localScale = filledInLeft;
+                        LLF = 1;
+                        LR.transform.localScale = filledInRight;
+                        LRF = 1;
                         break;
                 }
-
                 break;
 
             case Globals.InputNameSelected.RightController:
                 switch (Globals.Instance.player1Controls.controlScheme)
                 {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        RCLTP1.transform.localScale = new Vector3(2.8f, 3f, 1f);
+                    case Globals.ControlScheme.SharedLeft:
+                        RL.transform.localScale = filledInLeft;
+                        RLF = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        RCRTP1.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.SharedRight:
+                        RR.transform.localScale = filledInRight;
+                        RRF = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        RCLTP1.transform.localScale = new Vector3(2.8f, 3f, 1f);
-                        RCRTP1.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.Solo:
+                        RL.transform.localScale = filledInLeft;
+                        RLF = 1;
+                        RR.transform.localScale = filledInRight;
+                        RRF = 1;
                         break;
                 }
+                break;
 
+            case Globals.InputNameSelected.Keyboard:
+                switch (Globals.Instance.player1Controls.controlScheme)
+                {
+                    case Globals.ControlScheme.SharedLeft:
+                        LK.transform.localScale = filledKey;
+                        LKF = 1;
+                        break;
+                    case Globals.ControlScheme.SharedRight:
+                        RK.transform.localScale = filledKey;
+                        RKF = 1;
+                        break;
+                    case Globals.ControlScheme.Solo:
+                        LK.transform.localScale = filledKey;
+                        LKF = 1;
+                        RK.transform.localScale = filledKey;
+                        RKF = 1;
+                        break;
+                }
                 break;
         }
-        //Player 2
+
+        //////////////////Player 2/////////////////////////////////
         switch (Globals.Instance.player2Controls.inputNameSelected)
         {
             case Globals.InputNameSelected.LeftController:
                 switch (Globals.Instance.player2Controls.controlScheme)
                 {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        LCLTP2.transform.localScale = new Vector3(2.8f, 3f, 1f);
+                    case Globals.ControlScheme.SharedLeft:
+                        LL2.transform.localScale = filledInLeft;
+                        LLF2 = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        LCRTP2.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.SharedRight:
+                        LR2.transform.localScale = filledInRight;
+                        LRF2 = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        LCLTP2.transform.localScale = new Vector3(2.8f, 3f, 1f);
-                        LCRTP2.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.Solo:
+                        LL2.transform.localScale = filledInLeft;
+                        LLF2 = 1;
+                        LR2.transform.localScale = filledInRight;
+                        LRF2 = 1;
                         break;
                 }
-
                 break;
 
             case Globals.InputNameSelected.RightController:
                 switch (Globals.Instance.player2Controls.controlScheme)
                 {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        RCLTP2.transform.localScale = new Vector3(2.8f, 3f, 1f);
+                    case Globals.ControlScheme.SharedLeft:
+                        RL2.transform.localScale = filledInLeft;
+                        RLF2 = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        RCRTP2.transform.localScale = new Vector3(2.9f, 3f, 1f);inputnameandcontrolscheme
+                    case Globals.ControlScheme.SharedRight:
+                        RR2.transform.localScale = filledInRight;
+                        RRF2 = 1;
                         break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        RCLTP2.transform.localScale = new Vector3(2.8f, 3f, 1f);
-                        RCRTP2.transform.localScale = new Vector3(2.9f, 3f, 1f);
+                    case Globals.ControlScheme.Solo:
+                        RL2.transform.localScale = filledInLeft;
+                        RLF2 = 1;
+                        RR2.transform.localScale = filledInRight;
+                        RRF2 = 1;
                         break;
                 }
+                break;
 
+            case Globals.InputNameSelected.Keyboard:
+                switch (Globals.Instance.player2Controls.controlScheme)
+                {
+                    case Globals.ControlScheme.SharedLeft:
+                        LK2.transform.localScale = filledKey;
+                        LKF2 = 1;
+                        break;
+                    case Globals.ControlScheme.SharedRight:
+                        RK2.transform.localScale = filledKey;
+                        RKF2 = 1;
+                        break;
+                    case Globals.ControlScheme.Solo:
+                        LK2.transform.localScale = filledKey;
+                        LKF2 = 1;
+                        RK2.transform.localScale = filledKey;
+                        RKF2 = 1;
+                        break;
+                }
                 break;
         }
-        * */
        
         //Debug.Log(LCLTP2.GetComponentInChildren<Renderer>().material.color);
 	}
@@ -144,268 +213,358 @@ public class InputFill : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        GetCurrentPlayerControls();
-        SetControlsToUse();
-
-       // Debug.Log(player1ControlsToUse.inputNameSelected);
-        Player1InputFill(player1ControlsToUse, player2ControlsToUse);
-
-
-        
-        
-        //Debug.Log(player1FutureControls.controlScheme);
+        PlayerInputFill(SetControlsToUse(true), SetControlsToUse(false));
 	}
 
-    private void GetCurrentPlayerControls()
+    private ControlsAndInput SetControlsToUse(bool isPlayer1)
     {
-        player1CurrentControls.controlScheme = Globals.Instance.player1Controls.controlScheme;
-        player1CurrentControls.inputNameSelected = Globals.Instance.player1Controls.inputNameSelected;
+        ControlsAndInput controlsToUse = new ControlsAndInput();
 
-        player2CurrentControls.controlScheme = Globals.Instance.player2Controls.controlScheme;
-        player2CurrentControls.inputNameSelected = Globals.Instance.player2Controls.inputNameSelected;
-    }
-
-    private void SetControlsToUse()
-    {
-        if (player1FutureControls.controlScheme != Globals.ControlScheme.None && player1FutureControls.inputNameSelected != Globals.InputNameSelected.None)
+        if (isPlayer1)
         {
-            player1ControlsToUse.controlScheme = player1FutureControls.controlScheme;
-            player1ControlsToUse.inputNameSelected = player1FutureControls.inputNameSelected;
+            if (player1FutureControls.controlScheme != Globals.ControlScheme.None && player1FutureControls.inputNameSelected != Globals.InputNameSelected.None)
+            {
+                controlsToUse.controlScheme = player1FutureControls.controlScheme;
+                controlsToUse.inputNameSelected = player1FutureControls.inputNameSelected;
+            }
+            else
+            {
+                controlsToUse.controlScheme = Globals.Instance.player1Controls.controlScheme;
+                controlsToUse.inputNameSelected = Globals.Instance.player1Controls.inputNameSelected;
+            }
         }
         else
         {
-            player1ControlsToUse.controlScheme = player1CurrentControls.controlScheme;
-            player1ControlsToUse.inputNameSelected = player1CurrentControls.inputNameSelected;
+            if (player2FutureControls.controlScheme != Globals.ControlScheme.None && player2FutureControls.inputNameSelected != Globals.InputNameSelected.None)
+            {
+                controlsToUse.controlScheme = player2FutureControls.controlScheme;
+                controlsToUse.inputNameSelected = player2FutureControls.inputNameSelected;
+            }
+            else
+            {
+                controlsToUse.controlScheme = Globals.Instance.player2Controls.controlScheme;
+                controlsToUse.inputNameSelected = Globals.Instance.player2Controls.inputNameSelected;
+            }
         }
 
-        if (player2FutureControls.controlScheme != Globals.ControlScheme.None && player2FutureControls.inputNameSelected != Globals.InputNameSelected.None)
-        {
-            player2ControlsToUse.controlScheme = player2FutureControls.controlScheme;
-            player2ControlsToUse.inputNameSelected = player2FutureControls.inputNameSelected;
-        }
-        else
-        {
-            player2ControlsToUse.controlScheme = player2CurrentControls.controlScheme;
-            player2ControlsToUse.inputNameSelected = player2CurrentControls.inputNameSelected;
-        }
+        return controlsToUse;
     }
 
 
-  /*  void Player1InputFill(ControlsAndInput controlsAndInput)
-    {
-        controlsAndInput.controlScheme = controlsAndInput.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected ? controlsAndInput.controlScheme : Globals.ControlScheme.ControllerSolo;
-        switch (controlsAndInput.inputNameSelected)
-        {
-            case Globals.InputNameSelected.LeftController:
-
-                switch (controlsAndInput.controlScheme)
-                {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        LCLTP1.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, LCLTP1F);
-                        LCLTP1F += Time.deltaTime / duration;
-                        break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        // Debug.Log(t);
-                        LCRTP1.transform.localScale = Vector3.Lerp(emptyController, filledInRightController, LCRTP1F);
-                        LCRTP1F += Time.deltaTime / duration;
-                        break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        LCLTP1.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, LCLTP1F);
-                        LCRTP1.transform.localScale = Vector3.Lerp(emptyController, filledInRightController, LCRTP1F);
-                        LCRTP1F += Time.deltaTime / duration;
-                        LCLTP1F += Time.deltaTime / duration;
-                        break;
-                }
-
-                break;
-
-            case Globals.InputNameSelected.RightController:
-                switch (controlsAndInput.controlScheme)
-                {
-                    case Globals.ControlScheme.ControllerSharedLeft:
-                        RCLTP1.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, RCLTP1F);
-                        RCLTP1F += Time.deltaTime / duration;
-                        break;
-                    case Globals.ControlScheme.ControllerSharedRight:
-                        RCRTP1.transform.localScale = Vector3.Lerp(emptyController, filledInRightController, RCRTP1F);
-                        RCRTP1F += Time.deltaTime / duration;
-                        break;
-                    case Globals.ControlScheme.ControllerSolo:
-                        RCLTP1.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, RCLTP1F);
-                        RCRTP1.transform.localScale = Vector3.Lerp(emptyController, filledInRightController, RCRTP1F);
-                        RCRTP1F += Time.deltaTime / duration;
-                        RCLTP1F += Time.deltaTime / duration;
-                        break;
-                }
-
-                break;
-        }
-        //Player1InputEmpty(controlsAndInput);
-
-       /* f += Time.deltaTime / duration;
-
-        Debug.Log(f);
-        e = 1f - f;
-        Debug.Log("E: " + e);
-
-    }*/
-
-    void Player1InputFill(ControlsAndInput player1Controls, ControlsAndInput player2Controls)
+    void PlayerInputFill(ControlsAndInput player1Controls, ControlsAndInput player2Controls)
     {
         float t = Time.deltaTime / duration;
-        player1Controls.controlScheme = player1Controls.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected ? player1Controls.controlScheme : Globals.ControlScheme.Solo;
-        player2Controls.controlScheme = player2Controls.inputNameSelected == Globals.Instance.player1Controls.inputNameSelected ? player2Controls.controlScheme : Globals.ControlScheme.Solo;
 
-        CheckControlScheme(player1Controls, 1);
-        CheckControlScheme(player2Controls, 2);
+        # region Tweak Control Scheme
 
+        player1Controls.controlScheme = player1Controls.inputNameSelected == player2Controls.inputNameSelected ? player1Controls.controlScheme : Globals.ControlScheme.Solo;
+        player2Controls.controlScheme = player2Controls.inputNameSelected == player1Controls.inputNameSelected ? player2Controls.controlScheme : Globals.ControlScheme.Solo;
+
+        if(player1Controls.inputNameSelected == player2Controls.inputNameSelected)
+        {
+            if (player1Controls.controlScheme == player2Controls.controlScheme)
+            {
+                //Check if swapping sides. If so, set control scheme to say so.
+                if (player1Controls.controlScheme == Globals.Instance.player1Controls.controlScheme && player1Controls.inputNameSelected == Globals.Instance.player1Controls.inputNameSelected)
+                {
+                    if (player1Controls.controlScheme == Globals.ControlScheme.SharedLeft)
+                        player1Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                    else
+                        player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+                }
+                if (player2Controls.controlScheme == Globals.Instance.player2Controls.controlScheme && player2Controls.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected)
+                {
+                    if (player2Controls.controlScheme == Globals.ControlScheme.SharedLeft)
+                        player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                    else
+                        player2Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+                }
+            }
+
+            if(player1Controls.controlScheme == Globals.ControlScheme.Solo)
+            {
+                if (player2Controls.controlScheme == Globals.ControlScheme.SharedLeft)
+                    player1Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                if(player2Controls.controlScheme == Globals.ControlScheme.SharedRight)
+                    player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+            }
+            if (player2Controls.controlScheme == Globals.ControlScheme.Solo)
+            {
+                if (player1Controls.controlScheme == Globals.ControlScheme.SharedLeft)
+                    player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                if (player1Controls.controlScheme == Globals.ControlScheme.SharedRight)
+                    player2Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+            }
+        }
+
+        #endregion
+
+        CheckControlScheme(player1Controls, 1);        
 
         LLF += LLFilling ? t : -t;
         LRF += LRFilling ? t : -t;
         RLF += RLFilling ? t : -t;
         RRF += RRFilling ? t : -t;
         LKF += LKFilling ? t : -t;
-        RKF += RKFilling ? t : -t;    
+        RKF += RKFilling ? t : -t;
 
-        LLF = Mathf.Clamp(LLF, 0, 1);
-        LRF = Mathf.Clamp(LRF, 0, 1);
-        RLF = Mathf.Clamp(RLF, 0, 1);
-        RRF = Mathf.Clamp(RRF, 0, 1);
-        LKF = Mathf.Clamp(LKF, 0, 1);
-        RKF = Mathf.Clamp(RKF, 0, 1);
+        LLF = Mathf.Clamp(LLF, 0, 1f);
+        LRF = Mathf.Clamp(LRF, 0, 1f);
+        RLF = Mathf.Clamp(RLF, 0, 1f);
+        RRF = Mathf.Clamp(RRF, 0, 1f);
+        LKF = Mathf.Clamp(LKF, 0, 1f);
+        RKF = Mathf.Clamp(RKF, 0, 1f);
+
+        CheckControlScheme(player1Controls, 1);
+
+        previousLLF = LLF;
+        previousLRF = LRF;
+        previousRLF = RLF;
+        previousRRF = RRF;
+        previousLKF = LKF;
+        previousRKF = RKF;
+
+        CheckControlScheme(player2Controls, 2);
+
+        LLF2 += LLFilling2 ? t : -t;
+        LRF2 += LRFilling2 ? t : -t;
+        RLF2 += RLFilling2 ? t : -t;
+        RRF2 += RRFilling2 ? t : -t;
+        LKF2 += LKFilling2 ? t : -t;
+        RKF2 += RKFilling2 ? t : -t;
+
+        LLF2 = Mathf.Clamp(LLF2, 0, 1f);
+        LRF2 = Mathf.Clamp(LRF2, 0, 1f);
+        RLF2 = Mathf.Clamp(RLF2, 0, 1f);
+        RRF2 = Mathf.Clamp(RRF2, 0, 1f);
+        LKF2 = Mathf.Clamp(LKF2, 0, 1f);
+        RKF2 = Mathf.Clamp(RKF2, 0, 1f);
+
+        CheckControlScheme(player2Controls, 2);
+
+        previousLLF2 = LLF2;
+        previousLRF2 = LRF2;
+        previousRLF2 = RLF2;
+        previousRRF2 = RRF2;
+        previousLKF2 = LKF2;
+        previousRKF2 = RKF2;
 
         if(LL.activeInHierarchy)
-            LL.transform.localScale = Vector3.Lerp(emptyController, filledInController, LLF);
+            LL.transform.localScale = Vector3.Lerp(emptyController, filledInLeft, LLF);
         if(LR.activeInHierarchy)
-            LR.transform.localScale = Vector3.Lerp(emptyController, filledInController, LRF);
+            LR.transform.localScale = Vector3.Lerp(emptyController, filledInRight, LRF);
         if (RL.activeInHierarchy)
-            RL.transform.localScale = Vector3.Lerp(emptyController, filledInController, RLF);
+            RL.transform.localScale = Vector3.Lerp(emptyController, filledInLeft, RLF);
         if (RR.activeInHierarchy)
-            RR.transform.localScale = Vector3.Lerp(emptyController, filledInController, RRF);
+            RR.transform.localScale = Vector3.Lerp(emptyController, filledInRight, RRF);
         if (LK.activeInHierarchy)
-            LK.transform.localScale = Vector3.Lerp(emptyController, filledInController, LKF);
+            LK.transform.localScale = Vector3.Lerp(emptyKey, filledKey, LKF);
         if (RK.activeInHierarchy)
-            RK.transform.localScale = Vector3.Lerp(emptyController, filledInController, RKF);
+            RK.transform.localScale = Vector3.Lerp(emptyKey, filledKey, RKF);
 
-        if (LL.activeInHierarchy)
-            LL.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, LLColor, LLF);
-        if (LR.activeInHierarchy)
-            LR.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, LRColor, LRF);
-        if (RL.activeInHierarchy)
-            RL.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, RLColor, RLF);
-        if (RR.activeInHierarchy)
-            RR.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, RRColor, RRF);
-        if (LK.activeInHierarchy)
-            LK.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, LKColor, RKF);
-        if (RK.activeInHierarchy)
-            RK.GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.gray, RKColor, LKF);
+        if (LL2.activeInHierarchy)
+            LL2.transform.localScale = Vector3.Lerp(emptyController, filledInLeft, LLF2);
+        if (LR2.activeInHierarchy)
+            LR2.transform.localScale = Vector3.Lerp(emptyController, filledInRight, LRF2);
+        if (RL2.activeInHierarchy)
+            RL2.transform.localScale = Vector3.Lerp(emptyController, filledInLeft, RLF2);
+        if (RR2.activeInHierarchy)
+            RR2.transform.localScale = Vector3.Lerp(emptyController, filledInRight, RRF2);
+        if (LK2.activeInHierarchy)
+            LK2.transform.localScale = Vector3.Lerp(emptyKey, filledKey, LKF2);
+        if (RK2.activeInHierarchy)
+            RK2.transform.localScale = Vector3.Lerp(emptyKey, filledKey, RKF2);        
 
         SetValuesToFalse();
 
     }
 
-    void CheckControlScheme(ControlsAndInput controlsAndInput, int playerNumber)
+    void ChangePlayerOneInput(ControlsAndInput controlsAndInput)
     {
-       // controlsAndInput.controlScheme = controlsAndInput.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected ? controlsAndInput.controlScheme : Globals.ControlScheme.ControllerSolo;
+        if (controlsAndInput.controlScheme == Globals.Instance.player1Controls.controlScheme && controlsAndInput.inputNameSelected == Globals.Instance.player1Controls.inputNameSelected)
+            return;
+        
+        Globals.Instance.player1Controls.inputNameSelected = controlsAndInput.inputNameSelected;
+        Globals.Instance.player1Controls.controlScheme = controlsAndInput.controlScheme;
+        Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+        Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+        Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
 
+    }
+
+    void ChangePlayerTwoInput(ControlsAndInput controlsAndInput)
+    {
+        if (controlsAndInput.controlScheme == Globals.Instance.player2Controls.controlScheme && controlsAndInput.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected)
+            return;
+
+        Globals.Instance.player2Controls.inputNameSelected = controlsAndInput.inputNameSelected;
+        Globals.Instance.player2Controls.controlScheme = controlsAndInput.controlScheme;
+        Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+        Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+        Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+
+    }
+
+    void CheckControlScheme(ControlsAndInput controlsAndInput, int playerNumber, bool isDebug = false)
+    {
         switch (controlsAndInput.inputNameSelected)
         {
             case Globals.InputNameSelected.LeftController:
-
                 switch (controlsAndInput.controlScheme)
                 {
                     case Globals.ControlScheme.SharedLeft:
-                        LLFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
-                            LLColor = player1Color;
+                        {
+                            LLFilling = true;
+                            if(LLF == 1 && LLF != previousLLF)
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
                         else if (playerNumber == 2)
-                            LLColor = player2Color;                        
+                        {
+                            LLFilling2 = true;
+                            if (LLF2 == 1 && LLF2 != previousLLF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
                         break;
+                    //////////////////////////////////////////////////
                     case Globals.ControlScheme.SharedRight:
-                        LRFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
-                            LRColor = player1Color;
+                        {
+                            LRFilling = true;
+                            if (LRF == 1 && LRF != previousLRF)
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
                         else if (playerNumber == 2)
-                            LRColor = player2Color;
+                        {
+                            LRFilling2 = true;
+                            if (LRF2 == 1 && LRF2 != previousLRF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
                         break;
+                    //////////////////////////////////////////////////
                     case Globals.ControlScheme.Solo:
-                        LLFilling = true;
-                        LRFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
                         {
-                            LLColor = player1Color;
-                            LRColor = player1Color;
+                            LLFilling = true;
+                            LRFilling = true;
+                            if ((LLF == 1 && LLF != previousLLF) && (LRF == 1 && LRF != previousLRF))                                
+                                ChangePlayerOneInput(controlsAndInput);                            
                         }
                         else if (playerNumber == 2)
                         {
-                            LLColor = player2Color;
-                            LRColor = player2Color;
+                            LLFilling2 = true;
+                            LRFilling2 = true;
+                            if ((LLF2 == 1 && LLF2 != previousLLF2) && (LRF2 == 1 && LRF2 != previousLRF2))
+                                ChangePlayerTwoInput(controlsAndInput);
                         }
                         break;
+                    //////////////////////////////////////////////////
                 }
                 break;
+
             case Globals.InputNameSelected.RightController:
                 switch (controlsAndInput.controlScheme)
                 {
                     case Globals.ControlScheme.SharedLeft:
-                        RLFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
-                            RLColor = player1Color;
+                        {
+                            RLFilling = true;
+                            if (RLF == 1 && RLF != previousRLF)
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
                         else if (playerNumber == 2)
-                            RLColor = player2Color;
+                        {
+                            RLFilling2 = true;
+                            if (RLF2 == 1 && RLF2 != previousRLF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
                         break;
+                    //////////////////////////////////////////////////
                     case Globals.ControlScheme.SharedRight:
-                        RRFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
-                            RRColor = player1Color;
+                        {
+                            RRFilling = true;
+                            if (RRF == 1 && RRF != previousRRF)
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
                         else if (playerNumber == 2)
-                            RRColor = player2Color;
+                        {
+                            RRFilling2 = true;
+                            if (RRF2 == 1 && RRF2 != previousRRF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
                         break;
+                    //////////////////////////////////////////////////
                     case Globals.ControlScheme.Solo:
-                        RLFilling = true;
-                        RRFilling = true;
+                    //////////////////////////////////////////////////
                         if (playerNumber == 1)
                         {
-                            RLColor = player1Color;
-                            RRColor = player1Color;
+                            RLFilling = true;
+                            RRFilling = true;
+                            if ((RLF == 1 && RLF != previousRLF) && (RRF == 1 && RRF != previousRRF))
+                                ChangePlayerOneInput(controlsAndInput);
                         }
                         else if (playerNumber == 2)
                         {
-                            RLColor = player2Color;
-                            RRColor = player2Color;
-                        }
+                            RLFilling2 = true;
+                            RRFilling2 = true;
+                            if ((RLF2 == 1 && RLF2 != previousRLF) && (RRF2 == 1 && RRF2 != previousRRF))
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }                        
                         break;
                 }
                 break;
+
             case Globals.InputNameSelected.Keyboard:
                 switch (controlsAndInput.controlScheme)
                 {
                     case Globals.ControlScheme.SharedLeft:
-                        LKFilling = true;
-                        if (playerNumber == 1)
-                            LKColor = player1Color;
-                        else if (playerNumber == 2)
-                            LKColor = player2Color;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        RKFilling = true;
-                        if (playerNumber == 1)
-                            RKColor = player1Color;
-                        else if (playerNumber == 2)
-                            RKColor = player2Color;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        LKFilling = true;
-                        RKFilling = true;
                         if (playerNumber == 1)
                         {
-                            LKColor = player1Color;
-                            RKColor = player1Color;
+                            LKFilling = true;
+                            if (LKF == 1 && LKF != previousLKF)
+                                ChangePlayerOneInput(controlsAndInput);
                         }
                         else if (playerNumber == 2)
                         {
-                            LKColor = player2Color;
-                            RKColor = player2Color;
+                            LKFilling2 = true;
+                            if (LKF2 == 1 && LKF2 != previousLKF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
+                        break;
+                    case Globals.ControlScheme.SharedRight:
+                        if (playerNumber == 1)
+                        {
+                            RKFilling = true;
+                            if (RKF == 1 && RKF != previousRKF)
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
+                        else if (playerNumber == 2)
+                        {
+                            RKFilling2 = true;
+                            if (RKF2 == 1 && RKF2 != previousRKF2)
+                                ChangePlayerTwoInput(controlsAndInput);
+                        }
+                        break;
+                    case Globals.ControlScheme.Solo:
+                        if (playerNumber == 1)
+                        {
+                            LKFilling = true;
+                            RKFilling = true;
+                            if ((LKF == 1 && LKF != previousRLF) && (RKF == 1 && RKF != previousRKF))
+                                ChangePlayerOneInput(controlsAndInput);
+                        }
+                        else if (playerNumber == 2)
+                        {
+                            LKFilling2 = true;
+                            RKFilling2 = true;
+                            if ((LKF2 == 1 && LKF2 != previousRLF2) && (RKF2 == 1 && RKF2 != previousRKF2))
+                                ChangePlayerTwoInput(controlsAndInput);
                         }
                         break;
                 }
@@ -423,75 +582,13 @@ public class InputFill : MonoBehaviour {
         RRFilling = false;
         LKFilling = false;
         RKFilling = false;
+        LLFilling2 = false;
+        LRFilling2 = false;
+        RLFilling2 = false;
+        RRFilling2 = false;
+        LKFilling2 = false;
+        RKFilling2 = false;
     }
 
-     /*void Player1InputEmpty(ControlsAndInput controlsAndInput)
-    {
-        if (controlsAndInput.controlScheme != Globals.ControlScheme.None && controlsAndInput.inputNameSelected != Globals.InputNameSelected.None)
-        {
-            controlsAndInput.controlScheme = controlsAndInput.inputNameSelected == Globals.Instance.player2Controls.inputNameSelected ? controlsAndInput.controlScheme : Globals.ControlScheme.ControllerSolo;
-            switch (controlsAndInput.inputNameSelected)
-            {
-                case Globals.InputNameSelected.LeftController:
-                   
-                    switch (controlsAndInput.controlScheme)
-                    {
-                        case Globals.ControlScheme.ControllerSharedLeft:
-                            foreach(GameObject go in player1ColorFills)
-                            {
-                                if(go != LCLTP1)//&& go.transform.localScale.x > .01)                                
-                                    go.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, e);
-                            }
-                            break;
-                        case Globals.ControlScheme.ControllerSharedRight:
-                            foreach(GameObject go in player1ColorFills)
-                            {
-                                if (go != LCRTP1)// && go.transform.localScale.x > .01)
-                                    go.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, e);
-                            }
-                            break;
-                        case Globals.ControlScheme.ControllerSolo:
-                            foreach(GameObject go in player1ColorFills)
-                            {
-                                if (go != LCLTP1 && go != LCRTP1)// && go.transform.localScale.x > .01)                                
-                                    go.transform.localScale = Vector3.Lerp(emptyController,filledInLeftController, e);
-                            }
-                            break;
-                    }
-
-                    break;
-
-                case Globals.InputNameSelected.RightController:
-                    switch (controlsAndInput.controlScheme)
-                    {
-                        case Globals.ControlScheme.ControllerSharedLeft:
-                            foreach(GameObject go in player1ColorFills)
-                            {
-                                if(go != RCLTP1 && go.transform.localScale.x > .01)                                
-                                    go.transform.localScale = Vector3.Lerp(emptyController,filledInLeftController, e);
-                            }
-                            break;
-                        case Globals.ControlScheme.ControllerSharedRight:
-                            foreach (GameObject go in player1ColorFills)
-                            {
-                                if (go != RCRTP1 && go.transform.localScale.x > .01)
-                                    go.transform.localScale = Vector3.Lerp(emptyController, filledInLeftController, e);
-                            }
-                            break;
-                        case Globals.ControlScheme.ControllerSolo:
-                            foreach (GameObject go in player1ColorFills)
-                            {
-                                if (go != RCLTP1 && go != RCRTP1 && go.transform.localScale.x > .01)
-                                    go.transform.localScale = Vector3.Lerp(emptyController,filledInLeftController, e);
-                            }
-                            break;
-                    }
-
-                    break;
-            }
-
-        }
-
-        
-    }*/
+    
 }

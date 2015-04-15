@@ -59,20 +59,20 @@ public class InputSelect : MonoBehaviour {
 
         if (player1Timer < 1f)
         {
-            ChangePlayerOneInput();
+            //ChangePlayerOneInput();
             CancelInvoke("PlayerOneTimer");
-            inputFill.player1FutureControls.controlScheme = Globals.ControlScheme.None;
-            inputFill.player1FutureControls.inputNameSelected = Globals.InputNameSelected.None;
+            //inputFill.player1FutureControls.controlScheme = Globals.ControlScheme.None;
+            //inputFill.player1FutureControls.inputNameSelected = Globals.InputNameSelected.None;
             //inputFill.player1FutureControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
             player1Timer = 4f;
         }
 
         if (player2Timer < 1f)
         {
-            ChangePlayerTwoInput();
+            //ChangePlayerTwoInput();
             CancelInvoke("PlayerTwoTimer");
-            inputFill.player2FutureControls.controlScheme = Globals.ControlScheme.None;
-            inputFill.player2FutureControls.inputNameSelected = Globals.InputNameSelected.None;
+            //inputFill.player2FutureControls.controlScheme = Globals.ControlScheme.None;
+            //inputFill.player2FutureControls.inputNameSelected = Globals.InputNameSelected.None;
             player2Timer = 4f;
         }
 	
@@ -90,14 +90,14 @@ public class InputSelect : MonoBehaviour {
     {
         if (collide.gameObject.name == "Player 1")
         {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             inputFill.player1FutureControls.controlScheme = inputNameAndControlScheme.controlScheme;
             inputFill.player1FutureControls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
             InvokeRepeating("PlayerOneTimer", 1f, 1f);
         }
         if (collide.gameObject.name == "Player 2")
         {
-            Debug.Log("Enter");
+            //Debug.Log("Enter");
             inputFill.player2FutureControls.controlScheme = inputNameAndControlScheme.controlScheme;
             inputFill.player2FutureControls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
             InvokeRepeating("PlayerTwoTimer", 1f, 1f);
@@ -125,11 +125,11 @@ public class InputSelect : MonoBehaviour {
 
     void ChangePlayerOneInput()
     {
-        Globals.Instance.player1Controls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
-        Globals.Instance.player1Controls.controlScheme = inputNameAndControlScheme.controlScheme;
-        Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
-        Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
-        Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+       // Globals.Instance.player1Controls.inputNameSelected = inputNameAndControlScheme.inputNameSelected;
+        //Globals.Instance.player1Controls.controlScheme = inputNameAndControlScheme.controlScheme;
+        //Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
+        //Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
+        //Globals.Instance.player2Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player2Controls, Globals.Instance.player1Controls);
        
     }
 

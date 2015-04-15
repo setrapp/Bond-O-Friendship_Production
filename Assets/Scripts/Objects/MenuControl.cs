@@ -9,9 +9,17 @@ public class MenuControl : MonoBehaviour {
     public GameObject startMenu;
     public GameObject levelSelect;
 
+    public GameObject inputSelect;
+
 	public string startScene;
     InputDevice device;
     private int deviceCount;
+
+    private bool player1Ready = false;
+    private bool player2Ready = false;
+    private bool inputSelected = false;
+
+    public Camera menuCamera;
 
 	// Use this for initialization
 	void Start () {
@@ -42,64 +50,97 @@ public class MenuControl : MonoBehaviour {
 				MainMenuLoadLevel();
 			}
         }
-
-        if(deviceCount > 0)
+        if (!inputSelected)
         {
-            device = InputManager.ActiveDevice;
-            if (device.AnyButton)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+            if (deviceCount > 0)
             {
-                Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
-                Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
-                Globals.Instance.rightContollerIndex = -2;
-                Globals.Instance.rightControllerPreviousIndex = -2;
 
-                if(deviceCount == 1)
+                device = InputManager.ActiveDevice;
+                if (device.AnyButton)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
                 {
-                    Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
-                    Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
-                    Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
-                    Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                    Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
+                    Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
+                    Globals.Instance.rightContollerIndex = -2;
+                    Globals.Instance.rightControllerPreviousIndex = -2;
+
+                    if (deviceCount == 1)
+                    {
+                        Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+                        Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                        Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                        Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                    }
+                    else
+                    {
+                        Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.Solo;
+                        Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.Solo;
+                        Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+                        Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
+                    }
+
+                    //Debug.Log(Globals.Instance.player1ControlScheme);
+                    // MainMenuLoadLevel();
+                    if (menuCamera != null)
+                {
+                    menuCamera.gameObject.SetActive(true);
+                }
+                    inputSelected = true;
+                    startMenu.SetActive(false);
+                    inputSelect.SetActive(true);
+                    return;
+                    // Globals.usingController = true;
+                }
+            }
+            if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+            {
+                if (deviceCount == 0)
+                {
+                    Globals.Instance.leftControllerIndex = -3;
+                    Globals.Instance.rightContollerIndex = -3;
+                }
+                else if (deviceCount == 1)
+                {
+                    Globals.Instance.leftControllerIndex = -2;
+                    Globals.Instance.rightContollerIndex = -3;
                 }
                 else
                 {
-                    Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.Solo;
-                    Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.Solo;
-                    Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
-                    Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
+                    Globals.Instance.leftControllerIndex = -2;
+                    Globals.Instance.rightContollerIndex = -2;
                 }
 
-                //Debug.Log(Globals.Instance.player1ControlScheme);
-                MainMenuLoadLevel();
-                return;
-               // Globals.usingController = true;
-            }
-        }
-        if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
-        {
-            if (deviceCount == 0)
-            {
-                Globals.Instance.leftControllerIndex = -3;
-                Globals.Instance.rightContollerIndex = -3;
-            }
-            else if(deviceCount == 1)
-            {
-                Globals.Instance.leftControllerIndex = -2;
-                Globals.Instance.rightContollerIndex = -3;
-            }
-            else
-            {
-                Globals.Instance.leftControllerIndex = -2;
-                Globals.Instance.rightContollerIndex = -2;
-            }
+                Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+                Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+                Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
+                Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
 
-            Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
-            Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
-            Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
-            Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
-            MainMenuLoadLevel();
-           // Globals.usingController = false;
+                inputSelected = true;
+                if (menuCamera != null)
+                {
+                    menuCamera.gameObject.SetActive(true);
+                }
+                startMenu.SetActive(false);
+                inputSelect.SetActive(true);
+                return;
+                //MainMenuLoadLevel();
+                // Globals.usingController = false;
+            }
         }
-    }		
+
+        if (player1Ready && player2Ready && inputSelected)
+        {
+            MainMenuLoadLevel();
+            //Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(true);
+            if (menuCamera != null)
+            {
+                menuCamera.gameObject.SetActive(false);
+            }
+           
+        }
+        else
+            Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(false);
+
+    }	
 
     public void MainMenuLoadLevel()
     {
@@ -135,6 +176,32 @@ public class MenuControl : MonoBehaviour {
         #else
 		        Application.Quit();
         #endif
+    }
+
+    void OnTriggerEnter(Collider collide)
+    {
+        if (collide.gameObject.name == "Player 1")
+        {
+            Debug.Log("Here");
+            player1Ready = true;
+        }
+        if (collide.gameObject.name == "Player 2")
+        {
+            player2Ready = true;
+        }
+    }
+
+    void OnTriggerExit(Collider collide)
+    {
+        if (collide.gameObject.name == "Player 1")
+        {
+            player1Ready = false;
+        }
+        if (collide.gameObject.name == "Player 2")
+        {
+            player2Ready = false;
+        }
+
     }
 
 }
