@@ -9,16 +9,38 @@ public class ThreadPadElement : MonoBehaviour {
 	public List<GameObject> bondLinks = new List<GameObject>();
 	public Bond threadedbond = null;
 	public GameObject Activator;
+	public GameObject triIsland;
+	public GameObject triDest;
+	public GameObject bigIsland;
+	public GameObject bigDest;
+
+	private Vector3 triPosition;
+	private Vector3 bigPosition;
+	private float maxDistance;
+	private float maxTriDistance;
+	private float maxBigDistance;
 
 	// Use this for initialization
 	void Start () {
 		activated = false;
 		bondCount = 0;
-		
+		maxDistance = Vector3.Distance(gameObject.transform.position, Activator.transform.position);
+		maxTriDistance = Vector3.Distance(triIsland.transform.position, triDest.transform.position);
+		maxBigDistance = Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(Vector3.Distance(gameObject.transform.position, Activator.transform.position) < 1.6f)
+			GetComponent<SpringJoint>().spring = 0;
+
+		triPosition = triIsland.transform.position;
+		triPosition.x += 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxTriDistance)/Vector3.Distance(triIsland.transform.position, triDest.transform.position);
+		triIsland.transform.position = triPosition;
+
+		bigPosition = bigIsland.transform.position;
+		bigPosition.x -= 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxBigDistance)/Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
+		bigIsland.transform.position = bigPosition;
 
 		for(int i=0;i<bondLinks.Count;i++)
 		{
@@ -56,8 +78,6 @@ public class ThreadPadElement : MonoBehaviour {
 				bondLinks.Add(collide.gameObject);
 				threadedbond = bond;
 			}
-			//print(bondCount);
-			
 		}
 
 	}
@@ -77,18 +97,12 @@ public class ThreadPadElement : MonoBehaviour {
 	void OnTriggerEnter(Collider collide)
 	{
 		if(collide.gameObject == Activator)
-		{
 			activated = true;
-			//print ("Activated");
-		}
 	}
 
 	void OnTriggerExit(Collider collide)
 	{
 		if(collide.gameObject == Activator)
-		{
 			activated = false;
-			//print ("DeActivated");
-		}
 	}
 }
