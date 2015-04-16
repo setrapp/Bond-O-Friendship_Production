@@ -81,9 +81,9 @@ public class MenuControl : MonoBehaviour {
                     //Debug.Log(Globals.Instance.player1ControlScheme);
                     // MainMenuLoadLevel();
                     if (menuCamera != null)
-                    {
-                        menuCamera.gameObject.SetActive(true);
-                    }
+                {
+                    menuCamera.gameObject.SetActive(true);
+                }
                     inputSelected = true;
                     startMenu.SetActive(false);
                     inputSelect.SetActive(true);
@@ -182,7 +182,6 @@ public class MenuControl : MonoBehaviour {
     {
         if (collide.gameObject.name == "Player 1")
         {
-            
             player1Ready = true;
         }
         if (collide.gameObject.name == "Player 2")

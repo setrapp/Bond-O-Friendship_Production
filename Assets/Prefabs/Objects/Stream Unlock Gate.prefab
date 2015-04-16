@@ -47,6 +47,8 @@ GameObject:
   - 4: {fileID: 441624}
   - 65: {fileID: 6541628}
   - 114: {fileID: 11441626}
+  - 33: {fileID: 3345608}
+  - 23: {fileID: 2345608}
   m_Layer: 0
   m_Name: Stream Fill Collider
   m_TagString: Untagged
@@ -115,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -61.0299988, y: 31.7999992, z: 5}
+  m_LocalPosition: {x: -58.8600006, y: 32.1599998, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 441630}
@@ -140,8 +142,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141624}
   m_LocalRotation: {x: .707106829, y: 4.72404205e-09, z: 4.72404205e-09, w: .707106829}
-  m_LocalPosition: {x: 1.75160456, y: 8.00544171e-07, z: 7.69999981}
-  m_LocalScale: {x: 3.25136232, y: 2, z: 3.25136137}
+  m_LocalPosition: {x: 1.75160003, y: 8.00540022e-07, z: 7.69999981}
+  m_LocalScale: {x: 10.6888466, y: 2, z: 3.25136137}
   m_Children: []
   m_Father: {fileID: 441630}
   m_RootOrder: 3
@@ -164,8 +166,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141628}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.44000006, y: 0, z: -2}
-  m_LocalScale: {x: 18.3772793, y: 1, z: 13}
+  m_LocalPosition: {x: -4.94000006, y: -0, z: -2}
+  m_LocalScale: {x: 15.8771534, y: 1, z: 13}
   m_Children: []
   m_Father: {fileID: 441630}
   m_RootOrder: 0
@@ -245,6 +247,26 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!23 &2345608
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141624}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3341626
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -265,6 +287,13 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141628}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &3345608
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141624}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5441630
 Rigidbody:
@@ -356,7 +385,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  canReact: 1
+  reactable: 1
+  superiors: []
+  streamAlterSpeed: -1
   scalees:
   - scalee: {fileID: 441622}
     unscaled: {x: 1.5, y: 6, z: 1.5}
@@ -417,7 +448,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  canReact: 1
+  reactable: 1
+  superiors: []
+  streamAlterSpeed: -1
   fillTargetRenderers:
   - {fileID: 2341630}
   - {fileID: 2341628}
@@ -437,11 +470,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  canReact: 1
+  reactable: 1
+  superiors: []
+  streamAlterSpeed: -1
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
-  forceAllToLeast: 0
 --- !u!114 &11483574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -455,11 +489,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  canReact: 1
-  collidersEnabled: 0
+  reactable: 1
+  superiors: []
+  streamAlterSpeed: -1
+  collidersToEnabled: 0
   reactionColliders:
   - {fileID: 6541628}
-  bodiesKinematic: 0
+  bodiesToKinematic: 0
   reactionBodies:
   - {fileID: 5441630}
 --- !u!1001 &100100000

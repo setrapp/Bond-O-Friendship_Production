@@ -7,6 +7,7 @@ public class AudioTrigger : MonoBehaviour {
 	public LayerMask triggerLayers;
 	public SmartAudioSource audioMover;
 	public bool moveToCollsion = false;
+	public bool playMultiple = true;
 
 	void Start()
 	{
@@ -18,7 +19,7 @@ public class AudioTrigger : MonoBehaviour {
 
 	private void PlayAudio(Vector3 position)
 	{
-		if (audioToPlay != null && !audioToPlay.isPlaying)
+		if (audioToPlay != null && (!audioToPlay.isPlaying || playMultiple))
 		{
 			if (moveToCollsion && audioMover != null)
 			{
