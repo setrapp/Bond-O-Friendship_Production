@@ -56,7 +56,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			if (naturalFluffCount <= 0)
 			{
-				character.fillScale = 0;
+				//character.fillScale = 0;
 			}
 			else
 			{

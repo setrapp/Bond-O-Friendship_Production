@@ -15,9 +15,10 @@ public class StreamScalingReaction : StreamReaction {
 		}
 	}
 
-	public override void React(float actionRate)
+	public override bool React(float actionRate)
 	{
-		if (reactionProgress < 1)
+		bool reacted = base.React(actionRate);
+		if (reacted)
 		{
 			base.React(actionRate);
 
@@ -26,6 +27,7 @@ public class StreamScalingReaction : StreamReaction {
 				scalees[i].scalee.localScale = (scalees[i].unscaled * (1 - reactionProgress)) + (scalees[i].scaled * reactionProgress);
 			}
 		}
+		return reacted;
 	}
 }
 

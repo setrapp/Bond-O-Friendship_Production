@@ -30,7 +30,7 @@ public class ShrinkingPuzzle : MonoBehaviour {
 			if(hit.transform.name == "OrangeMovingPuzzle")
 			{
 				hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(hit.transform.gameObject.GetComponent<Renderer>().material.color, orange, Time.deltaTime);
-				hit.transform.localScale -= new Vector3(0.02f, 0.02f, 0);
+				hit.transform.localScale -= new Vector3(1.5f, 1.5f, 0)*Time.deltaTime;
 				if(hit.transform.localScale.x <= 0.5f)
 					Destroy(hit.transform.gameObject);
 			}
@@ -42,7 +42,7 @@ public class ShrinkingPuzzle : MonoBehaviour {
 			if(hit.transform.name == "BlueMovingPuzzle")
 			{
 				hit.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(hit.transform.gameObject.GetComponent<Renderer>().material.color, blue, Time.deltaTime);
-				hit.transform.localScale -= new Vector3(0.02f, 0.02f, 0);
+				hit.transform.localScale -= new Vector3(1.5f, 1.5f, 0)*Time.deltaTime;
 				if(hit.transform.localScale.x <= 0.5f)
 					Destroy(hit.transform.gameObject);
 			}
@@ -52,7 +52,7 @@ public class ShrinkingPuzzle : MonoBehaviour {
 		if(transform.childCount == 0 && plantParticle == null)
 		{
 			plantParticle = (GameObject)Instantiate(particlePrefab);
-			plantParticle.transform.position = transform.position;
+			plantParticle.transform.position = transform.position + new Vector3(0, 0, -20.0f);
 		}
 
 	}

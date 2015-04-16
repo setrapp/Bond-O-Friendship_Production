@@ -35,25 +35,34 @@ public class StreamReactionList : StreamReaction {
 		}
 	}
 
-	public override void React(float actionRate)
+	public override bool React(float actionRate)
 	{
-		// Provoke all listed reactions.
-		float minReaction = 1;
-		for (int i = 0; i < streamReactions.Count; i++)
+		bool reacted = base.React(0);
+		if (reacted)
 		{
-			if (streamReactions[i] == null || streamReactions[i] == this)
+			// Provoke all listed reactions.
+			float minReaction = 1;
+			for (int i = 0; i < streamReactions.Count; i++)
 			{
-				streamReactions.RemoveAt(i);
-				i--;
-			}
-			else
-			{
-				streamReactions[i].React(actionRate);
-				if (streamReactions[i].reactionProgress < minReaction)
+				if (streamReactions[i] == null || streamReactions[i] == this)
 				{
-					minReaction = streamReactions[i].reactionProgress;
+					streamReactions.RemoveAt(i);
+					i--;
+				}
+				else
+				{
+					streamReactions[i].React(actionRate * reactionRate);
+
+					if (streamReactions[i].reactionProgress < minReaction)
+					{
+						minReaction = streamReactions[i].reactionProgress;
+					}
 				}
 			}
+
+			reactionProgress = minReaction;
 		}
+		return reacted;
+
 	}
 }

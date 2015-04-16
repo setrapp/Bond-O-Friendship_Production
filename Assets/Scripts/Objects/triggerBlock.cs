@@ -8,7 +8,6 @@ public class triggerBlock : MonoBehaviour {
 	private Color myColor;
 	private float triggerTime;
 	public bool allDone = false;
-
 	// Use this for initialization
 	void Start () {
 		myColor = new Color((192.0f/255.0f),(22.0f/255.0f),(233.0f/255.0f),1.0f);

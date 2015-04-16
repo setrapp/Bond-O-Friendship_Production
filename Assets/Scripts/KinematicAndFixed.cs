@@ -8,17 +8,12 @@ public class KinematicAndFixed : MonoBehaviour {
 	public bool willKinematic = false;
 	public WaitPad triggerPad;
 	private bool triggered = false;
-	public SpinPad.SpinLimit triggerSpinLimit = SpinPad.SpinLimit.PULL_END;
 
 	public void Update()
 	{
 		if (!triggered)
 		{
 			bool padTriggered = triggerPad.activated;
-			if (triggerPad as SpinPad != null)
-			{
-				padTriggered = ((SpinPad)triggerPad).IsAtLimit(triggerSpinLimit);
-			}
 
 			if (padTriggered)
 			{

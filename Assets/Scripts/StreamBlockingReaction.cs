@@ -4,26 +4,25 @@ using System.Collections.Generic;
 
 public class StreamBlockingReaction : StreamReaction {
 
-	public bool collidersEnabled = false;
+	public bool collidersToEnabled = false;
 	[SerializeField]
 	public List<Collider> reactionColliders;
-	public bool bodiesKinematic = false;
+	public bool bodiesToKinematic = false;
 	[SerializeField]
 	public List<Rigidbody> reactionBodies;
 
-	public override void React(float actionRate)
+	public override bool React(float actionRate)
 	{
-		if (reactionProgress < 1)
+		bool reacted = base.React(actionRate);
+		if (reacted)
 		{
-			base.React(actionRate);
-
 			if (reactionProgress >= 1)
 			{
 				for (int i = 0; i < reactionColliders.Count; i++)
 				{
 					if (reactionColliders[i] != null)
 					{
-						reactionColliders[i].enabled = collidersEnabled;
+						reactionColliders[i].enabled = collidersToEnabled;
 					}
 				}
 
@@ -31,10 +30,11 @@ public class StreamBlockingReaction : StreamReaction {
 				{
 					if (reactionBodies[i] != null)
 					{
-						reactionBodies[i].isKinematic = bodiesKinematic;
+						reactionBodies[i].isKinematic = bodiesToKinematic;
 					}
 				}
 			}
 		}
+		return reacted;
 	}
 }
