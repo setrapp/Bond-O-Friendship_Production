@@ -67,6 +67,9 @@ public class Stream : MonoBehaviour {
 			Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
 			Vector3 toTarget = targetChannel.transform.position - transform.position;
 
+			// TODO: Should the stream be able to change z-depth?
+			oldToTarget.z = toTarget.z = 0;
+
 			if (Vector3.Dot(oldToTarget, toTarget) < 0)
 			{
 				Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
@@ -201,7 +204,7 @@ public class Stream : MonoBehaviour {
 
 	void OnDrawGizmos()
 	{
-		if (showTarget)
+		if (showTarget && targetChannel != null)
 		{
 			Gizmos.DrawLine(transform.position, targetChannel.transform.position);
 		}
