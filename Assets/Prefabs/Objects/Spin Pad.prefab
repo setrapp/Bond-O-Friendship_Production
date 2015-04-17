@@ -526,7 +526,7 @@ Transform:
   m_GameObject: {fileID: 155974}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -4.37113883e-08}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 455980}
   m_RootOrder: 2
@@ -562,7 +562,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 47.4765511, y: 89.428009, z: -79.3000031}
+  m_LocalPosition: {x: 47.9000015, y: 15.6999998, z: -79.3000031}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455970}
@@ -1192,7 +1192,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155988}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: .5
   m_Drag: 1.5
   m_AngularDrag: 100
   m_UseGravity: 0
@@ -1222,7 +1222,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155994}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: .5
   m_Drag: 1.5
   m_AngularDrag: 100
   m_UseGravity: 0
@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    defaultShapingForce: .25
+    defaultShapingForce: .150000006
     bondOnContact: 1
     bondOnFluff: 0
     ignoreBondingLayers:
@@ -1439,18 +1439,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     attachSpring1: 0
-    attachSpring2: 60
-    linkMass: .800000012
+    attachSpring2: 100
+    linkMass: .5
     linkDrag: .200000003
     pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
     midWidth: 1
-    addLinkDistance: .5
-    removeLinkDistance: .200000003
-    springForce: 200
-    springDamper: 10
+    addLinkDistance: 1
+    removeLinkDistance: .400000006
+    springForce: 30
+    springDamper: 1
     relativeRequestDistance: -1
     fluffRequestDelay: -1
     fluffPullForce: -1
@@ -1461,9 +1461,9 @@ MonoBehaviour:
     manualAttachment2: 0
     manualLinks: 0
     disableColliders: 0
-    fullDetailDistance: -1
-    sparseDetailDistance: -1
-    sparseDetailFactor: -1
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
+    sparseDetailFactor: .100000001
     sparseDetailLinksCheck: 1
 --- !u!114 &11455976
 MonoBehaviour:
@@ -1509,6 +1509,7 @@ MonoBehaviour:
   membraneDirection: {x: -1, y: 0, z: 0}
   membraneLength: 5.5
   showPosts: 0
+  disableAtFar: 1
   startPost: {fileID: 156000}
   endPost: {fileID: 155992}
   defaultShapingForce: -1
@@ -1695,8 +1696,6 @@ MonoBehaviour:
   fullOutRotation: -360
   currentRotation: 0
   rotationProgress: 0
-  maxDrag: 100
-  minDrag: 1.5
   dragDecreaseSpeed: 500
   dragIncreaseSpeed: 50
   membraneAttachmentSpring: 20
@@ -2146,7 +2145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    defaultShapingForce: .25
+    defaultShapingForce: .150000006
     bondOnContact: 1
     bondOnFluff: 0
     ignoreBondingLayers:
@@ -2170,18 +2169,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     attachSpring1: 0
-    attachSpring2: 60
-    linkMass: .800000012
+    attachSpring2: 100
+    linkMass: .5
     linkDrag: .200000003
     pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
     midWidth: 1
-    addLinkDistance: .5
-    removeLinkDistance: .200000003
-    springForce: 200
-    springDamper: 10
+    addLinkDistance: 1
+    removeLinkDistance: .400000006
+    springForce: 30
+    springDamper: 1
     relativeRequestDistance: -1
     fluffRequestDelay: -1
     fluffPullForce: -1
@@ -2192,9 +2191,9 @@ MonoBehaviour:
     manualAttachment2: 0
     manualLinks: 0
     disableColliders: 0
-    fullDetailDistance: -1
-    sparseDetailDistance: -1
-    sparseDetailFactor: -1
+    fullDetailDistance: 20
+    sparseDetailDistance: 50
+    sparseDetailFactor: .100000001
     sparseDetailLinksCheck: 1
 --- !u!114 &11456032
 MonoBehaviour:
@@ -2240,6 +2239,7 @@ MonoBehaviour:
   membraneDirection: {x: 1, y: 0, z: 0}
   membraneLength: 5.5
   showPosts: 0
+  disableAtFar: 1
   startPost: {fileID: 156004}
   endPost: {fileID: 155996}
   defaultShapingForce: -1
