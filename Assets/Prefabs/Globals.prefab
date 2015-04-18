@@ -102,7 +102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &199962
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +316,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.0109749, y: 75.7971039, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499962}
@@ -535,8 +535,8 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 60
-  orthographic: 1
+  field of view: 30
+  orthographic: 0
   orthographic size: 20
   m_Depth: 0
   m_CullingMask:
@@ -567,8 +567,8 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 60
-  orthographic: 1
+  field of view: 30
+  orthographic: 0
   orthographic size: 20
   m_Depth: 1
   m_CullingMask:
@@ -1014,14 +1014,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCamera1: 1
   player1: {fileID: 0}
   player2: {fileID: 0}
-  smoothness: 20
+  cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099986}
   otherCamera: {fileID: 2099990}
-  splitScreen: 1
   pivot: {fileID: 199966}
-  isCamera1: 1
 --- !u!114 &11499966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1050,8 +1049,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6657702c554729f498a976b44a0e0992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splittable: 0
+  splittable: 1
   split: 0
+  splitterDistance: .75
+  splitterDistanceInWorldSpace: 0
+  splitLineFadeDistance: .5
+  splitLineFadeDistanceInWorldSpace: 0
   player1CameraSystem: {fileID: 11499964}
   player2CameraSystem: {fileID: 11499978}
   splitCamera1: {fileID: 0}
@@ -1059,10 +1062,7 @@ MonoBehaviour:
   player1: {fileID: 0}
   player2: {fileID: 0}
   audioListener: {fileID: 8199990}
-  playerDistanceX: 0
-  playerDistanceY: 0
-  testPlayerOne: {x: 0, y: 0, z: 0}
-  testPlayerTwo: {x: 0, y: 0, z: 0}
+  playerDistance: 0
 --- !u!114 &11499970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1239,14 +1239,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCamera1: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
-  smoothness: 20
+  cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099990}
   otherCamera: {fileID: 2099986}
-  splitScreen: 1
   pivot: {fileID: 199978}
-  isCamera1: 0
 --- !u!114 &11499980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1274,7 +1273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logDebugInfo: 0
   invertYAxis: 0
-  enableXInput: 1
+  enableXInput: 0
   useFixedUpdate: 0
   dontDestroyOnLoad: 0
   customProfiles: []
