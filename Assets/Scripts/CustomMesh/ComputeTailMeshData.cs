@@ -66,8 +66,8 @@ public class ComputeTailMeshData : ComputeCustomMeshFromLocus {
             for (int i = 0; i < currentSize; i++ )
             {
                 //vertices
-                vertices[i*2] = receivedArray[i] + rights[i];
-                vertices[i*2+1] = receivedArray[i] - rights[i];
+                vertices[i*2] = receivedArray[i] - rights[i];
+                vertices[i*2+1] = receivedArray[i] + rights[i];
 
                 //Compute new triangles (different loop outside)
                 //MoveTrianglesFromBy(ref triangles, 0, 6, 2);

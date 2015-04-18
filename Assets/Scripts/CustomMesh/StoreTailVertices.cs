@@ -17,7 +17,8 @@ public class StoreTailVertices : StoreCustomMeshLocus {
     public LineRenderer lr;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
 
         right = new Vector3(1f, 0f, 0f);
         lr = GetComponent<LineRenderer>();
@@ -25,14 +26,17 @@ public class StoreTailVertices : StoreCustomMeshLocus {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
 
+        right = new Vector3(1, 0, 0);
         int currentSize = tailVertices.Count;
-        //if no tail
-        if (currentSize < maxSize-1)
+
+        //if tail not at max length
+        if (currentSize < maxSize - 1)
         {
             tailVertices.Insert(0, transform.position);
-            rightVectors.Insert(0, transform.rotation * right); 
+            //rightVectors.Insert(0, transform.rotation * right); 
         }
 
         else if (currentSize == maxSize - 1)
@@ -42,17 +46,22 @@ public class StoreTailVertices : StoreCustomMeshLocus {
             rightVectors.RemoveAt(rightVectors.Count - 1);
             //Add at the beginning
             tailVertices.Insert(0, transform.position);
-            rightVectors.Insert(0, transform.rotation * right);
+            //rightVectors.Insert(0, transform.rotation * right);
         }
 
-        else //extra points
-        {
-            while (tailVertices.Count > maxSize)
-            {
-                tailVertices.RemoveAt(tailVertices.Count - 1);
-                rightVectors.RemoveAt(rightVectors.Count - 1);
-            }
-        }
+        if (currentSize >= 2)
+            right = Quaternion.Euler(0, 0, 90) * (tailVertices[currentSize - 1] - tailVertices[currentSize - 2]);
+
+        rightVectors.Insert(0, transform.rotation * right.normalized); 
+
+        //else //extra points
+        //{
+        //    while (tailVertices.Count > maxSize)
+        //    {
+        //        tailVertices.RemoveAt(tailVertices.Count - 1);
+        //        rightVectors.RemoveAt(rightVectors.Count - 1);
+        //    }
+        //}
 
         if (renderLine)
         {
@@ -66,5 +75,6 @@ public class StoreTailVertices : StoreCustomMeshLocus {
         }
 
         else lr.enabled = false;
+
 	}
 }
