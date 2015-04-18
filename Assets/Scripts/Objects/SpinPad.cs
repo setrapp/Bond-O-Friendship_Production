@@ -9,6 +9,8 @@ public class SpinPad : WaitPad {
 	public Membrane membrane2;
 	public SpinPadSide wallEnd1;
 	public SpinPadSide wallEnd2;
+	public Collider wallEnd1Collider;
+	public Collider wallEnd2Collider;
 	public GameObject rotatee;
 	public SpinPadPushee helmet1;
 	public SpinPadPushee helmet2;
@@ -119,6 +121,15 @@ public class SpinPad : WaitPad {
 				activated = true;
 				SetLineColors();
 			}
+		}
+
+		if (wallEnd1 != null && wallEnd1Collider != null)
+		{
+			wallEnd1Collider.transform.position = wallEnd1.transform.position;
+		}
+		if (wallEnd2 != null && wallEnd2Collider != null)
+		{
+			wallEnd2Collider.transform.position = wallEnd2.transform.position;
 		}
 	}
 
