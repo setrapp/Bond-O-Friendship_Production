@@ -11,13 +11,23 @@ public class StreamReaction : MonoBehaviour {
 	[SerializeField]
 	public List<StreamReaction> superiors;
 	public float streamAlterSpeed = -1;
+	protected bool reacting = false;
 
-	void Start()
+	virtual protected void Start()
 	{
 		if (superiors.Count > 0)
 		{
 			reactable = false;
 		}
+	}
+
+	virtual protected void Update()
+	{
+		if (!reacting)
+		{
+			React(-reactionRate);
+		}
+		reacting = false;
 	}
 
 	public virtual bool React(float actionRate)
