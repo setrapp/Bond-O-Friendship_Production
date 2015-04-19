@@ -85,20 +85,23 @@ public class Stream : MonoBehaviour {
 				}
 			}
 
-			/*mover.velocity = mover.rigidbody.velocity;
+			mover.velocity = mover.rigidbody.velocity;
 			mover.Accelerate(toTarget);
 
 			if (!autoMove)
 			{
 				moveDirection = mover.velocity.normalized;
-			}*/
+			}
 
 			if (autoMove)
 			{
 				//moveDirection = toTarget.normalized;
 			}
 
-			mover.NaiveAccelerate(moveDirection);
+			//TODO remove
+			/*UpdateMovement();
+
+			mover.NaiveAccelerate(moveDirection);*/
 		}
 		else
 		{
