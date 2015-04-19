@@ -23,9 +23,9 @@ public class StreamReaction : MonoBehaviour {
 
 	virtual protected void Update()
 	{
-		if (!reacting)
+		if (!reacting && reactionProgress > 0)
 		{
-			React(-reactionRate);
+			//React(-reactionRate * Time.deltaTime);
 		}
 		reacting = false;
 	}
@@ -44,10 +44,11 @@ public class StreamReaction : MonoBehaviour {
 			}
 		}
 
-		if (reactionProgress < 1 && reactable)
+		if (reactable)
 		{
+			bool reacted = true;// (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
 			reactionProgress = CalculateReaction(actionRate);
-			return true;
+			return reacted;
 		}
 		return false;
 	}

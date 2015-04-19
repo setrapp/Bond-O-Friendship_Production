@@ -62,19 +62,6 @@ public class Stream : MonoBehaviour {
 
 	void Update()
 	{
-		if (autoMove)
-		{
-			UpdateMovement();
-		}
-		else
-		{
-			mover.Accelerate(moveDirection);
-		}
-		
-	}
-
-	public void UpdateMovement()
-	{
 		if (!ending)
 		{
 			if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
@@ -105,6 +92,16 @@ public class Stream : MonoBehaviour {
 			{
 				moveDirection = mover.velocity.normalized;
 			}
+
+			if (autoMove)
+			{
+				//moveDirection = toTarget.normalized;
+			}
+
+			//TODO remove
+			/*UpdateMovement();
+
+			mover.NaiveAccelerate(moveDirection);*/
 		}
 		else
 		{
@@ -122,6 +119,13 @@ public class Stream : MonoBehaviour {
 		}
 
 		tracer.AddVertex(transform.position);
+		
+	}
+
+	public void UpdateMovement()
+	{
+		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+		moveDirection = toTarget.normalized;
 	}
 
 	private void SeekNextChannel()
