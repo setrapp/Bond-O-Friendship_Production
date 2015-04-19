@@ -20,7 +20,7 @@ public class MaterialBondReaction : MonoBehaviour {
 
 		mainColor = targetRenderer.material.GetColor("_Color");
 
-		ReactToPlayerBond(true);
+		ReactToPlayerBond(true, false);
 	}
 
 	void Update()
@@ -28,11 +28,11 @@ public class MaterialBondReaction : MonoBehaviour {
 		ReactToPlayerBond(false);
 	}
 
-	private void ReactToPlayerBond(bool forceReact)
+	private void ReactToPlayerBond(bool forceReact, bool forcedReaction = false)
 	{
 		if (reactingToBond != Globals.Instance.playersBonded || forceReact)
 		{
-			reactingToBond = Globals.Instance.playersBonded;
+			reactingToBond = forceReact ? forcedReaction : Globals.Instance.playersBonded;
 			Color startingColor = mainColor;
 			if (reactingToBond)
 			{
