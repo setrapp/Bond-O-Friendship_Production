@@ -21,7 +21,6 @@ public class DestroyInSpace : MonoBehaviour {
 			{
 				wasFloating = true;
 				transform.parent.GetComponent<Renderer>().material.color = transform.parent.GetComponent<SpawnBud>().parentColor;
-				Debug.Log(transform.GetComponentInParent<Renderer>().gameObject.name);
 				transform.GetComponentInParent<SpawnBud>().spawned = false;
 				falling = true;
 			}
