@@ -126,6 +126,22 @@ public class SimpleMover : MonoBehaviour {
 		unfixedVelocity *= Mathf.Max(externalSpeedMultiplier, 0);
 	}
 
+	public void NaiveAccelerate(Vector3 direction, bool alreadyNormalized = true)
+	{
+		if (!alreadyNormalized)
+		{
+			direction.Normalize();
+		}
+
+		Vector3 newVelocity = velocity + (direction * acceleration * Time.deltaTime);
+		if (newVelocity.sqrMagnitude > maxSpeed * maxSpeed)
+		{
+			newVelocity = newVelocity.normalized * maxSpeed;
+		}
+
+		unfixedVelocity = newVelocity * Mathf.Max(externalSpeedMultiplier, 0);
+	}
+
 	public void Move(Vector3 direction, float speed, bool clampSpeed = true)
 	{
 		if (direction.sqrMagnitude != 1)
