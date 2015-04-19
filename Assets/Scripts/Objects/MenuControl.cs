@@ -130,7 +130,6 @@ public class MenuControl : MonoBehaviour {
         if (player1Ready && player2Ready && inputSelected)
         {
             MainMenuLoadLevel();
-            //Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(true);
             if (menuCamera != null)
             {
                 menuCamera.gameObject.SetActive(false);
@@ -138,17 +137,16 @@ public class MenuControl : MonoBehaviour {
            
         }
         else
-            Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(false);
+		{
+			CameraSplitter.Instance.player1CameraSystem.gameObject.SetActive(false);
+			CameraSplitter.Instance.player2CameraSystem.gameObject.SetActive(false);
+		}
 
     }	
 
     public void MainMenuLoadLevel()
     {
-		CameraSplitter splitter = Globals.Instance.GetComponentInChildren<CameraSplitter>();
-		if (splitter != null)
-		{
-			splitter.splittable = true;
-		}
+		CameraSplitter.Instance.splittable = true;
         Application.LoadLevel(startScene);
     }
 

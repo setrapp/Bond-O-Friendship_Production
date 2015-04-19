@@ -35,6 +35,7 @@ public class Fluff : MonoBehaviour {
 	public GameObject soleAttractor = null;
 	public Vector3 minFluffScale = Vector3.zero;
 	public Vector3 maxFluffScale = new Vector3(1, 1, 1);
+	public AudioSource attachAudio;
 
 	void Awake()
 	{
@@ -336,6 +337,11 @@ public class Fluff : MonoBehaviour {
 		hull.isTrigger = true;
 
 		forgetCreator = true;
+
+		if (attachAudio != null && !attachAudio.isPlaying)
+		{
+			attachAudio.Play();
+		}
 	}
 
 	public void ToggleSwayAnimation(bool playSway)
