@@ -21,6 +21,9 @@ public class Globals : MonoBehaviour {
 		}
 	}
 
+	public bool perspectiveCamera = false;
+	public float perspectiveFOV = 25;
+
 	public float audioVolume = -1;
 	public bool mute = false;
 	public AudioSource bgm;
@@ -92,11 +95,14 @@ public class Globals : MonoBehaviour {
 		}
 		//Debug.Log(leftControllerIndex);
 
+		CheckCameraPerspective();
+
 		if (audioVolume < 0)
 		{
 			audioVolume = AudioListener.volume;
 		}
 
+		CheckCameraPerspective();
 		CheckVolume();
 
 		if (bgm != null && !bgm.isPlaying)
@@ -113,6 +119,7 @@ public class Globals : MonoBehaviour {
 		ResetDeviceIndex();
 		WaitForInput();
 
+		CheckCameraPerspective();
 		CheckVolume();
 
 	   /* if(Input.GetKeyDown(KeyCode.Z))
@@ -126,6 +133,18 @@ public class Globals : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Escape))
 		{
 			Application.Quit();
+		}
+	}
+
+	private void CheckCameraPerspective()
+	{
+		if (CameraSplitter.Instance.splitCamera1.orthographic == perspectiveCamera || CameraSplitter.Instance.splitCamera2.orthographic == perspectiveCamera)
+		{
+			CameraSplitter.Instance.splitCamera1.orthographic = CameraSplitter.Instance.splitCamera2.orthographic = !perspectiveCamera;
+		}
+		if (perspectiveCamera && CameraSplitter.Instance.splitCamera1.fieldOfView != perspectiveFOV || CameraSplitter.Instance.splitCamera2.fieldOfView != perspectiveFOV)
+		{
+			CameraSplitter.Instance.splitCamera1.fieldOfView = CameraSplitter.Instance.splitCamera2.fieldOfView = perspectiveFOV;
 		}
 	}
 	
