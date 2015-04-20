@@ -9,6 +9,8 @@ public class SpinPad : WaitPad {
 	public Membrane membrane2;
 	public SpinPadSide wallEnd1;
 	public SpinPadSide wallEnd2;
+	public Collider wallEnd1Collider;
+	public Collider wallEnd2Collider;
 	public GameObject rotatee;
 	public SpinPadPushee helmet1;
 	public SpinPadPushee helmet2;
@@ -25,8 +27,6 @@ public class SpinPad : WaitPad {
 	public float fullOutRotation = -360;
 	public float currentRotation = 0;
 	public float rotationProgress = 0;
-	public float maxDrag = 100;
-	public float minDrag = 1.5f;
 	public float dragDecreaseSpeed = 500;
 	public float dragIncreaseSpeed = 50;
 	public float membraneAttachmentSpring = 50;
@@ -46,11 +46,6 @@ public class SpinPad : WaitPad {
 		oldWallEndPos1 = wallEnd1.transform.position;
 		oldWallEndPos2 = wallEnd2.transform.position;
 
-		wallEnd1.body.drag = maxDrag;
-		wallEnd2.body.drag = maxDrag;
-
-		
-
 		if (innerLine != null)
 		{
 			Helper.DrawCircle(innerLine, gameObject, Vector3.zero, inRadius);
@@ -64,6 +59,8 @@ public class SpinPad : WaitPad {
 		float progress = (rotationProgress / 2) + 0.5f;
 		currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
 		membraneWall1.membraneLength = membraneWall2.membraneLength = currentRadius;
+
+		UpdatePadRotation();
 
 		SetLineColors();
 	}
@@ -125,6 +122,15 @@ public class SpinPad : WaitPad {
 				SetLineColors();
 			}
 		}
+
+		if (wallEnd1 != null && wallEnd1Collider != null)
+		{
+			wallEnd1Collider.transform.position = wallEnd1.transform.position;
+		}
+		if (wallEnd2 != null && wallEnd2Collider != null)
+		{
+			wallEnd2Collider.transform.position = wallEnd2.transform.position;
+		}
 	}
 
 	private void UpdatePadRotation()
@@ -142,35 +148,30 @@ public class SpinPad : WaitPad {
 		// Keep the wall ends moving exactly opposite each other, moving only as fast as the slower of the two.
 		Vector3 newWallEndPos1 = center + toWallEnd1;
 		Vector3 newWallEndPos2 = center + toWallEnd2;
-		if ((newWallEndPos2 - oldWallEndPos2).sqrMagnitude < (newWallEndPos1 - oldWallEndPos1).sqrMagnitude)
+		if (Vector3.Dot(newWallEndPos1 - oldWallEndPos1, newWallEndPos2 - oldWallEndPos2) < 0)
 		{
-			newWallEndPos1 = center - toWallEnd2;
+			if ((newWallEndPos2 - oldWallEndPos2).sqrMagnitude < (newWallEndPos1 - oldWallEndPos1).sqrMagnitude)
+			{
+				newWallEndPos1 = center - toWallEnd2;
+			}
+			else
+			{
+				newWallEndPos2 = center - toWallEnd1;
+			}
 		}
 		else
 		{
-			newWallEndPos2 = center - toWallEnd1;
+			// If the wall ends attempted to move in the same direction, do not move.
+			newWallEndPos1 = oldWallEndPos1;
+			newWallEndPos2 = oldWallEndPos2;
 		}
+
+		
 
 		// Rotate the rotation tracker to point its up vector at the first wall end.
 		rotatee.transform.LookAt(rotatee.transform.position - Vector3.forward, wallEnd1.transform.transform.position - rotatee.transform.position);
 		float movementDotRight = Vector3.Dot(newWallEndPos1 - oldWallEndPos1, rotatee.transform.right);
 		float newRotateeRotation = rotatee.transform.eulerAngles.z;
-
-		// Lower spinning drag when pushing correctly, or raise it otherwise.
-		bool rotating = newRotateeRotation != oldRotateeRotation;
-		Vector3 centerToPlayer1 = Helper.ProjectVector(rotatee.transform.right, Globals.Instance.player1.transform.position - center);
-		Vector3 centerToPlayer2 = Helper.ProjectVector(rotatee.transform.right, Globals.Instance.player2.transform.position - center);
-		bool correctPushDirections = Vector3.Dot(centerToPlayer1, centerToPlayer2) < 0;
-		float drag = wallEnd1.body.drag;
-		if (correctPushDirections && rotating)
-		{
-			drag -= dragDecreaseSpeed * Time.deltaTime;
-		}
-		else
-		{
-			drag += dragIncreaseSpeed * Time.deltaTime;
-		}
-		wallEnd1.body.drag = wallEnd2.body.drag = Mathf.Clamp(drag, minDrag, maxDrag);
 
 		if (!activated)
 		{

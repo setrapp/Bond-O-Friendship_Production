@@ -26,7 +26,7 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		fluffStick = GetComponent<FluffStick>();
+		fluffStick = GetComponentInChildren<FluffStick>();
 		startColor = GetComponent<Renderer>().material.color;
 	}
 	
@@ -34,9 +34,9 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	void Update () {
 		if(fluffStick.stuckFluff != null && !complete)
 		{
-			fluffStick.stuckFluff.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime)*0.06f;
-			if(fluffStick.stuckFluff.transform.localScale.x <= 0)
-				Destroy(fluffStick.stuckFluff.gameObject);
+//			fluffStick.stuckFluff.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime)*0.06f;
+//			if(fluffStick.stuckFluff.transform.localScale.x <= 0)
+//				Destroy(fluffStick.stuckFluff.gameObject);
 
 			if(streamSE.transform.localScale.x < 30.0f)
 				streamSE.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
@@ -97,7 +97,8 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 
 		if(complete)
 		{
-			transform.parent.transform.position += new Vector3(0, 0, Time.deltaTime);
+			if(transform.parent.transform.position.z < 8.0f)
+				transform.parent.transform.position += new Vector3(0, 0, Time.deltaTime);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
