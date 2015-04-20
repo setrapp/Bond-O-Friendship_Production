@@ -63,7 +63,9 @@ GameObject:
   - 33: {fileID: 3333448}
   - 23: {fileID: 2333448}
   - 64: {fileID: 6433450}
-  - 114: {fileID: 11433448}
+  - 114: {fileID: 11441390}
+  - 54: {fileID: 5401344}
+  - 138: {fileID: 13892038}
   m_Layer: 16
   m_Name: Stream Blocker
   m_TagString: Untagged
@@ -327,7 +329,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133450}
   m_LocalRotation: {x: 0, y: 0, z: .707106829, w: .707106829}
-  m_LocalPosition: {x: -67.0851898, y: 76.0041275, z: 2}
+  m_LocalPosition: {x: 28.9675102, y: 109.044739, z: 2}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 433442}
@@ -670,6 +672,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 145004}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5401344
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133446}
+  serializedVersion: 2
+  m_Mass: 1.00000001e-07
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 56
+  m_CollisionDetection: 0
 --- !u!54 &5433450
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -692,7 +709,7 @@ MeshCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133446}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_SmoothSphereCollisions: 0
@@ -865,9 +882,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -884,9 +901,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   fillTargetRenderers:
   - {fileID: 2333446}
   - {fileID: 2333450}
@@ -905,27 +922,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
-  collidersToEnabled: 0
+  collidersToBlocking: 0
   reactionColliders: []
   bodiesToKinematic: 0
   reactionBodies:
   - {fileID: 5433450}
---- !u!114 &11433448
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 133446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reactions:
-  - {fileID: 11433442}
 --- !u!114 &11433450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -939,9 +943,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   scalees:
   - scalee: {fileID: 433444}
     unscaled: {x: .25, y: 1, z: .25}
@@ -949,6 +953,24 @@ MonoBehaviour:
   - scalee: {fileID: 433448}
     unscaled: {x: 1.5, y: 1, z: 1.5}
     scaled: {x: 2, y: 1, z: 2}
+--- !u!114 &11441390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0e1b26da4aa7c478528384f35dddda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionBody: {fileID: 5401344}
+  oscillateAmount: .100000001
+  reactions:
+  - {fileID: 11433442}
+  blockStream: 1
+  streamsBeingBlocked: []
+  warnForBody: 1
 --- !u!114 &11444988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1001,6 +1023,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 0}
   renderBase: 3000
   renderOffset: 140
+  forceRendererOn: 0
 --- !u!114 &11444994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1015,6 +1038,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 0}
   renderBase: 3000
   renderOffset: 140
+  forceRendererOn: 0
 --- !u!114 &11444996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1104,6 +1128,16 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!138 &13892038
+FixedJoint:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133446}
+  m_ConnectedBody: {fileID: 5433450}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

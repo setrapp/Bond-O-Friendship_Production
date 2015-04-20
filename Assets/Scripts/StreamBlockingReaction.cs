@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class StreamBlockingReaction : StreamReaction {
 
-	public bool collidersToEnabled = false;
+	public bool collidersToBlocking = false;
 	[SerializeField]
-	public List<Collider> reactionColliders;
+	public List<StreamCollisionTrigger> reactionColliders;
 	public bool bodiesToKinematic = false;
 	[SerializeField]
 	public List<Rigidbody> reactionBodies;
@@ -22,7 +22,7 @@ public class StreamBlockingReaction : StreamReaction {
 				{
 					if (reactionColliders[i] != null)
 					{
-						reactionColliders[i].enabled = collidersToEnabled;
+						reactionColliders[i].enabled = collidersToBlocking;
 					}
 				}
 

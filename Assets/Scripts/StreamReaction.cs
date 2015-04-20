@@ -7,10 +7,10 @@ public class StreamReaction : MonoBehaviour {
 
 	public float reactionProgress = 0;
 	public float reactionRate = 1;
+	public float decayRate = -1;
 	public bool reactable = true;
 	[SerializeField]
 	public List<StreamReaction> superiors;
-	public float streamAlterSpeed = -1;
 	protected bool reacting = false;
 
 	virtual protected void Start()
@@ -23,9 +23,14 @@ public class StreamReaction : MonoBehaviour {
 
 	virtual protected void Update()
 	{
+		if (decayRate < 0)
+		{
+			decayRate = reactionRate;
+		}
+
 		if (!reacting && reactionProgress > 0)
 		{
-			//React(-reactionRate * Time.deltaTime);
+			//React(-decayRate * Time.deltaTime);
 		}
 		reacting = false;
 	}
@@ -46,7 +51,7 @@ public class StreamReaction : MonoBehaviour {
 
 		if (reactable)
 		{
-			bool reacted = true;// (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
+			bool reacted = (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
 			reactionProgress = CalculateReaction(actionRate);
 			return reacted;
 		}

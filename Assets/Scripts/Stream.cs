@@ -9,16 +9,18 @@ public class Stream : MonoBehaviour {
 	public Tracer tracer;
 	public bool startAtTarget = true;
 	public bool showTarget = false;
-	public bool autoMove = true;
+	//public bool autoMove = true;
 	public  StreamChannel oldChannel;
-	private bool ending;
+	[HideInInspector]
+	public bool ending;
 	public Vector3 seekOffset;
 	public float actionRate = 1;
 	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
 	public ParticleSystem diffusionParticles;
 	public Stream streamSplittingPrefab;
-	private Vector3 moveDirection;
+	public int streamBlockers = 0;
+	public float blockingTime = 0;
 
 	/*TODO handle streams merging back together*/
 
@@ -62,70 +64,92 @@ public class Stream : MonoBehaviour {
 
 	void Update()
 	{
-		if (!ending)
+		if (streamBlockers <= 0)
 		{
-			if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
+			if (!ending)
 			{
-				diffusionParticles.gameObject.SetActive(false);
-			}
-
-			Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
-			Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-
-			// TODO: Should the stream be able to change z-depth?
-			oldToTarget.z = toTarget.z = 0;
-
-			if (Vector3.Dot(oldToTarget, toTarget) < 0)
-			{
-				Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
-				Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
-				//if (Vector3.Dot(toBank1, toBank2) < 0)
+				if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
 				{
-					SeekNextChannel();
+					diffusionParticles.gameObject.SetActive(false);
+				}
+
+				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
+				Vector3 fromBedCenter = transform.position - streamBedCenter;
+				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2;
+				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
+				{
+					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
+				}
+
+				Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
+				Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+
+				// TODO: Should the stream be able to change z-depth?
+				oldToTarget.z = toTarget.z = 0;
+
+				if (Vector3.Dot(oldToTarget, toTarget) < 0)
+				{
+					Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
+					Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
+					//if (Vector3.Dot(toBank1, toBank2) < 0)
+					{
+						SeekNextChannel();
+						toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+					}
+				}
+
+				//if (mover.velocity.sqrMagnitude < Mathf.Pow(mover.maxSpeed * needDirectionThreshold, 2) || Vector3.Dot(mover.velocity.normalized, toTarget.normalized) < needDirectionThreshold)
+				{
+					//mover.velocity = mover.rigidbody.velocity;
+					mover.AccelerateWithoutHandling(toTarget);
+					//mover.Accelerate(new Vector3(1, 0, 0));
 				}
 			}
-
-			mover.velocity = mover.rigidbody.velocity;
-			mover.Accelerate(toTarget);
-
-			if (!autoMove)
+			else
 			{
-				moveDirection = mover.velocity.normalized;
+				/*if (mover.velocity.sqrMagnitude > 0)
+				{
+					mover.Stop();
+					transform.up = targetChannel.transform.forward;
+				}
+				if (diffusionParticles != null && !diffusionParticles.gameObject.activeSelf)
+				{
+					diffusionParticles.gameObject.SetActive(true);
+				}
+				SeekNextChannel();*/
 			}
 
-			if (autoMove)
-			{
-				//moveDirection = toTarget.normalized;
-			}
-
-			//TODO remove
-			/*UpdateMovement();
-
-			mover.NaiveAccelerate(moveDirection);*/
+			streamBlockers = 0;
+			blockingTime = 0;
 		}
 		else
 		{
 			if (mover.velocity.sqrMagnitude > 0)
 			{
 				mover.Stop();
-				mover.body.angularVelocity = Vector3.zero;
-				transform.up = targetChannel.transform.forward;
 			}
-			if (diffusionParticles != null && !diffusionParticles.gameObject.activeSelf)
+
+			if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
 			{
-				diffusionParticles.gameObject.SetActive(true);
+				blockingTime += Time.deltaTime;
+				if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
+				{
+					spawner.StopTrackingStream(this);
+					spawner = null;
+					// TODO make the streams fade before destroying, or just remove their ability to act.
+					Destroy(gameObject);
+				}
 			}
-			SeekNextChannel();
+			
 		}
 
 		tracer.AddVertex(transform.position);
-		
 	}
 
 	public void UpdateMovement()
 	{
 		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-		moveDirection = toTarget.normalized;
+		
 	}
 
 	private void SeekNextChannel()
@@ -165,70 +189,11 @@ public class Stream : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay(Collision col)
+	public void ProvokeReaction(StreamReaction reaction)
 	{
-		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
-		if ((layer & ignoreReactionLayers.value) != layer)
-		{
-			Rigidbody body = col.rigidbody;
-			if (body != null)
-			{
-				ProvokeReaction(body.gameObject);
-			}
-			else
-			{
-				ProvokeReaction(col.collider.gameObject);
-			}
-		}
-	}
-
-	void OnTriggerStay(Collider col)
-	{
-		int layer = (int)Mathf.Pow(2, col.collider.gameObject.layer);
-		if ((layer & ignoreReactionLayers.value) != layer)
-		{
-			Rigidbody body = col.GetComponent<Rigidbody>();
-			if (body != null)
-			{
-				ProvokeReaction(body.gameObject);
-			}
-			else
-			{
-				ProvokeReaction(col.gameObject);
-			}
-		}
-	}
-
-	private void ProvokeReaction(GameObject reactionObject)
-	{
-		float minAlterSpeed = -1;
-
-		StreamReaction reaction = reactionObject.GetComponent<StreamReaction>();
 		if (reaction != null)
 		{
-			bool reacted = reaction.React(actionRate * Time.deltaTime);
-			if (!reacted && reaction.streamAlterSpeed >= 0 && (reaction.streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
-			{
-				minAlterSpeed = reaction.streamAlterSpeed;
-			}
-		}
-
-		StreamReactionDelegate reactionDelegate = reactionObject.GetComponent<StreamReactionDelegate>();
-		if (reactionDelegate != null)
-		{
-			for (int i = 0; i < reactionDelegate.reactions.Count; i++)
-			{
-				bool reacted = reactionDelegate.reactions[i].React(actionRate * Time.deltaTime);
-				if (!reacted && reactionDelegate.reactions[i].streamAlterSpeed >= 0 && (reactionDelegate.reactions[i].streamAlterSpeed < minAlterSpeed || minAlterSpeed < 0))
-				{
-					minAlterSpeed = reactionDelegate.reactions[i].streamAlterSpeed;
-				}
-			}
-		}
-
-		if (minAlterSpeed >= 0)
-		{
-			mover.maxSpeed = minAlterSpeed;
+			reaction.React(actionRate * Time.deltaTime);
 		}
 	}
 
