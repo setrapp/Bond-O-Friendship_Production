@@ -22,7 +22,7 @@ public class MovePaired : MonoBehaviour {
 		pairedObject.transform.position = pairStartPos + (transform.position - selfStartPos);
 
 		RaycastHit hit;
-		if(!Physics.Raycast(transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
+		if(!Physics.Raycast(pairedObject.transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
 		{
 			if (!wasFloating)
 			{
