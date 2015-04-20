@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class OrbWaitPad : WaitPad {
@@ -6,7 +6,7 @@ public class OrbWaitPad : WaitPad {
 	public Material activatedSphereColor;
 	private int triggersLit = 0;
 	public int maxTriggers;
-	private bool fullyLit;
+	public bool fullyLit;
 	public GameObject[] activationSpheres;
 	public ParticleSystem activatedParticle;
 	public GameObject optionalGate;
@@ -14,15 +14,19 @@ public class OrbWaitPad : WaitPad {
 	private float gateCloseSpeed;
 	private float gateXPos;
 	public float gateCloseTime = 20;
+	private int sphereCount;
 
 	override protected void Start () {
 		red = 0.1f;
-		turnTime = 0.3f;
-		activationSpheres = new GameObject[transform.parent.childCount];
+		waitRate = 0.3f;
+		activationSpheres = new GameObject[maxTriggers];
 		for(int i = 0; i < transform.parent.childCount; i++)
 		{
-			if(transform.parent.GetChild(i).name == "Activation Sphere" && activationSpheres[i] == null)
-					activationSpheres[i] = transform.parent.GetChild(i).gameObject;
+			if(transform.parent.GetChild(i).name == "Activation Sphere" && activationSpheres[sphereCount] == null)
+			{
+				activationSpheres[sphereCount] = transform.parent.GetChild(i).gameObject;
+				sphereCount++;
+			}
 		}
 		if (activatedParticle != null)
 		{
@@ -44,7 +48,7 @@ public class OrbWaitPad : WaitPad {
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
-			red += Time.deltaTime*turnTime;
+			red += Time.deltaTime*waitRate;
 		}
 		if(pOonPad == false || pTonPad == false)
 		{
@@ -72,9 +76,9 @@ public class OrbWaitPad : WaitPad {
 	}
 	void OnTriggerEnter(Collider collide)
 	{
-		if(collide.name == "Blossom")
+		if(collide.name == "Blossom(Clone)")
 		{
-			for(int i = 0; i < transform.parent.childCount; i++)
+			for(int i = 0; i < triggersLit+1; i++)
 			{
 				if(fullyLit == false && activationSpheres[i] != null)
 				{
@@ -88,15 +92,16 @@ public class OrbWaitPad : WaitPad {
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
+					Destroy(tempParticle.gameObject, 2.0f);
 					activationSpheres[i] = null;
 					//activatedParticle.Play();
-					if(optionalGate != null)
+					if(optionalGate != null && triggersLit >= maxTriggers-1)
 						gateClosing = true;
-					break;
+					//break;
 				}
 			}
 			triggersLit++;
-			if(triggersLit == maxTriggers)
+			if(triggersLit >= maxTriggers)
 				fullyLit = true;
 		}
 		if(collide.gameObject.name == "Player 1")

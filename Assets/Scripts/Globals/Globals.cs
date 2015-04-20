@@ -20,42 +20,23 @@ public class Globals : MonoBehaviour {
 			return instance;
 		}
 	}
+    
+	public enum ControlScheme{None, SharedLeft, SharedRight, Solo};
 
-	public enum JoyStick{Joy1, Joy2, Joy3, Joy4};
+    public enum InputNameSelected {None, Keyboard, LeftController, RightController };
 
-    [HideInInspector]
-    public KeyCode leftKeyboardUp;
-    [HideInInspector]
-    public KeyCode leftKeyboardDown;
-    [HideInInspector]
-    public KeyCode leftKeyboardLeft;
-    [HideInInspector]
-    public KeyCode leftKeyboardRight;
-
-    [HideInInspector]
-    public KeyCode rightKeyboardUp;
-    [HideInInspector]
-    public KeyCode rightKeyboardDown;
-    [HideInInspector]
-    public KeyCode rightKeyboardLeft;
-    [HideInInspector]
-    public KeyCode rightKeyboardRight;
+    public ControlsAndInput player1Controls;
+    public ControlsAndInput player2Controls;
 
 
-
-	public enum ControlScheme{KeyboardSharedLeft, KeyboardSharedRight, ControllerSharedLeft, ControllerSharedRight, KeyboardSolo, ControllerSolo};
-
-    public enum InputNameSelected { Keyboard, LeftController, RightController };
-
-
-    public ControlScheme player1ControlScheme;
-    public ControlScheme player2ControlScheme;
+   // public ControlScheme player1ControlScheme;
+    //public ControlScheme player2ControlScheme;
 
 	public PlayerInput player1;
 	public PlayerInput player2;
 
-    public InputNameSelected player1InputNameSelected;
-    public InputNameSelected player2InputNameSelected;
+   // public InputNameSelected player1InputNameSelected;
+   // public InputNameSelected player2InputNameSelected;
 
 	public GameObject initialPlayerHolder = null;
 
@@ -65,21 +46,17 @@ public class Globals : MonoBehaviour {
 	public float fluffLeaveAttractWait = 3.0f;
 	public float fluffLeaveEmbed = 1.0f;
 
-   // public static InputDevice startingDevice;
-   // public static InputDevice playerOneDevice;
-   // public static InputDevice playerTwoDevice;
-
     //Index of the player's controller, -1 means keyboard, -2 means waiting for input
-    public int player1Device;
-    public int player2Device;
-    public int player1PreviousDevice = -2;
-    public int player2PreviousDevice = -2;
+    public int leftControllerIndex;
+    public int rightContollerIndex;
+    public int leftControllerPreviousIndex = -2;
+    public int rightControllerPreviousIndex = -2;
 
-    public static int numberOfControllers;
+    public bool allowPreviousController = false;
+
+
 
     public static bool isPaused;
-
-    public static bool usingController;
 
 	public GameObject canvasPaused;
 
@@ -101,21 +78,157 @@ public class Globals : MonoBehaviour {
 
 	public EtherRing existingEther = null;
 
+	public bool playersBonded = false;
+
 	void Awake()
 	{
 		if (!Application.isEditor)
 		{
 			Screen.showCursor = false;
 		}
+        //Debug.Log(leftControllerIndex);
 	}
 
 	void Update()
 	{
+        
+        leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
+        rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
+        ResetDeviceIndex();
+        WaitForInput();
+
+       /* if(Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("Left Controller Index: " + leftControllerIndex);
+            Debug.Log("Previous Left: " + leftControllerPreviousIndex);
+            Debug.Log("Right Controller Index: " + rightContollerIndex);
+            Debug.Log("Previous Right: " + rightControllerPreviousIndex);
+        }*/
+
 		if (Input.GetKey(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
 	}
+	
+	public void BondFormed(Bond bond)
+	{
+		// Track if a bond between the players has been formed.
+		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
+		    && bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		{
+			playersBonded = true;
+		}
+	}
+
+	public void BondBroken(Bond bond)
+	{
+		// Track if a bond between the players has been broken.
+		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
+		    && bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		{
+			playersBonded = false;
+		}
+	}
+
+    private void ResetDeviceIndex()
+    {
+        if (player1Controls.inputNameSelected != InputNameSelected.LeftController && player2Controls.inputNameSelected != InputNameSelected.LeftController && (InputManager.controllerCount >= 2 || (InputManager.controllerCount == 1 && rightContollerIndex == -3)))
+            leftControllerIndex = -2;
+        if (player1Controls.inputNameSelected != InputNameSelected.RightController && player2Controls.inputNameSelected != InputNameSelected.RightController && InputManager.controllerCount >=2)
+            rightContollerIndex = -2;
+    }
+
+    private void WaitForInput()
+    {
+        if (leftControllerIndex == -2 && (player1Controls.inputNameSelected == InputNameSelected.LeftController || player2Controls.inputNameSelected == InputNameSelected.LeftController))
+        {
+            var device = InputManager.ActiveDevice;
+
+            if (InputManager.Devices.IndexOf(device) != rightContollerIndex && device.Name != "")
+            {
+                if (InputManager.Devices.IndexOf(device) == rightControllerPreviousIndex && !allowPreviousController)
+                {
+                }
+                else
+                {
+                    leftControllerIndex = InputManager.Devices.IndexOf(device);
+                    leftControllerPreviousIndex = leftControllerIndex;
+                }
+            }
+        }
+
+        if (rightContollerIndex == -2 && (player1Controls.inputNameSelected == InputNameSelected.RightController || player2Controls.inputNameSelected == InputNameSelected.RightController))
+        {
+            var device = InputManager.ActiveDevice;
+            if (InputManager.Devices.IndexOf(device) != leftControllerIndex && device.Name != "")
+            {
+                if (InputManager.Devices.IndexOf(device) == leftControllerPreviousIndex && !allowPreviousController)
+                {
+                }
+                else
+                {
+                    rightContollerIndex = InputManager.Devices.IndexOf(device);
+                    rightControllerPreviousIndex = rightContollerIndex;
+
+                }
+            }
+        }
+    }
+
+    private int HandleDeviceDisconnect(int deviceIndex)
+    {
+        var device = deviceIndex >= 0 ? InputManager.Devices[deviceIndex] : null;
+
+        if (device != null)
+        {
+            if (device.Name == "")
+            {
+                if (InputManager.controllerCount < 2)
+                    return -3;
+                else
+                    return -2;
+            }
+        }
+        /*if(deviceIndex == -2)
+        {
+            if (InputManager.controllerCount < 2)
+                return -3;
+        }*/
+        return deviceIndex;
+    }
+
+    public ControlScheme CheckSoloInput(ControlsAndInput playerCAI, ControlsAndInput otherPlayerCAI)
+    {
+        //If they aren't using the keyboard and they aren't using the same device as the other player, they are using a controller solo
+        if (playerCAI.inputNameSelected != otherPlayerCAI.inputNameSelected)
+            return ControlScheme.Solo;
+
+        return playerCAI.controlScheme;
+    }
+
+    public ControlScheme CheckSharedInput(ControlsAndInput playerCAI, ControlsAndInput otherPlayerCAI)
+    {
+        
+        //First Check if using the same device
+        if ((playerCAI.inputNameSelected == otherPlayerCAI.inputNameSelected))
+        {
+            if (otherPlayerCAI.controlScheme == ControlScheme.SharedLeft)
+                playerCAI.controlScheme = ControlScheme.SharedRight;
+            else if (otherPlayerCAI.controlScheme == ControlScheme.SharedRight)
+                playerCAI.controlScheme = ControlScheme.SharedLeft;
+        }
+        return playerCAI.controlScheme;
+    }
+    
+}
+
+
+[System.Serializable]
+public class ControlsAndInput
+{
+    public Globals.ControlScheme controlScheme;
+    public Globals.InputNameSelected inputNameSelected;
 }
 
 public class SharedKeyboard : PlayerActionSet

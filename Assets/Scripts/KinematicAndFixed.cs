@@ -11,12 +11,18 @@ public class KinematicAndFixed : MonoBehaviour {
 
 	public void Update()
 	{
-		if (triggerPad.activated && !triggered)
+		if (!triggered)
 		{
-			triggered = true;
-			body1.isKinematic = body2.isKinematic = willKinematic;
-			FixedJoint bodyJoint = body2.gameObject.AddComponent<FixedJoint>();
-			bodyJoint.connectedBody = body1;
+			bool padTriggered = triggerPad.activated;
+
+			if (padTriggered)
+			{
+				triggered = true;
+				body1.isKinematic = body2.isKinematic = willKinematic;
+				FixedJoint bodyJoint = body2.gameObject.AddComponent<FixedJoint>();
+				bodyJoint.connectedBody = body1;
+			}
 		}
+		
 	}
 }

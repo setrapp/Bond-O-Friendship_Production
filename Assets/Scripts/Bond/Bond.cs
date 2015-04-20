@@ -273,7 +273,7 @@ public class Bond : MonoBehaviour {
 			}
 		}
 
-		if (links.Count > 0)
+		if (links.Count > 0 && attachment1.fluffPullTarget != null && attachment2.fluffPullTarget != null)
 		{
 			if (stats.fluffPullLinks < 0 || links.Count < stats.fluffPullLinks * 2 + 1)
 			{
@@ -370,6 +370,8 @@ public class Bond : MonoBehaviour {
 		if (attachee1 != null)	{ attachee1.bonds.Remove(this); }
 		if (attachee2 != null)	{ attachee2.bonds.Remove(this); }
 
+		Globals.Instance.BondBroken(this);
+
 		BondBreaking();
 		if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
 		if (attachee2 != null) { attachee2.SendMessage("BondBroken", attachee1, SendMessageOptions.DontRequireReceiver); }
@@ -415,6 +417,8 @@ public class Bond : MonoBehaviour {
 
 		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
 		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
+
+		Globals.Instance.BondFormed(this);
 
 		BondForming();
 	}
@@ -551,6 +555,22 @@ public class Bond : MonoBehaviour {
 		for (int i = 0; i < halfCount; i++)
 		{
 			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
+		}
+
+		// Set mass and drag of links.
+		if (stats.linkMass >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.mass = stats.linkMass;
+			}
+		}
+		if (stats.linkDrag >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.drag = stats.linkDrag;
+			}
 		}
 
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
@@ -816,6 +836,8 @@ public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
+	public float linkMass = -1;
+	public float linkDrag = -1;
 	public float pullApartMaxFactor;
 	public float maxDistance = 25;
 	public float relativeWarningDistance = 0.5f;
@@ -852,6 +874,8 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.linkMass >= 0)					{	this.linkMass = replacement.linkMass;								}
+		if (fullOverwrite || replacement.linkDrag >= 0)					{	this.linkDrag = replacement.linkDrag;								}
 		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
