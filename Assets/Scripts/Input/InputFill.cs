@@ -72,10 +72,6 @@ public class InputFill : MonoBehaviour {
     private Vector3 filledKey = new Vector3(2.45f, 1.8f, 1f);
     private Vector3 emptyKey = new Vector3(0f, 1.8f, 1f);
     private Vector3 emptyController = new Vector3(0f, 3f, 1f);
-
-    private Color player1Color = new Color(70f/255f, 130f/255f, 192f/255f);
-    private Color player2Color = new Color(225f/255f, 123f/255f, 63f/255f);
-    private Color defaultColor = Color.black;
     
 	// Use this for initialization
 	void Start () 
