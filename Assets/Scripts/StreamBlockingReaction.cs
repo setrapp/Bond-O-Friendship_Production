@@ -22,7 +22,7 @@ public class StreamBlockingReaction : StreamReaction {
 				{
 					if (reactionColliders[i] != null)
 					{
-						reactionColliders[i].enabled = collidersToBlocking;
+						reactionColliders[i].blockStream = collidersToBlocking;
 					}
 				}
 

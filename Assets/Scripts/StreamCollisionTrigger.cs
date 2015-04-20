@@ -37,8 +37,10 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		// If no longer blocking streams, unblock currently blocked streams.
 		if (!blockStream && streamsBeingBlocked.Count > 0)
 		{
+			Debug.Log(streamsBeingBlocked.Count);
 			while(streamsBeingBlocked.Count > 0)
 			{
+				
 				RemoveStreamBlockee(0);
 			}
 		}
