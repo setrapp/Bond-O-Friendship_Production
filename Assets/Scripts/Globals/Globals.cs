@@ -184,10 +184,15 @@ public class Globals : MonoBehaviour {
 
 	private void ResetDeviceIndex()
 	{
-		if (player1Controls.inputNameSelected != InputNameSelected.LeftController && player2Controls.inputNameSelected != InputNameSelected.LeftController && (InputManager.controllerCount >= 2 || (InputManager.controllerCount == 1 && rightContollerIndex == -3)))
+		if (player1Controls.inputNameSelected != InputNameSelected.LeftController && player2Controls.inputNameSelected != InputNameSelected.LeftController && InputManager.controllerCount >= 1)
 			leftControllerIndex = -2;
 		if (player1Controls.inputNameSelected != InputNameSelected.RightController && player2Controls.inputNameSelected != InputNameSelected.RightController && InputManager.controllerCount >=2)
 			rightContollerIndex = -2;
+        if (InputManager.controllerCount < 2)
+            rightContollerIndex = -3;
+        if (InputManager.controllerCount == 0)
+            leftControllerIndex = -3;
+
 	}
 
 	private void WaitForInput()
@@ -241,11 +246,6 @@ public class Globals : MonoBehaviour {
 					return -2;
 			}
 		}
-		/*if(deviceIndex == -2)
-		{
-			if (InputManager.controllerCount < 2)
-				return -3;
-		}*/
 		return deviceIndex;
 	}
 

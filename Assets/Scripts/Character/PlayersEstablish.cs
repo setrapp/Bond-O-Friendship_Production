@@ -111,19 +111,20 @@ public class PlayersEstablish : MonoBehaviour {
 
 			if (CameraSplitter.Instance != null && (!CameraSplitter.Instance.player1CameraSystem.gameObject.activeSelf || !CameraSplitter.Instance.player2CameraSystem.gameObject.activeSelf))
 			{
-				CameraSplitter.Instance.player1CameraSystem.gameObject.SetActive(true);
-				CameraSplitter.Instance.player2CameraSystem.gameObject.SetActive(true);
-				CameraSplitter.Instance.JumpToPlayers();
+                CameraSplitter.Instance.followPlayers = true;
+				CameraSplitter.Instance.JumpToPlayers();                
 			}
 
-			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
+            if (Globals.Instance.initialPlayerHolder != null && (player1Holder.gameObject == Globals.Instance.initialPlayerHolder || player2Holder.gameObject == Globals.Instance.initialPlayerHolder))
 			{
 				// Jump camera to players.
 				if (CameraSplitter.Instance != null)
 				{
+                    CameraSplitter.Instance.followPlayers = true;
 					CameraSplitter.Instance.JumpToPlayers();
+                    
 				}
-
+                
 				Destroy(Globals.Instance.initialPlayerHolder);
 			}
 			
