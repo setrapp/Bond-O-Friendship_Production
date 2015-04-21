@@ -5,6 +5,7 @@ public class RenderQueue : MonoBehaviour {
 	public Renderer targetRenderer;
 	public RenderBase renderBase = RenderBase.GEOMETRY;
 	public int renderOffset = 0;
+	public bool forceRendererOn = false;
 
 	public enum RenderBase
 	{
@@ -20,6 +21,11 @@ public class RenderQueue : MonoBehaviour {
 		if (targetRenderer == null)
 		{
 			targetRenderer = GetComponent<Renderer>();
+		}
+
+		if (forceRendererOn && targetRenderer != null)
+		{
+			targetRenderer.enabled = true;
 		}
 
 		if (targetRenderer != null && targetRenderer.material != null)

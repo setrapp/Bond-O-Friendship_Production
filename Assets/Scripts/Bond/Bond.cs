@@ -100,14 +100,16 @@ public class Bond : MonoBehaviour {
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScalePrev.y = magFromPrevious;
-					linkScaleNext.y = magToNext;
+					linkScalePrev.y = magFromPrevious * 2;
+					linkScaleNext.y = magToNext * 2;
+
 					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
 					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
 					links[i].toPreviousCollider.size = linkScalePrev;
 					links[i].toNextCollider.size = linkScaleNext;
 					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
 					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+
 					links[i].transform.up = linkDir;
 				}
 			}
