@@ -13,7 +13,7 @@ public class StreamReaction : MonoBehaviour {
 	public bool reactable = true;
 	[SerializeField]
 	public List<StreamReaction> superiors;
-	protected bool reacting = false;
+	public int streamsTouched = 0;
 
 	virtual protected void Start()
 	{
@@ -30,9 +30,13 @@ public class StreamReaction : MonoBehaviour {
 			decayRate = reactionRate;
 		}
 
-		if (!reacting && Time.time - lastReaction >= decayDelay && reactionProgress > 0)
+		if (Time.time - lastReaction >= decayDelay)
 		{
-			React(-decayRate * Time.deltaTime);
+			if (reactionProgress > 0)
+			{
+				React(-decayRate * Time.deltaTime);
+			}
+			//touchingStream = false;
 		}
 	}
 
@@ -65,8 +69,15 @@ public class StreamReaction : MonoBehaviour {
 		return false;
 	}
 
+	public virtual void SetTouchedStreams(int streamsTouched)
+	{
+		this.streamsTouched = Mathf.Max(streamsTouched, 0);
+	}
+
 	public float CalculateReaction(float actionRate)
 	{
 		return Mathf.Clamp01(reactionProgress + actionRate * reactionRate);
 	}
+
+	public virtual void ReactToEmptyFluffStick(FluffStick fluffStick) { }
 }

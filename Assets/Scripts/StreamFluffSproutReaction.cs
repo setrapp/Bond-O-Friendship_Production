@@ -10,7 +10,6 @@ public class StreamFluffSproutReaction : StreamReaction {
 	public bool findPlaceholders = true;
 	private float actualActionRate;
 	private float actualConsumptionRate;
-	private bool usingStream = false;
 	
 
 	public void Awake()
@@ -33,17 +32,20 @@ public class StreamFluffSproutReaction : StreamReaction {
 				}
 			}
 		}
+
+		actualActionRate = fluffStickRoot.fluffActionRate;
+		actualConsumptionRate = fluffStickRoot.fluffConsumeRate;
 	}
 
-	void Update()
+	override protected void Update()
 	{
-		if (!reacting)
+		if (streamsTouched <= 0 && (fluffStickRoot.fluffActionRate != actualActionRate || fluffStickRoot.fluffConsumeRate != actualConsumptionRate))
 		{
 			fluffStickRoot.fluffActionRate = actualActionRate;
 			fluffStickRoot.fluffConsumeRate = actualConsumptionRate;
-			usingStream = false;
 		}
-		reacting = false;
+
+		base.Update();
 	}
 
 	public override bool React(float actionRate)
@@ -51,7 +53,7 @@ public class StreamFluffSproutReaction : StreamReaction {
 		bool reacted = base.React(actionRate);
 		if (reacted)
 		{
-			if (reactionProgress >= 1)
+			if (reactionProgress >= 1 && streamsTouched > 0)
 			{
 				bool spawned = false;
 				for (int i = 0; i < fluffPlaceholders.Count && (spawnAll || !spawned); i++)
@@ -78,7 +80,12 @@ public class StreamFluffSproutReaction : StreamReaction {
 			}
 		}
 
-		if (!usingStream)
+		return reacted;
+	}
+
+	public override void SetTouchedStreams(int streamsTouched)
+	{
+		if (this.streamsTouched <= 0)
 		{
 			if (fluffStickRoot != null)
 			{
@@ -88,13 +95,15 @@ public class StreamFluffSproutReaction : StreamReaction {
 				fluffStickRoot.fluffActionRate = 0;
 				fluffStickRoot.fluffConsumeRate = 0;
 			}
-			
-			usingStream = true;
 		}
-		reacting = true;
-
-		return reacted;
+		base.SetTouchedStreams(streamsTouched);
 	}
 
-	
+	public override void ReactToEmptyFluffStick(FluffStick fluffStick)
+	{
+		if (reactionProgress >= 1)
+		{
+			reactionProgress = 0;
+		}
+	}
 }

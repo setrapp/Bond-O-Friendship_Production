@@ -12,11 +12,9 @@ public class StreamSpawner : MonoBehaviour {
 	public int streamsPerSpawn = 3;
 	public int maxStreams = 100;
 	public float seekRandomizeRange = 1;
-	public int streamMoveBatch = 3;
 	public float streamGroupActionRate = 1;
 	public List<Stream> streams;
 	private float lastSpawnTime = -1;
-	private int moveBatchIndex = 0;
 
 	void Start()
 	{
@@ -40,6 +38,7 @@ public class StreamSpawner : MonoBehaviour {
 					newStream.spawner = this;
 					newStream.seekOffset = new Vector3(Random.Range(-seekRandomizeRange, seekRandomizeRange), Random.Range(-seekRandomizeRange, seekRandomizeRange), 0);
 					newStream.actionRate = streamGroupActionRate / streamsPerSpawn;
+
 					TrackStream(newStream);
 				}
 			}
@@ -53,35 +52,6 @@ public class StreamSpawner : MonoBehaviour {
 				i--;
 			}
 		}
-
-		// Only direct upto a specified number of streams, in order to cut down on processing. Depending on the random generation, a stream may be directed more than once in a frame, but it will only move once.
-		/*if (streams.Count > 0)
-		{
-			bool checkedAllStreams = false;
-			for (int i = 0; i < streamMoveBatch && !checkedAllStreams; i++)
-			{
-				int checkIndex = (moveBatchIndex + i) % streams.Count;
-				Stream moveeStream = streams[checkIndex];
-
-				// Only attempt to update streams that are actively moving forward.
-				if (!moveeStream.ending)
-				{
-					moveeStream.UpdateMovement();
-				}
-				else
-				{
-					i--;
-				}
-
-				// Allow the loop to end if all indices have been seen.
-				if (checkIndex == moveBatchIndex - 1)
-				{
-					checkedAllStreams = true;
-				}
-				
-			}
-			moveBatchIndex = (moveBatchIndex + streamMoveBatch) % streams.Count;
-		}*/
 	}
 
 	public void TrackStream(Stream newStream)

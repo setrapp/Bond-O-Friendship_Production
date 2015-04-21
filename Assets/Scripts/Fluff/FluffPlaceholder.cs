@@ -78,7 +78,7 @@ public class FluffPlaceholder : MonoBehaviour {
 			fluffMaterial = materialSource.material;
 		}
 
-		if (fluffPrefab != null)
+		if (fluffPrefab != null && (attachee == null || attachee.CanStick()))
 		{
 			GameObject newFluffObj = (GameObject)Instantiate(fluffPrefab, transform.position, transform.rotation);
 			newFluffObj.transform.parent = transform.parent;
@@ -117,10 +117,6 @@ public class FluffPlaceholder : MonoBehaviour {
 					}
 				}
 			}
-		}
-		else
-		{
-			Debug.LogError("Fluff Placeholder unable to spawn fluff. Please ensure parameters are correct.");
 		}
 
 		if (fluffRespawns == 0)

@@ -33,8 +33,9 @@ public class Fluff : MonoBehaviour {
 	public Vector3 pullForce;
 	public float pullDistance;
 	public GameObject soleAttractor = null;
-	public Vector3 minFluffScale = Vector3.zero;
-	public Vector3 maxFluffScale = new Vector3(1, 1, 1);
+	public float fluffFill;
+	public float minFill = 0;
+	public float maxFill = 1;
 	public AudioSource attachAudio;
 
 	void Awake()
@@ -72,6 +73,8 @@ public class Fluff : MonoBehaviour {
 		{
 			lineToAttractor.SetVertexCount(0);
 		}
+
+		fluffFill = maxFill;
 	}
 
 	// Update is called once per frame
@@ -260,6 +263,11 @@ public class Fluff : MonoBehaviour {
 		}
 		else
 		{
+			if (attachee != null && attachee.attachInfo != null)
+			{
+				attachee.attachInfo.FluffDetached(this);
+			}
+
 			if (body != null)
 			{
 				body.isKinematic = false;
@@ -373,21 +381,18 @@ public class Fluff : MonoBehaviour {
 		return blocked;
 	}
 
-	public void Inflate(Vector3 inflation)
+	public void Inflate(float inflation)
 	{
-		transform.localScale += inflation;
-		if (transform.localScale.x >= maxFluffScale.x || transform.localScale.y >= maxFluffScale.y || transform.localScale.z >= maxFluffScale.z)
-		{
-			transform.localScale = new Vector3(Mathf.Min(transform.localScale.x, maxFluffScale.x), Mathf.Min(transform.localScale.y, maxFluffScale.y), Mathf.Min(transform.localScale.z, maxFluffScale.z));
-		}
+		fluffFill = Mathf.Min(fluffFill + inflation, maxFill);
+		bulb.transform.localScale = new Vector3(fluffFill, fluffFill, fluffFill);
 	}
 
-	public void Deflate(Vector3 deflation)
+	public void Deflate(float deflation)
 	{
-		transform.localScale -= deflation;
-		if (transform.localScale.x <= minFluffScale.x || transform.localScale.y <= minFluffScale.y || transform.localScale.z <= minFluffScale.z)
+		fluffFill = Mathf.Max(fluffFill - deflation, minFill);
+		bulb.transform.localScale = new Vector3(fluffFill, fluffFill, fluffFill);
+		if (fluffFill <= minFill)
 		{
-			transform.localScale = new Vector3(Mathf.Max(transform.localScale.x, minFluffScale.x), Mathf.Max(transform.localScale.y, minFluffScale.y), Mathf.Max(transform.localScale.z, minFluffScale.z));
 			PopFluff();
 		}
 	}
@@ -550,7 +555,7 @@ public class Fluff : MonoBehaviour {
 
 			if (attachee.attachInfo != null && attachee.attachInfo.stuckFluff == this)
 			{
-				attachee.attachInfo.stuckFluff = null;
+				attachee.attachInfo.FluffDetached(this);
 			}
 		}
 

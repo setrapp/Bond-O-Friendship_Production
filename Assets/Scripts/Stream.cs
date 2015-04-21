@@ -6,6 +6,7 @@ public class Stream : MonoBehaviour {
 	public StreamSpawner spawner;
 	public StreamChannel targetChannel;
 	public SimpleMover mover;
+	public Renderer streamRenderer;
 	public Tracer tracer;
 	public bool startAtTarget = true;
 	public bool showTarget = false;
@@ -33,6 +34,10 @@ public class Stream : MonoBehaviour {
 		if (tracer == null)
 		{
 			tracer = GetComponent<Tracer>();
+		}
+		if (streamRenderer == null)
+		{
+			streamRenderer = GetComponent<Renderer>();
 		}
 	}
 
@@ -98,12 +103,8 @@ public class Stream : MonoBehaviour {
 					}
 				}
 
-				//if (mover.velocity.sqrMagnitude < Mathf.Pow(mover.maxSpeed * needDirectionThreshold, 2) || Vector3.Dot(mover.velocity.normalized, toTarget.normalized) < needDirectionThreshold)
-				{
-					//mover.velocity = mover.rigidbody.velocity;
-					mover.AccelerateWithoutHandling(toTarget);
-					//mover.Accelerate(new Vector3(1, 0, 0));
-				}
+				
+				mover.AccelerateWithoutHandling(toTarget);
 			}
 			else
 			{

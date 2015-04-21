@@ -10,8 +10,10 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	private int streamLayer;
 	public List<StreamReaction> reactions;
 	public bool blockStream = true;
-	public List<Stream> streamsBeingBlocked;
+	private bool wasBlocking = true;
+	public List<Stream> streamsTouched;
 	public bool warnForBody = true;
+	
 
 	void Start()
 	{
@@ -26,6 +28,8 @@ public class StreamCollisionTrigger : MonoBehaviour {
 				Debug.LogError("Stream Collision Trigger on " + gameObject.name + " is not attached to a non-kinematic rigidbody. A non-kinematic rigidbody is required for collision detection with streams.");
 			}
 		}
+
+		wasBlocking = blockStream;
 	}
 
 	void Update()
@@ -35,13 +39,34 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		oscillateDirection *= -1;
 
 		// If no longer blocking streams, unblock currently blocked streams.
-		if (!blockStream && streamsBeingBlocked.Count > 0)
+		if (wasBlocking && !blockStream)
 		{
-			while(streamsBeingBlocked.Count > 0)
+			for (int i = 0; i < streamsTouched.Count; i++)
 			{
-				
-				RemoveStreamBlockee(0);
+				StopBlockingStream(streamsTouched[i]);
 			}
+		}
+		else if (!wasBlocking && blockStream)
+		{
+			for (int i = 0; i < streamsTouched.Count; i++)
+			{
+				StartBlockingStream(streamsTouched[i]);
+			}
+		}
+		wasBlocking = blockStream;
+
+		float oldStreamTouchCount = streamsTouched.Count;
+		for (int i = 0; i < streamsTouched.Count; i++)
+		{
+			if (streamsTouched[i] == null)
+			{
+				streamsTouched.RemoveAt(i);
+				i--;
+			}
+		}
+		if (oldStreamTouchCount != streamsTouched.Count)
+		{
+			SetReactionsStreamTouches();
 		}
 	}
 
@@ -54,10 +79,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 			if (stream != null)
 			{
 				CallStreamAction(stream);
-				if (blockStream)
-				{
-					AddStreamBlockee(stream);
-				}
+				AddStreamTouched(stream);
 			}
 		}
 	}
@@ -69,10 +91,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 			if (stream != null)
 			{
 				CallStreamAction(stream);
-				if (blockStream)
-				{
-					AddStreamBlockee(stream);
-				}
+				AddStreamTouched(stream);
 			}
 		}
 	}
@@ -107,45 +126,71 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	{
 		if (col.gameObject.layer == streamLayer)
 		{
-			RemoveStreamBlockee(col.collider.GetComponent<Stream>());
+			RemoveStreamTouched(col.collider.GetComponent<Stream>());
 		}
 	}
 	void OnTriggerExit(Collider col)
 	{
 		if (col.gameObject.layer == streamLayer)
 		{
-			RemoveStreamBlockee(col.collider.GetComponent<Stream>());
+			RemoveStreamTouched(col.collider.GetComponent<Stream>());
 		}
 	}
 
 	void OnDestroy()
 	{
-		while (streamsBeingBlocked.Count > 0)
+		while (streamsTouched.Count > 0)
 		{
-			RemoveStreamBlockee(0);
+			RemoveStreamTouched(0);
 		}
 	}
 
-	private void AddStreamBlockee(Stream stream)
+	private void AddStreamTouched(Stream stream)
 	{
-		if (!streamsBeingBlocked.Contains(stream))
+		if (!streamsTouched.Contains(stream))
 		{
-			stream.streamBlockers++;
-			streamsBeingBlocked.Add(stream);
+			if (blockStream)
+			{
+				StartBlockingStream(stream);
+			}
+			streamsTouched.Add(stream);
+			SetReactionsStreamTouches();
 		}
 	}
 
-	private void RemoveStreamBlockee(Stream stream)
+	private void RemoveStreamTouched(Stream stream)
 	{
-		RemoveStreamBlockee(streamsBeingBlocked.IndexOf(stream));
+		RemoveStreamTouched(streamsTouched.IndexOf(stream));
 	}
 
-	private void RemoveStreamBlockee(int index)
+	private void RemoveStreamTouched(int index)
 	{
-		if (index >= 0 && index < streamsBeingBlocked.Count)
+		if (index >= 0 && index < streamsTouched.Count)
 		{
-			streamsBeingBlocked[index].streamBlockers--;
-			streamsBeingBlocked.RemoveAt(index);
+			StopBlockingStream(streamsTouched[index]);
+			streamsTouched.RemoveAt(index);
+			SetReactionsStreamTouches();
+		}
+	}
+
+	private void StartBlockingStream(Stream stream)
+	{
+		stream.streamBlockers++;
+	}
+
+	private void StopBlockingStream(Stream stream)
+	{
+		stream.streamBlockers--;
+	}
+
+	private void SetReactionsStreamTouches()
+	{
+		for (int i = 0; i < reactions.Count; i++)
+		{
+			if (reactions[i] != null)
+			{
+				reactions[i].SetTouchedStreams(streamsTouched.Count);
+			}
 		}
 	}
 
