@@ -46,9 +46,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 441624}
   - 65: {fileID: 6541628}
-  - 114: {fileID: 11441626}
   - 33: {fileID: 3345608}
   - 23: {fileID: 2345608}
+  - 114: {fileID: 11440864}
+  - 54: {fileID: 5410422}
+  - 138: {fileID: 13810422}
   m_Layer: 0
   m_Name: Stream Fill Collider
   m_TagString: Untagged
@@ -84,7 +86,6 @@ GameObject:
   - 33: {fileID: 3341630}
   - 65: {fileID: 6541630}
   - 23: {fileID: 2341630}
-  - 114: {fileID: 11441628}
   m_Layer: 16
   m_Name: NodeGate
   m_TagString: Untagged
@@ -102,7 +103,6 @@ GameObject:
   - 4: {fileID: 441630}
   - 54: {fileID: 5441630}
   - 114: {fileID: 11441624}
-  - 114: {fileID: 11411618}
   m_Layer: 0
   m_Name: Gate Hinge
   m_TagString: Untagged
@@ -117,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -58.8600006, y: 32.1599998, z: 5}
+  m_LocalPosition: {x: 29.0936775, y: 88.2323303, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 441630}
@@ -295,6 +295,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141624}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5410422
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141624}
+  serializedVersion: 2
+  m_Mass: 1.00000001e-07
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 62
+  m_CollisionDetection: 0
 --- !u!54 &5441630
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -317,7 +332,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141624}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: .100000001}
@@ -334,19 +349,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11411618
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 141630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reactions:
-  - {fileID: 11483572}
 --- !u!114 &11411622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -387,7 +389,6 @@ MonoBehaviour:
   reactionRate: 1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   scalees:
   - scalee: {fileID: 441622}
     unscaled: {x: 1.5, y: 6, z: 1.5}
@@ -395,6 +396,24 @@ MonoBehaviour:
   - scalee: {fileID: 441626}
     unscaled: {x: 4, y: 2, z: 4}
     scaled: {x: 6.23699093, y: 2, z: 6.23699093}
+--- !u!114 &11440864
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0e1b26da4aa7c478528384f35dddda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionBody: {fileID: 5410422}
+  oscillateAmount: .100000001
+  reactions:
+  - {fileID: 11483572}
+  blockStream: 1
+  streamsBeingBlocked: []
+  warnForBody: 1
 --- !u!114 &11441624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -409,32 +428,6 @@ MonoBehaviour:
   body: {fileID: 5441630}
   centerOfMass: {fileID: 141622}
   localOffset: {x: 0, y: 0, z: 0}
---- !u!114 &11441626
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 141624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reactions:
-  - {fileID: 11483572}
---- !u!114 &11441628
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 141628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reactions:
-  - {fileID: 11483572}
 --- !u!114 &11441630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -450,7 +443,6 @@ MonoBehaviour:
   reactionRate: 1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   fillTargetRenderers:
   - {fileID: 2341630}
   - {fileID: 2341628}
@@ -472,7 +464,6 @@ MonoBehaviour:
   reactionRate: 1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -491,13 +482,22 @@ MonoBehaviour:
   reactionRate: 1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
-  collidersToEnabled: 0
+  collidersToBlocking: 0
   reactionColliders:
-  - {fileID: 6541628}
+  - {fileID: 11440864}
   bodiesToKinematic: 0
   reactionBodies:
   - {fileID: 5441630}
+--- !u!138 &13810422
+FixedJoint:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141624}
+  m_ConnectedBody: {fileID: 5441630}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

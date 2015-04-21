@@ -29,4 +29,17 @@ public class FluffStick : MonoBehaviour {
 	{
 		return (stuckFluff == null || (root != null && !root.trackStuckFluffs));
 	}
+
+	public void FluffDetached(Fluff fluff)
+	{
+		if (fluff != null && fluff == stuckFluff)
+		{
+			stuckFluff = null;
+			if (root != null)
+			{
+				root.SendMessage("FluffStickEmpty", this, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		
+	}
 }

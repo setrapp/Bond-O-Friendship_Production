@@ -114,9 +114,17 @@ public class FluffStickRoot : MonoBehaviour {
 			{
 				if (attachedSticks[i].stuckFluff != null)
 				{
-					attachedSticks[i].stuckFluff.Deflate(new Vector3(fluffConsumeRate, fluffConsumeRate, fluffConsumeRate) * Time.deltaTime);
+					attachedSticks[i].stuckFluff.Deflate(fluffConsumeRate * Time.deltaTime);
 				}
 			}
+		}
+	}
+
+	public void FluffStickEmpty(FluffStick fluffStick)
+	{
+		if (fluffReaction != null && fluffStick != null && attachedSticks.Contains(fluffStick))
+		{
+			fluffReaction.ReactToEmptyFluffStick(fluffStick);
 		}
 	}
 }
