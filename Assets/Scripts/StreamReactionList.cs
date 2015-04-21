@@ -60,6 +60,11 @@ public class StreamReactionList : StreamReaction {
 				}
 			}
 
+			if (actionRate > 0)
+			{
+				lastReaction = Time.time;
+			}
+
 			reactionProgress = minReaction;
 		}
 		return reacted;

@@ -37,7 +37,6 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		// If no longer blocking streams, unblock currently blocked streams.
 		if (!blockStream && streamsBeingBlocked.Count > 0)
 		{
-			Debug.Log(streamsBeingBlocked.Count);
 			while(streamsBeingBlocked.Count > 0)
 			{
 				
@@ -49,16 +48,32 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// If blocking is desired, block newly colliding streams.
 	void OnCollisionEnter(Collision col)
 	{
-		if (blockStream && col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer)
 		{
-			AddStreamBlockee(col.collider.GetComponent<Stream>());
+			Stream stream = col.collider.GetComponent<Stream>();
+			if (stream != null)
+			{
+				CallStreamAction(stream);
+				if (blockStream)
+				{
+					AddStreamBlockee(stream);
+				}
+			}
 		}
 	}
 	void OnTriggerEnter(Collider col)
 	{
-		if (blockStream && col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer)
 		{
-			AddStreamBlockee(col.collider.GetComponent<Stream>());
+			Stream stream = col.collider.GetComponent<Stream>();
+			if (stream != null)
+			{
+				CallStreamAction(stream);
+				if (blockStream)
+				{
+					AddStreamBlockee(stream);
+				}
+			}
 		}
 	}
 
