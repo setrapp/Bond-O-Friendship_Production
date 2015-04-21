@@ -8,7 +8,6 @@
         Lighting Off
         ZTest LEqual
         ZWrite On
-        Blend SrcAlpha OneMinusSrcAlpha
 		
         Pass 
 		{		
