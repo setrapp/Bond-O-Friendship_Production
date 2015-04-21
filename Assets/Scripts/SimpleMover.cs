@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
+	private float currentSpeed;
+	private Vector3 currentDirection;
 	public Vector3 velocity;
 	private Vector3 unfixedVelocity;
 	public float acceleration;
@@ -20,7 +22,6 @@ public class SimpleMover : MonoBehaviour {
 	public Rigidbody body;
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
-	public bool jumpToMaxSpeed = false;
 
 	void Awake()
 	{
@@ -31,13 +32,6 @@ public class SimpleMover : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-
-		if (jumpToMaxSpeed && unfixedVelocity.sqrMagnitude > 0)
-		{
-			//unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
-			//jumpToMaxSpeed = false;
-		}
-
 		if (unfixedVelocity != velocity)
 		{
 			velocity = unfixedVelocity;
@@ -124,9 +118,11 @@ public class SimpleMover : MonoBehaviour {
 			unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
 		}
 		unfixedVelocity *= Mathf.Max(externalSpeedMultiplier, 0);
+		currentSpeed = unfixedVelocity.magnitude;
+		currentDirection = unfixedVelocity / currentSpeed;
 	}
 
-	public void NaiveAccelerate(Vector3 direction, bool alreadyNormalized = true)
+	public void AccelerateWithoutHandling(Vector3 direction, bool alreadyNormalized = true)
 	{
 		if (!alreadyNormalized)
 		{

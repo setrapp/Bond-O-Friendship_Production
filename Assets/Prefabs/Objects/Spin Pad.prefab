@@ -64,7 +64,7 @@ GameObject:
   - 114: {fileID: 11469994}
   - 114: {fileID: 11469996}
   m_Layer: 26
-  m_Name: Membrane Wall
+  m_Name: Membrane Wall 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,7 +371,7 @@ GameObject:
   - 114: {fileID: 11470010}
   - 114: {fileID: 11470012}
   m_Layer: 26
-  m_Name: Membrane Wall
+  m_Name: Membrane Wall 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,6 +405,7 @@ GameObject:
   - 4: {fileID: 470008}
   - 65: {fileID: 6570012}
   - 114: {fileID: 11469992}
+  - 114: {fileID: 11411896}
   m_Layer: 0
   m_Name: End 2 Stream Fill Collider
   m_TagString: Untagged
@@ -459,7 +460,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 470014}
   - 65: {fileID: 6570014}
-  - 114: {fileID: 11470014}
+  - 114: {fileID: 11411898}
   m_Layer: 0
   m_Name: End 1 Stream Fill Collider
   m_TagString: Untagged
@@ -605,7 +606,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.4203949, y: 6.33699799, z: 5.00000477}
+  m_LocalPosition: {x: 36.0720825, y: 91.2457352, z: 5.00000477}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 455970}
@@ -1420,6 +1421,44 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: .100000001}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11411896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0e1b26da4aa7c478528384f35dddda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionBody: {fileID: 5455978}
+  oscillateAmount: .100000001
+  reactions:
+  - {fileID: 11470004}
+  - {fileID: 11470010}
+  blockStream: 1
+  streamsBeingBlocked: []
+  warnForBody: 1
+--- !u!114 &11411898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0e1b26da4aa7c478528384f35dddda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionBody: {fileID: 5455978}
+  oscillateAmount: .100000001
+  reactions:
+  - {fileID: 11469998}
+  - {fileID: 11469994}
+  blockStream: 1
+  streamsBeingBlocked: []
+  warnForBody: 1
 --- !u!114 &11455970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2339,9 +2378,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 100000
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 0
@@ -2358,10 +2397,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors:
   - {fileID: 11469998}
-  streamAlterSpeed: -1
   membraneWall: {fileID: 11455978}
 --- !u!114 &11469998
 MonoBehaviour:
@@ -2376,9 +2415,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -2395,9 +2434,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   fillTargetRenderers:
   - {fileID: 2370014}
   unfilledTint: {r: .5, g: .5, b: .5, a: 1}
@@ -2415,9 +2454,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   scalees:
   - scalee: {fileID: 455988}
     unscaled: {x: 0, y: 1, z: 0}
@@ -2438,9 +2477,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -2457,9 +2496,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   fillTargetRenderers:
   - {fileID: 2370012}
   unfilledTint: {r: .5, g: .5, b: .5, a: 1}
@@ -2477,9 +2516,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 100000
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 0
@@ -2496,25 +2535,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors:
   - {fileID: 11470004}
-  streamAlterSpeed: -1
   membraneWall: {fileID: 11456034}
---- !u!114 &11470014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b2bf244baee78d4c89ac1f134173246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reactions:
-  - {fileID: 11469998}
-  - {fileID: 11469994}
 --- !u!114 &11479354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2528,9 +2553,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: -1
   reactable: 1
   superiors: []
-  streamAlterSpeed: -1
   scalees:
   - scalee: {fileID: 479354}
     unscaled: {x: 0, y: 1, z: 0}

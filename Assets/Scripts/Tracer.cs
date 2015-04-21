@@ -13,6 +13,7 @@ public class Tracer : MonoBehaviour {
 	public float trailFarWidth = 1;
 	public float zOffset = 10;
 	public float minVertexDistance = 1;
+	public Material lineMaterial;
 	
 	void Start() 
 	{
@@ -84,6 +85,10 @@ public class Tracer : MonoBehaviour {
 		lineRenderer = newLineMaker.GetComponent<LineRenderer>();
 		lineRenderer.SetVertexCount(0);
 		lineRenderer.SetWidth(trailFarWidth, trailNearWidth);
+		if (lineMaterial != null)
+		{
+			lineRenderer.material = lineMaterial;
+		}
 		vertices = new List<Vector3>();
 	}
 

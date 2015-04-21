@@ -60,9 +60,37 @@ public class StreamReactionList : StreamReaction {
 				}
 			}
 
+			if (actionRate > 0)
+			{
+				lastReaction = Time.time;
+			}
+
 			reactionProgress = minReaction;
 		}
 		return reacted;
 
+	}
+
+	public override void SetTouchedStreams(int streamsTouched)
+	{
+		base.SetTouchedStreams(streamsTouched);
+		for (int i = 0; i < streamReactions.Count; i++)
+		{
+			if (streamReactions[i] != null && streamReactions[i] != null)
+			{
+				streamReactions[i].SetTouchedStreams(streamsTouched);
+			}
+		}
+	}
+
+	public override void ReactToEmptyFluffStick(FluffStick fluffStick)
+	{
+		for (int i = 0; i < streamReactions.Count; i++)
+		{
+			if (streamReactions[i] != null && streamReactions[i] != null)
+			{
+				streamReactions[i].ReactToEmptyFluffStick(fluffStick);
+			}
+		}
 	}
 }

@@ -16,6 +16,9 @@ public class CameraSplitter : MonoBehaviour {
 	}
 
 	public bool splittable = true;
+    public bool followPlayers = true;
+
+
 	public bool split = false;
 	private bool wasSplit = false;
 

@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &119194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 419194}
+  - 198: {fileID: 19819194}
+  - 199: {fileID: 19919194}
+  m_Layer: 0
+  m_Name: Stream Diffusing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &147108
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,7 +30,6 @@ GameObject:
   - 23: {fileID: 2347108}
   - 114: {fileID: 11447108}
   - 114: {fileID: 11447104}
-  - 54: {fileID: 5447108}
   - 114: {fileID: 11447106}
   - 114: {fileID: 11498628}
   m_Layer: 4
@@ -23,23 +39,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &171236
-GameObject:
-  m_ObjectHideFlags: 0
+--- !u!4 &419194
+Transform:
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 471236}
-  - 198: {fileID: 19871236}
-  - 199: {fileID: 19971236}
-  m_Layer: 0
-  m_Name: Stream Diffusing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_GameObject: {fileID: 119194}
+  m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .666666687, y: .666666627, z: .666666627}
+  m_Children: []
+  m_Father: {fileID: 447108}
+  m_RootOrder: 0
 --- !u!4 &447108
 Transform:
   m_ObjectHideFlags: 1
@@ -47,23 +58,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 147108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 133.572311, y: 164.509506, z: .5}
+  m_LocalPosition: {x: 103.025307, y: 46.211586, z: .5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 471236}
+  - {fileID: 419194}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
---- !u!4 &471236
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171236}
-  m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .666666687, y: .666666627, z: .666666627}
-  m_Children: []
-  m_Father: {fileID: 447108}
   m_RootOrder: 0
 --- !u!23 &2347108
 Renderer:
@@ -92,21 +91,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 147108}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &5447108
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147108}
-  serializedVersion: 2
-  m_Mass: 1.00000001e-07
-  m_Drag: 1
-  m_AngularDrag: 5
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 56
-  m_CollisionDetection: 0
 --- !u!114 &11447104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,17 +105,22 @@ MonoBehaviour:
   spawner: {fileID: 0}
   targetChannel: {fileID: 0}
   mover: {fileID: 11447106}
+  streamRenderer: {fileID: 0}
   tracer: {fileID: 11447108}
   startAtTarget: 1
   showTarget: 0
-  startRange: 1
+  oldChannel: {fileID: 0}
+  ending: 0
+  seekOffset: {x: 0, y: 0, z: 0}
   actionRate: 1
   ignoreReactionLayers:
     serializedVersion: 2
     m_Bits: 536870912
   lineMaterial: {fileID: 2100000, guid: 184bdcd761bc71b41beda0e5671152b9, type: 2}
-  diffusionParticles: {fileID: 19871236}
+  diffusionParticles: {fileID: 0}
   streamSplittingPrefab: {fileID: 11447104}
+  streamBlockers: 0
+  blockingTime: 0
 --- !u!114 &11447106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,10 +139,9 @@ MonoBehaviour:
   minHandlingFactor: 1
   cutSpeedThreshold: .100000001
   externalSpeedMultiplier: 1
-  body: {fileID: 5447108}
+  body: {fileID: 0}
   bodylessDampening: 1
   slowDown: 0
-  jumpToMaxSpeed: 1
 --- !u!114 &11447108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,6 +160,7 @@ MonoBehaviour:
   trailFarWidth: 1
   zOffset: 0
   minVertexDistance: .200000003
+  lineMaterial: {fileID: 2100000, guid: 184bdcd761bc71b41beda0e5671152b9, type: 2}
 --- !u!114 &11498628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -186,6 +175,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 2347108}
   renderBase: 3000
   renderOffset: -2
+  forceRendererOn: 0
 --- !u!135 &13547108
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -198,12 +188,12 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: .5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!198 &19871236
+--- !u!198 &19819194
 ParticleSystem:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171236}
+  m_GameObject: {fileID: 119194}
   lengthInSec: 1
   startDelay: 0
   speed: 1
@@ -1235,12 +1225,12 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
---- !u!199 &19971236
+--- !u!199 &19919194
 ParticleSystemRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171236}
+  m_GameObject: {fileID: 119194}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
