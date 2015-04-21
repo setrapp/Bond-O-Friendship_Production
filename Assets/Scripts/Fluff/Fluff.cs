@@ -198,7 +198,7 @@ public class Fluff : MonoBehaviour {
 		if (blocked)
 		{
 			moving = true;
-			Attach(attemptPassHit.collider.GetComponent<FluffStick>()/*.gameObject, attemptPassHit.point, attemptPassHit.normal*/, true);
+			Attach(attemptPassHit.collider.GetComponent<FluffStick>(), true);
 			return;
 		}
 

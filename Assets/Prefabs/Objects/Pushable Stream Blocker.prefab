@@ -103,6 +103,7 @@ GameObject:
   - 114: {fileID: 11433444}
   - 114: {fileID: 11433446}
   - 114: {fileID: 11433450}
+  - 114: {fileID: 11482144}
   - 114: {fileID: 11444998}
   m_Layer: 16
   m_Name: Pushable Stream Blocker
@@ -196,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &144998
 GameObject:
   m_ObjectHideFlags: 1
@@ -329,7 +330,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133450}
   m_LocalRotation: {x: 0, y: 0, z: .707106829, w: .707106829}
-  m_LocalPosition: {x: 28.9675102, y: 109.044739, z: 2}
+  m_LocalPosition: {x: -40.2588463, y: 130.79454, z: 2}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 433442}
@@ -883,6 +884,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: -1
+  decayDelay: 5
   reactable: 1
   superiors: []
   streamReactions: []
@@ -902,6 +904,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: -1
+  decayDelay: 5
   reactable: 1
   superiors: []
   fillTargetRenderers:
@@ -923,6 +926,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: -1
+  decayDelay: 5
   reactable: 1
   superiors: []
   collidersToBlocking: 0
@@ -944,6 +948,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: -1
+  decayDelay: 5
   reactable: 1
   superiors: []
   scalees:
@@ -1078,8 +1083,8 @@ MonoBehaviour:
   maxPullForce: 1.5
   fluffReaction: {fileID: 11433442}
   fluffSproutRate: 1
-  fluffConsumeRate: 0
-  fluffActionRate: 0
+  fluffConsumeRate: .200000003
+  fluffActionRate: .200000003
 --- !u!114 &11445000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1102,6 +1107,28 @@ MonoBehaviour:
   dropParent: 0
   spawnFakeMoving: 0
   sproutFluff: 1
+--- !u!114 &11482144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a6363729f1738459ea76e8ac679eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
+  reactable: 1
+  superiors:
+  - {fileID: 11433444}
+  fluffStickRoot: {fileID: 11444998}
+  fluffPlaceholders: []
+  spawnAll: 0
+  findPlaceholders: 1
 --- !u!136 &13644988
 CapsuleCollider:
   m_ObjectHideFlags: 1

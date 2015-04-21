@@ -53,12 +53,16 @@ public class FluffPlaceholder : MonoBehaviour {
 
 	void Update()
 	{
-		if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+		if (autoSpawn)
 		{
-			fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
-			SpawnFluff();
+			if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+			{
+				fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
+				SpawnFluff();
+			}
 		}
-		
+
+
 		if ((createdFluff == null || createdFluff.moving) && pickTime < 0)
 		{
 			createdFluff = null;
@@ -88,7 +92,7 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/, true, sproutFluff);
+					newFluff.Attach(attachee, true, sproutFluff);
 				}
 				else 
 				{

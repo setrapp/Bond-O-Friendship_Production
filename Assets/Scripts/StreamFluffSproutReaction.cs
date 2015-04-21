@@ -63,7 +63,7 @@ public class StreamFluffSproutReaction : StreamReaction {
 					}
 					else
 					{
-						if (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null)
+						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
 						{
 							fluffPlaceholders[i].SpawnFluff();
 							spawned = true;
