@@ -7,8 +7,6 @@ public class ShrinkingPuzzle : MonoBehaviour {
 	private GameObject player2;
 	private Color orange;
 	private Color blue;
-	private Color startingOrange;
-	private Color startingBlue;
 	public GameObject particlePrefab;
 	private GameObject plantParticle;
 
@@ -16,8 +14,6 @@ public class ShrinkingPuzzle : MonoBehaviour {
 	void Start () {
 		player1 = Globals.Instance.player1.gameObject;
 		player2 = Globals.Instance.player2.gameObject;
-		startingOrange = new Color(0.65f, 0.2f, 0);
-		startingBlue = new Color(0.05f, 0.28f, 0.52f);
 		orange = new Color(1.0f, 0.61f, 0);
 		blue = new Color(0.2f, 0.6f, 1.0f);
 	}

@@ -274,7 +274,7 @@ public class PlayerInput : MonoBehaviour {
 		if (firstFluff != null && !Physics.GetIgnoreLayerCollision(firstFluff.gameObject.layer, fluffStick.gameObject.layer))
 		{
 			Fluff leavee = null;
-			float bestDot = 0;
+			float bestDot = -Mathf.Infinity;
 			for (int i = 0; i < character.fluffHandler.fluffs.Count; i++)
 			{
 				float fluffDotCol = Vector3.Dot(character.fluffHandler.fluffs[i].transform.position - transform.position, leavePos - transform.position);

@@ -7,7 +7,7 @@ public class StreamScalingReaction : StreamReaction {
 	[SerializeField]
 	public List<StreamScalingStats> scalees;
 
-	void Start()
+	override protected void Start()
 	{
 		for (int i = 0; i < scalees.Count; i++)
 		{

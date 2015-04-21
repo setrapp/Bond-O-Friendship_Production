@@ -33,20 +33,20 @@ public class PlayersEstablish : MonoBehaviour {
 			for (int i = 0; i < characters.Length; i++)
 			{
 				PlayerInput player = characters[i].GetComponent<PlayerInput>();
-                if (player != Globals.Instance.player1 && player != Globals.Instance.player2)
-                {
-                    if (player != null)
-                    {
-                        if (player.playerNumber == PlayerInput.Player.Player1)
-                        {
-                            player1 = player;
-                        }
-                        else if (player.playerNumber == PlayerInput.Player.Player2)
-                        {
-                            player2 = player;
-                        }
-                    }
-                }
+				if (player != Globals.Instance.player1 && player != Globals.Instance.player2)
+				{
+					if (player != null)
+					{
+						if (player.playerNumber == PlayerInput.Player.Player1)
+						{
+							player1 = player;
+						}
+						else if (player.playerNumber == PlayerInput.Player.Player2)
+						{
+							player2 = player;
+						}
+					}
+				}
 			}
 
 			// Place player 1.
@@ -109,15 +109,12 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 
-            if (!Globals.Instance.transform.FindChild("Camera System").gameObject.activeSelf)
-            {
-                Globals.Instance.transform.FindChild("Camera System").gameObject.SetActive(true);
-                if (CameraSplitter.Instance != null)
-                {
-                    CameraSplitter.Instance.JumpToPlayers();
-                }
-            }
-           
+			if (CameraSplitter.Instance != null && (!CameraSplitter.Instance.player1CameraSystem.gameObject.activeSelf || !CameraSplitter.Instance.player2CameraSystem.gameObject.activeSelf))
+			{
+				CameraSplitter.Instance.player1CameraSystem.gameObject.SetActive(true);
+				CameraSplitter.Instance.player2CameraSystem.gameObject.SetActive(true);
+				CameraSplitter.Instance.JumpToPlayers();
+			}
 
 			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
 			{

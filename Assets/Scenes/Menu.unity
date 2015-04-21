@@ -99,7 +99,7 @@ Transform:
   m_PrefabInternal: {fileID: 2020569886}
   m_GameObject: {fileID: 2468432}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .25, y: 0, z: -0}
+  m_LocalPosition: {x: .300000012, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 476694048}
@@ -161,6 +161,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 2468434}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &6991405
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +390,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 81346339}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &82221254
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +571,6 @@ Transform:
   m_LocalPosition: {x: 0, y: .0499992371, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 356845435}
   - {fileID: 570786081}
   - {fileID: 1666808936}
   - {fileID: 374733021}
@@ -1410,7 +1411,7 @@ Transform:
   m_PrefabInternal: {fileID: 2020569886}
   m_GameObject: {fileID: 303296966}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: -.0500000007, z: 0}
+  m_LocalPosition: {x: 0, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 164181613}
@@ -1422,7 +1423,7 @@ Renderer:
     type: 2}
   m_PrefabInternal: {fileID: 2020569886}
   m_GameObject: {fileID: 303296966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
@@ -1459,6 +1460,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 303296968}
   renderBase: 3000
   renderOffset: 99
+  forceRendererOn: 1
 --- !u!1 &324219779
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,69 +1564,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 324219779}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &356845434
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 356845435}
-  - 108: {fileID: 356845436}
-  m_Layer: 0
-  m_Name: Directional light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &356845435
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 356845434}
-  m_LocalRotation: {x: .468470007, y: -.226341993, z: .125525996, w: .844717979}
-  m_LocalPosition: {x: -626.510071, y: -89.1900024, z: 5.00022125}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 126667744}
-  m_RootOrder: 0
---- !u!108 &356845436
-Light:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 356845434}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
-  m_SpotAngle: 30
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_Strength: 1
-    m_Bias: .0500000007
-    m_Softness: 4
-    m_SoftnessFade: 1
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_ActuallyLightmapped: 1
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4278190079
-  m_Lightmapping: 4
-  m_ShadowSamples: 1
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
-  m_IndirectIntensity: 1
-  m_AreaSize: {x: 1, y: 1}
 --- !u!1 &371096248
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,7 +1664,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!199 &374733022
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -2903,7 +2842,7 @@ Transform:
   m_LocalScale: {x: 55.4561615, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!23 &432853813
 Renderer:
   m_ObjectHideFlags: 0
@@ -3379,7 +3318,7 @@ Transform:
   m_LocalScale: {x: 1, y: 40.0905647, z: 10}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!23 &570786082
 Renderer:
   m_ObjectHideFlags: 0
@@ -3647,7 +3586,7 @@ Transform:
   m_LocalScale: {x: 4.41383171, y: 4.41383171, z: 4.41383171}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!23 &635881838
 Renderer:
   m_ObjectHideFlags: 0
@@ -3906,6 +3845,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 719367400}
   renderBase: 1000
   renderOffset: 0
+  forceRendererOn: 0
 --- !u!23 &719367400
 Renderer:
   m_ObjectHideFlags: 0
@@ -4105,7 +4045,7 @@ Transform:
   m_LocalScale: {x: 55.4561615, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!23 &853135870
 Renderer:
   m_ObjectHideFlags: 0
@@ -4447,6 +4387,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60f4494396a1174186619de5cf4a73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioVolume: -1
+  mute: 0
+  bgm: {fileID: 2119224281}
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -5226,6 +5169,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1177908450}
   renderBase: 1000
   renderOffset: 1
+  forceRendererOn: 0
 --- !u!23 &1177908450
 Renderer:
   m_ObjectHideFlags: 0
@@ -5719,7 +5663,7 @@ Transform:
   m_PrefabInternal: {fileID: 2020569886}
   m_GameObject: {fileID: 1328739203}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.25, y: 0, z: -0}
+  m_LocalPosition: {x: -.300000012, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 476694048}
@@ -5781,6 +5725,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1328739205}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &1385828983
 GameObject:
   m_ObjectHideFlags: 0
@@ -6484,14 +6429,14 @@ MonoBehaviour:
   character: {fileID: 1530241262}
   body: {fileID: 1530241263}
   headSprite: {fileID: 860899134}
-  naturalFluffCount: 1
+  naturalFluffCount: 0
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   fluffContainer: {fileID: 1627551122}
   fluffs: []
   spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 1
+  startingFluff: 0
   maxFluffs: 32
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
@@ -6895,7 +6840,7 @@ Transform:
   m_PrefabInternal: {fileID: 627076188}
   m_GameObject: {fileID: 1539936963}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .25, y: 0, z: -0}
+  m_LocalPosition: {x: .300000012, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 74067000}
@@ -6957,6 +6902,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1539936965}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &1541534042
 GameObject:
   m_ObjectHideFlags: 0
@@ -7152,6 +7098,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1558641115}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &1586857038
 GameObject:
   m_ObjectHideFlags: 0
@@ -7957,7 +7904,7 @@ Transform:
   - {fileID: 169936903}
   - {fileID: 371096249}
   m_Father: {fileID: 126667744}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!114 &1666808937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9482,7 +9429,7 @@ Transform:
   - {fileID: 1904591098}
   - {fileID: 2086204442}
   m_Father: {fileID: 126667744}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1 &1784923774
 GameObject:
   m_ObjectHideFlags: 0
@@ -9578,7 +9525,7 @@ Transform:
   m_LocalScale: {x: 1, y: 40.0905647, z: 10}
   m_Children: []
   m_Father: {fileID: 126667744}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!23 &1802237573
 Renderer:
   m_ObjectHideFlags: 0
@@ -9642,7 +9589,7 @@ Transform:
   m_PrefabInternal: {fileID: 627076188}
   m_GameObject: {fileID: 1818958477}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.25, y: 0, z: -0}
+  m_LocalPosition: {x: -.300000012, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 74067000}
@@ -9704,6 +9651,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1818958479}
   renderBase: 3000
   renderOffset: 100
+  forceRendererOn: 0
 --- !u!1 &1824011281
 GameObject:
   m_ObjectHideFlags: 0
@@ -9842,7 +9790,6 @@ GameObject:
   - 4: {fileID: 1876605743}
   - 114: {fileID: 1876605744}
   - 135: {fileID: 1876605740}
-  - 81: {fileID: 1876605739}
   m_Layer: 0
   m_Name: Menu
   m_TagString: MainCamera
@@ -9850,13 +9797,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1876605739
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1876605738}
-  m_Enabled: 1
 --- !u!135 &1876605740
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9923,7 +9863,7 @@ Transform:
   m_PrefabInternal: {fileID: 627076188}
   m_GameObject: {fileID: 1887132390}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: -.0500000007, z: 0}
+  m_LocalPosition: {x: 0, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 634649542}
@@ -9935,7 +9875,7 @@ Renderer:
     type: 2}
   m_PrefabInternal: {fileID: 627076188}
   m_GameObject: {fileID: 1887132390}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_LightmapIndex: 255
@@ -9972,6 +9912,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 1887132392}
   renderBase: 3000
   renderOffset: 99
+  forceRendererOn: 1
 --- !u!1 &1894342758
 GameObject:
   m_ObjectHideFlags: 0
@@ -10768,14 +10709,14 @@ MonoBehaviour:
   character: {fileID: 2006680905}
   body: {fileID: 2006680906}
   headSprite: {fileID: 442329079}
-  naturalFluffCount: 1
+  naturalFluffCount: 0
   fluffPrefab: {fileID: 100000, guid: 42468f9142b4a164cba5bd927fc69446, type: 2}
   fluffContainer: {fileID: 1272221516}
   fluffs: []
   spawnOffset: .300000012
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
-  startingFluff: 1
+  startingFluff: 0
   maxFluffs: 32
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
@@ -11535,7 +11476,7 @@ GameObject:
   - 81: {fileID: 2119224280}
   - 82: {fileID: 2119224281}
   m_Layer: 0
-  m_Name: Audio Listener
+  m_Name: Audio Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11571,7 +11512,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 9ae5d2480a3ccce4b9234e8df05dd30e, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: .200000003
   m_Pitch: 1
   Loop: 1

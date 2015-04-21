@@ -3,18 +3,22 @@ using System.Collections;
 
 public class Stream : MonoBehaviour {
 
+	public StreamSpawner spawner;
 	public StreamChannel targetChannel;
 	public SimpleMover mover;
 	public Tracer tracer;
 	public bool startAtTarget = true;
 	public bool showTarget = false;
-	private StreamChannel oldChannel;
+	public bool autoMove = true;
+	public  StreamChannel oldChannel;
 	private bool ending;
+	public Vector3 seekOffset;
 	public float actionRate = 1;
 	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
 	public ParticleSystem diffusionParticles;
 	public Stream streamSplittingPrefab;
+	private Vector3 moveDirection;
 
 	/*TODO handle streams merging back together*/
 
@@ -34,7 +38,7 @@ public class Stream : MonoBehaviour {
 	{
 		if (targetChannel != null && startAtTarget)
 		{
-			transform.position = targetChannel.transform.position;
+			transform.position = targetChannel.transform.position + seekOffset;
 		}
 
 		tracer.CreateLineMaker(true);
@@ -53,6 +57,7 @@ public class Stream : MonoBehaviour {
 		}
 
 		SeekNextChannel();
+		UpdateMovement();
 	}
 
 	void Update()
@@ -65,7 +70,7 @@ public class Stream : MonoBehaviour {
 			}
 
 			Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
-			Vector3 toTarget = targetChannel.transform.position - transform.position;
+			Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 
 			// TODO: Should the stream be able to change z-depth?
 			oldToTarget.z = toTarget.z = 0;
@@ -82,6 +87,21 @@ public class Stream : MonoBehaviour {
 
 			mover.velocity = mover.rigidbody.velocity;
 			mover.Accelerate(toTarget);
+
+			if (!autoMove)
+			{
+				moveDirection = mover.velocity.normalized;
+			}
+
+			if (autoMove)
+			{
+				//moveDirection = toTarget.normalized;
+			}
+
+			//TODO remove
+			/*UpdateMovement();
+
+			mover.NaiveAccelerate(moveDirection);*/
 		}
 		else
 		{
@@ -99,6 +119,13 @@ public class Stream : MonoBehaviour {
 		}
 
 		tracer.AddVertex(transform.position);
+		
+	}
+
+	public void UpdateMovement()
+	{
+		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+		moveDirection = toTarget.normalized;
 	}
 
 	private void SeekNextChannel()
@@ -124,8 +151,11 @@ public class Stream : MonoBehaviour {
 					splitStream.startAtTarget = false;
 					splitStream.transform.parent = transform.parent;
 					splitStream.mover.maxSpeed = mover.maxSpeed;
-					//splitStream.transform.up = targetChannel.transform.position - splitStream.transform.position;
-					//splitStream.mover.Move(splitStream.transform.up, splitStream.mover.velocity.magnitude);
+					splitStream.seekOffset = seekOffset;
+					if (spawner != null)
+					{
+						spawner.TrackStream(splitStream);
+					}
 				}
 			}
 		}
