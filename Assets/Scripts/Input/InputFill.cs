@@ -65,7 +65,7 @@ public class InputFill : MonoBehaviour {
     public ControlsAndInput player1FutureControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
     public ControlsAndInput player2FutureControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
 
-    private float duration = 5f;
+    private float duration = 2f;
     
     private Vector3 filledInLeft = new Vector3(2.8f, 3f, 1f);
     private Vector3 filledInRight = new Vector3(2.9f, 3f, 1f);
