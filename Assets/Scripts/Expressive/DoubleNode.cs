@@ -19,11 +19,11 @@ public class DoubleNode : MonoBehaviour {
 	public float ScaleRate;
 	public float LifeTime;
 	
-	private float scalerate;
-	private float lifetime;
-
-	private float alphafade;
-	private float alpha;
+//	private float scalerate;
+//	private float lifetime;
+//
+//	private float alphafade;
+//	private float alpha;
 
 	public float activationTimer;
 	public float activeTime;
@@ -44,10 +44,10 @@ public class DoubleNode : MonoBehaviour {
 		b = 0.75f;
 		a = 1.0f;
 		GetComponent<Renderer>().material.color = Color.white;
-		scalerate = 10.0f;
-		lifetime = 3.0f;
-		alpha = 1.0f;
-		alphafade = 0.5f;
+//		scalerate = 10.0f;
+//		lifetime = 3.0f;
+//		alpha = 1.0f;
+//		alphafade = 0.5f;
 
 		blueColor = new Color(0.0f,(96.0f/255.0f),(194.0f/255.0f),1.0f);
 		orangeColor = new Color((230.0f/255.0f),(86.0f/255.0f),0.0f,1.0f);

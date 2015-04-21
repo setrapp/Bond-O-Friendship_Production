@@ -11,7 +11,7 @@ public class threaderPadSymbol : MonoBehaviour {
 	private Color myColor;
 	private Color postColor;
 	public GameObject pad;
-	private float alpha;
+//	private float alpha;
 	public GameObject activator;
 	
 	// Use this for initialization
@@ -19,7 +19,7 @@ public class threaderPadSymbol : MonoBehaviour {
 		timer = 1.0f;
 		//doorTimer = 1.0f;
 		red = 189.0f/255.0f;
-		alpha = 0.5f;
+	//	alpha = 0.5f;
 		
 	}
 	

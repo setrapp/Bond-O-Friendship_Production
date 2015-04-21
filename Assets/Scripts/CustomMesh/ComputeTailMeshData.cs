@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -92,6 +93,11 @@ public class ComputeTailMeshData : ComputeCustomMeshFromLocus {
                 triangles[index++] = i + 1;
                 triangles[index++] = i + 3;
                 triangles[index++] = i + 2;
+            }
+
+            if(Input.GetMouseButtonUp(0))
+            {
+                AssetDatabase.CreateAsset(mesh, "Assets/customMesh.asset");
             }
 
                 

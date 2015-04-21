@@ -11,6 +11,7 @@ public class FluffPlaceholder : MonoBehaviour {
 	public float respawnDelayMin = 0;
 	public float respawnDelayMax = 0;
 	private float pickTime = -1;
+	public bool autoSpawn = true;
 	public bool dropParent = false;
 	public bool spawnFakeMoving = false;
 	public bool sproutFluff = false;
@@ -26,14 +27,35 @@ public class FluffPlaceholder : MonoBehaviour {
 			materialSource.enabled = false;
 		}
 
-		SpawnFluff();
+		if (attachee == null)
+		{
+			attachee = GetComponent<FluffStick>();
+			if (attachee == null)
+			{
+				attachee = GetComponentInParent<FluffStick>();
+			}
+		}
+
+		if (attachee != null)
+		{
+			attachee.stickOffset = attachee.transform.InverseTransformPoint(transform.position);
+			attachee.stickDirection = -attachee.transform.InverseTransformDirection(transform.up);
+		}
+	}
+
+	void Start()
+	{
+		if (autoSpawn)
+		{
+			SpawnFluff();
+		}
 	}
 
 	void Update()
 	{
 		if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
 		{
-			fluffRespawns--;
+			fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
 			SpawnFluff();
 		}
 		
@@ -44,7 +66,7 @@ public class FluffPlaceholder : MonoBehaviour {
 		}
 	}
 
-	private void SpawnFluff()
+	public void SpawnFluff()
 	{
 		Material fluffMaterial = null;
 		if (materialSource != null)

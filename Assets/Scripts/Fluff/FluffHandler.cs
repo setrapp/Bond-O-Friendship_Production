@@ -276,6 +276,11 @@ public class FluffHandler : MonoBehaviour {
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
 			newFluffInfo.creator = character.bondAttachable;
 			fluffs.Add(newFluffInfo);
+
+			if (newFluffInfo.attachAudio != null && !newFluffInfo.attachAudio.isPlaying)
+			{
+				newFluffInfo.attachAudio.Play();
+			}
 		}
 	}
 
