@@ -13,8 +13,8 @@ public class MenuControl : MonoBehaviour {
     InputDevice device;
     private int deviceCount;
 
-    private bool player1Ready = false;
-    private bool player2Ready = false;
+    public bool player1Ready = false;
+    public bool player2Ready = false;
     private bool inputSelected = false;
 
     private float t = 1f;
@@ -78,13 +78,9 @@ public class MenuControl : MonoBehaviour {
                         Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
                     }
 
-                    //Debug.Log(Globals.Instance.player1ControlScheme);
-                    // MainMenuLoadLevel();
                     inputSelected = true;
-                    // startMenu.SetActive(false);
                     inputSelect.SetActive(true);
                     return;
-                    // Globals.usingController = true;
                 }
             }
             if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
@@ -111,12 +107,8 @@ public class MenuControl : MonoBehaviour {
                 Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
 
                 inputSelected = true;
-
-                //startMenu.SetActive(false);
                 inputSelect.SetActive(true);
                 return;
-                //MainMenuLoadLevel();
-                // Globals.usingController = false;
             }
         }
         else
@@ -175,29 +167,6 @@ public class MenuControl : MonoBehaviour {
         #endif
     }
 
-    void OnTriggerEnter(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = true;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = true;
-        }
-    }
-
-    void OnTriggerExit(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = false;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = false;
-        }
-
-    }
+   
 
 }
