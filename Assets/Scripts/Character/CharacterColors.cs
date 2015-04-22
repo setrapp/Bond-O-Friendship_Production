@@ -5,6 +5,7 @@ public class CharacterColors : MonoBehaviour {
 	public bool updateColors = false;
 	public CharacterComponents character;
 	[Header("Colors")]
+	public Color baseColor;
 	public Color attachmentColor;
 	[Header("Materials")]
 	public Material headMaterial;
@@ -37,7 +38,7 @@ public class CharacterColors : MonoBehaviour {
 		character.bondAttachable.attachmentColor = attachmentColor;
 		character.headRenderer.material = headMaterial;
 		character.fillRenderer.material = fillMaterial;
-		character.flashRenderer.color = attachmentColor;
+		character.flashRenderer.color = baseColor;
 		character.leftTrail.material = sideTrailMaterial;
 		character.midTrail.material = trailMaterial;
 		character.rightTrail.material = sideTrailMaterial;
