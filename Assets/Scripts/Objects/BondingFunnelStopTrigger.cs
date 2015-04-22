@@ -10,7 +10,7 @@ public class BondingFunnelStopTrigger : MonoBehaviour {
 	{
 		if (col == triggerer)
 		{
-			targetFunnel.StopBackTracking();
+			
 		}
 	}
 }

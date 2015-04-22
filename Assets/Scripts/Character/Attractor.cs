@@ -111,7 +111,7 @@ public class Attractor : MonoBehaviour {
 			{
 				bool fluffAttachedToSelf = (liveFluff.attachee != null && liveFluff.attachee.gameObject == gameObject);
 				bool ignoringAttract = !liveFluff.attractable || (liveFluff.attachee != null && liveFluff.attachee.possessive);
-				Color pullColor = character.colors.attachmentColor;
+				Color pullColor = character.colors.baseColor;
 				if (!fluffAttachedToSelf && !ignoringAttract && liveFluff.gameObject.activeSelf)
 				{
 					float fluffSqrDist = (liveFluff.transform.position - transform.position).sqrMagnitude;

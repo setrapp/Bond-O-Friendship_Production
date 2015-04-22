@@ -17,7 +17,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 			neededCharacter = Globals.Instance.player2.character;
 		}
 		neededCollider = neededCharacter.collider;
-		nodeRenderer.material.color = neededCharacter.colors.attachmentColor - colorDesaturation;
+		nodeRenderer.material.color = neededCharacter.colors.baseColor - colorDesaturation;
 		startingcolor = nodeRenderer.material.color;
 	}
 

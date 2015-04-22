@@ -235,9 +235,9 @@ public class PlayerInput : MonoBehaviour {
 			if (!character.bondAttachable.IsBondMade(partnerCharacter.bondAttachable))
 			{
 				character.bondAttachable.volleyPartner = partnerCharacter.bondAttachable;
-				character.SetFlashAndFill(partnerCharacter.colors.attachmentColor);
+				character.SetFlashAndFill(partnerCharacter.colors.baseColor);
 				partnerCharacter.bondAttachable.volleyPartner = character.bondAttachable;
-				partnerCharacter.SetFlashAndFill(character.colors.attachmentColor);
+				partnerCharacter.SetFlashAndFill(character.colors.baseColor);
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
 		}
