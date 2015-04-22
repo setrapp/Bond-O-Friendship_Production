@@ -9,10 +9,15 @@ public class SpawnLand : MonoBehaviour {
 	private GameObject land;
 	private Threader threader;
 	private bool spawned;
+	private Color threadColor;
+	private Color childColor;
+	private bool removed;
 
 	// Use this for initialization
 	void Start () {
 		threader = GetComponent<Threader>();
+		threadColor = GetComponent<Renderer>().material.color;
+//		childColor = transform.GetChild(0).GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
@@ -32,6 +37,22 @@ public class SpawnLand : MonoBehaviour {
 		else if(land != null && land.transform.localScale.x > 1.0f && transform.GetComponentInParent<ThreadParent>().solved == false)
 		{
 			land.transform.localScale -= new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+		}
+		if(transform.GetComponentInParent<ThreadParent>().solved == true)
+		{
+			threadColor.a -= Time.deltaTime;
+			childColor.a -= Time.deltaTime;
+			GetComponent<Renderer>().material.color = threadColor;
+			transform.GetChild(0).GetComponent<Renderer>().material.color = childColor;
+			if(!removed)
+			{
+				for(int i = 0; i < GetComponents<Collider>().Length; i++)
+					GetComponents<Collider>()[i].enabled = false;
+				if(transform.GetChild(0).GetComponent<Collider>().enabled == true)
+					transform.GetChild(0).GetComponent<Collider>().enabled = false;
+
+				removed = true;
+			}
 		}
 
 	}
