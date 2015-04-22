@@ -22,6 +22,7 @@ public class Stream : MonoBehaviour {
 	public Stream streamSplittingPrefab;
 	public int streamBlockers = 0;
 	public float blockingTime = 0;
+	public bool drawStreamLine = true;
 
 	/*TODO handle streams merging back together*/
 
@@ -108,6 +109,7 @@ public class Stream : MonoBehaviour {
 			}
 			else
 			{
+				Destroy(gameObject);
 				/*if (mover.velocity.sqrMagnitude > 0)
 				{
 					mover.Stop();
@@ -144,7 +146,10 @@ public class Stream : MonoBehaviour {
 			
 		}
 
-		tracer.AddVertex(transform.position);
+		if (drawStreamLine)
+		{
+			tracer.AddVertex(transform.position);
+		}
 	}
 
 	public void UpdateMovement()
