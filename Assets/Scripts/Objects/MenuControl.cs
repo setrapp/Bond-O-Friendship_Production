@@ -5,9 +5,7 @@ using InControl;
 
 public class MenuControl : MonoBehaviour {
 
-    public GameObject levelSelectButton;
     public GameObject startMenu;
-    public GameObject levelSelect;
 
     public GameObject inputSelect;
 
@@ -15,11 +13,12 @@ public class MenuControl : MonoBehaviour {
     InputDevice device;
     private int deviceCount;
 
-    private bool player1Ready = false;
-    private bool player2Ready = false;
+    public bool player1Ready = false;
+    public bool player2Ready = false;
     private bool inputSelected = false;
 
-    public Camera menuCamera;
+    private float t = 1f;
+    public float duration = 3.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -50,13 +49,14 @@ public class MenuControl : MonoBehaviour {
 				MainMenuLoadLevel();
 			}
         }
+
         if (!inputSelected)
         {
             if (deviceCount > 0)
             {
 
                 device = InputManager.ActiveDevice;
-                if (device.AnyButton)//device.LeftTrigger.IsPressed && device.RightTrigger.IsPressed)
+                if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged)
                 {
                     Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
                     Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
@@ -78,17 +78,9 @@ public class MenuControl : MonoBehaviour {
                         Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
                     }
 
-                    //Debug.Log(Globals.Instance.player1ControlScheme);
-                    // MainMenuLoadLevel();
-                    if (menuCamera != null)
-                {
-                    menuCamera.gameObject.SetActive(true);
-                }
                     inputSelected = true;
-                    startMenu.SetActive(false);
                     inputSelect.SetActive(true);
                     return;
-                    // Globals.usingController = true;
                 }
             }
             if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
@@ -115,34 +107,40 @@ public class MenuControl : MonoBehaviour {
                 Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
 
                 inputSelected = true;
-                if (menuCamera != null)
-                {
-                    menuCamera.gameObject.SetActive(true);
-                }
-                startMenu.SetActive(false);
                 inputSelect.SetActive(true);
                 return;
-                //MainMenuLoadLevel();
-                // Globals.usingController = false;
             }
+        }
+        else
+        {
+            if(startMenu.activeSelf)
+                FadeStartMenu();
         }
 
         if (player1Ready && player2Ready && inputSelected)
         {
-            MainMenuLoadLevel();
-            if (menuCamera != null)
-            {
-                menuCamera.gameObject.SetActive(false);
-            }
-           
+            MainMenuLoadLevel();           
         }
         else
 		{
-			CameraSplitter.Instance.player1CameraSystem.gameObject.SetActive(false);
-			CameraSplitter.Instance.player2CameraSystem.gameObject.SetActive(false);
+            CameraSplitter.Instance.followPlayers = false;
 		}
 
     }	
+
+
+    private void FadeStartMenu()
+    {
+        if (startMenu.GetComponent<CanvasGroup>().alpha != 0.0f)
+        {
+            t -= Time.deltaTime / duration;
+            t = Mathf.Clamp(t, 0.0f, 1.0f);
+            startMenu.GetComponent<CanvasGroup>().alpha = t;
+        }
+        else
+            startMenu.SetActive(false);
+    }
+
 
     public void MainMenuLoadLevel()
     {
@@ -159,13 +157,6 @@ public class MenuControl : MonoBehaviour {
         }
     }
 
-    
-    public void LevelSelect()
-    {
-        startMenu.SetActive(false);
-        levelSelect.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(levelSelectButton);
-    }
 
     public void ExitGame()
     {
@@ -176,29 +167,6 @@ public class MenuControl : MonoBehaviour {
         #endif
     }
 
-    void OnTriggerEnter(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = true;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = true;
-        }
-    }
-
-    void OnTriggerExit(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = false;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = false;
-        }
-
-    }
+   
 
 }

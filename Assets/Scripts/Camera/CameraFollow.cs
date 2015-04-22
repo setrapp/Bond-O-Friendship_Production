@@ -34,9 +34,12 @@ public class CameraFollow : MonoBehaviour {
 
     void FixedUpdate()
     {
-        MoveCamera();
-        FadeSplitScreenLine();
-        RotateAndResizeMasks();       
+        if (CameraSplitter.Instance.followPlayers)
+        {
+            MoveCamera();
+            FadeSplitScreenLine();
+            RotateAndResizeMasks();
+        }
     }
 
     private void MoveCamera()
