@@ -7,6 +7,7 @@ public class RotateDoor : MonoBehaviour {
 	public float speed = 8;
 	private bool rotating;
 	public float rotateDireciton = 1;
+	public Collider colliderToDisable = null;
 
 	void Start()
 	{
@@ -17,6 +18,11 @@ public class RotateDoor : MonoBehaviour {
 	void Update () {
 		if(rotating == true)
 		{
+			if (colliderToDisable != null && colliderToDisable.enabled)
+			{
+				colliderToDisable.enabled = false;
+			}
+
 			float currentRotation = transform.localRotation.eulerAngles.z;
 			if (stopAngle < 0)
 			{

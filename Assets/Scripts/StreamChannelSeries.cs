@@ -18,56 +18,59 @@ public class StreamChannelSeries : MonoBehaviour {
 	{
 		for(int i = 0; i < channels.Count; i++)
 		{
-			if(channels[i].bed != null)
+			if (channels[i] != null)
 			{
-				Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
-				if (bedRenderer != null)
+				if (channels[i].bed != null)
 				{
-					bedRenderer.enabled = renderBeds;
-				}
-
-				if (maskBeds)
-				{
-					GameObject bedOverlay = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
-					bedOverlay.transform.position += new Vector3(0, 0, 3) - new Vector3(0, 0, bedOverlay.transform.position.z);
-					Renderer bedOverlayRenderer = bedOverlay.GetComponent<Renderer>();
-					if (bedOverlayRenderer != null)
+					Renderer bedRenderer = channels[i].bed.GetComponent<Renderer>();
+					if (bedRenderer != null)
 					{
-						bedOverlayRenderer.enabled = true;
-						bedOverlayRenderer.material = overlayMaterial;
+						bedRenderer.enabled = renderBeds;
 					}
 
-					GameObject bedMask = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
-					bedMask.transform.position += new Vector3(0, 0, 4) - new Vector3(0, 0, bedMask.transform.position.z);
-					Renderer bedMaskRenderer = bedMask.GetComponent<Renderer>();
-					if (bedMaskRenderer != null)
+					if (maskBeds)
 					{
-						bedMaskRenderer.enabled = true;
-						bedMaskRenderer.material = maskMaterial;
-						RenderQueue maskQueue = bedMask.AddComponent<RenderQueue>();
-						maskQueue.targetRenderer = bedMaskRenderer;
-						maskQueue.renderBase = RenderQueue.RenderBase.TRANSPARENT;
-						maskQueue.renderOffset = maskRenderOffset;
-					}
+						GameObject bedOverlay = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
+						bedOverlay.transform.position += new Vector3(0, 0, 3) - new Vector3(0, 0, bedOverlay.transform.position.z);
+						Renderer bedOverlayRenderer = bedOverlay.GetComponent<Renderer>();
+						if (bedOverlayRenderer != null)
+						{
+							bedOverlayRenderer.enabled = true;
+							bedOverlayRenderer.material = overlayMaterial;
+						}
 
-					bedOverlay.transform.parent = channels[i].bed.transform;
-					bedMask.transform.parent = channels[i].bed.transform;
+						GameObject bedMask = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
+						bedMask.transform.position += new Vector3(0, 0, 4) - new Vector3(0, 0, bedMask.transform.position.z);
+						Renderer bedMaskRenderer = bedMask.GetComponent<Renderer>();
+						if (bedMaskRenderer != null)
+						{
+							bedMaskRenderer.enabled = true;
+							bedMaskRenderer.material = maskMaterial;
+							RenderQueue maskQueue = bedMask.AddComponent<RenderQueue>();
+							maskQueue.targetRenderer = bedMaskRenderer;
+							maskQueue.renderBase = RenderQueue.RenderBase.TRANSPARENT;
+							maskQueue.renderOffset = maskRenderOffset;
+						}
+
+						bedOverlay.transform.parent = channels[i].bed.transform;
+						bedMask.transform.parent = channels[i].bed.transform;
+					}
 				}
-			}
-			if(channels[i].bank1 != null)
-			{
-				Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
-				if (bank1Renderer != null)
+				if (channels[i].bank1 != null)
 				{
-					bank1Renderer.enabled = renderBanks;
+					Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
+					if (bank1Renderer != null)
+					{
+						bank1Renderer.enabled = renderBanks;
+					}
 				}
-			}
-			if(channels[i].bank2 != null)
-			{
-				Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
-				if (bank2Renderer != null)
+				if (channels[i].bank2 != null)
 				{
-					bank2Renderer.enabled = renderBanks;
+					Renderer bank2Renderer = channels[i].bank2.GetComponent<Renderer>();
+					if (bank2Renderer != null)
+					{
+						bank2Renderer.enabled = renderBanks;
+					}
 				}
 			}
 		}
@@ -94,7 +97,7 @@ public class StreamChannelSeries : MonoBehaviour {
 		}
 
 		int currentIndex = channels.IndexOf(currentChannel);
-		if (currentIndex >= 0 && currentIndex < channels.Count - 1)
+		if (currentIndex >= 0 && currentIndex < channels.Count - 1 && channels[currentIndex + 1] != null)
 		{
 			nextChannelList.Add(channels[currentIndex + 1]);
 		}

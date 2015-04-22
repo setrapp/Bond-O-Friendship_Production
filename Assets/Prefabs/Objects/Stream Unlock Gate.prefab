@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11483574}
   - 114: {fileID: 11413866}
   - 114: {fileID: 11411622}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Stream Unlock Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ GameObject:
   - 4: {fileID: 441622}
   - 33: {fileID: 3341626}
   - 23: {fileID: 2341626}
-  m_Layer: 16
+  m_Layer: 15
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   - 114: {fileID: 11440864}
   - 54: {fileID: 5410422}
   - 138: {fileID: 13810422}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: Stream Fill Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - 33: {fileID: 3341630}
   - 65: {fileID: 6541630}
   - 23: {fileID: 2341630}
-  m_Layer: 16
+  m_Layer: 15
   m_Name: NodeGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - 4: {fileID: 441630}
   - 54: {fileID: 5441630}
   - 114: {fileID: 11441624}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Gate Hinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.0936775, y: 88.2323303, z: 5}
+  m_LocalPosition: {x: 40.4748993, y: 136.371185, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 441630}
@@ -387,8 +387,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
   reactable: 1
   superiors: []
+  streamsTouched: 0
   scalees:
   - scalee: {fileID: 441622}
     unscaled: {x: 1.5, y: 6, z: 1.5}
@@ -412,7 +415,7 @@ MonoBehaviour:
   reactions:
   - {fileID: 11483572}
   blockStream: 1
-  streamsBeingBlocked: []
+  streamsTouched: []
   warnForBody: 1
 --- !u!114 &11441624
 MonoBehaviour:
@@ -441,8 +444,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
   reactable: 1
   superiors: []
+  streamsTouched: 0
   fillTargetRenderers:
   - {fileID: 2341630}
   - {fileID: 2341628}
@@ -462,8 +468,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
   reactable: 1
   superiors: []
+  streamsTouched: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -480,8 +489,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
   reactable: 1
   superiors: []
+  streamsTouched: 0
   collidersToBlocking: 0
   reactionColliders:
   - {fileID: 11440864}
