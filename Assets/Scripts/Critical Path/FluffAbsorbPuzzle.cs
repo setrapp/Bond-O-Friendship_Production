@@ -98,12 +98,27 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 					timeSE = Mathf.Clamp(timeSE,0f,1f);
 					endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeSE);
 				}
-//				if(!finishedSW)
-//					endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
-//				if(!finishedNE)
-//					endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
-//				if(!finishedNW)
-//					endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
+				if(!finishedSW)
+				{
+					timeSW += Time.deltaTime / duration;
+					
+					timeSW = Mathf.Clamp(timeSW,0f,1f);
+					endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeSW);
+				}
+				if(!finishedNE)
+				{
+					timeNE += Time.deltaTime / duration;
+					
+					timeNE = Mathf.Clamp(timeNE,0f,1f);
+					endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeNE);
+				}
+				if(!finishedNW)
+				{
+					timeNW += Time.deltaTime / duration;
+					
+					timeNW = Mathf.Clamp(timeNW,0f,1f);
+					endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeNW);
+				}
 			}
 			if(finishedSE)
 			{
@@ -140,6 +155,11 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 
 		if(complete)
 		{
+			for(int i = 0; i < transform.parent.childCount; i++)
+			{
+				if(transform.parent.GetChild(i).name == "Cube")
+					Destroy(transform.parent.GetChild(i).gameObject);
+			}
 			if(transform.parent.transform.position.z < 8.0f)
 				transform.parent.transform.position += new Vector3(0, 0, Time.deltaTime);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
