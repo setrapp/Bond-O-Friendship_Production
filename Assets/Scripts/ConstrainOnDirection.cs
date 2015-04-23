@@ -6,7 +6,6 @@ public class ConstrainOnDirection : MonoBehaviour {
 	public Vector3 constrainToDirection = new Vector3(0, 0, 1);
 	public Space directionSpace = Space.Self;
 	private Vector3 oldPosition;
-	private Vector3 usableDirection;
 	public Rigidbody body;
 
 	void Start()
@@ -25,16 +24,27 @@ public class ConstrainOnDirection : MonoBehaviour {
 			Vector3 usableDirection = constrainToDirection;
 			if (directionSpace == Space.Self)
 			{
-				transform.TransformDirection(constrainToDirection);
+				usableDirection = transform.TransformDirection(constrainToDirection);
 			}
 
-			transform.position = oldPosition + Helper.ProjectVector(transform.position - oldPosition, usableDirection);
+			transform.position = oldPosition + Helper.ProjectVector(usableDirection, transform.position - oldPosition);
 
-			/*if (body != null && body.velocity.sqrMagnitude > 0)
+
+			if (body != null && body.velocity.sqrMagnitude > 0)
 			{
-				body.velocity = Helper.ProjectVector(body.velocity, usableDirection);
-			}*/
+				body.velocity = Helper.ProjectVector(usableDirection, body.velocity);
+			}
 		}
-		
+	}
+
+	void OnDrawGizmos()
+	{
+		Vector3 usableDirection = constrainToDirection;
+		if (directionSpace == Space.Self)
+		{
+			usableDirection = transform.TransformDirection(constrainToDirection);
+		}
+		Gizmos.color = Color.white;
+		Gizmos.DrawLine(transform.position, transform.position + (usableDirection * 10));
 	}
 }
