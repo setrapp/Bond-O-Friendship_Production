@@ -35,7 +35,7 @@ public class MovePaired : MonoBehaviour {
 		{
 			transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime);
 			pairedObject.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime)*6.0f;
-			pairedObject.transform.position -= new Vector3(0, Time.deltaTime*3f, -Time.deltaTime*2f);
+			pairedObject.transform.localPosition -= new Vector3(0, Time.deltaTime*3f, -Time.deltaTime*2f);
 			if(transform.localScale.x <= 0)
 			{
 				Destroy(pairedObject);

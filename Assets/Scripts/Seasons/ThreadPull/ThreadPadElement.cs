@@ -35,11 +35,11 @@ public class ThreadPadElement : MonoBehaviour {
 			GetComponent<SpringJoint>().spring = 0;
 
 		triPosition = triIsland.transform.position;
-		triPosition.x += 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxTriDistance)/Vector3.Distance(triIsland.transform.position, triDest.transform.position);
+		triPosition.y -= 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxTriDistance)/Vector3.Distance(triIsland.transform.position, triDest.transform.position);
 		triIsland.transform.position = triPosition;
 
 		bigPosition = bigIsland.transform.position;
-		bigPosition.x -= 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxBigDistance)/Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
+		bigPosition.y += 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxBigDistance)/Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
 		bigIsland.transform.position = bigPosition;
 
 		for(int i=0;i<bondLinks.Count;i++)

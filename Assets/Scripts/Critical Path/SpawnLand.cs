@@ -17,7 +17,6 @@ public class SpawnLand : MonoBehaviour {
 	void Start () {
 		threader = GetComponent<Threader>();
 		threadColor = GetComponent<Renderer>().material.color;
-//		childColor = transform.GetChild(0).GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
