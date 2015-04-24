@@ -22,7 +22,7 @@ public class Stream : MonoBehaviour {
 	public Stream streamSplittingPrefab;
 	public int streamBlockers = 0;
 	public float blockingTime = 0;
-	public bool drawStreamLine = true;
+	public bool drawEditorStreamLine = true;
 
 	/*TODO handle streams merging back together*/
 
@@ -146,7 +146,7 @@ public class Stream : MonoBehaviour {
 			
 		}
 
-		if (drawStreamLine)
+		if (!Application.isEditor || drawEditorStreamLine)
 		{
 			tracer.AddVertex(transform.position);
 		}

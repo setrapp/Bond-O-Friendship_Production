@@ -37,6 +37,9 @@ public class Bond : MonoBehaviour {
 	[SerializeField]
 	public List<GameObject> fluffsHeld;
 	private float fluffRequestTime;
+	private List<BondStrain> strains;
+	public Color flashTint;
+	public float flashDuration = 1;
 
 	protected virtual void Start()
 	{
@@ -47,7 +50,17 @@ public class Bond : MonoBehaviour {
 	protected virtual void Update()
 	{
 		lengthFresh = false;
-		
+
+		if (strains != null && strains.Count > 0)
+		{
+			stats.maxDistance -= strains[0].intensity * Time.deltaTime;
+			strains[0].duration -= Time.deltaTime;
+			if (strains[0].duration <= 0)
+			{
+				strains.RemoveAt(0);
+			}
+		}
+
 		currentDetail = SetLevelOfDetail();
 		bool atSparseDetail = currentDetail <= stats.sparseDetailFactor;
 		float frameTime = Time.time;
@@ -353,6 +366,12 @@ public class Bond : MonoBehaviour {
 							fluff.nonAttractTime = 0;
 							fluff.attractable = true;
 							fluff.mover.externalSpeedMultiplier = 1.0f;
+							fluff.InflateToFull();
+
+							if (strains != null && strains.Count > 0)
+							{
+								fluff.PopFluff(0.5f, -1, false, true);
+							}
 						}
 
 						SpringJoint fluffSpring = fluff.GetComponent<SpringJoint>();
@@ -398,8 +417,7 @@ public class Bond : MonoBehaviour {
 
 		Color color1 = attachment1.attachee.attachmentColor;
 		Color color2 = attachment2.attachee.attachmentColor;
-		Color midColor = color1 + color2;
-		midColor.a = (color1.a + color2.a) / 2;
+		Color midColor = ComputeMidColor(color1, color2);
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
@@ -423,6 +441,13 @@ public class Bond : MonoBehaviour {
 		Globals.Instance.BondFormed(this);
 
 		BondForming();
+	}
+
+	private Color ComputeMidColor(Color color1, Color color2)
+	{
+		Color midColor = color1 + color2;
+		midColor.a = (color1.a + color2.a) / 2;
+		return midColor;
 	}
 
 	public void ReplacePartner(BondAttachable partnerToReplace, BondAttachable replacement)
@@ -460,9 +485,8 @@ public class Bond : MonoBehaviour {
 		}
 	}
 
-	private void AddLink(int index = -1, bool weightJoints = true)
+	private BondLink AddLink(int index = -1, bool weightJoints = true)
 	{
-
 		// Create new link in bond at the given index, or default to center.
 		if (index < 0)
 		{
@@ -470,6 +494,8 @@ public class Bond : MonoBehaviour {
 		}
 		Vector3 midpoint = (links[index].transform.position + links[index - 1].transform.position) / 2;
 		BondLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<BondLink>();
+		newLink.bond = this;
+		
 		newLink.transform.parent = transform;
 		links.Insert(index, newLink);
 
@@ -503,6 +529,8 @@ public class Bond : MonoBehaviour {
 			WeightJoints();
 		}
 		LinkAdded(newLink);
+
+		return newLink;
 	}
 
 	private void RemoveLink(int index, bool weightJoints = true)
@@ -677,6 +705,8 @@ public class Bond : MonoBehaviour {
 
 		fluff.PopFluff(0.5f, -1, true);
 
+		Flash();
+
 		return true;
 	}
 
@@ -814,6 +844,85 @@ public class Bond : MonoBehaviour {
 			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
 		}
 	}
+
+	public void Flash()
+	{
+		StartCoroutine(FlashAndFade());
+	}
+
+	private IEnumerator FlashAndFade()
+	{
+		Color color1 = attachment1.attachee.attachmentColor;
+		Color color2 = attachment2.attachee.attachmentColor;
+		Color midColor = ComputeMidColor(color1, color2);
+
+		Color flashColor1 = color1 + flashTint;
+		Color flashColor2 = color2 + flashTint;
+		Color flashMidColor = midColor + flashTint;
+
+
+		attachment1.lineRenderer.SetColors(flashColor1, flashMidColor);
+		attachment2.lineRenderer.SetColors(flashMidColor, flashColor2);
+
+		if (flashDuration <= 0)
+		{
+			yield return null;
+			attachment1.lineRenderer.SetColors(color1, midColor);
+			attachment2.lineRenderer.SetColors(midColor, color2);
+		}
+		else
+		{
+			float flashElapsed = 0;
+			while(flashElapsed < flashDuration)
+			{
+				float progress = flashElapsed / flashDuration;
+				Color fadeMidColor = (flashMidColor * (1 - progress)) + (midColor * progress);
+				attachment1.lineRenderer.SetColors((flashColor1 * (1 - progress)) + (color2 * progress), fadeMidColor);
+				attachment2.lineRenderer.SetColors(fadeMidColor, (flashColor2 * (1 - progress)) + (color2 * progress));
+				flashElapsed += Time.deltaTime;
+				yield return null;
+			}
+		}
+
+		
+	}
+
+	public void AddBondStrain(BondStrain bondStrain)
+	{
+		if (strains == null)
+		{
+			strains = new List<BondStrain>();
+		}
+
+		if (!IgnoreStrainer(bondStrain))
+		{
+			BondStrain newStrain = new BondStrain();
+			newStrain.intensity = bondStrain.intensity;
+			newStrain.duration = bondStrain.duration;
+			newStrain.strainer = bondStrain.strainer;
+
+			strains.Add(newStrain);
+		}
+	}
+
+	private bool IgnoreStrainer(BondStrain bondStrain)
+	{
+		if (bondStrain == null)
+		{
+			return true;
+		}
+		else if (bondStrain.strainer == null)
+		{
+			return false;
+		}
+
+		bool alreadyStraining = false;
+		for (int i = 0; i < strains.Count && !alreadyStraining; i++)
+		{
+			alreadyStraining = (strains[i].strainer == bondStrain.strainer);
+		}
+		return alreadyStraining;
+	}
 	
 	// Hooks for subclasses.
 	protected virtual void BondForming() {}
@@ -899,4 +1008,12 @@ public class BondStats
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
 	}
+}
+
+[System.Serializable]
+public class BondStrain
+{
+	public float intensity;
+	public float duration;
+	public GameObject strainer;
 }

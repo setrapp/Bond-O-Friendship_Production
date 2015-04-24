@@ -194,10 +194,10 @@ public class Membrane : Bond {
 			{
 				MembraneLink prevLinkBreak;
 				membranePrevious.IsBondMade(out prevLinkBreak, null, ignoreThis);
-				if (prevLinkBreak != null && prevLinkBreak.membrane != null)
+				if (prevLinkBreak != null && prevLinkBreak.bond != null)
 				{
-					prevLinkBreak.membrane.breakLinks.Add(prevLinkBreak);
-					prevLinkBreak.membrane.BreakMembrane(quickDestroy);
+					((Membrane)prevLinkBreak.bond).breakLinks.Add(prevLinkBreak);
+					((Membrane)prevLinkBreak.bond).BreakMembrane(quickDestroy);
 				}
 			}
 		}
@@ -448,13 +448,11 @@ public class Membrane : Bond {
 		MembraneLink startLink = attachment1.attachedLink as MembraneLink;
 		if (startLink != null)
 		{
-			startLink.membrane = this;
 			startPosition1 = startLink.transform.position;
 		}
 		MembraneLink endLink = attachment2.attachedLink as MembraneLink;
 		if (endLink != null)
 		{
-			endLink.membrane = this;
 			startPosition2 = endLink.transform.position;
 		}
 
@@ -462,7 +460,7 @@ public class Membrane : Bond {
 		attachment1FauxLink = attachment1.attachee.GetComponent<MembraneLink>();
 		if (attachment1FauxLink != null)
 		{
-			attachment1FauxLink.membrane = this;
+			attachment1FauxLink.bond = this;
 			if (attachment1FauxLink.bondAttachable != null)
 			{
 				attachment1FauxLink.bondAttachable.attachmentColor = attachmentColor;
@@ -474,7 +472,7 @@ public class Membrane : Bond {
 		attachment2FauxLink = attachment2.attachee.GetComponent<MembraneLink>();
 		if (attachment2FauxLink != null)
 		{
-			attachment2FauxLink.membrane = this;
+			attachment2FauxLink.bond = this;
 			if (attachment2FauxLink.bondAttachable != null)
 			{
 				attachment2FauxLink.bondAttachable.attachmentColor = attachmentColor;
@@ -557,7 +555,7 @@ public class Membrane : Bond {
 		MembraneLink addedMembraneLink = addedLink as MembraneLink;
 		if (addedMembraneLink != null)
 		{
-			addedMembraneLink.membrane = this;
+			addedMembraneLink.bond = this;
 			if (addedMembraneLink.bondAttachable != null)
 			{
 				addedMembraneLink.bondAttachable.attachmentColor = attachmentColor;
