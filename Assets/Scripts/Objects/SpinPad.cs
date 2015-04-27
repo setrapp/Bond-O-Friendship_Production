@@ -234,7 +234,7 @@ public class SpinPad : WaitPad {
 			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
 		}
 
-		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy);
+		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy);
 		bool spinInhibited = spinInhibitors > 0;
 
 		return wall1Bonded && wall2Bonded && !helmetsExist && !spinInhibited;
@@ -242,7 +242,7 @@ public class SpinPad : WaitPad {
 
 	private void CheckHelmets()
 	{
-		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy)
+		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy)
 		{
 			if (helmet1.pushing && helmet2.pushing)
 			{
