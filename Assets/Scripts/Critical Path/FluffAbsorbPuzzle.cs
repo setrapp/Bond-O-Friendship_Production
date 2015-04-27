@@ -160,8 +160,8 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 				if(transform.parent.GetChild(i).name == "Cube")
 					Destroy(transform.parent.GetChild(i).gameObject);
 			}
-			if(transform.parent.transform.position.z < 8.0f)
-				transform.parent.transform.position += new Vector3(0, 0, Time.deltaTime);
+			if(transform.parent.transform.localPosition.z < 8.0f)
+				transform.parent.transform.localPosition += new Vector3(0, 0, Time.deltaTime);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
