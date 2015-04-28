@@ -23,6 +23,10 @@ public class Globals : MonoBehaviour {
 
 	public bool perspectiveCamera = false;
 	public float perspectiveFOV = 25;
+    public float orthographicSize = 20;
+
+
+    public bool allowInput = true;
 
 	public float audioVolume = -1;
 	public bool mute = false;
@@ -149,6 +153,10 @@ public class Globals : MonoBehaviour {
 		{
 			CameraSplitter.Instance.splitCamera1.fieldOfView = CameraSplitter.Instance.splitCamera2.fieldOfView = perspectiveFOV;
 		}
+        if (!perspectiveCamera && CameraSplitter.Instance.splitCamera1.orthographicSize != orthographicSize || CameraSplitter.Instance.splitCamera2.orthographicSize != orthographicSize)
+        {
+            CameraSplitter.Instance.splitCamera1.orthographicSize = CameraSplitter.Instance.splitCamera2.orthographicSize = orthographicSize;
+        }
 	}
 	
 	private void CheckVolume()
