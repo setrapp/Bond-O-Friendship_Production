@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class BondLink : MonoBehaviour {
+	public Bond bond;
 	public BoxCollider toPreviousCollider = null;
 	public BoxCollider toNextCollider = null;
 	public Rigidbody body = null;

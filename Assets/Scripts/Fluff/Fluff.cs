@@ -387,6 +387,11 @@ public class Fluff : MonoBehaviour {
 		bulb.transform.localScale = new Vector3(fluffFill, fluffFill, fluffFill);
 	}
 
+	public void InflateToFull()
+	{
+		bulb.transform.localScale = new Vector3(maxFill, maxFill, maxFill);
+	}
+
 	public void Deflate(float deflation)
 	{
 		fluffFill = Mathf.Max(fluffFill - deflation, minFill);
@@ -398,21 +403,33 @@ public class Fluff : MonoBehaviour {
 	}
 
 	// Accessible function that does not require coroutine call.
-	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false)
+	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false, bool deflateBeforePop = false)
 	{
 		if (slowMultiplier >= 0)
 		{
 			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));
 		}
 
-		StartCoroutine(PopAndDestroy(secondsDelay, fakeDestroy));
+		StartCoroutine(PopAndDestroy(secondsDelay, fakeDestroy, deflateBeforePop));
 	}
 
-	private IEnumerator PopAndDestroy(float secondsDelay = 0, bool fakeDestroy = false)
+	private IEnumerator PopAndDestroy(float secondsDelay = 0, bool fakeDestroy = false, bool deflateBeforePop = false)
 	{
 		if (secondsDelay > 0)
 		{
-			yield return new WaitForSeconds(secondsDelay);
+			if (deflateBeforePop)
+			{
+				while(secondsDelay > 0)
+				{
+					Deflate(Time.deltaTime / secondsDelay);
+					secondsDelay -= Time.deltaTime;
+					yield return null;
+				}
+			}
+			else
+			{
+				yield return new WaitForSeconds(secondsDelay);
+			}
 		}
 
 		if (popAnimation != null)

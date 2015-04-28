@@ -56,6 +56,11 @@ public class StreamSpawner : MonoBehaviour {
 
 	public void TrackStream(Stream newStream)
 	{
+		/*if (streams.Count + 1 > maxStreams)
+		{
+			return;
+		}*/
+
 		while (streams.Count + 1 > maxStreams)
 		{
 			int removeIndex = Random.Range(0, streams.Count - 1);
