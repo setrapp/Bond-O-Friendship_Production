@@ -4315,8 +4315,15 @@ MonoBehaviour:
   perspectiveCamera: 0
   perspectiveFOV: 25
   audioVolume: -1
-  mute: 1
+  mute: 0
   bgm: {fileID: 2119224281}
+  defaultPulsePrefab: {fileID: 11400002, guid: fe97050609d727844b9f3ec597223262, type: 2}
+  defaultPulseStats:
+    scaleRate: 10
+    lifeTime: 2
+    alpha: 1
+    alphaFade: .5
+    smallRing: 0
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -6142,6 +6149,7 @@ GameObject:
   - 114: {fileID: 1530241253}
   - 114: {fileID: 1530241252}
   - 114: {fileID: 1530241266}
+  - 114: {fileID: 1530241268}
   m_Layer: 13
   m_Name: Player 2
   m_TagString: Character
@@ -6503,12 +6511,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
-    relativeRequestDistance: -1
+    relativeRequestDistance: .699999988
     fluffRequestDelay: 0
     fluffPullForce: .5
     fluffPullLinks: 10
     maxFluffCapacity: 16
-    extensionPerFluff: 5
+    extensionPerFluff: 2
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -6551,6 +6559,21 @@ MonoBehaviour:
   stickingCollider: {fileID: 0}
   stickOffset: {x: 0, y: 0, z: 0}
   stickDirection: {x: 0, y: 0, z: 1}
+--- !u!114 &1530241268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11488824, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 2020569886}
+  m_GameObject: {fileID: 1530241250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c8373e35e31a54393d8d4eadd83f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPainting: 0
+  paintPrefab: {fileID: 100000, guid: a7cd400ff8da0664a9d2cf24f485d85b, type: 2}
+  referenceColor: {r: .618560016, g: 0, b: .838235259, a: 1}
 --- !u!1 &1531071013
 GameObject:
   m_ObjectHideFlags: 0
@@ -9824,6 +9847,7 @@ GameObject:
   - 114: {fileID: 2006680896}
   - 114: {fileID: 2006680895}
   - 114: {fileID: 2006680909}
+  - 114: {fileID: 2006680911}
   m_Layer: 13
   m_Name: Player 1
   m_TagString: Character
@@ -10185,12 +10209,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
-    relativeRequestDistance: -1
+    relativeRequestDistance: .699999988
     fluffRequestDelay: 0
     fluffPullForce: .5
     fluffPullLinks: 10
     maxFluffCapacity: 16
-    extensionPerFluff: 5
+    extensionPerFluff: 2
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -10233,6 +10257,21 @@ MonoBehaviour:
   stickingCollider: {fileID: 0}
   stickOffset: {x: 0, y: 0, z: 0}
   stickDirection: {x: 0, y: 0, z: 1}
+--- !u!114 &2006680911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11488824, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 627076188}
+  m_GameObject: {fileID: 2006680893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c8373e35e31a54393d8d4eadd83f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPainting: 0
+  paintPrefab: {fileID: 100000, guid: a7cd400ff8da0664a9d2cf24f485d85b, type: 2}
+  referenceColor: {r: .618560016, g: 0, b: .838235259, a: 1}
 --- !u!1 &2009515945
 GameObject:
   m_ObjectHideFlags: 0
