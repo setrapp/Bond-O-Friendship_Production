@@ -403,8 +403,6 @@ public class FluffHandler : MonoBehaviour {
 
 	public void SendFluffToBond(Bond bondRequesting)
 	{
-
-
 		if (fluffs.Count <= 0 || bondRequesting == null)
 		{
 			return;
@@ -457,5 +455,10 @@ public class FluffHandler : MonoBehaviour {
 		fluffToSend.soleAttractor = partner.gameObject;
 		fluffToSend.Pass(Vector3.zero, gameObject, 0);
 		bondRequesting.AddFluff(fluffToSend);
+	}
+
+	private IEnumerator DeflateFluffForBond(Bond bond)
+	{
+		yield return null;
 	}
 }

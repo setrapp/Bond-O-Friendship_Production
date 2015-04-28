@@ -28,6 +28,9 @@ public class Globals : MonoBehaviour {
 	public bool mute = false;
 	public AudioSource bgm;
 
+	public RingPulse defaultPulsePrefab;
+	public PulseStats defaultPulseStats;
+
 	public enum ControlScheme{None, SharedLeft, SharedRight, Solo};
 
 	public enum InputNameSelected {None, Keyboard, LeftController, RightController };
@@ -168,6 +171,12 @@ public class Globals : MonoBehaviour {
 		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
 			&& bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
 		{
+			if (!playersBonded)
+			{
+				Helper.FirePulse(player1.transform.position, defaultPulseStats);
+				Helper.FirePulse(player2.transform.position, defaultPulseStats);
+			}
+
 			playersBonded = true;
 		}
 	}
