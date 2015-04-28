@@ -80,4 +80,36 @@ public class Helper {
 		}
 		renderer.SetPosition(vertexCount - 1, center + new Vector3(radius, 0, 0));
 	}
+
+	public static RingPulse FirePulse(Vector3 position, PulseStats pulseStats, RingPulse alternativePulsePrefab = null)
+	{
+		RingPulse pulsePrefab = alternativePulsePrefab;
+		if (pulsePrefab == null)
+		{
+			pulsePrefab = Globals.Instance.defaultPulsePrefab;
+		}
+		if (pulsePrefab == null)
+		{
+			return null;
+		}
+
+		RingPulse pulse = ((GameObject)GameObject.Instantiate(pulsePrefab.gameObject, position, Quaternion.identity)).GetComponent<RingPulse>();
+		pulse.scaleRate = pulseStats.scaleRate;
+		pulse.lifeTime = pulseStats.lifeTime;
+		pulse.alpha = pulseStats.alpha;
+		pulse.alphaFade = pulseStats.alphaFade;
+		pulse.smallRing = pulseStats.smallRing;
+
+		return pulse;
+	}
+}
+
+[System.Serializable]
+public class PulseStats
+{
+	public float scaleRate;
+	public float lifeTime;
+	public float alpha;
+	public float alphaFade;
+	public bool smallRing;
 }
