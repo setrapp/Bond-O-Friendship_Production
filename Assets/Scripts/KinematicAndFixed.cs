@@ -15,7 +15,7 @@ public class KinematicAndFixed : MonoBehaviour {
 		{
 			bool padTriggered = triggerPad.activated;
 
-			if (padTriggered)
+			if (padTriggered && body1 != null && body2 != null)
 			{
 				triggered = true;
 				body1.isKinematic = body2.isKinematic = willKinematic;

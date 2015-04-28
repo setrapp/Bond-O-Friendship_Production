@@ -16,6 +16,12 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	public Color finishedColor;
 	public float streamScaleRate;
 
+	public float duration = 2;
+	private float timeSE = 0;
+	private float timeSW = 0;
+	private float timeNE = 0;
+	private float timeNW = 0;
+
 	private FluffStick fluffStick;
 	private Color startColor;
 	private bool complete;
@@ -34,10 +40,6 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	void Update () {
 		if(fluffStick.stuckFluff != null && !complete)
 		{
-//			fluffStick.stuckFluff.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime)*0.06f;
-//			if(fluffStick.stuckFluff.transform.localScale.x <= 0)
-//				Destroy(fluffStick.stuckFluff.gameObject);
-
 			if(streamSE.transform.localScale.x < 30.0f)
 				streamSE.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
 			else
@@ -66,44 +68,113 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 			if(fluffStick.stuckFluff == null)
 			{
 				if(streamSE.transform.localScale.x > 0)
+				{
 					streamSE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					timeSE = 0;
+					finishedSE = false;
+				}
 				if(streamSW.transform.localScale.x > 0)
+				{
 					streamSW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					finishedSW = false;
+				}
 				if(streamNE.transform.localScale.x > 0)
+				{
 					streamNE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					finishedNE = false;
+				}
 				if(streamNW.transform.localScale.x > 0)
-					streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				{
+					streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;				
+					finishedNW = false;
+				}
 
 				GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
+
+				if(!finishedSE)
+				{
+					timeSE += Time.deltaTime / duration;
+					
+					timeSE = Mathf.Clamp(timeSE,0f,1f);
+					endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeSE);
+				}
+				if(!finishedSW)
+				{
+					timeSW += Time.deltaTime / duration;
+					
+					timeSW = Mathf.Clamp(timeSW,0f,1f);
+					endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeSW);
+				}
+				if(!finishedNE)
+				{
+					timeNE += Time.deltaTime / duration;
+					
+					timeNE = Mathf.Clamp(timeNE,0f,1f);
+					endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeNE);
+				}
+				if(!finishedNW)
+				{
+					timeNW += Time.deltaTime / duration;
+					
+					timeNW = Mathf.Clamp(timeNW,0f,1f);
+					endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, timeNW);
+				}
 			}
 			if(finishedSE)
-				endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, fillingColor, Time.deltaTime*0.2f);
-			if(finishedSW)
-				endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, fillingColor, Time.deltaTime*0.2f);
-			if(finishedNE)
-				endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, fillingColor, Time.deltaTime*0.2f);
-			if(finishedNW)
-				endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, fillingColor, Time.deltaTime*0.2f);
+			{
+				timeSE += Time.deltaTime / duration;
 
-			if(!finishedSE)
-				endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
-			if(!finishedSW)
-				endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
-			if(!finishedNE)
-				endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
-			if(!finishedNW)
-				endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, startColor, Time.deltaTime*0.2f);
+				timeSE = Mathf.Clamp(timeSE,0f,1f);
+				endSE.GetComponent<Renderer>().material.color = Color.Lerp(startColor, fillingColor, timeSE);
+			}
+			if(finishedSW)
+			{
+				timeSW += Time.deltaTime / duration;
+				
+				timeSW = Mathf.Clamp(timeSW,0f,1f);
+				endSW.GetComponent<Renderer>().material.color = Color.Lerp(startColor, fillingColor, timeSW);
+			}
+			if(finishedNE)
+			{
+				timeNE += Time.deltaTime / duration;
+				
+				timeNE = Mathf.Clamp(timeNE,0f,1f);
+				endNE.GetComponent<Renderer>().material.color = Color.Lerp(startColor, fillingColor, timeNE);
+			}
+			if(finishedNW)
+			{
+				timeNW += Time.deltaTime / duration;
+				
+				timeNW = Mathf.Clamp(timeNW,0f,1f);
+				endNW.GetComponent<Renderer>().material.color = Color.Lerp(startColor, fillingColor, timeNW);
+			}
+
+
+
 		}
 
 		if(complete)
 		{
-			if(transform.parent.transform.position.z < 8.0f)
-				transform.parent.transform.position += new Vector3(0, 0, Time.deltaTime);
+			for(int i = 0; i < transform.parent.childCount; i++)
+			{
+				if(transform.parent.GetChild(i).name == "Cube")
+					Destroy(transform.parent.GetChild(i).gameObject);
+			}
+			if(transform.parent.transform.localPosition.z < 8.0f)
+				transform.parent.transform.localPosition += new Vector3(0, 0, Time.deltaTime);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
+			if(streamSE.transform.localScale.y > 0)
+				streamSE.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
+			if(streamSW.transform.localScale.y > 0)
+				streamSW.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
+			if(streamNE.transform.localScale.y > 0)
+				streamNE.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
+			if(streamNW.transform.localScale.y > 0)
+				streamNW.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
 		}
 	}
 }

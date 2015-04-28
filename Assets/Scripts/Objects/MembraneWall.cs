@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
@@ -205,6 +206,10 @@ public class MembraneWall : MonoBehaviour {
 
 		// Update override stats to account for starting distance between endpoints.
 		membraneDirection.Normalize();
+		if (space == Space.Self)
+		{
+			membraneDirection = transform.TransformDirection(membraneDirection);
+		}
 		Vector3 membraneTrack = membraneDirection * membraneLength;
 		if (relativeMaxDistance >= 0)
 		{

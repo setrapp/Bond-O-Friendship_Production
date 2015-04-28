@@ -19,7 +19,8 @@ public class MovePaired : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		pairedObject.transform.position = pairStartPos + (transform.position - selfStartPos);
+		if(!falling)
+			pairedObject.transform.position = pairStartPos + (transform.position - selfStartPos);
 
 		RaycastHit hit;
 		if(!Physics.Raycast(pairedObject.transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
@@ -34,6 +35,7 @@ public class MovePaired : MonoBehaviour {
 		{
 			transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime);
 			pairedObject.transform.localScale -= new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime)*6.0f;
+			pairedObject.transform.localPosition -= new Vector3(0, Time.deltaTime*3f, -Time.deltaTime*2f);
 			if(transform.localScale.x <= 0)
 			{
 				Destroy(pairedObject);

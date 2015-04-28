@@ -8,10 +8,10 @@ public class StreamSpawner : MonoBehaviour {
 	public StreamChannelSeries startingChannelSeries;
 	public StreamChannel startingChannel;
 	public float spawnTime = 5;
+	public float destroyTimeFactor = 2;
 	public int streamsPerSpawn = 3;
 	public int maxStreams = 100;
 	public float seekRandomizeRange = 1;
-	public int streamMoveBatch = 3;
 	public float streamGroupActionRate = 1;
 	public List<Stream> streams;
 	private float lastSpawnTime = -1;
@@ -37,8 +37,8 @@ public class StreamSpawner : MonoBehaviour {
 					newStream.targetChannel = startingChannel;
 					newStream.spawner = this;
 					newStream.seekOffset = new Vector3(Random.Range(-seekRandomizeRange, seekRandomizeRange), Random.Range(-seekRandomizeRange, seekRandomizeRange), 0);
-					newStream.autoMove = false;
 					newStream.actionRate = streamGroupActionRate / streamsPerSpawn;
+
 					TrackStream(newStream);
 				}
 			}
@@ -52,25 +52,28 @@ public class StreamSpawner : MonoBehaviour {
 				i--;
 			}
 		}
-
-		// Only direct upto a specified number of streams, in order to cut down on processing. Depending on the random generation, a stream may be directed more than once in a frame, but it will only move once.
-		if (streams.Count > 0)
-		{
-			for (int i = 0; i < streamMoveBatch; i++)
-			{
-				Stream moveeStream = streams[Random.Range(0, streams.Count - 1)];
-				moveeStream.UpdateMovement();
-			}
-		}
 	}
 
 	public void TrackStream(Stream newStream)
 	{
+		/*if (streams.Count + 1 > maxStreams)
+		{
+			return;
+		}*/
+
 		while (streams.Count + 1 > maxStreams)
 		{
-			streams.RemoveAt(streams.Count / 2);
+			int removeIndex = Random.Range(0, streams.Count - 1);
+			Stream removeStream = streams[removeIndex];
+			streams.RemoveAt(removeIndex);
+			Destroy(removeStream.gameObject);
 		}
 		streams.Add(newStream);
 		newStream.transform.parent = transform;
+	}
+
+	public void StopTrackingStream(Stream stream)
+	{
+		streams.Remove(stream);
 	}
 }

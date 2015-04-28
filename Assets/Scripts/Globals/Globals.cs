@@ -23,10 +23,17 @@ public class Globals : MonoBehaviour {
 
 	public bool perspectiveCamera = false;
 	public float perspectiveFOV = 25;
+    public float orthographicSize = 20;
+
+
+    public bool allowInput = true;
 
 	public float audioVolume = -1;
 	public bool mute = false;
 	public AudioSource bgm;
+
+	public RingPulse defaultPulsePrefab;
+	public PulseStats defaultPulseStats;
 
 	public enum ControlScheme{None, SharedLeft, SharedRight, Solo};
 
@@ -146,6 +153,10 @@ public class Globals : MonoBehaviour {
 		{
 			CameraSplitter.Instance.splitCamera1.fieldOfView = CameraSplitter.Instance.splitCamera2.fieldOfView = perspectiveFOV;
 		}
+        if (!perspectiveCamera && CameraSplitter.Instance.splitCamera1.orthographicSize != orthographicSize || CameraSplitter.Instance.splitCamera2.orthographicSize != orthographicSize)
+        {
+            CameraSplitter.Instance.splitCamera1.orthographicSize = CameraSplitter.Instance.splitCamera2.orthographicSize = orthographicSize;
+        }
 	}
 	
 	private void CheckVolume()
@@ -168,6 +179,12 @@ public class Globals : MonoBehaviour {
 		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
 			&& bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
 		{
+			if (!playersBonded)
+			{
+				Helper.FirePulse(player1.transform.position, defaultPulseStats);
+				Helper.FirePulse(player2.transform.position, defaultPulseStats);
+			}
+
 			playersBonded = true;
 		}
 	}

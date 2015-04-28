@@ -7,21 +7,31 @@ public class MenuControl : MonoBehaviour {
 
     public GameObject startMenu;
 
+    public GameObject obscureCanvas;
+
     public GameObject inputSelect;
 
 	public string startScene;
     InputDevice device;
     private int deviceCount;
 
-    private bool player1Ready = false;
-    private bool player2Ready = false;
+    public bool player1Ready = false;
+    public bool player2Ready = false;
     private bool inputSelected = false;
 
     private float t = 1f;
     public float duration = 3.0f;
 
+    public bool fadeIn = true;
+
+    private Color startColor;
+    private Color fadeColor;
+
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
+        startColor = obscureCanvas.renderer.material.color;
+        fadeColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f);
     }
 
 
@@ -78,13 +88,9 @@ public class MenuControl : MonoBehaviour {
                         Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
                     }
 
-                    //Debug.Log(Globals.Instance.player1ControlScheme);
-                    // MainMenuLoadLevel();
                     inputSelected = true;
-                    // startMenu.SetActive(false);
                     inputSelect.SetActive(true);
                     return;
-                    // Globals.usingController = true;
                 }
             }
             if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
@@ -111,23 +117,23 @@ public class MenuControl : MonoBehaviour {
                 Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
 
                 inputSelected = true;
-
-                //startMenu.SetActive(false);
                 inputSelect.SetActive(true);
                 return;
-                //MainMenuLoadLevel();
-                // Globals.usingController = false;
             }
         }
         else
         {
-            if(startMenu.activeSelf)
+            if (startMenu.activeSelf)
                 FadeStartMenu();
+                
         }
 
         if (player1Ready && player2Ready && inputSelected)
         {
-            MainMenuLoadLevel();           
+            Globals.Instance.allowInput = false;
+            if(obscureCanvas.activeSelf)
+                FadeInFadeOut();
+            //MainMenuLoadLevel();           
         }
         else
 		{
@@ -146,14 +152,58 @@ public class MenuControl : MonoBehaviour {
             startMenu.GetComponent<CanvasGroup>().alpha = t;
         }
         else
+        {
             startMenu.SetActive(false);
+            t = 0;
+            MainMenuLoadLevel();
+        }
     }
 
+    private void FadeInFadeOut()
+    {
+        if(fadeIn)
+        {
+            if (t != 1)
+            {
+                t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+            }
+            else
+            {
+                fadeIn = false;
+                Globals.Instance.perspectiveCamera = true;
+                CameraSplitter.Instance.movePlayers = true;
+                inputSelect.SetActive(false);
+            }
+        }
+        else
+        {
+            if (t != 0)
+            {
+                t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
+                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+            }
+            else
+            {
+                obscureCanvas.SetActive(false);
+                Invoke("ZoomCamera", 1.0f);
+            }
+        }
+    }
+
+    public void ZoomCamera()
+    {
+        
+        CameraSplitter.Instance.zoom = true;
+    }
 
     public void MainMenuLoadLevel()
     {
-		CameraSplitter.Instance.splittable = true;
-        Application.LoadLevel(startScene);
+		//CameraSplitter.Instance.splittable = true;
+        //Application.LoadLevel(startScene);
+        Application.LoadLevelAdditiveAsync(startScene);
     }
 
     public void MainMenuLoadLevel(string levelName)
@@ -175,29 +225,6 @@ public class MenuControl : MonoBehaviour {
         #endif
     }
 
-    void OnTriggerEnter(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = true;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = true;
-        }
-    }
-
-    void OnTriggerExit(Collider collide)
-    {
-        if (collide.gameObject.name == "Player 1")
-        {
-            player1Ready = false;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Ready = false;
-        }
-
-    }
+   
 
 }
