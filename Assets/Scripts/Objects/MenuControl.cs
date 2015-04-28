@@ -7,6 +7,8 @@ public class MenuControl : MonoBehaviour {
 
     public GameObject startMenu;
 
+    public GameObject obscureCanvas;
+
     public GameObject inputSelect;
 
 	public string startScene;
@@ -20,8 +22,16 @@ public class MenuControl : MonoBehaviour {
     private float t = 1f;
     public float duration = 3.0f;
 
+    public bool fadeIn = true;
+
+    private Color startColor;
+    private Color fadeColor;
+
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
+        startColor = obscureCanvas.renderer.material.color;
+        fadeColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f);
     }
 
 
@@ -113,13 +123,17 @@ public class MenuControl : MonoBehaviour {
         }
         else
         {
-            if(startMenu.activeSelf)
+            if (startMenu.activeSelf)
                 FadeStartMenu();
+                
         }
 
         if (player1Ready && player2Ready && inputSelected)
         {
-            MainMenuLoadLevel();           
+            Globals.Instance.allowInput = false;
+            if(obscureCanvas.activeSelf)
+                FadeInFadeOut();
+            //MainMenuLoadLevel();           
         }
         else
 		{
@@ -138,14 +152,58 @@ public class MenuControl : MonoBehaviour {
             startMenu.GetComponent<CanvasGroup>().alpha = t;
         }
         else
+        {
             startMenu.SetActive(false);
+            t = 0;
+            MainMenuLoadLevel();
+        }
     }
 
+    private void FadeInFadeOut()
+    {
+        if(fadeIn)
+        {
+            if (t != 1)
+            {
+                t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+            }
+            else
+            {
+                fadeIn = false;
+                Globals.Instance.perspectiveCamera = true;
+                CameraSplitter.Instance.movePlayers = true;
+                inputSelect.SetActive(false);
+            }
+        }
+        else
+        {
+            if (t != 0)
+            {
+                t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
+                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+            }
+            else
+            {
+                obscureCanvas.SetActive(false);
+                Invoke("ZoomCamera", 1.0f);
+            }
+        }
+    }
+
+    public void ZoomCamera()
+    {
+        
+        CameraSplitter.Instance.zoom = true;
+    }
 
     public void MainMenuLoadLevel()
     {
-		CameraSplitter.Instance.splittable = true;
-        Application.LoadLevel(startScene);
+		//CameraSplitter.Instance.splittable = true;
+        //Application.LoadLevel(startScene);
+        Application.LoadLevelAdditiveAsync(startScene);
     }
 
     public void MainMenuLoadLevel(string levelName)
