@@ -48,13 +48,16 @@ public class CameraSplitter : MonoBehaviour {
 
     public bool movePlayers = false;
 
-    private Vector3 startPos = new Vector3(24.74f, 19.8f, -40f);
+    private Vector3 startPos = new Vector3(24.74f, 19.8f, -70f);
     private Vector3 zoomPos = new Vector3(24.74f, 19.8f, -300f);
 
     public float duration = 5f;
     public float t = 0f;
 
+	
     private bool toggle = false;
+	[HideInInspector]
+	public bool startZoomComplete = false;
 
 	void Start()
 	{
@@ -85,10 +88,12 @@ public class CameraSplitter : MonoBehaviour {
         {
             if (toggle)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
+				Debug.Log("???");
+                //transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
                 followPlayers = true;
                 Globals.Instance.allowInput = true;
-                toggle = false;                
+				toggle = false;
+				startZoomComplete = true;
                 // splittable = true;
             }
         }
@@ -98,7 +103,7 @@ public class CameraSplitter : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.A))
         {
-            Debug.Log(transform.position);
+            //Debug.Log(transform.position);
         }
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
@@ -159,31 +164,34 @@ public class CameraSplitter : MonoBehaviour {
 
     public void ZoomIn()
     {
-        if (t != 1)
-        {
-            t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
-            transform.position = Vector3.Lerp(zoomPos, startPos, t);
+		if (t < 1)
+		{
+			t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+			transform.position = Vector3.Lerp(zoomPos, startPos, t);
 
-            Vector3 heading = player1.transform.position - splitCamera1.transform.position;
-            float distance = Vector3.Dot(heading, splitCamera1.transform.forward);
-            float camHeight = 2.0f * (distance - 1f) * Mathf.Tan(splitCamera1.fieldOfView * 0.5f * Mathf.Deg2Rad);
-            Globals.Instance.orthographicSize = camHeight / 2.0f;
-        }
-        else
-        {
-            t = 0;
-            zoom = false;
-            zoomIn = false;
-            Globals.Instance.perspectiveCamera = false;
-            toggle = true;
-
-            Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
-           // followPlayers = true;
-           // splittable = true;
-        }
-
-
+			Vector3 heading = player1.transform.position - splitCamera1.transform.position;
+			float distance = Vector3.Dot(heading, splitCamera1.transform.forward);
+			float camHeight = 2.0f * (distance - 1f) * Mathf.Tan(splitCamera1.fieldOfView * 0.5f * Mathf.Deg2Rad);
+			Globals.Instance.orthographicSize = camHeight / 2.0f;
+		}
+		else
+		{
+			t = 0;
+			EndZoom();
+			// followPlayers = true;
+			splittable = true;
+		}
     }
+
+	public void EndZoom()
+	{
+		zoom = false;
+		zoomIn = false;
+		Globals.Instance.perspectiveCamera = false;
+		toggle = true;
+
+		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+	}
 
     public void ZoomOut()
     {

@@ -177,21 +177,29 @@ public class MenuControl : MonoBehaviour {
                 inputSelect.SetActive(false);
             }
         }
-        else
-        {
-            if (t != 0)
-            {
-                t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
-                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
-                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
-            }
-            else
-            {
-                obscureCanvas.SetActive(false);
-                Invoke("ZoomCamera", 1.0f);
-            }
-        }
-    }
+		else
+		{
+			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor)
+			{
+				if (t != 0)
+				{
+					t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
+					obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+					//obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+				}
+				else
+				{
+					obscureCanvas.SetActive(false);
+					Invoke("ZoomCamera", 1.0f);
+				}
+			}
+			else
+			{
+				CameraSplitter.Instance.EndZoom();
+				CameraSplitter.Instance.splittable = true;
+			}
+		}
+	}
 
     public void ZoomCamera()
     {

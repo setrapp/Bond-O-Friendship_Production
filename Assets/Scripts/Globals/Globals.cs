@@ -23,7 +23,13 @@ public class Globals : MonoBehaviour {
 
 	public bool perspectiveCamera = false;
 	public float perspectiveFOV = 25;
-    public float orthographicSize = 20;
+	[HideInInspector]
+	public float startingPerspectiveFOV;
+	public float orthographicSize = 20;
+	[HideInInspector]
+	public float startingOrthographicSize;
+
+	public bool zoomIntroInEditor = true;
 
 
     public bool allowInput = true;
@@ -101,6 +107,9 @@ public class Globals : MonoBehaviour {
 			Screen.showCursor = false;
 		}
 		//Debug.Log(leftControllerIndex);
+
+		startingPerspectiveFOV = perspectiveFOV;
+		startingOrthographicSize = orthographicSize;
 
 		CheckCameraPerspective();
 
