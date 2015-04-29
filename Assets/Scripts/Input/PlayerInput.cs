@@ -154,7 +154,7 @@ public class PlayerInput : MonoBehaviour {
         }*/
         #endregion
 
-        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard))
+        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
 		{
             if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
                 velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();

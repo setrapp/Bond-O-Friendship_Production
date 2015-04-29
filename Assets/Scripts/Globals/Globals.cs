@@ -23,6 +23,16 @@ public class Globals : MonoBehaviour {
 
 	public bool perspectiveCamera = false;
 	public float perspectiveFOV = 25;
+	[HideInInspector]
+	public float startingPerspectiveFOV;
+	public float orthographicSize = 20;
+	[HideInInspector]
+	public float startingOrthographicSize;
+
+	public bool zoomIntroInEditor = true;
+
+
+    public bool allowInput = true;
 
 	public float audioVolume = -1;
 	public bool mute = false;
@@ -98,6 +108,9 @@ public class Globals : MonoBehaviour {
 		}
 		//Debug.Log(leftControllerIndex);
 
+		startingPerspectiveFOV = perspectiveFOV;
+		startingOrthographicSize = orthographicSize;
+
 		CheckCameraPerspective();
 
 		if (audioVolume < 0)
@@ -149,6 +162,10 @@ public class Globals : MonoBehaviour {
 		{
 			CameraSplitter.Instance.splitCamera1.fieldOfView = CameraSplitter.Instance.splitCamera2.fieldOfView = perspectiveFOV;
 		}
+        if (!perspectiveCamera && CameraSplitter.Instance.splitCamera1.orthographicSize != orthographicSize || CameraSplitter.Instance.splitCamera2.orthographicSize != orthographicSize)
+        {
+            CameraSplitter.Instance.splitCamera1.orthographicSize = CameraSplitter.Instance.splitCamera2.orthographicSize = orthographicSize;
+        }
 	}
 	
 	private void CheckVolume()

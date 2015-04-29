@@ -17,15 +17,19 @@ public class ClusterNodeColorSpecific : ClusterNode {
 			neededCharacter = Globals.Instance.player2.character;
 		}
 		neededCollider = neededCharacter.collider;
-		nodeRenderer.material.color = neededCharacter.colors.baseColor - colorDesaturation;
-		startingcolor = nodeRenderer.material.color;
+
+		for (int i = 0; i < nodeRenderers.Count; i++)
+		{
+			nodeRenderers[i].material.color = neededCharacter.colors.baseColor - colorDesaturation;
+		}
+		startingcolor = nodeRenderers[0].material.color;
 	}
 
-	protected override void OnTriggerEnter(Collider col)
+	protected override void CheckCollision(Collider col)
 	{
 		if (col == neededCollider)
 		{
-			base.OnTriggerEnter(col);
+			base.CheckCollision(col);
 		}
 	}
 }

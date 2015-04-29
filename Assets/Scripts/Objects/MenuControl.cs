@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using InControl;
 
 public class MenuControl : MonoBehaviour {
 
     public GameObject startMenu;
+
+    public GameObject obscureCanvas;
 
     public GameObject inputSelect;
 
@@ -15,19 +18,56 @@ public class MenuControl : MonoBehaviour {
 
     public bool player1Ready = false;
     public bool player2Ready = false;
+
+    private bool readyUp = false;
+
     private bool inputSelected = false;
 
+    private float f = 0f;
     private float t = 1f;
     public float duration = 3.0f;
 
+    public bool fadeIn = true;
+
+    private Color startColor;
+    private Color fadeColor;
+
+    private Component[] inputSelectRenderers;
+    private List<Color> inputSelectColorsEmpty = new List<Color>();
+    private List<Color> inputSelectColorsFull = new List<Color>();
+
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
+        startColor = obscureCanvas.renderer.material.color;
+        fadeColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f);
+
+        inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();
+       
+        foreach(Renderer renderer in inputSelectRenderers)
+        {
+            if (renderer.material.HasProperty("_Color"))
+            {
+                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
+                inputSelectColorsEmpty.Add(renderer.material.color);
+                inputSelectColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
+            }
+            else
+            {
+                inputSelectColorsEmpty.Add(Color.white);
+                inputSelectColorsFull.Add(Color.white);
+            }
+        }
+       // Debug.Log(inputSelectRenderers.Length);
+        //Debug.Log(inputSelectColorsEmpty.Count);
+        //Debug.Log(inputSelectColorsFull.Count);
     }
 
 
 	// Update is called once per frame
     void Update()
     {
+        //Debug.Log(inputSelectRenderers.Length);
         //device = InputManager.ActiveDevice;
         //Debug.Log(device.Name);
         deviceCount = InputManager.controllerCount;
@@ -113,18 +153,27 @@ public class MenuControl : MonoBehaviour {
         }
         else
         {
-            if(startMenu.activeSelf)
+            if (startMenu.activeSelf)
                 FadeStartMenu();
+                
         }
 
         if (player1Ready && player2Ready && inputSelected)
         {
-            MainMenuLoadLevel();           
+            Globals.Instance.allowInput = false;
+            readyUp = true;
+            //if(obscureCanvas.activeSelf)
+                //FadeInFadeOut();           
+             
+            //MainMenuLoadLevel();           
         }
         else
 		{
             CameraSplitter.Instance.followPlayers = false;
 		}
+
+        if(readyUp)
+            FadeControls();
 
     }	
 
@@ -135,17 +184,102 @@ public class MenuControl : MonoBehaviour {
         {
             t -= Time.deltaTime / duration;
             t = Mathf.Clamp(t, 0.0f, 1.0f);
+            f = 1.0f - t;
             startMenu.GetComponent<CanvasGroup>().alpha = t;
+            for (int i = 0; i < inputSelectRenderers.Length; i++ )
+            {
+                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
+            }
         }
         else
+        {
             startMenu.SetActive(false);
+            t = 1.0f;
+            MainMenuLoadLevel();
+        }
     }
 
+    private void FadeControls()
+    {
+        if (t != 0)
+        {
+            
+            CameraSplitter.Instance.movePlayers = true;
+           // inputSelect.SetActive(false);
+          //  Debug.Log(t);
+            t -= Time.deltaTime / duration;
+            t = Mathf.Clamp(t, 0.0f, 1.0f);
+            for (int i = 0; i < inputSelectRenderers.Length; i++)
+            {
+                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
+            }
+        }
+        else
+        {
+			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor)
+			{
+				Invoke("ZoomCamera", 1.0f);
+			}
+			else
+			{
+				CameraSplitter.Instance.EndZoom();
+				CameraSplitter.Instance.splittable = true;
+			}
+        }
+    }
+
+    private void FadeInFadeOut()
+    {
+        if(fadeIn)
+        {
+            if (t != 1)
+            {
+                t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+                obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+                //obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+            }
+            else
+            {
+                fadeIn = false;
+                Globals.Instance.perspectiveCamera = true;
+                
+            }
+        }
+		else
+		{
+			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor)
+			{
+				if (t != 0)
+				{
+					t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
+					obscureCanvas.renderer.material.color = Color.Lerp(startColor, fadeColor, t);
+					//obscureCanvas.GetComponent<CanvasGroup>().alpha = t;
+				}
+				else
+				{
+					obscureCanvas.SetActive(false);
+				}
+			}
+			else
+			{
+				CameraSplitter.Instance.EndZoom();
+				CameraSplitter.Instance.splittable = true;
+			}
+		}
+	}
+
+    public void ZoomCamera()
+    {
+		CameraSplitter.Instance.zoom = true;
+    }
 
     public void MainMenuLoadLevel()
     {
-		CameraSplitter.Instance.splittable = true;
-        Application.LoadLevel(startScene);
+		//CameraSplitter.Instance.splittable = true;
+        //Application.LoadLevel(startScene);
+        Application.LoadLevelAdditiveAsync(startScene);
     }
 
     public void MainMenuLoadLevel(string levelName)

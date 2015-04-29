@@ -258,6 +258,24 @@ public class SpinPad : WaitPad {
 		float midRotation = (fullInRotation + fullOutRotation) / 2;
 
 		rotationProgress = Mathf.Clamp((currentRotation - midRotation) / (rotationRange / 2), -1, 1);
+
+		// Calculate portion complete for use in listeners.
+		if (completeOnIn && completeOnOut)
+		{
+			portionComplete = rotationProgress;
+		}
+		else if (completeOnIn)
+		{
+			portionComplete = (rotationProgress / 2) + 0.5f;
+		}
+		else if (completeOnOut)
+		{
+			portionComplete = (-rotationProgress / 2) + 0.5f;
+		}
+		else
+		{
+			portionComplete = 0;
+		}
 	}
 
 	public bool IsAtLimit(SpinLimit desiredLimit)
