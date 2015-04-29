@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using InControl;
 
@@ -17,8 +18,12 @@ public class MenuControl : MonoBehaviour {
 
     public bool player1Ready = false;
     public bool player2Ready = false;
+
+    private bool readyUp = false;
+
     private bool inputSelected = false;
 
+    private float f = 0f;
     private float t = 1f;
     public float duration = 3.0f;
 
@@ -27,17 +32,42 @@ public class MenuControl : MonoBehaviour {
     private Color startColor;
     private Color fadeColor;
 
+    private Component[] inputSelectRenderers;
+    private List<Color> inputSelectColorsEmpty = new List<Color>();
+    private List<Color> inputSelectColorsFull = new List<Color>();
+
 	// Use this for initialization
 	void Start () 
     {
         startColor = obscureCanvas.renderer.material.color;
         fadeColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f);
+
+        inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();
+       
+        foreach(Renderer renderer in inputSelectRenderers)
+        {
+            if (renderer.material.HasProperty("_Color"))
+            {
+                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
+                inputSelectColorsEmpty.Add(renderer.material.color);
+                inputSelectColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
+            }
+            else
+            {
+                inputSelectColorsEmpty.Add(Color.white);
+                inputSelectColorsFull.Add(Color.white);
+            }
+        }
+       // Debug.Log(inputSelectRenderers.Length);
+        //Debug.Log(inputSelectColorsEmpty.Count);
+        //Debug.Log(inputSelectColorsFull.Count);
     }
 
 
 	// Update is called once per frame
     void Update()
     {
+        //Debug.Log(inputSelectRenderers.Length);
         //device = InputManager.ActiveDevice;
         //Debug.Log(device.Name);
         deviceCount = InputManager.controllerCount;
@@ -131,14 +161,19 @@ public class MenuControl : MonoBehaviour {
         if (player1Ready && player2Ready && inputSelected)
         {
             Globals.Instance.allowInput = false;
-            if(obscureCanvas.activeSelf)
-                FadeInFadeOut();
+            readyUp = true;
+            //if(obscureCanvas.activeSelf)
+                //FadeInFadeOut();           
+             
             //MainMenuLoadLevel();           
         }
         else
 		{
             CameraSplitter.Instance.followPlayers = false;
 		}
+
+        if(readyUp)
+            FadeControls();
 
     }	
 
@@ -149,13 +184,41 @@ public class MenuControl : MonoBehaviour {
         {
             t -= Time.deltaTime / duration;
             t = Mathf.Clamp(t, 0.0f, 1.0f);
+            f = 1.0f - t;
             startMenu.GetComponent<CanvasGroup>().alpha = t;
+            for (int i = 0; i < inputSelectRenderers.Length; i++ )
+            {
+                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
+            }
         }
         else
         {
             startMenu.SetActive(false);
-            t = 0;
+            t = 1.0f;
             MainMenuLoadLevel();
+        }
+    }
+
+    private void FadeControls()
+    {
+        if (t != 0)
+        {
+            
+            CameraSplitter.Instance.movePlayers = true;
+           // inputSelect.SetActive(false);
+          //  Debug.Log(t);
+            t -= Time.deltaTime / duration;
+            t = Mathf.Clamp(t, 0.0f, 1.0f);
+            for (int i = 0; i < inputSelectRenderers.Length; i++)
+            {
+                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
+            }
+        }
+        else
+        {
+            Invoke("ZoomCamera", 1.0f);
         }
     }
 
@@ -173,8 +236,7 @@ public class MenuControl : MonoBehaviour {
             {
                 fadeIn = false;
                 Globals.Instance.perspectiveCamera = true;
-                CameraSplitter.Instance.movePlayers = true;
-                inputSelect.SetActive(false);
+                
             }
         }
         else
@@ -188,7 +250,7 @@ public class MenuControl : MonoBehaviour {
             else
             {
                 obscureCanvas.SetActive(false);
-                Invoke("ZoomCamera", 1.0f);
+                
             }
         }
     }

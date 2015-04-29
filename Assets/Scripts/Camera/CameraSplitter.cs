@@ -48,8 +48,8 @@ public class CameraSplitter : MonoBehaviour {
 
     public bool movePlayers = false;
 
-    private Vector3 startPos = new Vector3(24.74f, 19.8f, -40f);
-    private Vector3 zoomPos = new Vector3(24.74f, 19.8f, -300f);
+    private Vector3 startPos = new Vector3(28.1f, 22.1f, -40f);
+    private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -300f);
 
     public float duration = 5f;
     public float t = 0f;
@@ -70,11 +70,12 @@ public class CameraSplitter : MonoBehaviour {
 			splitCamera2 = player2CameraSystem.GetComponentInChildren<Camera>();
 		}
 		wasSplit = split;
-		CheckSplit(true);
+		//CheckSplit(true);
 	}
 
 	void Update()
 	{
+        
         //if(!Globals.Instance.perspectiveCamera)
            // transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
         if(zoom)
@@ -159,8 +160,10 @@ public class CameraSplitter : MonoBehaviour {
 
     public void ZoomIn()
     {
+        Debug.Log(t);
         if (t != 1)
         {
+           
             t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
             transform.position = Vector3.Lerp(zoomPos, startPos, t);
 
@@ -176,7 +179,7 @@ public class CameraSplitter : MonoBehaviour {
             zoomIn = false;
             Globals.Instance.perspectiveCamera = false;
             toggle = true;
-
+           
             Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
            // followPlayers = true;
            // splittable = true;
