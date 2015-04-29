@@ -34,6 +34,12 @@ public class Bond : MonoBehaviour {
 	public float fullDetailRemoveDistance = -1;
 	public float currentDetail = 1;
 	private bool disablingLinks = false;
+	[SerializeField]
+	public List<GameObject> fluffsHeld;
+	private float fluffRequestTime;
+	private List<BondStrain> strains;
+	public Color flashTint;
+	public float flashDuration = 1;
 
 	protected virtual void Start()
 	{
@@ -44,39 +50,20 @@ public class Bond : MonoBehaviour {
 	protected virtual void Update()
 	{
 		lengthFresh = false;
-		
+
+		if (strains != null && strains.Count > 0)
+		{
+			stats.maxDistance -= strains[0].intensity * Time.deltaTime;
+			strains[0].duration -= Time.deltaTime;
+			if (strains[0].duration <= 0)
+			{
+				strains.RemoveAt(0);
+			}
+		}
+
 		currentDetail = SetLevelOfDetail();
 		bool atSparseDetail = currentDetail <= stats.sparseDetailFactor;
 		float frameTime = Time.time;
-		/*if (currentDetail <= stats.sparseDetailFactor)
-		{
-			//TODO not sure any of this is usable
-			if (!disablingLinks)
-			{
-				for (int i = 0; i < links.Count; i++)
-				{
-					links[i].gameObject.SetActive(false);
-				}
-				disablingLinks = true;
-			}
-			if (links.Count >= 4)
-			{
-				for (int i = 2; i < links.Count - 2; i++)
-				{
-					RemoveLink(i, false);
-				}
-				WeightJoints();
-			}
-			//return;
-		}
-		else if (disablingLinks)
-		{
-			for (int i = 0; i < links.Count; i++)
-			{
-				links[i].gameObject.SetActive(true);
-			}
-			disablingLinks = false;
-		}*/
 
 		if (stats.pullApartMaxFactor > 0)
 		{
@@ -126,14 +113,16 @@ public class Bond : MonoBehaviour {
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScalePrev.y = magFromPrevious;
-					linkScaleNext.y = magToNext;
+					linkScalePrev.y = magFromPrevious * 2;
+					linkScaleNext.y = magToNext * 2;
+
 					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
 					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
 					links[i].toPreviousCollider.size = linkScalePrev;
 					links[i].toNextCollider.size = linkScaleNext;
 					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
 					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+
 					links[i].transform.up = linkDir;
 				}
 			}
@@ -141,6 +130,23 @@ public class Bond : MonoBehaviour {
 			// Base the width of the bond on how much has been drained beyond the partners' capacity.
 			float warningDistance = stats.maxDistance * stats.relativeWarningDistance;
 			float actualMidWidth = (stats.relativeWarningDistance > 0) ? stats.midWidth * Mathf.Clamp(1 - (BondLength - warningDistance) / (stats.maxDistance - warningDistance), 0, 1) : stats.midWidth;
+
+			// If stretching enough request fluffs to extend.
+			if (stats.relativeRequestDistance >= 0 && stats.maxDistance * stats.relativeRequestDistance < BondLength && Time.time - fluffRequestTime >= stats.fluffRequestDelay)
+			{
+				if (stats.maxFluffCapacity > fluffsHeld.Count)
+				{
+					if (Random.Range(0.0f, 1.0f) < 0.5f)
+					{
+						attachment1.attachee.RequestFluff(this);
+					}
+					else
+					{
+						attachment2.attachee.RequestFluff(this);
+					}
+					fluffRequestTime = Time.time;
+				}
+			}
 
 			// Place attachment points for each partner.
 			if (!stats.manualAttachment1)
@@ -281,6 +287,19 @@ public class Bond : MonoBehaviour {
 				}
 			}
 		}
+
+		if (links.Count > 0 && attachment1.fluffPullTarget != null && attachment2.fluffPullTarget != null)
+		{
+			if (stats.fluffPullLinks < 0 || links.Count < stats.fluffPullLinks * 2 + 1)
+			{
+				attachment1.fluffPullTarget.transform.position = attachment2.fluffPullTarget.transform.position = links[links.Count / 2].transform.position;
+			}
+			else
+			{
+				attachment1.fluffPullTarget.transform.position = links[stats.fluffPullLinks].transform.position;
+				attachment2.fluffPullTarget.transform.position = links[(links.Count - 1) - stats.fluffPullLinks].transform.position;
+			}
+		}
 	}
 
 	public virtual void RenderBond(float actualMidWidth, bool isCountEven)
@@ -328,11 +347,51 @@ public class Bond : MonoBehaviour {
 
 	public virtual void BreakBond(bool quickDestroy = false)
 	{
+		if (fluffsHeld.Count > 0)
+		{
+			float linksPerFluffSpawn = links.Count / (fluffsHeld.Count + 2);
+			for (int i = 0; i < fluffsHeld.Count; i++)
+			{
+				int linkToSpawnAt = (int)((i + 1) * linksPerFluffSpawn);
+				if (linkToSpawnAt > 0 && linkToSpawnAt < links.Count)
+				{
+					if(fluffsHeld[i] != null && links[i] != null)
+					{
+						fluffsHeld[i].SetActive(true);
+						fluffsHeld[i].transform.position = links[linkToSpawnAt].transform.position;
+						Fluff fluff = fluffsHeld[i].GetComponent<Fluff>();
+						if (fluff != null)
+						{
+							fluff.soleAttractor = null;
+							fluff.nonAttractTime = 0;
+							fluff.attractable = true;
+							fluff.mover.externalSpeedMultiplier = 1.0f;
+							fluff.InflateToFull();
+
+							if (strains != null && strains.Count > 0)
+							{
+								fluff.PopFluff(0.5f, -1, false, true);
+							}
+						}
+
+						SpringJoint fluffSpring = fluff.GetComponent<SpringJoint>();
+						if(fluffSpring != null)
+						{
+							Destroy(fluffSpring);
+						}
+					}
+					
+				}
+			}
+		}
+
 		BondAttachable attachee1 = attachment1.attachee;
 		BondAttachable attachee2 = attachment2.attachee;
 
 		if (attachee1 != null)	{ attachee1.bonds.Remove(this); }
 		if (attachee2 != null)	{ attachee2.bonds.Remove(this); }
+
+		Globals.Instance.BondBroken(this);
 
 		BondBreaking();
 		if (attachee1 != null) { attachee1.SendMessage("BondBroken", attachee2, SendMessageOptions.DontRequireReceiver); }
@@ -358,8 +417,7 @@ public class Bond : MonoBehaviour {
 
 		Color color1 = attachment1.attachee.attachmentColor;
 		Color color2 = attachment2.attachee.attachmentColor;
-		Color midColor = color1 + color2;
-		midColor.a = (color1.a + color2.a) / 2;
+		Color midColor = ComputeMidColor(color1, color2);
 		attachment1.lineRenderer.SetColors(color1, midColor);
 		attachment2.lineRenderer.SetColors(midColor, color2);
 
@@ -380,7 +438,16 @@ public class Bond : MonoBehaviour {
 		attachee1.SendMessage("BondMade", attachee2, SendMessageOptions.DontRequireReceiver);
 		attachee2.SendMessage("BondMade", attachee1, SendMessageOptions.DontRequireReceiver);
 
+		Globals.Instance.BondFormed(this);
+
 		BondForming();
+	}
+
+	private Color ComputeMidColor(Color color1, Color color2)
+	{
+		Color midColor = color1 + color2;
+		midColor.a = (color1.a + color2.a) / 2;
+		return midColor;
 	}
 
 	public void ReplacePartner(BondAttachable partnerToReplace, BondAttachable replacement)
@@ -418,9 +485,8 @@ public class Bond : MonoBehaviour {
 		}
 	}
 
-	private void AddLink(int index = -1, bool weightJoints = true)
+	private BondLink AddLink(int index = -1, bool weightJoints = true)
 	{
-
 		// Create new link in bond at the given index, or default to center.
 		if (index < 0)
 		{
@@ -428,6 +494,8 @@ public class Bond : MonoBehaviour {
 		}
 		Vector3 midpoint = (links[index].transform.position + links[index - 1].transform.position) / 2;
 		BondLink newLink = ((GameObject)Instantiate(linkPrefab, midpoint, Quaternion.identity)).GetComponent<BondLink>();
+		newLink.bond = this;
+		
 		newLink.transform.parent = transform;
 		links.Insert(index, newLink);
 
@@ -461,6 +529,8 @@ public class Bond : MonoBehaviour {
 			WeightJoints();
 		}
 		LinkAdded(newLink);
+
+		return newLink;
 	}
 
 	private void RemoveLink(int index, bool weightJoints = true)
@@ -515,6 +585,22 @@ public class Bond : MonoBehaviour {
 		for (int i = 0; i < halfCount; i++)
 		{
 			links[i].orderLevel = links[links.Count-(1+i)].orderLevel = i;
+		}
+
+		// Set mass and drag of links.
+		if (stats.linkMass >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.mass = stats.linkMass;
+			}
+		}
+		if (stats.linkDrag >= 0)
+		{
+			for (int i = 0; i < links.Count; i++)
+			{
+				links[i].body.drag = stats.linkDrag;
+			}
 		}
 
 		// Weight the strength of joints based on where links and neighbors exist in hierarchy.
@@ -601,6 +687,27 @@ public class Bond : MonoBehaviour {
 		}
 
 		WeightJoints();
+	}
+
+	public bool AddFluff(Fluff fluff)
+	{
+		if (fluff == null || (stats.maxFluffCapacity >= 0 && fluffsHeld.Count >= stats.maxFluffCapacity))
+		{
+			return false;
+		}
+
+		if (stats.maxDistance >= 0 && stats.extensionPerFluff >= 0)
+		{
+			stats.maxDistance += stats.extensionPerFluff;
+		}
+
+		fluffsHeld.Add(fluff.gameObject);
+
+		fluff.PopFluff(0.5f, -1, true);
+
+		Flash();
+
+		return true;
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
@@ -737,6 +844,85 @@ public class Bond : MonoBehaviour {
 			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
 		}
 	}
+
+	public void Flash()
+	{
+		StartCoroutine(FlashAndFade());
+	}
+
+	private IEnumerator FlashAndFade()
+	{
+		Color color1 = attachment1.attachee.attachmentColor;
+		Color color2 = attachment2.attachee.attachmentColor;
+		Color midColor = ComputeMidColor(color1, color2);
+
+		Color flashColor1 = color1 + flashTint;
+		Color flashColor2 = color2 + flashTint;
+		Color flashMidColor = midColor + flashTint;
+
+
+		attachment1.lineRenderer.SetColors(flashColor1, flashMidColor);
+		attachment2.lineRenderer.SetColors(flashMidColor, flashColor2);
+
+		if (flashDuration <= 0)
+		{
+			yield return null;
+			attachment1.lineRenderer.SetColors(color1, midColor);
+			attachment2.lineRenderer.SetColors(midColor, color2);
+		}
+		else
+		{
+			float flashElapsed = 0;
+			while(flashElapsed < flashDuration)
+			{
+				float progress = flashElapsed / flashDuration;
+				Color fadeMidColor = (flashMidColor * (1 - progress)) + (midColor * progress);
+				attachment1.lineRenderer.SetColors((flashColor1 * (1 - progress)) + (color2 * progress), fadeMidColor);
+				attachment2.lineRenderer.SetColors(fadeMidColor, (flashColor2 * (1 - progress)) + (color2 * progress));
+				flashElapsed += Time.deltaTime;
+				yield return null;
+			}
+		}
+
+		
+	}
+
+	public void AddBondStrain(BondStrain bondStrain)
+	{
+		if (strains == null)
+		{
+			strains = new List<BondStrain>();
+		}
+
+		if (!IgnoreStrainer(bondStrain))
+		{
+			BondStrain newStrain = new BondStrain();
+			newStrain.intensity = bondStrain.intensity;
+			newStrain.duration = bondStrain.duration;
+			newStrain.strainer = bondStrain.strainer;
+
+			strains.Add(newStrain);
+		}
+	}
+
+	private bool IgnoreStrainer(BondStrain bondStrain)
+	{
+		if (bondStrain == null)
+		{
+			return true;
+		}
+		else if (bondStrain.strainer == null)
+		{
+			return false;
+		}
+
+		bool alreadyStraining = false;
+		for (int i = 0; i < strains.Count && !alreadyStraining; i++)
+		{
+			alreadyStraining = (strains[i].strainer == bondStrain.strainer);
+		}
+		return alreadyStraining;
+	}
 	
 	// Hooks for subclasses.
 	protected virtual void BondForming() {}
@@ -753,6 +939,7 @@ public class BondAttachment
 	public Vector3 position;
 	public Vector3 offset;
 	public LineRenderer lineRenderer;
+	public Rigidbody fluffPullTarget;
 }
 
 [System.Serializable]
@@ -760,6 +947,8 @@ public class BondStats
 {
 	public float attachSpring1 = 0;
 	public float attachSpring2 = 0;
+	public float linkMass = -1;
+	public float linkDrag = -1;
 	public float pullApartMaxFactor;
 	public float maxDistance = 25;
 	public float relativeWarningDistance = 0.5f;
@@ -769,17 +958,22 @@ public class BondStats
 	public float removeLinkDistance = 0.3f;
 	public float springForce = 5000;
 	public float springDamper = 5;
+	[Header("Fluff Boosting")]
+	public float relativeRequestDistance = -1;
+	public float fluffRequestDelay = -1;
+	public float fluffPullForce = -1;
+	public int fluffPullLinks = -1;
+	public float maxFluffCapacity = -1;
+	public float extensionPerFluff = -1;
+	[Header("Manual Controls")]
 	public bool manualAttachment1 = false;
 	public bool manualAttachment2 = false;
 	public bool manualLinks = false;
 	public bool disableColliders = false;
 	[Header("Level of Detail")]
 	public float fullDetailDistance = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailDistance = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailFactor = -1;
-	[Header("Level of Detail")]
 	public float sparseDetailLinksCheck = 1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
@@ -791,6 +985,8 @@ public class BondStats
 
 		if (fullOverwrite || replacement.attachSpring1 >= 0)			{	this.attachSpring1 = replacement.attachSpring1;						}
 		if (fullOverwrite || replacement.attachSpring2 >= 0)			{	this.attachSpring2 = replacement.attachSpring2;						}
+		if (fullOverwrite || replacement.linkMass >= 0)					{	this.linkMass = replacement.linkMass;								}
+		if (fullOverwrite || replacement.linkDrag >= 0)					{	this.linkDrag = replacement.linkDrag;								}
 		if (fullOverwrite || replacement.pullApartMaxFactor >= 0)		{	this.pullApartMaxFactor = replacement.pullApartMaxFactor;			}
 		if (fullOverwrite || replacement.maxDistance >= 0)				{	this.maxDistance = replacement.maxDistance;							}
 		if (fullOverwrite || replacement.relativeWarningDistance >= 0)	{	this.relativeWarningDistance = replacement.relativeWarningDistance;	}
@@ -800,10 +996,24 @@ public class BondStats
 		if (fullOverwrite || replacement.removeLinkDistance >= 0)		{	this.removeLinkDistance = replacement.removeLinkDistance;			}
 		if (fullOverwrite || replacement.springForce >= 0)				{	this.springForce = replacement.springForce;							}
 		if (fullOverwrite || replacement.springDamper >= 0)				{	this.springDamper = replacement.springDamper;						}
+		if (fullOverwrite || replacement.relativeRequestDistance >= 0)	{	this.relativeRequestDistance = replacement.relativeRequestDistance;	}
+		if (fullOverwrite || replacement.fluffRequestDelay >= 0)		{	this.fluffRequestDelay = replacement.fluffRequestDelay;				}
+		if (fullOverwrite || replacement.fluffPullForce >= 0)			{	this.fluffPullForce = replacement.fluffPullForce;					}
+		if (fullOverwrite || replacement.fluffPullLinks >= 0)			{	this.fluffPullLinks = replacement.fluffPullLinks;					}
+		if (fullOverwrite || replacement.maxFluffCapacity >= 0)			{	this.maxFluffCapacity = replacement.maxFluffCapacity;				}
+		if (fullOverwrite || replacement.extensionPerFluff >= 0)		{	this.extensionPerFluff = replacement.extensionPerFluff;				}
 		manualAttachment1 = replacement.manualAttachment1;
 		manualAttachment2 = replacement.manualAttachment2;
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
 	}
+}
+
+[System.Serializable]
+public class BondStrain
+{
+	public float intensity;
+	public float duration;
+	public GameObject strainer;
 }

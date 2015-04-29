@@ -10,6 +10,6 @@ public class RotateFlipper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate(0, 0, 0.7f);
+		transform.Rotate(0, 0, 50.0f*Time.deltaTime);
 	}
 }

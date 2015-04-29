@@ -19,12 +19,12 @@ public class MiniNode : MonoBehaviour {
 	public float ScaleRate;
 	public float LifeTime;
 	
-	private float scalerate;
-	private float lifetime;
-	
-	private float alphafade;
-	private float alpha;
-	
+//	private float scalerate;
+//	private float lifetime;
+//	
+//	private float alphafade;
+//	private float alpha;
+//	
 	public float activationTimer;
 	public float activeTime;
 
@@ -42,10 +42,10 @@ public class MiniNode : MonoBehaviour {
 		b = 0.75f;
 		a = 1.0f;
 
-		scalerate = 10.0f;
-		lifetime = 3.0f;
-		alpha = 1.0f;
-		alphafade = 0.5f;
+//		scalerate = 10.0f;
+//		lifetime = 3.0f;
+//		alpha = 1.0f;
+//		alphafade = 0.5f;
 		
 		myColor = new Color((191.0f/255.0f),(105.0f/255.0f),(255.0f/255.0f),a);
 

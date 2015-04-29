@@ -83,15 +83,15 @@ namespace InControl
 		}
 		
 
-		public override void SubmitControlState( ulong updateTick )
+		public override void SubmitControlState( ulong updateTick, float deltaTime )
 		{
 			var value = SnapTo( currentVector, snapAngles );
-			SubmitAnalogValue( target, value, 0.0f, 1.0f, updateTick );
+			SubmitAnalogValue( target, value, 0.0f, 1.0f, updateTick, deltaTime );
 
-			SubmitButtonState( upTarget, fireButtonTarget && nextButtonTarget == upTarget, updateTick );
-			SubmitButtonState( rightTarget, fireButtonTarget && nextButtonTarget == rightTarget, updateTick );
-			SubmitButtonState( downTarget, fireButtonTarget && nextButtonTarget == downTarget, updateTick );
-			SubmitButtonState( leftTarget, fireButtonTarget && nextButtonTarget == leftTarget, updateTick );
+			SubmitButtonState( upTarget, fireButtonTarget && nextButtonTarget == upTarget, updateTick, deltaTime );
+			SubmitButtonState( downTarget, fireButtonTarget && nextButtonTarget == downTarget, updateTick, deltaTime );
+			SubmitButtonState( leftTarget, fireButtonTarget && nextButtonTarget == leftTarget, updateTick, deltaTime );
+			SubmitButtonState( rightTarget, fireButtonTarget && nextButtonTarget == rightTarget, updateTick, deltaTime );
 
 			if (fireButtonTarget && nextButtonTarget != ButtonTarget.None)
 			{
@@ -99,6 +99,16 @@ namespace InControl
 				lastButtonTarget = nextButtonTarget;
 				nextButtonTarget = ButtonTarget.None;
 			}
+		}
+
+
+		public override void CommitControlState( ulong updateTick, float deltaTime )
+		{
+			CommitAnalog( target );
+			CommitButton( upTarget );
+			CommitButton( downTarget );
+			CommitButton( leftTarget );
+			CommitButton( rightTarget );
 		}
 		
 		

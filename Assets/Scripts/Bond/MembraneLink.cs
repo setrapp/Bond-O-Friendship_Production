@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class MembraneLink : BondLink {
-	public Membrane membrane;
 	public BondAttachable bondAttachable;
 	public SpringJoint[] jointsShaping;
 
@@ -14,20 +13,24 @@ public class MembraneLink : BondLink {
 			{
 				Bond bond = bondAttachable.bonds[i];
 				MembraneLink nearestLink;
-				Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
-				bond.attachment1.position = newPos;
-				if (nearestLink != this)
+				Membrane membrane = bond as Membrane;
+				if (membrane != null)
 				{
-					BondAttachable newAttachee = nearestLink.bondAttachable;
-					if (nearestLink == nearestLink.membrane.links[0])
+					Vector3 newPos = membrane.NearestNeighboredPoint(bond.links[1].transform.position, out nearestLink);
+					bond.attachment1.position = newPos;
+					if (nearestLink != this)
 					{
-						newAttachee = nearestLink.membrane.attachment1FauxLink.bondAttachable;
+						BondAttachable newAttachee = nearestLink.bondAttachable;
+						if (nearestLink == nearestLink.bond.links[0])
+						{
+							newAttachee = ((Membrane)nearestLink.bond).attachment1FauxLink.bondAttachable;
+						}
+						else if (nearestLink == nearestLink.bond.links[nearestLink.bond.links.Count - 1])
+						{
+							newAttachee = ((Membrane)nearestLink.bond).attachment2FauxLink.bondAttachable;
+						}
+						bond.ReplacePartner(bondAttachable, newAttachee);
 					}
-					else if (nearestLink == nearestLink.membrane.links[nearestLink.membrane.links.Count - 1])
-					{
-						newAttachee = nearestLink.membrane.attachment2FauxLink.bondAttachable;
-					}
-					bond.ReplacePartner(bondAttachable, newAttachee);
 				}
 			}
 		}
@@ -38,7 +41,7 @@ public class MembraneLink : BondLink {
 		BondAttachable bondAttachable = collision.collider.GetComponent<BondAttachable>();
 		if (bondAttachable != null)
 		{
-			if (membrane != null && membrane.extraStats.bondOnContact)
+			if (bond != null && ((Membrane)bond).extraStats.bondOnContact)
 			{
 				AttempBond(bondAttachable, collision.contacts[0].point);
 			}
@@ -49,7 +52,7 @@ public class MembraneLink : BondLink {
 	{
 		if (fluff != null && fluff.moving && (fluff.attachee == null || fluff.attachee.gameObject == gameObject))
 		{
-			if (membrane != null && membrane.extraStats.bondOnFluff)
+			if (bond != null && ((Membrane)bond).extraStats.bondOnFluff)
 			{
 				AttempBond(fluff.creator, fluff.transform.position);
 			}
@@ -59,10 +62,12 @@ public class MembraneLink : BondLink {
 
 	private void AttempBond(BondAttachable partner, Vector3 contactPosition)
 	{
+		Membrane membrane = bond as Membrane;
+
 		if (membrane != null && partner != null && (membrane.preferNewBonds || !membrane.IsBondMade(partner)))
 		{
 			int partnerLayer = (int)Mathf.Pow(2, partner.gameObject.layer);
-			if ((partnerLayer & membrane.extraStats.ignoreBondingLayers) != partnerLayer)
+			if ((partnerLayer & ((Membrane)bond).extraStats.ignoreBondingLayers) != partnerLayer)
 			{
 				// Use the attachable provided by the membrane, to allow endpoint links to be handled differently.
 				BondAttachable linkAttachable = membrane.FindLinkAttachable(this);
@@ -72,7 +77,7 @@ public class MembraneLink : BondLink {
 					{
 						membrane.BreakInnerBond(partner);
 					}
-					bool bonded = linkAttachable.AttemptBond(partner, membrane.NearestPoint(contactPosition), true);
+					bool bonded = linkAttachable.AttemptBond(partner, ((Membrane)bond).NearestPoint(contactPosition), true);
 					if (bonded)
 					{
 						membrane.forceFullDetail = true;
@@ -89,9 +94,9 @@ public class MembraneLink : BondLink {
 
 	private void BondBroken()
 	{
-		if (membrane != null && !membrane.IsBondMade())
+		if (bond != null && !((Membrane)bond).IsBondMade())
 		{
-			membrane.forceFullDetail = false;
+			bond.forceFullDetail = false;
 		}
 	}
 }

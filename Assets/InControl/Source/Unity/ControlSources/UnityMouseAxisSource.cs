@@ -6,18 +6,23 @@ namespace InControl
 {
 	public class UnityMouseAxisSource : InputControlSource
 	{
-		string mouseAxisQuery;
+		public string MouseAxisQuery;
+
+
+		public UnityMouseAxisSource()
+		{
+		}
 
 
 		public UnityMouseAxisSource( string axis )
 		{
-			this.mouseAxisQuery = "mouse " + axis;
+			MouseAxisQuery = "mouse " + axis;
 		}
 		
 		
 		public float GetValue( InputDevice inputDevice )
 		{
-			return Input.GetAxisRaw( mouseAxisQuery );
+			return Input.GetAxisRaw( MouseAxisQuery );
 		}
 		
 		
