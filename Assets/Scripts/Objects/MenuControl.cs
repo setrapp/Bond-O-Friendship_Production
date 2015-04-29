@@ -85,7 +85,9 @@ public class MenuControl : MonoBehaviour {
             }
         }
         if (!startLevelLoaded)
-            StartCoroutine(MainMenuLoadLevel());     
+            StartCoroutine(MainMenuLoadLevel());
+
+        Globals.Instance.inMainMenu = true;
     }
 
 

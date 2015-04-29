@@ -198,6 +198,7 @@ public class CameraSplitter : MonoBehaviour {
 		toggle = true;
 
 		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+        Globals.Instance.inMainMenu = false;
 	}
 
     public void ZoomOut()

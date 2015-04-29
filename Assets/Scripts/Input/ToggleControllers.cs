@@ -30,6 +30,8 @@ public class ToggleControllers : MonoBehaviour {
 
     private bool rightControllerActive = false;
 
+
+
 	// Use this for initialization
 	void Start () 
     {
