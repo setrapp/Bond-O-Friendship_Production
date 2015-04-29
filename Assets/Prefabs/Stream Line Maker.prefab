@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 408704}
   - 120: {fileID: 12008704}
+  - 114: {fileID: 11419490}
   m_Layer: 0
   m_Name: Stream Line Maker
   m_TagString: Untagged
@@ -28,6 +29,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11419490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 108704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 12008704}
+  renderBase: 3000
+  renderOffset: -2
+  forceRendererOn: 0
 --- !u!120 &12008704
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -50,11 +66,11 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions: []
   m_Parameters:
-    startWidth: 1
+    startWidth: 0
     endWidth: 1
     m_StartColor:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 16777215
     m_EndColor:
       serializedVersion: 2
       rgba: 4294967295

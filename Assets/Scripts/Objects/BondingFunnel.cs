@@ -13,8 +13,6 @@ public class BondingFunnel : MonoBehaviour {
 	public GameObject scaleBearing2;
 	public GameObject scaleBackupBearing1;
 	public GameObject scaleBackupBearing2;
-	public Rigidbody noBacktrackBody1;
-	public Rigidbody noBacktrackBody2;
 	public bool solved = false;
 	[SerializeField]
 	public List<GameObject> solveListeners;
@@ -29,8 +27,6 @@ public class BondingFunnel : MonoBehaviour {
 	void Start()
 	{
 		pusheeLocalY = pushee.transform.localPosition.y;
-		noBacktrackBody1.centerOfMass = Vector3.zero;
-		noBacktrackBody2.centerOfMass = Vector3.zero;
 	}
 
 	void Update()
@@ -48,7 +44,7 @@ public class BondingFunnel : MonoBehaviour {
 
 				if (pusheeScale.y <= destroyBearingDistance)
 				{
-					Vector3 bearingPusherPos = bearingPusher.transform.localPosition;
+					/*Vector3 bearingPusherPos = bearingPusher.transform.localPosition;
 					Vector3 bearingPusherScale = bearingPusher.transform.localScale;
 					bearingPusher.transform.parent = outPushee.transform;
 					bearingPusher.transform.localPosition = bearingPusherPos;
@@ -83,7 +79,16 @@ public class BondingFunnel : MonoBehaviour {
 						{
 							Destroy(nonCollisionSprings[i]);
 						}
-					}
+					}*/
+
+					Destroy(pushee.gameObject);
+					pushee = null;
+					Destroy(scaleBearing1);
+					scaleBearing1 = null;
+					Destroy(scaleBearing2);
+					scaleBearing2 = null;
+					Destroy(bearingPusher);
+					bearingPusher = null;
 
 					funnelingOut = true;
 				}
@@ -107,17 +112,20 @@ public class BondingFunnel : MonoBehaviour {
 				}
 			}
 
-			pushee.transform.localScale = pusheeScale;
+			if (pushee != null)
+			{
+				pushee.transform.localScale = pusheeScale;
 
-			Vector3 capScale = pusheeCap1.transform.localScale;
-			capScale.z = (capScale.x * pusheeScale.x) / pusheeScale.y;
-			pusheeCap1.transform.localScale = capScale;
-			pusheeCap2.transform.localScale = capScale;
+				Vector3 capScale = pusheeCap1.transform.localScale;
+				capScale.z = (capScale.x * pusheeScale.x) / pusheeScale.y;
+				pusheeCap1.transform.localScale = capScale;
+				pusheeCap2.transform.localScale = capScale;
+			}
 
 			
 		}
 
-		if (!solved && pushee.isKinematic)
+		if (!solved && pushee != null && pushee.isKinematic)
 		{
 			solved = true;
 			for (int i = 0; i < solveListeners.Count; i++)
@@ -126,13 +134,10 @@ public class BondingFunnel : MonoBehaviour {
 			}
 		}
 
-		Vector3 pusheePos = pushee.transform.localPosition;
-		pusheePos.y = pusheeLocalY;
-	}
-
-	public void StopBackTracking()
-	{
-		noBacktrackBody1.isKinematic = false;
-		noBacktrackBody2.isKinematic = false;
+		if (pushee != null)
+		{
+			Vector3 pusheePos = pushee.transform.localPosition;
+			pusheePos.y = pusheeLocalY;
+		}
 	}
 }

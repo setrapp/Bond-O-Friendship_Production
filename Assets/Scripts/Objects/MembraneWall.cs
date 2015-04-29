@@ -5,11 +5,13 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
 	public float membraneLength;
 	public bool showPosts = false;
+	public bool disableAtFar = false;
 	public GameObject startPost;
 	public GameObject endPost;
 	public float defaultShapingForce = -1;
@@ -170,14 +172,31 @@ public class MembraneWall : MonoBehaviour {
 			}
 
 			createdMembrane.stats.maxDistance = maxDistance;
+
+			if (disableAtFar)
+			{
+				Vector3 midPoint = (startPost.transform.position + endPost.transform.position) / 2;
+				float sqrToPlayer1 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
+				float sqrToPlayer2 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
+				bool playerNearPosts = (sqrToPlayer1 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2) || sqrToPlayer2 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2));
+
+				if (createdMembrane.gameObject.activeSelf && (!playerNearPosts && createdMembrane.currentDetail <= createdMembrane.stats.sparseDetailFactor))
+				{
+					createdMembrane.gameObject.SetActive(false);
+				}
+				else if (!createdMembrane.gameObject.activeSelf && playerNearPosts)
+				{
+					createdMembrane.gameObject.SetActive(true);
+				}
+			}
 		}
 	}
 
-	public void CreateWall()
+	public Membrane CreateWall()
 	{
 		if (membraneCreator == null || membraneCreator.attachable1 == null || membraneCreator.attachable2 == null)
 		{
-			return;
+			return null;
 		}
 
 		if (shapingIndices.Count != shapingPoints.Count)
@@ -187,6 +206,10 @@ public class MembraneWall : MonoBehaviour {
 
 		// Update override stats to account for starting distance between endpoints.
 		membraneDirection.Normalize();
+		if (space == Space.Self)
+		{
+			membraneDirection = transform.TransformDirection(membraneDirection);
+		}
 		Vector3 membraneTrack = membraneDirection * membraneLength;
 		if (relativeMaxDistance >= 0)
 		{
@@ -254,6 +277,8 @@ public class MembraneWall : MonoBehaviour {
 		{
 			membraneCreator.createdBond.transform.parent = transform;
 		}
+
+		return membraneCreator.createdBond as Membrane;
 	}
 
 	private void MembraneBreaking(Membrane BreakingMembrane)

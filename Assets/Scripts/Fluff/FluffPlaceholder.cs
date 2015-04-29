@@ -4,14 +4,17 @@ using System.Collections;
 public class FluffPlaceholder : MonoBehaviour {
 	public GameObject fluffPrefab;
 	public Renderer materialSource;
-	public GameObject attachee;
+	public FluffStick attachee;
 	public Fluff createdFluff = null;
 	public int fluffRespawns = 0;
 	private float respawnDelay = 0;
 	public float respawnDelayMin = 0;
 	public float respawnDelayMax = 0;
 	private float pickTime = -1;
+	public bool autoSpawn = true;
 	public bool dropParent = false;
+	public bool spawnFakeMoving = false;
+	public bool sproutFluff = false;
 
 	void Awake()
 	{
@@ -24,17 +27,42 @@ public class FluffPlaceholder : MonoBehaviour {
 			materialSource.enabled = false;
 		}
 
-		SpawnFluff();
+		if (attachee == null)
+		{
+			attachee = GetComponent<FluffStick>();
+			if (attachee == null)
+			{
+				attachee = GetComponentInParent<FluffStick>();
+			}
+		}
+
+		if (attachee != null)
+		{
+			attachee.stickOffset = attachee.transform.InverseTransformPoint(transform.position);
+			attachee.stickDirection = -attachee.transform.InverseTransformDirection(transform.up);
+		}
+	}
+
+	void Start()
+	{
+		if (autoSpawn)
+		{
+			SpawnFluff();
+		}
 	}
 
 	void Update()
 	{
-		if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+		if (autoSpawn)
 		{
-			fluffRespawns--;
-			SpawnFluff();
+			if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+			{
+				fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
+				SpawnFluff();
+			}
 		}
-		
+
+
 		if ((createdFluff == null || createdFluff.moving) && pickTime < 0)
 		{
 			createdFluff = null;
@@ -42,7 +70,7 @@ public class FluffPlaceholder : MonoBehaviour {
 		}
 	}
 
-	private void SpawnFluff()
+	public void SpawnFluff()
 	{
 		Material fluffMaterial = null;
 		if (materialSource != null)
@@ -50,7 +78,7 @@ public class FluffPlaceholder : MonoBehaviour {
 			fluffMaterial = materialSource.material;
 		}
 
-		if (fluffPrefab != null)
+		if (fluffPrefab != null && (attachee == null || attachee.CanStick()))
 		{
 			GameObject newFluffObj = (GameObject)Instantiate(fluffPrefab, transform.position, transform.rotation);
 			newFluffObj.transform.parent = transform.parent;
@@ -64,12 +92,16 @@ public class FluffPlaceholder : MonoBehaviour {
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee, transform.position, transform.up);
+					newFluff.Attach(attachee, true, sproutFluff);
 				}
-				else
+				else 
 				{
-					// Fake movement to allow fluff update to handle attachment to floor.
-					newFluff.moving = true;
+					// If desired, fake movement to allow fluff update to handle attachment to floor.
+					if (spawnFakeMoving)
+					{
+						newFluff.moving = true;
+					}
+					newFluff.ToggleSwayAnimation(true);
 				}
 				createdFluff = newFluff;
 
@@ -85,10 +117,6 @@ public class FluffPlaceholder : MonoBehaviour {
 					}
 				}
 			}
-		}
-		else
-		{
-			Debug.LogError("Fluff Placeholder unable to spawn fluff. Please ensure parameters are correct.");
 		}
 
 		if (fluffRespawns == 0)

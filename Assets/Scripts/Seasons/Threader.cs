@@ -20,6 +20,8 @@ public class Threader : MonoBehaviour {
 	public GameObject smallripplePrefab;
 	private GameObject smallrippleObj;
 
+	private ThreadParent threadParent;
+
 	public bool rippleShot;
 
 		// Use this for initialization
@@ -33,7 +35,7 @@ public class Threader : MonoBehaviour {
 		a = 1.0f;
 		bondCount = 0; 
 
-
+		threadParent = transform.parent.GetComponent<ThreadParent>();
 
 	}
 	
@@ -63,7 +65,8 @@ public class Threader : MonoBehaviour {
 		}
 
 		myColor = new Color(r,g,b,a);
-		GetComponent<Renderer>().material.color = myColor;
+		if(threadParent.solved == false)
+			GetComponent<Renderer>().material.color = myColor;
 
 		if(activated == true)
 		{

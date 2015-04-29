@@ -1,277 +1,338 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpinPad : WaitPad
-{
-	public bool flipDirection = false;
-	public int spinInhibitors = 0;
-	public int backSpinInhibitors = 0;
-	public Rigidbody body;
-	public SpinPadSide player1Pad;
-	public SpinPadSide player2Pad;
-	public GameObject finishRing;
-	public GameObject ripplePrefab;
-	private float rotatingDirection = 1;
-	public float goalRotation = 360.0f;
+public class SpinPad : WaitPad {
+
+	public MembraneWall membraneWall1;
+	public MembraneWall membraneWall2;
+	public Membrane membrane1;
+	public Membrane membrane2;
+	public SpinPadSide wallEnd1;
+	public SpinPadSide wallEnd2;
+	public Collider wallEnd1Collider;
+	public Collider wallEnd2Collider;
+	public GameObject rotatee;
+	public SpinPadPushee helmet1;
+	public SpinPadPushee helmet2;
+	private float oldRotateeRotation;
+	public bool completeOnIn = false;
+	public bool completeOnOut = false;
+	public float inRadius = 5.5f;
+	public float outRadius = 5.5f;
+	public float currentRadius = 5.5f;
+	private Vector3 center;
+	private Vector3 oldWallEndPos1;
+	private Vector3 oldWallEndPos2;
+	public float fullInRotation = 0;
+	public float fullOutRotation = -360;
 	public float currentRotation = 0;
-	public float ringMinSize = 0.01f;
-	public float rinMaxSize = 1.15f;
-	private bool rippleFired = false;
-	[HideInInspector]
-	public bool player1Pushing = false;
-	[HideInInspector]
-	public bool player2Pushing = false;
-	public GameObject centerPushee;
-	public Renderer player1Pushee;
-	public Renderer player2Pushee;
-	public float pusheeDisappearInterval = 0.1f;
-	private float pusheeStartAlpha = 1;
-	private Vector3 startRotation;
-	public float oldRotation = 0;
-	public float resetDelay = 0.0f;
-	public float resetAcceleration = 10.0f;
-	public float resetMaxSpeed = 100.0f;
-	public float resetSpeed = 0f;
-	public bool resetting = false;
-	public float portionComplete;
+	public float rotationProgress = 0;
+	public float dragDecreaseSpeed = 500;
+	public float dragIncreaseSpeed = 50;
+	public float membraneAttachmentSpring = 50;
+	public int spinInhibitors = 0;
+	public LineRenderer innerLine;
+	public LineRenderer outerLine;
+	public Color lineInactiveColor = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+	public Color lineNotCompletedColor = new Color(0.75f, 0.75f, 0.75f, 0.5f);
+	public Color lineCompletedColor = new Color(1.0f, 1.0f, 1.0f, 0.8f);
 
-	protected override void Start()
+	void Start()
 	{
-		// If desired flip the pad over to rotate in the opposite direction.
-		if (flipDirection)
+		center = (wallEnd1.transform.position + wallEnd2.transform.position) / 2;
+		rotatee.transform.position = center;
+		rotatee.transform.LookAt(rotatee.transform.position - Vector3.forward, wallEnd1.transform.transform.position - rotatee.transform.position);
+		oldRotateeRotation = rotatee.transform.eulerAngles.z;
+		oldWallEndPos1 = wallEnd1.transform.position;
+		oldWallEndPos2 = wallEnd2.transform.position;
+
+		if (innerLine != null)
 		{
-			transform.Rotate(new Vector3(180, 0, 0));
-			Transform[] allChildren = GetComponentsInChildren<Transform>();
-			for (int i = 0; i < allChildren.Length; i++)
-			{
-				Transform child = allChildren[i];
-				if (child != transform)
-				{
-					child.localPosition = new Vector3(child.localPosition.x, child.localPosition.y, -child.localPosition.z);
-				}
-			}
-			rotatingDirection = -1;
+			Helper.DrawCircle(innerLine, gameObject, Vector3.zero, inRadius);
+		}
+		if (outerLine != null)
+		{
+			Helper.DrawCircle(outerLine, gameObject, Vector3.zero, outRadius);
 		}
 
-		// Set starting values for components.
-		player1Pad.spinPad = this;
-		player2Pad.spinPad = this;
-		finishRing.transform.localScale = new Vector3(ringMinSize, ringMinSize, ringMinSize);
-		SpinPadPushee[] centralPushees = centerPushee.GetComponentsInChildren<SpinPadPushee>();
-		for (int i = 0; i < centralPushees.Length; i++)
-		{
-			centralPushees[i].gameObject.SetActive(false);
-		}
+		CalculateRotationProgress();
+		float progress = (rotationProgress / 2) + 0.5f;
+		currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
+		membraneWall1.membraneLength = membraneWall2.membraneLength = currentRadius;
 
-		// Store initial rotation.
-		startRotation = transform.rotation.eulerAngles;
-		oldRotation = startRotation.z;
+		UpdatePadRotation();
 
-		// Set color tints for player starter pushees.
-		CopyPlayerColor copier1 = player1Pushee.GetComponent<CopyPlayerColor>();
-		if (copier1 != null)
-		{
-			copier1.tint = player1Pad.startTint;
-		}
-		CopyPlayerColor copier2 = player2Pushee.GetComponent<CopyPlayerColor>();
-		if (copier2 != null)
-		{
-			copier2.tint = player2Pad.startTint;
-		}
-		pusheeStartAlpha = player1Pushee.material.color.a;
+		SetLineColors();
 	}
 
-	protected override void Update()
+	void Update()
 	{
-		pOonPad = player1Pad.activated;
-		pTonPad = player2Pad.activated;
-
-		if (pOonPad && pTonPad && !activated)
+		if (membrane1 == null)
 		{
-			resetSpeed = 0;
-
-			// Track the new rotation and set to kinematic if not being pushed.
-			float newRotation = transform.rotation.eulerAngles.z;
-			if (player1Pushing && player2Pushing)
+			membrane1 = (Membrane)membraneWall1.membraneCreator.createdBond;
+			if (membrane1 != null)
 			{
-				if (body.isKinematic && spinInhibitors <= 0)
-				{
-					body.isKinematic = false;
-				}
-				
-				float rotChange = newRotation - oldRotation;
-				if (rotChange < -180)
-				{
-					rotChange = (360 - oldRotation) + newRotation;
-				}
-				currentRotation += rotChange;
+				membrane1.stats.attachSpring2 = membraneAttachmentSpring;
+			}
+		}
+		if (membrane2 == null)
+		{
+			membrane2 = (Membrane)membraneWall2.membraneCreator.createdBond;
+			if (membrane2 != null)
+			{
+				membrane2.stats.attachSpring2 = membraneAttachmentSpring;
+			}
+		}
+
+		CheckHelmets();
+
+		if (membrane1 != null && membrane2 != null)
+		{
+
+			if (PlayersPushing())
+			{
+				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = membraneAttachmentSpring;
 			}
 			else
 			{
-				if (!body.isKinematic)
-				{
-					body.isKinematic = true;
-				}
+				membrane1.stats.attachSpring2 = membrane2.stats.attachSpring2 = 0;
 			}
 
-			// Don't allow movement when spin is inhibited.
-			if (spinInhibitors > 0 && !body.isKinematic)
-			{
-				body.isKinematic = true;
-			}
-			else if (spinInhibitors < 0)
-			{
-				spinInhibitors = 0;
-			}
+			// Handle rotation of the pad.
+			UpdatePadRotation();
+		}
+		else if (membrane1 != null && membrane2 == null)
+		{
+			membrane1.stats.attachSpring2 = 0;
+		}
+		else if (membrane2 != null && membrane1 == null)
+		{
+			membrane2.stats.attachSpring2 = 0;
+		}
 
-			if (backSpinInhibitors < 0)
-			{
-				backSpinInhibitors = 0;
-			}
+		if (!activated)
+		{
+			CalculateRotationProgress();
+			float progress = (rotationProgress / 2) + 0.5f;
+			currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
 
-			// Save the current rotation for comparison next frame.
-			oldRotation = newRotation;
-
-			// Snap to finish and produce success feedback when goal rotation is reached.
-			if (currentRotation >= goalRotation)
+			if (!neverActivate && ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END))))
 			{
-				if (!body.isKinematic)
-				{
-					body.angularVelocity = Vector3.zero;
-				}
-				transform.rotation = Quaternion.Euler(startRotation.x, startRotation.y, startRotation.z + goalRotation);
-				body.isKinematic = true;
-				currentRotation = goalRotation;
-				FireRipple();
 				activated = true;
+				SetLineColors();
+			}
+		}
+
+		if (wallEnd1 != null && wallEnd1Collider != null)
+		{
+			wallEnd1Collider.transform.position = wallEnd1.transform.position;
+		}
+		if (wallEnd2 != null && wallEnd2Collider != null)
+		{
+			wallEnd2Collider.transform.position = wallEnd2.transform.position;
+		}
+	}
+
+	private void UpdatePadRotation()
+	{
+		// Calculate the vectors from the center to the edges of the pad where the walls ends are.
+		Vector3 toWallEnd1 = wallEnd1.transform.position - center;
+		toWallEnd1.z = 0;
+		toWallEnd1 = toWallEnd1.normalized * (currentRadius);
+
+		Vector3 toWallEnd2 = wallEnd2.transform.position - center;
+		toWallEnd2.z = 0;
+		toWallEnd2 = toWallEnd2.normalized * (currentRadius);
+
+
+		// Keep the wall ends moving exactly opposite each other, moving only as fast as the slower of the two.
+		Vector3 newWallEndPos1 = center + toWallEnd1;
+		Vector3 newWallEndPos2 = center + toWallEnd2;
+		if (Vector3.Dot(newWallEndPos1 - oldWallEndPos1, newWallEndPos2 - oldWallEndPos2) < 0)
+		{
+			if ((newWallEndPos2 - oldWallEndPos2).sqrMagnitude < (newWallEndPos1 - oldWallEndPos1).sqrMagnitude)
+			{
+				newWallEndPos1 = center - toWallEnd2;
+			}
+			else
+			{
+				newWallEndPos2 = center - toWallEnd1;
 			}
 		}
 		else
 		{
-			if (!body.isKinematic)
-			{
-				body.isKinematic = true;
-			}
-
-			// Return to starting orientation when not in use and incomplete.
-			if (!activated && !resetting && currentRotation > 0)
-			{
-				resetting = true;
-				resetSpeed = 0;
-				StartCoroutine(ResetToStart());
-			}
+			// If the wall ends attempted to move in the same direction, do not move.
+			newWallEndPos1 = oldWallEndPos1;
+			newWallEndPos2 = oldWallEndPos2;
 		}
 
-		// Scale the finish ring and position spiralling pushee handles based on how much of the required rotation is complete.
-		portionComplete = currentRotation / goalRotation;
-		float ringSize = (ringMinSize * (1 - portionComplete)) + (rinMaxSize * portionComplete);
-		finishRing.transform.localScale = new Vector3(ringSize, ringSize, ringSize);
 		
-		// Fade out player starting pushees.
-		float disappearComplete = 1;
-		if (pusheeDisappearInterval > 0)
+
+		// Rotate the rotation tracker to point its up vector at the first wall end.
+		rotatee.transform.LookAt(rotatee.transform.position - Vector3.forward, wallEnd1.transform.transform.position - rotatee.transform.position);
+		float movementDotRight = Vector3.Dot(newWallEndPos1 - oldWallEndPos1, rotatee.transform.right);
+		float newRotateeRotation = rotatee.transform.eulerAngles.z;
+
+		if (!activated)
 		{
-			disappearComplete = portionComplete / pusheeDisappearInterval;
+			// Maintain continuity of the rotation tracking by handling the crossing of the 360/0 degrees threshold.
+			float rotationChange = newRotateeRotation - oldRotateeRotation;
+			if (rotationChange > 180)
+			{
+				rotationChange -= 360;
+			}
+			else if (rotationChange < -180)
+			{
+				rotationChange += 360;
+			}
+
+			if ((currentRotation >= fullInRotation && rotationChange > 0) || (currentRotation <= fullOutRotation && rotationChange < 0))
+			{
+				rotationChange = 0;
+			}
+
+			if (rotationChange != 0)
+			{
+				SetLineColors();
+
+				membrane1.extraStats.defaultShapingForce = membrane2.extraStats.defaultShapingForce = 0;
+			}
+
+			// Update rotation progress.
+			currentRotation += rotationChange;
+			oldRotateeRotation = newRotateeRotation;
 		}
 
-		Color pusheeColor1 = player1Pushee.material.color;
-		pusheeColor1.a = pusheeStartAlpha * (1 - disappearComplete);
-		player1Pushee.material.color = pusheeColor1;
+		// Move wall ends to new positions.
+		wallEnd1.transform.position = new Vector3(newWallEndPos1.x, newWallEndPos1.y, wallEnd1.transform.position.z);
+		wallEnd2.transform.position = new Vector3(newWallEndPos2.x, newWallEndPos2.y, wallEnd2.transform.position.z);
 
-		Color pusheeColor2 = player2Pushee.material.color;
-		pusheeColor2.a = pusheeStartAlpha * (1 - disappearComplete);
-		player2Pushee.material.color = pusheeColor2;
-
-		if (disappearComplete >= 1 && (player1Pushee.gameObject.activeSelf || player2Pushee.gameObject.activeSelf))
-		{
-			player1Pushee.gameObject.SetActive(false);
-			player2Pushee.gameObject.SetActive(false);
-
-			for (int i = 0; i < centerPushee.transform.childCount; i++)
-			{
-				centerPushee.transform.GetChild(i).gameObject.SetActive(true);
-			}
-		}
-
-		// Only enable player starter pushees when the side pads are in use.
-		if (currentRotation / goalRotation < pusheeDisappearInterval)
-		{
-			if ((player1Pad.activating || player1Pad.activated))
-			{
-				if (!player1Pushee.gameObject.activeSelf)
-				{
-					player1Pushee.gameObject.SetActive(true);
-				}
-			}
-			else if (player1Pushee.gameObject.activeSelf && player1Pad.timeActivating <= 0)
-			{
-				player1Pushee.gameObject.SetActive(false);
-			}
-
-			if ((player2Pad.activating || player2Pad.activated))
-			{
-				if (!player2Pushee.gameObject.activeSelf)
-				{
-					player2Pushee.gameObject.SetActive(true);
-				}
-			}
-			else if (player2Pushee.gameObject.activeSelf && player2Pad.timeActivating <= 0)
-			{
-				player2Pushee.gameObject.SetActive(false);
-			}
-		}
+		// Maintain a copy of the wall positions.
+		oldWallEndPos1 = newWallEndPos1;
+		oldWallEndPos2 = newWallEndPos2;
 	}
 
-	private void FireRipple()
+	private bool PlayersPushing()
 	{
-		if (rippleFired == false)
+		bool wall1Bonded = false;
+		if (wallEnd1.playerDependent)
 		{
-			GameObject rippleObj = Instantiate(ripplePrefab, transform.position, Quaternion.identity) as GameObject;
-			RingPulse ripple = rippleObj.GetComponent<RingPulse>();
-			ripple.transform.localScale = new Vector3(10, 10, 10);
-			ripple.scaleRate = 9.5f;
-			ripple.lifeTime = 0.5f;
-			ripple.alpha = 1.0f;
-			ripple.alphaFade = 2.1f;
-			ripple.mycolor = Color.white;
-			//rippleObj.GetComponent<RingPulse>().smallRing = true;
-
-			rippleFired = true;
+			wall1Bonded = membrane1.IsBondMade(wallEnd1.TargetPlayer.bondAttachable);
 		}
+		else
+		{
+			wall1Bonded = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+		}
+
+		bool wall2Bonded = false;
+		if (wallEnd2.playerDependent)
+		{
+			wall2Bonded = membrane2.IsBondMade(wallEnd2.TargetPlayer.bondAttachable);
+		}
+		else
+		{
+			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+		}
+
+		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy);
+		bool spinInhibited = spinInhibitors > 0;
+
+		return wall1Bonded && wall2Bonded && !helmetsExist && !spinInhibited;
 	}
 
-	public IEnumerator ResetToStart()
+	private void CheckHelmets()
 	{
-		resetting = true;
-		yield return new WaitForSeconds(resetDelay);
-
-		while (currentRotation > 0 && (!pOonPad || !pTonPad))
+		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy)
 		{
-			if (backSpinInhibitors <= 0)
+			if (helmet1.pushing && helmet2.pushing)
 			{
-				resetSpeed += resetAcceleration * Time.deltaTime;
-				if (resetSpeed > resetMaxSpeed)
-				{
-					resetSpeed = resetMaxSpeed;
-				}
-
-				float backspin = resetSpeed * Time.deltaTime;
-				if (currentRotation - backspin < 0)
-				{
-					backspin = currentRotation;
-				}
-
-				transform.Rotate(new Vector3(0, 0, -backspin));
-				currentRotation -= backspin;
-				oldRotation = transform.rotation.eulerAngles.z;
+				helmet1.DestroyAndRipple();
+				helmet2.DestroyAndRipple();
 			}
-
-			yield return null;
 		}
-		resetting = false;
 	}
 
-	// Force pad to defer collision handling to side pads.
-	protected override void OnTriggerEnter(Collider collide){ }
-	protected override void OnTriggerExit(Collider collide) { }
+	private void CalculateRotationProgress()
+	{
+		float rotationRange = fullInRotation - fullOutRotation;
+		float midRotation = (fullInRotation + fullOutRotation) / 2;
+
+		rotationProgress = Mathf.Clamp((currentRotation - midRotation) / (rotationRange / 2), -1, 1);
+
+		// Calculate portion complete for use in listeners.
+		if (completeOnIn && completeOnOut)
+		{
+			portionComplete = rotationProgress;
+		}
+		else if (completeOnIn)
+		{
+			portionComplete = (rotationProgress / 2) + 0.5f;
+		}
+		else if (completeOnOut)
+		{
+			portionComplete = (-rotationProgress / 2) + 0.5f;
+		}
+		else
+		{
+			portionComplete = 0;
+		}
+	}
+
+	public bool IsAtLimit(SpinLimit desiredLimit)
+	{
+		bool atLimit = false;
+		if ((desiredLimit & SpinLimit.PULL_END) == SpinLimit.PULL_END && rotationProgress >= 1)
+		{
+			atLimit = true;
+		}
+		if ((desiredLimit & SpinLimit.PUSH_END) == SpinLimit.PUSH_END && rotationProgress <= -1)
+		{
+			atLimit = true;
+		}
+		return atLimit;
+	}
+
+	public void SetLineColors()
+	{
+		/*TODO use inactive color if pushing this direction will no complete the puzzle*/
+
+		if (innerLine != null)
+		{
+			if (!completeOnIn)
+			{
+				innerLine.material.color = lineInactiveColor;
+			}
+			else if (IsAtLimit(SpinLimit.PULL_END))
+			{
+				innerLine.material.color = lineCompletedColor;
+			}
+			else
+			{
+				innerLine.material.color = lineNotCompletedColor;
+			}
+		}
+
+		if (outerLine != null)
+		{
+			if (!completeOnOut)
+			{
+				outerLine.material.color = lineInactiveColor;
+			}
+			else if (IsAtLimit(SpinLimit.PUSH_END))
+			{
+				outerLine.material.color = lineCompletedColor;
+			}
+			else
+			{
+				outerLine.material.color = lineNotCompletedColor;
+			}
+		}
+		
+	}
+
+	public enum SpinLimit
+	{
+		PULL_END = 1,
+		PUSH_END = 2
+	}
 }

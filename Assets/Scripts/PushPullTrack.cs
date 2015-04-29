@@ -8,15 +8,8 @@ public class PushPullTrack : MonoBehaviour {
 
 	void Update()
 	{
-		float portionComplete = targetPad.currentRotation / targetPad.goalRotation;
-		if (targetPad.flipDirection)
-		{
-			transform.position = (pushTarget.transform.position * (1 - portionComplete)) + (pullTarget.transform.position * portionComplete);
-		}
-		else
-		{
-			transform.position = (pullTarget.transform.position * (1 - portionComplete)) + (pushTarget.transform.position * portionComplete);
-		}
+		float portionComplete = (targetPad.rotationProgress / 2) + 0.5f;
+		transform.position = (pushTarget.transform.position * (1 - portionComplete)) + (pullTarget.transform.position * portionComplete);
 	}
 
 }

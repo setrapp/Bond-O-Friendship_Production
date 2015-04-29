@@ -60,4 +60,56 @@ public class Helper {
 		}
 		return newCurrent;
 	}
+
+	public static void DrawCircle(LineRenderer renderer, GameObject parentObject, Vector3 offset, float radius, float thetaDelta = 0.01f)
+	{
+		Vector3 center = offset;
+		if (parentObject != null)
+		{
+			center = parentObject.transform.TransformPoint(offset);
+		}
+
+		int vertexCount = (int)((Mathf.PI * 2) / thetaDelta) + 2;
+		renderer.SetVertexCount(vertexCount);
+		for (int i = 0; i < vertexCount - 1; i++)
+		{
+			float theta = i * thetaDelta;
+			Vector3 unitCirclePoint = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);
+
+			renderer.SetPosition(i, center + (unitCirclePoint * radius));
+		}
+		renderer.SetPosition(vertexCount - 1, center + new Vector3(radius, 0, 0));
+	}
+
+	public static RingPulse FirePulse(Vector3 position, PulseStats pulseStats, RingPulse alternativePulsePrefab = null)
+	{
+		RingPulse pulsePrefab = alternativePulsePrefab;
+		if (pulsePrefab == null)
+		{
+			pulsePrefab = Globals.Instance.defaultPulsePrefab;
+		}
+		if (pulsePrefab == null)
+		{
+			return null;
+		}
+
+		RingPulse pulse = ((GameObject)GameObject.Instantiate(pulsePrefab.gameObject, position, Quaternion.identity)).GetComponent<RingPulse>();
+		pulse.scaleRate = pulseStats.scaleRate;
+		pulse.lifeTime = pulseStats.lifeTime;
+		pulse.alpha = pulseStats.alpha;
+		pulse.alphaFade = pulseStats.alphaFade;
+		pulse.smallRing = pulseStats.smallRing;
+
+		return pulse;
+	}
+}
+
+[System.Serializable]
+public class PulseStats
+{
+	public float scaleRate;
+	public float lifeTime;
+	public float alpha;
+	public float alphaFade;
+	public bool smallRing;
 }

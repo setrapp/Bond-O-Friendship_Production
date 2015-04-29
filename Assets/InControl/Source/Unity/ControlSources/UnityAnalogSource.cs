@@ -6,13 +6,19 @@ namespace InControl
 {
 	public class UnityAnalogSource : InputControlSource
 	{
-		int analogId;
 		static string[,] analogQueries;
+		public int AnalogId;
+
+
+		public UnityAnalogSource()
+		{
+			SetupAnalogQueries();
+		}
 
 
 		public UnityAnalogSource( int analogId )
 		{
-			this.analogId = analogId;
+			AnalogId = analogId;
 			SetupAnalogQueries();
 		}
 
@@ -20,7 +26,7 @@ namespace InControl
 		public float GetValue( InputDevice inputDevice )
 		{
 			var joystickId = (inputDevice as UnityInputDevice).JoystickId;
-			var analogKey = GetAnalogKey( joystickId, analogId );
+			var analogKey = GetAnalogKey( joystickId, AnalogId );
 			return Input.GetAxisRaw( analogKey );
 		}
 
@@ -41,7 +47,7 @@ namespace InControl
 				{
 					for (int analogId = 0; analogId < UnityInputDevice.MaxAnalogs; analogId++)
 					{
-						analogQueries[ joystickId - 1, analogId ] = "joystick " + joystickId + " analog " + analogId;
+						analogQueries[joystickId - 1, analogId] = "joystick " + joystickId + " analog " + analogId;
 					}
 				}
 			}
@@ -50,7 +56,7 @@ namespace InControl
 
 		static string GetAnalogKey( int joystickId, int analogId )
 		{
-			return analogQueries[ joystickId - 1, analogId ];
+			return analogQueries[joystickId - 1, analogId];
 		}
 	}
 }

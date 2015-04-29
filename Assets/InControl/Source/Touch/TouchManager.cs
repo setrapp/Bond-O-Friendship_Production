@@ -43,12 +43,11 @@ namespace InControl
 		List<Touch> activeTouches;
 		ReadOnlyCollection<Touch> readOnlyActiveTouches;
 		Vector2 lastMousePosition;
+		bool isReady;
 
-		#pragma warning disable 0414
+		#pragma warning disable 414
 		Touch mouseTouch;
-		#pragma warning restore 0414
-
-		bool isReady = false;
+		#pragma warning restore 414
 
 
 		protected TouchManager()
@@ -58,14 +57,15 @@ namespace InControl
 
 		void OnEnable()
 		{
-			SetSingletonInstance();
+			SetupSingleton();
 
 			touchControls = GetComponentsInChildren<TouchControl>( true );
 
 			if (Application.isPlaying)
 			{
 				InputManager.OnSetup += Setup;
-				InputManager.OnUpdate += UpdateTouches;
+				InputManager.OnUpdateDevices += UpdateDevice;
+				InputManager.OnCommitDevices += CommitDevice;
 			}
 		}
 
@@ -75,29 +75,11 @@ namespace InControl
 			if (Application.isPlaying)
 			{
 				InputManager.OnSetup -= Setup;
-				InputManager.OnUpdate -= UpdateTouches;
+				InputManager.OnUpdateDevices -= UpdateDevice;
+				InputManager.OnCommitDevices -= CommitDevice;
 			}
 
 			Reset();
-		}
-
-
-		void Start()
-		{
-			// This little hack is necessary because right after Unity starts up,
-			// cameras don't seem to have a correct projection matrix until after
-			// their first update or around that time. So we basically need to
-			// wait until the end of the first frame before everything is quite ready.
-			StartCoroutine( Ready() );
-		}
-
-
-		IEnumerator Ready()
-		{
-			yield return new WaitForEndOfFrame();
-			isReady = true;
-			UpdateScreenSize( new Vector2( Screen.width, Screen.height ) );
-			yield return null;
 		}
 
 
@@ -128,6 +110,25 @@ namespace InControl
 		}
 
 
+		void Start()
+		{
+			// This little hack is necessary because right after Unity starts up,
+			// cameras don't seem to have a correct projection matrix until after
+			// their first update or around that time. So we basically need to
+			// wait until the end of the first frame before everything is quite ready.
+			StartCoroutine( Ready() );
+		}
+
+
+		IEnumerator Ready()
+		{
+			yield return new WaitForEndOfFrame();
+			isReady = true;
+			UpdateScreenSize( new Vector2( Screen.width, Screen.height ) );
+			yield return null;
+		}
+
+
 		void Update()
 		{
 			if (!isReady)
@@ -153,22 +154,32 @@ namespace InControl
 		{
 			device = new InputDevice( "TouchDevice" );
 
-			device.AddControl( InputControlType.LeftStickX, "LeftStickX" );
-			device.AddControl( InputControlType.LeftStickY, "LeftStickY" );
-			device.AddControl( InputControlType.RightStickX, "RightStickX" );
-			device.AddControl( InputControlType.RightStickY, "RightStickY" );
+			device.AddControl( InputControlType.LeftStickLeft, "LeftStickLeft" );
+			device.AddControl( InputControlType.LeftStickRight, "LeftStickRight" );
+			device.AddControl( InputControlType.LeftStickUp, "LeftStickUp" );
+			device.AddControl( InputControlType.LeftStickDown, "LeftStickDown" );
+
+			device.AddControl( InputControlType.RightStickLeft, "RightStickLeft" );
+			device.AddControl( InputControlType.RightStickRight, "RightStickRight" );
+			device.AddControl( InputControlType.RightStickUp, "RightStickUp" );
+			device.AddControl( InputControlType.RightStickDown, "RightStickDown" );
+
 			device.AddControl( InputControlType.LeftTrigger, "LeftTrigger" );
 			device.AddControl( InputControlType.RightTrigger, "RightTrigger" );
+
 			device.AddControl( InputControlType.DPadUp, "DPadUp" );
 			device.AddControl( InputControlType.DPadDown, "DPadDown" );
 			device.AddControl( InputControlType.DPadLeft, "DPadLeft" );
 			device.AddControl( InputControlType.DPadRight, "DPadRight" );
+
 			device.AddControl( InputControlType.Action1, "Action1" );
 			device.AddControl( InputControlType.Action2, "Action2" );
 			device.AddControl( InputControlType.Action3, "Action3" );
 			device.AddControl( InputControlType.Action4, "Action4" );
+
 			device.AddControl( InputControlType.LeftBumper, "LeftBumper" );
 			device.AddControl( InputControlType.RightBumper, "RightBumper" );
+
 			device.AddControl( InputControlType.Menu, "Menu" );
 
 			for (var control = InputControlType.Button0; control <= InputControlType.Button19; control++)
@@ -177,6 +188,47 @@ namespace InControl
 			}
 
 			InputManager.AttachDevice( device );
+		}
+
+
+		void UpdateDevice( ulong updateTick, float deltaTime )
+		{
+			UpdateTouches( updateTick, deltaTime );
+			SubmitControlStates( updateTick, deltaTime );
+		}
+
+
+		void CommitDevice( ulong updateTick, float deltaTime )
+		{
+			CommitControlStates( updateTick, deltaTime );
+		}
+
+
+		void SubmitControlStates( ulong updateTick, float deltaTime )
+		{
+			var touchControlCount = touchControls.Length;
+			for (int i = 0; i < touchControlCount; i++)
+			{
+				var touchControl = touchControls[i];
+				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
+				{
+					touchControl.SubmitControlState( updateTick, deltaTime );
+				}
+			}
+		}
+
+
+		void CommitControlStates( ulong updateTick, float deltaTime )
+		{
+			var touchControlCount = touchControls.Length;
+			for (int i = 0; i < touchControlCount; i++)
+			{
+				var touchControl = touchControls[i];
+				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
+				{
+					touchControl.CommitControlState( updateTick, deltaTime );
+				}
+			}
 		}
 
 
@@ -189,8 +241,11 @@ namespace InControl
 			percentToWorld = Mathf.Min( viewSize.x, viewSize.y );
 			halfPercentToWorld = percentToWorld / 2.0f;
 
-			halfPixelToWorld = touchCamera.orthographicSize / screenSize.y;
-			pixelToWorld = halfPixelToWorld * 2.0f;
+			if (touchCamera != null)
+			{
+				halfPixelToWorld = touchCamera.orthographicSize / screenSize.y;
+				pixelToWorld = halfPixelToWorld * 2.0f;
+			}
 
 			if (touchControls != null)
 			{
@@ -198,100 +253,6 @@ namespace InControl
 				for (int i = 0; i < touchControlCount; i++)
 				{
 					touchControls[i].ConfigureControl();
-				}
-			}
-		}
-
-
-		/*
-		void OnDrawGizmos()
-		{
-			Gizmos.color = Color.white;
-			Gizmos.DrawLine( Vector3.zero, Vector3.one * PercentToWorld * -50.0f );
-
-			Gizmos.color = Color.red;
-			Gizmos.DrawLine( Vector3.zero, Vector3.one * PixelToWorld * 64.0f );
-
-			Utility.DrawRectGizmo( PercentToWorldRect( new Rect( 0, 0, 100, 100 ) ), Color.cyan );
-			Utility.DrawRectGizmo( PixelToWorldRect( new Rect( 0, 0, 64, 64 ) ), Color.magenta );
-		}
-		*/
-
-
-		public bool controlsEnabled
-		{
-			get
-			{
-				return _controlsEnabled;
-			}
-
-			set
-			{
-				if (_controlsEnabled != value)
-				{
-					var touchControlCount = touchControls.Length;
-					for (int i = 0; i < touchControlCount; i++)
-					{
-						touchControls[i].enabled = value;
-					}
-
-					_controlsEnabled = value;
-				}
-			}
-		}
-
-
-		void SendTouchBegan( Touch touch )
-		{
-			var touchControlCount = touchControls.Length;
-			for (int i = 0; i < touchControlCount; i++)
-			{
-				var touchControl = touchControls[i];
-				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
-				{
-					touchControl.TouchBegan( touch );
-				}
-			}
-		}
-
-
-		void SendTouchMoved( Touch touch )
-		{
-			var touchControlCount = touchControls.Length;
-			for (int i = 0; i < touchControlCount; i++)
-			{
-				var touchControl = touchControls[i];
-				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
-				{
-					touchControl.TouchMoved( touch );
-				}
-			}
-		}
-
-
-		void SendTouchEnded( Touch touch )
-		{
-			var touchControlCount = touchControls.Length;
-			for (int i = 0; i < touchControlCount; i++)
-			{
-				var touchControl = touchControls[i];
-				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
-				{
-					touchControl.TouchEnded( touch );
-				}
-			}
-		}
-
-
-		void SubmitControlStates( ulong updateTick, float deltaTime )
-		{
-			var touchControlCount = touchControls.Length;
-			for (int i = 0; i < touchControlCount; i++)
-			{
-				var touchControl = touchControls[i];
-				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
-				{
-					touchControl.SubmitControlState( updateTick );
 				}
 			}
 		}
@@ -341,7 +302,48 @@ namespace InControl
 			}
 
 			InvokeTouchEvents();
-			SubmitControlStates( updateTick, deltaTime );
+		}
+
+
+		void SendTouchBegan( Touch touch )
+		{
+			var touchControlCount = touchControls.Length;
+			for (int i = 0; i < touchControlCount; i++)
+			{
+				var touchControl = touchControls[i];
+				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
+				{
+					touchControl.TouchBegan( touch );
+				}
+			}
+		}
+
+
+		void SendTouchMoved( Touch touch )
+		{
+			var touchControlCount = touchControls.Length;
+			for (int i = 0; i < touchControlCount; i++)
+			{
+				var touchControl = touchControls[i];
+				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
+				{
+					touchControl.TouchMoved( touch );
+				}
+			}
+		}
+
+
+		void SendTouchEnded( Touch touch )
+		{
+			var touchControlCount = touchControls.Length;
+			for (int i = 0; i < touchControlCount; i++)
+			{
+				var touchControl = touchControls[i];
+				if (touchControl.enabled && touchControl.gameObject.activeInHierarchy)
+				{
+					touchControl.TouchEnded( touch );
+				}
+			}
 		}
 
 
@@ -421,6 +423,29 @@ namespace InControl
 			else
 			{
 				return Vector3.zero;
+			}
+		}
+
+
+		public bool controlsEnabled
+		{
+			get
+			{
+				return _controlsEnabled;
+			}
+
+			set
+			{
+				if (_controlsEnabled != value)
+				{
+					var touchControlCount = touchControls.Length;
+					for (int i = 0; i < touchControlCount; i++)
+					{
+						touchControls[i].enabled = value;
+					}
+
+					_controlsEnabled = value;
+				}
 			}
 		}
 

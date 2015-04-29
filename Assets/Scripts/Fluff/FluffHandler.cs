@@ -56,7 +56,7 @@ public class FluffHandler : MonoBehaviour {
 		{
 			if (naturalFluffCount <= 0)
 			{
-				character.fillScale = 0;
+				//character.fillScale = 0;
 			}
 			else
 			{
@@ -276,6 +276,11 @@ public class FluffHandler : MonoBehaviour {
 			newFluffInfo.attachee = new Attachee(gameObject, fluffStick, endPosition, true, true);
 			newFluffInfo.creator = character.bondAttachable;
 			fluffs.Add(newFluffInfo);
+
+			if (newFluffInfo.attachAudio != null && !newFluffInfo.attachAudio.isPlaying)
+			{
+				newFluffInfo.attachAudio.Play();
+			}
 		}
 	}
 
@@ -290,7 +295,7 @@ public class FluffHandler : MonoBehaviour {
 
 	public void AttachFluff(Fluff fluff)
 	{
-		if (fluff != null && (character.attractor.attracting || fluff.moving) && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
+		if (fluff != null && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
 		{
 			character.bondAttachable.AttemptBond(fluff.creator, fluff.transform.position);
 
@@ -394,5 +399,66 @@ public class FluffHandler : MonoBehaviour {
 		}
 
 		return new Vector3(0, 0, fluffAngle);
+	}
+
+	public void SendFluffToBond(Bond bondRequesting)
+	{
+		if (fluffs.Count <= 0 || bondRequesting == null)
+		{
+			return;
+		}
+
+		Rigidbody fluffPullTarget = null;
+		if (character.bondAttachable == bondRequesting.attachment1.attachee)
+		{
+			fluffPullTarget = bondRequesting.attachment1.fluffPullTarget;
+		}
+		else if (character.bondAttachable == bondRequesting.attachment2.attachee)
+		{
+			fluffPullTarget = bondRequesting.attachment2.fluffPullTarget;
+		}
+
+		if (fluffPullTarget == null)
+		{
+			return;
+		}
+
+		BondAttachable partner = bondRequesting.OtherPartner(character.bondAttachable);
+		if (partner == null)
+		{
+			return;
+		}
+
+		Fluff fluffToSend = fluffs[0];
+
+		character.fluffHandler.fluffs.Remove(fluffToSend);
+		if (OrphanFluffHolder.Instance != null)
+		{
+			fluffToSend .transform.parent = OrphanFluffHolder.Instance.transform;
+		}
+		else
+		{
+			fluffToSend .transform.parent = transform.parent;
+		}
+
+		SpringJoint springToBond = fluffToSend.gameObject.AddComponent<SpringJoint>();
+		springToBond.autoConfigureConnectedAnchor = false;
+		springToBond.anchor = Vector3.zero;
+		springToBond.connectedAnchor = Vector3.zero;
+		springToBond.connectedBody = fluffPullTarget;
+		
+		if (bondRequesting.stats.fluffPullForce >= 0)
+		{
+			springToBond.spring = bondRequesting.stats.fluffPullForce;
+		}
+
+		fluffToSend.soleAttractor = partner.gameObject;
+		fluffToSend.Pass(Vector3.zero, gameObject, 0);
+		bondRequesting.AddFluff(fluffToSend);
+	}
+
+	private IEnumerator DeflateFluffForBond(Bond bond)
+	{
+		yield return null;
 	}
 }

@@ -18,16 +18,15 @@ public class EtherRing : MonoBehaviour {
 			Globals.Instance.existingEther = this;
 		}
 
-		if (ringAtmosphere != null && (!Application.isEditor || forceAtmosphere))
+		/*if (ringAtmosphere != null && (!Application.isEditor || forceAtmosphere))
 		{
-			Debug.Log("hi");
 			ringAtmosphere.CreateShell();
 		}
 		for (int i = 0; i < expressivePlaceholders.Count; i++)
 		{
 			expressivePlaceholders[i].placeholder.SetActive(false);
 		}
-		expressiveClouds = new List<GameObject>();
+		expressiveClouds = new List<GameObject>();*/
 
 		// TODO REMOVE
 		//LevelHandler.Instance.LoadEtherRing(this, null);

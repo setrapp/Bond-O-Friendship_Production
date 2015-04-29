@@ -14,6 +14,7 @@ public class CharacterComponents : MonoBehaviour {
 	public TrailRenderer rightTrail;
 	public FluffHandler fluffHandler;
 	public FluffThrow fluffThrow;
+	public FluffStickRoot fluffStickRoot;
 	public FluffStick fluffStick;
 	public BondAttachable bondAttachable;
 	public SimpleMover mover;
@@ -56,6 +57,19 @@ public class CharacterComponents : MonoBehaviour {
 
 		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch;
 		bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
+
+		// Don't show mid-tail if a player bond is formed or cannot be formed.
+		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || Globals.Instance.playersBonded)
+		{
+			if (midTrail.gameObject.activeSelf)
+			{
+				midTrail.gameObject.SetActive(false);
+			}
+		}
+		else if (!midTrail.gameObject.activeSelf)
+		{
+			midTrail.gameObject.SetActive(true);
+		}
 	}
 
 	// Set color of indication flash and fluff spawn fill.
@@ -78,6 +92,10 @@ public class CharacterComponents : MonoBehaviour {
 			if (fluffThrow == null)
 			{
 				fluffThrow = GetComponent<FluffThrow>();
+			}
+			if (fluffStickRoot == null)
+			{
+				fluffStickRoot = GetComponent<FluffStickRoot>();
 			}
 			if (fluffStick == null)
 			{

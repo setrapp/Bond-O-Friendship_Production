@@ -6,14 +6,19 @@ namespace InControl
 {
 	public class UnityKeyCodeAxisSource : InputControlSource
 	{
-		KeyCode negativeKeyCode;
-		KeyCode positiveKeyCode;
+		public KeyCode NegativeKeyCode;
+		public KeyCode PositiveKeyCode;
+
+
+		public UnityKeyCodeAxisSource()
+		{
+		}
 
 
 		public UnityKeyCodeAxisSource( KeyCode negativeKeyCode, KeyCode positiveKeyCode )
 		{
-			this.negativeKeyCode = negativeKeyCode;
-			this.positiveKeyCode = positiveKeyCode;
+			NegativeKeyCode = negativeKeyCode;
+			PositiveKeyCode = positiveKeyCode;
 		}
 
 
@@ -21,12 +26,12 @@ namespace InControl
 		{
 			int axisValue = 0;
 			
-			if (Input.GetKey( negativeKeyCode ))
+			if (Input.GetKey( NegativeKeyCode ))
 			{
 				axisValue--;
 			}
 			
-			if (Input.GetKey( positiveKeyCode ))
+			if (Input.GetKey( PositiveKeyCode ))
 			{
 				axisValue++;
 			}

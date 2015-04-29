@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public class SimpleMover : MonoBehaviour {
 	public float maxSpeed;
+	private float currentSpeed;
+	private Vector3 currentDirection;
 	public Vector3 velocity;
 	private Vector3 unfixedVelocity;
 	public float acceleration;
@@ -20,7 +22,6 @@ public class SimpleMover : MonoBehaviour {
 	public Rigidbody body;
 	public float bodylessDampening = 1;
 	public bool slowDown = false;
-	public bool jumpToMaxSpeed = false;
 
 	void Awake()
 	{
@@ -31,13 +32,6 @@ public class SimpleMover : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-
-		if (jumpToMaxSpeed && unfixedVelocity.sqrMagnitude > 0)
-		{
-			//unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
-			//jumpToMaxSpeed = false;
-		}
-
 		if (unfixedVelocity != velocity)
 		{
 			velocity = unfixedVelocity;
@@ -74,7 +68,7 @@ public class SimpleMover : MonoBehaviour {
 		unfixedVelocity = velocity;
 
 		// Cut the speed to zero if going slow enough.
-		if (velocity.sqrMagnitude < Mathf.Pow(cutSpeedThreshold, 2)) {
+		if (velocity.sqrMagnitude <= Mathf.Pow(cutSpeedThreshold, 2)) {
 			velocity = Vector3.zero;
 			unfixedVelocity = Vector3.zero;
 			if (body != null && !body.isKinematic)
@@ -124,6 +118,24 @@ public class SimpleMover : MonoBehaviour {
 			unfixedVelocity = unfixedVelocity.normalized * maxSpeed;
 		}
 		unfixedVelocity *= Mathf.Max(externalSpeedMultiplier, 0);
+		currentSpeed = unfixedVelocity.magnitude;
+		currentDirection = unfixedVelocity / currentSpeed;
+	}
+
+	public void AccelerateWithoutHandling(Vector3 direction, bool alreadyNormalized = true)
+	{
+		if (!alreadyNormalized)
+		{
+			direction.Normalize();
+		}
+
+		Vector3 newVelocity = velocity + (direction * acceleration * Time.deltaTime);
+		if (newVelocity.sqrMagnitude > maxSpeed * maxSpeed)
+		{
+			newVelocity = newVelocity.normalized * maxSpeed;
+		}
+
+		unfixedVelocity = newVelocity * Mathf.Max(externalSpeedMultiplier, 0);
 	}
 
 	public void Move(Vector3 direction, float speed, bool clampSpeed = true)

@@ -9,61 +9,42 @@ namespace CustomProfileExample
 	// This custom profile is enabled by adding it to the Custom Profiles list
 	// on the InControlManager component, or you can attach it yourself like so:
 	// InputManager.AttachDevice( new UnityInputDevice( "KeyboardAndMouseProfile" ) );
-	// 
-	public class KeyboardAndMouseProfile : UnityInputDeviceProfile
+	//
+	public class KeyboardAndMouseProfile : CustomInputDeviceProfile
 	{
 		public KeyboardAndMouseProfile()
 		{
 			Name = "Keyboard/Mouse";
 			Meta = "A keyboard and mouse combination profile appropriate for FPS.";
 
-			// This profile only works on desktops.
-			SupportedPlatforms = new[]
-			{
-				"Windows",
-				"Mac",
-				"Linux"
-			};
-
-			Sensitivity = 1.0f;
-			LowerDeadZone = 0.0f;
-			UpperDeadZone = 1.0f;
-
-			ButtonMappings = new[]
-			{
-				new InputControlMapping
-				{
+			ButtonMappings = new[] {
+				new InputControlMapping {
 					Handle = "Fire - Mouse",
 					Target = InputControlType.Action1,
 					Source = MouseButton0
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
 					Handle = "Fire - Keyboard",
 					Target = InputControlType.Action1,
 					// KeyCodeButton fires when any of the provided KeyCode params are down.
 					Source = KeyCodeButton( KeyCode.F, KeyCode.Return )
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
 					Handle = "AltFire",
 					Target = InputControlType.Action2,
 					Source = MouseButton2
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
 					Handle = "Middle",
 					Target = InputControlType.Action3,
 					Source = MouseButton1
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
 					Handle = "Jump",
 					Target = InputControlType.Action4,
 					Source = KeyCodeButton( KeyCode.Space )
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
 					Handle = "Combo",
 					Target = InputControlType.LeftBumper,
 					// KeyCodeComboButton requires that all KeyCode params are down simultaneously.
@@ -71,55 +52,68 @@ namespace CustomProfileExample
 				},
 			};
 
-			AnalogMappings = new[]
-			{
-				new InputControlMapping
-				{
-					Handle = "Move X",
-					Target = InputControlType.LeftStickX,
-					// KeyCodeAxis splits the two KeyCodes over an axis. The first is negative, the second positive.
-					Source = KeyCodeAxis( KeyCode.A, KeyCode.D )
-				},
-				new InputControlMapping
-				{
-					Handle = "Move Y",
-					Target = InputControlType.LeftStickY,
-					// Notes that up is positive in Unity, therefore the order of KeyCodes is down, up.
-					Source = KeyCodeAxis( KeyCode.S, KeyCode.W )
+			AnalogMappings = new[] {
+				new InputControlMapping {
+					Handle = "Move Up",
+					Target = InputControlType.LeftStickUp,
+					Source = KeyCodeButton( KeyCode.W, KeyCode.UpArrow )
 				},
 				new InputControlMapping {
-					Handle = "Move X Alternate",
-					Target = InputControlType.LeftStickX,
-					Source = KeyCodeAxis( KeyCode.LeftArrow, KeyCode.RightArrow )
+					Handle = "Move Down",
+					Target = InputControlType.LeftStickDown,
+					Source = KeyCodeButton( KeyCode.S, KeyCode.DownArrow )
 				},
 				new InputControlMapping {
-					Handle = "Move Y Alternate",
-					Target = InputControlType.LeftStickY,
-					Source = KeyCodeAxis( KeyCode.DownArrow, KeyCode.UpArrow )
+					Handle = "Move Left",
+					Target = InputControlType.LeftStickUp,
+					Source = KeyCodeButton( KeyCode.A, KeyCode.LeftArrow )
 				},
-				new InputControlMapping
-				{
-					Handle = "Look X",
-					Target = InputControlType.RightStickX,
-					Source = MouseXAxis,
-					Raw    = true,
-					Scale  = 0.1f
+				new InputControlMapping {
+					Handle = "Move Right",
+					Target = InputControlType.LeftStickDown,
+					Source = KeyCodeButton( KeyCode.D, KeyCode.RightArrow )
 				},
-				new InputControlMapping
-				{
-					Handle = "Look Y",
-					Target = InputControlType.RightStickY,
+				new InputControlMapping {
+					Handle = "Look Up",
+					Target = InputControlType.RightStickUp,
 					Source = MouseYAxis,
-					Raw    = true,
-					Scale  = 0.1f
+					SourceRange = InputRange.ZeroToPositiveInfinity,
+					Raw = true,
+					Scale = 0.1f
 				},
-				new InputControlMapping
-				{
+				new InputControlMapping {
+					Handle = "Look Down",
+					Target = InputControlType.RightStickDown,
+					Source = MouseYAxis,
+					SourceRange = InputRange.ZeroToNegativeInfinity,
+					Raw = true,
+					Scale = 0.1f,
+					Invert = true
+				},
+				new InputControlMapping {
+					Handle = "Look Left",
+					Target = InputControlType.RightStickLeft,
+					Source = MouseXAxis,
+					SourceRange = InputRange.ZeroToNegativeInfinity,
+					Raw = true,
+					Scale = 0.1f,
+					Invert = true
+				},
+				new InputControlMapping {
+					Handle = "Look Right",
+					Target = InputControlType.RightStickRight,
+					Source = MouseXAxis,
+					SourceRange = InputRange.ZeroToPositiveInfinity,
+					Raw = true,
+					Scale = 0.1f
+				},
+				new InputControlMapping {
 					Handle = "Look Z",
 					Target = InputControlType.ScrollWheel,
 					Source = MouseScrollWheel,
-					Raw    = true,
-					Scale  = 0.1f
+					SourceRange = InputRange.Everything,
+					Raw = true,
+					Scale = 0.1f
 				}
 			};
 		}

@@ -18,9 +18,11 @@ namespace InControl
 
 			JoystickNames = new[] {
 				"Sony PLAYSTATION(R)3 Controller",
-				"SHENGHIC 2009/0708ZXW-V1Inc. PLAYSTATION(R)3Conteroller" // Works in editor, not in player?
+				"SHENGHIC 2009/0708ZXW-V1Inc. PLAYSTATION(R)3Conteroller", // Works in editor, not in player?
+				"SZMY-POWER CO.,LTD. GAMEPAD 3 TURBO",
+				"Gasia Co.,Ltd PS(R) Gamepad"
 			};
-				
+
 			ButtonMappings = new[] {
 				new InputControlMapping {
 					Handle = "Cross",
@@ -110,30 +112,18 @@ namespace InControl
 			};
 
 			AnalogMappings = new[] {
-				new InputControlMapping {
-					Handle = "Left Stick X",
-					Target = InputControlType.LeftStickX,
-					Source = Analog0
-				},
-				new InputControlMapping {
-					Handle = "Left Stick Y",
-					Target = InputControlType.LeftStickY,
-					Source = Analog1,
-					Invert = true
-				},
-				new InputControlMapping {
-					Handle = "Right Stick X",
-					Target = InputControlType.RightStickX,
-					Source = Analog2
-				},
-				new InputControlMapping {
-					Handle = "Right Stick Y",
-					Target = InputControlType.RightStickY,
-					Source = Analog3,
-					Invert = true
-				}
+				LeftStickLeftMapping( Analog0 ),
+				LeftStickRightMapping( Analog0 ),
+				LeftStickUpMapping( Analog1 ),
+				LeftStickDownMapping( Analog1 ),
+
+				RightStickLeftMapping( Analog2 ),
+				RightStickRightMapping( Analog2 ),
+				RightStickUpMapping( Analog3 ),
+				RightStickDownMapping( Analog3 )
 			};
 		}
 	}
+	// @endcond
 }
 

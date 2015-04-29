@@ -11,13 +11,24 @@ public class PlayersEstablish : MonoBehaviour {
 	public bool placeOnAwake = true;
 	public Transform defaultPlayerParent;
 
+
+    private bool placed = false;
 	void Awake()
 	{
 		if (placeOnAwake)
 		{
 			PlacePlayers();
+            placed = true;
 		}
 	}
+
+    void Update()
+    {
+        if(!placed && CameraSplitter.Instance.movePlayers)
+        {
+            PlacePlayers();
+       }
+    }
 
 	public void PlacePlayers()
 	{
@@ -33,15 +44,18 @@ public class PlayersEstablish : MonoBehaviour {
 			for (int i = 0; i < characters.Length; i++)
 			{
 				PlayerInput player = characters[i].GetComponent<PlayerInput>();
-				if (player != null)
+				if (player != Globals.Instance.player1 && player != Globals.Instance.player2)
 				{
-					if (player.playerNumber == PlayerInput.Player.Player1)
+					if (player != null)
 					{
-						player1 = player;
-					}
-					else if (player.playerNumber == PlayerInput.Player.Player2)
-					{
-						player2 = player;
+						if (player.playerNumber == PlayerInput.Player.Player1)
+						{
+							player1 = player;
+						}
+						else if (player.playerNumber == PlayerInput.Player.Player2)
+						{
+							player2 = player;
+						}
 					}
 				}
 			}
@@ -66,7 +80,7 @@ public class PlayersEstablish : MonoBehaviour {
 				{
 					Destroy(Globals.Instance.player1.gameObject);
 					Globals.Instance.player1 = player1;
-					player1.canvasPaused = Globals.Instance.canvasPaused;
+					//player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
 
@@ -96,7 +110,7 @@ public class PlayersEstablish : MonoBehaviour {
 				{
 					Destroy(Globals.Instance.player2.gameObject);
 					Globals.Instance.player2 = player2;
-					player2.canvasPaused = Globals.Instance.canvasPaused;
+					//player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
 
@@ -106,14 +120,20 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 
-			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
+			//if (CameraSplitter.Instance != null && (!CameraSplitter.Instance.player1CameraSystem.gameObject.activeSelf || !CameraSplitter.Instance.player2CameraSystem.gameObject.activeSelf))
+			//{
+             //   CameraSplitter.Instance.followPlayers = true;
+			//	CameraSplitter.Instance.JumpToPlayers();                
+			//}
+
+            if (Globals.Instance.initialPlayerHolder != null && (player1Holder.gameObject == Globals.Instance.initialPlayerHolder || player2Holder.gameObject == Globals.Instance.initialPlayerHolder))
 			{
 				// Jump camera to players.
 				if (CameraSplitter.Instance != null)
-				{
-					CameraSplitter.Instance.JumpToPlayers();
+				{                    
+					CameraSplitter.Instance.JumpToPlayers();                    
 				}
-
+                
 				Destroy(Globals.Instance.initialPlayerHolder);
 			}
 			

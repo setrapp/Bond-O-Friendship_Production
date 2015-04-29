@@ -7,7 +7,6 @@ public class WalkPad : WaitPad {
 	public GameObject endPoint;
 	public Color startColor;
 	public Color endColor;
-	public float portionComplete = 0;
 
 	override protected void Start()
 	{
