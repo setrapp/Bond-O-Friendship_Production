@@ -22,6 +22,7 @@ public class CameraSplitter : MonoBehaviour {
 	public bool split = false;
 	private bool wasSplit = false;
 
+    private bool onStart = true;
 
     public float splitterDistance = .5f;
     public float splitterDistanceInWorldSpace = 0.0f;
@@ -49,7 +50,7 @@ public class CameraSplitter : MonoBehaviour {
     public bool movePlayers = false;
 
     private Vector3 startPos = new Vector3(28.1f, 22.1f, -70f);
-    private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -300f);
+    private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -500f);
 
     public float duration = 5f;
     public float t = 0f;
@@ -73,7 +74,7 @@ public class CameraSplitter : MonoBehaviour {
 			splitCamera2 = player2CameraSystem.GetComponentInChildren<Camera>();
 		}
 		wasSplit = split;
-		//CheckSplit(true);
+		CheckSplit(true);
 	}
 
 	void Update()
@@ -130,6 +131,12 @@ public class CameraSplitter : MonoBehaviour {
         SetSplitDistanceInWorldSpace();
         playerDistance = Vector3.Distance(player1.transform.position, player2.transform.position);
         split = playerDistance > splitterDistanceInWorldSpace;
+
+        if(onStart)
+        {
+            split = false;
+            onStart = false;
+        }
 
         //Toggle split screen on and off
 		if (split != wasSplit || forceCheck)
@@ -191,6 +198,7 @@ public class CameraSplitter : MonoBehaviour {
 		toggle = true;
 
 		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+        Globals.Instance.inMainMenu = false;
 	}
 
     public void ZoomOut()
