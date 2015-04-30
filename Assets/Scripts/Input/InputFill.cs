@@ -71,7 +71,7 @@ public class InputFill : MonoBehaviour {
     private Vector3 filledInRight = new Vector3(2.9f, 3f, 1f);
     private Vector3 filledKey = new Vector3(2.45f, 1.8f, 1f);
     private Vector3 emptyKey = new Vector3(0f, 1.8f, 1f);
-    private Vector3 emptyController = new Vector3(0f, 3f, 1f);
+    public Vector3 emptyController = new Vector3(0f, 3f, 1f);
     
 	// Use this for initialization
 	void Start () 
