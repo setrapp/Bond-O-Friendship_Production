@@ -28,7 +28,7 @@ public class ToggleControllers : MonoBehaviour {
 
     private bool moving = false;
 
-    private bool rightControllerActive = false;
+//    private bool rightControllerActive = false;
 
 
 
