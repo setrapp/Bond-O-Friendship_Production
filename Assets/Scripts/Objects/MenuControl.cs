@@ -199,24 +199,28 @@ public class MenuControl : MonoBehaviour {
     {
         if (startMenu.GetComponent<CanvasGroup>().alpha != 0.0f)
         {
-            t -= Time.deltaTime / duration;
-            t = Mathf.Clamp(t, 0.0f, 1.0f);
-            f = 1.0f - t;
+            t = Mathf.Clamp(t - Time.deltaTime/1.0f, 0.0f, 1.0f);
             startMenu.GetComponent<CanvasGroup>().alpha = t;
             //levelCover.renderer.material.color = Color.Lerp(fadeColor, startColor, t);
             //levelCover2.renderer.material.color = Color.Lerp(fadeColor, startColor, t);
-            for (int i = 0; i < inputSelectRenderers.Length; i++ )
-            {
-                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
-                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
-            }
+            
         }
         else
         {
-            startMenu.SetActive(false);
-            //levelCover.SetActive(false);
-           // levelCover2.SetActive(false);
-            t = 1.0f;
+            if (f != 1)
+            {
+                f = Mathf.Clamp(f + Time.deltaTime / 3.0f, 0.0f, 1.0f);
+                for (int i = 0; i < inputSelectRenderers.Length; i++)
+                {
+                    if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                        inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
+                }
+            }
+            else
+            {
+                startMenu.SetActive(false);
+                t = 1.0f;
+            }
         }
     }
 
@@ -261,14 +265,24 @@ public class MenuControl : MonoBehaviour {
             if (t != 0)
             {
                 t = Mathf.Clamp(t - Time.deltaTime / 2.0f, 0.0f, 1.0f);
-                float f = 1 - t;
+                //float f = 1 - t;
                 obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
-                begin.GetComponent<CanvasGroup>().alpha = f;
+               // begin.GetComponent<CanvasGroup>().alpha = f;
             }
             else
             {
-                t = 1;
-                obscureMenuPanel.SetActive(false);
+
+                if (f != 1)
+                {
+                    f = Mathf.Clamp(f + Time.deltaTime / 3.0f, 0.0f, 1.0f);
+                    begin.GetComponent<CanvasGroup>().alpha = f;
+                }
+                else
+                {
+                    t = 1;
+                    f = 0;
+                    obscureMenuPanel.SetActive(false);
+                }
                 
             }
         
