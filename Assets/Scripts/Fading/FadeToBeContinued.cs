@@ -8,13 +8,13 @@ public class FadeToBeContinued : MonoBehaviour {
 	public float waitBeforeFade = 0;
 	public float fadeSpeed = 0.01f;
 	public GameObject attachedLevel = null;
-	public string endingLoadScene = "Menu";
+	//public string endingLoadScene = "Menu";
 	public bool destroyOnLoad = true;
 
-	public bool forceFromMenu = false;
-	public GameObject messagePrefab;
-	public string menuSceneName = "Menu";
-	public string targetSceneOverride = null;
+	//public bool forceFromMenu = false;
+	//public GameObject messagePrefab;
+	//public string menuSceneName = "Menu";
+	//public string targetSceneOverride = null;
 
 	void Update()
 	{
@@ -70,7 +70,7 @@ public class FadeToBeContinued : MonoBehaviour {
 		//Application.LoadLevel(endingLoadScene);
 
 		/*TODO make this work without going back to menu*/
-		if (forceFromMenu)
+		/*if (forceFromMenu)
 		{
 			GameObject levelLoadObject = (GameObject)Instantiate(messagePrefab);
 			levelLoadObject.name = "Level Load Message Insant";
@@ -87,11 +87,11 @@ public class FadeToBeContinued : MonoBehaviour {
 					levelLoadMessage.message = targetSceneOverride;
 				}
 			}
-			Application.LoadLevel(menuSceneName);
+            Globals.Instance.ResetOrExit(false);
 		}
 		else
-		{
-			GameObject levelLoadObject = (GameObject)Instantiate(messagePrefab);
+		{*/
+			/*GameObject levelLoadObject = (GameObject)Instantiate(messagePrefab);
 			levelLoadObject.name = "Level Load Message";
 			TranslevelMessage levelLoadMessage = levelLoadObject.GetComponent<TranslevelMessage>();
 			if (levelLoadMessage != null)
@@ -105,9 +105,10 @@ public class FadeToBeContinued : MonoBehaviour {
 				{
 					levelLoadMessage.message = targetSceneOverride;
 				}
-			}
-			Application.LoadLevel(menuSceneName);
-		}
+			}*/
+            
+            Globals.Instance.ResetOrExit(false);
+		//}
 
 
 		if (destroyOnLoad)
