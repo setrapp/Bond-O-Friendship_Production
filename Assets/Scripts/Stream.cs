@@ -81,7 +81,7 @@ public class Stream : MonoBehaviour {
 
 				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
 				Vector3 fromBedCenter = transform.position - streamBedCenter;
-				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2;
+				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2 - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
 				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
 				{
 					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
@@ -95,13 +95,13 @@ public class Stream : MonoBehaviour {
 
 				if (Vector3.Dot(oldToTarget, toTarget) < 0)
 				{
-					Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
-					Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
+					//Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
+					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
 					//if (Vector3.Dot(toBank1, toBank2) < 0)
-					{
+					//{
 						SeekNextChannel();
 						toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-					}
+					//}
 				}
 
 				
@@ -160,7 +160,7 @@ public class Stream : MonoBehaviour {
 
 	private void SeekNextChannel()
 	{
-		if (targetChannel == null)
+		if (targetChannel == null || targetChannel.parentSeries == null)
 		{
 			return;
 		}

@@ -82,13 +82,13 @@ public class StreamChannelMaker : MonoBehaviour {
 				}
 
 				newChannel.bed.transform.localScale = new Vector3(bedWidth, toNextDist, newChannel.bed.transform.localScale.z);
-				newChannel.bank1.transform.localScale = new Vector3(bankWidth, toNextDist, newChannel.bank1.transform.localScale.z);
-				newChannel.bank2.transform.localScale = new Vector3(bankWidth, toNextDist, newChannel.bank2.transform.localScale.z);
+				//newChannel.bank1.transform.localScale = new Vector3(bankWidth, toNextDist, newChannel.bank1.transform.localScale.z);
+				//newChannel.bank2.transform.localScale = new Vector3(bankWidth, toNextDist, newChannel.bank2.transform.localScale.z);
 				
 				float bankOffset = (bedWidth / 2) + (bankWidth / 2);
 				newChannel.bed.transform.localPosition = new Vector3(0, newChannel.bed.transform.localPosition.y, toNextDist / 2);
-				newChannel.bank1.transform.localPosition = new Vector3(bankOffset, newChannel.bank1.transform.localPosition.y, toNextDist / 2);
-				newChannel.bank2.transform.localPosition = new Vector3(-bankOffset, newChannel.bank1.transform.localPosition.y, toNextDist / 2);
+				//newChannel.bank1.transform.localPosition = new Vector3(bankOffset, newChannel.bank1.transform.localPosition.y, toNextDist / 2);
+				//newChannel.bank2.transform.localPosition = new Vector3(-bankOffset, newChannel.bank1.transform.localPosition.y, toNextDist / 2);
 					
 				newChannel.transform.LookAt(nextVertex, Vector3.forward);
 
