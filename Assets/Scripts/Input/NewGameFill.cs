@@ -19,8 +19,8 @@ public class NewGameFill : MonoBehaviour {
     private Vector3 emptyFillp1 = new Vector3(0f, .99f, 1f);
     private Vector3 emptyFillp2 = new Vector3(0f, .99f, 1f);
 
-    private Vector3 fullFillp1 = new Vector3(.59f, .99f, 1f);
-    private Vector3 fullFillp2 = new Vector3(.4f, .99f, 1f);
+    private Vector3 fullFillp1 = new Vector3(.4f, .99f, 1f);
+    private Vector3 fullFillp2 = new Vector3(.59f, .99f, 1f);
 	// Use this for initialization
 	void Start () {
 	
