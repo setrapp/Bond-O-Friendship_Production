@@ -109,7 +109,8 @@ public class Stream : MonoBehaviour {
 			}
 			else
 			{
-				Destroy(gameObject);
+				PrepareForDestroy();
+				//Destroy(gameObject);
 				/*if (mover.velocity.sqrMagnitude > 0)
 				{
 					mover.Stop();
@@ -127,22 +128,7 @@ public class Stream : MonoBehaviour {
 		}
 		else
 		{
-			if (mover.velocity.sqrMagnitude > 0)
-			{
-				mover.Stop();
-			}
-
-			if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
-			{
-				blockingTime += Time.deltaTime;
-				if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
-				{
-					spawner.StopTrackingStream(this);
-					spawner = null;
-					// TODO make the streams fade before destroying, or just remove their ability to act.
-					Destroy(gameObject);
-				}
-			}
+			PrepareForDestroy();
 			
 		}
 
@@ -156,6 +142,26 @@ public class Stream : MonoBehaviour {
 	{
 		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 		
+	}
+
+	private void PrepareForDestroy()
+	{
+		if (mover.velocity.sqrMagnitude > 0)
+		{
+			mover.Stop();
+		}
+
+		if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
+		{
+			blockingTime += Time.deltaTime;
+			if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
+			{
+				spawner.StopTrackingStream(this);
+				spawner = null;
+				// TODO make the streams fade before destroying, or just remove their ability to act.
+				Destroy(gameObject);
+			}
+		}
 	}
 
 	private void SeekNextChannel()
