@@ -27,7 +27,7 @@ public class PlayersEstablish : MonoBehaviour {
         if(!placed && CameraSplitter.Instance.movePlayers)
         {
             PlacePlayers();
-            placed = true;
+			placed = true;
        }
     }
 

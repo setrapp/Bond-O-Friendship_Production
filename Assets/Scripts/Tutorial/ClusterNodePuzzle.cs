@@ -41,14 +41,14 @@ public class ClusterNodePuzzle : MonoBehaviour {
         {
             progress = Mathf.Max((float)litCount / nodes.Count, progress);
         }
-        litCount = 0;
+        
 
 		if(streamBlocker != null && streamBlocker2 != null)
 		{
 			streamBlocker.transform.localScale = new Vector3(streamBlocker.transform.localScale.x, Mathf.Min(startingSize - (startingSize / nodes.Count) * litCount, streamBlocker.transform.localScale.y), streamBlocker.transform.localScale.z);
 			streamBlocker2.transform.localScale = new Vector3(streamBlocker2.transform.localScale.x, Mathf.Min(startingSize - (startingSize / nodes.Count) * litCount, streamBlocker2.transform.localScale.y), streamBlocker2.transform.localScale.z);
-			
 		}
+		litCount = 0;
 
 		bool allLit = true;
 		for (int i = 0; i < nodes.Count && allLit; i++)

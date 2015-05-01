@@ -9,6 +9,8 @@ public class SpinPad : WaitPad {
 	public Membrane membrane2;
 	public SpinPadSide wallEnd1;
 	public SpinPadSide wallEnd2;
+	public StreamMembraneReaction membraneReaction1;
+	public StreamMembraneReaction membraneReaction2;
 	public Collider wallEnd1Collider;
 	public Collider wallEnd2Collider;
 	public GameObject rotatee;
@@ -120,6 +122,27 @@ public class SpinPad : WaitPad {
 			{
 				activated = true;
 				SetLineColors();
+
+				if (membrane1 != null)
+				{
+					membrane1.BreakBond();
+				}
+				if (membrane2 != null)
+				{
+					membrane2.BreakBond();
+				}
+
+				if (membraneReaction1 != null)
+				{
+					membraneReaction1.reactionRate = 0;
+					membraneReaction1.reactable = false;
+				}
+
+				if (membraneReaction2 != null)
+				{
+					membraneReaction2.reactionRate = 0;
+					membraneReaction2.reactable = false;
+				}
 			}
 		}
 

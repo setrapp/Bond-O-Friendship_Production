@@ -63,6 +63,7 @@ GameObject:
   - 4: {fileID: 433444}
   - 33: {fileID: 3333446}
   - 23: {fileID: 2333446}
+  - 114: {fileID: 11465114}
   m_Layer: 0
   m_Name: Texture
   m_TagString: Untagged
@@ -122,8 +123,8 @@ GameObject:
   - 114: {fileID: 11433446}
   - 114: {fileID: 11433450}
   - 114: {fileID: 11482144}
-  - 114: {fileID: 11444998}
   - 114: {fileID: 11432122}
+  - 114: {fileID: 11444998}
   m_Layer: 16
   m_Name: Pushable Stream Blocker
   m_TagString: Untagged
@@ -821,8 +822,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133446}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 3.36999989}
-  m_LocalScale: {x: 7, y: 2.28046942, z: 7.00000668}
+  m_LocalPosition: {x: 0, y: 0, z: 8}
+  m_LocalScale: {x: 7, y: 5, z: 7.94999981}
   m_Children: []
   m_Father: {fileID: 433450}
   m_RootOrder: 2
@@ -833,7 +834,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133448}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 4.55999994}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
   m_LocalScale: {x: 10, y: 2.28046942, z: 10.0000095}
   m_Children: []
   m_Father: {fileID: 433450}
@@ -1798,9 +1799,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -1952,7 +1953,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: 0
-  decayDelay: 5
+  decayDelay: 0
   reactable: 1
   superiors: []
   streamsTouched: 0
@@ -1978,8 +1979,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  decayRate: -1
-  decayDelay: 5
+  decayRate: 0
+  decayDelay: 0
   reactable: 1
   superiors: []
   streamsTouched: 0
@@ -1999,8 +2000,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  decayRate: -1
-  decayDelay: 5
+  decayRate: 0
+  decayDelay: 0
   reactable: 1
   superiors: []
   streamsTouched: 0
@@ -2023,8 +2024,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  decayRate: -1
-  decayDelay: 5
+  decayRate: 0
+  decayDelay: 0
   reactable: 1
   superiors: []
   streamsTouched: 0
@@ -2046,15 +2047,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reactionProgress: 0
   reactionRate: 1
-  decayRate: -1
-  decayDelay: 5
+  decayRate: 0
+  decayDelay: 0
   reactable: 1
   superiors: []
   streamsTouched: 0
   scalees:
   - scalee: {fileID: 422032}
-    unscaled: {x: 1, y: 1, z: 1}
-    scaled: {x: 3, y: 1, z: 3}
+    unscaled: {x: 1, y: 3, z: 1}
+    scaled: {x: 3, y: 3, z: 3}
   - scalee: {fileID: 433448}
     unscaled: {x: 8, y: 1, z: 8}
     scaled: {x: 10, y: 1, z: 10}
@@ -2104,7 +2105,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   stuckFluff: {fileID: 0}
-  stickingCollider: {fileID: 13644990}
   stickOffset: {x: 0, y: -.5, z: 0}
   stickDirection: {x: 0, y: -1, z: 0}
 --- !u!114 &11444998
@@ -2154,6 +2154,21 @@ MonoBehaviour:
   dropParent: 0
   spawnFakeMoving: 0
   sproutFluff: 1
+--- !u!114 &11465114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2333444}
+  renderBase: 3000
+  renderOffset: 141
+  forceRendererOn: 0
 --- !u!114 &11477622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2189,7 +2204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   stuckFluff: {fileID: 0}
-  stickingCollider: {fileID: 13677622}
   stickOffset: {x: 0, y: -.5, z: 0}
   stickDirection: {x: 0, y: -1, z: 0}
 --- !u!114 &11477626
@@ -2235,7 +2249,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   stuckFluff: {fileID: 0}
-  stickingCollider: {fileID: 13677624}
   stickOffset: {x: 0, y: -.5, z: 0}
   stickDirection: {x: 0, y: -1, z: 0}
 --- !u!114 &11477632
@@ -2295,7 +2308,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   stuckFluff: {fileID: 0}
-  stickingCollider: {fileID: 13677626}
   stickOffset: {x: 0, y: -.5, z: 0}
   stickDirection: {x: 0, y: -1, z: 0}
 --- !u!114 &11477638
@@ -2327,7 +2339,7 @@ MonoBehaviour:
   reactionProgress: 0
   reactionRate: 1
   decayRate: 0
-  decayDelay: 5
+  decayDelay: 0
   reactable: 1
   superiors:
   - {fileID: 11433444}

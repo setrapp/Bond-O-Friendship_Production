@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class StreamChannelSeries : MonoBehaviour {
 	public bool renderBeds = true;
-	public bool renderBanks = true;
+	//public bool renderBanks = true;
 	public bool maskBeds = true;
 	public Material overlayMaterial;
 	public Material maskMaterial;
@@ -56,7 +56,7 @@ public class StreamChannelSeries : MonoBehaviour {
 						bedMask.transform.parent = channels[i].bed.transform;
 					}
 				}
-				if (channels[i].bank1 != null)
+				/*if (channels[i].bank1 != null)
 				{
 					Renderer bank1Renderer = channels[i].bank1.GetComponent<Renderer>();
 					if (bank1Renderer != null)
@@ -71,7 +71,7 @@ public class StreamChannelSeries : MonoBehaviour {
 					{
 						bank2Renderer.enabled = renderBanks;
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -80,10 +80,14 @@ public class StreamChannelSeries : MonoBehaviour {
 	{
 		List<StreamChannel> nextChannelList = new List<StreamChannel>();
 
+		if (currentChannel == null)
+		{
+			return null;
+		}
 
 		for (int i = 0; i < streamChanges.Count; i++)
 		{
-			if (streamChanges[i].preChangeChannel == currentChannel && streamChanges[i].nextSeries.channels.Count > 0)
+			if (streamChanges[i].preChangeChannel == currentChannel && streamChanges[i].nextSeries != null && streamChanges[i].nextSeries.channels.Count > 0)
 			{
 				if (streamChanges[i].postChangeChannel == null || streamChanges[i].postChangeChannel.parentSeries != streamChanges[i].nextSeries)
 				{
