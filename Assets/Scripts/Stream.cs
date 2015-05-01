@@ -110,6 +110,7 @@ public class Stream : MonoBehaviour {
 			else
 			{
 				PrepareForDestroy();
+				SeekNextChannel();
 				//Destroy(gameObject);
 				/*if (mover.velocity.sqrMagnitude > 0)
 				{
@@ -129,7 +130,6 @@ public class Stream : MonoBehaviour {
 		else
 		{
 			PrepareForDestroy();
-			
 		}
 
 		if (!Application.isEditor || drawEditorStreamLine)
