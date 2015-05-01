@@ -209,7 +209,7 @@ public class MenuControl : MonoBehaviour {
         {
             if (f != 1)
             {
-                f = Mathf.Clamp(f + Time.deltaTime / 3.0f, 0.0f, 1.0f);
+                f = Mathf.Clamp(f + Time.deltaTime / 2.0f, 0.0f, 1.0f);
                 for (int i = 0; i < inputSelectRenderers.Length; i++)
                 {
                     if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
@@ -274,7 +274,7 @@ public class MenuControl : MonoBehaviour {
 
                 if (f != 1)
                 {
-                    f = Mathf.Clamp(f + Time.deltaTime / 3.0f, 0.0f, 1.0f);
+                    f = Mathf.Clamp(f + Time.deltaTime / 1.5f, 0.0f, 1.0f);
                     begin.GetComponent<CanvasGroup>().alpha = f;
                 }
                 else
