@@ -268,8 +268,8 @@ public class FluffHandler : MonoBehaviour {
 				newFluffInfo.bulb.material = useMaterial;
 			}
 
-			if (newFluffInfo.stalk != null)
-				newFluffInfo.stalk.material = useMaterial;
+			//if (newFluffInfo.stalk != null)
+			//	newFluffInfo.stalk.material = useMaterial;
 
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
