@@ -37,6 +37,10 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 
     private Vector3 childStartSize;
     private Vector3 childEndSize;
+
+	public AllowPlayerBond bondAllow;
+	public AllowPlayerBond bondDisallow;
+
 	// Use this for initialization
 	override protected void Start () 
     {
@@ -98,6 +102,15 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             {
                 atTarget = false;
             }
+
+			if (atTarget && otherPlayerNode.atTarget)
+			{
+				bondAllow.AllowBond();
+			}
+			else
+			{
+				bondDisallow.AllowBond();
+			}
         }
 	}
 
@@ -108,17 +121,18 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 
     void OnTriggerStay(Collider collide)
     {
-        /*if (collide.gameObject.name == "Player 1" && isPlayer1)
-        {
-            moving = true;
-        }
-        if (collide.gameObject.name == "Player 2" && !isPlayer1)
-        {
-            moving = true;
-        }*/
-        if (atTarget && otherPlayerNode.atTarget)
+        if (Globals.Instance.playersBonded)
         {
             CheckCollision(collide);
+			if (bondAllow != null)
+			{
+				Destroy(bondAllow.gameObject);
+			}
+			if (bondDisallow != null)
+			{
+				Destroy(bondDisallow.gameObject);
+			}
+			
         }
     }
     override protected void OnCollisionEnter(Collision col)
