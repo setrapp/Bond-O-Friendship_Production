@@ -107,7 +107,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 			{
 				bondAllow.AllowBond();
 			}
-			else
+			else if (!Globals.Instance.playersBonded)
 			{
 				bondDisallow.AllowBond();
 			}
@@ -124,6 +124,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
         if (Globals.Instance.playersBonded)
         {
             CheckCollision(collide);
+			bondAllow.AllowBond();
 			if (bondAllow != null)
 			{
 				Destroy(bondAllow.gameObject);
