@@ -933,9 +933,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   perspectiveCamera: 0
   perspectiveFOV: 25
+  startingPerspectiveFOV: 0
+  orthographicSize: 20
+  startingOrthographicSize: 0
+  zoomIntroInEditor: 1
+  allowInput: 1
   audioVolume: -1
   mute: 0
   bgm: {fileID: 8225506}
+  defaultPulsePrefab: {fileID: 11400002, guid: fe97050609d727844b9f3ec597223262, type: 2}
+  defaultPulseStats:
+    scaleRate: 10
+    lifeTime: 2
+    alpha: 1
+    alphaFade: .5
+    smallRing: 0
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -950,6 +962,7 @@ MonoBehaviour:
   fluffLeaveDistance: 1
   fluffLeaveAttractWait: .5
   fluffLeaveEmbed: .5
+  inMainMenu: 1
   leftControllerIndex: 0
   rightContollerIndex: 0
   leftControllerPreviousIndex: -2
@@ -1055,10 +1068,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   splittable: 1
+  followPlayers: 1
   split: 0
-  splitterDistance: .75
+  splitterDistance: .899999976
   splitterDistanceInWorldSpace: 0
-  splitLineFadeDistance: .5
+  splitLineFadeDistance: .699999988
   splitLineFadeDistanceInWorldSpace: 0
   player1CameraSystem: {fileID: 11499964}
   player2CameraSystem: {fileID: 11499978}
@@ -1068,6 +1082,12 @@ MonoBehaviour:
   player2: {fileID: 0}
   audioListener: {fileID: 8199990}
   playerDistance: 0
+  zoom: 0
+  zoomIn: 0
+  movePlayers: 0
+  duration: 5
+  t: 0
+  startZoomComplete: 0
 --- !u!114 &11499970
 MonoBehaviour:
   m_ObjectHideFlags: 1

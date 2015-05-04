@@ -104,6 +104,7 @@ GameObject:
   - 114: {fileID: 11400022}
   - 114: {fileID: 11400024}
   - 114: {fileID: 11405788}
+  - 114: {fileID: 11488824}
   m_Layer: 13
   m_Name: Player
   m_TagString: Character
@@ -348,7 +349,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: -.707106829}
-  m_LocalPosition: {x: -6.76999998, y: 0, z: 0}
+  m_LocalPosition: {x: -9.69999981, y: 6.9000001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 462210}
@@ -599,7 +600,7 @@ TrailRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Time: .25
+  m_Time: .5
   m_StartWidth: .25
   m_EndWidth: 0
   m_Colors:
@@ -641,7 +642,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Time: .300000012
-  m_StartWidth: .5
+  m_StartWidth: .300000012
   m_EndWidth: 0
   m_Colors:
     m_Color[0]:
@@ -681,7 +682,7 @@ TrailRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Time: .25
+  m_Time: .5
   m_StartWidth: .25
   m_EndWidth: 0
   m_Colors:
@@ -764,8 +765,8 @@ MonoBehaviour:
     handling: 20
     bodyDrag: 0
     bodylessDampening: 0
-    sideTrailTime: 2
-    midTrailTime: 4
+    sideTrailTime: 4
+    midTrailTime: 2
     attractRange: 5
     maxAbsorbReact: 1
   perBondFloatBonus:
@@ -875,7 +876,7 @@ MonoBehaviour:
   fluffMaterial: {fileID: 2100000, guid: f047127f997cb174c8a338fddf5b2741, type: 2}
   spawnTime: 1
   startingFluff: 0
-  maxFluffs: 32
+  maxFluffs: 16
   spawnedFluff: {fileID: 0}
   sproutSpeed: .00999999978
   maxAlterAngle: 60
@@ -959,7 +960,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateColors: 0
   character: {fileID: 11400004}
-  attachmentColor: {r: .276654422, g: .40457654, b: .875, a: 1}
+  baseColor: {r: .278431386, g: .403921574, b: .870588243, a: 1}
+  attachmentColor: {r: .542387664, g: .227724895, b: .79411763, a: 1}
   headMaterial: {fileID: 2100000, guid: 3104c057573cc4c48a6a0388c3b5c4d2, type: 2}
   fillMaterial: {fileID: 2100000, guid: 7fa81883306f0864993706a671e8bf7a, type: 2}
   trailMaterial: {fileID: 2100000, guid: 6431f2d0464bbef4b9f6a05709536afb, type: 2}
@@ -1060,7 +1062,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 0}
   stuckFluff: {fileID: 0}
-  stickingCollider: {fileID: 0}
   stickOffset: {x: 0, y: 0, z: 0}
   stickDirection: {x: 0, y: 0, z: 1}
 --- !u!114 &11443356
@@ -1080,7 +1081,7 @@ MonoBehaviour:
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
-    maxDistance: 35
+    maxDistance: 8
     relativeWarningDistance: .5
     endsWidth: .0199999996
     midWidth: .5
@@ -1088,12 +1089,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
-    relativeRequestDistance: -1
+    relativeRequestDistance: .699999988
     fluffRequestDelay: 0
-    fluffPullForce: .5
+    fluffPullForce: 1
     fluffPullLinks: 10
     maxFluffCapacity: 16
-    extensionPerFluff: 5
+    extensionPerFluff: 2
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -1102,6 +1103,20 @@ MonoBehaviour:
     sparseDetailDistance: -1
     sparseDetailFactor: -1
     sparseDetailLinksCheck: 1
+--- !u!114 &11488824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c8373e35e31a54393d8d4eadd83f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPainting: 0
+  paintPrefab: {fileID: 100000, guid: a7cd400ff8da0664a9d2cf24f485d85b, type: 2}
+  referenceColor: {r: .618560016, g: 0, b: .838235259, a: 1}
 --- !u!114 &11496068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1128,7 +1143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 9600002}
   renderBase: 3000
-  renderOffset: 100
+  renderOffset: 300
   forceRendererOn: 0
 --- !u!114 &11496332
 MonoBehaviour:
@@ -1143,7 +1158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 9600000}
   renderBase: 3000
-  renderOffset: 100
+  renderOffset: 300
   forceRendererOn: 0
 --- !u!114 &11496334
 MonoBehaviour:
@@ -1158,7 +1173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 9600004}
   renderBase: 3000
-  renderOffset: 100
+  renderOffset: 300
   forceRendererOn: 0
 --- !u!114 &11496336
 MonoBehaviour:
@@ -1173,7 +1188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 2300000}
   renderBase: 3000
-  renderOffset: 99
+  renderOffset: 299
   forceRendererOn: 1
 --- !u!135 &13500002
 SphereCollider:

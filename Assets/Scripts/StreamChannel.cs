@@ -5,6 +5,6 @@ public class StreamChannel : MonoBehaviour {
 
 	public StreamChannelSeries parentSeries;
 	public GameObject bed;
-	public GameObject bank1;
-	public GameObject bank2;
+	//public GameObject bank1;
+	//public GameObject bank2;
 }

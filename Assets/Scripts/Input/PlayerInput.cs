@@ -34,6 +34,18 @@ public class PlayerInput : MonoBehaviour {
 			character = GetComponent<CharacterComponents>();
 		}
 
+        if(Globals.Instance != null)
+        {
+            if(playerNumber == Player.Player1)
+            {
+                Globals.Instance.player1 = this;
+            }
+            if (playerNumber == Player.Player2)
+            {
+                Globals.Instance.player2 = this;
+            }
+        }
+
         sharedKeyboard = new SharedKeyboard();
         sharedController = new SharedController();
         separateController = new SeparateController();
@@ -91,7 +103,7 @@ public class PlayerInput : MonoBehaviour {
         else
             deviceNumber = -1;
 
-        device = deviceNumber >= 0 ? InputManager.Devices[deviceNumber] : null;
+        device = deviceNumber >= 0 && deviceNumber < InputManager.Devices.Count ? InputManager.Devices[deviceNumber] : null;
 
         if (device != null)
         {
@@ -154,7 +166,7 @@ public class PlayerInput : MonoBehaviour {
         }*/
         #endregion
 
-        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard))
+        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
 		{
             if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
                 velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
@@ -235,9 +247,9 @@ public class PlayerInput : MonoBehaviour {
 			if (!character.bondAttachable.IsBondMade(partnerCharacter.bondAttachable))
 			{
 				character.bondAttachable.volleyPartner = partnerCharacter.bondAttachable;
-				character.SetFlashAndFill(partnerCharacter.colors.attachmentColor);
+				character.SetFlashAndFill(partnerCharacter.colors.baseColor);
 				partnerCharacter.bondAttachable.volleyPartner = character.bondAttachable;
-				partnerCharacter.SetFlashAndFill(character.colors.attachmentColor);
+				partnerCharacter.SetFlashAndFill(character.colors.baseColor);
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
 		}

@@ -22,6 +22,7 @@ public class CameraSplitter : MonoBehaviour {
 	public bool split = false;
 	private bool wasSplit = false;
 
+    private bool onStart = true;
 
     public float splitterDistance = .5f;
     public float splitterDistanceInWorldSpace = 0.0f;
@@ -43,6 +44,21 @@ public class CameraSplitter : MonoBehaviour {
     public float playerDistance;
     private float zViewPortDistance = 0.0f;
 
+    public bool zoom = false;
+    public bool zoomIn = false;
+
+    public bool movePlayers = false;
+
+    private Vector3 startPos = new Vector3(28.1f, 22.1f, -70f);
+    private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -500f);
+
+    public float duration = 5f;
+    public float t = 0f;
+
+	
+    private bool toggle = false;
+	[HideInInspector]
+	public bool startZoomComplete = false;
 
 	void Start()
 	{
@@ -63,8 +79,33 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Update()
 	{
+        
+        //if(!Globals.Instance.perspectiveCamera)
+           // transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
+        if(zoom)
+        {
+            ZoomIn();
+        }
+        else
+        {
+            if (toggle)
+            {
+                //transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
+                followPlayers = true;
+                Globals.Instance.allowInput = true;
+				toggle = false;
+				startZoomComplete = true;
+                // splittable = true;
+            }
+        }
+
 		if (splittable)
 			CheckSplit(false);	
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            //Debug.Log(transform.position);
+        }
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
 	}
@@ -90,6 +131,12 @@ public class CameraSplitter : MonoBehaviour {
         SetSplitDistanceInWorldSpace();
         playerDistance = Vector3.Distance(player1.transform.position, player2.transform.position);
         split = playerDistance > splitterDistanceInWorldSpace;
+
+        if(onStart)
+        {
+            split = false;
+            onStart = false;
+        }
 
         //Toggle split screen on and off
 		if (split != wasSplit || forceCheck)
@@ -121,4 +168,52 @@ public class CameraSplitter : MonoBehaviour {
 			CameraSplitter.Instance.transform.position = new Vector3(newCamPos.x, newCamPos.y, oldCamPos.z);
 		}
 	}
+
+    public void ZoomIn()
+    {
+		if (t < 1)
+		{
+			t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+			transform.position = Vector3.Lerp(zoomPos, startPos, t);
+
+			Vector3 heading = player1.transform.position - splitCamera1.transform.position;
+			float distance = Vector3.Dot(heading, splitCamera1.transform.forward);
+			float camHeight = 2.0f * (distance - 1f) * Mathf.Tan(splitCamera1.fieldOfView * 0.5f * Mathf.Deg2Rad);
+			Globals.Instance.orthographicSize = camHeight / 2.0f;
+		}
+		else
+		{
+			t = 0;
+			EndZoom();
+			// followPlayers = true;
+			splittable = true;
+		}
+    }
+           
+	public void EndZoom()
+	{
+		zoom = false;
+		zoomIn = false;
+		Globals.Instance.perspectiveCamera = false;
+		toggle = true;
+
+		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+        Globals.Instance.inMainMenu = false;
+	}
+
+    public void ZoomOut()
+    {
+        if (t != 1)
+        {
+            Globals.Instance.perspectiveCamera = true;
+            t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+            transform.position = Vector3.Lerp(startPos, zoomPos, t);
+        }
+        else
+        {
+            t = 0;
+            zoom = false;
+            zoomIn = true;
+        }
+    }
 }

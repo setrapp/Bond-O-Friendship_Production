@@ -30,7 +30,7 @@ public class Island : MonoBehaviour {
 			}
 			if (Globals.Instance != null && Globals.Instance.existingEther == null)
 			{
-				levelHelper.playersEstablish.PlacePlayers();
+				//levelHelper.playersEstablish.PlacePlayers();
 			}
 		}
 

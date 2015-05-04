@@ -9,6 +9,8 @@ public class SpinPad : WaitPad {
 	public Membrane membrane2;
 	public SpinPadSide wallEnd1;
 	public SpinPadSide wallEnd2;
+	public StreamMembraneReaction membraneReaction1;
+	public StreamMembraneReaction membraneReaction2;
 	public Collider wallEnd1Collider;
 	public Collider wallEnd2Collider;
 	public GameObject rotatee;
@@ -120,6 +122,27 @@ public class SpinPad : WaitPad {
 			{
 				activated = true;
 				SetLineColors();
+
+				if (membrane1 != null)
+				{
+					membrane1.BreakBond();
+				}
+				if (membrane2 != null)
+				{
+					membrane2.BreakBond();
+				}
+
+				if (membraneReaction1 != null)
+				{
+					membraneReaction1.reactionRate = 0;
+					membraneReaction1.reactable = false;
+				}
+
+				if (membraneReaction2 != null)
+				{
+					membraneReaction2.reactionRate = 0;
+					membraneReaction2.reactable = false;
+				}
 			}
 		}
 
@@ -234,7 +257,7 @@ public class SpinPad : WaitPad {
 			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
 		}
 
-		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy);
+		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy);
 		bool spinInhibited = spinInhibitors > 0;
 
 		return wall1Bonded && wall2Bonded && !helmetsExist && !spinInhibited;
@@ -242,7 +265,7 @@ public class SpinPad : WaitPad {
 
 	private void CheckHelmets()
 	{
-		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet1.gameObject.activeInHierarchy)
+		if (helmet1 != null && helmet2 != null && helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy)
 		{
 			if (helmet1.pushing && helmet2.pushing)
 			{
@@ -258,6 +281,24 @@ public class SpinPad : WaitPad {
 		float midRotation = (fullInRotation + fullOutRotation) / 2;
 
 		rotationProgress = Mathf.Clamp((currentRotation - midRotation) / (rotationRange / 2), -1, 1);
+
+		// Calculate portion complete for use in listeners.
+		if (completeOnIn && completeOnOut)
+		{
+			portionComplete = rotationProgress;
+		}
+		else if (completeOnIn)
+		{
+			portionComplete = (rotationProgress / 2) + 0.5f;
+		}
+		else if (completeOnOut)
+		{
+			portionComplete = (-rotationProgress / 2) + 0.5f;
+		}
+		else
+		{
+			portionComplete = 0;
+		}
 	}
 
 	public bool IsAtLimit(SpinLimit desiredLimit)
@@ -310,6 +351,14 @@ public class SpinPad : WaitPad {
 			}
 		}
 		
+	}
+
+	private void MembraneBroken(MembraneWall brokenMembrane)
+	{
+		if (brokenMembrane == membraneWall1 || brokenMembrane == membraneWall2)
+		{
+			brokenMembrane.gameObject.SetActive(false);
+		}
 	}
 
 	public enum SpinLimit

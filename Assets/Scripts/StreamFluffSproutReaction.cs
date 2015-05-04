@@ -10,7 +10,6 @@ public class StreamFluffSproutReaction : StreamReaction {
 	public bool findPlaceholders = true;
 	private float actualActionRate;
 	private float actualConsumptionRate;
-	
 
 	public void Awake()
 	{
@@ -73,10 +72,10 @@ public class StreamFluffSproutReaction : StreamReaction {
 					}
 				}
 
-				if (spawned)
-				{
+				//if (spawned)
+				//{
 					reactionProgress = 0;
-				}
+				//}
 			}
 		}
 

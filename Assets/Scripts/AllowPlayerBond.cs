@@ -7,12 +7,17 @@ public class AllowPlayerBond : MonoBehaviour {
 	public MembraneWall triggerMembraneWall;
 	public float startingBondLength = 35;
 	public bool makeBond = false;
+	public bool autoCheck = true;
+	public bool destroyOnUse = true;
 
 	void Update()
 	{
-		if ((triggerPad == null && triggerNodeGroup == null && triggerMembraneWall == null) || ((triggerPad != null && triggerPad.activated) || (triggerNodeGroup != null && triggerNodeGroup.solved)))
+		if (autoCheck)
 		{
-			AllowBond();
+			if ((triggerPad == null && triggerNodeGroup == null && triggerMembraneWall == null) || ((triggerPad != null && triggerPad.activated) || (triggerNodeGroup != null && triggerNodeGroup.solved)))
+			{
+				AllowBond();
+			}
 		}
 	}
 
@@ -24,7 +29,7 @@ public class AllowPlayerBond : MonoBehaviour {
 		}
 	}
 
-	private void AllowBond()
+	public void AllowBond()
 	{
 		Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
 		Globals.Instance.player2.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
@@ -34,6 +39,9 @@ public class AllowPlayerBond : MonoBehaviour {
 			Globals.Instance.player1.character.bondAttachable.AttemptBond(Globals.Instance.player2.character.bondAttachable, Globals.Instance.player1.transform.position, true);
 		}
 
-		Destroy(this);
+		if (destroyOnUse)
+		{
+			Destroy(this);
+		}
 	}
 }

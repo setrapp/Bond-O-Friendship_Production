@@ -23,10 +23,23 @@ public class Globals : MonoBehaviour {
 
 	public bool perspectiveCamera = false;
 	public float perspectiveFOV = 25;
+	[HideInInspector]
+	public float startingPerspectiveFOV;
+	public float orthographicSize = 20;
+	[HideInInspector]
+	public float startingOrthographicSize;
+
+	public bool zoomIntroInEditor = true;
+
+
+    public bool allowInput = true;
 
 	public float audioVolume = -1;
 	public bool mute = false;
 	public AudioSource bgm;
+
+	public RingPulse defaultPulsePrefab;
+	public PulseStats defaultPulseStats;
 
 	public enum ControlScheme{None, SharedLeft, SharedRight, Solo};
 
@@ -52,6 +65,8 @@ public class Globals : MonoBehaviour {
 	public float fluffLeaveDistance = 1.0f;
 	public float fluffLeaveAttractWait = 3.0f;
 	public float fluffLeaveEmbed = 1.0f;
+
+    public bool inMainMenu = true;
 
 	//Index of the player's controller, -1 means keyboard, -2 means waiting for input
 	public int leftControllerIndex;
@@ -89,11 +104,20 @@ public class Globals : MonoBehaviour {
 
 	void Awake()
 	{
+        //if (instance != null && instance != this)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+       // }
+
 		if (!Application.isEditor)
 		{
 			Screen.showCursor = false;
 		}
 		//Debug.Log(leftControllerIndex);
+
+		startingPerspectiveFOV = perspectiveFOV;
+		startingOrthographicSize = orthographicSize;
 
 		CheckCameraPerspective();
 
@@ -113,6 +137,9 @@ public class Globals : MonoBehaviour {
 
 	void Update()
 	{
+        if(Input.GetKeyDown(KeyCode.Escape))
+            ResetOrExit();
+        
 		
 		leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
 		rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
@@ -130,11 +157,26 @@ public class Globals : MonoBehaviour {
 			Debug.Log("Previous Right: " + rightControllerPreviousIndex);
 		}*/
 
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			Application.Quit();
-		}
+		
 	}
+
+    public void ResetOrExit(bool destroyGlobals = true)
+    {
+        if (inMainMenu)
+        {
+           // if (Application.isEditor)
+           //     UnityEditor.EditorApplication.isPlaying = false;
+           // else
+                Application.Quit();
+        }
+        else
+        {
+            if(destroyGlobals)
+                Destroy(gameObject);
+            instance = null;
+            Application.LoadLevel(0);
+        }
+    }
 
 	private void CheckCameraPerspective()
 	{
@@ -146,6 +188,10 @@ public class Globals : MonoBehaviour {
 		{
 			CameraSplitter.Instance.splitCamera1.fieldOfView = CameraSplitter.Instance.splitCamera2.fieldOfView = perspectiveFOV;
 		}
+        if (!perspectiveCamera && CameraSplitter.Instance.splitCamera1.orthographicSize != orthographicSize || CameraSplitter.Instance.splitCamera2.orthographicSize != orthographicSize)
+        {
+            CameraSplitter.Instance.splitCamera1.orthographicSize = CameraSplitter.Instance.splitCamera2.orthographicSize = orthographicSize;
+        }
 	}
 	
 	private void CheckVolume()
@@ -168,6 +214,12 @@ public class Globals : MonoBehaviour {
 		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
 			&& bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
 		{
+			if (!playersBonded)
+			{
+				Helper.FirePulse(player1.transform.position, defaultPulseStats);
+				Helper.FirePulse(player2.transform.position, defaultPulseStats);
+			}
+
 			playersBonded = true;
 		}
 	}
@@ -234,7 +286,7 @@ public class Globals : MonoBehaviour {
 
 	private int HandleDeviceDisconnect(int deviceIndex)
 	{
-		var device = deviceIndex >= 0 ? InputManager.Devices[deviceIndex] : null;
+		var device = deviceIndex >= 0 && deviceIndex < InputManager.Devices.Count ? InputManager.Devices[deviceIndex] : null;
 
 		if (device != null)
 		{

@@ -38,10 +38,10 @@ public class SpinPadSide : MonoBehaviour {
 
 		if (playerDependent)
 		{
-			playerColor = Globals.Instance.player1.character.colors.attachmentColor;
+			playerColor = Globals.Instance.player1.character.colors.baseColor;
 			if (targetPlayer == PlayerInput.Player.Player2)
 			{
-				playerColor = Globals.Instance.player2.character.colors.attachmentColor;
+				playerColor = Globals.Instance.player2.character.colors.baseColor;
 			}
 		}
 		else
