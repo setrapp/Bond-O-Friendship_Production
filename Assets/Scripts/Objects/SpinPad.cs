@@ -353,6 +353,14 @@ public class SpinPad : WaitPad {
 		
 	}
 
+	private void MembraneBroken(MembraneWall brokenMembrane)
+	{
+		if (brokenMembrane == membraneWall1 || brokenMembrane == membraneWall2)
+		{
+			brokenMembrane.gameObject.SetActive(false);
+		}
+	}
+
 	public enum SpinLimit
 	{
 		PULL_END = 1,

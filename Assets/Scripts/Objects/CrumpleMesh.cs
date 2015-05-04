@@ -9,6 +9,8 @@ public class CrumpleMesh : MonoBehaviour
     public bool y = true;
     public bool z = true;
 
+	public bool useRandomValues = true;
+
     public float scale = 1.0f;
     public float speed = 1.0f;
     bool recalculateNormals = false;
@@ -35,8 +37,11 @@ public class CrumpleMesh : MonoBehaviour
         }
         else
         {
-            scale = Random.Range(.1f, .3f);
-            speed = Random.Range(1.0f, 2.0f);
+			if (useRandomValues)
+			{
+				scale = Random.Range(.1f, .3f);
+				speed = Random.Range(1.0f, 2.0f);
+			}
         }
     }
 

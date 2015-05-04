@@ -104,7 +104,7 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				if (fluffsToAdd != null)
+				if (fluffsToAdd[i] != null)
 				{
 					fluffMaterial = fluffsToAdd[i].bulb.material;
 
