@@ -81,7 +81,7 @@ public class Stream : MonoBehaviour {
 
 				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
 				Vector3 fromBedCenter = transform.position - streamBedCenter;
-				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2;
+				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2 - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
 				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
 				{
 					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
@@ -95,13 +95,13 @@ public class Stream : MonoBehaviour {
 
 				if (Vector3.Dot(oldToTarget, toTarget) < 0)
 				{
-					Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
-					Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
+					//Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
+					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
 					//if (Vector3.Dot(toBank1, toBank2) < 0)
-					{
+					//{
 						SeekNextChannel();
 						toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-					}
+					//}
 				}
 
 				
@@ -109,7 +109,9 @@ public class Stream : MonoBehaviour {
 			}
 			else
 			{
-				Destroy(gameObject);
+				PrepareForDestroy();
+				SeekNextChannel();
+				//Destroy(gameObject);
 				/*if (mover.velocity.sqrMagnitude > 0)
 				{
 					mover.Stop();
@@ -127,23 +129,7 @@ public class Stream : MonoBehaviour {
 		}
 		else
 		{
-			if (mover.velocity.sqrMagnitude > 0)
-			{
-				mover.Stop();
-			}
-
-			if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
-			{
-				blockingTime += Time.deltaTime;
-				if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
-				{
-					spawner.StopTrackingStream(this);
-					spawner = null;
-					// TODO make the streams fade before destroying, or just remove their ability to act.
-					Destroy(gameObject);
-				}
-			}
-			
+			PrepareForDestroy();
 		}
 
 		if (!Application.isEditor || drawEditorStreamLine)
@@ -158,9 +144,29 @@ public class Stream : MonoBehaviour {
 		
 	}
 
+	private void PrepareForDestroy()
+	{
+		if (mover.velocity.sqrMagnitude > 0)
+		{
+			mover.Stop();
+		}
+
+		if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
+		{
+			blockingTime += Time.deltaTime;
+			if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
+			{
+				spawner.StopTrackingStream(this);
+				spawner = null;
+				// TODO make the streams fade before destroying, or just remove their ability to act.
+				Destroy(gameObject);
+			}
+		}
+	}
+
 	private void SeekNextChannel()
 	{
-		if (targetChannel == null)
+		if (targetChannel == null || targetChannel.parentSeries == null)
 		{
 			return;
 		}

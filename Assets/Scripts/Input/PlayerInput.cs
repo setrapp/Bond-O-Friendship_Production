@@ -34,6 +34,18 @@ public class PlayerInput : MonoBehaviour {
 			character = GetComponent<CharacterComponents>();
 		}
 
+        if(Globals.Instance != null)
+        {
+            if(playerNumber == Player.Player1)
+            {
+                Globals.Instance.player1 = this;
+            }
+            if (playerNumber == Player.Player2)
+            {
+                Globals.Instance.player2 = this;
+            }
+        }
+
         sharedKeyboard = new SharedKeyboard();
         sharedController = new SharedController();
         separateController = new SeparateController();
@@ -91,7 +103,7 @@ public class PlayerInput : MonoBehaviour {
         else
             deviceNumber = -1;
 
-        device = deviceNumber >= 0 ? InputManager.Devices[deviceNumber] : null;
+        device = deviceNumber >= 0 && deviceNumber < InputManager.Devices.Count ? InputManager.Devices[deviceNumber] : null;
 
         if (device != null)
         {

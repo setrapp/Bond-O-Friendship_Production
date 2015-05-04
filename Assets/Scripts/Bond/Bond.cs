@@ -108,6 +108,7 @@ public class Bond : MonoBehaviour {
 				for (int i = 1; i < links.Count - 1; i++)
 				{
 					linkDir = Vector3.zero;
+					
 					linkScalePrev = links[i].toPreviousCollider.size;
 					linkScaleNext = links[i].toNextCollider.size;
 					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
@@ -118,8 +119,8 @@ public class Bond : MonoBehaviour {
 
 					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
 					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
-					links[i].toPreviousCollider.size = linkScalePrev;
-					links[i].toNextCollider.size = linkScaleNext;
+					links[i].toPreviousCollider.size = (i != 1) ? linkScalePrev : Vector3.zero;
+					links[i].toNextCollider.size = (i != links.Count - 2) ? linkScaleNext : Vector3.zero;
 					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
 					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
 

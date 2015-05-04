@@ -66,6 +66,8 @@ public class Globals : MonoBehaviour {
 	public float fluffLeaveAttractWait = 3.0f;
 	public float fluffLeaveEmbed = 1.0f;
 
+    public bool inMainMenu = true;
+
 	//Index of the player's controller, -1 means keyboard, -2 means waiting for input
 	public int leftControllerIndex;
 	public int rightContollerIndex;
@@ -102,6 +104,12 @@ public class Globals : MonoBehaviour {
 
 	void Awake()
 	{
+        //if (instance != null && instance != this)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+       // }
+
 		if (!Application.isEditor)
 		{
 			Screen.showCursor = false;
@@ -129,6 +137,9 @@ public class Globals : MonoBehaviour {
 
 	void Update()
 	{
+        if(Input.GetKeyDown(KeyCode.Escape))
+            ResetOrExit();
+        
 		
 		leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
 		rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
@@ -146,11 +157,26 @@ public class Globals : MonoBehaviour {
 			Debug.Log("Previous Right: " + rightControllerPreviousIndex);
 		}*/
 
-		if (Input.GetKey(KeyCode.Escape))
-		{
-			Application.Quit();
-		}
+		
 	}
+
+    public void ResetOrExit(bool destroyGlobals = true)
+    {
+        if (inMainMenu)
+        {
+           // if (Application.isEditor)
+           //     UnityEditor.EditorApplication.isPlaying = false;
+           // else
+                Application.Quit();
+        }
+        else
+        {
+            if(destroyGlobals)
+                Destroy(gameObject);
+            instance = null;
+            Application.LoadLevel(0);
+        }
+    }
 
 	private void CheckCameraPerspective()
 	{
@@ -260,7 +286,7 @@ public class Globals : MonoBehaviour {
 
 	private int HandleDeviceDisconnect(int deviceIndex)
 	{
-		var device = deviceIndex >= 0 ? InputManager.Devices[deviceIndex] : null;
+		var device = deviceIndex >= 0 && deviceIndex < InputManager.Devices.Count ? InputManager.Devices[deviceIndex] : null;
 
 		if (device != null)
 		{

@@ -346,7 +346,7 @@ public class Fluff : MonoBehaviour {
 
 		forgetCreator = true;
 
-		if (attachAudio != null && !attachAudio.isPlaying)
+		if (attachAudio != null && !attachAudio.isPlaying && attachAudio.isActiveAndEnabled)
 		{
 			attachAudio.Play();
 		}
