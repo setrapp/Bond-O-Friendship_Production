@@ -1,6 +1,7 @@
 ﻿Shader "Shader Tutorials/ 3 - Specular" {
 	Properties {
 		_Color ("Color", Color) = (1.0, 1.0, 1.0, 1.0)
+		
 	}
 	SubShader {
 		Pass{
