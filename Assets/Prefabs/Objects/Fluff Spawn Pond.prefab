@@ -11,7 +11,9 @@ GameObject:
   - 33: {fileID: 3370016}
   - 23: {fileID: 2370016}
   - 114: {fileID: 11470012}
-  m_Layer: 0
+  - 114: {fileID: 11410588}
+  - 136: {fileID: 13643202}
+  m_Layer: 4
   m_Name: Pond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,6 +206,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.00000167, y: 2.00000262, z: 1.00000191}
   m_Center: {x: 5.96047016e-08, y: 9.91130802e-14, z: -1.9967556e-06}
+--- !u!114 &11410588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1460adb115cc2514a98e4d4b000c63ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionRate: 1
+  ignoreReactionLayers:
+    serializedVersion: 2
+    m_Bits: 536870912
 --- !u!114 &11417688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,6 +345,19 @@ MonoBehaviour:
   fluffPlaceholders: []
   spawnAll: 0
   findPlaceholders: 1
+--- !u!136 &13643202
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: .500000119
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
