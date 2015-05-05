@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2370016}
   - 114: {fileID: 11470012}
   - 114: {fileID: 11410588}
-  - 136: {fileID: 13643202}
+  - 64: {fileID: 6400002}
   m_Layer: 4
   m_Name: Pond
   m_TagString: Untagged
@@ -194,6 +194,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!64 &6400002
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 1
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &6570018
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -279,6 +292,7 @@ MonoBehaviour:
   blockStream: 1
   streamsTouched: []
   warnForBody: 1
+  ignoreCollider: {fileID: 6400002}
 --- !u!114 &11470016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -345,19 +359,6 @@ MonoBehaviour:
   fluffPlaceholders: []
   spawnAll: 0
   findPlaceholders: 1
---- !u!136 &13643202
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170012}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: .500000119
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

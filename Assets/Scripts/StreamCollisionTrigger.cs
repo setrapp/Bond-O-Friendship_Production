@@ -13,6 +13,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	private bool wasBlocking = true;
 	public List<StreamBody> streamsTouched;
 	public bool warnForBody = true;
+	public Collider ignoreCollider;
 	
 
 	void Start()
@@ -73,7 +74,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// If blocking is desired, block newly colliding streams.
 	void OnCollisionEnter(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
@@ -85,7 +86,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
@@ -99,7 +100,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// React to colliding streams.
 	void OnCollisionStay(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
@@ -110,7 +111,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerStay(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
@@ -124,14 +125,14 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// Stop blocking streams that are no colliding.
 	void OnCollisionExit(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			RemoveStreamTouched(col.collider.GetComponent<StreamBody>());
 		}
 	}
 	void OnTriggerExit(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
 			RemoveStreamTouched(col.collider.GetComponent<StreamBody>());
 		}

@@ -6,13 +6,19 @@ public class StreamColliderResetReaction : StreamReaction {
 	public Collider resetteeCollider;
 	private bool colliderEnabled;
 	private bool resetting = false;
+	private bool waitToReset = false;
 
 	void Update()
 	{
 		if (resetting)
 		{
-			//resetteeCollider.enabled = colliderEnabled;
-			//resetting = false;
+			resetteeCollider.enabled = colliderEnabled;
+			resetting = false;
+		}
+		if (waitToReset)
+		{
+			resetting = true;
+			waitToReset = false;
 		}
 	}
 
@@ -25,7 +31,8 @@ public class StreamColliderResetReaction : StreamReaction {
 			{
 				colliderEnabled = resetteeCollider.enabled;
 				resetteeCollider.enabled = !colliderEnabled;
-				resetting = true;
+				waitToReset = true;
+				reactable = false;
 			}
 		}
 		return reacted;

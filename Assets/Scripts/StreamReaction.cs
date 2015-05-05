@@ -8,7 +8,7 @@ public class StreamReaction : MonoBehaviour {
 	public float reactionProgress = 0;
 	public float reactionRate = 1;
 	public float decayRate = 0;
-	public float decayDelay = 5;
+	public float decayDelay = 0;
 	protected float lastReaction = 0;
 	public bool reactable = true;
 	[SerializeField]
