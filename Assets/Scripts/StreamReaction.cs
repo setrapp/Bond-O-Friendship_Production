@@ -14,6 +14,7 @@ public class StreamReaction : MonoBehaviour {
 	[SerializeField]
 	public List<StreamReaction> superiors;
 	public int streamsTouched = 0;
+	public bool stopReactionOnComplete = false;
 
 	virtual protected void Start()
 	{
@@ -62,6 +63,11 @@ public class StreamReaction : MonoBehaviour {
 			if (actionRate > 0)
 			{
 				lastReaction = Time.time;
+			}
+
+			if (reactionProgress >= 1 && stopReactionOnComplete)
+			{
+				Destroy(this);
 			}
 
 			return reacted;
