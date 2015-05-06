@@ -137,7 +137,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 3ab86f0fb76d5a045a555ebec3cd9484, type: 2}
+  - {fileID: 2100000, guid: 184bdcd761bc71b41beda0e5671152b9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -230,26 +230,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1460adb115cc2514a98e4d4b000c63ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
-  targetChannel: {fileID: 0}
-  mover: {fileID: 0}
-  streamRenderer: {fileID: 0}
-  tracer: {fileID: 0}
-  startAtTarget: 1
-  showTarget: 0
-  oldChannel: {fileID: 0}
-  ending: 0
-  seekOffset: {x: 0, y: 0, z: 0}
   actionRate: 1
   ignoreReactionLayers:
     serializedVersion: 2
     m_Bits: 536870912
-  lineMaterial: {fileID: 0}
-  diffusionParticles: {fileID: 0}
-  streamSplittingPrefab: {fileID: 0}
-  streamBlockers: 0
-  blockingTime: 0
-  drawEditorStreamLine: 1
 --- !u!114 &11417688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -327,6 +311,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   scalees:
   - scalee: {fileID: 470012}
     unscaled: {x: 0, y: 1, z: 0}
@@ -349,6 +334,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -371,6 +357,7 @@ MonoBehaviour:
   superiors:
   - {fileID: 11470016}
   streamsTouched: 0
+  stopReactionOnComplete: 0
   fluffStickRoot: {fileID: 11417688}
   fluffPlaceholders: []
   spawnAll: 0
