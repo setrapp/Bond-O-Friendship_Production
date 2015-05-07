@@ -110,6 +110,10 @@ public class MembraneWall : MonoBehaviour {
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
 			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
+			if (relativeMaxDistance < 0)
+			{
+				maxDistance = createdMembrane.stats.maxDistance;
+			}
 			relativeActualDistance = currentLength / shapedDistance;
 
 			// Ensure that enough players are attempting to break the membrane.

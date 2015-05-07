@@ -11,8 +11,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	public List<StreamReaction> reactions;
 	public bool blockStream = true;
 	private bool wasBlocking = true;
-	public List<Stream> streamsTouched;
+	public List<StreamBody> streamsTouched;
 	public bool warnForBody = true;
+	public Collider ignoreCollider;
 	
 
 	void Start()
@@ -43,14 +44,14 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		{
 			for (int i = 0; i < streamsTouched.Count; i++)
 			{
-				StopBlockingStream(streamsTouched[i]);
+				StopBlockingStream(streamsTouched[i] as Stream);
 			}
 		}
 		else if (!wasBlocking && blockStream)
 		{
 			for (int i = 0; i < streamsTouched.Count; i++)
 			{
-				StartBlockingStream(streamsTouched[i]);
+				StartBlockingStream(streamsTouched[i] as Stream);
 			}
 		}
 		wasBlocking = blockStream;
@@ -73,9 +74,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// If blocking is desired, block newly colliding streams.
 	void OnCollisionEnter(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			Stream stream = col.collider.GetComponent<Stream>();
+			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -85,9 +86,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			Stream stream = col.collider.GetComponent<Stream>();
+			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -99,9 +100,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// React to colliding streams.
 	void OnCollisionStay(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			Stream stream = col.collider.GetComponent<Stream>();
+			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -110,9 +111,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerStay(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			Stream stream = col.collider.GetComponent<Stream>();
+			StreamBody stream = col.collider.GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -124,16 +125,16 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	// Stop blocking streams that are no colliding.
 	void OnCollisionExit(Collision col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			RemoveStreamTouched(col.collider.GetComponent<Stream>());
+			RemoveStreamTouched(col.collider.GetComponent<StreamBody>());
 		}
 	}
 	void OnTriggerExit(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer)
+		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
 		{
-			RemoveStreamTouched(col.collider.GetComponent<Stream>());
+			RemoveStreamTouched(col.collider.GetComponent<StreamBody>());
 		}
 	}
 
@@ -145,20 +146,20 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		}
 	}
 
-	private void AddStreamTouched(Stream stream)
+	private void AddStreamTouched(StreamBody stream)
 	{
 		if (!streamsTouched.Contains(stream))
 		{
 			if (blockStream)
 			{
-				StartBlockingStream(stream);
+				StartBlockingStream(stream as Stream);
 			}
 			streamsTouched.Add(stream);
 			SetReactionsStreamTouches();
 		}
 	}
 
-	private void RemoveStreamTouched(Stream stream)
+	private void RemoveStreamTouched(StreamBody stream)
 	{
 		RemoveStreamTouched(streamsTouched.IndexOf(stream));
 	}
@@ -167,7 +168,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	{
 		if (index >= 0 && index < streamsTouched.Count)
 		{
-			StopBlockingStream(streamsTouched[index]);
+			StopBlockingStream(streamsTouched[index] as Stream);
 			streamsTouched.RemoveAt(index);
 			SetReactionsStreamTouches();
 		}
@@ -175,12 +176,18 @@ public class StreamCollisionTrigger : MonoBehaviour {
 
 	private void StartBlockingStream(Stream stream)
 	{
-		stream.streamBlockers++;
+		if (stream != null)
+		{
+			stream.streamBlockers++;
+		}
 	}
 
 	private void StopBlockingStream(Stream stream)
 	{
-		stream.streamBlockers--;
+		if (stream != null)
+		{
+			stream.streamBlockers--;
+		}
 	}
 
 	private void SetReactionsStreamTouches()
@@ -194,7 +201,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		}
 	}
 
-	void CallStreamAction(Stream stream)
+	void CallStreamAction(StreamBody stream)
 	{
 		if (stream != null)
 		{

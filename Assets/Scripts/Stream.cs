@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Stream : MonoBehaviour {
+public class Stream : StreamBody {
 
 	public StreamSpawner spawner;
 	public StreamChannel targetChannel;
@@ -11,12 +11,10 @@ public class Stream : MonoBehaviour {
 	public bool startAtTarget = true;
 	public bool showTarget = false;
 	//public bool autoMove = true;
-	public  StreamChannel oldChannel;
+	public StreamChannel oldChannel;
 	[HideInInspector]
 	public bool ending;
 	public Vector3 seekOffset;
-	public float actionRate = 1;
-	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
 	public ParticleSystem diffusionParticles;
 	public Stream streamSplittingPrefab;
@@ -99,12 +97,12 @@ public class Stream : MonoBehaviour {
 					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
 					//if (Vector3.Dot(toBank1, toBank2) < 0)
 					//{
-						SeekNextChannel();
-						toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+					SeekNextChannel();
+					toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 					//}
 				}
 
-				
+
 				mover.AccelerateWithoutHandling(toTarget);
 			}
 			else
@@ -141,7 +139,7 @@ public class Stream : MonoBehaviour {
 	public void UpdateMovement()
 	{
 		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-		
+
 	}
 
 	private void PrepareForDestroy()
@@ -198,14 +196,6 @@ public class Stream : MonoBehaviour {
 		else
 		{
 			ending = true;
-		}
-	}
-
-	public void ProvokeReaction(StreamReaction reaction)
-	{
-		if (reaction != null)
-		{
-			reaction.React(actionRate * Time.deltaTime);
 		}
 	}
 
