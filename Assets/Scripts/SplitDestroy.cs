@@ -38,9 +38,12 @@ public class SplitDestroy : MonoBehaviour {
 		if (fromCork.sqrMagnitude > 0 || splitDestroyee.transform.localScale != staringScale)
 		{
 			float corkDist = fromCork.magnitude;
-
 			float progress = Mathf.Clamp01(corkDist / splitDistance);
-			splitDestroyee.transform.localScale = (staringScale * (1 - progress)) + (endingScale * progress);
+
+			if (shrinkBeforeDestroy)
+			{
+				splitDestroyee.transform.localScale = (staringScale * (1 - progress)) + (endingScale * progress);
+			}
 
 			if (progress >= 1)
 			{
