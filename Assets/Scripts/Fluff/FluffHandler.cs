@@ -408,15 +408,15 @@ public class FluffHandler : MonoBehaviour {
 			return;
 		}
 
-		Rigidbody fluffPullTarget = null;
-		if (character.bondAttachable == bondRequesting.attachment1.attachee)
+		Rigidbody fluffPullTarget = bondRequesting.centralFluffPullTarget;
+		/*if (character.bondAttachable == bondRequesting.attachment1.attachee)
 		{
 			fluffPullTarget = bondRequesting.attachment1.fluffPullTarget;
 		}
 		else if (character.bondAttachable == bondRequesting.attachment2.attachee)
 		{
 			fluffPullTarget = bondRequesting.attachment2.fluffPullTarget;
-		}
+		}*/
 
 		if (fluffPullTarget == null)
 		{
@@ -454,7 +454,7 @@ public class FluffHandler : MonoBehaviour {
 
 		fluffToSend.soleAttractor = partner.gameObject;
 		fluffToSend.Pass(Vector3.zero, gameObject, 0);
-		bondRequesting.AddFluff(fluffToSend);
+		bondRequesting.AddFluff(fluffToSend, gameObject);
 	}
 
 	private IEnumerator DeflateFluffForBond(Bond bond)

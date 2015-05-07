@@ -30,6 +30,7 @@ GameObject:
   - 114: {fileID: 11400004}
   - 145: {fileID: 14500002}
   - 145: {fileID: 14500010}
+  - 114: {fileID: 11476688}
   m_Layer: 19
   m_Name: Attachment 2 Link
   m_TagString: Untagged
@@ -46,6 +47,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11472898}
   m_Layer: 19
   m_Name: Bond
   m_TagString: Connection
@@ -83,6 +85,7 @@ GameObject:
   - 114: {fileID: 11400006}
   - 145: {fileID: 14500000}
   - 145: {fileID: 14500008}
+  - 114: {fileID: 11476690}
   m_Layer: 19
   m_Name: Attachment 1 Link
   m_TagString: Untagged
@@ -391,6 +394,7 @@ MonoBehaviour:
   fluffsHeld: []
   flashTint: {r: .448529422, g: .458423465, b: .458423465, a: .258823544}
   flashDuration: .5
+  fluffStickRoot: {fileID: 11472898}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -412,6 +416,7 @@ MonoBehaviour:
   jointToAttachment: {fileID: 14500010}
   orderLevel: 0
   broken: 0
+  fluffStick: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -433,6 +438,64 @@ MonoBehaviour:
   jointToAttachment: {fileID: 14500008}
   orderLevel: 0
   broken: 0
+  fluffStick: {fileID: 0}
+--- !u!114 &11472898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155d4f73c56703429676501f6fde240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allChildSticks: 0
+  attachedSticks:
+  - {fileID: 11476690}
+  - {fileID: 11476688}
+  trackStuckFluffs: 1
+  fluffsDetachable: 0
+  pullableBody: {fileID: 0}
+  noKinematicOnPull: 0
+  allowSway: 0
+  bodyMassFactor: 1
+  pullMass: -1
+  maxPullForce: 0
+  fluffReaction: {fileID: 0}
+  fluffSproutRate: 0
+  fluffConsumeRate: 0
+  fluffActionRate: 0
+--- !u!114 &11476688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 11472898}
+  stuckFluff: {fileID: 0}
+  stickOffset: {x: 0, y: 0, z: 0}
+  stickDirection: {x: 1, y: 0, z: 0}
+--- !u!114 &11476690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 11472898}
+  stuckFluff: {fileID: 0}
+  stickOffset: {x: 0, y: 0, z: 0}
+  stickDirection: {x: 1, y: 0, z: 0}
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1
