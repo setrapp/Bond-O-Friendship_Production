@@ -12,7 +12,6 @@ public class BondLink : MonoBehaviour {
 	public SpringJoint jointToAttachment = null;
 	public int orderLevel = 0;
 	public bool broken = false;
-	public FluffStick fluffStick;
 
 	void OnDestroy()
 	{

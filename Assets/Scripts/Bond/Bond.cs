@@ -40,8 +40,6 @@ public class Bond : MonoBehaviour {
 	private List<BondStrain> strains;
 	public Color flashTint;
 	public float flashDuration = 1;
-	public FluffStickRoot fluffStickRoot;
-	public Rigidbody centralFluffPullTarget;
 
 	protected virtual void Start()
 	{
@@ -168,44 +166,6 @@ public class Bond : MonoBehaviour {
 				}
 			}
 
-			// If compressing enough return a fluff to attachee.
-			if (stats.relativeRequestDistance >= 0 && (stats.maxDistance * stats.relativeRequestDistance) - (stats.extensionPerFluff * 2) > BondLength && Time.time - fluffRequestTime >= stats.fluffRequestDelay)
-			{
-				/*if (fluffsHeld.Count > 0 && fluffsHeld[fluffsHeld.Count - 1] != null)
-				{
-					Fluff detachedFluff = fluffsHeld[fluffsHeld.Count - 1].GetComponent<Fluff>();
-					if (detachedFluff != null)
-					{
-						detachedFluff.attachee = null;
-						detachedFluff.soleAttractor = null;
-						detachedFluff.nonAttractTime = 0;
-						detachedFluff.attractable = true;
-						detachedFluff.mover.externalSpeedMultiplier = 1.0f;
-					}
-					fluffsHeld.RemoveAt(fluffsHeld.Count - 1);
-
-					
-					Rigidbody fluffPullTarget = attachment1.fluffPullTarget;
-					if (Random.Range(0, 1.0f) < 0.5f)
-					{
-						fluffPullTarget = attachment2.fluffPullTarget;
-					}
-
-					SpringJoint springToAttachment = detachedFluff.GetComponent<SpringJoint>();
-					if (springToAttachment == null)
-					{
-						detachedFluff.gameObject.AddComponent<SpringJoint>();
-					}
-					springToAttachment.autoConfigureConnectedAnchor = false;
-					springToAttachment.anchor = Vector3.zero;
-					springToAttachment.connectedAnchor = Vector3.zero;
-					springToAttachment.connectedBody = fluffPullTarget;
-
-					stats.maxDistance -= stats.extensionPerFluff;
-					fluffRequestTime = Time.time;
-				}*/
-			}
-
 			// Place attachment points for each partner.
 			if (!stats.manualAttachment1)
 			{
@@ -329,9 +289,8 @@ public class Bond : MonoBehaviour {
 			}
 		}
 
-		if (links.Count > 0 && centralFluffPullTarget && attachment1.fluffPullTarget != null && attachment2.fluffPullTarget != null)
+		if (links.Count > 0 && attachment1.fluffPullTarget != null && attachment2.fluffPullTarget != null)
 		{
-			centralFluffPullTarget.transform.position = links[links.Count / 2].transform.position;
 			if (stats.fluffPullLinks < 0 || links.Count < stats.fluffPullLinks * 2 + 1)
 			{
 				attachment1.fluffPullTarget.transform.position = attachment2.fluffPullTarget.transform.position = links[links.Count / 2].transform.position;
@@ -584,16 +543,6 @@ public class Bond : MonoBehaviour {
 		}
 		LinkAdded(newLink);
 
-		if (newLink.fluffStick != null && fluffStickRoot != null)
-		{
-			newLink.fluffStick.root = fluffStickRoot;
-			fluffStickRoot.attachedSticks.Add(newLink.fluffStick);
-			if (Random.Range(0, 1.0f) < 0.5f)
-			{
-				newLink.fluffStick.stickDirection *= -1;
-			}
-		}
-
 		return newLink;
 	}
 
@@ -614,17 +563,6 @@ public class Bond : MonoBehaviour {
 		{
 			nextLink.linkPrevious = previousLink;
 		}
-
-		if (fluffStickRoot != null && links[index].fluffStick != null)
-		{
-			fluffStickRoot.attachedSticks.Remove(links[index].fluffStick);
-			if (links[index].fluffStick.stuckFluff != null)
-			{
-				StartCoroutine(PrepareToAttachFluff(links[index].fluffStick.stuckFluff, gameObject, 0, links[index]));
-			}
-			
-		}
-
 
 		LinkRemoved(links[index]);
 		Destroy(links[index].gameObject);
@@ -765,7 +703,7 @@ public class Bond : MonoBehaviour {
 		WeightJoints();
 	}
 
-	public bool AddFluff(Fluff fluff, GameObject adder)
+	public bool AddFluff(Fluff fluff)
 	{
 		if (fluff == null || (stats.maxFluffCapacity >= 0 && fluffsHeld.Count >= stats.maxFluffCapacity))
 		{
@@ -779,50 +717,11 @@ public class Bond : MonoBehaviour {
 
 		fluffsHeld.Add(fluff.gameObject);
 
-		StartCoroutine(PrepareToAttachFluff(fluff, adder, Random.Range(0.25f, 0.5f)));
+		fluff.PopFluff(0.5f, -1, true);
 
 		Flash();
 
 		return true;
-	}
-
-	public IEnumerator PrepareToAttachFluff(Fluff fluff, GameObject adder, float relativeAttachDistance, BondLink ignoreLink = null)
-	{
-		float attachDistance = BondLength * relativeAttachDistance;
-		while (fluff != null && adder != null && (fluff.transform.position - adder.transform.position).sqrMagnitude < attachDistance * attachDistance)
-		{
-			attachDistance = bondLength * relativeAttachDistance;
-			yield return null;
-		}
-
-		bool fluffAttached = false;
-		while (fluff != null && !fluffAttached && fluffStickRoot != null)
-		{
-			BondLink nearLink;
-			NearestPoint(fluff.transform.position, out nearLink);
-			if (nearLink != null && nearLink != ignoreLink && nearLink.fluffStick != null)
-			{
-				fluffAttached = AttachFluffAtLink(fluff, nearLink);
-			}
-			yield return null;
-		}
-
-		if (!fluffAttached && fluff != null)
-		{
-			fluff.PopFluff(0, -1, true);
-		}
-	}
-
-	public bool AttachFluffAtLink(Fluff fluff, BondLink bondLink)
-	{
-		if (bondLink != null && bondLink.fluffStick != null && bondLink.fluffStick.stuckFluff == null)
-		{
-			fluff.Attach(bondLink.fluffStick);
-			fluff.attachee.possessive = true;
-			return true;
-		}
-
-		return false;
 	}
 
 	public Vector3 NearestPoint(Vector3 checkPoint)
