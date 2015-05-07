@@ -3,8 +3,8 @@ Shader "DepthMask/MaskerAlphaGradient" {
 	Properties {
 
 		_Color ("Color", Color) = (0.0,0.0,0.0,1.0)
-		_P1Pos ("To Player 1", Color) = (0.0, 0.0, 0.0, 0.0);
-		_P2Pos ("To Player 2", Color) = (0.0, 0.0, 0.0, 0.0);
+		_P1Pos ("P1 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
+		_P2Pos ("P2 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
 
 	}	
 	SubShader {
@@ -52,8 +52,9 @@ Shader "DepthMask/MaskerAlphaGradient" {
 			struct vertexOutput{
 				float4 pos: SV_POSITION;
 				float3 normal: NORMAL;
-				float3 
 				float4 col: COLOR;
+				float4 toP1: To_P1_POS;
+				float4 toP2: TO_P2_POS;
 			};
 
 			//vertex function
@@ -62,11 +63,15 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				vo.pos = mul(UNITY_MATRIX_MVP, vi.vertex);
 
 				float3 normalDirection = normalize(mul(float4(vi.normal, 0.0), _World2Object).xyz);
-				float3 toP1;
-				float3 toP2;
 
+				//normals and color simply passed along
 				vo.normal = vi.normal;
 				vo.color = vi.color;
+
+				//calculate direction vector to both players
+				vo.toP1 = _P1Pos - vi.vertex;
+				vo.toP2 = _P2Pos - vi.vertex;
+
 				return vo;
 			}
 
