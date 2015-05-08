@@ -27,12 +27,14 @@ public class ConstrainOnDirection : MonoBehaviour {
 				usableDirection = transform.TransformDirection(constrainToDirection);
 			}
 
-			transform.position = oldPosition + Helper.ProjectVector(usableDirection, transform.position - oldPosition);
-
-
-			if (body != null && body.velocity.sqrMagnitude > 0)
+			if (body != null && body.velocity.sqrMagnitude > 0 && !body.isKinematic)
 			{
+				body.MovePosition(oldPosition + Helper.ProjectVector(usableDirection, transform.position - oldPosition));
 				body.velocity = Helper.ProjectVector(usableDirection, body.velocity);
+			}
+			else if (body == null)
+			{
+				transform.position = oldPosition + Helper.ProjectVector(usableDirection, transform.position - oldPosition);
 			}
 		}
 	}

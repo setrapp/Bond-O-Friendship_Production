@@ -8,9 +8,13 @@ public class JoinTogetherGroup : MonoBehaviour {
 	[SerializeField]
 	public List<JoinTogether> joins;
 	public JoinTogetherPair groupJoinTarget;
+	public bool solved = false;
+	public PulseStats basePulseStats;
+	public PulseStats pairedPulseStats;
 
 	void Start()
 	{
+		// If desired, find and attach all child joins.
 		if (allChildJoins)
 		{
 			JoinTogether[] childJoins = GetComponentsInChildren<JoinTogether>();
@@ -23,6 +27,7 @@ public class JoinTogetherGroup : MonoBehaviour {
 			}
 		}
 
+		// Direct all attached joins to the specified group target.
 		for (int i = 0; i < joins.Count; i++)
 		{
 			if (joins[i].joinTarget.baseObject == null)
@@ -33,44 +38,38 @@ public class JoinTogetherGroup : MonoBehaviour {
 			{
 				joins[i].joinTarget.pairedObject = groupJoinTarget.pairedObject;
 			}
-
-			// Attach spring joints to join pieces to prevent collisions.
-			for (int j = i + 1; j < joins.Count; j++)
-			{
-				if (joins[i].baseBody != null && joins[j].baseBody != null)
-				{
-					SpringJoint noCollide = joins[i].baseBody.gameObject.AddComponent<SpringJoint>();
-					noCollide.connectedBody = joins[j].baseBody;
-					noCollide.spring = 0;
-					noCollide.damper = 0;
-					noCollide.anchor = Vector3.zero;
-					noCollide.autoConfigureConnectedAnchor = false;
-					noCollide.connectedAnchor = Vector3.zero;
-				}
-				
-			}
+			joins[i].EstablishConstraints();
 		}
 	}
 
 	void Update()
 	{
-		bool allJoined = true;
-		for (int i = 0; i < joins.Count && allJoined; i++)
+		if (!solved)
 		{
-			if (!joins[i].atJoin)
-			{
-				allJoined = false;
-			}
-		}
-
-		if (allJoined)
-		{
+			// Check if all joins are in the joining position.
+			bool allJoined = true;
 			for (int i = 0; i < joins.Count && allJoined; i++)
 			{
-				if (joins[i].baseBody != null)
+				if (!joins[i].atJoin)
 				{
-					joins[i].baseBody.isKinematic = true;
+					allJoined = false;
 				}
+			}
+
+			// If all joins are in position, stop their movement and solve the puzzle.
+			if (allJoined)
+			{
+				for (int i = 0; i < joins.Count && allJoined; i++)
+				{
+					if (joins[i].baseBody != null)
+					{
+						joins[i].baseBody.isKinematic = true;
+					}
+				}
+
+				solved = true;
+				Helper.FirePulse(groupJoinTarget.baseObject.transform.position, basePulseStats);
+				Helper.FirePulse(groupJoinTarget.pairedObject.transform.position, pairedPulseStats);
 			}
 		}
 	}

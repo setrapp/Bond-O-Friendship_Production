@@ -4,12 +4,12 @@ using System.Collections;
 public class JoinTogether : MonoBehaviour {
 
 	public Rigidbody baseBody = null;
+	public ConstrainOnDirection movementConstraint;
 	public JoinTogetherPair moveable;
 	public JoinTogetherPair sepatationTarget;
 	public JoinTogetherPair joinTarget;
 	private Vector3 oldMoveablePosition;
 	public bool atJoin = false;
-	private float progressThreshold = 0.95f;
 
 	void Awake()
 	{
@@ -21,6 +21,12 @@ public class JoinTogether : MonoBehaviour {
 		{
 			baseBody = moveable.baseObject.GetComponent<Rigidbody>();
 		}
+		if (movementConstraint == null)
+		{
+			movementConstraint = moveable.baseObject.GetComponent<ConstrainOnDirection>();
+		}
+
+		EstablishConstraints();
 	}
 
 	void Update()
@@ -34,12 +40,17 @@ public class JoinTogether : MonoBehaviour {
 
 			separationToMoveable = Helper.ProjectVector(separationToJoin, separationToMoveable);
 			float progress = separationToMoveable.magnitude / separationToJoin.magnitude;
+			float progressDirection = Vector3.Dot(separationToMoveable, separationToJoin);
 
-			if (progress > 1)
+			if (progress > 1 && progressDirection > 0)
 			{
 				if (baseBody != null)
 				{
 					baseBody.MovePosition(joinTarget.baseObject.transform.position);
+					if (!baseBody.isKinematic)
+					{
+						baseBody.velocity = Vector3.zero;
+					}
 				}
 				else
 				{
@@ -47,8 +58,24 @@ public class JoinTogether : MonoBehaviour {
 				}
 				progress = 1;
 			}
+			else if (progressDirection < 0)
+			{
+				if (baseBody != null)
+				{
+					baseBody.MovePosition(sepatationTarget.baseObject.transform.position);
+					if (!baseBody.isKinematic)
+					{
+						baseBody.velocity = Vector3.zero;
+					}
+				}
+				else
+				{
+					moveable.baseObject.transform.position = sepatationTarget.baseObject.transform.position;
+				}
+				progress = 0;
+			}
 
-			if (progress >= progressThreshold)
+			if (progress >= 1)
 			{
 				atJoin = true;
 			}
@@ -56,6 +83,15 @@ public class JoinTogether : MonoBehaviour {
 			moveable.pairedObject.transform.position = sepatationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - sepatationTarget.pairedObject.transform.position) * progress);
 
 			oldMoveablePosition = moveable.baseObject.transform.position;
+		}
+	}
+
+	public void EstablishConstraints()
+	{
+		if (movementConstraint != null && baseBody != null && sepatationTarget.baseObject != null && joinTarget.baseObject != null)
+		{
+			movementConstraint.directionSpace = Space.World;
+			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - sepatationTarget.baseObject.transform.position).normalized;
 		}
 	}
 }
