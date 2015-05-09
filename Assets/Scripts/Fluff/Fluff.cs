@@ -15,7 +15,7 @@ public class Fluff : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public MeshRenderer bulb;
-	public MeshRenderer stalk;
+	//public MeshRenderer stalk;
 	public GameObject geometry;
 	public LineRenderer lineToAttractor;
 	[HideInInspector]
