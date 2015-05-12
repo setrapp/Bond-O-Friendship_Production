@@ -11,6 +11,10 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	public GameObject endSW;
 	public GameObject endNE;
 	public GameObject endNW;
+	public GameObject bedSE;
+	public GameObject bedSW;
+	public GameObject bedNE;
+	public GameObject bedNW;
 
 	public Color fillingColor;
 	public Color finishedColor;
@@ -47,20 +51,32 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	void Update () {
 		if(fluffStick.stuckFluff != null && !complete)
 		{
-			if(streamSE.transform.localScale.x < 30.0f)
+			if(streamSE.transform.localScale.x < bedSE.transform.localScale.x)
+			{
 				streamSE.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				streamSE.transform.localPosition += new Vector3(Time.deltaTime, -Time.deltaTime, 0);
+			}
 			else
 				finishedSE = true;
-			if(streamSW.transform.localScale.x < 33.5f)
+			if(streamSW.transform.localScale.x < bedSW.transform.localScale.x)
+			{
 				streamSW.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				streamSW.transform.localPosition += new Vector3(-Time.deltaTime, -Time.deltaTime, 0);
+			}
 			else
 				finishedSW = true;
-			if(streamNE.transform.localScale.x < 63.5f)
+			if(streamNE.transform.localScale.x < bedNE.transform.localScale.x)
+			{
 				streamNE.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				streamNE.transform.localPosition += new Vector3(Time.deltaTime, Time.deltaTime, 0);
+			}
 			else
 				finishedNE = true;
-			if(streamNW.transform.localScale.x < 49.5f)
+			if(streamNW.transform.localScale.x < bedNW.transform.localScale.x)
+			{
 				streamNW.transform.localScale += new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				streamNW.transform.localPosition += new Vector3(-Time.deltaTime, Time.deltaTime, 0);
+			}
 			else
 				finishedNW = true;
 
@@ -77,22 +93,29 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 				if(streamSE.transform.localScale.x > 0)
 				{
 					streamSE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					streamSE.transform.localPosition -= new Vector3(Time.deltaTime, -Time.deltaTime, 0);
 					timeSE = 0;
 					finishedSE = false;
 				}
 				if(streamSW.transform.localScale.x > 0)
 				{
 					streamSW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					streamSW.transform.localPosition -= new Vector3(-Time.deltaTime, -Time.deltaTime, 0);
+					timeSW = 0;
 					finishedSW = false;
 				}
 				if(streamNE.transform.localScale.x > 0)
 				{
 					streamNE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					streamNE.transform.localPosition -= new Vector3(Time.deltaTime, Time.deltaTime, 0);
+					timeNE = 0;
 					finishedNE = false;
 				}
 				if(streamNW.transform.localScale.x > 0)
 				{
-					streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;				
+					streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+					streamNW.transform.localPosition -= new Vector3(-Time.deltaTime, Time.deltaTime, 0);
+					timeNW = 0;
 					finishedNW = false;
 				}
 
@@ -162,26 +185,47 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 
 		if(complete)
 		{
-			for(int i = 0; i < transform.parent.childCount; i++)
+			if(streamSE.transform.localScale.x > 0)
 			{
-				if(transform.parent.GetChild(i).name == "Cube")
-					Destroy(transform.parent.GetChild(i).gameObject);
+				streamSE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				float dist =  streamSE.transform.localScale.x/streamScaleRate;
+				endSE.transform.position = streamSE.transform.position + new Vector3(-dist,-dist, 0);
+				streamSE.transform.localPosition -= new Vector3(Time.deltaTime, -Time.deltaTime, 0);
 			}
-			if(transform.parent.transform.localPosition.z < 8.0f)
-				transform.parent.transform.localPosition += new Vector3(0, 0, Time.deltaTime);
+			if(streamSW.transform.localScale.x > 0)
+			{
+				streamSW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				float dist =  streamSW.transform.localScale.x/streamScaleRate;
+				endSW.transform.position = streamSW.transform.position + new Vector3(-dist,dist, 0);
+				streamSW.transform.localPosition -= new Vector3(-Time.deltaTime, -Time.deltaTime, 0);
+			}
+			if(streamNE.transform.localScale.x > 0)
+			{
+				streamNE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				float dist =  streamNE.transform.localScale.x/streamScaleRate;
+				endNE.transform.position = streamNE.transform.position + new Vector3(dist,-dist, 0);
+				streamNE.transform.localPosition -= new Vector3(Time.deltaTime, Time.deltaTime, 0);
+			}
+			if(streamNW.transform.localScale.x > 0)
+			{
+				streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
+				float dist =  streamNW.transform.localScale.x/streamScaleRate;
+				endNW.transform.position = streamNW.transform.position + new Vector3(dist, dist, 0);
+				streamNW.transform.localPosition -= new Vector3(-Time.deltaTime, Time.deltaTime, 0);
+			}
+			if(bedSE != null)
+				Destroy(bedSE);
+			if(bedSW != null)
+				Destroy(bedSW);
+			if(bedNE != null)
+				Destroy(bedNE);
+			if(bedNW != null)
+				Destroy(bedNW);
 			GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endSW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endNE.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
 			endNW.GetComponent<Renderer>().material.color = Color.Lerp(GetComponent<Renderer>().material.color, finishedColor, Time.deltaTime*0.2f);
-			if(streamSE.transform.localScale.y > 0)
-				streamSE.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
-			if(streamSW.transform.localScale.y > 0)
-				streamSW.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
-			if(streamNE.transform.localScale.y > 0)
-				streamNE.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
-			if(streamNW.transform.localScale.y > 0)
-				streamNW.transform.localScale -= new Vector3(0, Time.deltaTime, 0)*0.2f;
 		}
 	}
 }
