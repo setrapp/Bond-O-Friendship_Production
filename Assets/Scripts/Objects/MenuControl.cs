@@ -57,6 +57,7 @@ public class MenuControl : MonoBehaviour {
     {
         //startColor = levelCover.renderer.material.color;
        // fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
+		Globals.Instance.allowInput = false;
         inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();       
         foreach(Renderer renderer in inputSelectRenderers)
         {
@@ -247,6 +248,7 @@ public class MenuControl : MonoBehaviour {
             {
                 startMenu.SetActive(false);
                 t = 1.0f;
+				Globals.Instance.allowInput = true;
             }
         }
     }
