@@ -16,7 +16,7 @@ public class CursorSeek : MonoBehaviour {
 	{
 		if(gameCamera == null)
 		{
-			gameCamera = CameraSplitter.Instance.player1CameraSystem.transform.GetChild(0).GetComponent<Camera>();
+			gameCamera = CameraSplitter.Instance.mainCameraFollow.transform.GetChild(0).GetComponent<Camera>();
 		}
 		if (mover == null)
 		{
