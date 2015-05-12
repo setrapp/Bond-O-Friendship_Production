@@ -37,8 +37,9 @@ public class Bond : MonoBehaviour {
 	[SerializeField]
 	public List<GameObject> fluffsHeld;
 	private float fluffRequestTime;
-	private List<BondStrain> strains;
+	public List<BondStrain> strains;
 	public Color flashTint;
+	public Color strainTint;
 	public float flashDuration = 1;
 
 	protected virtual void Start()
@@ -861,22 +862,35 @@ public class Bond : MonoBehaviour {
 
 	public void Flash()
 	{
-		StartCoroutine(FlashAndFade());
+		StartCoroutine(FlashAndFade(flashTint));
 	}
 
-	private IEnumerator FlashAndFade()
+	private IEnumerator FlashAndFade(Color tint, bool straining = false)
 	{
 		Color color1 = attachment1.attachee.attachmentColor;
 		Color color2 = attachment2.attachee.attachmentColor;
 		Color midColor = ComputeMidColor(color1, color2);
 
-		Color flashColor1 = color1 + flashTint;
-		Color flashColor2 = color2 + flashTint;
-		Color flashMidColor = midColor + flashTint;
+		if (straining)
+		{
+			tint *= -1;
+		}
+
+		Color flashColor1 = color1 + tint;
+		Color flashColor2 = color2 + tint;
+		Color flashMidColor = midColor + tint;
 
 
 		attachment1.lineRenderer.SetColors(flashColor1, flashMidColor);
 		attachment2.lineRenderer.SetColors(flashMidColor, flashColor2);
+
+		if (straining)
+		{
+			while (strains.Count > 0)
+			{
+				yield return null;
+			}
+		}
 
 		if (flashDuration <= 0)
 		{
@@ -887,7 +901,7 @@ public class Bond : MonoBehaviour {
 		else
 		{
 			float flashElapsed = 0;
-			while(flashElapsed < flashDuration)
+			while(flashElapsed < flashDuration && (strains == null || strains.Count <= 0))
 			{
 				float progress = flashElapsed / flashDuration;
 				Color fadeMidColor = (flashMidColor * (1 - progress)) + (midColor * progress);
@@ -910,12 +924,20 @@ public class Bond : MonoBehaviour {
 
 		if (!IgnoreStrainer(bondStrain))
 		{
+			int oldStrainCount = strains.Count;
+			
+
 			BondStrain newStrain = new BondStrain();
 			newStrain.intensity = bondStrain.intensity;
 			newStrain.duration = bondStrain.duration;
 			newStrain.strainer = bondStrain.strainer;
 
 			strains.Add(newStrain);
+
+			if (oldStrainCount <= 0)
+			{
+				StartCoroutine(FlashAndFade(strainTint, true));
+			}
 		}
 	}
 

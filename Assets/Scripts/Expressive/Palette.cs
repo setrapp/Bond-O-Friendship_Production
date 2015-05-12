@@ -56,7 +56,7 @@ public class Palette : MonoBehaviour {
 		rippleObj.GetComponent<RingPulse>().scaleRate = 40.0f;
 		rippleObj.GetComponent<RingPulse>().lifeTime = 2.0f;
 		rippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-		rippleObj.GetComponent<RingPulse>().alphaFade = 1.8f;
+		//rippleObj.GetComponent<RingPulse>().alphaFade = 1.8f;
 
 		//print ("fire!");
 	}
