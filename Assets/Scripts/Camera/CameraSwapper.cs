@@ -13,13 +13,13 @@ public class CameraSwapper : MonoBehaviour {
 			return;
 		}
 
-		if (CameraSplitter.Instance == null || CameraSplitter.Instance.player1CameraSystem == null || CameraSplitter.Instance.player2CameraSystem == null)
+		if (CameraSplitter.Instance == null || CameraSplitter.Instance.mainCameraFollow == null || CameraSplitter.Instance.splitCameraFollow == null)
 		{
 			return;
 		}
 
-		CameraFollow camera1 = CameraSplitter.Instance.player1CameraSystem;
-		CameraFollow camera2 = CameraSplitter.Instance.player2CameraSystem;
+		CameraFollow camera1 = CameraSplitter.Instance.mainCameraFollow;
+		CameraFollow camera2 = CameraSplitter.Instance.splitCameraFollow;
 		Transform cameraPlayer1 = camera1.player1;
 		Transform cameraPlayer2 = camera1.player2;
 
@@ -48,8 +48,8 @@ public class CameraSwapper : MonoBehaviour {
 
 		if (swap)
 		{
-			CameraSplitter.Instance.player1CameraSystem = camera2;
-			CameraSplitter.Instance.player2CameraSystem = camera1;
+			CameraSplitter.Instance.mainCameraFollow = camera2;
+			CameraSplitter.Instance.splitCameraFollow = camera1;
 			camera1.player1 = cameraPlayer2;
 			camera1.player2 = cameraPlayer1;
 			camera2.player1 = cameraPlayer1;

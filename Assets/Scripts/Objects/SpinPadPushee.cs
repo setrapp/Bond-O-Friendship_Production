@@ -57,7 +57,7 @@ public class SpinPadPushee : MonoBehaviour {
 			ripple.scaleRate = 8;
 			ripple.lifeTime = 1;
 			ripple.alpha = 1;
-			ripple.alphaFade = 1;
+			//ripple.alphaFade = 1;
 			ripple.smallRing = false;
 		}
 

@@ -134,7 +134,7 @@ public class Threader : MonoBehaviour {
 			smallrippleObj.GetComponent<RingPulse>().scaleRate = 8.0f;
 			smallrippleObj.GetComponent<RingPulse>().lifeTime = 1.5f;
 			smallrippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-			smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
+			//smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
 			smallrippleObj.GetComponent<RingPulse>().mycolor = Color.white;
 			//smallrippleObj.GetComponent<RingPulse>().smallRing = true;
 			rippleShot = true;

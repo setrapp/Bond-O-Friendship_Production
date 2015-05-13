@@ -8,18 +8,10 @@ public class ToggleControllers : MonoBehaviour {
     public GameObject rightController;
     public GameObject leftController;
 
-    public GameObject rightControllerMask;
-
     public InputFill inputFill;
 
     private Vector3 leftControllerLocation;
     private Vector3 rightControllerLocation;
-
-    public Collider lcltCol;
-    public Collider lcrtCol;
-
-    public Collider rcltCol;
-    public Collider rcrtCol;
 
     private Vector3 centerLocation;
 
@@ -57,12 +49,6 @@ public class ToggleControllers : MonoBehaviour {
                 inputFill.player2FutureControls.controlScheme = Globals.ControlScheme.None;
                 inputFill.player2FutureControls.inputNameSelected = Globals.InputNameSelected.None;
             }
-
-            inputFill.LL.transform.localScale = inputFill.emptyController;
-            inputFill.LL2.transform.localScale = inputFill.emptyController;
-            inputFill.LR.transform.localScale = inputFill.emptyController;
-            inputFill.LR2.transform.localScale = inputFill.emptyController;
-
         }
         else
         {
@@ -81,10 +67,6 @@ public class ToggleControllers : MonoBehaviour {
                 inputFill.player2FutureControls.inputNameSelected = Globals.InputNameSelected.None;
             }
 
-            inputFill.RL.transform.localScale = inputFill.emptyController;
-            inputFill.RL2.transform.localScale = inputFill.emptyController;
-            inputFill.RR.transform.localScale = inputFill.emptyController;
-            inputFill.RR2.transform.localScale = inputFill.emptyController;
 
             t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
         }
@@ -102,12 +84,7 @@ public class ToggleControllers : MonoBehaviour {
         if(t == 0)
             rightController.SetActive(false);
 
-        lcltCol.enabled = !moving;
-        lcrtCol.enabled = !moving;
-        rcltCol.enabled = !moving;
-        rcrtCol.enabled = !moving;
 
-        rightControllerMask.SetActive(!moving);
 
 
 

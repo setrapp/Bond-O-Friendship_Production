@@ -15,6 +15,7 @@ GameObject:
   - 145: {fileID: 14500004}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11442350}
   m_Layer: 19
   m_Name: Bond Link
   m_TagString: Untagged
@@ -171,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e9b8a977b3ed14f947ad373e275e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 6552446}
   toNextCollider: {fileID: 6552444}
   body: {fileID: 5400000}
@@ -180,6 +182,7 @@ MonoBehaviour:
   jointToAttachment: {fileID: 14500004}
   orderLevel: 0
   broken: 0
+  fluffStick: {fileID: 11442350}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,6 +195,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creditsLinkPrefab: {fileID: 100000, guid: 63c60abd1c3deda4fae435f72948d17d, type: 2}
+--- !u!114 &11442350
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe56b517c9fbc1488b49bfee1d169ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  stuckFluff: {fileID: 0}
+  stickOffset: {x: 0, y: 0, z: 0}
+  stickDirection: {x: 1, y: 0, z: 0}
 --- !u!114 &11452444
 MonoBehaviour:
   m_ObjectHideFlags: 1

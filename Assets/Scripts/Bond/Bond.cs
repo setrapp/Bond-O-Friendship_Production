@@ -37,8 +37,9 @@ public class Bond : MonoBehaviour {
 	[SerializeField]
 	public List<GameObject> fluffsHeld;
 	private float fluffRequestTime;
-	private List<BondStrain> strains;
+	public List<BondStrain> strains;
 	public Color flashTint;
+	public Color strainTint;
 	public float flashDuration = 1;
 
 	protected virtual void Start()
@@ -102,29 +103,46 @@ public class Bond : MonoBehaviour {
 			// Direct, scale, and place link colliders to cover the surface of the bond.
 			if (!stats.manualLinks && !atSparseDetail)
 			{
-				Vector3 linkDir = Vector3.zero;
-				Vector3 linkScalePrev = Vector3.zero;
-				Vector3 linkScaleNext = Vector3.zero;
-				for (int i = 1; i < links.Count - 1; i++)
+				if (!stats.disableColliders)
 				{
-					linkDir = Vector3.zero;
-					
-					linkScalePrev = links[i].toPreviousCollider.size;
-					linkScaleNext = links[i].toNextCollider.size;
-					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
-					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScalePrev.y = magFromPrevious * 2;
-					linkScaleNext.y = magToNext * 2;
+					Vector3 linkDir = Vector3.zero;
+					Vector3 linkScalePrev = Vector3.zero;
+					Vector3 linkScaleNext = Vector3.zero;
+					for (int i = 1; i < links.Count - 1; i++)
+					{
+						linkDir = Vector3.zero;
 
-					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
-					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
-					links[i].toPreviousCollider.size = (i != 1) ? linkScalePrev : Vector3.zero;
-					links[i].toNextCollider.size = (i != links.Count - 2) ? linkScaleNext : Vector3.zero;
-					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
-					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+						linkScalePrev = links[i].toPreviousCollider.size;
+						linkScaleNext = links[i].toNextCollider.size;
+						linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
+						float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+						float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+						linkScalePrev.y = magFromPrevious * 2;
+						linkScaleNext.y = magToNext * 2;
 
-					links[i].transform.up = linkDir;
+						links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
+						links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
+						links[i].toPreviousCollider.size = (i != 1) ? linkScalePrev : Vector3.zero;
+						links[i].toNextCollider.size = (i != links.Count - 2) ? linkScaleNext : Vector3.zero;
+						links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
+						links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+
+						links[i].transform.up = linkDir;
+					}
+				}
+				else
+				{
+					/*for (int i = 0; i < links.Count; i++)
+					{
+						if (links[i].toNextCollider != null)
+						{
+							links[i].toNextCollider.enabled = false;
+						}
+						if (links[i].toPreviousCollider != null)
+						{
+							links[i].toPreviousCollider.enabled = false;
+						}
+					}*/
 				}
 			}
 
@@ -216,75 +234,58 @@ public class Bond : MonoBehaviour {
 	{
 		bool isCountEven = links.Count % 2 == 0;
 
-		// Mainting desired length of links by adding and removing.
-		if (!stats.disableColliders)
+		// Maintain desired length of links by adding and removing.
+		if (!stats.manualLinks)
 		{
-			if (!stats.manualLinks)
+			if (links.Count < 4)
 			{
-				if (links.Count < 4)
-				{
-					AddLink();
-				}
-				else
-				{
-					int linksCheckedOnFrame = 0;
-					bool bondChanged = false;
-					float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
-					float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
-					if (stats.addLinkDistance >= 0)
-					{
-						for (int i = 1; i < links.Count - 2; i++)
-						{
-							float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
-							if (sqrDist > sqrAddDist)
-							{
-								AddLink(i + 1, false);
-								bondChanged = true;
-							}
-
-							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-							{
-								linksCheckedOnFrame = 0;
-								yield return null;
-							}
-						}
-					}
-					if (stats.removeLinkDistance >= 0)
-					{
-						for (int i = 1; i < links.Count - 2; i++)
-						{
-							float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
-							if (sqrDist < sqrRemoveDist)
-							{
-								RemoveLink(i, false);
-								bondChanged = true;
-							}
-
-							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-							{
-								linksCheckedOnFrame = 0;
-								yield return null;
-							}
-						}
-					}
-					if (bondChanged)
-					{
-						WeightJoints();
-					}
-				}
+				AddLink();
 			}
-		}
-		else
-		{
-			for (int i = 0; i < links.Count; i++)
+			else
 			{
-				if (links[i].toNextCollider != null)
+				int linksCheckedOnFrame = 0;
+				bool bondChanged = false;
+				float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
+				float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
+				if (stats.addLinkDistance >= 0)
 				{
-					links[i].toNextCollider.enabled = false;
+					for (int i = 1; i < links.Count - 2; i++)
+					{
+						float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+						if (sqrDist > sqrAddDist)
+						{
+							AddLink(i + 1, false);
+							bondChanged = true;
+						}
+
+						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+						{
+							linksCheckedOnFrame = 0;
+							yield return null;
+						}
+					}
 				}
-				if (links[i].toPreviousCollider != null)
+				if (stats.removeLinkDistance >= 0)
 				{
-					links[i].toPreviousCollider.enabled = false;
+					for (int i = 1; i < links.Count - 2; i++)
+					{
+						float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+						if (sqrDist < sqrRemoveDist)
+						{
+							RemoveLink(i, false);
+							bondChanged = true;
+						}
+
+						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+						{
+							linksCheckedOnFrame = 0;
+							yield return null;
+						}
+					}
+				}
+				if (bondChanged)
+				{
+					WeightJoints();
 				}
 			}
 		}
@@ -506,6 +507,18 @@ public class Bond : MonoBehaviour {
 		newLink.linkPrevious = previousLink;
 		newLink.linkNext = nextLink;
 
+		if (stats.disableColliders)
+		{
+			if (newLink.toPreviousCollider != null)
+			{
+				newLink.toPreviousCollider.enabled = false;
+			}
+			if (newLink.toNextCollider != null)
+			{
+				newLink.toNextCollider.enabled = false;
+			}
+		}
+
 		if (previousLink != null)
 		{
 			previousLink.linkNext = newLink;
@@ -551,6 +564,7 @@ public class Bond : MonoBehaviour {
 		{
 			nextLink.linkPrevious = previousLink;
 		}
+
 		LinkRemoved(links[index]);
 		Destroy(links[index].gameObject);
 		links.RemoveAt(index);
@@ -848,22 +862,35 @@ public class Bond : MonoBehaviour {
 
 	public void Flash()
 	{
-		StartCoroutine(FlashAndFade());
+		StartCoroutine(FlashAndFade(flashTint));
 	}
 
-	private IEnumerator FlashAndFade()
+	private IEnumerator FlashAndFade(Color tint, bool straining = false)
 	{
 		Color color1 = attachment1.attachee.attachmentColor;
 		Color color2 = attachment2.attachee.attachmentColor;
 		Color midColor = ComputeMidColor(color1, color2);
 
-		Color flashColor1 = color1 + flashTint;
-		Color flashColor2 = color2 + flashTint;
-		Color flashMidColor = midColor + flashTint;
+		if (straining)
+		{
+			tint *= -1;
+		}
+
+		Color flashColor1 = color1 + tint;
+		Color flashColor2 = color2 + tint;
+		Color flashMidColor = midColor + tint;
 
 
 		attachment1.lineRenderer.SetColors(flashColor1, flashMidColor);
 		attachment2.lineRenderer.SetColors(flashMidColor, flashColor2);
+
+		if (straining)
+		{
+			while (strains.Count > 0)
+			{
+				yield return null;
+			}
+		}
 
 		if (flashDuration <= 0)
 		{
@@ -874,7 +901,7 @@ public class Bond : MonoBehaviour {
 		else
 		{
 			float flashElapsed = 0;
-			while(flashElapsed < flashDuration)
+			while(flashElapsed < flashDuration && (strains == null || strains.Count <= 0))
 			{
 				float progress = flashElapsed / flashDuration;
 				Color fadeMidColor = (flashMidColor * (1 - progress)) + (midColor * progress);
@@ -897,12 +924,20 @@ public class Bond : MonoBehaviour {
 
 		if (!IgnoreStrainer(bondStrain))
 		{
+			int oldStrainCount = strains.Count;
+			
+
 			BondStrain newStrain = new BondStrain();
 			newStrain.intensity = bondStrain.intensity;
 			newStrain.duration = bondStrain.duration;
 			newStrain.strainer = bondStrain.strainer;
 
 			strains.Add(newStrain);
+
+			if (oldStrainCount <= 0)
+			{
+				StartCoroutine(FlashAndFade(strainTint, true));
+			}
 		}
 	}
 
@@ -1005,6 +1040,8 @@ public class BondStats
 		if (fullOverwrite || replacement.extensionPerFluff >= 0)		{	this.extensionPerFluff = replacement.extensionPerFluff;				}
 		manualAttachment1 = replacement.manualAttachment1;
 		manualAttachment2 = replacement.manualAttachment2;
+		manualLinks = replacement.manualLinks;
+		disableColliders = replacement.disableColliders;
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}

@@ -23,6 +23,7 @@ public class CharacterComponents : MonoBehaviour {
 	public Rigidbody body;
 	public Attractor attractor;
 	public FlufflessPass flufflessPass;
+	public Light backLight;
 	[HideInInspector]
 	public float fillScale = 1;
 	public float flashFadeTime = 1;

@@ -137,7 +137,9 @@ public class PlayersEstablish : MonoBehaviour {
                 
 				Destroy(Globals.Instance.initialPlayerHolder);
 			}
-			
+
+			player1.character.backLight.gameObject.SetActive(true);
+			player2.character.backLight.gameObject.SetActive(true);
 
 			// After the players have been spawned in one level, don't change them when new levels load.
 			Globals.Instance.updatePlayersOnLoad = false;
