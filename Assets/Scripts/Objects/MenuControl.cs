@@ -6,6 +6,8 @@ using InControl;
 
 public class MenuControl : MonoBehaviour {
 
+    public ClusterNodePuzzle newGameNodePuzzle;
+
     public GameObject startMenu;
 
     public GameObject obscureMenuPanel;
@@ -25,6 +27,10 @@ public class MenuControl : MonoBehaviour {
     public bool player2Ready = false;
 
     private bool readyUp = false;
+    private bool startGame = false;
+    private bool toggled = false;
+
+    private bool firePulse = true;
 
     private bool inputSelected = false;
 
@@ -51,6 +57,7 @@ public class MenuControl : MonoBehaviour {
     {
         //startColor = levelCover.renderer.material.color;
        // fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
+		Globals.Instance.allowInput = false;
         inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();       
         foreach(Renderer renderer in inputSelectRenderers)
         {
@@ -171,10 +178,18 @@ public class MenuControl : MonoBehaviour {
             {
                 if (startMenu.activeSelf)
                     FadeStartMenu();
+                
+                if(firePulse)
+                {
+                    Helper.FirePulse(Globals.Instance.player1.transform.position, Globals.Instance.defaultPulseStats);
 
+                    Helper.FirePulse(Globals.Instance.player2.transform.position, Globals.Instance.defaultPulseStats);
+
+                    firePulse = false;
+                }
             }
 
-            if (player1Ready && player2Ready && inputSelected)
+            if (inputSelected && newGameNodePuzzle != null && newGameNodePuzzle.solved)
             {
                 Globals.Instance.allowInput = false;
                 readyUp = true;
@@ -189,11 +204,24 @@ public class MenuControl : MonoBehaviour {
             }
 
             if (readyUp)
-                FadeControls();
+            {
+                if (!toggled)
+                {
+                    Invoke("StartGame", .5f);
+                    toggled = true;
+                }
+
+                if(startGame)
+                    FadeControls();
+            }
         }
 
     }	
 
+    private void StartGame()
+    {
+        startGame = true;
+    }
 
     private void FadeStartMenu()
     {
@@ -220,6 +248,7 @@ public class MenuControl : MonoBehaviour {
             {
                 startMenu.SetActive(false);
                 t = 1.0f;
+				Globals.Instance.allowInput = true;
             }
         }
     }
@@ -233,7 +262,7 @@ public class MenuControl : MonoBehaviour {
             t = Mathf.Clamp(t, 0.0f, 1.0f);
             for (int i = 0; i < inputSelectRenderers.Length; i++)
             {
-                if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
+                if (inputSelectRenderers[i].renderer != null && inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
                     inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
             }
 

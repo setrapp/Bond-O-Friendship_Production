@@ -12,6 +12,11 @@ public class BondDestroyer : MonoBehaviour {
 	public Renderer targetRenderer;
 	public BondStrain bondStrain;
 	public bool defaultStrainerToSelf = true;
+	[Header("Destroy Pulse")]
+	public float pulseDelay = -1;
+	private float lastPulseTime = 0;
+	public PulseStats pulseStats;
+	private BondDestroyerPulse destroyerPulse;
 
 	void Awake()
 	{
@@ -46,6 +51,38 @@ public class BondDestroyer : MonoBehaviour {
 				}
 			}
 			targetRenderer.material.color = fadeColor;
+			if (destroyerPulse != null && destroyerPulse.renderer != null)
+			{
+				destroyerPulse.pulseBase.alpha = fadeColor.a;
+				destroyerPulse.renderer.material.color = fadeColor;
+			}
+		}
+
+		// Only allow one pulse to exist at a time.
+		if (pulseDelay >= 0 && pulseDelay < pulseStats.lifeTime)
+		{
+			pulseDelay = pulseStats.lifeTime;
+		}
+
+		if (pulseDelay >= 0 && Time.time - lastPulseTime >= pulseDelay)
+		{
+			RingPulse shotPulse = Helper.FirePulse(transform.position, pulseStats);
+			shotPulse.gameObject.name = "Destroyer Pulse";
+			shotPulse.gameObject.layer = gameObject.layer;
+			Renderer pulseRenderer = shotPulse.renderer;
+			if (pulseRenderer != null)
+			{
+				Color pulseColor = targetRenderer.material.color;
+				pulseColor.a = restAlpha;
+				shotPulse.mycolor = pulseColor;
+				pulseRenderer.material.color = pulseColor;
+			}
+			destroyerPulse = shotPulse.gameObject.AddComponent<BondDestroyerPulse>();
+			destroyerPulse.creator = this;
+			destroyerPulse.renderer = pulseRenderer;
+			destroyerPulse.pulseBase = shotPulse;
+
+			lastPulseTime = Time.time;
 		}
 
 		if (toPop != null)
@@ -83,7 +120,7 @@ public class BondDestroyer : MonoBehaviour {
 		AttemptDestoy(col);
 	}
 
-	void AttemptDestoy(Collider other)
+	public void AttemptDestoy(Collider other, BondDestroyerPulse collidedPulse = null)
 	{
 		bool crossed = false;
 		if (other.gameObject.tag == "Fluff" && destroyFluffs)
@@ -121,6 +158,18 @@ public class BondDestroyer : MonoBehaviour {
 			Color crossColor = targetRenderer.material.color;
 			crossColor.a = crossAlpha;
 			targetRenderer.material.color = crossColor;
+
+			/*if (collidedPulse != null && collidedPulse.renderer != null)
+			{
+				Color pulseCrossColor = crossColor;
+				collidedPulse.pulseBase.alpha = pulseCrossColor.a;
+				collidedPulse.renderer.material.color = crossColor;
+			}*/
+			if (destroyerPulse != null && destroyerPulse.renderer != null)
+			{
+				destroyerPulse.pulseBase.alpha = crossColor.a;
+				destroyerPulse.renderer.material.color = crossColor;
+			}
 		}
 	}
 }

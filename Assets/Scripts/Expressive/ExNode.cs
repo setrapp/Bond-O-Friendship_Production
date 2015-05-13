@@ -93,7 +93,7 @@ public class ExNode : MonoBehaviour {
 		rippleObj.GetComponent<RingPulse>().scaleRate = a;
 		rippleObj.GetComponent<RingPulse>().lifeTime = b;
 		rippleObj.GetComponent<RingPulse>().alpha = c;
-		rippleObj.GetComponent<RingPulse>().alphaFade = d;
+		//rippleObj.GetComponent<RingPulse>().alphaFade = d;
 		rippleObj.GetComponent<RingPulse>().smallRing = false;
 
 
@@ -106,7 +106,7 @@ public class ExNode : MonoBehaviour {
 		smallrippleObj.GetComponent<RingPulse>().scaleRate = 8.0f;
 		smallrippleObj.GetComponent<RingPulse>().lifeTime = 1.5f;
 		smallrippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-		smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
+		//smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
 		smallrippleObj.GetComponent<RingPulse>().smallRing = true;
 		//print ("fire!");
 	}

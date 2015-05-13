@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
-    public bool isCamera1;
+    public bool isMainCamera;
 	//[HideInInspector]
 	public Transform player1;
 	//[HideInInspector]
@@ -12,10 +12,10 @@ public class CameraFollow : MonoBehaviour {
 	private Vector3 mainTargetPosition;
     private Vector3 betweenPlayers = Vector3.zero;
     private float centeringDistance = 0.0f;
+    [HideInInspector]
     public Vector3 cameraOffset = new Vector3(0, 0, -100);
 
 	public Camera childMainCamera;
-    public Camera otherCamera;	
 
 	public GameObject pivot;
     private GameObject line;
@@ -74,7 +74,7 @@ public class CameraFollow : MonoBehaviour {
             ResizeMaskPerspective();
 
         Quaternion rotation = new Quaternion();
-        if (isCamera1)
+        if (isMainCamera)
             rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player1.transform.position - player2.transform.position, Vector3.forward));
         else
             rotation = Quaternion.FromToRotation(Vector3.up, Vector3.Cross(player2.transform.position - player1.transform.position, Vector3.forward));
@@ -108,7 +108,7 @@ public class CameraFollow : MonoBehaviour {
 
             //Scale and Position the mask
             camMask.transform.localScale = new Vector3(maskHeight / 2f, 1f, maskHeight);
-            if (isCamera1)               
+            if (isMainCamera)               
                 camMask.transform.localPosition = new Vector3(5f * (maskHeight / 2f), 0f, 0f);
             else
                 camMask.transform.localPosition = new Vector3(-5f * (maskHeight / 2f), 0f, 0f);
