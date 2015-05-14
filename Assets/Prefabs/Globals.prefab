@@ -970,15 +970,17 @@ MonoBehaviour:
   zoomIntroInEditor: 0
   allowInput: 1
   audioVolume: -1
-  mute: 0
+  mute: 1
   bgm: {fileID: 8225506}
   defaultPulsePrefab: {fileID: 11400002, guid: fe97050609d727844b9f3ec597223262, type: 2}
   defaultPulseStats:
     scaleRate: 10
     lifeTime: 2
+    fadeAlpha: 1
     alpha: 1
-    alphaFade: .5
     smallRing: 0
+    pauseInterval: -1
+    retractInterval: -1
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -1048,8 +1050,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreReversedGraphics: 1
-  blockingObjects: 0
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1064,12 +1066,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCamera1: 1
+  isMainCamera: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
   cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099986}
-  otherCamera: {fileID: 2099990}
   pivot: {fileID: 199966}
 --- !u!114 &11499966
 MonoBehaviour:
@@ -1106,8 +1107,8 @@ MonoBehaviour:
   splitterDistanceInWorldSpace: 0
   splitLineFadeDistance: .699999988
   splitLineFadeDistanceInWorldSpace: 0
-  player1CameraSystem: {fileID: 11499964}
-  player2CameraSystem: {fileID: 11499978}
+  mainCameraFollow: {fileID: 0}
+  splitCameraFollow: {fileID: 0}
   splitCamera1: {fileID: 2099986}
   splitCamera2: {fileID: 2099990}
   player1: {fileID: 0}
@@ -1297,12 +1298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCamera1: 0
+  isMainCamera: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
   cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099990}
-  otherCamera: {fileID: 2099986}
   pivot: {fileID: 199978}
 --- !u!114 &11499980
 MonoBehaviour:
