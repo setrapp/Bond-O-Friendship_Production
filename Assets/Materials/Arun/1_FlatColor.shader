@@ -16,15 +16,18 @@
 			//base input structs
 			struct vertexInput{
 				float4 vertex: POSITION;
+				float4 normal: NORMAL;
 			};
 			struct vertexOutput{
 				float4 pos: SV_POSITION;
+				float4 norm: NORMAL;
 			};
 
 			//vertex function
 			vertexOutput vert(vertexInput vi){
 				vertexOutput vo;
 				vo.pos = mul(UNITY_MATRIX_MVP, vi.vertex);
+				vo.normal = vi.normal;
 				return vo;
 			}
 
