@@ -59,11 +59,39 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				float4 toP1 = normalize(_P1Pos - vo.worldPos);
 				float4 toP2 = normalize(_P2Pos - vo.worldPos);
 
-				alpha = 1 - ((dot(vo.normal, toP1) + dot(vo.normal, toP2)) / 2);
+				float normDotTo1 = dot(vo.normal, toP1);
+				float normDotTo2 = dot(vo.normal, toP2);
+
+
+				
+				//More light like behaviour
+				//if (normDotTo1 < 0.05)
+				//{
+				//	normDotTo1 = 0;
+				//}
+				//if (normDotTo2 < 0.05)
+				//{
+				//	normDotTo2 = 0;
+				//}
+				//
+				//float alpha1 = 1 - normDotTo1;
+				//float alpha2 = 1 - normDotTo2;
+				//
+				//alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
+				
+
+				//more organic, less light-like
+				float normDotTo = (dot(vo.normal, toP1) + dot(vo.normal, toP2)) / 2;
+				alpha = 1 - ((pow(normDotTo, 8 ) * 50000) + normDotTo/2);
+				if (normDotTo < .2)
+				{
+					alpha = 0.9;
+				}
+
 
 				color = float4(_Color.rgb,alpha);
 
-				return color;//float4(alpha, alpha, alpha, 1);
+				return color;
 			}
 			ENDCG
 		}
