@@ -32,9 +32,6 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
     private Color fullColor;
     private Color transparentColor;
 
-    private Color childFullColor;
-    private Color childTransparentColor;
-
     private Vector3 childStartSize;
     private Vector3 childEndSize;
 
@@ -50,8 +47,6 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 
         fullColor = renderer.material.color;
         transparentColor = new Color(fullColor.a, fullColor.b, fullColor.g, 0.0f);
-        childFullColor = child.material.color;
-        childTransparentColor = new Color(childFullColor.a, childFullColor.b, childFullColor.g, 0.0f);
         childStartSize = child.transform.localScale;
         childEndSize = Vector3.zero;
 
@@ -94,14 +89,13 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             t = moving ? Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f) : Mathf.Clamp(t - Time.deltaTime / moveBackDur, 0.0f, 1.0f);
             transform.position = Vector3.Lerp(startPos, endPos, t);
             renderer.material.color = Color.Lerp(fullColor, transparentColor, t);
-            //child.material.color = Color.Lerp(childFullColor, childTransparentColor, t);
             child.transform.localScale = Vector3.Lerp(childStartSize, childEndSize, t);
             atTarget = t >= .8f;
 
-            if (!moving)
-            {
-                atTarget = false;
-            }
+            //if (!moving)
+            //{
+            //    atTarget = false;
+            //}
 
 			if (atTarget && otherPlayerNode.atTarget)
 			{
@@ -111,6 +105,12 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 			{
 				bondDisallow.AllowBond();
 			}
+
+            if (Globals.Instance.playersBonded && !lit)
+            {
+                lit = true;
+                targetPuzzle.NodeColored();
+            }
         }
 	}
 
@@ -121,7 +121,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 
     void OnTriggerStay(Collider collide)
     {
-        if (Globals.Instance.playersBonded)
+       /* if (Globals.Instance.playersBonded)
         {
             CheckCollision(collide);
 			bondAllow.AllowBond();
@@ -134,7 +134,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 				Destroy(bondDisallow.gameObject);
 			}
 			
-        }
+        }*/
     }
     override protected void OnCollisionEnter(Collision col)
     {

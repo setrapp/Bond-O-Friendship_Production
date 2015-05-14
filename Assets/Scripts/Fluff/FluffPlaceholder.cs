@@ -88,7 +88,7 @@ public class FluffPlaceholder : MonoBehaviour {
 				if (fluffMaterial != null)
 				{
 					newFluff.bulb.material = fluffMaterial;
-					newFluff.stalk.material = fluffMaterial;
+					//newFluff.stalk.material = fluffMaterial;
 				}
 				if (attachee != null)
 				{
