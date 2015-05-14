@@ -15,6 +15,7 @@ public class Fluff : MonoBehaviour {
 	private bool disableColliders;
 	public Vector3 oldBulbPos;
 	public MeshRenderer bulb;
+	public MeshRenderer innerBulb;
 	//public MeshRenderer stalk;
 	public GameObject geometry;
 	public LineRenderer lineToAttractor;
@@ -184,7 +185,7 @@ public class Fluff : MonoBehaviour {
 			}
 		}
 
-		
+		innerBulb.transform.forward = Vector3.forward;
 	}
 
 	public void Pass(Vector3 passForce, GameObject ignoreColliderTemporary = null, float preventAttractTime = 0)
