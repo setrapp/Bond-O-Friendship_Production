@@ -30,10 +30,17 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 	private bool finishedNE;
 	private bool finishedNW;
 
+	public AllowPlayerBond tempAllowBond;
+
 	// Use this for initialization
 	void Start () {
 		fluffStick = GetComponentInChildren<FluffStick>();
 		startColor = GetComponent<Renderer>().material.color;
+
+		if (tempAllowBond != null)
+		{
+			tempAllowBond.AllowBond();
+		}
 	}
 	
 	// Update is called once per frame

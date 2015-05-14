@@ -14,6 +14,7 @@ public class ClusterNodePuzzle : MonoBehaviour {
 
 	private float startingSize;
 	private int litCount;
+    public float progress = 0;
 
 
 	void Awake()
@@ -30,17 +31,24 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	
 	public void NodeColored()
 	{
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            if (nodes[i].lit)
+                litCount++;
+        }
+
+        if (nodes.Count > 0)
+        {
+            progress = Mathf.Max((float)litCount / nodes.Count, progress);
+        }
+        
+
 		if(streamBlocker != null && streamBlocker2 != null)
 		{
-			for(int i = 0; i < nodes.Count; i++)
-			{
-				if(nodes[i].lit)
-					litCount++;
-			}
 			streamBlocker.transform.localScale = new Vector3(streamBlocker.transform.localScale.x, Mathf.Min(startingSize - (startingSize / nodes.Count) * litCount, streamBlocker.transform.localScale.y), streamBlocker.transform.localScale.z);
 			streamBlocker2.transform.localScale = new Vector3(streamBlocker2.transform.localScale.x, Mathf.Min(startingSize - (startingSize / nodes.Count) * litCount, streamBlocker2.transform.localScale.y), streamBlocker2.transform.localScale.z);
-			litCount = 0;
 		}
+		litCount = 0;
 
 		bool allLit = true;
 		for (int i = 0; i < nodes.Count && allLit; i++)

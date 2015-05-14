@@ -11,7 +11,9 @@ GameObject:
   - 33: {fileID: 3370016}
   - 23: {fileID: 2370016}
   - 114: {fileID: 11470012}
-  m_Layer: 0
+  - 114: {fileID: 11410588}
+  - 64: {fileID: 6400002}
+  m_Layer: 4
   m_Name: Pond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,6 +30,8 @@ GameObject:
   - 4: {fileID: 470014}
   - 114: {fileID: 11470018}
   - 114: {fileID: 11470016}
+  - 114: {fileID: 11498976}
+  - 114: {fileID: 11417688}
   m_Layer: 0
   m_Name: Fluff Spawn Pond
   m_TagString: Untagged
@@ -116,7 +120,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 170018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: .600000024, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 470014}
@@ -190,6 +194,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!64 &6400002
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_SmoothSphereCollisions: 0
+  m_Convex: 1
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &6570018
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -202,6 +219,46 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.00000167, y: 2.00000262, z: 1.00000191}
   m_Center: {x: 5.96047016e-08, y: 9.91130802e-14, z: -1.9967556e-06}
+--- !u!114 &11410588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1460adb115cc2514a98e4d4b000c63ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionRate: 1
+  ignoreReactionLayers:
+    serializedVersion: 2
+    m_Bits: 536870912
+--- !u!114 &11417688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155d4f73c56703429676501f6fde240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allChildSticks: 1
+  attachedSticks: []
+  trackStuckFluffs: 1
+  fluffsDetachable: 1
+  pullableBody: {fileID: 0}
+  noKinematicOnPull: 0
+  allowSway: 1
+  bodyMassFactor: 1
+  pullMass: -1
+  maxPullForce: 0
+  fluffReaction: {fileID: 0}
+  fluffSproutRate: 1
+  fluffConsumeRate: 0
+  fluffActionRate: 0
 --- !u!114 &11470012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,6 +292,7 @@ MonoBehaviour:
   blockStream: 1
   streamsTouched: []
   warnForBody: 1
+  ignoreCollider: {fileID: 6400002}
 --- !u!114 &11470016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,12 +305,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reactionProgress: 0
-  reactionRate: 1
+  reactionRate: .100000001
   decayRate: 0
   decayDelay: 5
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   scalees:
   - scalee: {fileID: 470012}
     unscaled: {x: 0, y: 1, z: 0}
@@ -269,15 +328,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reactionProgress: 0
-  reactionRate: .300000012
+  reactionRate: 1
   decayRate: 0
   decayDelay: 5
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
+--- !u!114 &11498976
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a6363729f1738459ea76e8ac679eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 5
+  reactable: 1
+  superiors:
+  - {fileID: 11470016}
+  streamsTouched: 0
+  stopReactionOnComplete: 0
+  fluffStickRoot: {fileID: 11417688}
+  fluffPlaceholders: []
+  spawnAll: 0
+  findPlaceholders: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -16,9 +16,11 @@ public class NewGameFill : MonoBehaviour {
 
     private float duration = 2f;
 
-    private Vector3 emptyFill = new Vector3(0f, 1.843626f, 0.05848432f);
+    private Vector3 emptyFillp1 = new Vector3(0f, .99f, 1f);
+    private Vector3 emptyFillp2 = new Vector3(0f, .99f, 1f);
 
-    private Vector3 fullFill = new Vector3(.25f, 1.843626f, 0.05848432f);
+    private Vector3 fullFillp1 = new Vector3(.4f, .99f, 1f);
+    private Vector3 fullFillp2 = new Vector3(.59f, .99f, 1f);
 	// Use this for initialization
 	void Start () {
 	
@@ -36,9 +38,9 @@ public class NewGameFill : MonoBehaviour {
         player2F = Mathf.Clamp(player2F, 0, 1f);
 
         if (player1Fill.activeInHierarchy)
-            player1Fill.transform.localScale = Vector3.Lerp(emptyFill, fullFill, player1F);
+            player1Fill.transform.localScale = Vector3.Lerp(emptyFillp1, fullFillp1, player1F);
         if (player2Fill.activeInHierarchy)
-            player2Fill.transform.localScale = Vector3.Lerp(emptyFill, fullFill, player2F);
+            player2Fill.transform.localScale = Vector3.Lerp(emptyFillp2, fullFillp2, player2F);
 
         if (player1F == 1.0f)
             menuControl.player1Ready = true;
@@ -66,13 +68,16 @@ public class NewGameFill : MonoBehaviour {
 
     void OnTriggerExit(Collider collide)
     {
-        if (collide.gameObject.name == "Player 1")
+        if (!menuControl.player1Ready || !menuControl.player2Ready)
         {
-            player1Filling = false;
-        }
-        if (collide.gameObject.name == "Player 2")
-        {
-            player2Filling = false;
+            if (collide.gameObject.name == "Player 1")
+            {
+                player1Filling = false;
+            }
+            if (collide.gameObject.name == "Player 2")
+            {
+                player2Filling = false;
+            }
         }
 
     }

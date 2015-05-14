@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Stream : MonoBehaviour {
+public class Stream : StreamBody {
 
 	public StreamSpawner spawner;
 	public StreamChannel targetChannel;
@@ -11,12 +11,10 @@ public class Stream : MonoBehaviour {
 	public bool startAtTarget = true;
 	public bool showTarget = false;
 	//public bool autoMove = true;
-	public  StreamChannel oldChannel;
+	public StreamChannel oldChannel;
 	[HideInInspector]
 	public bool ending;
 	public Vector3 seekOffset;
-	public float actionRate = 1;
-	public LayerMask ignoreReactionLayers;
 	public Material lineMaterial;
 	public ParticleSystem diffusionParticles;
 	public Stream streamSplittingPrefab;
@@ -99,17 +97,19 @@ public class Stream : MonoBehaviour {
 					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
 					//if (Vector3.Dot(toBank1, toBank2) < 0)
 					//{
-						SeekNextChannel();
-						toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+					SeekNextChannel();
+					toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 					//}
 				}
 
-				
+
 				mover.AccelerateWithoutHandling(toTarget);
 			}
 			else
 			{
-				Destroy(gameObject);
+				PrepareForDestroy();
+				SeekNextChannel();
+				//Destroy(gameObject);
 				/*if (mover.velocity.sqrMagnitude > 0)
 				{
 					mover.Stop();
@@ -127,23 +127,7 @@ public class Stream : MonoBehaviour {
 		}
 		else
 		{
-			if (mover.velocity.sqrMagnitude > 0)
-			{
-				mover.Stop();
-			}
-
-			if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
-			{
-				blockingTime += Time.deltaTime;
-				if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
-				{
-					spawner.StopTrackingStream(this);
-					spawner = null;
-					// TODO make the streams fade before destroying, or just remove their ability to act.
-					Destroy(gameObject);
-				}
-			}
-			
+			PrepareForDestroy();
 		}
 
 		if (!Application.isEditor || drawEditorStreamLine)
@@ -155,7 +139,27 @@ public class Stream : MonoBehaviour {
 	public void UpdateMovement()
 	{
 		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-		
+
+	}
+
+	private void PrepareForDestroy()
+	{
+		if (mover.velocity.sqrMagnitude > 0)
+		{
+			mover.Stop();
+		}
+
+		if (spawner != null && spawner.spawnTime >= 0 && spawner.destroyTimeFactor >= 0)
+		{
+			blockingTime += Time.deltaTime;
+			if (blockingTime >= spawner.spawnTime * spawner.destroyTimeFactor)
+			{
+				spawner.StopTrackingStream(this);
+				spawner = null;
+				// TODO make the streams fade before destroying, or just remove their ability to act.
+				Destroy(gameObject);
+			}
+		}
 	}
 
 	private void SeekNextChannel()
@@ -192,14 +196,6 @@ public class Stream : MonoBehaviour {
 		else
 		{
 			ending = true;
-		}
-	}
-
-	public void ProvokeReaction(StreamReaction reaction)
-	{
-		if (reaction != null)
-		{
-			reaction.React(actionRate * Time.deltaTime);
 		}
 	}
 

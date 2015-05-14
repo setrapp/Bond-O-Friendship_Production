@@ -52,6 +52,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &116996
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 416996}
+  - 82: {fileID: 8216996}
+  m_Layer: 0
+  m_Name: Fluff Audio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &199956
 GameObject:
   m_ObjectHideFlags: 1
@@ -94,7 +110,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 499960}
   - 33: {fileID: 3399984}
-  - 64: {fileID: 6499984}
   - 23: {fileID: 2399984}
   m_Layer: 12
   m_Name: Line
@@ -179,7 +194,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 499972}
   - 33: {fileID: 3399986}
-  - 64: {fileID: 6499986}
   - 23: {fileID: 2399986}
   - 114: {fileID: 11499972}
   m_Layer: 11
@@ -247,7 +261,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 499980}
   - 33: {fileID: 3399988}
-  - 64: {fileID: 6499988}
   - 23: {fileID: 2399988}
   - 114: {fileID: 11499980}
   m_Layer: 12
@@ -266,7 +279,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 499982}
   - 33: {fileID: 3399990}
-  - 64: {fileID: 6499990}
   - 23: {fileID: 2399990}
   m_Layer: 11
   m_Name: Line
@@ -316,7 +328,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -60.5600777, y: 149.957642, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499962}
@@ -324,6 +336,18 @@ Transform:
   - {fileID: 499986}
   - {fileID: 499988}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &416996
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 116996}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 499956}
   m_RootOrder: 0
 --- !u!4 &499956
 Transform:
@@ -334,7 +358,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 416996}
   m_Father: {fileID: 499962}
   m_RootOrder: 2
 --- !u!4 &499958
@@ -369,7 +394,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -50}
+  m_LocalPosition: {x: 28.1000004, y: 22.1000004, z: -500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499958}
@@ -526,7 +551,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: .0196078438}
+  m_BackGroundColor: {r: .140388846, g: .734341085, b: .488567859, a: .0196078438}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -535,7 +560,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 30
+  field of view: 25
   orthographic: 0
   orthographic size: 20
   m_Depth: 0
@@ -567,7 +592,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 30
+  field of view: 25
   orthographic: 0
   orthographic size: 20
   m_Depth: 1
@@ -689,58 +714,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199982}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6499984
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199960}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6499986
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199972}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6499988
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199980}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6499990
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199982}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!81 &8199990
 AudioListener:
   m_ObjectHideFlags: 1
@@ -748,6 +721,64 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199956}
   m_Enabled: 1
+--- !u!82 &8216996
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 116996}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: 001b1a12a8f9bd247b51485518ae6970, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!82 &8225506
 AudioSource:
   m_ObjectHideFlags: 1
@@ -931,7 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60f4494396a1174186619de5cf4a73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perspectiveCamera: 0
+  perspectiveCamera: 1
   perspectiveFOV: 25
   startingPerspectiveFOV: 0
   orthographicSize: 20
@@ -939,7 +970,7 @@ MonoBehaviour:
   zoomIntroInEditor: 0
   allowInput: 1
   audioVolume: -1
-  mute: 1
+  mute: 0
   bgm: {fileID: 8225506}
   defaultPulsePrefab: {fileID: 11400002, guid: fe97050609d727844b9f3ec597223262, type: 2}
   defaultPulseStats:
@@ -962,8 +993,9 @@ MonoBehaviour:
   fluffLeaveDistance: 1
   fluffLeaveAttractWait: .5
   fluffLeaveEmbed: .5
-  leftControllerIndex: 0
-  rightContollerIndex: 0
+  inMainMenu: 1
+  leftControllerIndex: -2
+  rightContollerIndex: -2
   leftControllerPreviousIndex: -2
   rightControllerPreviousIndex: -2
   allowPreviousController: 0
@@ -975,6 +1007,7 @@ MonoBehaviour:
   orphanFluffHolderPrefab: {fileID: 140434, guid: c16be213cb4e43640af61548fe855922,
     type: 2}
   allFluffs: []
+  fluffAudio: {fileID: 8216996}
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
   playersBonded: 0
@@ -1066,12 +1099,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6657702c554729f498a976b44a0e0992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splittable: 1
-  followPlayers: 1
+  splittable: 0
+  followPlayers: 0
   split: 0
-  splitterDistance: .75
+  splitterDistance: .899999976
   splitterDistanceInWorldSpace: 0
-  splitLineFadeDistance: .5
+  splitLineFadeDistance: .699999988
   splitLineFadeDistanceInWorldSpace: 0
   player1CameraSystem: {fileID: 11499964}
   player2CameraSystem: {fileID: 11499978}

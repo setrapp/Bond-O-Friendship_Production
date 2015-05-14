@@ -36,7 +36,7 @@ public class ClusterNode : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	virtual protected void Update () {
 		if(lit == true)
 		{
 			//TODO fix this.
@@ -89,12 +89,12 @@ public class ClusterNode : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision col)
+    virtual protected void OnCollisionEnter(Collision col)
 	{
 		CheckCollision(col.collider);
 	}
 
-	void OnTriggerEnter(Collider col)
+    virtual protected void OnTriggerEnter(Collider col)
 	{
 		CheckCollision(col);
 	}

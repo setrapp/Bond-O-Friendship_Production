@@ -102,28 +102,46 @@ public class Bond : MonoBehaviour {
 			// Direct, scale, and place link colliders to cover the surface of the bond.
 			if (!stats.manualLinks && !atSparseDetail)
 			{
-				Vector3 linkDir = Vector3.zero;
-				Vector3 linkScalePrev = Vector3.zero;
-				Vector3 linkScaleNext = Vector3.zero;
-				for (int i = 1; i < links.Count - 1; i++)
+				if (!stats.disableColliders)
 				{
-					linkDir = Vector3.zero;
-					linkScalePrev = links[i].toPreviousCollider.size;
-					linkScaleNext = links[i].toNextCollider.size;
-					linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
-					float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
-					float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-					linkScalePrev.y = magFromPrevious * 2;
-					linkScaleNext.y = magToNext * 2;
+					Vector3 linkDir = Vector3.zero;
+					Vector3 linkScalePrev = Vector3.zero;
+					Vector3 linkScaleNext = Vector3.zero;
+					for (int i = 1; i < links.Count - 1; i++)
+					{
+						linkDir = Vector3.zero;
 
-					links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
-					links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
-					links[i].toPreviousCollider.size = linkScalePrev;
-					links[i].toNextCollider.size = linkScaleNext;
-					links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
-					links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+						linkScalePrev = links[i].toPreviousCollider.size;
+						linkScaleNext = links[i].toNextCollider.size;
+						linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
+						float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
+						float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
+						linkScalePrev.y = magFromPrevious * 2;
+						linkScaleNext.y = magToNext * 2;
 
-					links[i].transform.up = linkDir;
+						links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
+						links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);
+						links[i].toPreviousCollider.size = (i != 1) ? linkScalePrev : Vector3.zero;
+						links[i].toNextCollider.size = (i != links.Count - 2) ? linkScaleNext : Vector3.zero;
+						links[i].toPreviousCollider.transform.up = links[i].transform.position - links[i - 1].transform.position;
+						links[i].toNextCollider.transform.up = links[i + 1].transform.position - links[i].transform.position;
+
+						links[i].transform.up = linkDir;
+					}
+				}
+				else
+				{
+					/*for (int i = 0; i < links.Count; i++)
+					{
+						if (links[i].toNextCollider != null)
+						{
+							links[i].toNextCollider.enabled = false;
+						}
+						if (links[i].toPreviousCollider != null)
+						{
+							links[i].toPreviousCollider.enabled = false;
+						}
+					}*/
 				}
 			}
 
@@ -215,75 +233,58 @@ public class Bond : MonoBehaviour {
 	{
 		bool isCountEven = links.Count % 2 == 0;
 
-		// Mainting desired length of links by adding and removing.
-		if (!stats.disableColliders)
+		// Maintain desired length of links by adding and removing.
+		if (!stats.manualLinks)
 		{
-			if (!stats.manualLinks)
+			if (links.Count < 4)
 			{
-				if (links.Count < 4)
-				{
-					AddLink();
-				}
-				else
-				{
-					int linksCheckedOnFrame = 0;
-					bool bondChanged = false;
-					float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
-					float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
-					if (stats.addLinkDistance >= 0)
-					{
-						for (int i = 1; i < links.Count - 2; i++)
-						{
-							float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
-							if (sqrDist > sqrAddDist)
-							{
-								AddLink(i + 1, false);
-								bondChanged = true;
-							}
-
-							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-							{
-								linksCheckedOnFrame = 0;
-								yield return null;
-							}
-						}
-					}
-					if (stats.removeLinkDistance >= 0)
-					{
-						for (int i = 1; i < links.Count - 2; i++)
-						{
-							float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
-							if (sqrDist < sqrRemoveDist)
-							{
-								RemoveLink(i, false);
-								bondChanged = true;
-							}
-
-							if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-							{
-								linksCheckedOnFrame = 0;
-								yield return null;
-							}
-						}
-					}
-					if (bondChanged)
-					{
-						WeightJoints();
-					}
-				}
+				AddLink();
 			}
-		}
-		else
-		{
-			for (int i = 0; i < links.Count; i++)
+			else
 			{
-				if (links[i].toNextCollider != null)
+				int linksCheckedOnFrame = 0;
+				bool bondChanged = false;
+				float sqrAddDist = Mathf.Pow(stats.addLinkDistance, 2);
+				float sqrRemoveDist = Mathf.Pow(stats.removeLinkDistance, 2);
+				if (stats.addLinkDistance >= 0)
 				{
-					links[i].toNextCollider.enabled = false;
+					for (int i = 1; i < links.Count - 2; i++)
+					{
+						float sqrDist = (links[i + 1].transform.position - links[i].transform.position).sqrMagnitude;
+						if (sqrDist > sqrAddDist)
+						{
+							AddLink(i + 1, false);
+							bondChanged = true;
+						}
+
+						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+						{
+							linksCheckedOnFrame = 0;
+							yield return null;
+						}
+					}
 				}
-				if (links[i].toPreviousCollider != null)
+				if (stats.removeLinkDistance >= 0)
 				{
-					links[i].toPreviousCollider.enabled = false;
+					for (int i = 1; i < links.Count - 2; i++)
+					{
+						float sqrDist = (links[i + 1].transform.position - links[i - 1].transform.position).sqrMagnitude;
+						if (sqrDist < sqrRemoveDist)
+						{
+							RemoveLink(i, false);
+							bondChanged = true;
+						}
+
+						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
+						{
+							linksCheckedOnFrame = 0;
+							yield return null;
+						}
+					}
+				}
+				if (bondChanged)
+				{
+					WeightJoints();
 				}
 			}
 		}
@@ -504,6 +505,18 @@ public class Bond : MonoBehaviour {
 		BondLink nextLink = links[index + 1];
 		newLink.linkPrevious = previousLink;
 		newLink.linkNext = nextLink;
+
+		if (stats.disableColliders)
+		{
+			if (newLink.toPreviousCollider != null)
+			{
+				newLink.toPreviousCollider.enabled = false;
+			}
+			if (newLink.toNextCollider != null)
+			{
+				newLink.toNextCollider.enabled = false;
+			}
+		}
 
 		if (previousLink != null)
 		{
@@ -1004,6 +1017,8 @@ public class BondStats
 		if (fullOverwrite || replacement.extensionPerFluff >= 0)		{	this.extensionPerFluff = replacement.extensionPerFluff;				}
 		manualAttachment1 = replacement.manualAttachment1;
 		manualAttachment2 = replacement.manualAttachment2;
+		manualLinks = replacement.manualLinks;
+		disableColliders = replacement.disableColliders;
 		if (fullOverwrite || replacement.fullDetailDistance >= 0)		{	this.fullDetailDistance = replacement.fullDetailDistance;			}
 		if (fullOverwrite || replacement.sparseDetailDistance >= 0)		{	this.sparseDetailDistance = replacement.sparseDetailDistance;		}
 		if (fullOverwrite || replacement.sparseDetailFactor >= 0)		{	this.sparseDetailFactor = replacement.sparseDetailFactor;			}
