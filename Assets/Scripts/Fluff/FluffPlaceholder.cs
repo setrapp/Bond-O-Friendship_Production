@@ -53,12 +53,16 @@ public class FluffPlaceholder : MonoBehaviour {
 
 	void Update()
 	{
-		if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+		if (autoSpawn)
 		{
-			fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
-			SpawnFluff();
+			if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+			{
+				fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
+				SpawnFluff();
+			}
 		}
-		
+
+
 		if ((createdFluff == null || createdFluff.moving) && pickTime < 0)
 		{
 			createdFluff = null;
@@ -74,7 +78,7 @@ public class FluffPlaceholder : MonoBehaviour {
 			fluffMaterial = materialSource.material;
 		}
 
-		if (fluffPrefab != null)
+		if (fluffPrefab != null && (attachee == null || attachee.CanStick()))
 		{
 			GameObject newFluffObj = (GameObject)Instantiate(fluffPrefab, transform.position, transform.rotation);
 			newFluffObj.transform.parent = transform.parent;
@@ -84,11 +88,11 @@ public class FluffPlaceholder : MonoBehaviour {
 				if (fluffMaterial != null)
 				{
 					newFluff.bulb.material = fluffMaterial;
-					newFluff.stalk.material = fluffMaterial;
+					//newFluff.stalk.material = fluffMaterial;
 				}
 				if (attachee != null)
 				{
-					newFluff.Attach(attachee/*, attachee.transform.position + attachee.transform.TransformDirection(attachee.stickOffset), attachee.transform.TransformDirection(attachee.stickDirection)*/, true, sproutFluff);
+					newFluff.Attach(attachee, true, sproutFluff);
 				}
 				else 
 				{
@@ -113,10 +117,6 @@ public class FluffPlaceholder : MonoBehaviour {
 					}
 				}
 			}
-		}
-		else
-		{
-			Debug.LogError("Fluff Placeholder unable to spawn fluff. Please ensure parameters are correct.");
 		}
 
 		if (fluffRespawns == 0)

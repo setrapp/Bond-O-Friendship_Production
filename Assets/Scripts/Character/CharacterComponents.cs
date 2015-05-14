@@ -23,6 +23,7 @@ public class CharacterComponents : MonoBehaviour {
 	public Rigidbody body;
 	public Attractor attractor;
 	public FlufflessPass flufflessPass;
+	public Light backLight;
 	[HideInInspector]
 	public float fillScale = 1;
 	public float flashFadeTime = 1;
@@ -57,6 +58,19 @@ public class CharacterComponents : MonoBehaviour {
 
 		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch;
 		bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
+
+		// Don't show mid-tail if a player bond is formed or cannot be formed.
+		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || Globals.Instance.playersBonded)
+		{
+			if (midTrail.gameObject.activeSelf)
+			{
+				midTrail.gameObject.SetActive(false);
+			}
+		}
+		else if (!midTrail.gameObject.activeSelf)
+		{
+			midTrail.gameObject.SetActive(true);
+		}
 	}
 
 	// Set color of indication flash and fluff spawn fill.

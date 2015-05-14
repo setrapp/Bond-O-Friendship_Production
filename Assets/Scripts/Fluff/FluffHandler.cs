@@ -104,7 +104,7 @@ public class FluffHandler : MonoBehaviour {
 			for (int i = fluffsToAdd.Count - 1; i >= 0; i--)
 			{
 				Material fluffMaterial = null;
-				if (fluffsToAdd != null)
+				if (fluffsToAdd[i] != null)
 				{
 					fluffMaterial = fluffsToAdd[i].bulb.material;
 
@@ -268,8 +268,8 @@ public class FluffHandler : MonoBehaviour {
 				newFluffInfo.bulb.material = useMaterial;
 			}
 
-			if (newFluffInfo.stalk != null)
-				newFluffInfo.stalk.material = useMaterial;
+			//if (newFluffInfo.stalk != null)
+			//	newFluffInfo.stalk.material = useMaterial;
 
 			newFluffInfo.ToggleSwayAnimation(false);
 			newFluffInfo.hull.isTrigger = true;
@@ -403,8 +403,6 @@ public class FluffHandler : MonoBehaviour {
 
 	public void SendFluffToBond(Bond bondRequesting)
 	{
-
-
 		if (fluffs.Count <= 0 || bondRequesting == null)
 		{
 			return;
@@ -457,5 +455,10 @@ public class FluffHandler : MonoBehaviour {
 		fluffToSend.soleAttractor = partner.gameObject;
 		fluffToSend.Pass(Vector3.zero, gameObject, 0);
 		bondRequesting.AddFluff(fluffToSend);
+	}
+
+	private IEnumerator DeflateFluffForBond(Bond bond)
+	{
+		yield return null;
 	}
 }

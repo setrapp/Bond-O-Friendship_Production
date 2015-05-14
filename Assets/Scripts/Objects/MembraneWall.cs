@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
 	public Vector3 membraneDirection;
@@ -109,6 +110,10 @@ public class MembraneWall : MonoBehaviour {
 			currentLength = createdMembrane.BondLength;
 			float shapedDistance = ShapedDistance;
 			float maxDistance = shapedDistance * relativeMaxDistance + requirementDistanceAdd;
+			if (relativeMaxDistance < 0)
+			{
+				maxDistance = createdMembrane.stats.maxDistance;
+			}
 			relativeActualDistance = currentLength / shapedDistance;
 
 			// Ensure that enough players are attempting to break the membrane.
@@ -176,7 +181,7 @@ public class MembraneWall : MonoBehaviour {
 			{
 				Vector3 midPoint = (startPost.transform.position + endPost.transform.position) / 2;
 				float sqrToPlayer1 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
-				float sqrToPlayer2 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
+				float sqrToPlayer2 = (midPoint - Globals.Instance.player2.transform.position).sqrMagnitude;
 				bool playerNearPosts = (sqrToPlayer1 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2) || sqrToPlayer2 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2));
 
 				if (createdMembrane.gameObject.activeSelf && (!playerNearPosts && createdMembrane.currentDetail <= createdMembrane.stats.sparseDetailFactor))
@@ -205,6 +210,10 @@ public class MembraneWall : MonoBehaviour {
 
 		// Update override stats to account for starting distance between endpoints.
 		membraneDirection.Normalize();
+		if (space == Space.Self)
+		{
+			membraneDirection = transform.TransformDirection(membraneDirection);
+		}
 		Vector3 membraneTrack = membraneDirection * membraneLength;
 		if (relativeMaxDistance >= 0)
 		{

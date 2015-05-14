@@ -13,8 +13,6 @@ public class BondingFunnel : MonoBehaviour {
 	public GameObject scaleBearing2;
 	public GameObject scaleBackupBearing1;
 	public GameObject scaleBackupBearing2;
-	public Rigidbody noBacktrackBody1;
-	public Rigidbody noBacktrackBody2;
 	public bool solved = false;
 	[SerializeField]
 	public List<GameObject> solveListeners;
@@ -29,8 +27,6 @@ public class BondingFunnel : MonoBehaviour {
 	void Start()
 	{
 		pusheeLocalY = pushee.transform.localPosition.y;
-		noBacktrackBody1.centerOfMass = Vector3.zero;
-		noBacktrackBody2.centerOfMass = Vector3.zero;
 	}
 
 	void Update()
@@ -143,11 +139,5 @@ public class BondingFunnel : MonoBehaviour {
 			Vector3 pusheePos = pushee.transform.localPosition;
 			pusheePos.y = pusheeLocalY;
 		}
-	}
-
-	public void StopBackTracking()
-	{
-		noBacktrackBody1.isKinematic = false;
-		noBacktrackBody2.isKinematic = false;
 	}
 }

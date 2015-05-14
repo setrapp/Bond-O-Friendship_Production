@@ -11,13 +11,25 @@ public class PlayersEstablish : MonoBehaviour {
 	public bool placeOnAwake = true;
 	public Transform defaultPlayerParent;
 
+
+    private bool placed = false;
 	void Awake()
 	{
 		if (placeOnAwake)
 		{
 			PlacePlayers();
+            placed = true;
 		}
 	}
+
+    void Update()
+    {
+        if(!placed && CameraSplitter.Instance.movePlayers)
+        {
+            PlacePlayers();
+			placed = true;
+       }
+    }
 
 	public void PlacePlayers()
 	{
@@ -109,24 +121,25 @@ public class PlayersEstablish : MonoBehaviour {
 				}
 			}
 
-			if (CameraSplitter.Instance != null && (!CameraSplitter.Instance.player1CameraSystem.gameObject.activeSelf || !CameraSplitter.Instance.player2CameraSystem.gameObject.activeSelf))
-			{
-				CameraSplitter.Instance.player1CameraSystem.gameObject.SetActive(true);
-				CameraSplitter.Instance.player2CameraSystem.gameObject.SetActive(true);
-				CameraSplitter.Instance.JumpToPlayers();
-			}
+			//if (CameraSplitter.Instance != null && (!CameraSplitter.Instance.player1CameraSystem.gameObject.activeSelf || !CameraSplitter.Instance.player2CameraSystem.gameObject.activeSelf))
+			//{
+             //   CameraSplitter.Instance.followPlayers = true;
+			//	CameraSplitter.Instance.JumpToPlayers();                
+			//}
 
-			if (Globals.Instance.initialPlayerHolder != null && (player1.transform.parent == Globals.Instance.initialPlayerHolder || player2.transform.parent == Globals.Instance.initialPlayerHolder))
+            if (Globals.Instance.initialPlayerHolder != null && (player1Holder.gameObject == Globals.Instance.initialPlayerHolder || player2Holder.gameObject == Globals.Instance.initialPlayerHolder))
 			{
 				// Jump camera to players.
 				if (CameraSplitter.Instance != null)
-				{
-					CameraSplitter.Instance.JumpToPlayers();
+				{                    
+					CameraSplitter.Instance.JumpToPlayers();                    
 				}
-
+                
 				Destroy(Globals.Instance.initialPlayerHolder);
 			}
-			
+
+			player1.character.backLight.gameObject.SetActive(true);
+			player2.character.backLight.gameObject.SetActive(true);
 
 			// After the players have been spawned in one level, don't change them when new levels load.
 			Globals.Instance.updatePlayersOnLoad = false;

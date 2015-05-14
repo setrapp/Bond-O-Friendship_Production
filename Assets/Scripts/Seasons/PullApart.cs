@@ -99,7 +99,7 @@ public class PullApart : MonoBehaviour {
 			smallrippleObj.GetComponent<RingPulse>().scaleRate = 8.0f;
 			smallrippleObj.GetComponent<RingPulse>().lifeTime = 1.5f;
 			smallrippleObj.GetComponent<RingPulse>().alpha = 1.0f;
-			smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
+			//smallrippleObj.GetComponent<RingPulse>().alphaFade = 0.7f;
 			smallrippleObj.GetComponent<RingPulse>().mycolor = Color.white;
 			//smallrippleObj.GetComponent<RingPulse>().smallRing = true;
 
@@ -107,7 +107,7 @@ public class PullApart : MonoBehaviour {
 			smallripple2.GetComponent<RingPulse>().scaleRate = 8.0f;
 			smallripple2.GetComponent<RingPulse>().lifeTime = 1.5f;
 			smallripple2.GetComponent<RingPulse>().alpha = 1.0f;
-			smallripple2.GetComponent<RingPulse>().alphaFade = 0.7f;
+			//smallripple2.GetComponent<RingPulse>().alphaFade = 0.7f;
 			smallripple2.GetComponent<RingPulse>().mycolor = Color.white;
 			//smallrippleObj.GetComponent<RingPulse>().smallRing = true;
 

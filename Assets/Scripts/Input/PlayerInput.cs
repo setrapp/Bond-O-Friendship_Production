@@ -13,7 +13,9 @@ public class PlayerInput : MonoBehaviour {
 
 	public float deadZone = .75f;
 
-	private Vector3 velocityChange;
+	public Vector3 velocityChange;
+
+    public Vector3 moveDir;
 
     SharedKeyboard sharedKeyboard;
     SharedController sharedController;
@@ -33,6 +35,18 @@ public class PlayerInput : MonoBehaviour {
 		{
 			character = GetComponent<CharacterComponents>();
 		}
+
+        if(Globals.Instance != null)
+        {
+            if(playerNumber == Player.Player1)
+            {
+                Globals.Instance.player1 = this;
+            }
+            if (playerNumber == Player.Player2)
+            {
+                Globals.Instance.player2 = this;
+            }
+        }
 
         sharedKeyboard = new SharedKeyboard();
         sharedController = new SharedController();
@@ -91,7 +105,7 @@ public class PlayerInput : MonoBehaviour {
         else
             deviceNumber = -1;
 
-        device = deviceNumber >= 0 ? InputManager.Devices[deviceNumber] : null;
+        device = deviceNumber >= 0 && deviceNumber < InputManager.Devices.Count ? InputManager.Devices[deviceNumber] : null;
 
         if (device != null)
         {
@@ -154,7 +168,7 @@ public class PlayerInput : MonoBehaviour {
         }*/
         #endregion
 
-        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard))
+        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
 		{
             if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
                 velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
@@ -175,7 +189,7 @@ public class PlayerInput : MonoBehaviour {
 			}
 
 			// Turn towards velocity change.
-			Vector3 moveDir = character.mover.velocity;
+			moveDir = character.mover.velocity;
 			if (moveDir.sqrMagnitude <= 0)
 			{
 				moveDir = transform.forward + (velocityChange.normalized * Time.deltaTime);
@@ -185,7 +199,7 @@ public class PlayerInput : MonoBehaviour {
 	}
 
    
-    private Vector3 PlayerControllerSharedMovement()
+    public Vector3 PlayerControllerSharedMovement()
     {
         Vector2 stickInput = Vector2.zero;
         if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
@@ -202,14 +216,14 @@ public class PlayerInput : MonoBehaviour {
         return Vector3.zero;
     }
 
-    private Vector3 PlayerControllerSoloMovement()
+    public Vector3 PlayerControllerSoloMovement()
     {
         Vector2 stickInput = Vector2.zero;
         stickInput = separateController.Move;
         return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(separateController.Move.X, separateController.Move.Y, 0) : Vector3.zero;
     }
 
-    private Vector3 PlayerKeyboardSharedMovement()
+    public Vector3 PlayerKeyboardSharedMovement()
     {
         if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
         {
@@ -222,7 +236,7 @@ public class PlayerInput : MonoBehaviour {
         return Vector3.zero;
     }
 
-    private Vector3 PlayerKeyboardSoloMovement()
+    public Vector3 PlayerKeyboardSoloMovement()
     {
         return new Vector3(separateKeyboard.Move.X, separateKeyboard.Move.Y,0);
     }	
@@ -235,9 +249,9 @@ public class PlayerInput : MonoBehaviour {
 			if (!character.bondAttachable.IsBondMade(partnerCharacter.bondAttachable))
 			{
 				character.bondAttachable.volleyPartner = partnerCharacter.bondAttachable;
-				character.SetFlashAndFill(partnerCharacter.colors.attachmentColor);
+				character.SetFlashAndFill(partnerCharacter.colors.baseColor);
 				partnerCharacter.bondAttachable.volleyPartner = character.bondAttachable;
-				partnerCharacter.SetFlashAndFill(character.colors.attachmentColor);
+				partnerCharacter.SetFlashAndFill(character.colors.baseColor);
 				character.bondAttachable.AttemptBond(partnerCharacter.bondAttachable, col.contacts[0].point, true);
 			}
 		}

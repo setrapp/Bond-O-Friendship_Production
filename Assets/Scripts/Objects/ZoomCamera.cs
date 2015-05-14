@@ -6,17 +6,21 @@ public class ZoomCamera : MonoBehaviour {
 	public WaitPad triggerPad;
 	private Camera mainCamera;
 	private Camera splitCamera;
-	private float startZoom;
+	public float startZoom;
 	public float zoomTarget;
 	public float startZoomPortion = 0;
 	public float endZoomPortion = 1;
-	private float oldPortionComplete;
+	public float oldPortionComplete;
 	[Header("Resetting Controls")]
+	public bool resetOnComplete = true;
 	public float resetDelay = 0.5f;
 	public float resetAcceleration = 1;
 	public float resetMaxSpeed = 5;
 	public float resetSpeed = 0f;
 	private bool resetting = false;
+	[Header("Starting Zoom Only")]
+	public bool zoomToStartingSize = false;
+	private bool foundStartingZoom = false;
 
 	void Start()
 	{
@@ -25,23 +29,44 @@ public class ZoomCamera : MonoBehaviour {
 			mainCamera = CameraSplitter.Instance.splitCamera1;
 			splitCamera = CameraSplitter.Instance.splitCamera2;
 			startZoom = mainCamera.orthographicSize;
+			if (zoomToStartingSize)
+			{
+				zoomTarget = Globals.Instance.startingOrthographicSize;
+			}
+			else
+			{
+				foundStartingZoom = true;
+			}
 		}
 	}
 
 	void Update()
 	{
+		// Wait to find starting zoom for special starting zoomer.
+		if (zoomToStartingSize)
+		{
+			if (!CameraSplitter.Instance.startZoomComplete)
+			{
+				return;
+			}
+			else if (!foundStartingZoom)
+			{
+				startZoom = mainCamera.orthographicSize;
+				foundStartingZoom = true;
+			}
+		}
+
 		if (endZoomPortion <= 0)
 		{
 			return;
 		}
 
-		if (triggerPad.activated && !resetting && oldPortionComplete > 0)
+		if (resetOnComplete && triggerPad.activated && !resetting && oldPortionComplete > 0)
 		{
 			StartCoroutine(ResetToStart());
 		}
 
 		bool updateZoom = resetting;
-
 
 		if (!triggerPad.activated && oldPortionComplete != triggerPad.portionComplete)
 		{
@@ -55,6 +80,7 @@ public class ZoomCamera : MonoBehaviour {
 			float zoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
 			mainCamera.orthographicSize = zoom;
 			splitCamera.orthographicSize = zoom;
+			Globals.Instance.orthographicSize = zoom;
 		}
 	}
 

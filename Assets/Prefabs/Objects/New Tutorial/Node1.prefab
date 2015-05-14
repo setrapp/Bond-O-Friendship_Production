@@ -1,5 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &109510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 409510}
+  - 33: {fileID: 3309510}
+  - 23: {fileID: 2309510}
+  - 114: {fileID: 11480580}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &183224
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,6 +47,8 @@ GameObject:
   - 23: {fileID: 2383224}
   - 114: {fileID: 11483224}
   - 136: {fileID: 13683222}
+  - 114: {fileID: 11480582}
+  - 114: {fileID: 11460988}
   m_Layer: 0
   m_Name: Node1
   m_TagString: Untagged
@@ -36,6 +56,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &409510
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: .926506102, y: .926505864, z: .926505864}
+  m_Children: []
+  m_Father: {fileID: 483226}
+  m_RootOrder: 1
 --- !u!4 &483224
 Transform:
   m_ObjectHideFlags: 1
@@ -43,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183224}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.55999863, y: -1.33000541, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 483226}
@@ -54,13 +86,34 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183226}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.69000006, y: -1.99000001, z: -7.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -.740711153, w: .67182374}
+  m_LocalPosition: {x: -2.65999985, y: -1.11000061, z: -7.5}
+  m_LocalScale: {x: 1.47820997, y: 1.47821009, z: 1.47820997}
   m_Children:
   - {fileID: 483224}
+  - {fileID: 409510}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!23 &2309510
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109510}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 9dac82985ec8e9549ba990e827355123, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!23 &2383224
 Renderer:
   m_ObjectHideFlags: 1
@@ -73,7 +126,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: ee18b283d1d25174d959c33e1050cde8, type: 2}
+  - {fileID: 2100000, guid: 88b3f0f357dd90c4da11fb8960d2fe87, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -81,13 +134,20 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!33 &3309510
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109510}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &3383224
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183226}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!82 &8283222
 AudioSource:
   m_ObjectHideFlags: 1
@@ -211,6 +271,61 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!114 &11460988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746a471bc2309ee49849c0f65a20d60f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clusterNode: {fileID: 11483224}
+  crumpleMesh: {fileID: 11480582}
+--- !u!114 &11480580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad34e26df8c9c74b97f78d96f9453c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 1
+  y: 1
+  z: 0
+  scale: 1
+  speed: 1
+  useOtherValues: 1
+  wilin: 1
+  wasWilin: 0
+  firstWil: 1
+  valuesToUse: {fileID: 11480582}
+--- !u!114 &11480582
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad34e26df8c9c74b97f78d96f9453c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 1
+  y: 1
+  z: 0
+  scale: 1
+  speed: 1
+  useOtherValues: 0
+  wilin: 1
+  wasWilin: 0
+  firstWil: 1
+  valuesToUse: {fileID: 0}
 --- !u!114 &11483222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -229,6 +344,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   placementOffset: {x: 0, y: 0, z: 0}
   moveToCollsion: 0
+  playMultiple: 0
 --- !u!114 &11483224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -242,7 +358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
   disappearOnSolve: 1
-  nodeRenderer: {fileID: 0}
+  nodeRenderers: []
   cooldownTime: 20
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
@@ -256,10 +372,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: .500000238
+  m_Radius: .5
   m_Height: 10
   m_Direction: 2
-  m_Center: {x: 1.42108547e-14, y: 0, z: 3.7252903e-06}
+  m_Center: {x: 1.42108547e-14, y: 0, z: 7.53998756e-06}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

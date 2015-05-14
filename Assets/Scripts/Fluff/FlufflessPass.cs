@@ -17,7 +17,7 @@ public class FlufflessPass : MonoBehaviour {
 		if (particles != null && characterComponents != null)
 		{
 			defaultParticleSpeed = particles.startSpeed;
-			particles.startColor = characterComponents.colors.attachmentColor;
+			particles.startColor = characterComponents.colors.baseColor;
 		}
 	}
 

@@ -7,11 +7,14 @@ public class StreamReaction : MonoBehaviour {
 
 	public float reactionProgress = 0;
 	public float reactionRate = 1;
+	public float decayRate = 0;
+	public float decayDelay = 0;
+	protected float lastReaction = 0;
 	public bool reactable = true;
 	[SerializeField]
 	public List<StreamReaction> superiors;
-	public float streamAlterSpeed = -1;
-	protected bool reacting = false;
+	public int streamsTouched = 0;
+	public bool stopReactionOnComplete = false;
 
 	virtual protected void Start()
 	{
@@ -23,11 +26,19 @@ public class StreamReaction : MonoBehaviour {
 
 	virtual protected void Update()
 	{
-		if (!reacting && reactionProgress > 0)
+		if (decayRate < 0)
 		{
-			//React(-reactionRate * Time.deltaTime);
+			decayRate = reactionRate;
 		}
-		reacting = false;
+
+		if (Time.time - lastReaction >= decayDelay)
+		{
+			if (reactionProgress > 0)
+			{
+				React(-decayRate * Time.deltaTime);
+			}
+			//touchingStream = false;
+		}
 	}
 
 	public virtual bool React(float actionRate)
@@ -46,15 +57,33 @@ public class StreamReaction : MonoBehaviour {
 
 		if (reactable)
 		{
-			bool reacted = true;// (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
+			bool reacted = (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
 			reactionProgress = CalculateReaction(actionRate);
+
+			if (actionRate > 0)
+			{
+				lastReaction = Time.time;
+			}
+
+			if (reactionProgress >= 1 && stopReactionOnComplete)
+			{
+				Destroy(this);
+			}
+
 			return reacted;
 		}
 		return false;
+	}
+
+	public virtual void SetTouchedStreams(int streamsTouched)
+	{
+		this.streamsTouched = Mathf.Max(streamsTouched, 0);
 	}
 
 	public float CalculateReaction(float actionRate)
 	{
 		return Mathf.Clamp01(reactionProgress + actionRate * reactionRate);
 	}
+
+	public virtual void ReactToEmptyFluffStick(FluffStick fluffStick) { }
 }

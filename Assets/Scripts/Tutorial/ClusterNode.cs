@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ClusterNode : MonoBehaviour {
 
 	[HideInInspector]
 	public ClusterNodePuzzle targetPuzzle;
 	public bool disappearOnSolve = true;
-	public Renderer nodeRenderer = null;
+	public List<Renderer> nodeRenderers = null;
 	public float cooldownTime = -1;
 	protected float timer;
 	public bool lit;
@@ -22,16 +23,20 @@ public class ClusterNode : MonoBehaviour {
 
 	// Use this for initialization
 	virtual protected void Start () {
-		if (nodeRenderer == null)
+		if (nodeRenderers == null)
 		{
-			nodeRenderer = gameObject.GetComponent<Renderer>();
+			nodeRenderers = new List<Renderer>();
 		}
-		startingcolor = nodeRenderer.material.color;
+		if(nodeRenderers.Count < 1)
+		{
+			nodeRenderers.Add(gameObject.GetComponent<Renderer>());
+		}
+		startingcolor = nodeRenderers[0].material.color;
 
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	virtual protected void Update () {
 		if(lit == true)
 		{
 			//TODO fix this.
@@ -62,7 +67,10 @@ public class ClusterNode : MonoBehaviour {
 				if (timer <= 0)
 				{
 					lit = false;
-					nodeRenderer.material.color = startingcolor;
+					for (int i = 0; i < nodeRenderers.Count; i++)
+					{
+						nodeRenderers[i].material.color = startingcolor;
+					}
 				}
 			}
 		}
@@ -70,15 +78,28 @@ public class ClusterNode : MonoBehaviour {
 		if(targetPuzzle.solved && disappearOnSolve)
 		{
 			fadeColor.a -= Time.deltaTime;
-			nodeRenderer.material.color = fadeColor;
-			if (nodeRenderer.material.color.a <= 0.01f)
+			for (int i = 0; i < nodeRenderers.Count; i++)
+			{
+				nodeRenderers[i].material.color = fadeColor;
+			}
+			if (fadeColor.a <= 0.01f)
 			{
 				Destroy(gameObject);
 			}
 		}
 	}
 
-	virtual protected void OnTriggerEnter (Collider col)
+    virtual protected void OnCollisionEnter(Collision col)
+	{
+		CheckCollision(col.collider);
+	}
+
+    virtual protected void OnTriggerEnter(Collider col)
+	{
+		CheckCollision(col);
+	}
+
+	virtual protected void CheckCollision (Collider col)
 	{
 		if (targetPuzzle.solved)
 		{
@@ -88,11 +109,11 @@ public class ClusterNode : MonoBehaviour {
 		Color playerColor = new Color();
 		if (col == Globals.Instance.player1.character.bodyCollider)
 		{
-			playerColor = Globals.Instance.player1.character.colors.attachmentColor;
+			playerColor = Globals.Instance.player1.character.colors.baseColor;
 		}
 		else if (col == Globals.Instance.player2.character.bodyCollider)
 		{
-			playerColor = Globals.Instance.player2.character.colors.attachmentColor;
+			playerColor = Globals.Instance.player2.character.colors.baseColor;
 		}
 		else if (col.gameObject.layer == LayerMask.NameToLayer("Bond"))
 		{
@@ -104,15 +125,22 @@ public class ClusterNode : MonoBehaviour {
 		}
 
 
-		nodeRenderer.material.color = playerColor;
-		fadeColor = nodeRenderer.material.color;
 
-		ParticleSystem part = (ParticleSystem)Instantiate(targetPuzzle.nodeParticle);
-		part.transform.position = transform.position;
-		part.startColor = playerColor;
-		part.transform.parent = transform;
-		part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-		Destroy(part.gameObject, 2.0f);
+		for (int i = 0; i < nodeRenderers.Count; i++)
+		{
+			nodeRenderers[i].material.color = playerColor;
+		}
+		fadeColor = nodeRenderers[0].material.color;
+
+		if (targetPuzzle.nodeParticle != null)
+		{
+			ParticleSystem part = (ParticleSystem)Instantiate(targetPuzzle.nodeParticle);
+			part.transform.position = transform.position;
+			part.startColor = playerColor;
+			part.transform.parent = transform;
+			part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+			Destroy(part.gameObject, 2.0f);
+		}
 
 		lighter = col;
 		timer = cooldownTime;
@@ -120,6 +148,14 @@ public class ClusterNode : MonoBehaviour {
 		{
 			lit = true;
 			targetPuzzle.NodeColored();
+		}
+	}
+
+	void OnColliderExit(Collision col)
+	{
+		if (col.collider == lighter)
+		{
+			lighter = null;
 		}
 	}
 

@@ -1382,6 +1382,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -1390,6 +1393,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -1432,6 +1441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 17557347}
@@ -1441,7 +1451,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 17557344}
   jointsShaping: []
 --- !u!114 &17557346
@@ -2024,6 +2033,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 100
     attachSpring2: 50
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -2032,6 +2044,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -2079,6 +2097,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
@@ -2087,6 +2108,12 @@ MonoBehaviour:
     removeLinkDistance: .800000012
     springForce: 500
     springDamper: .100000001
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -2136,11 +2163,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 51679171}
   createOnStart: 1
+  space: 0
   destroyWhenBroken: 0
   wallIsCentered: 0
   membraneDirection: {x: 1, y: -1, z: 0}
   membraneLength: 21
   showPosts: 1
+  disableAtFar: 0
   startPost: {fileID: 1487206988}
   endPost: {fileID: 261900005}
   defaultShapingForce: -1
@@ -2888,7 +2917,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &115631634
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,7 +3340,6 @@ Transform:
   - {fileID: 2086262304}
   - {fileID: 1825383160}
   - {fileID: 1398582147}
-  - {fileID: 1793531536}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!114 &152132843
@@ -3663,8 +3694,6 @@ GameObject:
   - 4: {fileID: 184508604}
   - 33: {fileID: 184508608}
   - 23: {fileID: 184508606}
-  - 114: {fileID: 184508605}
-  - 136: {fileID: 184508607}
   - 136: {fileID: 184508609}
   m_Layer: 16
   m_Name: Floor Puzzle
@@ -3681,33 +3710,12 @@ Transform:
   m_GameObject: {fileID: 184508603}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9, y: 12.3000002, z: -.200000003}
-  m_LocalScale: {x: 3, y: 3, z: .00999999698}
+  m_LocalScale: {x: 3, y: 3, z: .00999999978}
   m_Children:
   - {fileID: 2003537312}
   - {fileID: 1233885799}
   m_Father: {fileID: 354390345}
   m_RootOrder: 1
---- !u!114 &184508605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 17097005}
-  m_GameObject: {fileID: 184508603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0722da1c2d0512141a6d530fff2a5801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outerRing: {fileID: 1233885798}
-  gate: {fileID: 541327819}
-  emergencyEscapeGate: {fileID: 0}
-  timer: .699999988
-  maxTime: .699999988
-  totalTargets: 2
-  groupNumber: 0
-  groupTotal: 1
-  gateCloseTime: 20
 --- !u!23 &184508606
 Renderer:
   m_ObjectHideFlags: 0
@@ -3729,20 +3737,6 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!136 &184508607
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 13630038, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 17097005}
-  m_GameObject: {fileID: 184508603}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: .5
-  m_Height: 5
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &184508608
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3759,9 +3753,9 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 17097005}
   m_GameObject: {fileID: 184508603}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: .5
+  m_Radius: .800000012
   m_Height: 5
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -3996,6 +3990,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 5
@@ -4004,6 +4001,12 @@ MonoBehaviour:
     removeLinkDistance: 1.79999995
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -5524,6 +5527,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 329082409}
   renderBase: 3000
   renderOffset: -2
+  forceRendererOn: 0
 --- !u!1 &332939522
 GameObject:
   m_ObjectHideFlags: 0
@@ -6505,7 +6509,6 @@ GameObject:
   - 4: {fileID: 413721755}
   - 33: {fileID: 413721758}
   - 23: {fileID: 413721757}
-  - 136: {fileID: 413721756}
   m_Layer: 15
   m_Name: Floor Puzzle Middle
   m_TagString: Untagged
@@ -6525,20 +6528,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1715361614}
   m_RootOrder: 0
---- !u!136 &413721756
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 13630040, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 2008710914}
-  m_GameObject: {fileID: 413721754}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: .500000238
-  m_Height: 10
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &413721757
 Renderer:
   m_ObjectHideFlags: 0
@@ -7849,7 +7838,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &467532944
 GameObject:
   m_ObjectHideFlags: 0
@@ -7902,6 +7894,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 100
     attachSpring2: 20
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -7910,6 +7905,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -7957,6 +7958,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
@@ -7965,6 +7969,12 @@ MonoBehaviour:
     removeLinkDistance: 1.5
     springForce: 20
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -8014,11 +8024,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 467532949}
   createOnStart: 0
+  space: 0
   destroyWhenBroken: 1
   wallIsCentered: 1
   membraneDirection: {x: 1, y: 0, z: 0}
   membraneLength: 40
   showPosts: 0
+  disableAtFar: 0
   startPost: {fileID: 1482068052}
   endPost: {fileID: 1977816452}
   defaultShapingForce: -1
@@ -8876,7 +8888,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &549632202
 GameObject:
   m_ObjectHideFlags: 0
@@ -9055,7 +9070,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &584348922
 GameObject:
   m_ObjectHideFlags: 0
@@ -9728,6 +9746,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -9736,6 +9757,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -9778,6 +9805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 631338195}
@@ -9787,7 +9815,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 631338192}
   jointsShaping: []
 --- !u!114 &631338194
@@ -10875,86 +10902,6 @@ Prefab:
   m_RootGameObject: {fileID: 1312906082}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!1001 &711868511
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 152132842}
-    m_Modifications:
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -24.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 152.800003
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -9.19999981
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 403744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 403744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 136.795593
-      objectReference: {fileID: 0}
-    - target: {fileID: 403744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 403744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 103742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: layerCount
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 11403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: alphaInterval
-      value: .00439999998
-      objectReference: {fileID: 0}
-    - target: {fileID: 11403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: depthInterval
-      value: .0299999993
-      objectReference: {fileID: 0}
-    - target: {fileID: 2303742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5d8ee55b86bf4fc48b6bcb9c54e3c2d3, type: 2}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: f7a07160882ce074f84160620963c59f, type: 2}
-  m_RootGameObject: {fileID: 1793531534}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1001 &743845506
 Prefab:
   m_ObjectHideFlags: 0
@@ -11649,7 +11596,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &856801346
 GameObject:
   m_ObjectHideFlags: 0
@@ -12192,6 +12142,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -12200,6 +12153,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -12242,6 +12201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 892686813}
@@ -12251,7 +12211,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 892686811}
   jointsShaping: []
 --- !u!54 &892686813
@@ -14895,10 +14854,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pOonPad: 0
   pTonPad: 0
+  waitRate: 1
+  neverActivate: 0
   activated: 0
+  portionComplete: 0
   activatedSphereColor: {fileID: 2100000, guid: 70ca1ba64f818fc4faf7e2366c41ff83,
     type: 2}
   maxTriggers: 1
+  fullyLit: 0
   activationSpheres: []
   activatedParticle: {fileID: 1285319531}
   optionalGate: {fileID: 1301442689}
@@ -15417,7 +15380,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1152165425
 GameObject:
   m_ObjectHideFlags: 0
@@ -19412,6 +19378,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -19420,6 +19389,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -19462,6 +19437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 1313064757}
@@ -19471,7 +19447,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 1313064754}
   jointsShaping: []
 --- !u!114 &1313064756
@@ -19735,7 +19710,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1001 &1348033804
 Prefab:
   m_ObjectHideFlags: 0
@@ -20050,7 +20028,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1373620809
 GameObject:
   m_ObjectHideFlags: 0
@@ -20099,7 +20080,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1001 &1374314753
 Prefab:
   m_ObjectHideFlags: 0
@@ -23410,6 +23394,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -23418,6 +23405,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -23460,6 +23453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 1568383380}
@@ -23469,7 +23463,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 1568383377}
   jointsShaping: []
 --- !u!114 &1568383379
@@ -24032,7 +24025,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1001 &1609609083
 Prefab:
   m_ObjectHideFlags: 0
@@ -25086,6 +25082,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 25
     relativeWarningDistance: .5
     endsWidth: .0199999996
@@ -25094,6 +25093,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -25136,6 +25141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e9cf3e104353a49a7f370a27450727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bond: {fileID: 0}
   toPreviousCollider: {fileID: 0}
   toNextCollider: {fileID: 0}
   body: {fileID: 1684076148}
@@ -25145,7 +25151,6 @@ MonoBehaviour:
   jointToAttachment: {fileID: 0}
   orderLevel: 0
   broken: 0
-  membrane: {fileID: 0}
   bondAttachable: {fileID: 1684076145}
   jointsShaping: []
 --- !u!114 &1684076147
@@ -25783,8 +25788,6 @@ GameObject:
   - 4: {fileID: 1715361614}
   - 33: {fileID: 1715361618}
   - 23: {fileID: 1715361617}
-  - 114: {fileID: 1715361616}
-  - 136: {fileID: 1715361615}
   - 136: {fileID: 1715361619}
   m_Layer: 16
   m_Name: Floor Puzzle
@@ -25807,41 +25810,6 @@ Transform:
   - {fileID: 1046049031}
   m_Father: {fileID: 354390345}
   m_RootOrder: 2
---- !u!136 &1715361615
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 13630038, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 2008710914}
-  m_GameObject: {fileID: 1715361613}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: .5
-  m_Height: 5
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1715361616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 2008710914}
-  m_GameObject: {fileID: 1715361613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0722da1c2d0512141a6d530fff2a5801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outerRing: {fileID: 1046049030}
-  gate: {fileID: 541327819}
-  emergencyEscapeGate: {fileID: 0}
-  timer: .699999988
-  maxTime: .699999988
-  totalTargets: 2
-  groupNumber: 0
-  groupTotal: 1
-  gateCloseTime: 20
 --- !u!23 &1715361617
 Renderer:
   m_ObjectHideFlags: 0
@@ -25879,9 +25847,9 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 2008710914}
   m_GameObject: {fileID: 1715361613}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: .5
+  m_Radius: .800000012
   m_Height: 5
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -26084,7 +26052,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1766022090
 GameObject:
   m_ObjectHideFlags: 0
@@ -26700,7 +26671,7 @@ Prefab:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 103742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1793531536}
@@ -26718,7 +26689,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11403742, guid: f7a07160882ce074f84160620963c59f,
     type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1793531534}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -26734,15 +26705,14 @@ MonoBehaviour:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 403742, guid: f7a07160882ce074f84160620963c59f, type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1793531534}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -24.5, y: 152.800003, z: -9.19999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2055253007}
-  m_Father: {fileID: 152132842}
-  m_RootOrder: 8
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
 --- !u!114 &1793531537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27347,10 +27317,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pOonPad: 0
   pTonPad: 0
+  waitRate: 1
+  neverActivate: 0
   activated: 0
+  portionComplete: 0
   activatedSphereColor: {fileID: 2100000, guid: 70ca1ba64f818fc4faf7e2366c41ff83,
     type: 2}
   maxTriggers: 3
+  fullyLit: 0
   activationSpheres: []
   activatedParticle: {fileID: 15658756}
   optionalGate: {fileID: 0}
@@ -27761,7 +27735,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1853424866
 GameObject:
   m_ObjectHideFlags: 0
@@ -28339,7 +28316,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1877422161
 GameObject:
   m_ObjectHideFlags: 0
@@ -28388,7 +28368,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1880734384
 GameObject:
   m_ObjectHideFlags: 0
@@ -28566,7 +28549,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1001 &1889891783
 Prefab:
   m_ObjectHideFlags: 0
@@ -28980,7 +28966,10 @@ MonoBehaviour:
   fluffRespawns: 0
   respawnDelayMin: 0
   respawnDelayMax: 0
+  autoSpawn: 1
   dropParent: 0
+  spawnFakeMoving: 0
+  sproutFluff: 0
 --- !u!1 &1903545845
 GameObject:
   m_ObjectHideFlags: 0
@@ -29734,7 +29723,6 @@ GameObject:
   - 4: {fileID: 2003537312}
   - 33: {fileID: 2003537314}
   - 23: {fileID: 2003537313}
-  - 136: {fileID: 2003537315}
   m_Layer: 15
   m_Name: Floor Puzzle Middle
   m_TagString: Untagged
@@ -29783,20 +29771,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 17097005}
   m_GameObject: {fileID: 2003537311}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!136 &2003537315
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 13630040, guid: 0ce4e4c0f1dbb564581af7a83a9d73aa,
-    type: 2}
-  m_PrefabInternal: {fileID: 17097005}
-  m_GameObject: {fileID: 2003537311}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: .500000238
-  m_Height: 10
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2008710914
 Prefab:
   m_ObjectHideFlags: 0
@@ -30139,7 +30113,6 @@ MonoBehaviour:
   waitBeforeFade: 3
   fadeSpeed: .00499999989
   attachedLevel: {fileID: 152132841}
-  endingLoadScene: Menu
   destroyOnLoad: 1
 --- !u!23 &2025655167
 Renderer:
@@ -30185,6 +30158,7 @@ MonoBehaviour:
   targetRenderer: {fileID: 2025655167}
   renderBase: 1000
   renderOffset: -10
+  forceRendererOn: 0
 --- !u!1 &2027341624
 GameObject:
   m_ObjectHideFlags: 0
@@ -30712,7 +30686,7 @@ Prefab:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 103744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2055253007}
@@ -30720,6 +30694,7 @@ GameObject:
   - 64: {fileID: 2055253009}
   - 23: {fileID: 2055253006}
   - 114: {fileID: 2055253008}
+  - 114: {fileID: 2055253011}
   m_Layer: 17
   m_Name: DarkPlane
   m_TagString: Untagged
@@ -30732,7 +30707,7 @@ Renderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 2303742, guid: f7a07160882ce074f84160620963c59f,
     type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2055253005}
   m_Enabled: 1
   m_CastShadows: 1
@@ -30752,20 +30727,20 @@ Renderer:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 403744, guid: f7a07160882ce074f84160620963c59f, type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2055253005}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 136.795593, y: 150, z: 1}
+  m_LocalPosition: {x: -24.5, y: 152.800003, z: -9.19999981}
+  m_LocalScale: {x: 174.128067, y: 221.083786, z: 2.67980361}
   m_Children: []
-  m_Father: {fileID: 1793531536}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
 --- !u!114 &2055253008
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11403744, guid: f7a07160882ce074f84160620963c59f,
     type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2055253005}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -30775,12 +30750,13 @@ MonoBehaviour:
   targetRenderer: {fileID: 0}
   renderBase: 3000
   renderOffset: 2
+  forceRendererOn: 0
 --- !u!64 &2055253009
 MeshCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 6403742, guid: f7a07160882ce074f84160620963c59f,
     type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2055253005}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -30794,9 +30770,25 @@ MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 3303742, guid: f7a07160882ce074f84160620963c59f,
     type: 2}
-  m_PrefabInternal: {fileID: 711868511}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2055253005}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2055253011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2055253005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65477d551d8e5bf488e62087e41dffad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p1: {fileID: 0}
+  p2: {fileID: 0}
+  height: 3
+  radius: 3
+  squaredHypotenuse: 0
 --- !u!1001 &2060675578
 Prefab:
   m_ObjectHideFlags: 0
@@ -31115,6 +31107,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 100
     attachSpring2: 50
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: 5
     relativeWarningDistance: .5
     endsWidth: .5
@@ -31123,6 +31118,12 @@ MonoBehaviour:
     removeLinkDistance: .300000012
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -31170,6 +31171,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 1
@@ -31178,6 +31182,12 @@ MonoBehaviour:
     removeLinkDistance: .800000012
     springForce: 500
     springDamper: .100000001
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -31227,11 +31237,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 2083422160}
   createOnStart: 1
+  space: 0
   destroyWhenBroken: 0
   wallIsCentered: 0
   membraneDirection: {x: -1, y: -1, z: 0}
   membraneLength: 21
   showPosts: 1
+  disableAtFar: 0
   startPost: {fileID: 1713398275}
   endPost: {fileID: 1009759799}
   defaultShapingForce: -1
@@ -31673,6 +31685,69 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2130808078}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2140105063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2140105065}
+  - 108: {fileID: 2140105064}
+  m_Layer: 0
+  m_Name: Point light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &2140105064
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2140105063}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 2.98000002
+  m_Range: 22.6451836
+  m_SpotAngle: 88.9000015
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_Strength: 1
+    m_Bias: .0500000007
+    m_Softness: 4
+    m_SoftnessFade: 1
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_ActuallyLightmapped: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 1
+  m_ShadowSamples: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_IndirectIntensity: 1
+  m_AreaSize: {x: 1, y: 1}
+--- !u!4 &2140105065
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2140105063}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -66.9000015, y: 107, z: -19.2000008}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
 --- !u!1 &2143257099
 GameObject:
   m_ObjectHideFlags: 0
