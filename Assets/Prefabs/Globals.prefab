@@ -316,7 +316,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -60.5600777, y: 149.957642, z: 0}
+  m_LocalPosition: {x: -35.5449486, y: 138.117477, z: -434.889038}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499962}
@@ -945,9 +945,11 @@ MonoBehaviour:
   defaultPulseStats:
     scaleRate: 10
     lifeTime: 2
+    fadeAlpha: 1
     alpha: 1
-    alphaFade: .5
     smallRing: 0
+    pauseInterval: -1
+    retractInterval: -1
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -1032,12 +1034,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCamera1: 1
+  isMainCamera: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
   cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099986}
-  otherCamera: {fileID: 2099990}
   pivot: {fileID: 199966}
 --- !u!114 &11499966
 MonoBehaviour:
@@ -1074,8 +1075,8 @@ MonoBehaviour:
   splitterDistanceInWorldSpace: 0
   splitLineFadeDistance: .699999988
   splitLineFadeDistanceInWorldSpace: 0
-  player1CameraSystem: {fileID: 11499964}
-  player2CameraSystem: {fileID: 11499978}
+  mainCameraFollow: {fileID: 0}
+  splitCameraFollow: {fileID: 0}
   splitCamera1: {fileID: 2099986}
   splitCamera2: {fileID: 2099990}
   player1: {fileID: 0}
@@ -1265,12 +1266,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b6028042e7f77c41a93369358c5f635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCamera1: 0
+  isMainCamera: 0
   player1: {fileID: 0}
   player2: {fileID: 0}
   cameraOffset: {x: 0, y: 0, z: -100}
   childMainCamera: {fileID: 2099990}
-  otherCamera: {fileID: 2099986}
   pivot: {fileID: 199978}
 --- !u!114 &11499980
 MonoBehaviour:

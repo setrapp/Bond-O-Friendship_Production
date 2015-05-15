@@ -5,12 +5,21 @@ Shader "DepthMask/MaskerAlphaGradient" {
 		_Color ("Color", Color) = (0.0,0.0,0.0,1.0)
 		_P1Pos ("P1 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
 		_P2Pos ("P2 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
+		_Exponent("Sharpness Radius", Float) = 4.0
+		_Exp_Coeff("Sharpness Multiplier", Float) = 30.0
+		_Ambience("Ambience", Float) = 0.8
+		_RingCoeff("Outer Radius", Float) = 5
 		//_HypSquared ("Hypotenuse Squared", Float) = 0.0
 
 	}	
 	SubShader {
 		Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
+		
 		Blend SrcAlpha OneMinusSrcAlpha
+		//Blend SrcAlpha SrcAlpha
+		//Blend One One
+		//BlendOp Subtract
+		
 
 		Pass {	
 			
@@ -25,6 +34,10 @@ Shader "DepthMask/MaskerAlphaGradient" {
 			uniform float4 _Color;
 			uniform float4 _P1Pos; 
 			uniform float4 _P2Pos;
+			uniform float _Exponent;
+			uniform float _Exp_Coeff;
+			uniform float _Ambience;
+			uniform float _RingCoeff;
 
 
 			//base input structs
@@ -65,25 +78,25 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 				
 				//More light like behaviour
-				//if (normDotTo1 < 0.05)
+				//if (normDotTo1 < 0.25)
 				//{
 				//	normDotTo1 = 0;
 				//}
-				//if (normDotTo2 < 0.05)
+				//if (normDotTo2 < 0.25)
 				//{
 				//	normDotTo2 = 0;
 				//}
-				//
-				//float alpha1 = 1 - normDotTo1;
-				//float alpha2 = 1 - normDotTo2;
-				//
-				//alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
+				
+				float alpha1 = 1 - normDotTo1;
+				float alpha2 = 1 - normDotTo2;
+				
+				alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
 				
 
 				//more organic, less light-like
 				float normDotTo = (dot(vo.normal, toP1) + dot(vo.normal, toP2)) / 2;
-				alpha = 1 - ((pow(normDotTo, 8 ) * 50000) + normDotTo/2);
-				if (normDotTo < .2)
+				alpha = 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience);
+				if (normDotTo < 1/_RingCoeff)
 				{
 					alpha = 0.9;
 				}
