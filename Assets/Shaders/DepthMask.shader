@@ -2,24 +2,30 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 	Properties {
 
+		//Colour of the Plane
 		_Color ("Color", Color) = (0.0,0.0,0.0,1.0)
-		_P1Pos ("P1 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
-		_P2Pos ("P2 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
+
+		//2 Players' positions
+		_P1Pos ("Player1 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		_P2Pos ("Player2 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		// 2 closest luminus calculated via script
+		_L1Pos ("Luminus1 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		_L2Pos ("Luminus2 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+
+		//Visibility around Players
 		_Exponent("Sharpness Radius", Float) = 4.0
 		_Exp_Coeff("Sharpness Multiplier", Float) = 30.0
 		_Ambience("Ambience", Float) = 0.8
 		_RingCoeff("Outer Radius", Float) = 5
-		//_HypSquared ("Hypotenuse Squared", Float) = 0.0
+
+
+		//Visibility around Luminus
 
 	}	
 	SubShader {
 		Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
 		
-		Blend SrcAlpha OneMinusSrcAlpha
-		//Blend SrcAlpha SrcAlpha
-		//Blend One One
-		//BlendOp Subtract
-		
+		Blend SrcAlpha OneMinusSrcAlpha		
 
 		Pass {	
 			
@@ -62,6 +68,11 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				return vo;
 			}
 
+			float CalcAlpha(float normDotTo, float _Exponent, float _Exp_Coeff, float _Ambience)
+			{
+				return 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience); 
+			}
+
 			//fragment function
 			float4 frag(vertexOutput vo) : COLOR
 			{
@@ -74,10 +85,8 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 				float normDotTo1 = dot(vo.normal, toP1);
 				float normDotTo2 = dot(vo.normal, toP2);
-
-
 				
-				//More light like behaviour
+				//Uncomment this part for a more subtle cellular look
 				//if (normDotTo1 < 0.25)
 				//{
 				//	normDotTo1 = 0;
@@ -86,26 +95,37 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				//{
 				//	normDotTo2 = 0;
 				//}
-				
-				float alpha1 = 1 - normDotTo1;
-				float alpha2 = 1 - normDotTo2;
-				
-				alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
+				//float alpha1 = 1 - normDotTo1;
+				//float alpha2 = 1 - normDotTo2;
+				//
+				//alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
 				
 
 				//more organic, less light-like
-				float normDotTo = (dot(vo.normal, toP1) + dot(vo.normal, toP2)) / 2;
-				alpha = 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience);
-				if (normDotTo < 1/_RingCoeff)
-				{
-					alpha = 0.9;
-				}
+				float normDotTo;
+				
+				//Additive mean
+				normDotTo = (normDotTo1 + normDotTo2) / 2;
 
+				//Multiplicative (much lower when far away)
+				//normDotTo = pow(normDotTo1 * normDotTo2, 0.5);
+				
+				alpha = CalcAlpha(normDotTo,_Exponent,_Exp_Coeff,_Ambience);
+				//alpha = 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience);
+
+				alpha = min(alpha , CalcAlpha(1/_RingCoeff,_Exponent,_Exp_Coeff,_Ambience));
+
+				//Uncomment this part for hard edges around players
+				//if (normDotTo < 1/_RingCoeff)
+				//{
+				//	alpha = 0.9;
+				//}
 
 				color = float4(_Color.rgb,alpha);
-
 				return color;
 			}
+
+			
 			ENDCG
 		}
 	}
