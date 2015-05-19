@@ -18,8 +18,13 @@ public class FadeOut : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		myColor = new Color(189.0f/255.0f, 201.0f/255.0f,254.0f/255.0f,timer);
-		shadow = new Color(139.0f/255.0f, 139.0f/255.0f,139.0f/255.0f,timer);
-		myShadow.renderer.material.color = shadow;
+
+        if (myShadow != null)
+        {
+            shadow = new Color(139.0f / 255.0f, 139.0f / 255.0f, 139.0f / 255.0f, timer);
+            myShadow.renderer.material.color = shadow;
+        }
+
 		GetComponent<Renderer>().material.color = myColor;
 		if(fadeNow == true)
 		{
