@@ -428,6 +428,11 @@ public class Fluff : MonoBehaviour {
 	// Accessible function that does not require coroutine call.
 	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false, bool deflateBeforePop = false)
 	{
+		if (!gameObject.activeInHierarchy)
+		{
+			return;
+		}
+
 		if (slowMultiplier >= 0)
 		{
 			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));

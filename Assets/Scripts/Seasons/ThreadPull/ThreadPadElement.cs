@@ -7,8 +7,10 @@ public class ThreadPadElement : MonoBehaviour {
 	public bool activated;
 	public float bondCount;
 	public List<GameObject> bondLinks = new List<GameObject>();
+	public Rigidbody body;
 	public Bond threadedbond = null;
 	public GameObject Activator;
+	public GameObject destination;
 	public GameObject triIsland;
 	public GameObject triDest;
 	public GameObject bigIsland;
@@ -27,12 +29,17 @@ public class ThreadPadElement : MonoBehaviour {
 		maxDistance = Vector3.Distance(gameObject.transform.position, Activator.transform.position);
 		maxTriDistance = Vector3.Distance(triIsland.transform.position, triDest.transform.position);
 		maxBigDistance = Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
+
+		if (body == null)
+		{
+			body = GetComponent<Rigidbody>();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(gameObject.transform.position, Activator.transform.position) < 1.6f)
-			GetComponent<SpringJoint>().spring = 0;
+		//if(Vector3.Distance(gameObject.transform.position, Activator.transform.position) < 1.6f)
+		//	GetComponent<SpringJoint>().spring = 0;
 
 		triPosition = triIsland.transform.position;
 		triPosition.y -= 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxTriDistance)/Vector3.Distance(triIsland.transform.position, triDest.transform.position);

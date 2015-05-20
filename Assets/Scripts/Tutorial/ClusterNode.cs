@@ -20,6 +20,10 @@ public class ClusterNode : MonoBehaviour {
 	protected Collider lighter = null;
 	public Color bondColor;
 
+	[Header("Optional Wall Pairing")]
+	public GameObject pairedWall;
+	private Color wallColor;
+	private float startWallAlpha;
 
 	// Use this for initialization
 	virtual protected void Start () {
@@ -33,6 +37,11 @@ public class ClusterNode : MonoBehaviour {
 		}
 		startingcolor = nodeRenderers[0].material.color;
 
+		if (pairedWall != null)
+		{
+			wallColor = pairedWall.GetComponent<Renderer>().material.color;
+			startWallAlpha = wallColor.a;
+		}
 	}
 	
 	// Update is called once per frame
@@ -61,6 +70,13 @@ public class ClusterNode : MonoBehaviour {
 			if(solved && line != null)
 				Destroy(line);*/
 
+			if (pairedWall != null)
+			{
+				wallColor.a -= Time.deltaTime;
+				pairedWall.GetComponent<Renderer>().material.color = wallColor;
+			}
+			
+
 			if (!targetPuzzle.solved && cooldownTime > 0 && lighter == null)
 			{
 				timer -= Time.deltaTime;
@@ -70,6 +86,13 @@ public class ClusterNode : MonoBehaviour {
 					for (int i = 0; i < nodeRenderers.Count; i++)
 					{
 						nodeRenderers[i].material.color = startingcolor;
+					}
+
+					if (pairedWall != null)
+					{
+						wallColor.a = startWallAlpha;
+						pairedWall.GetComponent<Renderer>().material.color = wallColor;
+						pairedWall.GetComponent<Collider>().enabled = true;
 					}
 				}
 			}
@@ -148,6 +171,11 @@ public class ClusterNode : MonoBehaviour {
 		{
 			lit = true;
 			targetPuzzle.NodeColored();
+
+			if (pairedWall != null)
+			{
+				pairedWall.GetComponent<Collider>().enabled = false;
+			}
 		}
 	}
 

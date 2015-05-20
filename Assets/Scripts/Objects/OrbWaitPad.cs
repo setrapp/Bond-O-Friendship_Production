@@ -15,6 +15,7 @@ public class OrbWaitPad : WaitPad {
 	private float gateXPos;
 	public float gateCloseTime = 20;
 	private int sphereCount;
+	public bool requirePlayers = true;
 
 	override protected void Start () {
 		red = 0.1f;
@@ -44,7 +45,7 @@ public class OrbWaitPad : WaitPad {
 		mycolor = new Color(red,0.3f,0.5f);
 		GetComponent<Renderer>().material.color = mycolor;
 
-	if(pOonPad == true && pTonPad == true && fullyLit)
+		if((!requirePlayers || pOonPad == true && pTonPad == true) && fullyLit)
 		{
 			//renderer.material.color = Color.magenta;
 			if(red < 1.0f)
@@ -55,7 +56,7 @@ public class OrbWaitPad : WaitPad {
 			if(red > 0.1f)
 			red -= Time.deltaTime;
 		}
-		if(red >= 1)
+		if (fullyLit && (red >= 1 || !requirePlayers))
 		{
 			activated = true;
 		}

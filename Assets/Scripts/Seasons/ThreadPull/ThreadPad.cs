@@ -35,8 +35,11 @@ public class ThreadPad : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		postColor = new Color(0.5f, 0.5f, blue, alpha);
-		renderer.material.color = postColor;
+		if (renderer != null)
+		{
+			postColor = new Color(0.5f, 0.5f, blue, alpha);
+			renderer.material.color = postColor;
+		}
 		
 		bool anyThreader = false;
 		bool allThreaders = true;
@@ -87,6 +90,21 @@ public class ThreadPad : MonoBehaviour {
 		if(myThreaders[0].activated == true && myThreaders[1].activated == true && myThreaders[2].activated == true)
 		{
 			solved = true;
+			myThreaders[0].transform.position = new Vector3(myThreaders[0].destination.transform.position.x, myThreaders[0].destination.transform.position.y, myThreaders[0].transform.position.z);
+			if (myThreaders[0].body != null)
+			{
+				myThreaders[0].body.isKinematic = true;
+			}
+			myThreaders[1].transform.position = new Vector3(myThreaders[1].destination.transform.position.x, myThreaders[1].destination.transform.position.y, myThreaders[1].transform.position.z);
+			if (myThreaders[1].body != null)
+			{
+				myThreaders[1].body.isKinematic = true;
+			}
+			myThreaders[2].transform.position = new Vector3(myThreaders[2].destination.transform.position.x, myThreaders[2].destination.transform.position.y, myThreaders[2].transform.position.z);
+			if (myThreaders[2].body != null)
+			{
+				myThreaders[2].body.isKinematic = true;
+			}
 		}
 
 		for(int i = 0;i < Posts.Count; i++)
@@ -102,7 +120,10 @@ public class ThreadPad : MonoBehaviour {
 
 		if(alpha <= 0)
 		{
-			gameObject.collider.enabled = false;
+			if (collider != null)
+			{
+				gameObject.collider.enabled = false;
+			}
 		}
 		
 	}
