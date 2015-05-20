@@ -17,6 +17,7 @@ public class BondDestroyer : MonoBehaviour {
 	private float lastPulseTime = 0;
 	public PulseStats pulseStats;
 	private BondDestroyerPulse destroyerPulse;
+    public RingPulse DangerPulse;
 
 	void Awake()
 	{
@@ -66,7 +67,7 @@ public class BondDestroyer : MonoBehaviour {
 
 		if (pulseDelay >= 0 && Time.time - lastPulseTime >= pulseDelay)
 		{
-			RingPulse shotPulse = Helper.FirePulse(transform.position, pulseStats);
+			RingPulse shotPulse = Helper.FirePulse(transform.position, pulseStats, DangerPulse);
 			shotPulse.gameObject.name = "Destroyer Pulse";
 			shotPulse.gameObject.layer = gameObject.layer;
 			Renderer pulseRenderer = shotPulse.renderer;
@@ -152,6 +153,12 @@ public class BondDestroyer : MonoBehaviour {
 			}
 			crossed = true;
 		}
+        else if (other.gameObject.tag == "Bud")
+        {
+            GameObject Blossom = other.gameObject;
+            Blossom.GetComponent<BudFadeOut>().fadeNow = true;
+            crossed = true;
+        }
 
 		if (crossed)
 		{

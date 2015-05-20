@@ -18,7 +18,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 		}
 		neededCollider = neededCharacter.collider;
 
-		for (int i = 0; i < nodeRenderers.Count; i++)
+		for (int i = 0; i < nodeRenderers.Length; i++)
 		{
 			nodeRenderers[i].material.color = neededCharacter.colors.baseColor - colorDesaturation;
 		}

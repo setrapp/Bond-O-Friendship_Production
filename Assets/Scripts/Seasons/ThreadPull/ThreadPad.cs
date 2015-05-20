@@ -87,9 +87,11 @@ public class ThreadPad : MonoBehaviour {
 			//solved = true;
 		}
 
-		if(myThreaders[0].activated == true && myThreaders[1].activated == true && myThreaders[2].activated == true)
+		if(!solved && myThreaders[0].activated == true && myThreaders[1].activated == true && myThreaders[2].activated == true)
 		{
 			solved = true;
+			Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
+
 			myThreaders[0].transform.position = new Vector3(myThreaders[0].destination.transform.position.x, myThreaders[0].destination.transform.position.y, myThreaders[0].transform.position.z);
 			if (myThreaders[0].body != null)
 			{

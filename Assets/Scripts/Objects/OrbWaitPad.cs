@@ -18,7 +18,7 @@ public class OrbWaitPad : WaitPad {
 	public bool requirePlayers = true;
 
 	override protected void Start () {
-		red = 0.1f;
+        red = 0.8f;
 		waitRate = 0.3f;
 		activationSpheres = new GameObject[maxTriggers];
 		for(int i = 0; i < transform.parent.childCount; i++)
@@ -42,7 +42,7 @@ public class OrbWaitPad : WaitPad {
 
 	override protected void Update()
 	{
-		mycolor = new Color(red,0.3f,0.5f);
+        mycolor = new Color(red, 0.8f, 0.3f);
 		GetComponent<Renderer>().material.color = mycolor;
 
 		if((!requirePlayers || pOonPad == true && pTonPad == true) && fullyLit)
