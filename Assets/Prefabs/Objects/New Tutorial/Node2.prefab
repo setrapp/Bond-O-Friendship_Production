@@ -49,6 +49,7 @@ GameObject:
   - 136: {fileID: 13683222}
   - 114: {fileID: 11422874}
   - 114: {fileID: 11482198}
+  - 114: {fileID: 11488684}
   m_Layer: 16
   m_Name: Node2
   m_TagString: Untagged
@@ -86,8 +87,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183226}
-  m_LocalRotation: {x: 0, y: 0, z: .306909055, w: .951738894}
-  m_LocalPosition: {x: 2.29999924, y: -3.36999512, z: -7.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.29899979, y: -.660003662, z: -7.5}
   m_LocalScale: {x: 1.47820997, y: 1.47820997, z: 1.47820997}
   m_Children:
   - {fileID: 483224}
@@ -365,6 +366,31 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  pairedWall: {fileID: 0}
+  wallRenderers: []
+--- !u!114 &11488684
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 0
+  reactable: 1
+  superiors: []
+  streamsTouched: 0
+  stopReactionOnComplete: 0
+  scalees:
+  - scalee: {fileID: 483226}
+    unscaled: {x: 0, y: 0, z: 1.47820997}
+    scaled: {x: 1.47820997, y: 1.47820997, z: 1.47820997}
 --- !u!136 &13683222
 CapsuleCollider:
   m_ObjectHideFlags: 1

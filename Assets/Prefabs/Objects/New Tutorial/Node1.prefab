@@ -49,6 +49,7 @@ GameObject:
   - 136: {fileID: 13683222}
   - 114: {fileID: 11480582}
   - 114: {fileID: 11460988}
+  - 114: {fileID: 11450046}
   m_Layer: 16
   m_Name: Node1
   m_TagString: Untagged
@@ -86,9 +87,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 183226}
-  m_LocalRotation: {x: 0, y: 0, z: -.740711153, w: .67182374}
-  m_LocalPosition: {x: -2.65999985, y: -1.11000061, z: -7.5}
-  m_LocalScale: {x: 1.47820997, y: 1.47821009, z: 1.47820997}
+  m_LocalRotation: {x: 0, y: 0, z: -.258025408, w: .966138124}
+  m_LocalPosition: {x: -.265357971, y: 1.05322266, z: -7.5}
+  m_LocalScale: {x: 1.47820985, y: 1.47821009, z: 1.47820997}
   m_Children:
   - {fileID: 483224}
   - {fileID: 409510}
@@ -271,6 +272,29 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!114 &11450046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 0
+  reactable: 1
+  superiors: []
+  streamsTouched: 0
+  stopReactionOnComplete: 0
+  scalees:
+  - scalee: {fileID: 483226}
+    unscaled: {x: 0, y: 0, z: 1.47820997}
+    scaled: {x: 1.47820997, y: 1.47820997, z: 1.47820997}
 --- !u!114 &11460988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -365,6 +389,8 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  pairedWall: {fileID: 0}
+  wallRenderers: []
 --- !u!136 &13683222
 CapsuleCollider:
   m_ObjectHideFlags: 1

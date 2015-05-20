@@ -50,6 +50,7 @@ GameObject:
   - 136: {fileID: 13699856}
   - 114: {fileID: 11499846}
   - 114: {fileID: 11499848}
+  - 114: {fileID: 11429556}
   m_Layer: 16
   m_Name: Node2
   m_TagString: Untagged
@@ -172,7 +173,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199850}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3.3900001}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: .926506102, y: .926505864, z: .926505864}
   m_Children: []
   m_Father: {fileID: 499848}
@@ -208,7 +209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199856}
   m_LocalRotation: {x: 0, y: 0, z: -.701608002, w: .712563217}
-  m_LocalPosition: {x: -4.26473141, y: -4.76460457, z: -9.41374969}
+  m_LocalPosition: {x: -4.26473141, y: -4.76460457, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 499846}
@@ -499,6 +500,29 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!114 &11429556
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 199848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364b3df6b0550847b4613624c64c174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 0
+  reactable: 1
+  superiors: []
+  streamsTouched: 0
+  stopReactionOnComplete: 0
+  scalees:
+  - scalee: {fileID: 499848}
+    unscaled: {x: 0, y: 0, z: 1.67132998}
+    scaled: {x: 1.67132998, y: 1.67132998, z: 1.67132998}
 --- !u!114 &11499846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -548,7 +572,7 @@ MonoBehaviour:
   targetPuzzle: {fileID: 0}
   disappearOnSolve: 1
   nodeRenderers: []
-  cooldownTime: 20
+  cooldownTime: 2
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
