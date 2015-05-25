@@ -13,9 +13,11 @@ GameObject:
   - 23: {fileID: 2324960}
   - 54: {fileID: 5424960}
   - 114: {fileID: 11447194}
+  - 114: {fileID: 11490240}
+  - 114: {fileID: 11430974}
   m_Layer: 16
   m_Name: Blossom
-  m_TagString: Untagged
+  m_TagString: Bud
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,8 +29,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124960}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.76000023, y: 203.440002, z: -2.19000053}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -32.9300003, y: 323.359985, z: 0}
+  m_LocalScale: {x: 2.50649214, y: 2.50649333, z: 2.50649333}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -44,7 +46,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 04eb2afc251f75747922662c033ca86a, type: 2}
+  - {fileID: 2100000, guid: 9f3851a56ad2fb84baf1ba8f6d3214e7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -72,8 +74,21 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &11430974
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18679f8be0131fb4082753abc288db40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myShadow: {fileID: 0}
+  fadeNow: 0
 --- !u!114 &11447194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,6 +103,28 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &11490240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad34e26df8c9c74b97f78d96f9453c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 1
+  y: 1
+  z: 0
+  useRandomValues: 1
+  scale: 1
+  speed: 1
+  useOtherValues: 0
+  wilin: 1
+  wasWilin: 0
+  firstWil: 1
+  valuesToUse: {fileID: 0}
 --- !u!135 &13524960
 SphereCollider:
   m_ObjectHideFlags: 1

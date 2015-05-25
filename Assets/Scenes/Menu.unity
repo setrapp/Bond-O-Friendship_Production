@@ -3511,7 +3511,7 @@ Light:
   m_DrawHalo: 0
   m_ActuallyLightmapped: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -6225,7 +6225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &824765891
 Transform:
   m_ObjectHideFlags: 0
@@ -6935,18 +6935,20 @@ MonoBehaviour:
   startingPerspectiveFOV: 0
   orthographicSize: 20
   startingOrthographicSize: 0
-  zoomIntroInEditor: 1
+  zoomIntroInEditor: 0
   allowInput: 1
   audioVolume: -1
-  mute: 0
+  mute: 1
   bgm: {fileID: 2119224281}
   defaultPulsePrefab: {fileID: 11400002, guid: fe97050609d727844b9f3ec597223262, type: 2}
   defaultPulseStats:
     scaleRate: 10
     lifeTime: 2
+    fadeAlpha: 1
     alpha: 1
-    alphaFade: .5
     smallRing: 0
+    pauseInterval: -1
+    retractInterval: -1
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -9143,7 +9145,7 @@ Light:
   m_DrawHalo: 0
   m_ActuallyLightmapped: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -10100,6 +10102,7 @@ MonoBehaviour:
   body: {fileID: 1530241263}
   attractor: {fileID: 1530241253}
   flufflessPass: {fileID: 2143896435}
+  backLight: {fileID: 425418216}
   fillScale: 1
   flashFadeTime: 2
 --- !u!54 &1530241263
@@ -10149,7 +10152,7 @@ MonoBehaviour:
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
-    maxDistance: 8
+    maxDistance: 16
     relativeWarningDistance: .5
     endsWidth: .0199999996
     midWidth: .5
@@ -10162,7 +10165,7 @@ MonoBehaviour:
     fluffPullForce: 1
     fluffPullLinks: 10
     maxFluffCapacity: 16
-    extensionPerFluff: 2
+    extensionPerFluff: 1.5
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -10551,6 +10554,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1557153958}
   - 114: {fileID: 1557153959}
+  - 114: {fileID: 1557153960}
   m_Layer: 0
   m_Name: Bonding Light
   m_TagString: Untagged
@@ -10578,9 +10582,23 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1865630044}
   m_GameObject: {fileID: 1557153957}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fdad5000dca81949be9f9609a66f90b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactingObject: {fileID: 1407371697}
+  activeOnBond: 1
+--- !u!114 &1557153960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11491082, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 1865630044}
+  m_GameObject: {fileID: 1557153957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254136c6db55cdf43a4784c60e664ef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   reactingObject: {fileID: 1407371697}
@@ -10842,7 +10860,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1590784313
 Transform:
   m_ObjectHideFlags: 0
@@ -11680,11 +11698,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 199966, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 199978, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11499968, guid: 7ea575b0b6d0c7e4b84ae0376db9a644, type: 2}
       propertyPath: startPos.x
@@ -11873,9 +11891,11 @@ MonoBehaviour:
   pulseStats:
     scaleRate: 10
     lifeTime: 2
+    fadeAlpha: 1
     alpha: 1
-    alphaFade: .5
     smallRing: 0
+    pauseInterval: -1
+    retractInterval: -1
   leftControllerLeftThumbstick: {fileID: 658928238}
   leftControllerRightThumbstick: {fileID: 963742415}
   rightControllerLeftThumbstick: {fileID: 902678183}
@@ -15433,6 +15453,7 @@ MonoBehaviour:
   body: {fileID: 2006680906}
   attractor: {fileID: 2006680896}
   flufflessPass: {fileID: 1705626990}
+  backLight: {fileID: 1407371699}
   fillScale: 1
   flashFadeTime: 2
 --- !u!54 &2006680906
@@ -15482,7 +15503,7 @@ MonoBehaviour:
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
-    maxDistance: 8
+    maxDistance: 16
     relativeWarningDistance: .5
     endsWidth: .0199999996
     midWidth: .5
@@ -15495,7 +15516,7 @@ MonoBehaviour:
     fluffPullForce: 1
     fluffPullLinks: 10
     maxFluffCapacity: 16
-    extensionPerFluff: 2
+    extensionPerFluff: 1.5
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
@@ -16008,6 +16029,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2082297300}
   - 114: {fileID: 2082297301}
+  - 114: {fileID: 2082297302}
   m_Layer: 0
   m_Name: Bonding Light
   m_TagString: Untagged
@@ -16035,9 +16057,23 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 2020569886}
   m_GameObject: {fileID: 2082297299}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fdad5000dca81949be9f9609a66f90b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactingObject: {fileID: 425418215}
+  activeOnBond: 1
+--- !u!114 &2082297302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11491082, guid: 1ccc0e99af2cf6b47a3f4f25558fb029,
+    type: 2}
+  m_PrefabInternal: {fileID: 2020569886}
+  m_GameObject: {fileID: 2082297299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254136c6db55cdf43a4784c60e664ef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   reactingObject: {fileID: 425418215}
