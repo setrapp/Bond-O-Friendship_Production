@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11407762}
   m_Layer: 0
   m_Name: WaitPad
   m_TagString: Untagged
@@ -78,8 +79,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -801.787048, y: -716.269836, z: -1}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: 32.5999985, y: 156.800003, z: .970000029}
+  m_LocalScale: {x: 4.75, y: 4.74999952, z: .949999928}
   m_Children:
   - {fileID: 400004}
   - {fileID: 400002}
@@ -93,8 +94,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .600000024}
-  m_LocalScale: {x: 6, y: 6, z: 5.19999981}
+  m_LocalPosition: {x: 0, y: 0, z: .219999999}
+  m_LocalScale: {x: 5.49725723, y: 5.4972558, z: 4.76428843}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 1
@@ -134,7 +135,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6f5a1bfdc5d4d5d42a4e70a44c3ae89a, type: 2}
+  - {fileID: 2100000, guid: 89f616a1a7374ed40ac948e800ada0e9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -189,7 +190,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pOonPad: 0
   pTonPad: 0
+  waitRate: .200000003
+  neverActivate: 1
   activated: 0
+  portionComplete: 0
+--- !u!114 &11407762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f4b5fcdc58d7543a440ff7f78f248f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerPad: {fileID: 11400000}
+  startZoom: 0
+  zoomTarget: 40
+  startZoomPortion: 0
+  endZoomPortion: 1
+  oldPortionComplete: 0
+  resetOnComplete: 1
+  resetDelay: .5
+  resetAcceleration: 0
+  resetMaxSpeed: 0
+  resetSpeed: 0
+  zoomToStartingSize: 0
 --- !u!114 &11470230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,6 +231,9 @@ MonoBehaviour:
   stats:
     attachSpring1: 0
     attachSpring2: 0
+    linkMass: -1
+    linkDrag: -1
+    pullApartMaxFactor: 0
     maxDistance: -1
     relativeWarningDistance: -1
     endsWidth: 5
@@ -212,6 +242,12 @@ MonoBehaviour:
     removeLinkDistance: 1.79999995
     springForce: 5000
     springDamper: 5
+    relativeRequestDistance: -1
+    fluffRequestDelay: -1
+    fluffPullForce: -1
+    fluffPullLinks: -1
+    maxFluffCapacity: -1
+    extensionPerFluff: -1
     manualAttachment1: 0
     manualAttachment2: 0
     manualLinks: 0
