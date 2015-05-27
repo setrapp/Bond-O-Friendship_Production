@@ -15,6 +15,7 @@ public class StreamSpawner : MonoBehaviour {
 	public float streamGroupActionRate = 1;
 	public List<Stream> streams;
 	private float lastSpawnTime = -1;
+	public bool lineOnFrontOnly = true;
 
 	void Start()
 	{
