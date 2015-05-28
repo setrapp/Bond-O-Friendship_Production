@@ -76,21 +76,13 @@ public class Stream : StreamBody {
 					diffusionParticles.gameObject.SetActive(false);
 				}
 
-				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
-				Vector3 fromBedCenter = transform.position - streamBedCenter;
-				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2 - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
-				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
-				{
-					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
-				}
-
-				Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
+				Vector3 oldToTarget = (targetChannel.transform.position + seekOffset) - oldChannel.transform.position;
 				Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 
 				// TODO: Should the stream be able to change z-depth?
 				oldToTarget.z = toTarget.z = 0;
 
-				if (Vector3.Dot(oldToTarget, toTarget) < 0)
+				if (Vector3.Dot(oldToTarget, toTarget) <= 0)
 				{
 					//Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
 					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
@@ -101,6 +93,13 @@ public class Stream : StreamBody {
 					//}
 				}
 
+				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
+				Vector3 fromBedCenter = transform.position - streamBedCenter;
+				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2;// - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
+				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
+				{
+					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
+				}
 
 				mover.AccelerateWithoutHandling(toTarget);
 			}
