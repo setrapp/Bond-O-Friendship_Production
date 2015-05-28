@@ -8,13 +8,17 @@ public class MenuControl : MonoBehaviour {
 
     public ClusterNodePuzzle newGameNodePuzzle;
 
+    public InputFill inputFill;
+
     public GameObject startMenu;
 
     public GameObject obscureMenuPanel;
 
-    public GameObject inputSelect;
+    
 
     public GameObject begin;
+
+    public GameObject inputSelect;  
 
     //public GameObject levelCover;
     //public GameObject levelCover2;
@@ -30,48 +34,49 @@ public class MenuControl : MonoBehaviour {
     private bool startGame = false;
     private bool toggled = false;
 
-    private bool firePulse = true;
-
     private bool inputSelected = false;
 
     private float f = 0f;
     private float t = 1f;
     public float duration = 3.0f;
 
+    public float fadeInDuration = 1.5f;
+
     public bool fadeIn = true;
 
     private Color startColor;
     private Color fadeColor;
 
-    private Component[] inputSelectRenderers;
-    private List<Color> inputSelectColorsEmpty = new List<Color>();
-    private List<Color> inputSelectColorsFull = new List<Color>();
+   
 
     private bool startLevelLoaded = false;
 
     private bool startPanelFade = false;
     private bool zoom = true;
 
+
+    public List<Renderer> inputSelectRenderers;
+    private List<Color> inputSelectColorsEmpty = new List<Color>();
+    private List<Color> inputSelectColorsFull = new List<Color>();
+
 	// Use this for initialization
 	void Start () 
     {
         //startColor = levelCover.renderer.material.color;
        // fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
-		Globals.Instance.allowInput = false;
-        inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();       
-        foreach(Renderer renderer in inputSelectRenderers)
+        //inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();   
+        Globals.Instance.allowInput = false;
+
+        if (Application.isEditor && !Globals.Instance.zoomIntroInEditor)
         {
-            if (renderer.material.HasProperty("_Color"))
-            {
-                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
-                inputSelectColorsEmpty.Add(renderer.material.color);
-                inputSelectColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
-            }
-            else
-            {
-                inputSelectColorsEmpty.Add(Color.white);
-                inputSelectColorsFull.Add(Color.white);
-            }
+            fadeInDuration = .1f;
+        }
+
+        foreach (Renderer renderer in inputSelectRenderers)
+        {
+            renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
+            inputSelectColorsEmpty.Add(renderer.material.color);
+            inputSelectColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
         }
 
         GameObject[] messages = GameObject.FindGameObjectsWithTag("TranslevelMessage");
@@ -101,11 +106,6 @@ public class MenuControl : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        //Debug.Log(inputSelectRenderers.Length);
-        //device = InputManager.ActiveDevice;
-        //Debug.Log(device.Name);
-
-
         if (obscureMenuPanel.activeSelf && startPanelFade)
         {
             FadeInFadeOut();
@@ -117,7 +117,6 @@ public class MenuControl : MonoBehaviour {
             {
                 if (deviceCount > 0)
                 {
-
                     device = InputManager.ActiveDevice;
                     if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged)
                     {
@@ -146,7 +145,7 @@ public class MenuControl : MonoBehaviour {
                         return;
                     }
                 }
-                if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))//Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+                if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
                 {
                     if (deviceCount == 0)
                     {
@@ -178,25 +177,12 @@ public class MenuControl : MonoBehaviour {
             {
                 if (startMenu.activeSelf)
                     FadeStartMenu();
-                
-                if(firePulse)
-                {
-                    Helper.FirePulse(Globals.Instance.player1.transform.position, Globals.Instance.defaultPulseStats);
-
-                    Helper.FirePulse(Globals.Instance.player2.transform.position, Globals.Instance.defaultPulseStats);
-
-                    firePulse = false;
-                }
             }
 
             if (inputSelected && newGameNodePuzzle != null && newGameNodePuzzle.solved)
             {
                 Globals.Instance.allowInput = false;
-                readyUp = true;
-                //if(obscureCanvas.activeSelf)
-                //FadeInFadeOut();           
-
-                //MainMenuLoadLevel();           
+                readyUp = true;      
             }
             else
             {
@@ -228,17 +214,14 @@ public class MenuControl : MonoBehaviour {
         if (startMenu.GetComponent<CanvasGroup>().alpha != 0.0f)
         {
             t = Mathf.Clamp(t - Time.deltaTime/1.0f, 0.0f, 1.0f);
-            startMenu.GetComponent<CanvasGroup>().alpha = t;
-            //levelCover.renderer.material.color = Color.Lerp(fadeColor, startColor, t);
-            //levelCover2.renderer.material.color = Color.Lerp(fadeColor, startColor, t);
-            
+            startMenu.GetComponent<CanvasGroup>().alpha = t;            
         }
         else
         {
             if (f != 1)
             {
-                f = Mathf.Clamp(f + Time.deltaTime / 2.0f, 0.0f, 1.0f);
-                for (int i = 0; i < inputSelectRenderers.Length; i++)
+                f = Mathf.Clamp(f + Time.deltaTime / .5f, 0.0f, 1.0f);
+                for (int i = 0; i < inputSelectRenderers.Count; i++)
                 {
                     if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
                         inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
@@ -246,9 +229,9 @@ public class MenuControl : MonoBehaviour {
             }
             else
             {
+                inputFill.allowFill = true;
                 startMenu.SetActive(false);
                 t = 1.0f;
-				Globals.Instance.allowInput = true;
             }
         }
     }
@@ -260,7 +243,7 @@ public class MenuControl : MonoBehaviour {
             CameraSplitter.Instance.movePlayers = true;
             t -= Time.deltaTime / duration;
             t = Mathf.Clamp(t, 0.0f, 1.0f);
-            for (int i = 0; i < inputSelectRenderers.Length; i++)
+            for (int i = 0; i < inputSelectRenderers.Count; i++)
             {
                 if (inputSelectRenderers[i].renderer != null && inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
                     inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
@@ -293,7 +276,7 @@ public class MenuControl : MonoBehaviour {
         
             if (t != 0)
             {
-                t = Mathf.Clamp(t - Time.deltaTime / 2.0f, 0.0f, 1.0f);
+                t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
                 //float f = 1 - t;
                 obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
                // begin.GetComponent<CanvasGroup>().alpha = f;
@@ -303,7 +286,7 @@ public class MenuControl : MonoBehaviour {
 
                 if (f != 1)
                 {
-                    f = Mathf.Clamp(f + Time.deltaTime / 1.5f, 0.0f, 1.0f);
+                    f = Mathf.Clamp(f + Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
                     begin.GetComponent<CanvasGroup>().alpha = f;
                 }
                 else
