@@ -40,7 +40,7 @@ public class ThreadParent : MonoBehaviour {
 				allThreaders = false;
 			}
 		}
-
+        
 		if(anyThreader == true && !wasThreading)
 		{
 			if(playerBond != null)
@@ -56,7 +56,7 @@ public class ThreadParent : MonoBehaviour {
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;
 			}
-		}
+		} 
 
 		wasThreading = anyThreader;
 

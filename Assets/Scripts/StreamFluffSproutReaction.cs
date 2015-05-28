@@ -55,14 +55,14 @@ public class StreamFluffSproutReaction : StreamReaction {
 			if (reactionProgress >= 1 && streamsTouched > 0)
 			{
 				bool spawned = false;
-				for (int i = 0; i < fluffPlaceholders.Count && (spawnAll || !spawned); i++)
+				for (int i = 0; i < fluffPlaceholders.Count; i++)
 				{
 					if (fluffPlaceholders[i] == null)
 					{
 						fluffPlaceholders.RemoveAt(i);
 						i--;
 					}
-					else
+					else if (spawnAll || !spawned)
 					{
 						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
 						{
@@ -70,6 +70,19 @@ public class StreamFluffSproutReaction : StreamReaction {
 							spawned = true;
 						}
 					}
+				}
+
+				if (!spawnAll)
+				{
+					/*while (!spawned)
+					{
+						int i = Random.Range(0, fluffPlaceholders.Count);
+						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
+						{
+							fluffPlaceholders[i].SpawnFluff();
+							spawned = true;
+						}
+					}*/
 				}
 
 				//if (spawned)

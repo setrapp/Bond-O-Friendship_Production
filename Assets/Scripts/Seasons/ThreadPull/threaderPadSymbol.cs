@@ -18,7 +18,7 @@ public class threaderPadSymbol : MonoBehaviour {
 	void Start () {
 		timer = 1.0f;
 		//doorTimer = 1.0f;
-		red = 189.0f/255.0f;
+		red = 86.0f/255.0f;
 	//	alpha = 0.5f;
 		
 	}
@@ -27,15 +27,15 @@ public class threaderPadSymbol : MonoBehaviour {
 	void Update () {
 		//Debug.Log(red);
 		//print (timer);
-		myColor = new Color(red, 201.0f/255.0f,254.0f/255.0f,1.0f);
+		myColor = new Color(red, 124.0f/255.0f,91.0f/255.0f,1.0f);
 		postColor = new Color(1.0f,1.0f,1.0f,1.0f);
-		pad.GetComponent<Renderer>().material.color = postColor;
+		pad.GetComponent<Renderer>().material.color = myColor;
 		GetComponent<Renderer>().material.color = myColor;
 		if (activated == true)
 		{
 			if(timer > 0)
 				timer -= Time.deltaTime;
-			if(red < 1.0f)
+			if(red < 5.0f)
 			{
 				red += Time.deltaTime;
 			}
