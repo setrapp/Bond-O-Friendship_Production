@@ -15,6 +15,7 @@ public class CameraSplitter : MonoBehaviour {
 		}
 	}
 
+
     [HideInInspector]
 	public bool splittable = true;
     [HideInInspector]
