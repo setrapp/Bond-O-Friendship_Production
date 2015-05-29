@@ -93,6 +93,7 @@ public class Globals : MonoBehaviour {
 
 	[SerializeField]
 	public List<Fluff> allFluffs;
+	public AudioSource fluffAudio;
 
 	public bool updatePlayersOnLoad = true;
 

@@ -42,7 +42,7 @@ public class SpawnBud : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider col) {
-		if(spawned == false && col.name != "Fluff(Clone)")
+		if(spawned == false && (col.gameObject.tag == "Character" || col.gameObject.layer == LayerMask.NameToLayer("Bond")))
 		{
 
 			if (col == Globals.Instance.player1.character.bodyCollider)

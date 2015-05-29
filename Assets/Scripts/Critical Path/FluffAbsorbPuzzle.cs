@@ -189,28 +189,28 @@ public class FluffAbsorbPuzzle : MonoBehaviour {
 			{
 				streamSE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
 				float dist =  streamSE.transform.localScale.x/streamScaleRate;
-				endSE.transform.position = streamSE.transform.position + new Vector3(-dist,-dist, 0);
+				endSE.transform.position = streamSE.transform.position + new Vector3(-dist, -dist, endSE.transform.position.z - streamSE.transform.position.z);
 				streamSE.transform.localPosition -= new Vector3(Time.deltaTime, -Time.deltaTime, 0);
 			}
 			if(streamSW.transform.localScale.x > 0)
 			{
 				streamSW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
 				float dist =  streamSW.transform.localScale.x/streamScaleRate;
-				endSW.transform.position = streamSW.transform.position + new Vector3(-dist,dist, 0);
+				endSW.transform.position = streamSW.transform.position + new Vector3(-dist, dist, endSW.transform.position.z - streamSW.transform.position.z);
 				streamSW.transform.localPosition -= new Vector3(-Time.deltaTime, -Time.deltaTime, 0);
 			}
 			if(streamNE.transform.localScale.x > 0)
 			{
 				streamNE.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
 				float dist =  streamNE.transform.localScale.x/streamScaleRate;
-				endNE.transform.position = streamNE.transform.position + new Vector3(dist,-dist, 0);
+				endNE.transform.position = streamNE.transform.position + new Vector3(dist, -dist, endNE.transform.position.z - streamNE.transform.position.z);
 				streamNE.transform.localPosition -= new Vector3(Time.deltaTime, Time.deltaTime, 0);
 			}
 			if(streamNW.transform.localScale.x > 0)
 			{
 				streamNW.transform.localScale -= new Vector3(Time.deltaTime, 0, 0)*streamScaleRate;
 				float dist =  streamNW.transform.localScale.x/streamScaleRate;
-				endNW.transform.position = streamNW.transform.position + new Vector3(dist, dist, 0);
+				endNW.transform.position = streamNW.transform.position + new Vector3(dist, dist, endNW.transform.position.z - streamNW.transform.position.z);
 				streamNW.transform.localPosition -= new Vector3(-Time.deltaTime, Time.deltaTime, 0);
 			}
 			if(bedSE != null)
