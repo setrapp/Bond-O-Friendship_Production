@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class Island : MonoBehaviour {
 	public IslandID islandId;
+	public Globals.BackgroundAudio backgroundAudioId;
 	public IslandContainer container;
 	public LevelHelper levelHelper;
 	//public bool forcePlayersEstablish = true;
 	public bool visibilityDepthMaskNeeded = false;
 	public bool fadeBackgroundColor = true;
 	public Color backgroundColor;
-	public AudioSource backgroundAudio;
 
 	void Start()
 	{

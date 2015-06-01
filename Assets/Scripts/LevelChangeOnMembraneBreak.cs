@@ -6,6 +6,7 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 
 	public MembraneWall membraneWall;
 	public Island levelToUse;
+	public float newAudioVolume = 1;
 
 	private void MembraneBroken(MembraneWall brokenMembrane)
 	{
@@ -14,7 +15,11 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 			if (levelToUse != null)
 			{
 				CameraColorFade.Instance.FadeToColor(levelToUse.backgroundColor);
-				// fade background audio.
+				AudioSource backgroundAudio = Globals.Instance.levelsBackgroundAudio[(int)levelToUse.backgroundAudioId];
+				if (backgroundAudio != Globals.Instance.bgm)
+				{
+					StartCoroutine(BackgroundAudioCrossFade.Instance.CrossFade(backgroundAudio, newAudioVolume));
+				}
 			}
 		}
 	}
