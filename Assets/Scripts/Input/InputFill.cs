@@ -171,10 +171,9 @@ public class InputFill : MonoBehaviour
     public ControlsAndInput player1PreviousControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
     public ControlsAndInput player2PreviousControls = new ControlsAndInput { controlScheme = Globals.ControlScheme.None, inputNameSelected = Globals.InputNameSelected.None };
 
-    public float duration = 2f;
-    
-    private Vector3 filledKey = new Vector3(2.45f, 1.8f, 1f);
-    private Vector3 emptyKey = new Vector3(0f, 1.8f, 1f);
+    private float duration = 1.0f;
+    private bool firstFill = true;
+
 
     private Vector3 emptyFill = new Vector3(0.0f, 0.0f, 1.0f);
     private Vector3 fullFill = new Vector3(1.0f, 1.0f, 1.0f);
@@ -189,141 +188,14 @@ public class InputFill : MonoBehaviour
     public GameObject rightControllerSplitLine;
     public GameObject keyboardSplitLine;
 
+    public bool allowFill = false;
+
 	// Use this for initialization
 	void Start () 
     {
         SetPlayers();
         SetInputSizes();
-        /*
-        switch (Globals.Instance.player1Controls.inputNameSelected)
-        {
-            case Globals.InputNameSelected.LeftController:
-                switch (Globals.Instance.player1Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        LL.transform.localScale = filledInLeft;
-                        LLF = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        LR.transform.localScale = filledInRight;
-                        LRF = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        LL.transform.localScale = filledInLeft;
-                        LLF = 1;
-                        LR.transform.localScale = filledInRight;
-                        LRF = 1;
-                        break;
-                }
-                break;
-
-            case Globals.InputNameSelected.RightController:
-                switch (Globals.Instance.player1Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        RL.transform.localScale = filledInLeft;
-                        RLF = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        RR.transform.localScale = filledInRight;
-                        RRF = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        RL.transform.localScale = filledInLeft;
-                        RLF = 1;
-                        RR.transform.localScale = filledInRight;
-                        RRF = 1;
-                        break;
-                }
-                break;
-
-            case Globals.InputNameSelected.Keyboard:
-                switch (Globals.Instance.player1Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        LK.transform.localScale = filledKey;
-                        LKF = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        RK.transform.localScale = filledKey;
-                        RKF = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        LK.transform.localScale = filledKey;
-                        LKF = 1;
-                        RK.transform.localScale = filledKey;
-                        RKF = 1;
-                        break;
-                }
-                break;
-        }
-
-        //////////////////Player 2/////////////////////////////////
-        switch (Globals.Instance.player2Controls.inputNameSelected)
-        {
-            case Globals.InputNameSelected.LeftController:
-                switch (Globals.Instance.player2Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        LL2.transform.localScale = filledInLeft;
-                        LLF2 = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        LR2.transform.localScale = filledInRight;
-                        LRF2 = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        LL2.transform.localScale = filledInLeft;
-                        LLF2 = 1;
-                        LR2.transform.localScale = filledInRight;
-                        LRF2 = 1;
-                        break;
-                }
-                break;
-
-            case Globals.InputNameSelected.RightController:
-                switch (Globals.Instance.player2Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        RL2.transform.localScale = filledInLeft;
-                        RLF2 = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        RR2.transform.localScale = filledInRight;
-                        RRF2 = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        RL2.transform.localScale = filledInLeft;
-                        RLF2 = 1;
-                        RR2.transform.localScale = filledInRight;
-                        RRF2 = 1;
-                        break;
-                }
-                break;
-
-            case Globals.InputNameSelected.Keyboard:
-                switch (Globals.Instance.player2Controls.controlScheme)
-                {
-                    case Globals.ControlScheme.SharedLeft:
-                        LK2.transform.localScale = filledKey;
-                        LKF2 = 1;
-                        break;
-                    case Globals.ControlScheme.SharedRight:
-                        RK2.transform.localScale = filledKey;
-                        RKF2 = 1;
-                        break;
-                    case Globals.ControlScheme.Solo:
-                        LK2.transform.localScale = filledKey;
-                        LKF2 = 1;
-                        RK2.transform.localScale = filledKey;
-                        RKF2 = 1;
-                        break;
-                }
-                break;
-        }
-       
-        //Debug.Log(LCLTP2.GetComponentInChildren<Renderer>().material.color);
-         * */
+        
 	}
 	
 	// Update is called once per frame
@@ -335,21 +207,27 @@ public class InputFill : MonoBehaviour
         }
         else
         {
-            GetPlayerPosNoZ();
+            if (allowFill)
+            {
+                GetPlayerPosNoZ();
 
-            SetControlsToUse(true);
-            SetControlsToUse(false);
-            TweakControlScheme();
+                SetControlsToUse(true);
+                SetControlsToUse(false);
+                TweakControlScheme();
 
-            if (player1ControlsChanged)
-                WaitForPlayerInput(player1PreviousControls, true);
-            if (player2ControlsChanged)
-                WaitForPlayerInput(player2PreviousControls, false);
+                if (player1ControlsChanged)
+                    WaitForPlayerInput(player1PreviousControls, true);
+                if (player2ControlsChanged)
+                    WaitForPlayerInput(player2PreviousControls, false);
 
-            if (!player1ControlsChanged && !player2ControlsChanged)
-                PlayerInputFill(player1ControlsToUse, player2ControlsToUse);
-            else
-                ChangeInputSizes();
+                if (!player1ControlsChanged && !player2ControlsChanged)
+                    PlayerInputFill(player1ControlsToUse, player2ControlsToUse);
+                else
+                    ChangeInputSizes();
+
+                if (firstFill)
+                    CheckFirstFill();
+            }
            
         }
 
@@ -449,6 +327,18 @@ public class InputFill : MonoBehaviour
 
     }
 
+    void CheckFirstFill()
+    {
+        if(LLF == 1.0 || LRF == 1.0 || RLF == 1.0 || RRF == 1.0 || LKF == 1.0f || RKF == 1.0f)
+        {
+            firstFill = false;
+            CheckForInputChange(true);
+            Helper.FirePulse(Globals.Instance.player1.transform.position, Globals.Instance.defaultPulseStats);
+            Helper.FirePulse(Globals.Instance.player2.transform.position, Globals.Instance.defaultPulseStats);
+            Globals.Instance.allowInput = true;
+            duration = 2.0f;
+        }
+    }
 
     void WaitForPlayerInput(ControlsAndInput controlScheme, bool isPlayer1)
     {
@@ -835,9 +725,9 @@ public class InputFill : MonoBehaviour
 
     }
 
-    void CheckForInputChange()
+    void CheckForInputChange(bool forceChange = false)
     {
-        if (player1PreviousControls.controlScheme != Globals.Instance.player1Controls.controlScheme || player1PreviousControls.inputNameSelected != Globals.Instance.player1Controls.inputNameSelected && !player1ControlsChanged)
+        if (player1PreviousControls.controlScheme != Globals.Instance.player1Controls.controlScheme || player1PreviousControls.inputNameSelected != Globals.Instance.player1Controls.inputNameSelected || forceChange && !player1ControlsChanged)
         {
             player1ControlsChanged = true;
             switch (Globals.Instance.player1Controls.inputNameSelected)
@@ -906,7 +796,7 @@ public class InputFill : MonoBehaviour
 
 
 
-        if (player2PreviousControls.controlScheme != Globals.Instance.player2Controls.controlScheme || player2PreviousControls.inputNameSelected != Globals.Instance.player2Controls.inputNameSelected && !player2ControlsChanged)
+        if (player2PreviousControls.controlScheme != Globals.Instance.player2Controls.controlScheme || player2PreviousControls.inputNameSelected != Globals.Instance.player2Controls.inputNameSelected || forceChange && !player2ControlsChanged)
         {
             player2ControlsChanged = true;
             switch (Globals.Instance.player2Controls.inputNameSelected)

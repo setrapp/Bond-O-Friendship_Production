@@ -28,6 +28,12 @@ public class Tracer : MonoBehaviour {
 		AddVertex(transform.position);
 	}
 
+	public void EndLine()
+	{
+		lineRenderer = null;
+		vertices = new List<Vector3>();
+	}
+
 	public void AddVertex(Vector3 position) {
 		position.z += zOffset;
 
@@ -79,7 +85,7 @@ public class Tracer : MonoBehaviour {
 		
 	}	
 	
-	public void CreateLineMaker(bool criticalLine) {		
+	public void CreateLineMaker(bool criticalLine) {
 		GameObject newLineMaker = (GameObject)Instantiate(lineMakerPrefab, Vector3.zero, Quaternion.identity);
 		newLineMaker.transform.parent = transform;
 		lineRenderer = newLineMaker.GetComponent<LineRenderer>();

@@ -18,7 +18,9 @@ public class ClusterPuzzleScalee : MonoBehaviour {
     {
         transform.localScale = (startScale * (1 - triggerCluster.progress)) + (endScale * triggerCluster.progress);
 
-        if (triggerCluster.progress == 1)
-            shrinkAndMove.fullSize = true;
+        if (triggerCluster.progress >= 1)
+		{
+			shrinkAndMove.BecomeFullSize();
+		}
     }
 }

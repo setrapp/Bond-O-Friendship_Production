@@ -10,6 +10,7 @@ public class Island : MonoBehaviour {
 	public bool visibilityDepthMaskNeeded = false;
 	public bool fadeBackgroundColor = true;
 	public Color backgroundColor;
+	public AudioSource backgroundAudio;
 
 	void Start()
 	{

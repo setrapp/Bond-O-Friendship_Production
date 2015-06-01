@@ -29,9 +29,9 @@ public class Threader : MonoBehaviour {
 
 		rippleShot = false;
 		activated = false;
-		r = 0.5f;
-		g = 0.5f;
-		b = 0.5f;
+		r = 0.8f;
+		g = 0.8f;
+		b = 0.8f;
 		a = 1.0f;
 		bondCount = 0; 
 
@@ -64,7 +64,7 @@ public class Threader : MonoBehaviour {
 			activated = true;
 		}
 
-		myColor = new Color(r,g,b,a);
+		myColor = new Color(r,g,b);
 		if(threadParent.solved == false)
 			GetComponent<Renderer>().material.color = myColor;
 

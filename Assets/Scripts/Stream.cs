@@ -21,6 +21,7 @@ public class Stream : StreamBody {
 	public int streamBlockers = 0;
 	public float blockingTime = 0;
 	public bool drawEditorStreamLine = true;
+	private bool endLineNextChannel = false;
 
 	/*TODO handle streams merging back together*/
 
@@ -34,6 +35,8 @@ public class Stream : StreamBody {
 		{
 			tracer = GetComponent<Tracer>();
 		}
+		tracer.enabled = false;
+
 		if (streamRenderer == null)
 		{
 			streamRenderer = GetComponent<Renderer>();
@@ -42,19 +45,15 @@ public class Stream : StreamBody {
 
 	void Start()
 	{
+		
+
 		if (targetChannel != null && startAtTarget)
 		{
 			transform.position = targetChannel.transform.position + seekOffset;
 		}
 
-		tracer.CreateLineMaker(true);
 		if (lineMaterial != null)
 		{
-			if (tracer.lineRenderer != null)
-			{
-				tracer.lineRenderer.material = lineMaterial;
-			}
-
 			if (diffusionParticles != null)
 			{
 				diffusionParticles.renderer.material.color = lineMaterial.color;
@@ -77,21 +76,13 @@ public class Stream : StreamBody {
 					diffusionParticles.gameObject.SetActive(false);
 				}
 
-				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
-				Vector3 fromBedCenter = transform.position - streamBedCenter;
-				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2 - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
-				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
-				{
-					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
-				}
-
-				Vector3 oldToTarget = targetChannel.transform.position - oldChannel.transform.position;
+				Vector3 oldToTarget = (targetChannel.transform.position + seekOffset) - oldChannel.transform.position;
 				Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
 
 				// TODO: Should the stream be able to change z-depth?
 				oldToTarget.z = toTarget.z = 0;
 
-				if (Vector3.Dot(oldToTarget, toTarget) < 0)
+				if (Vector3.Dot(oldToTarget, toTarget) <= 0)
 				{
 					//Vector3 toBank1 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank1.transform.position - transform.position);
 					//Vector3 toBank2 = Helper.ProjectVector(targetChannel.transform.right, targetChannel.bank2.transform.position - transform.position);
@@ -102,6 +93,13 @@ public class Stream : StreamBody {
 					//}
 				}
 
+				Vector3 streamBedCenter = oldChannel.transform.position + Helper.ProjectVector(oldChannel.transform.forward, transform.position - oldChannel.transform.position);
+				Vector3 fromBedCenter = transform.position - streamBedCenter;
+				float maxDistFromCenter = oldChannel.bed.transform.localScale.x / 2;// - Mathf.Min(oldChannel.bed.transform.localScale.x, transform.localScale.x) / 2;
+				if (fromBedCenter.sqrMagnitude > Mathf.Pow(maxDistFromCenter, 2))
+				{
+					transform.position = streamBedCenter + (fromBedCenter.normalized * maxDistFromCenter);
+				}
 
 				mover.AccelerateWithoutHandling(toTarget);
 			}
@@ -130,7 +128,7 @@ public class Stream : StreamBody {
 			PrepareForDestroy();
 		}
 
-		if (!Application.isEditor || drawEditorStreamLine)
+		if (tracer != null && tracer.enabled && (!Application.isEditor || drawEditorStreamLine))
 		{
 			tracer.AddVertex(transform.position);
 		}
@@ -169,6 +167,26 @@ public class Stream : StreamBody {
 			return;
 		}
 
+		if (endLineNextChannel)
+		{
+			EndStreamLine();
+			endLineNextChannel = false;
+		}
+
+		bool prepareEndLine = false;
+		// Start drawing the line behind the stream if no stream has reached the current channel.
+		if (targetChannel.lastStreamReached != null && tracer.enabled)
+		{
+			prepareEndLine = true;
+		}
+		/*else if (targetChannel.lastStreamReached == null && !tracer.enabled)
+		{
+			StartStreamLine();
+		}*/
+		
+		targetChannel.lastStreamReached = this;
+		
+
 		StreamChannel[] nextChannels = targetChannel.parentSeries.GetNextChannels(targetChannel);
 		if (nextChannels != null && nextChannels.Length > 0)
 		{
@@ -186,6 +204,7 @@ public class Stream : StreamBody {
 					splitStream.transform.parent = transform.parent;
 					splitStream.mover.maxSpeed = mover.maxSpeed;
 					splitStream.seekOffset = seekOffset;
+
 					if (spawner != null)
 					{
 						spawner.TrackStream(splitStream);
@@ -197,6 +216,33 @@ public class Stream : StreamBody {
 		{
 			ending = true;
 		}
+
+		if (prepareEndLine)
+		{
+			endLineNextChannel = true;
+		}
+		else if (targetChannel.lastStreamReached == null && !tracer.enabled)
+		{
+			StartStreamLine();
+		}
+	}
+
+	private void StartStreamLine()
+	{
+		tracer.enabled = true;
+		tracer.CreateLineMaker(true);
+		tracer.AddVertex(transform.position);
+		if (lineMaterial != null && tracer.lineRenderer != null)
+		{
+			tracer.lineRenderer.material = lineMaterial;
+		}
+	}
+
+	private void EndStreamLine()
+	{
+		tracer.AddVertex(transform.position);
+		tracer.EndLine();
+		tracer.enabled = false;
 	}
 
 	void OnDrawGizmos()

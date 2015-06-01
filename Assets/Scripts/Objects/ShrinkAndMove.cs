@@ -114,6 +114,15 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
         }
 	}
 
+	public void BecomeFullSize()
+	{
+		fullSize = true;
+		/*startPos = transform.position;
+		endPos = target.position;
+		childStartSize = child.transform.localScale;
+		childEndSize = Vector3.zero;*/
+	}
+
     override protected void OnTriggerEnter(Collider collide)
     {
        

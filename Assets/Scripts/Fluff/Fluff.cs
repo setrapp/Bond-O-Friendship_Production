@@ -37,7 +37,6 @@ public class Fluff : MonoBehaviour {
 	public float fluffFill;
 	public float minFill = 0;
 	public float maxFill = 1;
-	public AudioSource attachAudio;
 
 	void Awake()
 	{
@@ -347,10 +346,33 @@ public class Fluff : MonoBehaviour {
 
 		forgetCreator = true;
 
-		if (attachAudio != null && !attachAudio.isPlaying && attachAudio.gameObject.activeInHierarchy && attachAudio.enabled)
+		PlayFluffAudio();
+	}
+
+	public void PlayFluffAudio(CharacterComponents attachingCharacter = null)
+	{
+		Vector3 fromNearPlayer = Vector3.zero;
+
+		if (attachingCharacter == null)
 		{
-			attachAudio.Play();
+			Vector3 fromPlayer1 = transform.position - Globals.Instance.player1.transform.position;
+			Vector3 fromPlayer2 = transform.position - Globals.Instance.player2.transform.position;
+			fromNearPlayer = fromPlayer1;
+			if (fromPlayer2.sqrMagnitude < fromPlayer1.sqrMagnitude)
+			{
+				fromNearPlayer = fromPlayer2;
+			}
 		}
+
+
+		AudioSource attachAudio = Globals.Instance.fluffAudio;
+		if (attachAudio == null || fromNearPlayer.sqrMagnitude > Mathf.Pow(attachAudio.maxDistance, 2))
+		{
+			return;
+		}
+
+		attachAudio.transform.position = CameraSplitter.Instance.audioListener.transform.position + fromNearPlayer;
+		attachAudio.Play();
 	}
 
 	public void ToggleSwayAnimation(bool playSway)
@@ -406,6 +428,11 @@ public class Fluff : MonoBehaviour {
 	// Accessible function that does not require coroutine call.
 	public void PopFluff(float secondsDelay = 0, float slowMultiplier = -1, bool fakeDestroy = false, bool deflateBeforePop = false)
 	{
+		if (!gameObject.activeInHierarchy)
+		{
+			return;
+		}
+
 		if (slowMultiplier >= 0)
 		{
 			StartCoroutine(SlowBeforePop(slowMultiplier, secondsDelay));

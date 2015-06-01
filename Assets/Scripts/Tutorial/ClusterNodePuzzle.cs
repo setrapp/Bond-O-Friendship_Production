@@ -21,8 +21,18 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	{
 		for (int i = 0; i < nodes.Count; i++)
 		{
-			nodes[i].lit = false;
-			nodes[i].targetPuzzle = this;
+			if (nodes[i] != null)
+			{
+				nodes[i].lit = false;
+				nodes[i].targetPuzzle = this;
+			}
+			else
+			{
+				Debug.LogError("Node Puzzle \'" + gameObject.name + "\' has a null referenced node. Removing node for play session. Please remove from list permanently while in edit mode.");
+				nodes.RemoveAt(i);
+				i--;
+			}
+			
 		}
 
 		if(streamBlocker != null && streamBlocker2 != null)
