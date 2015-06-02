@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 420028}
   - 33: {fileID: 3320028}
   - 23: {fileID: 2320028}
+  - 114: {fileID: 11424830}
   m_Layer: 16
   m_Name: Lower Fill
   m_TagString: Untagged
@@ -77,9 +78,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.7600002, y: 47.0800018, z: 3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 2.32940578e-09, w: 1}
+  m_LocalPosition: {x: -11, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: .5}
   m_Children:
   - {fileID: 420032}
   - {fileID: 420028}
@@ -212,6 +213,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   collidersToBlocking: 0
   reactionColliders:
   - {fileID: 11420038}
@@ -235,6 +237,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   scalees:
   - scalee: {fileID: 420028}
     unscaled: {x: 2, y: 4, z: 2}
@@ -257,15 +260,18 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   pulsePositionOffset: {x: 0, y: 0, z: 0}
   optionalPulsePrefab: {fileID: 0}
   useDefaultStats: 1
   optionalPulseStats:
     scaleRate: 0
     lifeTime: 0
+    fadeAlpha: 1
     alpha: 0
-    alphaFade: 0
     smallRing: 0
+    pauseInterval: -1
+    retractInterval: -1
 --- !u!114 &11420034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -284,6 +290,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   fillTargetRenderers:
   - {fileID: 2320028}
   unfilledTint: {r: .382352948, g: .34396255, b: .129325271, a: 1}
@@ -306,6 +313,7 @@ MonoBehaviour:
   reactable: 1
   superiors: []
   streamsTouched: 0
+  stopReactionOnComplete: 0
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
@@ -327,6 +335,22 @@ MonoBehaviour:
   blockStream: 1
   streamsTouched: []
   warnForBody: 1
+  ignoreCollider: {fileID: 0}
+--- !u!114 &11424830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2320028}
+  renderBase: 3000
+  renderOffset: -2
+  forceRendererOn: 0
 --- !u!138 &13820028
 FixedJoint:
   m_ObjectHideFlags: 1
