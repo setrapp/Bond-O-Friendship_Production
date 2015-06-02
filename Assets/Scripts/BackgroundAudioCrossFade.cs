@@ -4,10 +4,10 @@ using System.Collections;
 public class BackgroundAudioCrossFade : MonoBehaviour {
 
 	private BackgroundAudioCrossFade instance;
-	private BackgroundAudioCrossFade Instance
+	/*private BackgroundAudioCrossFade Instance
 	{
 		// fill this in
-	}
+	}*/
     public float fadeTime = 3.0f;
     public AudioSource oldAudio;
     public AudioSource newAudio;
