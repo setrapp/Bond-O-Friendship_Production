@@ -56,7 +56,7 @@ public class Stream : StreamBody {
 		{
 			if (diffusionParticles != null)
 			{
-				diffusionParticles.renderer.material.color = lineMaterial.color;
+				diffusionParticles.GetComponent<Renderer>().material.color = lineMaterial.color;
 				diffusionParticles.gameObject.SetActive(false);
 			}
 		}

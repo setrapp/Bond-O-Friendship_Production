@@ -114,7 +114,7 @@ public class Globals : MonoBehaviour {
 
 		if (!Application.isEditor)
 		{
-			Screen.showCursor = false;
+			Cursor.visible = false;
 		}
 		//Debug.Log(leftControllerIndex);
 

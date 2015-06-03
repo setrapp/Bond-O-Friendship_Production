@@ -223,8 +223,8 @@ public class MenuControl : MonoBehaviour {
                 f = Mathf.Clamp(f + Time.deltaTime / .5f, 0.0f, 1.0f);
                 for (int i = 0; i < inputSelectRenderers.Count; i++)
                 {
-                    if (inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
-                        inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
+                    if (inputSelectRenderers[i].GetComponent<Renderer>().material.HasProperty("_Color"))
+                        inputSelectRenderers[i].GetComponent<Renderer>().material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
                 }
             }
             else
@@ -245,8 +245,8 @@ public class MenuControl : MonoBehaviour {
             t = Mathf.Clamp(t, 0.0f, 1.0f);
             for (int i = 0; i < inputSelectRenderers.Count; i++)
             {
-                if (inputSelectRenderers[i].renderer != null && inputSelectRenderers[i].renderer.material.HasProperty("_Color"))
-                    inputSelectRenderers[i].renderer.material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
+                if (inputSelectRenderers[i].GetComponent<Renderer>() != null && inputSelectRenderers[i].GetComponent<Renderer>().material.HasProperty("_Color"))
+                    inputSelectRenderers[i].GetComponent<Renderer>().material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
             }
 
             if (zoom)

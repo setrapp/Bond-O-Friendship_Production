@@ -22,11 +22,11 @@ public class SetShaderData_DepthMasker : MonoBehaviour {
         //every frame, update players positions on material (for shader)
 
         Vector3 pos = new Vector3(p1.transform.position.x, p1.transform.position.y, transform.position.z - height);
-        renderer.material.SetVector("_P1Pos", pos);
+        GetComponent<Renderer>().material.SetVector("_P1Pos", pos);
 
         //p2
         pos = new Vector3(p2.transform.position.x, p2.transform.position.y, transform.position.z - height);
-        renderer.material.SetVector("_P2Pos", pos);
+        GetComponent<Renderer>().material.SetVector("_P2Pos", pos);
 
 	}
 }

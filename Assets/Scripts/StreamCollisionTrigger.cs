@@ -86,9 +86,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
+		if (col.gameObject.layer == streamLayer && col.GetComponent<Collider>() != ignoreCollider)
 		{
-			StreamBody stream = col.collider.GetComponent<StreamBody>();
+			StreamBody stream = col.GetComponent<Collider>().GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -111,9 +111,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerStay(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
+		if (col.gameObject.layer == streamLayer && col.GetComponent<Collider>() != ignoreCollider)
 		{
-			StreamBody stream = col.collider.GetComponent<StreamBody>();
+			StreamBody stream = col.GetComponent<Collider>().GetComponent<StreamBody>();
 			if (stream != null)
 			{
 				CallStreamAction(stream);
@@ -132,9 +132,9 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	}
 	void OnTriggerExit(Collider col)
 	{
-		if (col.gameObject.layer == streamLayer && col.collider != ignoreCollider)
+		if (col.gameObject.layer == streamLayer && col.GetComponent<Collider>() != ignoreCollider)
 		{
-			RemoveStreamTouched(col.collider.GetComponent<StreamBody>());
+			RemoveStreamTouched(col.GetComponent<Collider>().GetComponent<StreamBody>());
 		}
 	}
 

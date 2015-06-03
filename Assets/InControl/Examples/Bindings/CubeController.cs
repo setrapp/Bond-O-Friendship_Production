@@ -107,7 +107,7 @@ namespace BindingsExample
 			var fireColor = playerInput.Fire.IsPressed ? Color.red : Color.white;
 			var jumpColor = playerInput.Jump.IsPressed ? Color.green : Color.white;
 
-			renderer.material.color = Color.Lerp( fireColor, jumpColor, 0.5f );
+			GetComponent<Renderer>().material.color = Color.Lerp( fireColor, jumpColor, 0.5f );
 		}
 
 

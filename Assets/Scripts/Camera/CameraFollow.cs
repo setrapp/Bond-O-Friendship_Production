@@ -69,12 +69,12 @@ public class CameraFollow : MonoBehaviour {
 		}
 
 		line.transform.localScale = Vector3.Lerp (new Vector3 (0.0f, line.transform.localScale.y, line.transform.localScale.z), new Vector3 (0.03f, line.transform.localScale.y, line.transform.localScale.z), lineWidth);
-        line.renderer.material.color = lineColor;
+        line.GetComponent<Renderer>().material.color = lineColor;
     }
 
     private void RotateAndResizeMasks()
     {
-        if (childMainCamera.isOrthoGraphic)
+        if (childMainCamera.orthographic)
             ResizeMaskOrthographic();
         else
             ResizeMaskPerspective();

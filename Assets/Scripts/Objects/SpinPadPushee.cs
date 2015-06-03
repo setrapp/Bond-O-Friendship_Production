@@ -37,9 +37,9 @@ public class SpinPadPushee : MonoBehaviour {
 
 	void Update()
 	{
-		if (!pusheeCollider.collider.enabled)
+		if (!pusheeCollider.GetComponent<Collider>().enabled)
 		{
-			pusheeCollider.collider.enabled = true;
+			pusheeCollider.GetComponent<Collider>().enabled = true;
 		}
 	}
 
