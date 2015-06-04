@@ -94,7 +94,7 @@ public class PlayerInput : MonoBehaviour {
         separateKeyboard.Right.AddDefaultBinding(Key.RightArrow);
 	}
 
-	void Update () 
+	void FixedUpdate () 
 	{
         controlScheme = playerNumber == Player.Player1 ? Globals.Instance.player1Controls : Globals.Instance.player2Controls;
 
