@@ -15,13 +15,13 @@ Shader "DepthMask/MaskerAlphaGradient" {
 		[HideInInspector]_L2Pos ("Luminus2 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
 
 		//Tweakable variables for transparency created around players
-		_Ambience("Ambience", Float) = -1.0
+		_Constant("Ambience", Float) = -1.0
 		_Quadratic("Inner Only", Float) = -10.0
 		_Linear("Inner and Outer", Float) = 10.0
 
 		//Pulsing effect
-		_PulseRate("Pulse Rate", Float) = 2.0
-		_PulseWidth("Pulse Width", Float) = 30
+		_PulseRate("Pulse Rate", Float) = 3.0
+		_PulseWidth("Pulse Width", Float) = 5.0
 		
 
 	}	
@@ -43,7 +43,7 @@ Shader "DepthMask/MaskerAlphaGradient" {
 			uniform float4 _Color;
 			uniform float4 _P1Pos; 
 			uniform float4 _P2Pos;
-			uniform float _Ambience;
+			uniform float _Constant;
 			uniform float _Linear;
 			uniform float _Quadratic;
 			uniform float _PulseRate;
@@ -105,7 +105,7 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				//alpha = CalcAlpha(normDotTo,_Exponent,_Exp_Coeff,_Ambience);
 				//alpha = 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience);
 
-				alpha = 1 - _Ambience - (_Linear/toP1Length + _Quadratic/(toP1Length*toP1Length)) - (_Linear/toP2Length + _Quadratic/(toP2Length*toP2Length)) + sin(_Time.y*_PulseRate)*_PulseWidth/100; 
+				alpha = 1 - ( _Constant + (_Linear/toP1Length + _Quadratic/(toP1Length*toP1Length)) + (_Linear/toP2Length + _Quadratic/(toP2Length*toP2Length)) ) + sin(_Time.y*_PulseRate)*_PulseWidth/100; 
 
 				color = float4(_Color.rgb,alpha);
 				return color;
