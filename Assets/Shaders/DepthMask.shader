@@ -2,15 +2,33 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 	Properties {
 
+		//Colour of the Plane
 		_Color ("Color", Color) = (0.0,0.0,0.0,1.0)
-		_P1Pos ("P1 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
-		_P2Pos ("P2 Position", Vector) = (0.0, 0.0, 0.0, 0.0)
-		//_HypSquared ("Hypotenuse Squared", Float) = 0.0
+
+		//2 Players' positions
+		[HideInInspector]_P1Pos ("Player1 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		[HideInInspector]_P2Pos ("Player2 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		//_Time("Time", Float) = 1.0f
+
+		// 2 closest luminus calculated via script
+		[HideInInspector]_L1Pos ("Luminus1 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+		[HideInInspector]_L2Pos ("Luminus2 Pos", Vector) = (0.0, 0.0, 0.0, 0.0)
+
+		//Tweakable variables for transparency created around players
+		_Constant("Ambience", Float) = -1.0
+		_Quadratic("Inner Only", Float) = -10.0
+		_Linear("Inner and Outer", Float) = 10.0
+
+		//Pulsing effect
+		_PulseRate("Pulse Rate", Float) = 3.0
+		_PulseWidth("Pulse Width", Float) = 5.0
+		
 
 	}	
 	SubShader {
 		Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
-		Blend SrcAlpha OneMinusSrcAlpha
+		
+		Blend SrcAlpha OneMinusSrcAlpha		
 
 		Pass {	
 			
@@ -25,6 +43,13 @@ Shader "DepthMask/MaskerAlphaGradient" {
 			uniform float4 _Color;
 			uniform float4 _P1Pos; 
 			uniform float4 _P2Pos;
+			uniform float _Constant;
+			uniform float _Linear;
+			uniform float _Quadratic;
+			uniform float _PulseRate;
+			uniform float _PulseWidth;
+			
+			//uniform float _Time;
 
 
 			//base input structs
@@ -49,6 +74,7 @@ Shader "DepthMask/MaskerAlphaGradient" {
 				return vo;
 			}
 
+
 			//fragment function
 			float4 frag(vertexOutput vo) : COLOR
 			{
@@ -56,43 +82,36 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 				float4 color;
 
-				float4 toP1 = normalize(_P1Pos - vo.worldPos);
-				float4 toP2 = normalize(_P2Pos - vo.worldPos);
+				//float4 toP1 = normalize(_P1Pos - vo.worldPos);
+				//float4 toP2 = normalize(_P2Pos - vo.worldPos);
+				float4 toP1 = _P1Pos - vo.worldPos;
+				float4 toP2 = _P2Pos - vo.worldPos;
 
-				float normDotTo1 = dot(vo.normal, toP1);
-				float normDotTo2 = dot(vo.normal, toP2);
-
-
+				//float normDotTo1 = dot(vo.normal, toP1);
+				//float normDotTo2 = dot(vo.normal, toP2);
 				
-				//More light like behaviour
-				//if (normDotTo1 < 0.05)
-				//{
-				//	normDotTo1 = 0;
-				//}
-				//if (normDotTo2 < 0.05)
-				//{
-				//	normDotTo2 = 0;
-				//}
-				//
-				//float alpha1 = 1 - normDotTo1;
-				//float alpha2 = 1 - normDotTo2;
-				//
-				//alpha = 1 - (pow(normDotTo1, 2) + pow(normDotTo2, 2));
-				
+				float toP1Length = length(toP1.xyz);
+				float toP2Length = length(toP2.xyz);
 
 				//more organic, less light-like
-				float normDotTo = (dot(vo.normal, toP1) + dot(vo.normal, toP2)) / 2;
-				alpha = 1 - ((pow(normDotTo, 8 ) * 50000) + normDotTo/2);
-				if (normDotTo < .2)
-				{
-					alpha = 0.9;
-				}
+				//float normDotTo;
+				
+				//Additive mean
+				//normDotTo = (normDotTo1 + normDotTo2) / 2;
 
+				//Multiplicative (much lower when far away)
+				//normDotTo = pow(normDotTo1 * normDotTo2, 0.5);
+				
+				//alpha = CalcAlpha(normDotTo,_Exponent,_Exp_Coeff,_Ambience);
+				//alpha = 1 - ((pow(normDotTo, _Exponent ) * _Exp_Coeff) + normDotTo*_Ambience);
+
+				alpha = 1 - ( _Constant + (_Linear/toP1Length + _Quadratic/(toP1Length*toP1Length)) + (_Linear/toP2Length + _Quadratic/(toP2Length*toP2Length)) ) + sin(_Time.y*_PulseRate)*_PulseWidth/100; 
 
 				color = float4(_Color.rgb,alpha);
-
 				return color;
 			}
+
+			
 			ENDCG
 		}
 	}
