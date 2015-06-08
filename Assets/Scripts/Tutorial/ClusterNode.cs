@@ -132,7 +132,7 @@ public class ClusterNode : MonoBehaviour {
 		CheckCollision(col);
 	}
 
-	virtual protected void CheckCollision (Collider col)
+	virtual public void CheckCollision (Collider col)
 	{
 		if (targetPuzzle.solved)
 		{

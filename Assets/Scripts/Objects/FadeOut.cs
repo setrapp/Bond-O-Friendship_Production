@@ -22,7 +22,7 @@ public class FadeOut : MonoBehaviour {
         if (myShadow != null)
         {
             shadow = new Color(139.0f / 255.0f, 139.0f / 255.0f, 139.0f / 255.0f, timer);
-            myShadow.renderer.material.color = shadow;
+            myShadow.GetComponent<Renderer>().material.color = shadow;
         }
 
 		GetComponent<Renderer>().material.color = myColor;

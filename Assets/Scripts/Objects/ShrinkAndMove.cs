@@ -45,7 +45,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
         startPos = transform.position;
         endPos = target.position;
 
-        fullColor = renderer.material.color;
+        fullColor = GetComponent<Renderer>().material.color;
         transparentColor = new Color(fullColor.a, fullColor.b, fullColor.g, 0.0f);
         childStartSize = child.transform.localScale;
         childEndSize = Vector3.zero;
@@ -88,7 +88,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             
             t = moving ? Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f) : Mathf.Clamp(t - Time.deltaTime / moveBackDur, 0.0f, 1.0f);
             transform.position = Vector3.Lerp(startPos, endPos, t);
-            renderer.material.color = Color.Lerp(fullColor, transparentColor, t);
+            GetComponent<Renderer>().material.color = Color.Lerp(fullColor, transparentColor, t);
             child.transform.localScale = Vector3.Lerp(childStartSize, childEndSize, t);
             atTarget = t >= .8f;
 

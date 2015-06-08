@@ -18,7 +18,7 @@ namespace InControl
 			touchManager = target as TouchManager;
 
 			var path = AssetDatabase.GetAssetPath( MonoScript.FromScriptableObject( this ) );
-			headerTexture = Resources.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/TouchManagerHeader.png" );
+			headerTexture = AssetDatabase.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/TouchManagerHeader.png" );
 		}
 		
 		

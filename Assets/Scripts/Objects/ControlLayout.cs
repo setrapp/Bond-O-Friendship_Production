@@ -72,30 +72,30 @@ public class ControlLayout : MonoBehaviour {
     {
         if (!playerOneMoveKeyboard.activeInHierarchy && !playerOneShootKeyboard.activeInHierarchy && !playerTwoMoveKeyboard.activeInHierarchy && !playerTwoShootKeyboard.activeInHierarchy)
         {
-            StartCoroutine(FadeOut(keyboardOutline, keyboardOutline.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(keyboardOutline, keyboardOutline.GetComponent<Renderer>().material.color, 1.0f));
             if (!keyboardOutline.activeInHierarchy)
                 this.gameObject.SetActive(false);
         }
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)) && !playerOneMovePressed)
         {
-            StartCoroutine(FadeOut(playerOneMoveKeyboard, playerOneMoveKeyboard.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerOneMoveKeyboard, playerOneMoveKeyboard.GetComponent<Renderer>().material.color, 1.0f));
             playerOneMovePressed = true;
         }
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && !playerTwoMovePressed)
         {
-            StartCoroutine(FadeOut(playerTwoMoveKeyboard, playerTwoMoveKeyboard.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerTwoMoveKeyboard, playerTwoMoveKeyboard.GetComponent<Renderer>().material.color, 1.0f));
             playerTwoMovePressed = true;
         }
 
         if ((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.Space)) && !playerOneShootPressed)
         {
-            StartCoroutine(FadeOut(playerOneShootKeyboard, playerOneShootKeyboard.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerOneShootKeyboard, playerOneShootKeyboard.GetComponent<Renderer>().material.color, 1.0f));
             playerOneShootPressed = true;
         }
         if ((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.Return)) && !playerTwoShootPressed)
         {
-            StartCoroutine(FadeOut(playerTwoShootKeyboard, playerTwoShootKeyboard.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerTwoShootKeyboard, playerTwoShootKeyboard.GetComponent<Renderer>().material.color, 1.0f));
             playerTwoShootPressed = true;
         }       
     }
@@ -104,31 +104,31 @@ public class ControlLayout : MonoBehaviour {
     {
         if (!playerOneMoveController.activeInHierarchy && !playerOneShootController.activeInHierarchy && !playerTwoMoveController.activeInHierarchy && !playerTwoShootController.activeInHierarchy)
         {
-            StartCoroutine(FadeOut(controllerOutline, controllerOutline.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(controllerOutline, controllerOutline.GetComponent<Renderer>().material.color, 1.0f));
             if (!controllerOutline.activeInHierarchy)
                 this.gameObject.SetActive(false);
         }
 
         if(device.LeftStick.HasChanged && !playerOneMovePressed)
         {   
-            StartCoroutine(FadeOut(playerOneMoveController, playerOneMoveController.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerOneMoveController, playerOneMoveController.GetComponent<Renderer>().material.color, 1.0f));
             playerOneMovePressed = true;
         }
         
         if (device.RightStick.HasChanged && !playerTwoMovePressed)
         {
-            StartCoroutine(FadeOut(playerTwoMoveController, playerTwoMoveController.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerTwoMoveController, playerTwoMoveController.GetComponent<Renderer>().material.color, 1.0f));
             playerTwoMovePressed = true;
         }
 
         if ((device.LeftBumper.IsPressed || device.LeftTrigger.IsPressed) && !playerOneShootPressed)
         {
-            StartCoroutine(FadeOut(playerOneShootController, playerOneShootController.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerOneShootController, playerOneShootController.GetComponent<Renderer>().material.color, 1.0f));
             playerOneShootPressed = true;
         }
         if ((device.RightBumper.IsPressed || device.RightTrigger.IsPressed) && !playerTwoShootPressed)
         {
-            StartCoroutine(FadeOut(playerTwoShootController, playerTwoShootController.renderer.material.color, 1.0f));
+            StartCoroutine(FadeOut(playerTwoShootController, playerTwoShootController.GetComponent<Renderer>().material.color, 1.0f));
             playerTwoShootPressed = true;
         }       
     }
@@ -137,8 +137,8 @@ public class ControlLayout : MonoBehaviour {
     {
         for (float t = 0.0f; t < duration; t += Time.deltaTime)
         {            
-            go.renderer.material.color = Color.Lerp(goStartingColor, new Color(goStartingColor.r, goStartingColor.g, goStartingColor.b, 0.0f), t / duration);
-            if (go.renderer.material.color.a < 0.1f)
+            go.GetComponent<Renderer>().material.color = Color.Lerp(goStartingColor, new Color(goStartingColor.r, goStartingColor.g, goStartingColor.b, 0.0f), t / duration);
+            if (go.GetComponent<Renderer>().material.color.a < 0.1f)
                 go.SetActive(false);
             yield return null;
         }        

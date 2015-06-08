@@ -15,7 +15,7 @@ namespace InControl
 		protected void LoadHeaderImage( string fileName )
 		{
 			var path = AssetDatabase.GetAssetPath( MonoScript.FromScriptableObject( this ) );
-			headerTexture = Resources.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/" + fileName );
+			headerTexture = AssetDatabase.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/" + fileName );
 		}
 
 
