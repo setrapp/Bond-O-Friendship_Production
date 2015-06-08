@@ -25,7 +25,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 		startingcolor = nodeRenderers[0].material.color;
 	}
 
-	protected override void CheckCollision(Collider col)
+	public override void CheckCollision(Collider col)
 	{
 		if (col == neededCollider)
 		{
