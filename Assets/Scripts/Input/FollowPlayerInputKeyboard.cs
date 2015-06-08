@@ -48,8 +48,8 @@ public class FollowPlayerInputKeyboard : MonoBehaviour {
     void Start()
     {
         SetPlayers();
-        player1StartColor = leftUpKeyP1.renderer.material.color;
-        player2StartColor = leftUpKeyP2.renderer.material.color;
+        player1StartColor = leftUpKeyP1.GetComponent<Renderer>().material.color;
+        player2StartColor = leftUpKeyP2.GetComponent<Renderer>().material.color;
     }
 
     // Update is called once per frame
@@ -154,92 +154,92 @@ public class FollowPlayerInputKeyboard : MonoBehaviour {
 
         if(leftUpKeyMoved)
         {
-            leftUpKeyP1.renderer.material.color = player1PressedColor;
-            leftUpKeyP2.renderer.material.color = player2PressedColor;
+            leftUpKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            leftUpKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            leftUpKeyP1.renderer.material.color = player1StartColor;
-            leftUpKeyP2.renderer.material.color = player2StartColor;
+            leftUpKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            leftUpKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (leftLeftKeyMoved)
         {
-            leftLeftKeyP1.renderer.material.color = player1PressedColor;
-            leftLeftKeyP2.renderer.material.color = player2PressedColor;
+            leftLeftKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            leftLeftKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            leftLeftKeyP1.renderer.material.color = player1StartColor;
-            leftLeftKeyP2.renderer.material.color = player2StartColor;
+            leftLeftKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            leftLeftKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (leftDownKeyMoved)
         {
-            leftDownKeyP1.renderer.material.color = player1PressedColor;
-            leftDownKeyP2.renderer.material.color = player2PressedColor;
+            leftDownKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            leftDownKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            leftDownKeyP1.renderer.material.color = player1StartColor;
-            leftDownKeyP2.renderer.material.color = player2StartColor;
+            leftDownKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            leftDownKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (leftRightKeyMoved)
         {
-            leftRightKeyP1.renderer.material.color = player1PressedColor;
-            leftRightKeyP2.renderer.material.color = player2PressedColor;
+            leftRightKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            leftRightKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            leftRightKeyP1.renderer.material.color = player1StartColor;
-            leftRightKeyP2.renderer.material.color = player2StartColor;
+            leftRightKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            leftRightKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         ////
 
         if (rightUpKeyMoved)
         {
-            rightUpKeyP1.renderer.material.color = player1PressedColor;
-            rightUpKeyP2.renderer.material.color = player2PressedColor;
+            rightUpKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            rightUpKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            rightUpKeyP1.renderer.material.color = player1StartColor;
-            rightUpKeyP2.renderer.material.color = player2StartColor;
+            rightUpKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            rightUpKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (rightLeftKeyMoved)
         {
-            rightLeftKeyP1.renderer.material.color = player1PressedColor;
-            rightLeftKeyP2.renderer.material.color = player2PressedColor;
+            rightLeftKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            rightLeftKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            rightLeftKeyP1.renderer.material.color = player1StartColor;
-            rightLeftKeyP2.renderer.material.color = player2StartColor;
+            rightLeftKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            rightLeftKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (rightDownKeyMoved)
         {
-            rightDownKeyP1.renderer.material.color = player1PressedColor;
-            rightDownKeyP2.renderer.material.color = player2PressedColor;
+            rightDownKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            rightDownKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            rightDownKeyP1.renderer.material.color = player1StartColor;
-            rightDownKeyP2.renderer.material.color = player2StartColor;
+            rightDownKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            rightDownKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         if (rightRightKeyMoved)
         {
-            rightRightKeyP1.renderer.material.color = player1PressedColor;
-            rightRightKeyP2.renderer.material.color = player2PressedColor;
+            rightRightKeyP1.GetComponent<Renderer>().material.color = player1PressedColor;
+            rightRightKeyP2.GetComponent<Renderer>().material.color = player2PressedColor;
         }
         else
         {
-            rightRightKeyP1.renderer.material.color = player1StartColor;
-            rightRightKeyP2.renderer.material.color = player2StartColor;
+            rightRightKeyP1.GetComponent<Renderer>().material.color = player1StartColor;
+            rightRightKeyP2.GetComponent<Renderer>().material.color = player2StartColor;
         }
 
         leftUpKeyMoved = false;
