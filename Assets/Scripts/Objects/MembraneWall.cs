@@ -49,6 +49,7 @@ public class MembraneWall : MonoBehaviour {
 	public int requiredPlayersToBreak = 0;
 	public string specialBreakerTag = "";
 	public int requiredSpecialsToBreak = 0;
+	private bool reqsWereMet = true;
 	//public AsyncOperation requiredLoading = null;
 	public float insufficientDifficulty = 1;
 	[Header("Starting Distance Factors")]
@@ -148,15 +149,20 @@ public class MembraneWall : MonoBehaviour {
 			bool requirementsMet = enoughPlayersBonded && enoughSpecialsBonded;// && loadingComplete;
 
 			if (!requirementsMet)
-			{
-				
+			{	
 				maxDistance = -1;
-				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
+				if (reqsWereMet != requirementsMet)
+				{
+					createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce * insufficientDifficulty;
+				}
 				requirementDistanceAdd = 0;
 			}
 			else
 			{
-				createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce;
+				if (reqsWereMet != requirementsMet)
+				{
+					createdMembrane.stats.springForce = membraneCreator.bondOverrideStats.stats.springForce;
+				}
 
 				// Prevent instant breaking upon meeting requirements by adding extra distance necessary to break.
 				if (maxDistance >= 0 && relativeRequiredAdd >= 0)
@@ -174,6 +180,7 @@ public class MembraneWall : MonoBehaviour {
 					}
 				}
 			}
+			reqsWereMet = requirementsMet;
 
 			createdMembrane.stats.maxDistance = maxDistance;
 

@@ -10,6 +10,14 @@ public class FadeToBeContinued : MonoBehaviour {
 	public GameObject attachedLevel = null;
 	//public string endingLoadScene = "Menu";
 	public bool destroyOnLoad = true;
+	private float t = 0.0f;
+
+	private bool zoomOut = false;
+	private bool zoomComplete = false;
+	private Vector3 startingPos;
+	private Vector3 endingPos;
+
+	private GameObject cameraSystem;
 
 	//public bool forceFromMenu = false;
 	//public GameObject messagePrefab;
@@ -18,6 +26,8 @@ public class FadeToBeContinued : MonoBehaviour {
 
 	void Update()
 	{
+		if (zoomOut)
+			ZoomOut ();
 		if (fade != null)
 		{
 			if (fading != 0)
@@ -58,11 +68,35 @@ public class FadeToBeContinued : MonoBehaviour {
 		{
 			fade.gameObject.AddComponent<DontDestroyOnLoad>();
 		}
+
+		if (!zoomOut && !zoomComplete) 
+		{
+			zoomOut = true;
+			if(cameraSystem == null)
+				cameraSystem = CameraSplitter.Instance.gameObject;
+			startingPos = cameraSystem.transform.position;
+			endingPos = new Vector3(startingPos.x, startingPos.y, -500.0f);
+			CameraSplitter.Instance.followPlayers = false;
+		}
 		
 		yield return new WaitForSeconds(waitBeforeFade);
 		fading = 1;
 	}
 
+	private void ZoomOut()
+	{
+		if (t != 1)
+		{
+			Globals.Instance.perspectiveCamera = true;
+			t = Mathf.Clamp(t + Time.deltaTime / waitBeforeFade, 0.0f, 1.0f);
+			cameraSystem.transform.position = Vector3.Lerp(startingPos, endingPos, t);
+		}
+		else
+		{
+			zoomOut = false;
+			zoomComplete = true;
+		}
+	}
 	private IEnumerator FadeIn()
 	{
 		yield return new WaitForSeconds(waitBeforeFade / 2);

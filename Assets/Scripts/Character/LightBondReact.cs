@@ -19,21 +19,21 @@ public class LightBondReact : MonoBehaviour {
 
         if(turnOn)
         {
-            if (reactingObject.light.spotAngle < 50)
-                reactingObject.light.spotAngle += Time.deltaTime * 20.0f;
+            if (reactingObject.GetComponent<Light>().spotAngle < 50)
+                reactingObject.GetComponent<Light>().spotAngle += Time.deltaTime * 20.0f;
 
-            if (reactingObject.light.intensity < 3.5f)
-                reactingObject.light.intensity += Time.deltaTime * 2.0f;
+            if (reactingObject.GetComponent<Light>().intensity < 3.5f)
+                reactingObject.GetComponent<Light>().intensity += Time.deltaTime * 2.0f;
 
             //reactingObject.light.intensity = 5.0f;
         }
         if (!turnOn)
         {
             //reactingObject.SetActive(!Globals.Instance.playersBonded);
-            if (reactingObject.light.spotAngle > 20)
-                reactingObject.light.spotAngle -= Time.deltaTime * 20.0f;
-            if (reactingObject.light.intensity > 1.0f)
-                reactingObject.light.intensity -= Time.deltaTime * 2.0f;
+            if (reactingObject.GetComponent<Light>().spotAngle > 20)
+                reactingObject.GetComponent<Light>().spotAngle -= Time.deltaTime * 20.0f;
+            if (reactingObject.GetComponent<Light>().intensity > 1.0f)
+                reactingObject.GetComponent<Light>().intensity -= Time.deltaTime * 2.0f;
 
             //reactingObject.light.range = 25.0f;
             //reactingObject.light.intensity = 1.0f;

@@ -16,7 +16,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 		{
 			neededCharacter = Globals.Instance.player2.character;
 		}
-		neededCollider = neededCharacter.collider;
+		neededCollider = neededCharacter.GetComponent<Collider>();
 
 		for (int i = 0; i < nodeRenderers.Length; i++)
 		{
@@ -25,7 +25,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 		startingcolor = nodeRenderers[0].material.color;
 	}
 
-	protected override void CheckCollision(Collider col)
+	public override void CheckCollision(Collider col)
 	{
 		if (col == neededCollider)
 		{

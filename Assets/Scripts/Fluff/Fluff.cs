@@ -558,7 +558,7 @@ public class Fluff : MonoBehaviour {
 	private void AttemptColliderAttach(Collider col)
 	{
 		bool sameLayer = (col.gameObject.layer == gameObject.layer);
-		bool alreadyAttachee = (attachee != null && collider.gameObject == attachee.gameObject);
+		bool alreadyAttachee = (attachee != null && GetComponent<Collider>().gameObject == attachee.gameObject);
 		bool shouldIgnore = col.gameObject == ignoreCollider;
 		bool nonDetachable = (attachee != null && attachee.attachInfo != null && attachee.attachInfo.root != null && !attachee.attachInfo.root.fluffsDetachable);
 		if ((attachee != null && attachee.possessive) || nonDetachable || sameLayer || alreadyAttachee || shouldIgnore)
@@ -577,7 +577,7 @@ public class Fluff : MonoBehaviour {
 			fluffStick.stuckFluff = this;
 		}
 
-		GameObject newAttachee = collider.gameObject;
+		GameObject newAttachee = GetComponent<Collider>().gameObject;
 		FluffAttachDelgator fluffAttachDelegator = newAttachee.GetComponent<FluffAttachDelgator>();
 		while (fluffAttachDelegator != null && fluffAttachDelegator.attachDelegatee != null && fluffAttachDelegator.attachDelegatee != newAttachee)
 		{

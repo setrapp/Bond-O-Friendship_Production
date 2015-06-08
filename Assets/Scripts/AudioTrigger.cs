@@ -45,7 +45,7 @@ public class AudioTrigger : MonoBehaviour {
 		int layer = (int)Mathf.Pow(2, col.gameObject.layer);
 		if ((layer & triggerLayers) == layer)
 		{
-			PlayAudio(col.collider.transform.position);
+			PlayAudio(col.GetComponent<Collider>().transform.position);
 		}
 	}
 }

@@ -20,6 +20,7 @@ public class CameraFollow : MonoBehaviour {
 	public GameObject pivot;
     private GameObject line;
     private GameObject camMask;
+	private float lineWidth = 0.0f;
     
     private Color lineColor = Color.white;
 
@@ -34,12 +35,13 @@ public class CameraFollow : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (CameraSplitter.Instance.followPlayers)
-        {
+        if (CameraSplitter.Instance.followPlayers) 
+		{
             MoveCamera();
-            FadeSplitScreenLine();
-            RotateAndResizeMasks();
+            
         }
+		FadeSplitScreenLine();
+		RotateAndResizeMasks();
     }
 
     private void MoveCamera()
@@ -54,21 +56,25 @@ public class CameraFollow : MonoBehaviour {
 
     private void FadeSplitScreenLine()
     {
-        if (CameraSplitter.Instance.playerDistance > CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace)
-        {
-            float distanceShift = CameraSplitter.Instance.playerDistance - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
-            float splitShift = CameraSplitter.Instance.splitterDistanceInWorldSpace - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
-            lineColor.a = Mathf.Clamp((distanceShift / splitShift), 0.0f, 1.0f);
-        }
-        else
-            lineColor.a = 0.0f;
+        if (CameraSplitter.Instance.playerDistance > CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace) {
+			float distanceShift = CameraSplitter.Instance.playerDistance - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
+			float splitShift = CameraSplitter.Instance.splitterDistanceInWorldSpace - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
+			lineColor.a = Mathf.Clamp((distanceShift / splitShift), 0.0f, 1.0f);
+			lineWidth = Mathf.Clamp ((distanceShift / splitShift), 0.0f, 1.0f);
+		} 
+		else 
+		{
+			lineColor.a = 0.0f;
+			lineWidth= 0.0f;
+		}
 
-        line.renderer.material.color = lineColor;
+		line.transform.localScale = Vector3.Lerp (new Vector3 (0.0f, line.transform.localScale.y, line.transform.localScale.z), new Vector3 (0.03f, line.transform.localScale.y, line.transform.localScale.z), lineWidth);
+        line.GetComponent<Renderer>().material.color = lineColor;
     }
 
     private void RotateAndResizeMasks()
     {
-        if (childMainCamera.isOrthoGraphic)
+        if (childMainCamera.orthographic)
             ResizeMaskOrthographic();
         else
             ResizeMaskPerspective();
@@ -113,7 +119,7 @@ public class CameraFollow : MonoBehaviour {
             else
                 camMask.transform.localPosition = new Vector3(-5f * (maskHeight / 2f), 0f, 0f);
             //Scale the dividing line
-            line.transform.localScale = new Vector3(.03f, 1f, maskHeight);
+            line.transform.localScale = new Vector3(line.transform.localScale.x, 1f, maskHeight);
 
             currentCamHeight = camHeight;
             currentCamWidth = camWidth;

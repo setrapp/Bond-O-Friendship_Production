@@ -82,6 +82,7 @@ public class ZipperPad : MonoBehaviour {
 
 			if (allSolved)
 			{
+				playerBond.stats.maxDistance = defaultbondlength;
 				solved = true;
 				Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
 
@@ -112,7 +113,13 @@ public class ZipperPad : MonoBehaviour {
 					responders[i].responderObject.transform.position = (responders[i].startPosition * (1 - progress)) + (responders[i].destination.transform.position * progress);
 				}
 			}
-		}	
+		}
+
+		/*if (solved && playerBond != null && playerBond.stats.maxDistance <= defaultbondlength)
+		{
+			playerBond.stats.maxDistance = defaultbondlength;
+			defaultbondlength = -1;
+		}*/
 	}
 }
 
