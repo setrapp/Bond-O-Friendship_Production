@@ -30,6 +30,7 @@ public class Globals : MonoBehaviour {
 	public float startingOrthographicSize;
 
 	public bool zoomIntroInEditor = true;
+	public bool earlyBondInEditor = false;
 
 
     public bool allowInput = true;
