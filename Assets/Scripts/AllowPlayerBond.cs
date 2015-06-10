@@ -9,6 +9,7 @@ public class AllowPlayerBond : MonoBehaviour {
 	public bool makeBond = false;
 	public bool autoCheck = true;
 	public bool destroyOnUse = true;
+	public bool editorDisablable = false;
 
 	void Update()
 	{
@@ -31,12 +32,16 @@ public class AllowPlayerBond : MonoBehaviour {
 
 	public void AllowBond()
 	{
-		Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
-		Globals.Instance.player2.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
-
-		if (makeBond)
+		// If disabled in editor, do not change player bond stats.
+		if (!(editorDisablable && Globals.Instance.earlyBondInEditor && Application.isEditor))
 		{
-			Globals.Instance.player1.character.bondAttachable.AttemptBond(Globals.Instance.player2.character.bondAttachable, Globals.Instance.player1.transform.position, true);
+			Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
+			Globals.Instance.player2.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
+			
+			if (makeBond)
+			{
+				Globals.Instance.player1.character.bondAttachable.AttemptBond(Globals.Instance.player2.character.bondAttachable, Globals.Instance.player1.transform.position, true);
+			}
 		}
 
 		if (destroyOnUse)

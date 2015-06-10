@@ -26,7 +26,7 @@ public class SpawnLand : MonoBehaviour {
 			if(land == null)
 			{
 				land = (GameObject)Instantiate(landPrefab);
-				land.transform.position = transform.position + new Vector3(0, 0, 1.0f);
+				land.transform.position = transform.position + new Vector3(0, 0, .004f);
 			}
 			else if(land.transform.localScale.x <= maxLandSize)
 			{
