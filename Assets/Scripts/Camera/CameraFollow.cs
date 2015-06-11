@@ -33,7 +33,7 @@ public class CameraFollow : MonoBehaviour {
         camMask = pivot.transform.FindChild("Mask").gameObject;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (CameraSplitter.Instance.followPlayers) 
 		{

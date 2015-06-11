@@ -85,6 +85,9 @@ public class CameraSplitter : MonoBehaviour {
 
 			splitCamera1 = mainCameraFollow.GetComponentInChildren<Camera>();
 			splitCamera2 = splitCameraFollow.GetComponentInChildren<Camera>();
+
+			splitCamera1.transparencySortMode = TransparencySortMode.Orthographic;
+			splitCamera2.transparencySortMode = TransparencySortMode.Orthographic;
 		}
 		wasSplit = split;
 		CheckSplit(true);
@@ -207,7 +210,6 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		zoom = false;
 		zoomIn = false;
-		Globals.Instance.perspectiveCamera = false;
 		toggle = true;
 
 		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
