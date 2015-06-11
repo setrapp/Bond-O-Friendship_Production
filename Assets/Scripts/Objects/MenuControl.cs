@@ -302,6 +302,7 @@ public class MenuControl : MonoBehaviour {
 
     public void ZoomCamera()
     {
+		CameraSplitter.Instance.SetZoomTarget ();
 		CameraSplitter.Instance.zoom = true;
     }
 

@@ -60,7 +60,7 @@ public class CameraSplitter : MonoBehaviour {
     [HideInInspector]
     public bool movePlayers = false;
 
-    private Vector3 startPos = new Vector3(28.1f, 22.1f, -70f);
+	public Vector3 startPos = new Vector3(28.1f, 22.1f, -70f);
     private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -500f);
 
     [HideInInspector]
@@ -183,6 +183,12 @@ public class CameraSplitter : MonoBehaviour {
 			Vector3 newCamPos = ((player1.transform.position + player2.transform.position) / 2);
 			CameraSplitter.Instance.transform.position = new Vector3(newCamPos.x, newCamPos.y, oldCamPos.z);
 		}
+	}
+
+	public void SetZoomTarget()
+	{
+		startPos = ((player1.transform.position + player2.transform.position) / 2);
+		startPos.z = -70.0f;
 	}
 
     public void ZoomIn()
