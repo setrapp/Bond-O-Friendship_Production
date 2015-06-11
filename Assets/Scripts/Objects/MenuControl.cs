@@ -258,6 +258,7 @@ public class MenuControl : MonoBehaviour {
                 else
                 {
                     CameraSplitter.Instance.EndZoom();
+					CameraSplitter.Instance.transform.position = new Vector3(CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, -100.0f);
                     CameraSplitter.Instance.splittable = true;
                 }
 
