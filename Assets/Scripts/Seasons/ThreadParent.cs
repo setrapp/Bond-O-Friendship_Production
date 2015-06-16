@@ -62,11 +62,16 @@ public class ThreadParent : MonoBehaviour {
 
 		if(allThreaders == true)
 		{
+			playerBond.stats.maxDistance = defaultbondlength;
 			solved = true;
 			BroadcastMessage("MiniFire", SendMessageOptions.DontRequireReceiver);
 		}
 	
-
+		/*if (solved && playerBond != null && playerBond.stats.maxDistance <= defaultbondlength)
+		{
+			playerBond.stats.maxDistance = defaultbondlength;
+			defaultbondlength = -1;
+		}*/
 	
 	}
 }

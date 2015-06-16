@@ -52,9 +52,9 @@ public class RingBreaker : MonoBehaviour {
 			else
 			{
 				mover.slowDown = true;
-				if (collider != null)
+				if (GetComponent<Collider>() != null)
 				{
-					collider.enabled = true;
+					GetComponent<Collider>().enabled = true;
 				}
 			}
 		}

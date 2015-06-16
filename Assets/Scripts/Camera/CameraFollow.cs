@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour {
     private Vector3 betweenPlayers = Vector3.zero;
     private float centeringDistance = 0.0f;
     [HideInInspector]
-    public Vector3 cameraOffset = new Vector3(0, 0, -100);
+    //public Vector3 cameraOffset = new Vector3(0, 0, -100);
 
 	public Camera childMainCamera;
 
@@ -33,7 +33,7 @@ public class CameraFollow : MonoBehaviour {
         camMask = pivot.transform.FindChild("Mask").gameObject;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (CameraSplitter.Instance.followPlayers) 
 		{
@@ -50,8 +50,8 @@ public class CameraFollow : MonoBehaviour {
 
         betweenPlayers = player2.position - player1.position;
         mainTargetPosition = CameraSplitter.Instance.split ? (player1.position + (betweenPlayers.normalized * centeringDistance)) : ((player1.position + player2.position) / 2);
-
-        transform.position = mainTargetPosition + cameraOffset;
+		mainTargetPosition.z = transform.position.z;
+		transform.position = mainTargetPosition;// + cameraOffset;
     }
 
     private void FadeSplitScreenLine()
@@ -69,12 +69,12 @@ public class CameraFollow : MonoBehaviour {
 		}
 
 		line.transform.localScale = Vector3.Lerp (new Vector3 (0.0f, line.transform.localScale.y, line.transform.localScale.z), new Vector3 (0.03f, line.transform.localScale.y, line.transform.localScale.z), lineWidth);
-        line.renderer.material.color = lineColor;
+        line.GetComponent<Renderer>().material.color = lineColor;
     }
 
     private void RotateAndResizeMasks()
     {
-        if (childMainCamera.isOrthoGraphic)
+        if (childMainCamera.orthographic)
             ResizeMaskOrthographic();
         else
             ResizeMaskPerspective();

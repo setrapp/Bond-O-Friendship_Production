@@ -28,8 +28,8 @@ public class SpawnLeaf : MonoBehaviour {
 	void OnParticleCollision (GameObject other) {
 		if(other.name == "Critical_Path_Floors")
 		{
-			allParticles = new ParticleSystem.Particle[particleSystem.particleCount];
-			particleSystem.GetParticles(allParticles);
+			allParticles = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
+			GetComponent<ParticleSystem>().GetParticles(allParticles);
 			foreach(ParticleSystem.Particle thisParticle in allParticles) 
 			{	
 				leafPick = Random.Range(1, 8);

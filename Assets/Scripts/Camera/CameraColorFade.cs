@@ -20,7 +20,7 @@ public class CameraColorFade : MonoBehaviour {
 	//private Color startingColor;
 	private Color currentColor;
 	public Color fadeColor;
-	public float fadeSpeed;
+	public float fadeTime;
 	public bool fading;
 
 
@@ -43,13 +43,13 @@ public class CameraColorFade : MonoBehaviour {
 	void Update () {
 		if (fading)
 		{
-			if (fadeSpeed <= 0)
+			if (fadeTime <= 0)
 			{
 				JumpToColor(fadeColor);
 				return;
 			}
 
-			currentColor = Color.Lerp(currentColor, fadeColor, Time.deltaTime / fadeSpeed);
+			currentColor = Color.Lerp(currentColor, fadeColor, Time.deltaTime / fadeTime);
 			for (int i = 0; i < cameras.Count; i++)
 			{
 				cameras[i].backgroundColor = currentColor;

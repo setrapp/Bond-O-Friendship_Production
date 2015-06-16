@@ -30,6 +30,7 @@ public class Globals : MonoBehaviour {
 	public float startingOrthographicSize;
 
 	public bool zoomIntroInEditor = true;
+	public bool earlyBondInEditor = false;
 
 
     public bool allowInput = true;
@@ -37,6 +38,7 @@ public class Globals : MonoBehaviour {
 	public float audioVolume = -1;
 	public bool mute = false;
 	public AudioSource bgm;
+	public AudioSource[] levelsBackgroundAudio;
 
 	public RingPulse defaultPulsePrefab;
 	public PulseStats defaultPulseStats;
@@ -113,7 +115,7 @@ public class Globals : MonoBehaviour {
 
 		if (!Application.isEditor)
 		{
-			Screen.showCursor = false;
+			Cursor.visible = false;
 		}
 		//Debug.Log(leftControllerIndex);
 
@@ -324,7 +326,14 @@ public class Globals : MonoBehaviour {
 		}
 		return playerCAI.controlScheme;
 	}
-	
+
+	public enum BackgroundAudio
+	{
+		TUTORIAL = 0,
+		HARMONY,
+		INTIMACY,
+		ASYMMETRY
+	}
 }
 
 
