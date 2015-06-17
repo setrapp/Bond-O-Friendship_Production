@@ -1,24 +1,26 @@
-using System;
+﻿using System;
 
 
 namespace InControl
 {
 	// @cond nodoc
 	[AutoDiscover]
-	public class LogitechF510WinProfile : UnityInputDeviceProfile
+	public class Xbox360AmazonProfile : UnityInputDeviceProfile
 	{
-		public LogitechF510WinProfile()
+		public Xbox360AmazonProfile()
 		{
-			Name = "Logitech F510 Controller";
-			Meta = "Logitech F510 Controller on Windows";
+			Name = "XBox 360 Controller";
+			Meta = "XBox 360 Controller on Amazon Fire TV";
 
 			SupportedPlatforms = new[] {
-				"Windows"
+				"Amazon AFT"
 			};
 
 			JoystickNames = new[] {
-				"Controller (Rumble Gamepad F510)",
+				"Microsoft X-Box 360 pad"
 			};
+
+			LastResortRegex = "360";
 
 			ButtonMappings = new[] {
 				new InputControlMapping {
@@ -63,13 +65,13 @@ namespace InControl
 				},
 				new InputControlMapping {
 					Handle = "Back",
-					Target = InputControlType.Select,
-					Source = Button6
+					Target = InputControlType.Back,
+					Source = EscapeKey
 				},
 				new InputControlMapping {
 					Handle = "Start",
 					Target = InputControlType.Start,
-					Source = Button7
+					Source = MenuKey
 				}
 			};
 
@@ -79,29 +81,25 @@ namespace InControl
 				LeftStickUpMapping( Analog1 ),
 				LeftStickDownMapping( Analog1 ),
 
-				RightStickLeftMapping( Analog3 ),
-				RightStickRightMapping( Analog3 ),
-				RightStickUpMapping( Analog4 ),
-				RightStickDownMapping( Analog4 ),
+				RightStickLeftMapping( Analog2 ),
+				RightStickRightMapping( Analog2 ),
+				RightStickUpMapping( Analog3 ),
+				RightStickDownMapping( Analog3 ),
 
-				DPadLeftMapping( Analog5 ),
-				DPadRightMapping( Analog5 ),
-				DPadUpMapping( Analog6 ),
-				DPadDownMapping( Analog6 ),
+				DPadLeftMapping( Analog4 ),
+				DPadRightMapping( Analog4 ),
+				DPadUpMapping( Analog5 ),
+				DPadDownMapping( Analog5 ),
 
 				new InputControlMapping {
 					Handle = "Left Trigger",
 					Target = InputControlType.LeftTrigger,
-					Source = Analog2,
-					SourceRange = InputRange.ZeroToOne,
-					TargetRange = InputRange.ZeroToOne
+					Source = Analog12,
 				},
 				new InputControlMapping {
 					Handle = "Right Trigger",
 					Target = InputControlType.RightTrigger,
-					Source = Analog2,
-					SourceRange = InputRange.ZeroToMinusOne,
-					TargetRange = InputRange.ZeroToOne
+					Source = Analog11,
 				}
 			};
 		}

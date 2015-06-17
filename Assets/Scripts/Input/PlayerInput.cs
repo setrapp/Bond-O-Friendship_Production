@@ -17,10 +17,13 @@ public class PlayerInput : MonoBehaviour {
 
     public Vector3 moveDir;
 
-    SharedKeyboard sharedKeyboard;
-    SharedController sharedController;
-    SeparateController separateController;
-    SeparateKeyboard separateKeyboard;
+	InputActionSet keyboardInput;
+	InputActionSet controllerInput;
+
+    //SharedKeyboard sharedKeyboard;
+    //SharedController sharedController;
+    //SeparateController separateController;
+    //SeparateKeyboard separateKeyboard;
 
     public bool allowPreviousController = true;
 
@@ -48,50 +51,7 @@ public class PlayerInput : MonoBehaviour {
             }
         }
 
-        sharedKeyboard = new SharedKeyboard();
-        sharedController = new SharedController();
-        separateController = new SeparateController();
-        separateKeyboard = new SeparateKeyboard();
-
-        //Shared Keyboard
-        sharedKeyboard.LUp.AddDefaultBinding(Key.W);
-        sharedKeyboard.LDown.AddDefaultBinding(Key.S);
-        sharedKeyboard.LLeft.AddDefaultBinding(Key.A);
-        sharedKeyboard.LRight.AddDefaultBinding(Key.D);
-        sharedKeyboard.RUp.AddDefaultBinding(Key.UpArrow);
-        sharedKeyboard.RDown.AddDefaultBinding(Key.DownArrow);
-        sharedKeyboard.RLeft.AddDefaultBinding(Key.LeftArrow);
-        sharedKeyboard.RRight.AddDefaultBinding(Key.RightArrow);
-
-        //Shared Controller
-        sharedController.LUp.AddDefaultBinding(InputControlType.LeftStickUp);
-        sharedController.LDown.AddDefaultBinding(InputControlType.LeftStickDown);
-        sharedController.LLeft.AddDefaultBinding(InputControlType.LeftStickLeft);
-        sharedController.LRight.AddDefaultBinding(InputControlType.LeftStickRight);
-        sharedController.RUp.AddDefaultBinding(InputControlType.RightStickUp);
-        sharedController.RDown.AddDefaultBinding(InputControlType.RightStickDown);
-        sharedController.RLeft.AddDefaultBinding(InputControlType.RightStickLeft);
-        sharedController.RRight.AddDefaultBinding(InputControlType.RightStickRight);
-
-        //Separate Controller
-        separateController.Up.AddDefaultBinding(InputControlType.LeftStickUp);
-        separateController.Down.AddDefaultBinding(InputControlType.LeftStickDown);
-        separateController.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
-        separateController.Right.AddDefaultBinding(InputControlType.LeftStickRight);
-        separateController.Up.AddDefaultBinding(InputControlType.RightStickUp);
-        separateController.Down.AddDefaultBinding(InputControlType.RightStickDown);
-        separateController.Left.AddDefaultBinding(InputControlType.RightStickLeft);
-        separateController.Right.AddDefaultBinding(InputControlType.RightStickRight);
-
-        //Sepatate Keyboard
-        separateKeyboard.Up.AddDefaultBinding(Key.W);
-        separateKeyboard.Down.AddDefaultBinding(Key.S);
-        separateKeyboard.Left.AddDefaultBinding(Key.A);
-        separateKeyboard.Right.AddDefaultBinding(Key.D);
-        separateKeyboard.Up.AddDefaultBinding(Key.UpArrow);
-        separateKeyboard.Down.AddDefaultBinding(Key.DownArrow);
-        separateKeyboard.Left.AddDefaultBinding(Key.LeftArrow);
-        separateKeyboard.Right.AddDefaultBinding(Key.RightArrow);
+		CreateActionSets();
 	}
 
 	void FixedUpdate () 
@@ -109,8 +69,7 @@ public class PlayerInput : MonoBehaviour {
 
         if (device != null)
         {
-            sharedController.Device = device;
-            separateController.Device = device;
+			controllerInput.Device = device;
         }
 
         if(deviceNumber == -3)
@@ -171,9 +130,17 @@ public class PlayerInput : MonoBehaviour {
         if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
 		{
             if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
+			{
+				controllerInput.Enabled = true;
+				keyboardInput.Enabled = false;
                 velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerControllerSoloMovement() : PlayerControllerSharedMovement();
+			}
             else
+			{
+				controllerInput.Enabled = false;
+				keyboardInput.Enabled = true;
                 velocityChange = controlScheme.controlScheme == Globals.ControlScheme.Solo ? PlayerKeyboardSoloMovement() : PlayerKeyboardSharedMovement();
+			}
 
 			velocityChange = character.mover.ClampMovementChange(velocityChange, true, true);
 
@@ -204,13 +171,13 @@ public class PlayerInput : MonoBehaviour {
         Vector2 stickInput = Vector2.zero;
         if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
         {
-            stickInput = sharedController.LMove;
-            return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.LMove.X, sharedController.LMove.Y, 0) : Vector3.zero;
+            stickInput = controllerInput.LMove;
+			return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(controllerInput.LMove.X, controllerInput.LMove.Y, 0) : Vector3.zero;
         }
         else if (controlScheme.controlScheme == Globals.ControlScheme.SharedRight)
         {
-            stickInput = sharedController.RMove;
-            return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(sharedController.RMove.X, sharedController.RMove.Y, 0) : Vector3.zero;
+			stickInput = controllerInput.RMove;
+			return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(controllerInput.RMove.X, controllerInput.RMove.Y, 0) : Vector3.zero;
         }
 
         return Vector3.zero;
@@ -218,27 +185,27 @@ public class PlayerInput : MonoBehaviour {
 
     public Vector3 PlayerControllerSoloMovement()
     {
-        Vector2 stickInput = Vector2.zero;
-        stickInput = separateController.Move;
-        return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(separateController.Move.X, separateController.Move.Y, 0) : Vector3.zero;
+		Vector2 stickInput = controllerInput.LMove.Vector + controllerInput.RMove.Vector;//separateController.Move;
+        return stickInput.sqrMagnitude > Mathf.Pow(deadZone, 2f) ? new Vector3(stickInput.x, stickInput.y, 0) : Vector3.zero;
     }
 
     public Vector3 PlayerKeyboardSharedMovement()
     {
         if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
         {
-            return new Vector3(sharedKeyboard.LMove.X, sharedKeyboard.LMove.Y, 0);
+			return new Vector3(keyboardInput.LMove.X, keyboardInput.LMove.Y, 0);
         }
         else if (controlScheme.controlScheme == Globals.ControlScheme.SharedRight)
         {
-            return new Vector3(sharedKeyboard.RMove.X, sharedKeyboard.RMove.Y, 0);
+			return new Vector3(keyboardInput.RMove.X, keyboardInput.RMove.Y, 0);
         }
         return Vector3.zero;
     }
 
     public Vector3 PlayerKeyboardSoloMovement()
     {
-        return new Vector3(separateKeyboard.Move.X, separateKeyboard.Move.Y,0);
+		Vector2 keyInput = keyboardInput.LMove.Vector + keyboardInput.RMove.Vector;
+		return new Vector3(keyInput.x, keyInput.y,0);
     }	
 	
 	private void OnCollisionEnter(Collision col)
@@ -336,6 +303,33 @@ public class PlayerInput : MonoBehaviour {
 
 
 	#region Helper Methods
+
+	private void CreateActionSets()
+	{
+		keyboardInput = new InputActionSet();
+		controllerInput = new InputActionSet ();
+		
+		//Shared Keyboard
+		keyboardInput.LUp.AddDefaultBinding(Key.W);
+		keyboardInput.LDown.AddDefaultBinding(Key.S);
+		keyboardInput.LLeft.AddDefaultBinding(Key.A);
+		keyboardInput.LRight.AddDefaultBinding(Key.D);
+		keyboardInput.RUp.AddDefaultBinding(Key.UpArrow);
+		keyboardInput.RDown.AddDefaultBinding(Key.DownArrow);
+		keyboardInput.RLeft.AddDefaultBinding(Key.LeftArrow);
+		keyboardInput.RRight.AddDefaultBinding(Key.RightArrow);
+		
+		//Shared Controller
+		controllerInput.LUp.AddDefaultBinding(InputControlType.LeftStickUp);
+		controllerInput.LDown.AddDefaultBinding(InputControlType.LeftStickDown);
+		controllerInput.LLeft.AddDefaultBinding(InputControlType.LeftStickLeft);
+		controllerInput.LRight.AddDefaultBinding(InputControlType.LeftStickRight);
+		controllerInput.RUp.AddDefaultBinding(InputControlType.RightStickUp);
+		controllerInput.RDown.AddDefaultBinding(InputControlType.RightStickDown);
+		controllerInput.RLeft.AddDefaultBinding(InputControlType.RightStickLeft);
+		controllerInput.RRight.AddDefaultBinding(InputControlType.RightStickRight);
+	}
+
 
 	private void CheckDevices()
 	{

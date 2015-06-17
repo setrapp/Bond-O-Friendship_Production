@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using InControl.TinyJSON;
 using UnityEngine;
 
 
@@ -114,6 +113,14 @@ namespace InControl
 
 		void DetectJoystickDevice( int unityJoystickId, string unityJoystickName )
 		{
+			#if UNITY_PS4
+			if (unityJoystickName == "Empty")
+			{
+				// On PS4 console, disconnected controllers may have this name.
+				return;
+			}
+			#endif
+
 			if (unityJoystickName == "WIRED CONTROLLER" ||
 			    unityJoystickName == " WIRED CONTROLLER")
 			{
@@ -128,7 +135,7 @@ namespace InControl
 			}
 
 			// PS4 controller only works properly as of Unity 4.5
-			if (InputManager.UnityVersion < new VersionInfo( 4, 5 ))
+			if (InputManager.UnityVersion < new VersionInfo( 4, 5, 0, 0 ))
 			{
 				if (Application.platform == RuntimePlatform.OSXEditor ||
 				    Application.platform == RuntimePlatform.OSXPlayer ||
@@ -143,7 +150,7 @@ namespace InControl
 			}
 
 			// As of Unity 4.6.3p1, empty strings on windows represent disconnected devices.
-			/*(if (InputManager.UnityVersion >= new VersionInfo( 4, 6, 3 ))
+			/*if (InputManager.UnityVersion >= new VersionInfo( 4, 6, 3, 0 ))
 			{
 				if (Application.platform == RuntimePlatform.WindowsEditor ||
 				    Application.platform == RuntimePlatform.WindowsPlayer ||
@@ -177,6 +184,8 @@ namespace InControl
 			{
 				matchedDeviceProfile = systemDeviceProfiles.Find( config => config.HasLastResortRegex( unityJoystickName ) );
 			}
+
+//			Logger.LogInfo( "Device " + unityJoystickId + " with name \"" + unityJoystickName + "\" detected." );
 
 			InputDeviceProfile deviceProfile = null;
 
@@ -239,7 +248,7 @@ namespace InControl
 		void AddSystemDeviceProfiles()
 		{
 			foreach (var typeName in UnityInputDeviceProfileList.Profiles)
-			{				
+			{
 				var deviceProfile = (UnityInputDeviceProfile) Activator.CreateInstance( Type.GetType( typeName ) );
 				AddSystemDeviceProfile( deviceProfile );
 			}

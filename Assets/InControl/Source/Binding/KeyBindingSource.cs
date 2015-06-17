@@ -7,7 +7,7 @@ namespace InControl
 {
 	public class KeyBindingSource : BindingSource
 	{
-		KeyCombo keyCombo;
+		public KeyCombo Control { get; protected set; }
 
 
 		internal KeyBindingSource()
@@ -17,13 +17,13 @@ namespace InControl
 
 		public KeyBindingSource( KeyCombo keyCombo )
 		{
-			this.keyCombo = keyCombo;
+			Control = keyCombo;
 		}
 
 
 		public KeyBindingSource( params Key[] keys )
 		{
-			this.keyCombo = new KeyCombo( keys );
+			Control = new KeyCombo( keys );
 		}
 
 
@@ -35,7 +35,7 @@ namespace InControl
 
 		public override bool GetState( InputDevice inputDevice )
 		{
-			return keyCombo.IsPressed;
+			return Control.IsPressed;
 		}
 
 
@@ -43,7 +43,7 @@ namespace InControl
 		{ 
 			get
 			{
-				return keyCombo.ToString();
+				return Control.ToString();
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace InControl
 			var bindingSource = other as KeyBindingSource;
 			if (bindingSource != null)
 			{
-				return keyCombo == bindingSource.keyCombo;
+				return Control == bindingSource.Control;
 			}
 
 			return false;
@@ -84,7 +84,7 @@ namespace InControl
 			var bindingSource = other as KeyBindingSource;
 			if (bindingSource != null)
 			{
-				return keyCombo == bindingSource.keyCombo;
+				return Control == bindingSource.Control;
 			}
 
 			return false;
@@ -93,7 +93,7 @@ namespace InControl
 
 		public override int GetHashCode()
 		{
-			return keyCombo.GetHashCode();
+			return Control.GetHashCode();
 		}
 
 
@@ -108,13 +108,16 @@ namespace InControl
 
 		internal override void Load( BinaryReader reader )
 		{
-			keyCombo.Load( reader );
+			// Have to do this because it's a struct property? Weird.
+			var temp = new KeyCombo();
+			temp.Load( reader );
+			Control = temp;
 		}
 
 
 		internal override void Save( BinaryWriter writer )
 		{
-			keyCombo.Save( writer );
+			Control.Save( writer );
 		}
 	}
 }

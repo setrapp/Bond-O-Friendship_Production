@@ -10,7 +10,7 @@ namespace InControl
 			Name = "";
 			//if (joystickName != "")
 			//{
-				//Name += " (" + joystickName + ")";
+			//	Name += " (" + joystickName + ")";
 			//}
 
 			Meta = "";

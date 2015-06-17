@@ -572,10 +572,16 @@ namespace InControl.ReorderableList
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Callback to draw custom content for empty list (optional).</param>
 		/// <param name="flags">Optional flags to pass into list field.</param>
-		private static void DoListField( IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmpty drawEmpty, ReorderableListFlags flags = 0 )
+		private static void DoListField( IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmpty drawEmpty, ReorderableListFlags flags )
 		{
 			ReorderableListControl.DrawControlFromState( adaptor, drawEmpty, flags );
 		}
+
+		private static void DoListField( IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmpty drawEmpty )
+		{
+			DoListField( adaptor, drawEmpty, 0 );
+		}
+
 		/// <summary>
 		/// Draw list field control for adapted collection.
 		/// </summary>
@@ -583,9 +589,15 @@ namespace InControl.ReorderableList
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Callback to draw custom content for empty list (optional).</param>
 		/// <param name="flags">Optional flags to pass into list field.</param>
-		private static void DoListFieldAbsolute( Rect position, IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmptyAbsolute drawEmpty, ReorderableListFlags flags = 0 )
+		private static void DoListFieldAbsolute( Rect position, IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmptyAbsolute drawEmpty, ReorderableListFlags flags )
 		{
 			ReorderableListControl.DrawControlFromState( position, adaptor, drawEmpty, flags );
+		}
+
+
+		private static void DoListFieldAbsolute( Rect position, IReorderableListAdaptor adaptor, ReorderableListControl.DrawEmptyAbsolute drawEmpty )
+		{
+			DoListFieldAbsolute( position, adaptor, drawEmpty, 0 );
 		}
 
 

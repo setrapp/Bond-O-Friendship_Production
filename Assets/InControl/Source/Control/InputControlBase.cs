@@ -23,6 +23,7 @@ namespace InControl
 
 		float nextRepeatTime;
 		float lastPressedTime;
+		bool wasRepeated;
 
 		InputControlState thisState;
 		InputControlState lastState;
@@ -65,7 +66,8 @@ namespace InControl
 		{
 			PrepareForUpdate( updateTick );
 
-			if (Mathf.Abs( value ) > Mathf.Abs( tempState.RawValue ))
+			//if (Mathf.Abs( value ) > Mathf.Abs( tempState.RawValue ))
+			if (Math.Abs( value ) > Math.Abs( tempState.RawValue ))
 			{
 				tempState.RawValue = value;
 
@@ -88,22 +90,25 @@ namespace InControl
 		{
 			thisState = tempState;
 
-			WasRepeated = false;
-			if (WasReleased)
+			var lastPressed = lastState.State;
+			var thisPressed = thisState.State;
+
+			wasRepeated = false;
+			if (lastPressed && !thisPressed) // if (WasReleased)
 			{
 				nextRepeatTime = 0.0f;
 			}
 			else
-			if (IsPressed)
+			if (thisPressed) // if (IsPressed)
 			{
-				if (HasChanged)
+				if (lastPressed != thisPressed) // if (HasChanged)
 				{
 					nextRepeatTime = Time.realtimeSinceStartup + FirstRepeatDelay;
 				}
 				else
 				if (Time.realtimeSinceStartup >= nextRepeatTime)
 				{
-					WasRepeated = true;
+					wasRepeated = true;
 					nextRepeatTime = Time.realtimeSinceStartup + RepeatDelay;
 				}
 			}
@@ -186,8 +191,7 @@ namespace InControl
 
 		public bool WasRepeated
 		{
-			get;
-			protected set;
+			get { return wasRepeated; }
 		}
 
 

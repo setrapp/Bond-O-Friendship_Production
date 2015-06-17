@@ -8,7 +8,7 @@ using UnityEngine;
 namespace InControl
 {
 	/// <summary>
-	/// Represents a combination of one or more keys, including modifiers.
+	/// Represents a combination of one or more keys, including modifiers, up to a maximum of eight.
 	/// </summary>
 	public struct KeyCombo : IEnumerable<int>
 	{
@@ -43,14 +43,14 @@ namespace InControl
 			data = data | (((ulong) key & 0xFF) << (size * 8));
 			size = size + 1;
 		}
-		
-		
+
+
 		public void Clear()
 		{
 			data = 0;
 			size = 0;
 		}
-		
+
 
 		public IEnumerator<int> GetEnumerator()
 		{
@@ -59,8 +59,8 @@ namespace InControl
 				yield return (int) ((data >> (i * 8)) & 0xFF);
 			}
 		}
-		
-		
+
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
@@ -74,8 +74,8 @@ namespace InControl
 				return size;
 			}
 		}
-		
-		
+
+
 		public bool IsPressed
 		{
 			get

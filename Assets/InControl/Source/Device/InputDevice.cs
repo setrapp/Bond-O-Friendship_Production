@@ -210,6 +210,12 @@ namespace InControl
 		}
 
 
+		internal void RequestActivation()
+		{
+			LastChangeTick = InputManager.CurrentTick;
+		}
+
+
 		public virtual void Vibrate( float leftMotor, float rightMotor )
 		{
 		}

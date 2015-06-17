@@ -1,32 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using InControl.TinyJSON;
 
 
 namespace InControl
 {
 	public abstract class InputDeviceProfile
 	{
-		[Include]
+		[SerializeField]
 		public string Name { get; protected set; }
 
-		[Include]
+		[SerializeField]
 		public string Meta { get; protected set; }
 
-		[Include]
+		[SerializeField]
 		public InputControlMapping[] AnalogMappings { get; protected set; }
 
-		[Include]
+		[SerializeField]
 		public InputControlMapping[] ButtonMappings { get; protected set; }
 
-		[Include]
+		[SerializeField]
 		public string[] SupportedPlatforms { get; protected set; }
 
-		[Include]
+		[SerializeField]
+		public string[] ExcludePlatforms { get; protected set; }
+
+		[SerializeField]
 		public VersionInfo MinUnityVersion { get; protected set; }
 
-		[Include]
+		[SerializeField]
 		public VersionInfo MaxUnityVersion { get; protected set; }
 
 		static HashSet<Type> hideList = new HashSet<Type>();
@@ -45,13 +47,14 @@ namespace InControl
 			ButtonMappings = new InputControlMapping[0];
 
 			SupportedPlatforms = new string[0];
+			ExcludePlatforms = new string[0];
 
-			MinUnityVersion = new VersionInfo( 3 );
-			MaxUnityVersion = new VersionInfo( 9 );
+			MinUnityVersion = new VersionInfo( 3, 0, 0, 0 );
+			MaxUnityVersion = new VersionInfo( 9, 0, 0, 0 );
 		}
 
 
-		[Include]
+		[SerializeField]
 		public float Sensitivity
 		{ 
 			get { return sensitivity; }
@@ -59,7 +62,7 @@ namespace InControl
 		}
 
 
-		[Include]
+		[SerializeField]
 		public float LowerDeadZone
 		{ 
 			get { return lowerDeadZone; }
@@ -67,7 +70,7 @@ namespace InControl
 		}
 
 
-		[Include]
+		[SerializeField]
 		public float UpperDeadZone
 		{ 
 			get { return upperDeadZone; }
@@ -82,6 +85,17 @@ namespace InControl
 				if (!IsSupportedOnThisVersionOfUnity)
 				{
 					return false;
+				}
+
+				if (ExcludePlatforms != null)
+				{
+					foreach (var platform in ExcludePlatforms)
+					{
+						if (InputManager.Platform.Contains( platform.ToUpper() ))
+						{
+							return false;
+						}
+					}
 				}
 
 				if (SupportedPlatforms == null || SupportedPlatforms.Length == 0)

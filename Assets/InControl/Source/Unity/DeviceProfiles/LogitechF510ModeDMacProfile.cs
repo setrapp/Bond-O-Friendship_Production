@@ -5,61 +5,61 @@ namespace InControl
 {
 	// @cond nodoc
 	[AutoDiscover]
-	public class LogitechRumblePad2WinProfile : UnityInputDeviceProfile
+	public class LogitechF510ModeDMacProfile : UnityInputDeviceProfile
 	{
-		public LogitechRumblePad2WinProfile()
+		public LogitechF510ModeDMacProfile()
 		{
-			Name = "Logitech RumblePad 2 Controller";
-			Meta = "Logitech RumblePad 2 Controller on Windows";
+			Name = "Logitech F510 Controller";
+			Meta = "Logitech F510 Controller on Mac (Mode D)";
 
 			SupportedPlatforms = new[] {
-				"Windows"
+				"OS X"
 			};
 
 			JoystickNames = new[] {
-				"Logitech Rumblepad 2 USB"
+				"Logitech Logitech RumblePad 2 USB"
 			};
 
 			ButtonMappings = new[] {
 				new InputControlMapping {
-					Handle = "1",
-					Target = InputControlType.Action3,
-					Source = Button0
-				},
-				new InputControlMapping {
-					Handle = "2",
+					Handle = "A",
 					Target = InputControlType.Action1,
 					Source = Button1
 				},
 				new InputControlMapping {
-					Handle = "3",
+					Handle = "B",
 					Target = InputControlType.Action2,
 					Source = Button2
 				},
 				new InputControlMapping {
-					Handle = "4",
+					Handle = "X",
+					Target = InputControlType.Action3,
+					Source = Button0
+				},
+				new InputControlMapping {
+					Handle = "Y",
 					Target = InputControlType.Action4,
 					Source = Button3
 				},
 				new InputControlMapping {
-					Handle = "9",
+					Handle = "Back",
 					Target = InputControlType.Back,
 					Source = Button8
 				},
 				new InputControlMapping {
-					Handle = "10",
+					Handle = "Start",
 					Target = InputControlType.Start,
 					Source = Button9
 				},
 				new InputControlMapping {
 					Handle = "Left Stick Button",
 					Target = InputControlType.LeftStickButton,
-					Source = Button11
+					Source = Button10
 				},
 				new InputControlMapping {
 					Handle = "Right Stick Button",
 					Target = InputControlType.RightStickButton,
-					Source = Button12
+					Source = Button11
 				},
 				new InputControlMapping {
 					Handle = "Left Bumper",

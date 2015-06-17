@@ -7,7 +7,7 @@ namespace InControl
 {
 	public class MouseBindingSource : BindingSource
 	{
-		Mouse mouseControl;
+		public Mouse Control { get; protected set; }
 
 
 		internal MouseBindingSource()
@@ -17,7 +17,7 @@ namespace InControl
 
 		public MouseBindingSource( Mouse mouseControl )
 		{
-			this.mouseControl = mouseControl;
+			Control = mouseControl;
 		}
 
 
@@ -25,7 +25,7 @@ namespace InControl
 		{
 			var scale = 0.2f;
 
-			switch (mouseControl)
+			switch (Control)
 			{
 				case Mouse.LeftButton:
 					return Input.GetMouseButton( 0 ) ? 1.0f : 0.0f;
@@ -61,7 +61,7 @@ namespace InControl
 		{ 
 			get
 			{
-				return mouseControl.ToString();
+				return Control.ToString();
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace InControl
 			var bindingSource = other as MouseBindingSource;
 			if (bindingSource != null)
 			{
-				return mouseControl == bindingSource.mouseControl;
+				return Control == bindingSource.Control;
 			}
 
 			return false;
@@ -102,7 +102,7 @@ namespace InControl
 			var bindingSource = other as MouseBindingSource;
 			if (bindingSource != null)
 			{
-				return mouseControl == bindingSource.mouseControl;
+				return Control == bindingSource.Control;
 			}
 
 			return false;
@@ -111,7 +111,7 @@ namespace InControl
 
 		public override int GetHashCode()
 		{
-			return mouseControl.GetHashCode();
+			return Control.GetHashCode();
 		}
 
 
@@ -126,13 +126,13 @@ namespace InControl
 
 		internal override void Save( BinaryWriter writer )
 		{
-			writer.Write( (int) mouseControl );
+			writer.Write( (int) Control );
 		}
 
 
 		internal override void Load( BinaryReader reader )
 		{
-			mouseControl = (Mouse) reader.ReadInt32();
+			Control = (Mouse) reader.ReadInt32();
 		}
 	}
 }

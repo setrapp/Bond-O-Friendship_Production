@@ -13,8 +13,7 @@ namespace InControl
 		public const int MaxAnalogs = 20;
 
 		//internal int JoystickId { get; private set; }
-
-        public int JoystickId { get; private set; }
+		public int JoystickId { get; private set; }
 		public InputDeviceProfile Profile { get; protected set; }
 
 
