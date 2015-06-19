@@ -141,7 +141,14 @@ public class Globals : MonoBehaviour {
 	void Update()
 	{
         if(Input.GetKeyDown(KeyCode.Escape))
+		{
             ResetOrExit();
+		}
+
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			mute = !mute;
+		}
         
 		
 		leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
