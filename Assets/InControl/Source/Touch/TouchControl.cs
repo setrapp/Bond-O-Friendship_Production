@@ -88,6 +88,11 @@ namespace InControl
 
 		void Setup()
 		{
+			if (!enabled)
+			{
+				return;
+			}
+
 			CreateControl();
 			ConfigureControl();
 		}

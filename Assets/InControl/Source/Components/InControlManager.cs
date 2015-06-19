@@ -11,9 +11,13 @@ namespace InControl
 	{
 		public bool logDebugInfo = false;
 		public bool invertYAxis = false;
-		public bool enableXInput = false;
 		public bool useFixedUpdate = false;
 		public bool dontDestroyOnLoad = false;
+
+		public bool enableXInput = false;
+		public int xInputUpdateRate = 0;
+		public int xInputBufferSize = 0;
+
 		public List<string> customProfiles = new List<string>();
 
 
@@ -29,6 +33,8 @@ namespace InControl
 
 			InputManager.InvertYAxis = invertYAxis;
 			InputManager.EnableXInput = enableXInput;
+			InputManager.XInputUpdateRate = (uint) Mathf.Max( xInputUpdateRate, 0 );
+			InputManager.XInputBufferSize = (uint) Mathf.Max( xInputBufferSize, 0 );
 			InputManager.SetupInternal();
 
 			foreach (var className in customProfiles)
@@ -114,6 +120,12 @@ namespace InControl
 		void OnApplicationQuit()
 		{
 			InputManager.OnApplicationQuit();
+		}
+
+
+		void OnLevelWasLoaded( int level )
+		{
+			InputManager.OnLevelWasLoaded();
 		}
 
 

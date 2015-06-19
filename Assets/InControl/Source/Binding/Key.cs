@@ -90,9 +90,9 @@ namespace InControl
 		Quote,
 		Return,
 
-		LessThan,
-		GreaterThan,
-		QuestionMark,
+		Comma,
+		Period,
+		Slash,
 
 		Space,
 

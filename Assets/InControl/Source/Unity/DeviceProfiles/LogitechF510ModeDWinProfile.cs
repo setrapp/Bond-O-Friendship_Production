@@ -1,60 +1,45 @@
-using System;
+﻿using System;
 
 
 namespace InControl
 {
 	// @cond nodoc
 	[AutoDiscover]
-	public class LogitechRumblePad2MacProfile : UnityInputDeviceProfile
+	public class LogitechF510ModeDWinProfile : UnityInputDeviceProfile
 	{
-		public LogitechRumblePad2MacProfile()
+		public LogitechF510ModeDWinProfile()
 		{
-			Name = "Logitech RumblePad 2 Controller";
-			Meta = "Logitech RumblePad 2 on Mac";
+			Name = "Logitech F510 Controller";
+			Meta = "Logitech F510 Controller on Windows (DirectInput Mode)";
 
 			SupportedPlatforms = new[] {
-				"OS X"
+				"Windows"
 			};
 
 			JoystickNames = new[] {
-				"Logitech Logitech RumblePad 2 USB"
+				"Logitech RumblePad 2 USB",
 			};
 
 			ButtonMappings = new[] {
 				new InputControlMapping {
-					Handle = "1",
-					Target = InputControlType.Action3,
-					Source = Button0
-				},
-				new InputControlMapping {
-					Handle = "2",
+					Handle = "A",
 					Target = InputControlType.Action1,
 					Source = Button1
 				},
 				new InputControlMapping {
-					Handle = "3",
+					Handle = "B",
 					Target = InputControlType.Action2,
 					Source = Button2
 				},
 				new InputControlMapping {
-					Handle = "4",
+					Handle = "X",
+					Target = InputControlType.Action3,
+					Source = Button0
+				},
+				new InputControlMapping {
+					Handle = "Y",
 					Target = InputControlType.Action4,
 					Source = Button3
-				},
-				new InputControlMapping {
-					Handle = "10",
-					Target = InputControlType.Start,
-					Source = Button10
-				},
-				new InputControlMapping {
-					Handle = "Left Stick Button",
-					Target = InputControlType.LeftStickButton,
-					Source = Button11
-				},
-				new InputControlMapping {
-					Handle = "Right Stick Button",
-					Target = InputControlType.RightStickButton,
-					Source = Button12
 				},
 				new InputControlMapping {
 					Handle = "Left Bumper",
@@ -67,6 +52,26 @@ namespace InControl
 					Source = Button5
 				},
 				new InputControlMapping {
+					Handle = "Left Stick Button",
+					Target = InputControlType.LeftStickButton,
+					Source = Button10
+				},
+				new InputControlMapping {
+					Handle = "Right Stick Button",
+					Target = InputControlType.RightStickButton,
+					Source = Button11
+				},
+				new InputControlMapping {
+					Handle = "Back",
+					Target = InputControlType.Back,
+					Source = Button8
+				},
+				new InputControlMapping {
+					Handle = "Start",
+					Target = InputControlType.Start,
+					Source = Button9
+				},
+				new InputControlMapping {
 					Handle = "Left Trigger",
 					Target = InputControlType.LeftTrigger,
 					Source = Button6
@@ -75,7 +80,7 @@ namespace InControl
 					Handle = "Right Trigger",
 					Target = InputControlType.RightTrigger,
 					Source = Button7
-				}
+				},
 			};
 
 			AnalogMappings = new[] {
@@ -91,8 +96,8 @@ namespace InControl
 
 				DPadLeftMapping( Analog4 ),
 				DPadRightMapping( Analog4 ),
-				DPadUpMapping( Analog5 ),
-				DPadDownMapping( Analog5 ),
+				DPadUpMapping2( Analog5 ),
+				DPadDownMapping2( Analog5 ),
 			};
 		}
 	}

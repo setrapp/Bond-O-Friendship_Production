@@ -15,7 +15,7 @@ public class ClusterNodeBit : MonoBehaviour {
 
 		if (targetNode == null)
 		{
-			Debug.LogError("ClusterNodeBit " + gameObject.name + "is not targetting a cluster node.");
+			Debug.LogError("ClusterNodeBit " + gameObject.name + " is not targetting a cluster node.");
 		}
 	}
 

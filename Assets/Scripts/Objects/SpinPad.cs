@@ -50,11 +50,11 @@ public class SpinPad : WaitPad {
 
 		if (innerLine != null)
 		{
-			Helper.DrawCircle(innerLine, gameObject, Vector3.zero, inRadius);
+			Helper.DrawCircle(innerLine, innerLine.gameObject, Vector3.zero, inRadius);
 		}
 		if (outerLine != null)
 		{
-			Helper.DrawCircle(outerLine, gameObject, Vector3.zero, outRadius);
+			Helper.DrawCircle(outerLine, outerLine.gameObject, Vector3.zero, outRadius);
 		}
 
 		CalculateRotationProgress();

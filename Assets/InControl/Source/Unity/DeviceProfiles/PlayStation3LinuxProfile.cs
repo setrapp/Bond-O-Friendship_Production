@@ -21,7 +21,7 @@ namespace InControl
 				"SHENGHIC 2009/0708ZXW-V1Inc. PLAYSTATION(R)3Conteroller" // Not a typo.
 			};
 
-			MaxUnityVersion = new VersionInfo( 4, 9 );
+			MaxUnityVersion = new VersionInfo( 4, 9, 0, 0 );
 
 			ButtonMappings = new[] {
 				new InputControlMapping {

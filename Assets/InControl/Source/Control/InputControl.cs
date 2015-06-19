@@ -50,7 +50,7 @@ namespace InControl
 		{
 			get
 			{
-				return Target >= InputControlType.LeftStickUp && Target <= InputControlType.RightBumper;
+				return Utility.TargetIsStandard( Target );
 			}
 		}
 	}

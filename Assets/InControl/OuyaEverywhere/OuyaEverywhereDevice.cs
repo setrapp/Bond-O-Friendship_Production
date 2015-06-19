@@ -26,34 +26,34 @@ namespace InControl
 
 			Meta = "OUYA Everywhere Device #" + deviceIndex;
 
-			AddControl( InputControlType.LeftStickLeft, "LeftStickLeft" );
-			AddControl( InputControlType.LeftStickRight, "LeftStickRight" );
-			AddControl( InputControlType.LeftStickUp, "LeftStickUp" );
-			AddControl( InputControlType.LeftStickDown, "LeftStickDown" );
+			AddControl( InputControlType.LeftStickLeft, "Left Stick Left" );
+			AddControl( InputControlType.LeftStickRight, "Left Stick Right" );
+			AddControl( InputControlType.LeftStickUp, "Left Stick Up" );
+			AddControl( InputControlType.LeftStickDown, "Left Stick Down" );
 
-			AddControl( InputControlType.RightStickLeft, "RightStickLeft" );
-			AddControl( InputControlType.RightStickRight, "RightStickRight" );
-			AddControl( InputControlType.RightStickUp, "RightStickUp" );
-			AddControl( InputControlType.RightStickDown, "RightStickDown" );
+			AddControl( InputControlType.RightStickLeft, "Right Stick Left" );
+			AddControl( InputControlType.RightStickRight, "Right Stick Right" );
+			AddControl( InputControlType.RightStickUp, "Right Stick Up" );
+			AddControl( InputControlType.RightStickDown, "Right Stick Down" );
 
-			AddControl( InputControlType.LeftTrigger, "LeftTrigger" );
-			AddControl( InputControlType.RightTrigger, "RightTrigger" );
+			AddControl( InputControlType.LeftTrigger, "Left Trigger" );
+			AddControl( InputControlType.RightTrigger, "Right Trigger" );
 
-			AddControl( InputControlType.DPadUp, "DPadUp" );
-			AddControl( InputControlType.DPadDown, "DPadDown" );
-			AddControl( InputControlType.DPadLeft, "DPadLeft" );
-			AddControl( InputControlType.DPadRight, "DPadRight" );
+			AddControl( InputControlType.DPadUp, "DPad Up" );
+			AddControl( InputControlType.DPadDown, "DPad Down" );
+			AddControl( InputControlType.DPadLeft, "DPad Left" );
+			AddControl( InputControlType.DPadRight, "DPad Right" );
 
 			AddControl( InputControlType.Action1, "O" );
 			AddControl( InputControlType.Action2, "A" );
 			AddControl( InputControlType.Action3, "Y" );
 			AddControl( InputControlType.Action4, "U" );
 
-			AddControl( InputControlType.LeftBumper, "LeftBumper" );
-			AddControl( InputControlType.RightBumper, "RightBumper" );
+			AddControl( InputControlType.LeftBumper, "Left Bumper" );
+			AddControl( InputControlType.RightBumper, "Right Bumper" );
 
-			AddControl( InputControlType.LeftStickButton, "LeftStickButton" );
-			AddControl( InputControlType.RightStickButton, "RightStickButton" );
+			AddControl( InputControlType.LeftStickButton, "Left Stick Button" );
+			AddControl( InputControlType.RightStickButton, "Right Stick Button" );
 
 			AddControl( InputControlType.Menu, "Menu" );
 		}

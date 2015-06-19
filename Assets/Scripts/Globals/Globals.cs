@@ -344,20 +344,21 @@ public class ControlsAndInput
 	public Globals.InputNameSelected inputNameSelected;
 }
 
-public class SharedKeyboard : PlayerActionSet
+public class InputActionSet : PlayerActionSet
 {
 	public PlayerAction LLeft;
 	public PlayerAction LRight;
 	public PlayerAction LUp;
 	public PlayerAction LDown;
 	public PlayerTwoAxisAction LMove;
+
 	public PlayerAction RLeft;
 	public PlayerAction RRight;
 	public PlayerAction RUp;
 	public PlayerAction RDown;
 	public PlayerTwoAxisAction RMove;
 
-	public SharedKeyboard()
+	public InputActionSet()
 	{
 		LLeft = CreatePlayerAction("L Move Left");
 		LRight = CreatePlayerAction("L Move Right");
@@ -372,13 +373,14 @@ public class SharedKeyboard : PlayerActionSet
 	}
 }
 
-public class SharedController : PlayerActionSet
+/*public class SharedController : PlayerActionSet
 {
 	public PlayerAction LLeft;
 	public PlayerAction LRight;
 	public PlayerAction LUp;
 	public PlayerAction LDown;
 	public PlayerTwoAxisAction LMove;
+
 	public PlayerAction RLeft;
 	public PlayerAction RRight;
 	public PlayerAction RUp;
@@ -392,6 +394,7 @@ public class SharedController : PlayerActionSet
 		LUp = CreatePlayerAction("L Move Up");
 		LDown = CreatePlayerAction("L Move Down");
 		LMove = CreateTwoAxisPlayerAction(LLeft, LRight, LDown, LUp);
+
 		RLeft = CreatePlayerAction("R Move Left");
 		RRight = CreatePlayerAction("R Move Right");
 		RUp = CreatePlayerAction("R Move Up");
@@ -434,4 +437,4 @@ public class SeparateKeyboard : PlayerActionSet
 		Down = CreatePlayerAction("Move Down");
 		Move = CreateTwoAxisPlayerAction(Left, Right, Down, Up);
 	}
-}
+}*/

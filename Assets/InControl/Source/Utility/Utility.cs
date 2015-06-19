@@ -150,25 +150,6 @@ namespace InControl
 		}
 
 
-		//		public static Vector2 ApplyCircularDeadZone( Vector2 v, float lowerDeadZone )
-		//		{
-		//			if (Mathf.Approximately( lowerDeadZone, 0.0f ))
-		//			{
-		//				return v;
-		//			}
-		//
-		//			var scale = 1.0f / lowerDeadZone;
-		//			var magnitude = Mathf.Max( 0.0f, v.magnitude - lowerDeadZone ) * scale;
-		//			return v.normalized * magnitude;
-		//		}
-		//
-		//
-		//		public static Vector2 ApplyCircularDeadZone( float x, float y, float lowerDeadZone )
-		//		{
-		//			return ApplyCircularDeadZone( new Vector2( x, y ), lowerDeadZone );
-		//		}
-
-
 		public static float ApplySmoothing( float thisValue, float lastValue, float deltaTime, float sensitivity )
 		{
 			// 1.0f and above is instant (no smoothing).
@@ -190,9 +171,15 @@ namespace InControl
 		}
 
 
-		public static bool TargetIsButton( InputControlType target )
+		internal static bool TargetIsButton( InputControlType target )
 		{
 			return (target >= InputControlType.Action1 && target <= InputControlType.Action4) || (target >= InputControlType.Button0 && target <= InputControlType.Button19);
+		}
+
+
+		internal static bool TargetIsStandard( InputControlType target )
+		{
+			return target >= InputControlType.LeftStickUp && target <= InputControlType.RightBumper;
 		}
 
 
@@ -211,6 +198,31 @@ namespace InControl
 			streamWriter.Write( data );
 			streamWriter.Flush();
 			streamWriter.Close();
+		}
+
+
+		public static bool Approximately( float value1, float value2 )
+		{
+			var delta = value1 - value2;
+			return (delta >= -float.Epsilon) && (delta <= float.Epsilon);
+		}
+
+
+		public static bool IsNotZero( float value )
+		{
+			return (value < -float.Epsilon) || (value > float.Epsilon);
+		}
+
+
+		public static bool IsZero( float value )
+		{
+			return (value >= -float.Epsilon) || (value <= float.Epsilon);
+		}
+
+
+		public static bool AbsoluteIsOverThreshold( float value, float threshold )
+		{
+			return (value < -threshold) || (value > threshold);
 		}
 	}
 }

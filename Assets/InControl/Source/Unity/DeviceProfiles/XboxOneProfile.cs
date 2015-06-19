@@ -87,8 +87,8 @@ namespace InControl
 
 				DPadLeftMapping( Analog5 ),
 				DPadRightMapping( Analog5 ),
-				DPadUpMapping( Analog6 ),
-				DPadDownMapping( Analog6 ),
+				DPadUpMapping2( Analog6 ),
+				DPadDownMapping2( Analog6 ),
 
 				new InputControlMapping {
 					Handle = "Left Trigger",
@@ -102,6 +102,21 @@ namespace InControl
 					Target = InputControlType.RightTrigger,
 					Source = Analog2,
 					SourceRange = InputRange.ZeroToMinusOne,
+					TargetRange = InputRange.ZeroToOne,
+				},
+
+				new InputControlMapping {
+					Handle = "Left Trigger",
+					Target = InputControlType.LeftTrigger,
+					Source = Analog8,
+					SourceRange = InputRange.ZeroToOne,
+					TargetRange = InputRange.ZeroToOne,
+				},
+				new InputControlMapping {
+					Handle = "Right Trigger",
+					Target = InputControlType.RightTrigger,
+					Source = Analog9,
+					SourceRange = InputRange.ZeroToOne,
 					TargetRange = InputRange.ZeroToOne,
 				}
 			};

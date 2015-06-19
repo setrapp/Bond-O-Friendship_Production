@@ -5,7 +5,7 @@ namespace InControl
 {
 	public class InputControlMapping
 	{
-		[TinyJSON.TypeHint]
+		// [TinyJSON.TypeHint]
 		public InputControlSource Source;
 
 		public InputControlType Target;
