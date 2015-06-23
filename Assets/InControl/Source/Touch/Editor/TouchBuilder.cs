@@ -61,14 +61,14 @@ namespace InControl
 		[MenuItem( "GameObject/Create Other/InControl/Touch/Button Control", false, 3 )]
 		public static void CreateTouchButtonControl()
 		{			
-			MonoBehaviour component;
-			if (component = GameObject.FindObjectOfType<InControlManager>())
+			var touchManager = GameObject.FindObjectOfType<TouchManager>();
+			if (touchManager != null)
 			{
-				var gameObject = component.gameObject;
+				var gameObject = touchManager.gameObject;
 				
 				var controlGameObject = new GameObject( "TouchButtonControl" );
 				controlGameObject.transform.parent = gameObject.transform;
-				controlGameObject.layer = LayerMask.NameToLayer( "UI" );
+				controlGameObject.layer = touchManager.controlsLayer;
 
 				var control = controlGameObject.AddComponent<TouchButtonControl>();
 				control.button.Sprite = FindSpriteWithName( "TouchButton_A" );
@@ -88,14 +88,14 @@ namespace InControl
 		[MenuItem( "GameObject/Create Other/InControl/Touch/Stick Control", false, 3 )]
 		public static void CreateTouchStickControl()
 		{			
-			MonoBehaviour component;
-			if (component = GameObject.FindObjectOfType<InControlManager>())
+			var touchManager = GameObject.FindObjectOfType<TouchManager>();
+			if (touchManager != null)
 			{
-				var gameObject = component.gameObject;
+				var gameObject = touchManager.gameObject;
 				
 				var controlGameObject = new GameObject( "TouchStickControl" );
 				controlGameObject.transform.parent = gameObject.transform;
-				controlGameObject.layer = LayerMask.NameToLayer( "UI" );
+				controlGameObject.layer = touchManager.controlsLayer;
 
 				var control = controlGameObject.AddComponent<TouchStickControl>();
 				control.ring.Sprite = FindSpriteWithName( "TouchStick_Ring" );
@@ -116,15 +116,15 @@ namespace InControl
 		[MenuItem( "GameObject/Create Other/InControl/Touch/Swipe Control", false, 3 )]
 		public static void CreateTouchSwipeControl()
 		{			
-			MonoBehaviour component;
-			if (component = GameObject.FindObjectOfType<InControlManager>())
+			var touchManager = GameObject.FindObjectOfType<TouchManager>();
+			if (touchManager != null)
 			{
-				var gameObject = component.gameObject;
+				var gameObject = touchManager.gameObject;
 				
 				var controlGameObject = new GameObject( "TouchSwipeControl" );
 				controlGameObject.transform.parent = gameObject.transform;
 				controlGameObject.AddComponent<TouchSwipeControl>();
-				controlGameObject.layer = LayerMask.NameToLayer( "UI" );
+				controlGameObject.layer = touchManager.controlsLayer;
 				
 				Selection.activeGameObject = controlGameObject;
 				
@@ -141,15 +141,15 @@ namespace InControl
 		[MenuItem( "GameObject/Create Other/InControl/Touch/Track Control", false, 3 )]
 		public static void CreateTouchTrackControl()
 		{			
-			MonoBehaviour component;
-			if (component = GameObject.FindObjectOfType<InControlManager>())
+			var touchManager = GameObject.FindObjectOfType<TouchManager>();
+			if (touchManager != null)
 			{
-				var gameObject = component.gameObject;
+				var gameObject = touchManager.gameObject;
 				
 				var controlGameObject = new GameObject( "TouchTrackControl" );
 				controlGameObject.transform.parent = gameObject.transform;
 				controlGameObject.AddComponent<TouchTrackControl>();
-				controlGameObject.layer = LayerMask.NameToLayer( "UI" );
+				controlGameObject.layer = touchManager.controlsLayer;
 				
 				Selection.activeGameObject = controlGameObject;
 				
@@ -160,6 +160,20 @@ namespace InControl
 			{
 				Debug.LogError( "Could not find InControl manager object." );
 			}			
+		}
+
+
+		public static void ChangeControlsLayer( int layer )
+		{
+			TouchManager.Instance.touchCamera.cullingMask = 1 << layer;
+
+			foreach (var control in GameObject.FindObjectsOfType<TouchControl>())
+			{
+				foreach (var transform in control.gameObject.GetComponentsInChildren<Transform>( true ))
+				{
+					transform.gameObject.layer = layer;
+				}
+			}
 		}
 
 

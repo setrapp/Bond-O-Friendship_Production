@@ -39,9 +39,14 @@ namespace InControl
 		public ulong UpdateTick { get; protected set; }
 
 		/// <summary>
-		/// The binding source type that provided input to this action st.
+		/// The binding source type that provided input to this action set.
 		/// </summary>
 		public BindingSourceType LastInputType = BindingSourceType.None;
+
+		/// <summary>
+		/// Whether this action set should produce input. Default: <c>true</c>
+		/// </summary>
+		public bool Enabled { get; set; }
 
 		List<PlayerAction> actions = new List<PlayerAction>();
 		List<PlayerOneAxisAction> oneAxisActions = new List<PlayerOneAxisAction>();
@@ -53,6 +58,7 @@ namespace InControl
 		protected PlayerActionSet()
 		{
 			Actions = new ReadOnlyCollection<PlayerAction>( actions );
+			Enabled = true;
 			InputManager.OnUpdate -= Update;
 			InputManager.OnUpdate += Update;
 		}
@@ -167,6 +173,26 @@ namespace InControl
 			{
 				actions[i].ResetBindings();
 			}
+		}
+
+
+		internal bool HasBinding( BindingSource binding )
+		{
+			if (binding == null)
+			{
+				return false;
+			}
+
+			var actionsCount = actions.Count;
+			for (int i = 0; i < actionsCount; i++)
+			{
+				if (actions[i].HasBinding( binding ))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 

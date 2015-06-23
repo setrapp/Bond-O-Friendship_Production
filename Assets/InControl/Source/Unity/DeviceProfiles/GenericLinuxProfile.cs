@@ -20,7 +20,7 @@ namespace InControl
 				"."
 			};
 
-			MinUnityVersion = new VersionInfo( 5 );
+			MinUnityVersion = new VersionInfo( 5, 0, 0, 0 );
 
 			ButtonMappings = new[] {
 				new InputControlMapping {
@@ -77,6 +77,28 @@ namespace InControl
 					Handle = "Right Stick Button",
 					Target = InputControlType.RightStickButton,
 					Source = Button10
+				},
+				new InputControlMapping {
+					Handle = "DPad Left",
+					Target = InputControlType.DPadLeft,
+					Source = Button11,
+					Invert = true
+				},
+				new InputControlMapping {
+					Handle = "DPad Right",
+					Target = InputControlType.DPadRight,
+					Source = Button12,
+				},
+				new InputControlMapping {
+					Handle = "DPad Up",
+					Target = InputControlType.DPadUp,
+					Source = Button13,
+					Invert = true
+				},
+				new InputControlMapping {
+					Handle = "DPad Down",
+					Target = InputControlType.DPadDown,
+					Source = Button14,
 				}
 			};
 

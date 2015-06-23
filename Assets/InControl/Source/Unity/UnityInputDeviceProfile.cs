@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using InControl.TinyJSON;
 
 
 namespace InControl
@@ -15,13 +14,13 @@ namespace InControl
 
 	public class UnityInputDeviceProfile : InputDeviceProfile
 	{
-		[Include]
+		[SerializeField]
 		protected string[] JoystickNames;
 
-		[Include]
+		[SerializeField]
 		protected string[] JoystickRegex;
 
-		[Include]
+		[SerializeField]
 		protected string LastResortRegex;
 
 
@@ -104,7 +103,7 @@ namespace InControl
 			return HasJoystickName( joystickName ) || HasLastResortRegex( joystickName );
 		}
 
-
+		/*
 		#region Serialization
 
 		public string Save()
@@ -152,6 +151,7 @@ namespace InControl
 		}
 
 		#endregion
+		*/
 
 
 		#region InputControlSource helpers

@@ -117,8 +117,8 @@ public class Bond : MonoBehaviour {
 						linkDir = links[i + 1].transform.position - links[i - 1].transform.position;
 						float magFromPrevious = (links[i].transform.position - links[i - 1].transform.position).magnitude;
 						float magToNext = (links[i + 1].transform.position - links[i].transform.position).magnitude;
-						linkScalePrev.y = magFromPrevious * 2;
-						linkScaleNext.y = magToNext * 2;
+						linkScalePrev.y = magFromPrevious;
+						linkScaleNext.y = magToNext;
 
 						links[i].toPreviousCollider.center = new Vector3(0, -linkScalePrev.y / 2, 0);
 						links[i].toNextCollider.center = new Vector3(0, linkScaleNext.y / 2, 0);

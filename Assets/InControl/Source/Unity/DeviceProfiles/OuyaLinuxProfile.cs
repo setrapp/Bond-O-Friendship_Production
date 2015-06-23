@@ -21,7 +21,7 @@ namespace InControl
 				"OUYA Game Controller"
 			};
 
-			MaxUnityVersion = new VersionInfo( 4, 9 );
+			MaxUnityVersion = new VersionInfo( 4, 9, 0, 0 );
 
 			LowerDeadZone = 0.3f;
 

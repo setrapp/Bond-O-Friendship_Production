@@ -78,7 +78,13 @@ namespace InControl
 		}
 
 
-		public void Update( bool forceUpdate = false )
+		public void Update()
+		{
+			Update( false );
+		}
+
+
+		public void Update( bool forceUpdate )
 		{
 			if (Dirty || forceUpdate)
 			{

@@ -81,8 +81,8 @@ namespace InControl
 
 				DPadLeftMapping( Analog5 ),
 				DPadRightMapping( Analog5 ),
-				DPadUpMapping( Analog6 ),
-				DPadDownMapping( Analog6 ),
+				DPadUpMapping2( Analog6 ),
+				DPadDownMapping2( Analog6 ),
 
 				new InputControlMapping {
 					Handle = "Left Trigger",

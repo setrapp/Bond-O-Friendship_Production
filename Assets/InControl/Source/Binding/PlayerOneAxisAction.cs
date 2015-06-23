@@ -24,7 +24,7 @@ namespace InControl
 		internal void Update( ulong updateTick, float deltaTime )
 		{
 			var value = ValueFromSides( negativeAction, positiveAction );
-			UpdateWithValue( value, updateTick, deltaTime );
+			CommitWithValue( value, updateTick, deltaTime );
 		}
 
 

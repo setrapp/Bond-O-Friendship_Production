@@ -16,6 +16,10 @@ namespace InControl
 				"Android"
 			};
 
+			ExcludePlatforms = new[] {
+				"Amazon AFT"
+			};
+
 			JoystickNames = new[] {
 				"Microsoft X-Box 360 pad"
 			};

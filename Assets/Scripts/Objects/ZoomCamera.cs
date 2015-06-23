@@ -19,7 +19,7 @@ public class ZoomCamera : MonoBehaviour {
 	public float resetSpeed = 0f;
 	private bool resetting = false;
 	[Header("Starting Zoom Only")]
-	public bool zoomToStartingSize = false;
+	//public bool zoomToStartingSize = false;
 	private bool foundStartingZoom = false;
 
 	void Start()
@@ -28,22 +28,22 @@ public class ZoomCamera : MonoBehaviour {
 		{
 			mainCamera = CameraSplitter.Instance.splitCamera1;
 			splitCamera = CameraSplitter.Instance.splitCamera2;
-			startZoom = mainCamera.orthographicSize;
-			if (zoomToStartingSize)
+			startZoom = mainCamera.fieldOfView;
+			/*if (zoomToStartingSize)
 			{
 				zoomTarget = Globals.Instance.startingOrthographicSize;
 			}
 			else
-			{
+			{*/
 				foundStartingZoom = true;
-			}
+			//}
 		}
 	}
 
 	void Update()
 	{
 		// Wait to find starting zoom for special starting zoomer.
-		if (zoomToStartingSize)
+		/*if (zoomToStartingSize)
 		{
 			if (!CameraSplitter.Instance.startZoomComplete)
 			{
@@ -54,7 +54,7 @@ public class ZoomCamera : MonoBehaviour {
 				startZoom = mainCamera.orthographicSize;
 				foundStartingZoom = true;
 			}
-		}
+		}*/
 
 		if (endZoomPortion <= 0)
 		{
@@ -78,9 +78,9 @@ public class ZoomCamera : MonoBehaviour {
 		{
 			float alterPortionComplete = Mathf.Clamp01((oldPortionComplete - startZoomPortion) / (endZoomPortion - startZoomPortion));
 			float zoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
-			mainCamera.orthographicSize = zoom;
-			splitCamera.orthographicSize = zoom;
-			Globals.Instance.orthographicSize = zoom;
+			mainCamera.fieldOfView = zoom;
+			splitCamera.fieldOfView = zoom;
+			Globals.Instance.perspectiveFOV = zoom;
 		}
 	}
 
