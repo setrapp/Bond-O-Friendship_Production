@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 
@@ -27,6 +28,11 @@ namespace InControl
 		public string Name { get; private set; }
 
 		/// <summary>
+		/// Gets the owning action set containing this action.
+		/// </summary>
+		public PlayerActionSet Owner { get; private set; }
+
+		/// <summary>
 		/// Configures how this action listens for new bindings.
 		/// When <c>null</c> (default) the owner's <see cref="PlayerActionSet.ListenOptions"/> will be used.
 		/// <seealso cref="PlayerAction.ListenForBinding()"/>
@@ -44,8 +50,6 @@ namespace InControl
 
 		readonly ReadOnlyCollection<BindingSource> bindings;
 
-		PlayerActionSet owner;
-
 		readonly static BindingSourceListener[] bindingSourceListeners = new BindingSourceListener[] {
 			new DeviceBindingSourceListener(),
 			new KeyBindingSourceListener(),
@@ -62,7 +66,7 @@ namespace InControl
 		{
 			Raw = true;
 			Name = name;
-			this.owner = owner;
+			Owner = owner;
 			bindings = new ReadOnlyCollection<BindingSource>( visibleBindings );
 		}
 
@@ -167,7 +171,7 @@ namespace InControl
 		}
 
 
-		bool HasBinding( BindingSource binding )
+		internal bool HasBinding( BindingSource binding )
 		{
 			if (binding == null)
 			{
@@ -246,7 +250,7 @@ namespace InControl
 		/// </summary>
 		public void ListenForBinding()
 		{
-			owner.listenWithAction = this;
+			Owner.listenWithAction = this;
 
 			var bindingSourceListenerCount = bindingSourceListeners.Length;
 			for (int i = 0; i < bindingSourceListenerCount; i++)
@@ -263,7 +267,7 @@ namespace InControl
 		{
 			if (IsListeningForBinding)
 			{
-				owner.listenWithAction = null;
+				Owner.listenWithAction = null;
 			}
 		}
 
@@ -275,7 +279,7 @@ namespace InControl
 		{
 			get
 			{
-				return owner.listenWithAction == this;
+				return Owner.listenWithAction == this;
 			}
 		}
 
@@ -315,23 +319,30 @@ namespace InControl
 
 		void UpdateBindings( ulong updateTick, float deltaTime )
 		{
-			var bindingCount = regularBindings.Count;
-			for (int i = bindingCount - 1; i >= 0; i--)
+			if (Owner.Enabled)
 			{
-				var binding = regularBindings[i];
-				if (binding.BoundTo != this)
+				var bindingCount = regularBindings.Count;
+				for (int i = bindingCount - 1; i >= 0; i--)
 				{
-					regularBindings.RemoveAt( i );
-					visibleBindings.Remove( binding );
-				}
-				else
-				{
-					var value = binding.GetValue( Device );
-					if (UpdateWithValue( value, updateTick, deltaTime ))
+					var binding = regularBindings[i];
+					if (binding.BoundTo != this)
 					{
-						LastInputType = binding.BindingSourceType;
+						regularBindings.RemoveAt( i );
+						visibleBindings.Remove( binding );
+					}
+					else
+					{
+						var value = binding.GetValue( Device );
+						if (UpdateWithValue( value, updateTick, deltaTime ))
+						{
+							LastInputType = binding.BindingSourceType;
+						}
 					}
 				}
+			}
+			else
+			{
+				UpdateWithValue( 0.0f, updateTick, deltaTime );
 			}
 
 			Commit();
@@ -343,7 +354,7 @@ namespace InControl
 			if (IsListeningForBinding)
 			{
 				BindingSource binding = null;
-				var listenOptions = ListenOptions ?? owner.ListenOptions;
+				var listenOptions = ListenOptions ?? Owner.ListenOptions;
 
 				var bindingSourceListenerCount = bindingSourceListeners.Length;
 				for (int i = 0; i < bindingSourceListenerCount; i++)
@@ -357,27 +368,54 @@ namespace InControl
 
 				if (binding == null)
 				{
-					return;
-				}
-
-				if (HasBinding( binding ))
-				{
+					// No binding found.
 					return;
 				}
 
 				var onBindingFound = listenOptions.OnBindingFound;
 				if (onBindingFound != null && !onBindingFound( this, binding ))
 				{
+					// Binding rejected by user.
+					return;
+				}
+
+				if (HasBinding( binding ))
+				{
+					var onBindingRejected = listenOptions.OnBindingRejected;
+					if (onBindingRejected != null)
+					{
+						onBindingRejected( this, binding, BindingSourceRejectionType.DuplicateBindingOnAction );
+					}
+					return;
+				}
+
+				if (!listenOptions.AllowDuplicateBindingsPerSet && Owner.HasBinding( binding ))
+				{					
+					var onBindingRejected = listenOptions.OnBindingRejected;
+					if (onBindingRejected != null)
+					{
+						onBindingRejected( this, binding, BindingSourceRejectionType.DuplicateBindingOnActionSet );
+					}
 					return;
 				}
 
 				StopListeningForBinding();
 
-				if (listenOptions.MaxAllowedBindings > 0)
+				if (listenOptions.MaxAllowedBindingsPerType > 0)
 				{
-					while (regularBindings.Count >= listenOptions.MaxAllowedBindings)
+					while (regularBindings.Count( b => b.BindingSourceType == binding.BindingSourceType ) >= listenOptions.MaxAllowedBindingsPerType)
 					{
-						regularBindings.RemoveAt( 0 );
+						regularBindings.RemoveAt( regularBindings.FindIndex( b => b.BindingSourceType == binding.BindingSourceType ) );
+					}
+				}
+				else
+				{
+					if (listenOptions.MaxAllowedBindings > 0)
+					{
+						while (regularBindings.Count >= listenOptions.MaxAllowedBindings)
+						{
+							regularBindings.RemoveAt( 0 );
+						}
 					}
 				}
 
@@ -415,7 +453,7 @@ namespace InControl
 			{
 				if (device == null)
 				{
-					device = owner.Device;
+					device = Owner.Device;
 					UpdateVisibleBindings();
 				}
 

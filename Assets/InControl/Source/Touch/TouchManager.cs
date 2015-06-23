@@ -25,8 +25,15 @@ namespace InControl
 		public Camera touchCamera;
 		public GizmoShowOption controlsShowGizmos = GizmoShowOption.Always;
 
+		[HideInInspector]
+		public bool enableControlsOnTouch = false;
+
 		[SerializeField, HideInInspector]
 		bool _controlsEnabled = true;
+
+		// Defaults to UI layer.
+		[HideInInspector]
+		public int controlsLayer = 5;
 
 		public static event Action OnSetup;
 
@@ -350,6 +357,16 @@ namespace InControl
 		void InvokeTouchEvents()
 		{
 			var touchCount = activeTouches.Count;
+
+			if (enableControlsOnTouch)
+			{
+				if (touchCount > 0 && !controlsEnabled)
+				{
+					Device.RequestActivation();
+					controlsEnabled = true;
+				}
+			}
+
 			for (int i = 0; i < touchCount; i++)
 			{
 				var touch = activeTouches[i];

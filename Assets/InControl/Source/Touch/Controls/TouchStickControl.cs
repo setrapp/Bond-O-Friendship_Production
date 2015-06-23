@@ -212,6 +212,7 @@ namespace InControl
 			value.y = inputCurve.Evaluate( Mathf.Abs( value.y ) ) * Mathf.Sign( value.y );
 
 			KnobPosition = movedPosition;
+			RingPosition = beganPosition;
 		}
 
 

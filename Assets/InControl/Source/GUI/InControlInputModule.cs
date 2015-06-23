@@ -1,5 +1,4 @@
-﻿#if UNITY_4_6 || UNITY_5_0
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using InControl;
 
@@ -39,6 +38,10 @@ namespace InControl
 		float nextMoveRepeatTime;
 		float lastVectorPressedTime;
 		TwoAxisInputControl direction;
+
+		public PlayerAction SubmitAction { get; set; }
+		public PlayerAction CancelAction { get; set; }
+		public PlayerTwoAxisAction MoveAction { get; set; }
 
 
 		protected InControlInputModule()
@@ -92,11 +95,6 @@ namespace InControl
 			lastMousePosition = Input.mousePosition;
 
 			var selectObject = eventSystem.currentSelectedGameObject;
-
-			if (selectObject == null)
-			{
-				selectObject = eventSystem.lastSelectedGameObject;
-			}
 
 			if (selectObject == null)
 			{
@@ -172,7 +170,14 @@ namespace InControl
 
 			if (axisEventData.moveDir != MoveDirection.None)
 			{
-				ExecuteEvents.Execute( eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler );
+				if (eventSystem.currentSelectedGameObject == null)
+				{
+					eventSystem.SetSelectedGameObject( eventSystem.firstSelectedGameObject, GetBaseEventData() );
+				}
+				else
+				{
+					ExecuteEvents.Execute( eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler );
+				}
 				SetVectorRepeatTimer();
 			}
 
@@ -263,8 +268,6 @@ namespace InControl
 					newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>( currentOverGo );
 				}
 
-				// Debug.Log("Pressed: " + newPressed);
-
 				float time = Time.unscaledTime;
 
 				if (newPressed == pointerEvent.lastPress)
@@ -301,12 +304,9 @@ namespace InControl
 			// PointerUp notification
 			if (data.ReleasedThisFrame())
 			{
-				// Debug.Log("Executing pressup on: " + pointer.pointerPress);
 				ExecuteEvents.Execute( pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerUpHandler );
 
-				// Debug.Log("KeyCode: " + pointer.eventData.keyCode);
-
-				// see if we mouse up on the same element that we clicked on...
+				// See if we mouse up on the same element that we clicked on...
 				var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>( currentOverGo );
 
 				// PointerClick and Drop events
@@ -332,7 +332,7 @@ namespace InControl
 				pointerEvent.dragging = false;
 				pointerEvent.pointerDrag = null;
 
-				// redo pointer enter / exit to refresh state
+				// Redo pointer enter / exit to refresh state
 				// so that if we moused over somethign that ignored it before
 				// due to having pressed on something else
 				// it now gets it.
@@ -370,14 +370,16 @@ namespace InControl
 			lastVectorState = thisVectorState;
 			thisVectorState = Vector2.zero;
 
-			if (Mathf.Abs( direction.X ) > analogMoveThreshold)
+			TwoAxisInputControl dir = MoveAction ?? direction;
+			
+			if (Mathf.Abs( dir.X ) > analogMoveThreshold)
 			{
-				thisVectorState.x = Mathf.Sign( direction.X );
+				thisVectorState.x = Mathf.Sign( dir.X );
 			}
 
-			if (Mathf.Abs( direction.Y ) > analogMoveThreshold)
+			if (Mathf.Abs( dir.Y ) > analogMoveThreshold)
 			{
-				thisVectorState.y = Mathf.Sign( direction.Y );
+				thisVectorState.y = Mathf.Sign( dir.Y );
 			}
 
 			if (VectorIsReleased)
@@ -403,10 +405,10 @@ namespace InControl
 			}
 
 			lastSubmitState = thisSubmitState;
-			thisSubmitState = SubmitButton.IsPressed;
+			thisSubmitState = SubmitAction == null ? SubmitButton.IsPressed : SubmitAction.IsPressed;
 
 			lastCancelState = thisCancelState;
-			thisCancelState = CancelButton.IsPressed;
+			thisCancelState = CancelAction == null ? CancelButton.IsPressed : CancelAction.IsPressed;
 		}
 
 
@@ -525,5 +527,5 @@ namespace InControl
 		}
 	}
 }
-#endif
+
 

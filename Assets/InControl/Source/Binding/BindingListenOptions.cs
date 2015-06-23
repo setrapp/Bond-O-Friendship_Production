@@ -34,9 +34,24 @@ namespace InControl
 		/// The maximum number of bindings allowed for the action. 
 		/// If a new binding is detected and would cause this number to be exceeded, 
 		/// enough bindings are removed to make room before adding the new binding.
-		/// If set to zero (default), no limit is applied.
+		/// When zero (default), no limit is applied.
 		/// </summary>
 		public uint MaxAllowedBindings = 0;
+
+		/// <summary>
+		/// The maximum number of bindings of a given type allowed for the action. 
+		/// If a new binding is detected and would cause this number to be exceeded, 
+		/// enough bindings are removed to make room before adding the new binding.
+		/// When zero (default), no limit is applied.
+		/// When nonzero, this setting overrides MaxAllowedBindings.
+		/// </summary>
+		public uint MaxAllowedBindingsPerType = 0;
+
+
+		/// <summary>
+		/// Allow bindings that are already bound to any other action in the set.
+		/// </summary>
+		public bool AllowDuplicateBindingsPerSet = false;
 
 		/// <summary>
 		/// This function is called when a binding is found but before it is added.
@@ -51,6 +66,13 @@ namespace InControl
 		/// If set to <code>null</code> (default), it will not be called.
 		/// </summary>
 		public Action<PlayerAction, BindingSource> OnBindingAdded = null;
+
+		/// <summary>
+		/// This action is called after a binding is found, but rejected along with 
+		/// the reason (BindingSourceRejectionType) why it was rejected.
+		/// If set to <code>null</code> (default), it will not be called.
+		/// </summary>
+		public Action<PlayerAction, BindingSource, BindingSourceRejectionType> OnBindingRejected = null;
 	}
 }
 

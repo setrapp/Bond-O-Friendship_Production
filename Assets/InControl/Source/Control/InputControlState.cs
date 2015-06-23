@@ -24,14 +24,16 @@ namespace InControl
 		public void Set( float value )
 		{
 			Value = value;
-			State = !Mathf.Approximately( value, 0.0f );
+//			State = !Mathf.Approximately( value, 0.0f );
+			State = Utility.IsNotZero( value );
 		}
 
 
 		public void Set( float value, float threshold )
 		{
 			Value = value;
-			State = Mathf.Abs( value ) > threshold;
+//			State = Mathf.Abs( value ) > threshold;
+			State = Utility.AbsoluteIsOverThreshold( value, threshold );
 		}
 
 
@@ -57,13 +59,15 @@ namespace InControl
 
 		public static bool operator ==( InputControlState a, InputControlState b )
 		{
-			return Mathf.Approximately( a.Value, b.Value );
+			if (a.State != b.State) return false;
+			return Utility.Approximately( a.Value, b.Value );
 		}
 
 
 		public static bool operator !=( InputControlState a, InputControlState b )
 		{
-			return !Mathf.Approximately( a.Value, b.Value );
+			if (a.State == b.State) return false;
+			return !Utility.Approximately( a.Value, b.Value );
 		}
 	}
 }

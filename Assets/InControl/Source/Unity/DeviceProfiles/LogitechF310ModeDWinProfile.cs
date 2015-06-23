@@ -13,8 +13,7 @@ namespace InControl
 			Meta = "Logitech F310 Controller on Windows (DirectInput Mode)";
 
 			SupportedPlatforms = new[] {
-				"Windows",
-				"OS X"
+				"Windows"
 			};
 
 			JoystickNames = new[] {

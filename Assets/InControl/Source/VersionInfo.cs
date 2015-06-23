@@ -45,7 +45,7 @@ namespace InControl
 		/// <param name="minor">The minor version component.</param>
 		/// <param name="patch">The patch version component.</param>
 		/// <param name="build">The build version component.</param>
-		public VersionInfo( int major, int minor = 0, int patch = 0, int build = 0 )
+		public VersionInfo( int major, int minor, int patch, int build )
 		{
 			Major = major;
 			Minor = minor;
@@ -64,8 +64,8 @@ namespace InControl
 			return new VersionInfo() {
 				Major = 1,
 				Minor = 5,
-				Patch = 1,
-				Build = 4840
+				Patch = 5,
+				Build = 5366
 			};
 		}
 

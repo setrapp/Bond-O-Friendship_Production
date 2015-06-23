@@ -24,7 +24,7 @@ namespace InControl
 
 			LastResortRegex = "360";
 
-			MaxUnityVersion = new VersionInfo( 4, 9 );
+			MaxUnityVersion = new VersionInfo( 4, 9, 0, 0 );
 
 			ButtonMappings = new[] {
 				new InputControlMapping {

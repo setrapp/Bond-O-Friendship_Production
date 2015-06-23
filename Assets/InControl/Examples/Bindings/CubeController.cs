@@ -18,11 +18,10 @@ namespace BindingsExample
 		public PlayerAction Down;
 		public PlayerTwoAxisAction Move;
 
-        
 
 		public PlayerActions()
 		{
-			Fire = CreatePlayerAction( "Fire 1" );
+			Fire = CreatePlayerAction( "Fire" );
 			Jump = CreatePlayerAction( "Jump" );
 			Left = CreatePlayerAction( "Move Left" );
 			Right = CreatePlayerAction( "Move Right" );
@@ -30,16 +29,15 @@ namespace BindingsExample
 			Down = CreatePlayerAction( "Move Down" );
 			Move = CreateTwoAxisPlayerAction( Left, Right, Down, Up );
 		}
-        
 	}
 
 
 	public class CubeController : MonoBehaviour
 	{
+		Renderer cachedRenderer;
 		PlayerActions playerInput;
 		string saveData;
 
-        public bool waiting = false;
 
 		void OnEnable()
 		{
@@ -72,6 +70,7 @@ namespace BindingsExample
 			playerInput.Right.AddDefaultBinding( Mouse.PositiveX );
 
 			playerInput.ListenOptions.MaxAllowedBindings = 3;
+//			playerInput.ListenOptions.MaxAllowedBindingsPerType = 1;
 
 			playerInput.ListenOptions.OnBindingFound = ( action, binding ) =>
 			{
@@ -85,31 +84,42 @@ namespace BindingsExample
 
 			playerInput.ListenOptions.OnBindingAdded += ( action, binding ) =>
 			{
-				Debug.Log( "Added binding... " + binding.DeviceName + ": " + binding.Name );
-                waiting = false;
+				Debug.Log( "Binding added... " + binding.DeviceName + ": " + binding.Name );
+			};
+
+			playerInput.ListenOptions.OnBindingRejected += ( action, binding, reason ) =>
+			{
+				Debug.Log( "Binding rejected... " + reason );
 			};
 
 			LoadBindings();
 		}
 
 
+		void Start()
+		{
+			cachedRenderer = GetComponent<Renderer>();
+//			playerInput.Enabled = false;
+		}
+
+
 		void Update()
 		{
-            playerInput.Device = InputManager.Devices[0];
-            playerInput.ListenOptions.IncludeKeys = false;
 
 			transform.Rotate( Vector3.down, 500.0f * Time.deltaTime * playerInput.Move.X, Space.World );
 			transform.Rotate( Vector3.right, 500.0f * Time.deltaTime * playerInput.Move.Y, Space.World );
 
-            //if(!waiting)
-            
-
 			var fireColor = playerInput.Fire.IsPressed ? Color.red : Color.white;
 			var jumpColor = playerInput.Jump.IsPressed ? Color.green : Color.white;
 
-			GetComponent<Renderer>().material.color = Color.Lerp( fireColor, jumpColor, 0.5f );
-		}
+			cachedRenderer.material.color = Color.Lerp( fireColor, jumpColor, 0.5f );
 
+			if (playerInput.Fire.WasPressed)
+				Debug.Log( "Pressed" );
+
+			if (playerInput.Fire.WasReleased)
+				Debug.Log( "Released" );
+		}
 
 		void SaveBindings()
 		{
@@ -188,7 +198,7 @@ namespace BindingsExample
 
 				if (GUI.Button( new Rect( 20, y + 3.0f, 20, h - 5.0f ), "+" ))
 				{
-                    action.ListenForBinding();
+					action.ListenForBinding();
 				}
 
 				if (GUI.Button( new Rect( 50, y + 3.0f, 50, h - 5.0f ), "Reset" ))

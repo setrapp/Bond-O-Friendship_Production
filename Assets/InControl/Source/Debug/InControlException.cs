@@ -22,11 +22,5 @@ namespace InControl
 			: base( message, inner )
 		{
 		}
-
-
-		protected InControlException( SerializationInfo info, StreamingContext context )
-			: base( info, context )
-		{
-		}
 	}
 }

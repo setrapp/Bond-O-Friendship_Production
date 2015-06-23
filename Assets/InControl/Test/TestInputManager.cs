@@ -67,8 +67,10 @@ namespace InControl
 
 		void Start()
 		{
-			var unityDeviceManager = InputManager.GetDeviceManager<UnityInputDeviceManager>();
-			unityDeviceManager.ReloadDevices();
+//			var unityDeviceManager = InputManager.GetDeviceManager<UnityInputDeviceManager>();
+//			unityDeviceManager.ReloadDevices();
+
+			Debug.Log( "IntPtr.Size = " + IntPtr.Size );
 		}
 
 

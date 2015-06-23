@@ -7,11 +7,15 @@ namespace CustomProfileExample
 {
 	public class CubeController : MonoBehaviour
 	{
+		Renderer cachedRenderer;
 		Vector3 targetPosition;
 
 
 		void Start()
 		{
+			// Get the renderer.
+			cachedRenderer = GetComponent<Renderer>();
+
 			// Get the starting position of the object.
 			targetPosition = transform.position;
 		}
@@ -23,7 +27,7 @@ namespace CustomProfileExample
 			var inputDevice = InputManager.ActiveDevice;
 
 			// Set target object material color based on which action is pressed.
-			GetComponent<Renderer>().material.color = GetColorFromActionButtons( inputDevice );
+			cachedRenderer.material.color = GetColorFromActionButtons( inputDevice );
 
 			// Rotate target object with both sticks and d-pad.
 			transform.Rotate( Vector3.down, 500.0f * Time.deltaTime * inputDevice.Direction.X, Space.World );

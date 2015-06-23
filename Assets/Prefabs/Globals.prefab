@@ -690,6 +690,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!20 &2049150
 Camera:
   m_ObjectHideFlags: 1
@@ -722,6 +723,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!23 &2349144
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -1768,8 +1770,8 @@ MonoBehaviour:
   startingPerspectiveFOV: 0
   orthographicSize: 20
   startingOrthographicSize: 0
-  zoomIntroInEditor: 0
-  earlyBondInEditor: 1
+  zoomIntroInEditor: 1
+  earlyBondInEditor: 0
   allowInput: 1
   audioVolume: -1
   mute: 1
@@ -2030,7 +2032,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: earlyBondInEditor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: zoomIntroInEditor
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 149132}
