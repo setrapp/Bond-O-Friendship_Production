@@ -55,9 +55,9 @@ public class StreamReaction : MonoBehaviour {
 			}
 		}
 
-		if (reactable)
+		if (reactable && enabled && gameObject.activeInHierarchy)
 		{
-			bool reacted = (actionRate >= 0 && reactionProgress < 1) || (actionRate <= 0 && reactionProgress > 0);
+			bool reacted = (actionRate >= 0 && reactionProgress < 1) || (actionRate < 0 && reactionProgress > 0);
 			reactionProgress = CalculateReaction(actionRate);
 
 			if (actionRate > 0)
