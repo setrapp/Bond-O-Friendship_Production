@@ -674,8 +674,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
+  near clip plane: 45
+  far clip plane: 750
   field of view: 25
   orthographic: 0
   orthographic size: 20
@@ -707,8 +707,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
+  near clip plane: 45
+  far clip plane: 750
   field of view: 25
   orthographic: 0
   orthographic size: 20
@@ -1771,10 +1771,10 @@ MonoBehaviour:
   orthographicSize: 20
   startingOrthographicSize: 0
   zoomIntroInEditor: 1
-  earlyBondInEditor: 0
+  earlyBondInEditor: 1
   allowInput: 1
   audioVolume: -1
-  mute: 1
+  mute: 0
   bgm: {fileID: 8294998}
   levelsBackgroundAudio:
   - {fileID: 8294998}
@@ -1892,9 +1892,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logDebugInfo: 0
   invertYAxis: 0
-  enableXInput: 0
   useFixedUpdate: 0
   dontDestroyOnLoad: 0
+  enableXInput: 0
+  xInputUpdateRate: 0
+  xInputBufferSize: 0
   customProfiles: []
 --- !u!114 &11449146
 MonoBehaviour:
@@ -2035,11 +2037,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: earlyBondInEditor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: zoomIntroInEditor
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mute
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
