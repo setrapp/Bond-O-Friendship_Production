@@ -9,8 +9,8 @@ public class SeasonManager : MonoBehaviour {
 
 	public enum ActiveSeason
 	{
-		DRY = 1,
-		WET = 2,
-		COLD = 4
+		DRY = 0,
+		WET = 1,
+		COLD = 2
 	}
 }

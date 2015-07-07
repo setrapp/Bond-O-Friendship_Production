@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11490240}
   - 114: {fileID: 11430974}
   - 135: {fileID: 13574892}
+  - 114: {fileID: 11475126}
   m_Layer: 16
   m_Name: Blossom
   m_TagString: Bud
@@ -148,6 +149,25 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &11475126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58060a68ff820744da25a7bc3d091b3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  managerSearchTag: Island
+  manager: {fileID: 0}
+  body: {fileID: 0}
+  destroyInSpace: {fileID: 0}
+  seasonDragFactors:
+  - 1
+  - 10
+  - .200000003
 --- !u!114 &11490240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -191,7 +211,19 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[1]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[2]
+      value: .200000003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
