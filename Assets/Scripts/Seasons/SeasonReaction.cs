@@ -6,7 +6,6 @@ public class SeasonReaction : MonoBehaviour {
 	public string managerSearchTag = "Island";
 	public SeasonManager manager = null;
 	protected SeasonManager.ActiveSeason season = SeasonManager.ActiveSeason.DRY;
-	protected bool seasonChanged = false;
 
 
 	protected virtual void Start()
@@ -33,16 +32,16 @@ public class SeasonReaction : MonoBehaviour {
 		{
 			enabled = false;
 		}
-		seasonChanged = false;
 	}
 
 	protected virtual void Update()
 	{
-		seasonChanged = false;
 		if (manager != null && season != manager.activeSeason)
 		{
 			season = manager.activeSeason;
-			seasonChanged = true;
+			ApplySeasonChanges();
 		}
 	}
+
+	protected virtual void ApplySeasonChanges() { }
 }
