@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SeasonObjectReaction : SeasonReaction {
 
 	public Rigidbody body;
 	public DestroyInSpace destroyInSpace;
+	public CrumpleMesh crumpleMesh;
 	private float baseDrag;
 	public float[] seasonDragFactors = new float[3];
-	/*private float dryDrag;
-	public float wetDrag;
-	public float coldDrag;*/
+	public Renderer reactionRenderer;
+	public Color[] seasonColors = new Color[3];
+	private Vector3 normalScale = new Vector3(1, 1, 1);
+	public Vector3 wetScale = new Vector3(1, 1, 1);
 
 	protected override void Start()
 	{
@@ -23,12 +26,28 @@ public class SeasonObjectReaction : SeasonReaction {
 		{
 			destroyInSpace = GetComponent<DestroyInSpace>();
 		}
+		if (crumpleMesh == null)
+		{
+			crumpleMesh = GetComponent<CrumpleMesh>();
+		}
+		if (reactionRenderer == null)
+		{
+			reactionRenderer = GetComponent<Renderer>();
+		}
 
 		if (body != null)
 		{
 			baseDrag = body.drag;
 		}
-		ApplySeasonDrag();
+
+		if (seasonColors.Length > 0 && reactionRenderer != null)
+		{
+			seasonColors[0] = reactionRenderer.material.color;
+		}
+
+		normalScale = transform.localScale;
+
+		ApplySeasonChanges();
 	}
 
 	override protected void Update()
@@ -37,18 +56,26 @@ public class SeasonObjectReaction : SeasonReaction {
 		
 		if (seasonChanged)
 		{
-			ApplySeasonDrag();
+			ApplySeasonChanges();
 		}
 	}
 
-	private void ApplySeasonDrag()
+	private void ApplySeasonChanges()
 	{
-		if (body != null)
+		// Drag.
+		if (body != null && seasonDragFactors.Length >= 3)
 		{
 			body.drag = baseDrag * seasonDragFactors[(int)season];
 		}
 
-		if (destroyInSpace)
+		// Color.
+		if (seasonColors.Length >= 3 && reactionRenderer != null)
+		{
+			reactionRenderer.material.color = seasonColors[(int)season];
+		}
+
+		// Allow existence in space if in cold season.
+		if (destroyInSpace != null)
 		{
 			if (season == SeasonManager.ActiveSeason.COLD)
 			{
@@ -58,6 +85,30 @@ public class SeasonObjectReaction : SeasonReaction {
 			{
 				destroyInSpace.enabled = true;
 			}
+		}
+
+		// Stop jiggling in cold season.
+		if (crumpleMesh != null)
+		{
+			if (season == SeasonManager.ActiveSeason.COLD)
+			{
+				crumpleMesh.enabled = false;
+			}
+			else
+			{
+				crumpleMesh.enabled = true;
+			}
+		}
+
+		// Alter Scale if in wet season
+		if (season == SeasonManager.ActiveSeason.WET)
+		{
+			normalScale = transform.localScale;
+			transform.localScale = wetScale;
+		}
+		else
+		{
+			transform.localScale = normalScale;
 		}
 		
 	}
