@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class SeasonPlayerReaction : SeasonReaction {
 
 	public CharacterComponents character;
+	public float[] seasonDragFactors = new float[3];
+	private float baseDrag;
 	public float[] seasonLengthFactors = new float[3];
 
 	protected override void Start()
@@ -16,6 +18,11 @@ public class SeasonPlayerReaction : SeasonReaction {
 			character = GetComponent<CharacterComponents>();
 		}
 
+		if (character != null && character.body != null)
+		{
+			baseDrag = character.body.drag;
+		}
+
 		ApplySeasonChanges();
 	}
 
@@ -23,34 +30,56 @@ public class SeasonPlayerReaction : SeasonReaction {
 	{
 		base.ApplySeasonChanges();
 		
+		/*TOOD change tail length???*/
+
 		if (character != null && character.bondAttachable != null && seasonLengthFactors.Length >= 3)
 		{
-			BondAttachable bondAttachable = character.bondAttachable;
-			for (int i = 0; i < bondAttachable.bonds.Count; i++)
+			for (int i = 0; i < character.bondAttachable.bonds.Count; i++)
 			{
-				
-				BondAttachable bondPartner = bondAttachable.bonds[i].OtherPartner(character.bondAttachable);
+				BondAttachable bondPartner = character.bondAttachable.bonds[i].OtherPartner(character.bondAttachable);
 				if (bondPartner == Globals.Instance.player1.character.bondAttachable || bondPartner == Globals.Instance.player2.character.bondAttachable)
 				{
-					Bond playerBond = character.bondAttachable.bonds[i];
-					BondStats attachableStats = bondAttachable.bondOverrideStats.stats;
-
-					switch(season)
-					{
-						case SeasonManager.ActiveSeason.DRY:
-							/*TODO Attempt to maintain length by requestion fluffs from players*/
-							playerBond.stats.maxDistance = attachableStats.maxDistance;
-							break;
-						case SeasonManager.ActiveSeason.WET:
-							playerBond.stats.maxDistance = (attachableStats.maxDistance + (attachableStats.maxFluffCapacity * attachableStats.extensionPerFluff));
-							break;
-						case SeasonManager.ActiveSeason.COLD:
-							playerBond.stats.maxDistance = attachableStats.maxDistance;
-							break;
-					}
-					playerBond.stats.maxDistance *= seasonLengthFactors[(int)season];
+					BondSeasionReact(character.bondAttachable.bonds[i]);
 				}
 			}
 		}
+
+		if (character != null && character.body != null)
+		{
+			character.body.drag = baseDrag * seasonDragFactors[(int)season];
+		}
+	}
+
+	private void BondSeasionReact(Bond reactingBond)
+	{
+		BondStats attachableStats = character.bondAttachable.bondOverrideStats.stats;
+
+		switch (season)
+		{
+			case SeasonManager.ActiveSeason.DRY:
+				/*TODO Attempt to maintain length by requestion fluffs from players*/
+				reactingBond.stats.maxDistance = attachableStats.maxDistance;
+				reactingBond.stats.maxFluffCapacity = attachableStats.maxFluffCapacity;
+				break;
+			case SeasonManager.ActiveSeason.WET:
+				reactingBond.stats.maxDistance = (attachableStats.maxDistance + (attachableStats.maxFluffCapacity * attachableStats.extensionPerFluff));
+				reactingBond.stats.maxFluffCapacity = 0;
+				break;
+			case SeasonManager.ActiveSeason.COLD:
+				reactingBond.stats.maxDistance = attachableStats.maxDistance;
+				reactingBond.stats.maxFluffCapacity = 0;
+				break;
+		}
+		reactingBond.stats.maxDistance *= seasonLengthFactors[(int)season];
+	}
+
+	public void ChangeActiveLevel(Island activeIsland)
+	{
+		FindManager(true);
+	}
+
+	public void BondAttached(Bond newBond)
+	{
+		BondSeasionReact(newBond);
 	}
 }

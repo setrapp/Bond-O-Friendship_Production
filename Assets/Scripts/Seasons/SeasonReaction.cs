@@ -10,9 +10,28 @@ public class SeasonReaction : MonoBehaviour {
 
 	protected virtual void Start()
 	{
+		FindManager();
+	}
+
+	protected virtual void Update()
+	{
+		if (manager != null && season != manager.activeSeason)
+		{
+			season = manager.activeSeason;
+			ApplySeasonChanges();
+		}
+	}
+
+	protected void FindManager(bool resetPreCheck = false)
+	{
+		if (resetPreCheck)
+		{
+			manager = null;
+		}
+
 		// Find the season manager that controls this object by checking the transform parents.
 		Transform parent = transform.parent;
-		while(manager == null && parent != null)
+		while (manager == null && parent != null)
 		{
 			if (parent.gameObject.tag == managerSearchTag)
 			{
@@ -27,19 +46,11 @@ public class SeasonReaction : MonoBehaviour {
 		if (manager != null)
 		{
 			season = manager.activeSeason;
+			enabled = true;
 		}
 		else
 		{
 			enabled = false;
-		}
-	}
-
-	protected virtual void Update()
-	{
-		if (manager != null && season != manager.activeSeason)
-		{
-			season = manager.activeSeason;
-			ApplySeasonChanges();
 		}
 	}
 
