@@ -12,6 +12,7 @@ public class SpawnLand : MonoBehaviour {
 	private Color threadColor;
 	private Color childColor;
 	private bool removed;
+	public float colliderZDepth = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +28,11 @@ public class SpawnLand : MonoBehaviour {
 			{
 				land = (GameObject)Instantiate(landPrefab);
 				land.transform.position = transform.position + new Vector3(0, 0, .004f);
+				Collider landCollider = land.GetComponentInChildren<Collider>();
+				if (landCollider != null)
+				{
+					landCollider.transform.localPosition += new Vector3(0, colliderZDepth, 0);
+				}
 			}
 			else if(land.transform.localScale.x <= maxLandSize)
 			{

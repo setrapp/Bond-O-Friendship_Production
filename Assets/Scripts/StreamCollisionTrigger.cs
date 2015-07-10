@@ -15,6 +15,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	public bool warnForBody = true;
 	public Collider ignoreCollider;
 	
+	//public bool debug = false;
 
 	void Start()
 	{
@@ -33,7 +34,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		wasBlocking = blockStream;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		// Keep body moving to ensure that collisions are listened for.
 		transform.position += oscillateDirection * oscillateAmount * Time.deltaTime;
@@ -140,6 +141,8 @@ public class StreamCollisionTrigger : MonoBehaviour {
 
 	void OnDestroy()
 	{
+		//if (debug)
+			//Debug.Log ("Destroyed" + streamsTouched.Count);
 		while (streamsTouched.Count > 0)
 		{
 			RemoveStreamTouched(0);
