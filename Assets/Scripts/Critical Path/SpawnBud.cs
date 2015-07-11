@@ -26,7 +26,7 @@ public class SpawnBud : MonoBehaviour {
 		{
 			fadeTimer -= Time.deltaTime;
 			if(!scaling)
-				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2, 2.0f - fadeTimer*2, 2.0f - fadeTimer*2);
+				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f);
 			GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
 
 			if(fadeTimer <= 0)
@@ -62,7 +62,7 @@ public class SpawnBud : MonoBehaviour {
 			Destroy(nodePart.gameObject, 2.0f);
 			newBud = (GameObject)Instantiate(bud);
 			newBud.transform.position = transform.position;
-			newBud.transform.localScale = new Vector3(0, 0, 0);
+			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
 			//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
             newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;

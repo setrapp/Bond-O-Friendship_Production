@@ -65,7 +65,7 @@ public class Stream : StreamBody {
 		UpdateMovement();
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		if (streamBlockers <= 0)
 		{

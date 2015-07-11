@@ -49,7 +49,7 @@ public class StreamReactionList : StreamReaction {
 					streamReactions.RemoveAt(i);
 					i--;
 				}
-				else
+				else if (streamReactions[i].enabled && streamReactions[i].gameObject.activeInHierarchy)
 				{
 					streamReactions[i].React(actionRate * reactionRate);
 

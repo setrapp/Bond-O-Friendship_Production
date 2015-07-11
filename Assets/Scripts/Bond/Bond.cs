@@ -83,7 +83,7 @@ public class Bond : MonoBehaviour {
 
 		if (attachment1.attachee != null || attachment2.attachee != null)
 		{
-			StartCoroutine(UpdateBondCount(atSparseDetail));
+			UpdateBondCount(atSparseDetail);
 
 			bool isCountEven = links.Count % 2 == 0;
 
@@ -129,20 +129,6 @@ public class Bond : MonoBehaviour {
 
 						links[i].transform.up = linkDir;
 					}
-				}
-				else
-				{
-					/*for (int i = 0; i < links.Count; i++)
-					{
-						if (links[i].toNextCollider != null)
-						{
-							links[i].toNextCollider.enabled = false;
-						}
-						if (links[i].toPreviousCollider != null)
-						{
-							links[i].toPreviousCollider.enabled = false;
-						}
-					}*/
 				}
 			}
 
@@ -230,7 +216,7 @@ public class Bond : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator UpdateBondCount(bool atSparseDetail)
+	private void UpdateBondCount(bool atSparseDetail)
 	{
 		bool isCountEven = links.Count % 2 == 0;
 
@@ -257,12 +243,6 @@ public class Bond : MonoBehaviour {
 							AddLink(i + 1, false);
 							bondChanged = true;
 						}
-
-						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-						{
-							linksCheckedOnFrame = 0;
-							yield return null;
-						}
 					}
 				}
 				if (stats.removeLinkDistance >= 0)
@@ -274,12 +254,6 @@ public class Bond : MonoBehaviour {
 						{
 							RemoveLink(i, false);
 							bondChanged = true;
-						}
-
-						if (atSparseDetail && linksCheckedOnFrame >= stats.sparseDetailLinksCheck)
-						{
-							linksCheckedOnFrame = 0;
-							yield return null;
 						}
 					}
 				}
@@ -1010,7 +984,6 @@ public class BondStats
 	public float fullDetailDistance = -1;
 	public float sparseDetailDistance = -1;
 	public float sparseDetailFactor = -1;
-	public float sparseDetailLinksCheck = 1;
 
 	public void Overwrite(BondStats replacement, bool fullOverwrite = false)
 	{
