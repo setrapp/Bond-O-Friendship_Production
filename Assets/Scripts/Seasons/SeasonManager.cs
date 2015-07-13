@@ -13,4 +13,11 @@ public class SeasonManager : MonoBehaviour {
 		WET = 1,
 		COLD = 2
 	}
+
+	public bool AttemptSeasonChange(ActiveSeason newSeason)
+	{
+		activeSeason = newSeason;
+
+		return true;
+	}
 }
