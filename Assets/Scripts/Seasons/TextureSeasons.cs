@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TextureSeasons : MonoBehaviour {
@@ -32,7 +32,7 @@ public class TextureSeasons : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		season = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ().season;
+		season = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasonsOld> ().season;
 		switch(season)
 		{
 		case 0:

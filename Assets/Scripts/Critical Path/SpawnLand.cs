@@ -28,6 +28,7 @@ public class SpawnLand : MonoBehaviour {
 			{
 				land = (GameObject)Instantiate(landPrefab);
 				land.transform.position = transform.position + new Vector3(0, 0, .004f);
+				land.transform.parent = transform.parent;
 				Collider landCollider = land.GetComponentInChildren<Collider>();
 				if (landCollider != null)
 				{

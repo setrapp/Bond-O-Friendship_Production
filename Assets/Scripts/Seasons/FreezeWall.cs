@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FreezeWall : MonoBehaviour {
@@ -13,11 +13,11 @@ public class FreezeWall : MonoBehaviour {
 	private Color iceColor;
 	private Color startColor;
 	private GameObject objects;
-	private ManageSeasons manager;
+	private ManageSeasonsOld manager;
 
 	// Use this for initialization
 	void Start () {
-		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ();
+		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasonsOld> ();
 
 		iceColor = new Color (0.2f, 1.0f, 1.0f);
 		startColor = GetComponent<Renderer>().material.color;
