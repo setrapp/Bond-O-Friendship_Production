@@ -39,6 +39,7 @@ public class SeasonSwitch : MonoBehaviour {
 		if (manager != null)
 		{
 			activeSeason = manager.activeSeason;
+			CheckSeason();
 		}
 		else
 		{
@@ -50,24 +51,34 @@ public class SeasonSwitch : MonoBehaviour {
 	{
 		if (manager != null && activeSeason != manager.activeSeason)
 		{
-			if (manager.activeSeason == targetSeason)
-			{
-				switchCollider.enabled = false;
-				switchRenderer.enabled = false;
-			}
-			else
-			{
-				switchCollider.enabled = true;
-				switchRenderer.enabled = true;
-			}
+			CheckSeason();
+			activeSeason = manager.activeSeason;
 		}
 	}
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (manager != null && col.gameObject.tag == ("Player") || col.gameObject.layer == LayerMask.NameToLayer ("Bond"))
+		if (manager != null && (col.gameObject.tag == ("Character") || col.gameObject.layer == LayerMask.NameToLayer ("Bond")))
 		{
-			manager.AttemptSeasonChange(targetSeason);
+			bool seasonChanged = manager.AttemptSeasonChange(targetSeason);
+			if (seasonChanged)
+			{
+				Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
+			}
+		}
+	}
+
+	void CheckSeason()
+	{
+		if (manager.activeSeason == targetSeason)
+		{
+			switchCollider.enabled = false;
+			switchRenderer.enabled = false;
+		}
+		else
+		{
+			switchCollider.enabled = true;
+			switchRenderer.enabled = true;
 		}
 	}
 }

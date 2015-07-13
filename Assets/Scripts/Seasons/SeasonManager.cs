@@ -6,6 +6,8 @@ public class SeasonManager : MonoBehaviour {
 
 
 	public ActiveSeason activeSeason = ActiveSeason.DRY;
+	public float transitionTime = 1;
+	private float startTransition = -1;
 
 	public enum ActiveSeason
 	{
@@ -16,8 +18,12 @@ public class SeasonManager : MonoBehaviour {
 
 	public bool AttemptSeasonChange(ActiveSeason newSeason)
 	{
-		activeSeason = newSeason;
-
-		return true;
+		if (Time.time - startTransition >= transitionTime || startTransition < 0)
+		{
+			startTransition = Time.time;
+			activeSeason = newSeason;
+			return true;
+		}
+		return false;
 	}
 }
