@@ -20,6 +20,9 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 				{
 					StartCoroutine(BackgroundAudioCrossFade.Instance.CrossFade(backgroundAudio, newAudioVolume));
 				}
+
+				Globals.Instance.player1.SendMessage("ChangeActiveLevel", levelToUse, SendMessageOptions.DontRequireReceiver);
+				Globals.Instance.player2.SendMessage("ChangeActiveLevel", levelToUse, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 	}

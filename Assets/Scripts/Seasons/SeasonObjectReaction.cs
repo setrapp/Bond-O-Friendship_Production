@@ -50,18 +50,10 @@ public class SeasonObjectReaction : SeasonReaction {
 		ApplySeasonChanges();
 	}
 
-	override protected void Update()
+	override protected void ApplySeasonChanges()
 	{
-		base.Update();
-		
-		if (seasonChanged)
-		{
-			ApplySeasonChanges();
-		}
-	}
+		base.ApplySeasonChanges();
 
-	private void ApplySeasonChanges()
-	{
 		// Drag.
 		if (body != null && seasonDragFactors.Length >= 3)
 		{
