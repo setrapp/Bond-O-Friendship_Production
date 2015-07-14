@@ -129,4 +129,9 @@ public class CharacterComponents : MonoBehaviour {
 		}
 		componentsFound = true;
 	}
+
+	public void ChangeActiveLevel(Island activeIsland)
+	{
+		transform.parent = activeIsland.transform;
+	}
 }

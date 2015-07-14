@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SpawnLeaves : MonoBehaviour {
@@ -20,7 +20,7 @@ public class SpawnLeaves : MonoBehaviour {
 	private float fadeSpeed;
 	private Color startColor;
 	private int leafArraySize;
-	private ManageSeasons manager;
+	private ManageSeasonsOld manager;
 	private GameObject leaf1Prefab;
 	private GameObject leaf2Prefab;
 	private GameObject leaf3Prefab;
@@ -44,7 +44,7 @@ public class SpawnLeaves : MonoBehaviour {
 
 		startColor = new Color(0, 0, 0, 0);
 
-		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasons> ();
+		manager = GameObject.Find ("Seasons Manager").GetComponent<ManageSeasonsOld> ();
 		area = (halfWidth * halfHeight) * manager.leafDensity;
 		leafArraySize = Mathf.RoundToInt(area) + 1;
 		leaves = new GameObject[leafArraySize];

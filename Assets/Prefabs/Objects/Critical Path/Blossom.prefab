@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11490240}
   - 114: {fileID: 11430974}
   - 135: {fileID: 13574892}
+  - 114: {fileID: 11475126}
   m_Layer: 16
   m_Name: Blossom
   m_TagString: Bud
@@ -132,7 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18679f8be0131fb4082753abc288db40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  budRenderer: {fileID: 0}
   myShadow: {fileID: 0}
+  shadowRenderer: {fileID: 0}
   fadeNow: 0
 --- !u!114 &11447194
 MonoBehaviour:
@@ -148,13 +151,39 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &11475126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124960}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58060a68ff820744da25a7bc3d091b3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  managerSearchTag: Island
+  manager: {fileID: 0}
+  body: {fileID: 0}
+  destroyInSpace: {fileID: 0}
+  crumpleMesh: {fileID: 0}
+  seasonDragFactors:
+  - 1
+  - 10
+  - .200000003
+  reactionRenderer: {fileID: 0}
+  seasonColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: .375084728, g: .0287630018, b: .977941155, a: 1}
+  - {r: .306552768, g: .849515319, b: .926470578, a: 1}
+  wetScale: {x: 2, y: 2, z: 1}
 --- !u!114 &11490240
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124960}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ad34e26df8c9c74b97f78d96f9453c8, type: 3}
   m_Name: 
@@ -192,6 +221,74 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[1]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonDragFactors.Array.data[2]
+      value: .200000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].r
+      value: .375084728
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].g
+      value: .0287630018
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].b
+      value: .977941155
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[2].r
+      value: .306552768
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[2].g
+      value: .849515319
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[2].b
+      value: .926470578
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[2].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: wetScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: wetScale.y
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

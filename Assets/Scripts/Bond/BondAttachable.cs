@@ -87,6 +87,11 @@ public class BondAttachable : MonoBehaviour {
 			}
 		}
 
+		if (newBond != null)
+		{
+			SendMessage("BondAttached", newBond, SendMessageOptions.DontRequireReceiver);
+		}
+
 		return newBond;
 	}
 
