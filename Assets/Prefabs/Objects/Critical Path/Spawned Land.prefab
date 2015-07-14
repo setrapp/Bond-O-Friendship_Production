@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3385500}
   - 64: {fileID: 6485500}
   - 23: {fileID: 2385500}
+  - 114: {fileID: 11460974}
   m_Layer: 0
   m_Name: Spawned Land
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2385500
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -39,15 +40,19 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 48e8b4ce3efe83b488575d91d85101b8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3385500
@@ -67,9 +72,26 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11460974
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 185500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6db71f82bb363764d9a535546e1c7726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  managerSearchTag: Island
+  manager: {fileID: 0}
+  seasonColors:
+  - {r: .768627524, g: 1, b: .811764777, a: 1}
+  - {r: .272058845, g: 1, b: .407776713, a: 1}
+  - {r: .90506053, g: .992647052, b: .921390235, a: 1}
+  seasonRenderer: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -81,4 +103,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 185500}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

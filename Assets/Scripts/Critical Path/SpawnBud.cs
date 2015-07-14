@@ -7,7 +7,7 @@ public class SpawnBud : MonoBehaviour {
 	public GameObject bud;
 	public bool spawned;
 	public Color parentColor;
-    public Color BudColor;
+    //public Color BudColor;
 
 	private float fadeTimer = 1.0f;
 	private bool fading;
@@ -34,6 +34,11 @@ public class SpawnBud : MonoBehaviour {
 				fading = false;
 				scaling = false;
 				newBud.transform.parent = transform;
+				SeasonObjectReaction seasonReaction = newBud.GetComponent<SeasonObjectReaction>();
+				if (seasonReaction != null)
+				{
+					seasonReaction.enabled = true;
+				}
 				fadeTimer = 1.0f;
 			}
 			//	Destroy(gameObject);
@@ -64,7 +69,7 @@ public class SpawnBud : MonoBehaviour {
 			newBud.transform.position = transform.position;
 			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
 			//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
-            newBud.GetComponent<Renderer>().material.color = BudColor;
+            //newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;
 			spawned = true;
 		}
