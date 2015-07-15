@@ -21,7 +21,6 @@ public class StreamArise : MonoBehaviour {
 	void FixedUpdate () {
 
 		myPos = transform.position;
-		My
 		transform.position = myPos;
 
 		if (myThreadPuzzle.GetComponent<ThreadParent> ().solved) 
