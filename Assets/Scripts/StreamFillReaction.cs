@@ -8,7 +8,8 @@ public class StreamFillReaction : StreamReaction {
 	public List<Renderer> fillTargetRenderers;
 	public Color unfilledTint = Color.grey;
 	public Color filledTint = Color.white;
-	private List<Color> baseColors;
+	[HideInInspector]
+	public List<Color> baseColors;
 
 	void Awake()
 	{

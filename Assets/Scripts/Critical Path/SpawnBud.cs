@@ -17,7 +17,7 @@ public class SpawnBud : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		parentColor = GetComponent<Renderer>().material.color;
+		parentColor = transform.parent.GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
@@ -27,7 +27,7 @@ public class SpawnBud : MonoBehaviour {
 			fadeTimer -= Time.deltaTime;
 			if(!scaling)
 				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f);
-			GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
+			transform.parent.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
 
 			if(fadeTimer <= 0)
 			{
