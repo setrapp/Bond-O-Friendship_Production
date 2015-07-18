@@ -38,6 +38,10 @@ public class SpawnLand : MonoBehaviour {
 			else if(land.transform.localScale.x <= maxLandSize)
 			{
 				land.transform.localScale += new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+				if (land.transform.localScale.x >= maxLandSize)
+				{
+					SendMessage("LandFull", SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 		else if(land != null && land.transform.localScale.x > 1.0f && transform.GetComponentInParent<ThreadParent>().solved == false)

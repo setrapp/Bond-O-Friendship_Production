@@ -142,5 +142,11 @@ public class Threader : MonoBehaviour {
 		//print ("fire!");
 	}
 
-
+	void LandFull()
+	{
+		if (threadParent.solved)
+		{
+			threadParent.LandFull();
+		}
+	}
 }
