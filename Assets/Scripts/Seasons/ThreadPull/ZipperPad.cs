@@ -53,19 +53,19 @@ public class ZipperPad : MonoBehaviour {
 		
 		if(anyThreader == true && !wasThreading)
 		{
-			if(playerBond != null)
+			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				defaultbondlength = playerBond.stats.maxDistance;
 				playerBond.stats.maxDistance = desiredbondLength;
-			}
+			}*/
 		}
 		else if(anyThreader == false && wasThreading)
 		{
-			if(playerBond != null)
+			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;
-			}
+			}*/
 		}
 		
 		wasThreading = anyThreader;
@@ -82,7 +82,7 @@ public class ZipperPad : MonoBehaviour {
 
 			if (allSolved)
 			{
-				playerBond.stats.maxDistance = defaultbondlength;
+				//playerBond.stats.maxDistance = defaultbondlength;
 				solved = true;
 				Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
 

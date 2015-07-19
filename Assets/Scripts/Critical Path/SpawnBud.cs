@@ -33,7 +33,13 @@ public class SpawnBud : MonoBehaviour {
 			{
 				fading = false;
 				scaling = false;
-				newBud.transform.parent = transform;
+				newBud.transform.parent = transform.parent;
+				DestroyInSpace budDestroy = newBud.GetComponent<DestroyInSpace>();
+				if (budDestroy)
+				{
+					budDestroy.spawner = this;
+					budDestroy.spawnRenderer = transform.parent.GetComponent<Renderer>();
+				}
 				SeasonObjectReaction seasonReaction = newBud.GetComponent<SeasonObjectReaction>();
 				if (seasonReaction != null)
 				{

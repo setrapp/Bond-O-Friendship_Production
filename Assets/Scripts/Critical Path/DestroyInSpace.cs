@@ -6,6 +6,8 @@ public class DestroyInSpace : MonoBehaviour {
 	public LayerMask ignoreLayers;
 	private bool wasFloating = false;
 	private bool falling;
+	public SpawnBud spawner;
+	public Renderer spawnRenderer;
 
 	// Use this for initialization
 	void Start () {
@@ -20,8 +22,8 @@ public class DestroyInSpace : MonoBehaviour {
 			if (!wasFloating)
 			{
 				wasFloating = true;
-				transform.parent.GetComponent<Renderer>().material.color = transform.parent.GetComponent<SpawnBud>().parentColor;
-				transform.GetComponentInParent<SpawnBud>().spawned = false;
+				spawnRenderer.material.color = spawner.parentColor;
+				spawner.spawned = false;
 				falling = true;
 			}
 		}
