@@ -53,7 +53,7 @@ public class IslandContainer : MonoBehaviour {
 				{
 					// Unload other islands and generate atmospheres.
 					LevelHandler.Instance.UnloadIslands();
-					LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
+					//LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
 
 					// Load the target island.
 					StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
@@ -63,7 +63,7 @@ public class IslandContainer : MonoBehaviour {
 			else
 			{
 				// Load the contents of the ether ring that surrounds this island.
-				LevelHandler.Instance.LoadEtherRing(parentRing, this);
+				//LevelHandler.Instance.LoadEtherRing(parentRing, this);
 
 				Globals.Instance.visibilityDepthMaskNeeded = false;
 				if (DepthMaskHolder.Instance != null)
@@ -100,7 +100,7 @@ public class IslandContainer : MonoBehaviour {
 	{
 		GenerateAtmosphere();
 		//TODO uncomment.
-		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
+		//LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 		if (island != null)
 		{
 			island.levelHelper.landingEnabledObjects.ToggleObjects(true);
