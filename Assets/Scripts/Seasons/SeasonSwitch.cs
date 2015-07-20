@@ -9,6 +9,9 @@ public class SeasonSwitch : MonoBehaviour {
 	private SeasonManager.ActiveSeason activeSeason;
 	public Collider switchCollider = null;
 	public Renderer switchRenderer = null;
+	public StreamFillReaction fillReaction = null;
+	public StreamScalingReaction scaleReaction = null;
+	private bool initializedSeason = false;
 
 
 	public void Start()
@@ -20,6 +23,14 @@ public class SeasonSwitch : MonoBehaviour {
 		if (switchRenderer == null)
 		{
 			switchRenderer = GetComponent<Renderer>();
+		}
+		if (fillReaction == null)
+		{
+			fillReaction = GetComponent<StreamFillReaction>();
+		}
+		if (scaleReaction == null)
+		{
+			scaleReaction = GetComponent<StreamScalingReaction>();
 		}
 
 		// Find the season manager that controls this object by checking the transform parents.
@@ -36,12 +47,7 @@ public class SeasonSwitch : MonoBehaviour {
 			}
 		}
 
-		if (manager != null)
-		{
-			activeSeason = manager.activeSeason;
-			CheckSeason();
-		}
-		else
+		if (manager == null)
 		{
 			enabled = false;
 		}
@@ -49,10 +55,11 @@ public class SeasonSwitch : MonoBehaviour {
 
 	void Update()
 	{
-		if (manager != null && activeSeason != manager.activeSeason)
+		if (!initializedSeason || (manager != null && activeSeason != manager.activeSeason))
 		{
 			CheckSeason();
 			activeSeason = manager.activeSeason;
+			initializedSeason = true;
 		}
 	}
 
@@ -73,12 +80,51 @@ public class SeasonSwitch : MonoBehaviour {
 		if (manager.activeSeason == targetSeason)
 		{
 			switchCollider.enabled = false;
-			switchRenderer.enabled = false;
+			RendererToSeason(false);
 		}
 		else
 		{
 			switchCollider.enabled = true;
-			switchRenderer.enabled = true;
+			RendererToSeason(true);
+		}
+	}
+
+	private void RendererToSeason(bool toUsable)
+	{
+		bool rendererFound = false;
+		for (int i = 0; i < fillReaction.fillTargetRenderers.Count && !rendererFound; i++)
+		{
+			if (fillReaction.fillTargetRenderers[i] == switchRenderer)
+			{
+				rendererFound = true;
+				if (toUsable)
+				{
+					switchRenderer.material.color = fillReaction.baseColors[i] * fillReaction.filledTint;
+				}
+				else
+				{
+					switchRenderer.material.color = fillReaction.baseColors[i] * fillReaction.unfilledTint;
+				}
+				
+			}
+		}
+
+		rendererFound = false;
+		for (int i = 0; i < scaleReaction.scalees.Count && !rendererFound; i++)
+		{
+			if (scaleReaction.scalees[i] != null && scaleReaction.scalees[i].scalee == switchRenderer.transform)
+			{
+				rendererFound = true;
+				if (toUsable)
+				{
+					switchRenderer.transform.localScale = scaleReaction.scalees[i].scaled;
+				}
+				else
+				{
+					switchRenderer.transform.localScale = scaleReaction.scalees[i].unscaled;
+				}
+
+			}
 		}
 	}
 }
