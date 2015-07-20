@@ -43,7 +43,7 @@ public class ThreadParent : MonoBehaviour {
         
 		if(anyThreader == true && !wasThreading)
 		{
-			if(playerBond != null)
+			if(playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				defaultbondlength = playerBond.stats.maxDistance;
 				playerBond.stats.maxDistance = desiredbondLength;
@@ -51,7 +51,7 @@ public class ThreadParent : MonoBehaviour {
 		}
 		else if(anyThreader == false && wasThreading)
 		{
-			if(playerBond != null)
+			if(playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;

@@ -26,8 +26,10 @@ public class ActivateGate : MonoBehaviour {
 				}
 		}
 	void OnTriggerExit(Collider col) {
-		if (col.tag == "Character" && playersOnPad > 0)
+		if (col.tag == "Character" && playersOnPad > 0) {
 						playersOnPad--;
+						GetComponent<Renderer> ().material.color = Color.white;
+				}
 
 		gate.SetActive (true);
 	}
