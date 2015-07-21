@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public MembraneCreationLink creationLink = null;
 	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
@@ -66,6 +67,11 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator == null)
 		{
 			membraneCreator = GetComponent<AutoMembrane>();
+		}
+
+		if (creationLink == null)
+		{
+			creationLink = GetComponent<MembraneCreationLink>();
 		}
 
 		if (membraneCreator != null)
