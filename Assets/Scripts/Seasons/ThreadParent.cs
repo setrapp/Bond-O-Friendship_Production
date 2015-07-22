@@ -42,29 +42,29 @@ public class ThreadParent : MonoBehaviour {
 				allThreaders = false;
 			}
 		}
-        
+
 		if(anyThreader == true && !wasThreading)
 		{
-			if(playerBond != null)
+			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				defaultbondlength = playerBond.stats.maxDistance;
 				playerBond.stats.maxDistance = desiredbondLength;
-			}
+			}*/
 		}
 		else if(anyThreader == false && wasThreading)
 		{
-			if(playerBond != null)
+			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;
-			}
+			}*/
 		} 
 
 		wasThreading = anyThreader;
 
 		if(allThreaders == true)
 		{
-			playerBond.stats.maxDistance = defaultbondlength;
+			//playerBond.stats.maxDistance = defaultbondlength;
 			solved = true;
 			BroadcastMessage("MiniFire", SendMessageOptions.DontRequireReceiver);
 		}
