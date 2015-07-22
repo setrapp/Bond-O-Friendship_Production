@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PairedClusterNode : ClusterNode {
+public class MirroringClusterNode : ClusterNode {
 
-    public ClusterNode mirrorNode;
+    public ClusterNode nodeToMirror;
     public bool revealed;
 
 	// Update is called once per frame
@@ -15,6 +15,6 @@ public class PairedClusterNode : ClusterNode {
 
     void MirrorNode()
     {
-        revealed = mirrorNode.GetComponent<ClusterNode>().lit;  
+        revealed = nodeToMirror.lit;  
     }
 }
