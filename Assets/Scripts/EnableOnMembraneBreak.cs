@@ -8,7 +8,7 @@ public class EnableOnMembraneBreak : MonoBehaviour {
 	public bool toEnabled = true;
 	public List<GameObject> enablees;
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane != null && brokenMembrane == membraneWall)
 		{

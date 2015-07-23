@@ -92,7 +92,7 @@ public class IslandContainer : MonoBehaviour {
 		LevelHandler.Instance.ignoreAtmosphereBreaks = false;
 	}
 
-	private void MembraneBreaking(MembraneWall breakingMembrane)
+	private void MembraneWallBreaking(MembraneWall breakingMembrane)
 	{
 		// If atmosphere breaks are being ignored, skip this break.
 		if (LevelHandler.Instance.ignoreAtmosphereBreaks)
@@ -103,8 +103,6 @@ public class IslandContainer : MonoBehaviour {
 		// Handle breaking of the island's atmosphere.
 		if (breakingMembrane != null && atmosphere.Contains(breakingMembrane))
 		{
-			
-
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;
 			Globals.Instance.player2.transform.parent = transform.parent;

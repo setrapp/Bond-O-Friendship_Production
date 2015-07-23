@@ -302,7 +302,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -315,7 +315,7 @@ public class MembraneWall : MonoBehaviour {
 
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBroken", this, SendMessageOptions.DontRequireReceiver);
 		}
 		if (destroyWhenBroken)
 		{
@@ -327,7 +327,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
-			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

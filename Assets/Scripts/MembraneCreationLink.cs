@@ -8,7 +8,7 @@ public class MembraneCreationLink : MonoBehaviour {
 	public List<MembraneWall> linkedMembranes;
 	public bool createLinkedOnBreak = true;
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBreaking(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane != null && brokenMembrane == membraneWallTrigger && createLinkedOnBreak)
 		{
