@@ -155,10 +155,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 192664308}
   m_LocalRotation: {x: 0, y: 0, z: .886300206, w: .463111132}
-  m_LocalPosition: {x: 400.600006, y: 175.199997, z: 3.70000076}
-  m_LocalScale: {x: 1.00002205, y: 105.002892, z: 8.46477127}
+  m_LocalPosition: {x: -80.2999878, y: 90.6999969, z: -.399997711}
+  m_LocalScale: {x: 1.00002193, y: 105.002884, z: 8.46477127}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 481433383}
   m_RootOrder: 2
 --- !u!1001 &231544765
 Prefab:
@@ -423,6 +423,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2096208890}
   m_RootOrder: 0
+--- !u!1 &481433382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 481433383}
+  m_Layer: 0
+  m_Name: Crit Path 1 to Crit Path 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &481433383
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481433382}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 360.646301, y: 71.6725464, z: -7.58750153}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1617616883}
+  - {fileID: 913535640}
+  - {fileID: 192664312}
+  - {fileID: 1033750604}
+  m_Father: {fileID: 784857000}
+  m_RootOrder: 1
 --- !u!1 &506600075
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +464,7 @@ GameObject:
   - 4: {fileID: 506600076}
   - 114: {fileID: 506600077}
   m_Layer: 0
-  m_Name: Tutorial
+  m_Name: Tutorial Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -830,6 +861,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1562363468}
+  - {fileID: 481433383}
   m_Father: {fileID: 1270691310}
   m_RootOrder: 1
 --- !u!1 &913535636
@@ -900,10 +932,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 913535636}
   m_LocalRotation: {x: 0, y: 0, z: -.886300206, w: .463111132}
-  m_LocalPosition: {x: 486.209991, y: 175.199997, z: 3.70000076}
-  m_LocalScale: {x: 1.00002205, y: 105.002892, z: 8.46477127}
+  m_LocalPosition: {x: 5.30999756, y: 90.6999969, z: -.399997711}
+  m_LocalScale: {x: 1.00002193, y: 105.002884, z: 8.46477127}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 481433383}
   m_RootOrder: 1
 --- !u!1 &1033750600
 GameObject:
@@ -973,10 +1005,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1033750600}
   m_LocalRotation: {x: 0, y: 0, z: -.893934548, w: .448197514}
-  m_LocalPosition: {x: 398.200012, y: 84.5, z: 4.09999847}
+  m_LocalPosition: {x: -82.6999817, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 103.923813, z: 6.99984455}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 481433383}
   m_RootOrder: 3
 --- !u!1 &1270691308
 GameObject:
@@ -1022,7 +1054,7 @@ Transform:
   - {fileID: 1281453560}
   - {fileID: 2096208890}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
 --- !u!1 &1281453559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,7 +1065,7 @@ GameObject:
   - 4: {fileID: 1281453560}
   - 114: {fileID: 1281453561}
   m_Layer: 0
-  m_Name: Critical Path 1
+  m_Name: Critical Path 1 Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1266,6 +1298,10 @@ Prefab:
       propertyPath: creationLink
       value: 
       objectReference: {fileID: 1358900527}
+    - target: {fileID: 100002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
   m_IsPrefabParent: 0
@@ -1880,10 +1916,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1617616879}
   m_LocalRotation: {x: 0, y: 0, z: .893934548, w: .448197514}
-  m_LocalPosition: {x: 480.899994, y: 84.5, z: 4.09999847}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 103.923813, z: 6.99984455}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 481433383}
   m_RootOrder: 0
 --- !u!1 &2096208889
 GameObject:
@@ -1895,12 +1931,12 @@ GameObject:
   - 4: {fileID: 2096208890}
   - 114: {fileID: 2096208891}
   m_Layer: 0
-  m_Name: Critical Path 2
+  m_Name: Critical Path 2 Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2096208890
 Transform:
   m_ObjectHideFlags: 0
