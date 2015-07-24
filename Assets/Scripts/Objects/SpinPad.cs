@@ -122,6 +122,7 @@ public class SpinPad : WaitPad {
 			{
 				activated = true;
 				SetLineColors();
+				Helper.FirePulse(rotatee.transform.position, Globals.Instance.defaultPulseStats);
 
 				if (membrane1 != null)
 				{
