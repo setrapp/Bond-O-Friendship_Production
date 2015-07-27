@@ -3386,6 +3386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd07974afbec044fb52767ef8988f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paintCopier: {fileID: 0}
+  pairedCanvas: {fileID: 0}
   player1: {fileID: 0}
   player2: {fileID: 0}
   changeColor: 0
@@ -3882,7 +3884,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 131422745}
-  m_LocalRotation: {x: -.36640349, y: .604771435, z: .604771376, w: -.36640349}
+  m_LocalRotation: {x: -.36640352, y: .604771495, z: .604771435, w: -.36640352}
   m_LocalPosition: {x: -6.93771362, y: -17.9834747, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6240,7 +6242,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 256453356}
-  m_LocalRotation: {x: .347754419, y: .615684152, z: .615684092, w: .347754419}
+  m_LocalRotation: {x: .347754389, y: .615684092, z: .615684032, w: .347754389}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8317,7 +8319,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 331649106}
-  m_LocalRotation: {x: .603053927, y: .369223505, z: .369223505, w: .603053987}
+  m_LocalRotation: {x: .603053868, y: .369223475, z: .369223475, w: .603053927}
   m_LocalPosition: {x: 6.07804871, y: 4.25413513, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -16370,6 +16372,14 @@ Prefab:
       propertyPath: m_Name
       value: PaintCanvas (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 38b15250bd752e1439774c70a0023995, type: 2}
+      propertyPath: paintCopier
+      value: 
+      objectReference: {fileID: 1968872314}
+    - target: {fileID: 11400000, guid: 38b15250bd752e1439774c70a0023995, type: 2}
+      propertyPath: pairedCanvas
+      value: 
+      objectReference: {fileID: 554184764}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 38b15250bd752e1439774c70a0023995, type: 2}
   m_IsPrefabParent: 0
@@ -22336,7 +22346,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 980305150}
-  m_LocalRotation: {x: .346007645, y: .616667509, z: .616667509, w: .346007615}
+  m_LocalRotation: {x: .346007615, y: .616667449, z: .616667449, w: .346007586}
   m_LocalPosition: {x: 45.7606201, y: 3.38819122, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -38517,7 +38527,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1674836778}
-  m_LocalRotation: {x: -.36640352, y: .604771495, z: .604771435, w: -.36640352}
+  m_LocalRotation: {x: -.36640349, y: .604771435, z: .604771376, w: -.36640349}
   m_LocalPosition: {x: -6.93771362, y: -17.9834747, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -39276,7 +39286,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1721679253}
-  m_LocalRotation: {x: .263987362, y: .655980706, z: .655980647, w: .263987362}
+  m_LocalRotation: {x: .263987392, y: .655980766, z: .655980706, w: .263987392}
   m_LocalPosition: {x: 25.568512, y: -24.4709015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -45323,6 +45333,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1968872315}
+  - 114: {fileID: 1968872316}
   m_Layer: 0
   m_Name: Paint Copier
   m_TagString: Untagged
@@ -45342,6 +45353,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 706320040}
   m_RootOrder: 5
+--- !u!114 &1968872316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1968872314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2fb2d9123ffd14aacb39987d05e091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paintPrefab: {fileID: 100000, guid: eaa83557a149cf948b1ee281128b073d, type: 2}
+  painting: 0
+  paintColor: {r: .544117689, g: .544117689, b: .544117689, a: 1}
+  randRot: 120
+  alpha: 1
+  origColor: 1
+  r: 0
+  g: 0
+  b: 0
+  a: 0
+  eraserOn: 0
 --- !u!1 &1969103015
 GameObject:
   m_ObjectHideFlags: 0
