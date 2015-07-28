@@ -11,6 +11,7 @@ public class Luminus : MonoBehaviour {
 	private float player2Dist;
 	private float maxDist;
 	public bool isOn;
+	public bool stayOn = false;
 	private bool playerInRange;
 	private float intense;
 	private float range;
@@ -44,7 +45,7 @@ public class Luminus : MonoBehaviour {
 			//print ("out of range");
 		}
 
-		if (playerInRange == false) {
+		if (playerInRange == false && !stayOn) {
 			isOn = false;
 		}
 	
