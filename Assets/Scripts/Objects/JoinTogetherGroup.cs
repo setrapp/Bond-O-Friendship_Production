@@ -56,11 +56,12 @@ public class JoinTogetherGroup : MonoBehaviour {
 				}
 			}
 
-			// If all joins are in position, stop their movement and solve the puzzle.
+			// If all joins are in position, stop their movement, place them all at join goal, and solve the puzzle.
 			if (allJoined)
 			{
 				for (int i = 0; i < joins.Count && allJoined; i++)
 				{
+					joins[i].JumpToJoinGoal();
 					if (joins[i].baseBody != null)
 					{
 						joins[i].baseBody.isKinematic = true;
