@@ -74,14 +74,28 @@ public class Paint : MonoBehaviour {
 
             paintPos = new Vector3(transform.position.x + paintJitter, transform.position.y + paintJitter, transform.position.z + zJitter);
 
-            if (painting == true && gameObject.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
-            {
-                if (paintTime == painttimeFloat)
-                {
-                    blot();
-                }
-                paintTime -= Time.deltaTime;
-            }
+			if(name != "Paint Copier")
+			{
+	            if (painting == true && gameObject.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
+	            {
+	                if (paintTime == painttimeFloat)
+	                {
+	                    blot();
+	                }
+	                paintTime -= Time.deltaTime;
+	            }
+			}
+			if(name == "Paint Copier")
+			{
+				if (painting == true && transform.parent.GetComponent<CanvasBehavior>().pairedPlayer.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
+				{
+					if (paintTime == painttimeFloat)
+					{
+						blot();
+					}
+					paintTime -= Time.deltaTime;
+				}
+			}
             if (paintTime <= 0.0f)
             {
                 paintTime = painttimeFloat;
