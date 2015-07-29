@@ -8,6 +8,7 @@ public class PaintCircle : MonoBehaviour {
 	public float myLife;
 	public Vector3 mySize;
 	public float sizeRand;
+    public float initialRadius;
 	public Color paintCircColor;
 	public float rSizemin;
 	public float rSizemax;
@@ -17,6 +18,7 @@ public class PaintCircle : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		sizeRand = Random.Range(rSizemin,rSizemax);
+        initialRadius = sizeRand;
 		myLife = Random.Range(rLifemin,rLifemax);
         erased = false;
 		//paintCircColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
