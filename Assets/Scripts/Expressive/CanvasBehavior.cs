@@ -3,8 +3,11 @@ using System.Collections;
 
 public class CanvasBehavior : MonoBehaviour {
 
+	public GameObject paintCopier;
+	public GameObject pairedCanvas;
 	public GameObject player1;
 	public GameObject player2;
+	public GameObject pairedPlayer;
 	private Color canvasColor;
 	private float alpha;
 	public bool changeColor = true;
@@ -36,7 +39,7 @@ public class CanvasBehavior : MonoBehaviour {
 	public float b4;
 	public float a4;
 
-
+	private Vector3 mirrorDistance;
 
 
 	// Use this for initialization
@@ -48,6 +51,8 @@ public class CanvasBehavior : MonoBehaviour {
 		{
 			gameObject.GetComponent<Renderer>().material.color = canvasColor;
 		}
+		if(pairedCanvas != null)
+			mirrorDistance = transform.position - pairedCanvas.transform.position;
 
 	}
 	
@@ -85,38 +90,51 @@ public class CanvasBehavior : MonoBehaviour {
 				alpha += Time.deltaTime * 0.5f;
 			}
 		}
-	
+		if(pairedPlayer != null && paintCopier != null)
+		{
+			paintCopier.transform.position = pairedPlayer.transform.position + mirrorDistance;
+		}
 	}
 
 	void OnTriggerEnter (Collider collide)
 	{
-		if(collide.gameObject.name == "Player 1")
+		if(paintCopier == null)
 		{
-			player1 = collide.gameObject;
-			player1.GetComponent<Paint>().painting = true;
-
-		}
-		if(collide.gameObject.name == "Player 2")
-		{
-			player2 = collide.gameObject;
-			player2.GetComponent<Paint>().painting = true;
-
+			if(collide.gameObject.name == "Player 1")
+			{
+				player1 = collide.gameObject;
+				player1.GetComponent<Paint>().painting = true;
+				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = player1;
+				pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>().painting = true;
+			}
+			if(collide.gameObject.name == "Player 2")
+			{
+				player2 = collide.gameObject;
+				player2.GetComponent<Paint>().painting = true;
+				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = player2;
+				pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>().painting = true;
+			}
 		}
 	}
 
 	void OnTriggerExit (Collider collide)
 	{
-		if(collide.gameObject.name == "Player 1")
+		if(paintCopier == null)
 		{
-			player1 = collide.gameObject;
-			player1.GetComponent<Paint>().painting = false;
-			//print ("Paintfalse");
-		}
-		if(collide.gameObject.name == "Player 2")
-		{
-			player2 = collide.gameObject;
-			player2.GetComponent<Paint>().painting = false;
-			//print ("Paint");
+			if(collide.gameObject.name == "Player 1")
+			{
+				player1 = collide.gameObject;
+				player1.GetComponent<Paint>().painting = false;
+				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = null;
+				pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>().painting = false;
+			}
+			if(collide.gameObject.name == "Player 2")
+			{
+				player2 = collide.gameObject;
+				player2.GetComponent<Paint>().painting = false;
+				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = null;
+				pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>().painting = false;
+			}
 		}
 	}
 }
