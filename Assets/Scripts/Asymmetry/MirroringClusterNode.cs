@@ -8,6 +8,16 @@ public class MirroringClusterNode : ClusterNode {
 	public bool revealToPaint = false;
     public bool revealed;
 
+    int numOfRenderers;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        numOfRenderers = nodeRenderers.Length;
+        HideNode();
+    }
+
 	// Update is called once per frame
     protected override void Update() 
     {
@@ -46,10 +56,22 @@ public class MirroringClusterNode : ClusterNode {
 	public void RevealNode()
 	{
 		revealed = true;
+
+        //enable rendering
+        for (int i = 0; i < numOfRenderers; i++)
+        {
+            nodeRenderers[i].enabled = true;
+        }
 	}
 
-	public void HideNode()
+    public void HideNode()
 	{
 		revealed = false;
+
+        //disable rendering
+        for (int i = 0; i < numOfRenderers; i++)
+        {
+            nodeRenderers[i].enabled = false;
+        }
 	}
 }
