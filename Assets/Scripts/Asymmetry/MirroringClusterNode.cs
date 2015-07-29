@@ -14,7 +14,7 @@ public class MirroringClusterNode : ClusterNode {
         base.Update();
 
 		//Reveal 
-		if (nodeToMirror.lit && revealToNode)
+		if (revealToNode && nodeToMirror.lit)
 			RevealNode();
 	}
 
