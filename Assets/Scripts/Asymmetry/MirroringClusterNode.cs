@@ -43,12 +43,12 @@ public class MirroringClusterNode : ClusterNode {
 		}
 	}
 
-	void RevealNode()
+	public void RevealNode()
 	{
 		revealed = true;
 	}
 
-	void HideNode()
+	public void HideNode()
 	{
 		revealed = false;
 	}
