@@ -16,6 +16,7 @@ public class Luminus : MonoBehaviour {
 	private float intense;
 	private float range;
 	public float timeMult;
+	public float maxIntensity = 1;
 	public float intensity = 0;
 	public float fadeTime = 1;
 	public bool fadingIn = true;
@@ -54,11 +55,11 @@ public class Luminus : MonoBehaviour {
 	
 
 		// Fade intensity.
-		if (isOn && fadingIn && intensity < 1)
+		if (isOn && fadingIn && intensity < maxIntensity)
 		{
 			if (fadeTime > 0)
 			{
-				intensity += Time.deltaTime / fadeTime;
+				intensity += Time.deltaTime / fadeTime * maxIntensity;
 			}
 			else
 			{
@@ -69,14 +70,14 @@ public class Luminus : MonoBehaviour {
 		{
 			if (fadeTime > 0)
 			{
-				intensity -= Time.deltaTime / fadeTime;
+				intensity -= Time.deltaTime / fadeTime * maxIntensity;
 			}
 			else
 			{
 				intensity = 0;
 			}
 		}
-		intensity = Mathf.Clamp01(intensity);
+		intensity = Mathf.Clamp(intensity, 0, maxIntensity);
 
 		if (isOn == true) {
 			if(intense < 5.0f)

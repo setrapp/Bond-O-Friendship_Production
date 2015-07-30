@@ -36034,6 +36034,10 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.54843271
       objectReference: {fileID: 0}
+    - target: {fileID: 11407762, guid: cdafa4684ca9025468f8d19df918ce7c, type: 2}
+      propertyPath: zoomTarget
+      value: 75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cdafa4684ca9025468f8d19df918ce7c, type: 2}
   m_IsPrefabParent: 0
@@ -61457,11 +61461,26 @@ MonoBehaviour:
   startZoomPortion: 0
   endZoomPortion: 1
   oldPortionComplete: 0
+  currentZoom: 0
+  updateZoom: 0
   resetOnComplete: 1
   resetDelay: .5
   resetAcceleration: 0
   resetMaxSpeed: 0
   resetSpeed: 0
+--- !u!114 &1163467599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1163467596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdeefcc409bdff340b5048ae55fca858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetZoom: {fileID: 0}
+  maxLuminIntensity: 3
 --- !u!4 &1163877495 stripped
 Transform:
   m_PrefabParentObject: {fileID: 404500, guid: fb16667041ef6ce4ea4228ea8b5151dd, type: 2}
@@ -81739,20 +81758,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1528063197}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f4b5fcdc58d7543a440ff7f78f248f, type: 3}
+  m_Script: {fileID: 11500000, guid: bdeefcc409bdff340b5048ae55fca858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerPad: {fileID: 1824433070}
-  startZoom: 0
-  zoomTarget: 75
-  startZoomPortion: 0
-  endZoomPortion: 1
-  oldPortionComplete: 0
-  resetOnComplete: 1
-  resetDelay: .5
-  resetAcceleration: 0
-  resetMaxSpeed: 0
-  resetSpeed: 0
+  targetZoom: {fileID: 0}
+  maxLuminIntensity: 5
 --- !u!1001 &1528186411
 Prefab:
   m_ObjectHideFlags: 0
@@ -96981,12 +96991,6 @@ MonoBehaviour:
   parentSeries: {fileID: 1001422671}
   bed: {fileID: 1056141139}
   lastStreamReached: {fileID: 0}
---- !u!114 &1824433070 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11400000, guid: cdafa4684ca9025468f8d19df918ce7c,
-    type: 2}
-  m_PrefabInternal: {fileID: 689160642}
-  m_Script: {fileID: 11500000, guid: 778cd73dd88624a45918766ce2e89315, type: 3}
 --- !u!1 &1825094396
 GameObject:
   m_ObjectHideFlags: 0
@@ -104103,11 +104107,26 @@ MonoBehaviour:
   startZoomPortion: 0
   endZoomPortion: 1
   oldPortionComplete: 0
+  currentZoom: 0
+  updateZoom: 0
   resetOnComplete: 1
   resetDelay: .5
   resetAcceleration: 0
   resetMaxSpeed: 0
   resetSpeed: 0
+--- !u!114 &1980284563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1980284560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdeefcc409bdff340b5048ae55fca858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetZoom: {fileID: 0}
+  maxLuminIntensity: 5
 --- !u!1001 &1980829534
 Prefab:
   m_ObjectHideFlags: 0
@@ -112914,6 +112933,10 @@ Prefab:
     - target: {fileID: 6485294, guid: e2a8a95d440fd5b4c82daf34743915fc, type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11485298, guid: e2a8a95d440fd5b4c82daf34743915fc, type: 2}
+      propertyPath: extraWidth
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e2a8a95d440fd5b4c82daf34743915fc, type: 2}

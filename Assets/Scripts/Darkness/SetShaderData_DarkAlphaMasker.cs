@@ -58,6 +58,14 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 			lightingMultiples.w = 0;
 		}
 
+		// Apply the players' actual intensities.
+		if (Globals.Instance != null)
+		{
+			lightingMultiples.x *= Globals.Instance.playerLuminIntensity;
+			lightingMultiples.y *= Globals.Instance.playerLuminIntensity;
+		}
+
+		// Apply the lumini's actual intensities.
 		lightingMultiples.z *= l1.intensity;
 		lightingMultiples.w *= l2.intensity;
 

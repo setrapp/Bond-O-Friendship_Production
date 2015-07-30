@@ -11,6 +11,9 @@ public class ZoomCamera : MonoBehaviour {
 	public float startZoomPortion = 0;
 	public float endZoomPortion = 1;
 	public float oldPortionComplete;
+	public float currentZoom = 0;
+	[HideInInspector]
+	public bool updateZoom = false;
 	[Header("Resetting Controls")]
 	public bool resetOnComplete = true;
 	public float resetDelay = 0.5f;
@@ -66,7 +69,7 @@ public class ZoomCamera : MonoBehaviour {
 			StartCoroutine(ResetToStart());
 		}
 
-		bool updateZoom = resetting;
+		updateZoom = resetting;
 
 		if (!triggerPad.activated && oldPortionComplete != triggerPad.portionComplete)
 		{
@@ -77,10 +80,10 @@ public class ZoomCamera : MonoBehaviour {
 		if (updateZoom)
 		{
 			float alterPortionComplete = Mathf.Clamp01((oldPortionComplete - startZoomPortion) / (endZoomPortion - startZoomPortion));
-			float zoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
-			mainCamera.fieldOfView = zoom;
-			splitCamera.fieldOfView = zoom;
-			Globals.Instance.perspectiveFOV = zoom;
+			currentZoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
+			mainCamera.fieldOfView = currentZoom;
+			splitCamera.fieldOfView = currentZoom;
+			Globals.Instance.perspectiveFOV = currentZoom;
 		}
 	}
 
