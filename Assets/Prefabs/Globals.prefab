@@ -1754,6 +1754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a38d45bc519f448837406257d75c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreAtmosphereBreaks: 0
 --- !u!114 &11449136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1770,8 +1771,8 @@ MonoBehaviour:
   startingPerspectiveFOV: 0
   orthographicSize: 20
   startingOrthographicSize: 0
-  zoomIntroInEditor: 0
-  earlyBondInEditor: 1
+  zoomIntroInEditor: 1
+  earlyBondInEditor: 0
   allowInput: 1
   audioVolume: -1
   mute: 1
@@ -1822,6 +1823,8 @@ MonoBehaviour:
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
   playersBonded: 0
+  playerLuminIntensity: 1
+  defaultPlayerLuminIntensity: 1
 --- !u!114 &11449138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2037,11 +2040,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: earlyBondInEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: zoomIntroInEditor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: mute
