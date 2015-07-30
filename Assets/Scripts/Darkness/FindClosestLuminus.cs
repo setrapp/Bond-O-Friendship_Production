@@ -6,7 +6,6 @@ public class FindClosestLuminus : MonoBehaviour {
 
 	[HideInInspector] public Luminus[] luminusArray;
 	public Luminus l1, l2;   //Closest to P1, P2
-	public Luminus l2Alt;
 	[HideInInspector] public GameObject p1, p2;   //Players
 	[HideInInspector] public SetShaderData_DarkAlphaMasker darkMaskScript;    //on the alpha masking plane
 	[HideInInspector] public float l1p1_sqMag, l2p2_sqMag;    //shortest distances (useful in shader)
@@ -44,8 +43,6 @@ public class FindClosestLuminus : MonoBehaviour {
 				}
 			}
 		}
-		
-		/* TODO What happens when none of the lumini are on??? */
 
 		darkMaskScript = GameObject.Find("DarkMask").GetComponent<SetShaderData_DarkAlphaMasker>();
 		//Find which ones are closest at the beginning
@@ -63,10 +60,10 @@ public class FindClosestLuminus : MonoBehaviour {
 
 	void FindClosestLumini()
 	{
-		l1 = l2 = luminusArray[0];
-		l2Alt = luminusArray[0];
-		Vector3 l1p1 = p1.transform.position - l1.transform.position;
-		Vector3 l2p2 = p2.transform.position - l2.transform.position;
+		Luminus newL1, newL2, l2Alt;
+		newL1 = newL2 = l2Alt = luminusArray[0];
+		Vector3 l1p1 = p1.transform.position - newL1.transform.position;
+		Vector3 l2p2 = p2.transform.position - newL2.transform.position;
 		Vector3 l2Altp2 = p2.transform.position - l2Alt.transform.position;
 		Vector3 temp;
 
@@ -76,34 +73,34 @@ public class FindClosestLuminus : MonoBehaviour {
 
 		for (int i = 1; i < luminusArray.Length; i++)
 		{
-			if (luminusArray[i].isOn)
+			if (true || luminusArray[i].isOn)
 			{
 				//Closest to p1
 				temp = p1.transform.position - luminusArray[i].transform.position;
 				//if a different luminus is closer
-				if (!l1.isOn || temp.sqrMagnitude < l1p1_sqMag)
+				if (temp.sqrMagnitude < l1p1_sqMag)
 				{
-					l1 = luminusArray[i];
+					newL1 = luminusArray[i];
 					l1p1_sqMag = temp.sqrMagnitude;
 				}
 
 				//Closest to P2
 				temp = p2.transform.position - luminusArray[i].transform.position;
 				//if a different luminus is closer
-				if (!l2.isOn || temp.sqrMagnitude < l2p2_sqMag)
+				if (temp.sqrMagnitude < l2p2_sqMag)
 				{
 					// Store the previous nearest luminus, in case the nearest is shared with player one.
-					if ((!l2Alt.isOn || l2Alt == l1 || l2p2_sqMag < l2Altp2_sqMag) && l1 != l2)
+					if ((!l2Alt.isOn || l2Alt == newL1 || l2p2_sqMag < l2Altp2_sqMag) && newL1 != newL2)
 					{
-						l2Alt = l2;
+						l2Alt = newL2;
 						l2Altp2_sqMag = l2p2_sqMag;
 					}
 
-					l2 = luminusArray[i];
+					newL2 = luminusArray[i];
 					l2p2_sqMag = temp.sqrMagnitude;
 				}
 				// Store the second nearest luminus, in case the nearest is shared with player one.
-				else if ((!l2Alt.isOn || l2Alt == l1 || temp.sqrMagnitude < l2Altp2_sqMag) && l1 != luminusArray[i])
+				else if ((l2Alt == newL1 || temp.sqrMagnitude < l2Altp2_sqMag) && newL1 != luminusArray[i])
 				{
 					l2Alt = luminusArray[i];
 					l2Altp2_sqMag = temp.sqrMagnitude;
@@ -112,9 +109,55 @@ public class FindClosestLuminus : MonoBehaviour {
 		}
 
 		// If player two is nearest to the same luminus as player one, use the alternate luminus.
-		if (l2 == l1)
+		if (newL2 == newL1)
 		{
-			l2 = l2Alt;
+			newL2 = l2Alt;
+		}
+
+		AttemptLuminusChange(newL1, newL2);
+	}
+
+	private void AttemptLuminusChange(Luminus newL1, Luminus newL2)
+	{
+		if (l1 == null)
+		{
+			l1 = newL1;
+		}
+		if (l2 == null)
+		{
+			l2 = newL2;
+		}
+
+		// If a new luminus matches the existing luminus targeted by the opposite player, swap targets to avoid fading a luminus still in use.
+		if (newL2 == l1)
+		{
+			l1 = l2;
+			l2 = newL2;
+		}
+		else if (newL1 == l2)
+		{
+			l2 = l1;
+			l1 = newL1;
+		}
+
+		// Fade out current lumini and fade in new ones over time. Only switch a luminus when the old one is faded out.
+		if (l1 != newL1)
+		{
+			l1.fadingIn = false;
+			if (l1.intensity <= 0)
+			{
+				l1 = newL1;
+				l1.fadingIn = true;
+			}
+		}
+		if (l2 != newL2)
+		{
+			l2.fadingIn = false;
+			if (l2.intensity <= 0)
+			{
+				l2 = newL2;
+				l2.fadingIn = true;
+			}
 		}
 	}
 

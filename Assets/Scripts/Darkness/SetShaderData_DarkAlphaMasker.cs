@@ -5,6 +5,7 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 
 	public GameObject p1, p2;
 	public Luminus l1, l2;
+	public Luminus oldL1, oldL2;
 	public float l1p1_sqMag, l2p2_sqMag;    //shortest distances (useful in shader)
 	private Vector4 mul_sameLuminus, mul_diffLuminus;
 	public Renderer maskRenderer;
@@ -56,6 +57,9 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		{
 			lightingMultiples.w = 0;
 		}
+
+		lightingMultiples.z *= l1.intensity;
+		lightingMultiples.w *= l2.intensity;
 
 		maskRenderer.material.SetVector("_Mul", lightingMultiples);
 
