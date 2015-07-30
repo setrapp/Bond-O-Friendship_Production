@@ -12,6 +12,8 @@ public class ThreadParent : MonoBehaviour {
 	public bool wasThreading;
 	private Bond playerBond = null;
 	public bool solved;
+	private int landsFull = 0;
+	public List<GameObject> landCompleteActivatees;
 	// Use this for initialization
 	void Start () {
 		solved = false;
@@ -73,5 +75,18 @@ public class ThreadParent : MonoBehaviour {
 			defaultbondlength = -1;
 		}*/
 	
+	}
+
+	public void LandFull()
+	{
+		// React to all spawned land being full.
+		landsFull++;
+		if (landsFull == myThreaders.Count)
+		{
+			for (int i = 0; i < landCompleteActivatees.Count; i++)
+			{
+				landCompleteActivatees[i].gameObject.SetActive(true);
+			}
+		}
 	}
 }

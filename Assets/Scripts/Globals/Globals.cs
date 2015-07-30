@@ -105,6 +105,9 @@ public class Globals : MonoBehaviour {
 
 	public bool playersBonded = false;
 
+	public float playerLuminIntensity = 1;
+	public float defaultPlayerLuminIntensity = 1;
+
 	void Awake()
 	{
         //if (instance != null && instance != this)
@@ -136,6 +139,8 @@ public class Globals : MonoBehaviour {
 		{
 			bgm.Play();
 		}
+
+		defaultPlayerLuminIntensity = playerLuminIntensity;
 	}
 
 	void Update()
