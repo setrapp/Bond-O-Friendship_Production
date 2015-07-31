@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PaintCircle : MonoBehaviour {
 
-
     public bool erased;
 	public float myLife;
 	public Vector3 mySize;

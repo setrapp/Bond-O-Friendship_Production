@@ -21,6 +21,9 @@ public class Paint : MonoBehaviour {
 	public float b;
 	public float a;
     public bool eraserOn;
+
+	public CanvasBehavior paintCanvas;
+	public CanvasBehavior mirrorCanvas;
 	
 	// Use this for initialization
 	void Start () {
@@ -80,7 +83,7 @@ public class Paint : MonoBehaviour {
 	            {
 	                if (paintTime == painttimeFloat)
 	                {
-	                    blot();
+	                    blot(false);
 	                }
 	                paintTime -= Time.deltaTime;
 	            }
@@ -91,7 +94,7 @@ public class Paint : MonoBehaviour {
 				{
 					if (paintTime == painttimeFloat)
 					{
-						blot();
+						blot(true);
 					}
 					paintTime -= Time.deltaTime;
 				}
@@ -107,7 +110,7 @@ public class Paint : MonoBehaviour {
         }
 	}
 
-	void blot()
+	void blot(bool inMirror)
 	{
 		paintCircle = Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot)) as GameObject;
 		paintCircle.GetComponent<Renderer>().material.color = paintColor;
@@ -126,6 +129,9 @@ public class Paint : MonoBehaviour {
 			paintCircle.GetComponent<PaintCircle>().rSizemin = 0.5f;
 			paintCircle.GetComponent<PaintCircle>().rSizemax = 3.0f;
 		}
+
+		if (inMirror)
+			mirrorCanvas.gameObject.GetComponent<PaintAndNodeCollisionTest> ().CheckPaintAndNodeCollision (paintCircle.GetComponent<PaintCircle>());
 	}
 
     void Erase()
