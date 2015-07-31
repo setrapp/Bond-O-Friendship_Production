@@ -11,6 +11,7 @@ public class IslandContainer : MonoBehaviour {
 	public Renderer editorPlaceholder;
 	public List<MembraneWall> atmosphere;
 	public Vector3 spawnOffset;
+	public Vector3 spawnRotation;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
 	//private bool playersLanded = false;
@@ -191,7 +192,12 @@ public class IslandContainer : MonoBehaviour {
 		if (createdIsland != null && createdIsland.islandId == islandId)
 		{
 			createdIsland.transform.parent = transform;
-			createdIsland.transform.localPosition = Vector3.zero + spawnOffset;
+			if (editorPlaceholder)
+			{
+				createdIsland.transform.position = editorPlaceholder.transform.position;
+			}
+			createdIsland.transform.localPosition += spawnOffset;
+			createdIsland.transform.localRotation = Quaternion.Euler(spawnRotation);
 			island = createdIsland;
 			createdIsland.container = this;
 			islandLoading = false;
