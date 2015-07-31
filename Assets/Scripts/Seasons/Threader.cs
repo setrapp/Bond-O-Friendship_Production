@@ -153,7 +153,6 @@ public class Threader : MonoBehaviour {
 		if (threadParent.solved)
 		{
 			waitingOnFull = false;
-			Debug.Log(gameObject.name);
 			threadParent.LandFull();
 		}
 	}

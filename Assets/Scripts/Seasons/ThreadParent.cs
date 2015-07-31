@@ -81,10 +81,8 @@ public class ThreadParent : MonoBehaviour {
 	{
 		// React to all spawned land being full.
 		landsFull++;
-		Debug.Log (landsFull + " " + myThreaders.Count);
 		if (landsFull == myThreaders.Count)
 		{
-			Debug.Log ("all full");
 			for (int i = 0; i < landCompleteActivatees.Count; i++)
 			{
 				landCompleteActivatees[i].gameObject.SetActive(true);

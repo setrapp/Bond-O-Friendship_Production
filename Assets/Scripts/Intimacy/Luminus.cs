@@ -11,10 +11,15 @@ public class Luminus : MonoBehaviour {
 	private float player2Dist;
 	private float maxDist;
 	public bool isOn;
+	public bool stayOn = false;
 	private bool playerInRange;
 	private float intense;
 	private float range;
 	public float timeMult;
+	public float maxIntensity = 1;
+	public float intensity = 0;
+	public float fadeTime = 1;
+	public bool fadingIn = true;
 
 	// Use this for initialization
 	void Start () {
@@ -30,8 +35,8 @@ public class Luminus : MonoBehaviour {
 	// Update is called once per frame
 	void Update (){
 
-		myLight.range = range;
-		myLight.intensity = intense;
+		//myLight.range = range;
+		myLight.intensity = 0;//myLight.intensity = intense;
 
 		player1Dist = Vector3.Distance (transform.position, player1.transform.position);
 		player2Dist = Vector3.Distance (transform.position, player2.transform.position);
@@ -44,10 +49,35 @@ public class Luminus : MonoBehaviour {
 			//print ("out of range");
 		}
 
-		if (playerInRange == false) {
+		if (playerInRange == false && !stayOn) {
 			isOn = false;
 		}
 	
+
+		// Fade intensity.
+		if (isOn && fadingIn && intensity < maxIntensity)
+		{
+			if (fadeTime > 0)
+			{
+				intensity += Time.deltaTime / fadeTime * maxIntensity;
+			}
+			else
+			{
+				intensity = 1;
+			}
+		}
+		else if (isOn && !fadingIn && intensity > 0)
+		{
+			if (fadeTime > 0)
+			{
+				intensity -= Time.deltaTime / fadeTime * maxIntensity;
+			}
+			else
+			{
+				intensity = 0;
+			}
+		}
+		intensity = Mathf.Clamp(intensity, 0, maxIntensity);
 
 		if (isOn == true) {
 			if(intense < 5.0f)
@@ -73,7 +103,6 @@ public class Luminus : MonoBehaviour {
 			//myLight.range = 1.0f;
 			//myLight.intensity = 1.0f;
 		}
-	
 	}
 
 	void OnTriggerEnter(Collider collide)
@@ -83,7 +112,6 @@ public class Luminus : MonoBehaviour {
 			if(isOn == false)
 			{
 				isOn = true;
-				print ("isOn");
 				Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
 
 			}
