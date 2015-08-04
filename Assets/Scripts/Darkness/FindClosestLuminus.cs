@@ -60,6 +60,11 @@ public class FindClosestLuminus : MonoBehaviour {
 
 	void FindClosestLumini()
 	{
+		if (luminusArray.Length < 1)
+		{
+			return;
+		}
+
 		Luminus newL1, newL2, l2Alt;
 		newL1 = newL2 = l2Alt = luminusArray[0];
 		Vector3 l1p1 = p1.transform.position - newL1.transform.position;

@@ -8,6 +8,7 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	public List<GameObject> listeners;
 	public ParticleSystem nodeParticle;
 	public bool solved;
+	public StreamReactionList streamReaction;
 
 	public GameObject streamBlocker;
 	public GameObject streamBlocker2;
@@ -37,6 +38,11 @@ public class ClusterNodePuzzle : MonoBehaviour {
 				i--;
 			}
 			
+		}
+
+		if (streamReaction == null)
+		{
+			streamReaction = GetComponent<StreamReactionList>();
 		}
 
 		if(streamBlocker != null && streamBlocker2 != null)
