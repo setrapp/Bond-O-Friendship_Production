@@ -22,7 +22,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
     public float toggleDis = 1.0f;
 
     public Transform target;
-    private Vector3 startPos;
+	private Vector3 startPos;
     private Vector3 endPos;
 
     public float duration = 2.5f;
