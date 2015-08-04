@@ -17,7 +17,7 @@ public class ConstrainOnDirection : MonoBehaviour {
 		oldPosition = transform.position;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		if (transform.position != oldPosition)
 		{

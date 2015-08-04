@@ -52,6 +52,7 @@ public class StreamFluffSproutReaction : StreamReaction {
 		bool reacted = base.React(actionRate);
 		if (reacted)
 		{
+			
 			if (reactionProgress >= 1 && streamsTouched > 0)
 			{
 				bool spawned = false;
@@ -68,6 +69,7 @@ public class StreamFluffSproutReaction : StreamReaction {
 						{
 							fluffPlaceholders[i].SpawnFluff();
 							spawned = true;
+							
 						}
 					}
 				}
