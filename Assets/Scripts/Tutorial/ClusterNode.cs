@@ -137,7 +137,7 @@ public class ClusterNode : MonoBehaviour {
 
 	virtual public void CheckCollision (Collider col)
 	{
-		if (targetPuzzle.solved || (targetPuzzle.streamReaction != null && targetPuzzle.streamReaction.reactionProgress < 1))
+		if (targetPuzzle.solved || (targetPuzzle.streamReaction != null && targetPuzzle.streamReaction.reactionProgress <= 0))
 		{
 			return;
 		}
