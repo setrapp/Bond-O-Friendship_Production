@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public MembraneCreationLink creationLink = null;
 	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
@@ -66,6 +67,11 @@ public class MembraneWall : MonoBehaviour {
 		if (membraneCreator == null)
 		{
 			membraneCreator = GetComponent<AutoMembrane>();
+		}
+
+		if (creationLink == null)
+		{
+			creationLink = GetComponent<MembraneCreationLink>();
 		}
 
 		if (membraneCreator != null)
@@ -296,7 +302,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -309,7 +315,7 @@ public class MembraneWall : MonoBehaviour {
 
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBroken", this, SendMessageOptions.DontRequireReceiver);
 		}
 		if (destroyWhenBroken)
 		{
@@ -321,7 +327,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
-			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

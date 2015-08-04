@@ -15,12 +15,12 @@ public class MembraneBreakToFade : MonoBehaviour {
 		SendFade();
 	}
 
-	private void MembraneBroken(MembraneWall membrane)
+	private void MembraneWallBroken(MembraneWall membrane)
 	{
 		SendFade();
 	}
 
-	private void MembraneBroken(MembraneShell membrane)
+	private void MembraneShellBroken(MembraneShell membrane)
 	{
 		SendFade();
 	}

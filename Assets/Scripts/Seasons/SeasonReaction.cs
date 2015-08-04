@@ -22,7 +22,7 @@ public class SeasonReaction : MonoBehaviour {
 		}
 	}
 
-	protected void FindManager(bool resetPreCheck = false)
+	public void FindManager(bool resetPreCheck = false)
 	{
 		if (resetPreCheck)
 		{

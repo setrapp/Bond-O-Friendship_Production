@@ -354,7 +354,7 @@ public class SpinPad : WaitPad {
 		
 	}
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane == membraneWall1 || brokenMembrane == membraneWall2)
 		{
