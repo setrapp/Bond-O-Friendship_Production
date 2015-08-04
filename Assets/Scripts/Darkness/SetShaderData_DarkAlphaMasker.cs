@@ -9,6 +9,9 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 	public float l1p1_sqMag, l2p2_sqMag;    //shortest distances (useful in shader)
 	private Vector4 mul_sameLuminus, mul_diffLuminus;
 	public Renderer maskRenderer;
+	public bool fadeIn = false;
+	public float fadeTime = 1;
+	public DarknessTrigger trigger = null;
 
 	//Imaginary height of the light source
 	public float height = 1.5f;
@@ -28,6 +31,36 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (trigger != null)
+		{
+			fadeIn = trigger.isActiveAndEnabled;
+		}
+
+		Color maskColor = maskRenderer.material.color;
+		if (fadeIn && maskColor.a < 1)
+		{
+			if (fadeTime > 0)
+			{
+				maskColor.a += Time.deltaTime / fadeTime;
+			}
+			else
+			{
+				maskColor.a = 1;
+			}
+		}
+		else if (!fadeIn && maskColor.a > 0)
+		{
+			if (fadeTime > 0)
+			{
+				maskColor.a -= Time.deltaTime / fadeTime;
+			}
+			else
+			{
+				maskColor.a = 0;
+			}
+		}
+		maskColor.a = Mathf.Clamp01(maskColor.a);
+		maskRenderer.material.color = maskColor;
 
 		//every frame, update players positions on material (for shader)
 		Vector3 pos = new Vector3(p1.transform.position.x, p1.transform.position.y, transform.position.z - height);
@@ -36,10 +69,16 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		maskRenderer.material.SetVector("_P2Pos", pos);
 
 		//repeat for the two closest lumini
-		pos = new Vector3(l1.transform.position.x, l1.transform.position.y, transform.position.z - height);
-		maskRenderer.material.SetVector("_L1Pos", pos);
-		pos = new Vector3(l2.transform.position.x, l2.transform.position.y, transform.position.z - height);
-		maskRenderer.material.SetVector("_L2Pos", pos);
+		if (l1 != null)
+		{
+			pos = new Vector3(l1.transform.position.x, l1.transform.position.y, transform.position.z - height);
+			maskRenderer.material.SetVector("_L1Pos", pos);
+		}
+		if (l2 != null)
+		{
+			pos = new Vector3(l2.transform.position.x, l2.transform.position.y, transform.position.z - height);
+			maskRenderer.material.SetVector("_L2Pos", pos);
+		}
 
 		// Determine if both players are near the same luminus.
 		Vector4 lightingMultiples = mul_diffLuminus;
@@ -49,11 +88,11 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		}
 
 		// Ignore luminus if it is not turned on.
-		if (!l1.isOn)
+		if (l1 != null && !l1.isOn)
 		{
 			lightingMultiples.z = 0;
 		}
-		if (!l2.isOn)
+		if (l2 != null && !l2.isOn)
 		{
 			lightingMultiples.w = 0;
 		}
@@ -66,8 +105,14 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		}
 
 		// Apply the lumini's actual intensities.
-		lightingMultiples.z *= l1.intensity;
-		lightingMultiples.w *= l2.intensity;
+		if (l1 != null)
+		{
+			lightingMultiples.z *= l1.intensity;
+		}
+		if (l2 != null)
+		{
+			lightingMultiples.w *= l2.intensity;
+		}
 
 		maskRenderer.material.SetVector("_Mul", lightingMultiples);
 
