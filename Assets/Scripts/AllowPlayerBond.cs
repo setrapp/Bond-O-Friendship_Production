@@ -22,7 +22,7 @@ public class AllowPlayerBond : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane == triggerMembraneWall)
 		{

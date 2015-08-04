@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class IslandContainer : MonoBehaviour {
-	public EtherRing parentRing;
 	public IslandID islandId;
 	public Island island;
 	[HideInInspector]
 	public bool islandLoading = false;
 	public string islandSceneName;
 	public Renderer editorPlaceholder;
-	public MembraneShell atmosphere;
+	public List<MembraneWall> atmosphere;
 	public Vector3 spawnOffset;
 	public bool spawnOnStart = false; // TODO this should be handled in main menu.
 	private GameObject landedPlayer = null;
@@ -30,47 +30,126 @@ public class IslandContainer : MonoBehaviour {
 		}
 	}
 
-	public void GenerateAtmosphere()
+	public void GenerateAtmosphere(MembraneWall triggerMembrane = null)
 	{
 		if (atmosphere != null)
 		{
-			atmosphere.CreateShell();
+			for (int i = 0; i < atmosphere.Count; i++)
+			{
+				if (atmosphere[i] != null && atmosphere[i] != triggerMembrane)
+				{
+					atmosphere[i].CreateWall();
+				}
+			}
 		}
 	}
 
-	private void MembraneBreaking(MembraneShell BreakingMembrane)
+	public void DestroyAtmosphere()
 	{
+		// Ignore ensuing atmosphere breaks until all affected membranes have been handled.
+		LevelHandler.Instance.ignoreAtmosphereBreaks = true;
+
+		if (atmosphere != null)
+		{
+			for (int i = 0; i < atmosphere.Count; i++)
+			{
+				if (atmosphere[i] != null && atmosphere[i].membraneCreator != null && atmosphere[i].membraneCreator.createdBond != null)
+				{
+					atmosphere[i].membraneCreator.createdBond.BreakBond();
+				}
+			}
+		}
+
+		// Stop ignoring atmosphere breaks.
+		LevelHandler.Instance.ignoreAtmosphereBreaks = false;
+	}
+
+	public void DestroyLinkedMembranes(MembraneWall ignoreLinks = null)
+	{
+		// Ignore ensuing atmosphere breaks until all affected membranes have been handled.
+		LevelHandler.Instance.ignoreAtmosphereBreaks = true;
+
+		if (atmosphere != null)
+		{
+			for (int i = 0; i < atmosphere.Count; i++)
+			{
+				if (atmosphere[i] != null && atmosphere[i] != ignoreLinks && atmosphere[i].creationLink != null)
+				{
+					List<MembraneWall> linkedMembranes = atmosphere[i].creationLink.linkedMembranes;
+					for (int j = 0; j < linkedMembranes.Count; j++)
+					{
+						if (linkedMembranes[j] != null && linkedMembranes[j].membraneCreator != null && linkedMembranes[j].membraneCreator.createdBond != null)
+						{
+							linkedMembranes[j].membraneCreator.createdBond.BreakBond();
+						}
+					}
+				}
+				
+			}
+		}
+
+		// Stop ignoring atmosphere breaks.
+		LevelHandler.Instance.ignoreAtmosphereBreaks = false;
+	}
+
+	private void MembraneWallBreaking(MembraneWall breakingMembrane)
+	{
+		// If atmosphere breaks are being ignored, skip this break.
+		if (LevelHandler.Instance.ignoreAtmosphereBreaks)
+		{
+			return;
+		}
+
 		// Handle breaking of the island's atmosphere.
-		if (BreakingMembrane != null && BreakingMembrane == atmosphere)
+		if (breakingMembrane != null && atmosphere.Contains(breakingMembrane))
 		{
 			// TODO: How should player parenting be handled?
 			Globals.Instance.player1.transform.parent = transform.parent;
 			Globals.Instance.player2.transform.parent = transform.parent;
 
+			// Entering Level.
 			if (island == null)
 			{
 				if (!islandLoading)
 				{
 					// Unload other islands and generate atmospheres.
 					LevelHandler.Instance.UnloadIslands();
-					LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
+					//LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
 
 					// Load the target island.
 					StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
 					islandLoading = true;
+
+					// TODO disable atmosphere of previous level
+					
 				}
 			}
+			//Exiting Level
 			else
 			{
-				// Load the contents of the ether ring that surrounds this island.
-				LevelHandler.Instance.LoadEtherRing(parentRing, this);
+				// TODO disable membranes linked to other membranes in atmosphere
+				//DestroyLinkedMembranes(breakingMembrane);
 
-				Globals.Instance.visibilityDepthMaskNeeded = false;
+				// Load the contents of the ether ring that surrounds this island.
+				//LevelHandler.Instance.LoadEtherRing(parentRing, this);
+
+
+				// TODO is this needed for darkness stuff still.
+				/*Globals.Instance.visibilityDepthMaskNeeded = false;
 				if (DepthMaskHolder.Instance != null)
 				{
 					Destroy(DepthMaskHolder.Instance.gameObject);
-				}
+				}*/
 			}
+
+			// Enable the membranes linked to the one broken.
+			if (breakingMembrane.creationLink != null)
+			{
+				breakingMembrane.creationLink.CreateMembranes();
+			}
+
+			// Enable all other membranes in atmosphere.
+			GenerateAtmosphere(breakingMembrane);
 		}
 	}
 
@@ -100,7 +179,7 @@ public class IslandContainer : MonoBehaviour {
 	{
 		GenerateAtmosphere();
 		//TODO uncomment.
-		LevelHandler.Instance.UnloadEtherRing(parentRing, this);
+		//LevelHandler.Instance.UnloadEtherRing(parentRing, this);
 		if (island != null)
 		{
 			island.levelHelper.landingEnabledObjects.ToggleObjects(true);
@@ -117,11 +196,11 @@ public class IslandContainer : MonoBehaviour {
 			createdIsland.container = this;
 			islandLoading = false;
 			
-			PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
+			/*PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
 			if (playersEstablish != null)
 			{
 				playersEstablish.PlacePlayers();
-			}
+			}*/
 
 			if (waitingToIsolate)
 			{

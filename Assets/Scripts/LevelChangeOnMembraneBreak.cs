@@ -8,7 +8,7 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 	public Island levelToUse;
 	public float newAudioVolume = 1;
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane != null && brokenMembrane == membraneWall)
 		{

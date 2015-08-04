@@ -20,6 +20,7 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 	private List<Island> loadedIslands;
+	public bool ignoreAtmosphereBreaks = false;
 	//private float progressMagicNumber = 0.9f;
 
 	void Awake()
@@ -55,7 +56,7 @@ public class LevelHandler : MonoBehaviour {
 			loadedIslands.RemoveAt(i);
 			if (removeIsland.container != null)
 			{
-				removeIsland.container.GenerateAtmosphere();
+				//removeIsland.container.GenerateAtmosphere();
 
 				removeIsland.container.island = null;
 				removeIsland.container = null;
@@ -84,7 +85,7 @@ public class LevelHandler : MonoBehaviour {
 				{
 					if (islandContainers[i].atmosphere != null)
 					{
-						islandContainers[i].atmosphere.SilentBreak();
+						//islandContainers[i].atmosphere.SilentBreak();
 					}
 				}
 			}

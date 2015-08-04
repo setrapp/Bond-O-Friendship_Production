@@ -122,6 +122,7 @@ public class SpinPad : WaitPad {
 			{
 				activated = true;
 				SetLineColors();
+				Helper.FirePulse(rotatee.transform.position, Globals.Instance.defaultPulseStats);
 
 				if (membrane1 != null)
 				{
@@ -353,7 +354,7 @@ public class SpinPad : WaitPad {
 		
 	}
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane == membraneWall1 || brokenMembrane == membraneWall2)
 		{

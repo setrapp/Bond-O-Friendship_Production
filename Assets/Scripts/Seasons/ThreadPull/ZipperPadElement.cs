@@ -13,6 +13,7 @@ public class ZipperPadElement : MonoBehaviour {
 	public GameObject destination;
 	private Vector3 startPosition;
 	private Vector3 oldPosition;
+	public float requiredProgress = 0.75f;
 	public float progress;
 
 	// Use this for initialization
@@ -39,50 +40,33 @@ public class ZipperPadElement : MonoBehaviour {
 			progress = startToCurrent.magnitude / startToDestination.magnitude;
 			float progressDirection = Vector3.Dot (startToCurrent, startToDestination);
 			
-			if (progress > 1 && progressDirection > 0) {
-				if (body != null) {
-					body.MovePosition (destination.transform.position);
-					if (!body.isKinematic) {
-						body.velocity = Vector3.zero;
-					}
-				} else {
-					transform.position = destination.transform.position;
-				}
-				progress = 1;
-			}
-			else if (progressDirection < 0)
+			if (progressDirection < 0)
 			{
 				if (body != null) {
-					body.MovePosition(startPosition);
 					if (!body.isKinematic) {
 						body.velocity = Vector3.zero;
 					}
-				} else {
-					transform.position = startPosition;
 				}
+				transform.position = startPosition;
 				progress = 0;
 			}
-
-			activated = (progress >= 1);
+			else if (progress >= requiredProgress) {
+				if (progress > 1)
+				{
+					if (body != null)
+					{
+						if (!body.isKinematic)
+						{
+							body.velocity = Vector3.zero;
+						}
+					}
+					transform.position = destination.transform.position;
+					progress = 1;
+				}
+				activated = true;
+			}
 		}
 		oldPosition = transform.position;
-		
-		
-		
-		
-		
-		
-		
-		//if(Vector3.Distance(gameObject.transform.position, Activator.transform.position) < 1.6f)
-		//	GetComponent<SpringJoint>().spring = 0;
-
-		/*triPosition = triIsland.transform.position;
-		triPosition.y -= 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxTriDistance)/Vector3.Distance(triIsland.transform.position, triDest.transform.position);
-		triIsland.transform.position = triPosition;
-
-		bigPosition = bigIsland.transform.position;
-		bigPosition.y += 1 - ((Vector3.Distance(gameObject.transform.position, Activator.transform.position)/maxDistance)*maxBigDistance)/Vector3.Distance(bigIsland.transform.position, bigDest.transform.position);
-		bigIsland.transform.position = bigPosition;*/
 
 		for(int i=0;i<bondLinks.Count;i++)
 		{

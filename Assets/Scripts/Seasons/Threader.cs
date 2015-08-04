@@ -16,6 +16,7 @@ public class Threader : MonoBehaviour {
 	public List<GameObject> bondLinks = new List<GameObject>();
 	//public List<Bond> bonds = new List<Bond>();
 	public Bond threadedbond = null;
+	public bool waitingOnFull = false;
 
 	public GameObject smallripplePrefab;
 	private GameObject smallrippleObj;
@@ -41,6 +42,11 @@ public class Threader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (waitingOnFull && threadParent != null && threadParent.solved)
+		{
+			LandFull();
+		}
+
 		for(int i=0;i<bondLinks.Count;i++)
 		{
 			//Debug.Log(bondLinks[i]);
@@ -50,7 +56,6 @@ public class Threader : MonoBehaviour {
 				i--;
 			}
 		}
-
 
 		bondCount = bondLinks.Count;
 
@@ -142,5 +147,18 @@ public class Threader : MonoBehaviour {
 		//print ("fire!");
 	}
 
+	void LandFull()
+	{
+		waitingOnFull = true;
+		if (threadParent.solved)
+		{
+			waitingOnFull = false;
+			threadParent.LandFull();
+		}
+	}
 
+	void LandNotFull()
+	{
+		waitingOnFull = false;
+	}
 }

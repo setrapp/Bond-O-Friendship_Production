@@ -5,32 +5,34 @@ using System.Collections.Generic;
 public class PaintAndNodeCollisionTest : MonoBehaviour {
 
     public ClusterNodePuzzle mirrorPuzzle;
-    [HideInInspector] public List <ClusterNode> nodes;
+    public List <ClusterNode> nodes;
     public float nodeRadius = 0.6f;
     public float paintDropRadius;
 
 	// Use this for initialization
 	void Start () {
-        mirrorPuzzle = GameObject.Find("MirroringClusterPuzzle").GetComponent<ClusterNodePuzzle>();
-        nodes = mirrorPuzzle.nodes;
-        nodeRadius = (gameObject.GetComponent<PaintCircle>().initialRadius) / 2;
+        //mirrorPuzzle = GetComponent<CanvasBehavior>().puzzleToReveal;
+        nodes = mirrorPuzzle.nodes;    
 	}
 	
 	// Update is called once per frame
 	void Update () {
+	}
 
-        int count = nodes.Count;
-        float distance;
-
-        for (int i = 0; i < count; i++)
-        {
-            if (nodes[i] as MirroringClusterNode != null)
-            {
-                distance = Vector3.Distance(transform.position, nodes[i].transform.position);
-                if (distance <= paintDropRadius + nodeRadius)
-                    ((MirroringClusterNode)nodes[i]).RevealNode();
-            }
-        }
-
+	public void CheckPaintAndNodeCollision(PaintCircle paintCircle)
+	{
+		if (GetComponent<CanvasBehavior> ().paintCopier != null) {
+			int count = nodes.Count;
+			float distanceSqr;
+			float paintDropRadius = paintCircle.initialRadius / 2;
+		
+			for (int i = 0; i < count; i++) {
+				if (nodes [i] as MirroringClusterNode != null) {
+					distanceSqr = Vector3.SqrMagnitude (paintCircle.transform.position - nodes [i].transform.position);
+					if (distanceSqr <= (paintDropRadius + nodeRadius) * (paintDropRadius + nodeRadius))
+						((MirroringClusterNode)nodes [i]).RevealNode ();
+				}
+			}
+		}
 	}
 }
