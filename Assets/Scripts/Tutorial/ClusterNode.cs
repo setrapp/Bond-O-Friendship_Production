@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ClusterNode : MonoBehaviour {
 
-	[HideInInspector]
+	//[HideInInspector]
 	public ClusterNodePuzzle targetPuzzle;
 	public bool disappearOnSolve = true;
 	public Renderer[] nodeRenderers = null;
@@ -119,8 +119,11 @@ public class ClusterNode : MonoBehaviour {
 			{
 				Destroy(gameObject);
 			}
+
 		}
 	}
+
+   
 
     virtual protected void OnCollisionEnter(Collision col)
 	{
@@ -134,7 +137,7 @@ public class ClusterNode : MonoBehaviour {
 
 	virtual public void CheckCollision (Collider col)
 	{
-		if (targetPuzzle.solved)
+		if (targetPuzzle.solved || (targetPuzzle.streamReaction != null && targetPuzzle.streamReaction.reactionProgress <= 0))
 		{
 			return;
 		}

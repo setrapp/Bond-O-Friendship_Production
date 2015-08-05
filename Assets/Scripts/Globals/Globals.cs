@@ -105,6 +105,7 @@ public class Globals : MonoBehaviour {
 
 	public bool playersBonded = false;
 
+	public SetShaderData_DarkAlphaMasker darknessMask = null;
 	public float playerLuminIntensity = 1;
 	public float defaultPlayerLuminIntensity = 1;
 

@@ -118,20 +118,6 @@ public class FloatMoving : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision)
-	{
-		if (collision.collider.tag == "Character")
-		{
-			collided = true;
-			BondAttachable partner = collision.collider.GetComponent<BondAttachable>();
-			if (Floating && partner != null && !character.bondAttachable.IsBondMade(partner))
-			{
-				character.bondAttachable.AttemptBond(partner, transform.position, true);
-			}
-		}
-
-	}
-
 	private void BondMade(BondAttachable bondPartner)
 	{
 		ApplyFloatStats();

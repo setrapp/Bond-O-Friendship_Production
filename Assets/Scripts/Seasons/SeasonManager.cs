@@ -16,6 +16,24 @@ public class SeasonManager : MonoBehaviour {
 		COLD = 2
 	}
 
+	void Start()
+	{
+		SeasonPlayerReaction player1Reaction = Globals.Instance.player1.GetComponent<SeasonPlayerReaction>();
+		SeasonPlayerReaction player2Reaction = Globals.Instance.player2.GetComponent<SeasonPlayerReaction>();
+
+		if (player1Reaction != null)
+		{
+			player1Reaction.manager = this;
+			player1Reaction.enabled = true;
+		}
+
+		if (player2Reaction != null)
+		{
+			player2Reaction.manager = this;
+			player2Reaction.enabled = true;
+		}
+	}
+
 	public bool AttemptSeasonChange(ActiveSeason newSeason)
 	{
 		if (Time.time - startTransition >= transitionTime || startTransition < 0)
