@@ -223,6 +223,10 @@ public class Stream : StreamBody {
 		}
 		else if (targetChannel.lastStreamReached == null && !tracer.enabled)
 		{
+			if (tracer.lineRenderer != null)
+			{
+				tracer.DestroyLine();
+			}
 			StartStreamLine();
 		}
 	}
