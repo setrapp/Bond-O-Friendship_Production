@@ -74,4 +74,12 @@ public class MirroringClusterNode : ClusterNode {
             nodeRenderers[i].enabled = false;
         }
 	}
+
+	override public void CheckCollision (Collider col)
+	{
+		if (revealed)
+		{
+			base.CheckCollision(col);
+		}
+	}
 }
