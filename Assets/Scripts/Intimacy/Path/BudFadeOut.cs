@@ -43,9 +43,17 @@ public class BudFadeOut : MonoBehaviour
 				shadowRenderer.material.color = shadowColor;
 			}
 
-			//timer -= Time.deltaTime;
+			timer -= Time.deltaTime;
 			if (timer <= 0)
 			{
+				DestroyInSpace destroyInSpace = GetComponent<DestroyInSpace>();
+				if (destroyInSpace != null)
+				{
+					destroyInSpace.spawnRenderer.material.color = destroyInSpace.spawner.parentColor;
+					destroyInSpace.spawner.spawned = false;
+				}
+				
+
 				Destroy(gameObject);
 			}
 		}
