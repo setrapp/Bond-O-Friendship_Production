@@ -26,6 +26,7 @@ GameObject:
   - 4: {fileID: 469528}
   - 33: {fileID: 3369528}
   - 23: {fileID: 2369528}
+  - 114: {fileID: 11401018}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -163,6 +164,21 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 1
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11401018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 169528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2369528}
+  renderBase: 3000
+  renderOffset: -4
+  forceRendererOn: 0
 --- !u!114 &11496134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -216,6 +232,18 @@ Prefab:
       propertyPath: seasonColors.Array.data[0].b
       value: .916251242
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderBase
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderOffset
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: targetRenderer
+      value: 
+      objectReference: {fileID: 2369528}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 185500}

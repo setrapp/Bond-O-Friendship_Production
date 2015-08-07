@@ -77,7 +77,7 @@ Shader "DepthMask/MaskerAlphaGradient" {
 
 			struct vertexOutput{
 				float4 pos: SV_POSITION;
-				float4 normal: NORMAL;
+				float4 normal: POSITION1;
 				float4 worldPos: COLOR0;
 			};
 
