@@ -11,7 +11,7 @@ public class Globals : MonoBehaviour {
 		{
 			if (instance == null)
 			{
-				GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
+                GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
 				if (instanceObject != null)
 				{
 					instance = instanceObject.GetComponent<Globals>();
