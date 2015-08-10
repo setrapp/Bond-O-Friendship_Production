@@ -29,10 +29,11 @@ public class BondAttachable : MonoBehaviour {
 
 	public void AttachFluff(Fluff fluff)
 	{
-		if (handleFluffAttachment && fluff != null)
+		// TODO This whole thing can probably just be removed.
+		/*if (handleFluffAttachment && fluff != null)
 		{
 			AttemptBond(fluff.creator, fluff.transform.position);
-		}
+		}*/
 	}
 
 	public Bond AttemptBond(BondAttachable bondPartner, Vector3 contactPosition, bool forceBond = false)

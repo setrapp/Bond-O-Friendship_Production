@@ -19,7 +19,7 @@ public class CharacterComponents : MonoBehaviour {
 	public BondAttachable bondAttachable;
 	public SimpleMover mover;
 	public FloatMoving floatMove;
-	public SphereCollider bodyCollider;
+	public CapsuleCollider bodyCollider;
 	public Rigidbody body;
 	public Attractor attractor;
 	public FlufflessPass flufflessPass;
@@ -116,7 +116,7 @@ public class CharacterComponents : MonoBehaviour {
 			}
 			if (bodyCollider == null)
 			{
-				bodyCollider = GetComponent<SphereCollider>();
+				bodyCollider = GetComponent<CapsuleCollider>();
 			}
 			if (body == null)
 			{

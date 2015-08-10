@@ -16,6 +16,24 @@ public class FindClosestLuminus : MonoBehaviour {
 		p1 = Globals.Instance.player1.gameObject;
 		p2 = Globals.Instance.player2.gameObject;
 
+		//FindAllLumini();
+
+		darkMaskScript = GameObject.Find("DarkMask").GetComponent<SetShaderData_DarkAlphaMasker>();
+		//Find which ones are closest at the beginning
+		FindClosestLumini();
+		SendDataToDarkMask();
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+		//Update closest lumini every frame
+		FindClosestLumini();
+		SendDataToDarkMask();
+	}
+
+	public void FindAllLumini()
+	{
 		/*TODO make sure this doesn't break when moving between two levels with a darkness layer*/
 		// Find all objects with the luminus tag, ignoring objects that do not have a luminus component.
 		GameObject[] luminusObjects = GameObject.FindGameObjectsWithTag("Luminus");
@@ -43,19 +61,6 @@ public class FindClosestLuminus : MonoBehaviour {
 				}
 			}
 		}
-
-		darkMaskScript = GameObject.Find("DarkMask").GetComponent<SetShaderData_DarkAlphaMasker>();
-		//Find which ones are closest at the beginning
-		FindClosestLumini();
-		SendDataToDarkMask();
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		//Update closest lumini every frame
-		FindClosestLumini();
-		SendDataToDarkMask();
 	}
 
 	void FindClosestLumini()
