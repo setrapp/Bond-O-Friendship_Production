@@ -71,11 +71,11 @@ public class CrumpleMesh : MonoBehaviour
                 var vertex = baseVertices[i];
 
                 if (x)
-                    vertex.x += Mathf.PerlinNoise(timex + vertex.x, timex + vertex.z) * scale;
+                    vertex.x += (Mathf.PerlinNoise(timex + vertex.x, timex + vertex.z) - 0.5f) * scale;
                 if (y)
-                    vertex.y += Mathf.PerlinNoise(timey + vertex.x, timey + vertex.y) * scale;
+                    vertex.y += (Mathf.PerlinNoise(timey + vertex.x, timey + vertex.y) - 0.5f) * scale;
                 if (z)
-                    vertex.z += Mathf.PerlinNoise(timez + vertex.x, timez + vertex.z) * scale;
+					vertex.z += (Mathf.PerlinNoise(timez + vertex.x, timez + vertex.z) - 0.5f) * scale;
 
                 vertices[i] = vertex;
             }
