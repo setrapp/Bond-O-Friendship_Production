@@ -37,7 +37,6 @@ public class StreamReaction : MonoBehaviour {
 			{
 				React(-decayRate * Time.deltaTime);
 			}
-			//touchingStream = false;
 		}
 	}
 
