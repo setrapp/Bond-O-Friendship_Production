@@ -3,12 +3,15 @@ using System.Collections;
 
 public class MirroringClusterNode : ClusterNode {
 
-    public ClusterNode nodeToMirror;
-	public bool revealToNode = true;
-	public bool revealToPaint = false;
+    [HideInInspector] public ClusterNode nodeToMirror;
+	[HideInInspector] public bool revealToNode = false;
+    [HideInInspector] public bool revealToPaint = true;
     public bool revealed;
+    public float revealDuration = 60.0f;
 
-    int numOfRenderers;
+    private float revealedAt = -1;
+
+    private int numOfRenderers;
 
     protected override void Start()
     {
@@ -24,8 +27,17 @@ public class MirroringClusterNode : ClusterNode {
         base.Update();
 
 		//Reveal 
-		if (revealToNode && nodeToMirror.lit)
-			RevealNode();
+        if (revealToNode && nodeToMirror.lit)
+        {
+            RevealNode();
+            revealedAt = Time.time;
+        }
+
+        if (revealed)
+        {
+            if (Time.time - revealedAt > revealDuration)
+                HideNode();
+        }
 	}
 
     void MirrorNode()
@@ -56,6 +68,7 @@ public class MirroringClusterNode : ClusterNode {
 	public void RevealNode()
 	{
 		revealed = true;
+        revealedAt = Time.time;
 
         //enable rendering
         for (int i = 0; i < numOfRenderers; i++)
@@ -66,12 +79,14 @@ public class MirroringClusterNode : ClusterNode {
 
     public void HideNode()
 	{
-		revealed = false;
-
-        //disable rendering
-        for (int i = 0; i < numOfRenderers; i++)
+        if (!lit)
         {
-            nodeRenderers[i].enabled = false;
+            revealed = false;
+            //disable rendering
+            for (int i = 0; i < numOfRenderers; i++)
+            {
+                nodeRenderers[i].enabled = false;
+            }
         }
 	}
 
