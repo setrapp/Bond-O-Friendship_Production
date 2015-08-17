@@ -55,8 +55,9 @@ public class CharacterComponents : MonoBehaviour {
 
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 
-		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch;
-		bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
+		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch.
+		// REMOVED: Causes players to get stuck in some places.
+		//bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
 
 		// Don't show mid-tail if a player bond is formed or cannot be formed.
 		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || Globals.Instance.playersBonded)
