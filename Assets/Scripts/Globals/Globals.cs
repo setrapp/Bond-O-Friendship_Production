@@ -48,6 +48,9 @@ public class Globals : MonoBehaviour {
 
 	public enum InputNameSelected {None, Keyboard, LeftController, RightController };
 
+	public enum GameState { Unpaused, Unpausing, Paused, Pausing};
+	public GameState gameState = GameState.Unpaused;
+
 	public ControlsAndInput player1Controls;
 	public ControlsAndInput player2Controls;
 
@@ -83,6 +86,11 @@ public class Globals : MonoBehaviour {
 
 	public static bool isPaused;
 
+	public Vector3 player1PositionBeforePause;
+	public Vector3 player2PositionBeforePause;
+	public Vector3 camera1PositionBeforePause;
+	public Vector3 camera2PositionBeforePause;
+
 	public GameObject canvasPaused;
 
 	[Header("Fluff Depth Mask")]
@@ -105,6 +113,9 @@ public class Globals : MonoBehaviour {
 	public EtherRing existingEther = null;
 
 	public bool playersBonded = false;
+
+
+	public GameObject pauseMenu;
 
 	public SetShaderData_DarkAlphaMasker darknessMask = null;
 	public float playerLuminIntensity = 1;
@@ -149,7 +160,18 @@ public class Globals : MonoBehaviour {
 	{
         if(Input.GetKeyDown(KeyCode.Escape))
 		{
-            ResetOrExit();
+            //ResetOrExit();
+			if(gameState == GameState.Unpaused)
+			{
+				gameState = GameState.Pausing;
+				OnPause();
+			}
+			if(gameState == GameState.Paused)
+			{
+				allowInput = false;
+				CameraSplitter.Instance.splittable = true;
+				gameState = GameState.Unpausing;
+			}
 		}
 
 		if (Input.GetKeyDown(KeyCode.M))
@@ -157,6 +179,43 @@ public class Globals : MonoBehaviour {
 			mute = !mute;
 		}
         
+		if (gameState == GameState.Pausing) 
+		{
+			
+			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedOut)
+			{
+				CameraSplitter.Instance.Zoom(true);
+				CameraSplitter.Instance.MovePlayers(player1PositionBeforePause, player2PositionBeforePause);
+			}
+			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedOut)
+			{
+				gameState = GameState.Paused;
+			}
+		}
+
+		if (gameState == GameState.Paused) 
+		{
+			if(!pauseMenu.activeInHierarchy)
+				pauseMenu.SetActive(true);
+			CameraSplitter.Instance.splittable = false;
+			allowInput = true;
+		}
+
+		if (gameState == GameState.Unpausing) 
+		{
+			if(pauseMenu.activeInHierarchy)
+				pauseMenu.SetActive(false);
+			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
+			{
+				CameraSplitter.Instance.Zoom(false);
+				CameraSplitter.Instance.MovePlayers(player1PositionBeforePause, player2PositionBeforePause, false);
+			}
+			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedIn)
+			{
+				gameState = GameState.Unpaused;
+				allowInput = true;
+			}
+		}
 		
 		leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
 		rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
@@ -176,6 +235,22 @@ public class Globals : MonoBehaviour {
 
 		
 	}
+
+	public void OnPause()
+	{
+		SetPauseLocations ();
+		CameraSplitter.Instance.SetZoomTarget ();
+		allowInput = false;
+	}
+
+	public void SetPauseLocations()
+	{
+		player1PositionBeforePause = player1.transform.position;
+		player2PositionBeforePause = player2.transform.position;
+		camera1PositionBeforePause = CameraSplitter.Instance.splitCamera1.transform.position;
+		camera2PositionBeforePause = CameraSplitter.Instance.splitCamera2.transform.position;
+	}
+
 
     public void ResetOrExit(bool destroyGlobals = true)
     {

@@ -22,7 +22,7 @@ public class ClusterNodePuzzle : MonoBehaviour {
     public bool solveWithDependent = false;
 
 
-	void Awake()
+	void Start()
 	{
 		for (int i = 0; i < nodes.Count; i++)
 		{

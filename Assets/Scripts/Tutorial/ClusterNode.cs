@@ -6,6 +6,8 @@ public class ClusterNode : MonoBehaviour {
 
 	//[HideInInspector]
 	public ClusterNodePuzzle targetPuzzle;
+	public bool controlColor = true;
+	public bool colorSet = false;
 	public bool disappearOnSolve = true;
 	public Renderer[] nodeRenderers = null;
 	public float cooldownTime = -1;
@@ -33,11 +35,14 @@ public class ClusterNode : MonoBehaviour {
 		}
 		startingcolor = nodeRenderers[0].material.color;
 
+
+
 		if (pairedWall != null)
 		{
 			wallRenderers = pairedWall.GetComponentsInChildren<Renderer>();
 			startWallAlpha = wallRenderers[0].material.color.a;
 		}
+		colorSet = true;
 	}
 	
 	// Update is called once per frame
@@ -68,13 +73,15 @@ public class ClusterNode : MonoBehaviour {
 
 			if (pairedWall != null && (wallRenderers[0].material.color.a > startWallAlpha / 2 || wallRenderers[0].material.color.a > 0 && targetPuzzle.solved))
 			{
-				for (int i = 0; i < wallRenderers.Length; i++)
-				{
-					Color newWallColor = wallRenderers[i].material.color;
-					newWallColor.a -= Time.deltaTime;
-					wallRenderers[i].material.color = newWallColor;
+				if(controlColor)
+					{
+					for (int i = 0; i < wallRenderers.Length; i++)
+					{
+						Color newWallColor = wallRenderers[i].material.color;
+						newWallColor.a -= Time.deltaTime;
+						wallRenderers[i].material.color = newWallColor;
+					}
 				}
-
 				if (wallRenderers[0].material.color.a <= 0)
 				{
 					pairedWall.GetComponent<Collider>().enabled = false; ;
@@ -88,9 +95,12 @@ public class ClusterNode : MonoBehaviour {
 				if (timer <= 0)
 				{
 					lit = false;
-					for (int i = 0; i < nodeRenderers.Length; i++)
+					if(controlColor)
 					{
-						nodeRenderers[i].material.color = startingcolor;
+						for (int i = 0; i < nodeRenderers.Length; i++)
+						{
+							nodeRenderers[i].material.color = startingcolor;
+						}
 					}
 				}
 				
@@ -99,11 +109,14 @@ public class ClusterNode : MonoBehaviour {
 		}
 		else if (pairedWall != null && wallRenderers[0].material.color.a < startWallAlpha)
 		{
-			for (int i = 0; i < wallRenderers.Length; i++)
+			if(controlColor)
 			{
-				Color newWallColor = wallRenderers[i].material.color;
-				newWallColor.a += Time.deltaTime * 3;
-				wallRenderers[i].material.color = newWallColor;
+				for (int i = 0; i < wallRenderers.Length; i++)
+				{
+					Color newWallColor = wallRenderers[i].material.color;
+					newWallColor.a += Time.deltaTime * 3;
+					wallRenderers[i].material.color = newWallColor;
+				}
 			}
 			pairedWall.GetComponent<Collider>().enabled = true;
 		}
@@ -111,9 +124,12 @@ public class ClusterNode : MonoBehaviour {
 		if(targetPuzzle.solved && disappearOnSolve && (pairedWall == null || !pairedWall.GetComponent<Collider>().enabled))
 		{
 			fadeColor.a -= Time.deltaTime;
-			for (int i = 0; i < nodeRenderers.Length; i++)
+			if(controlColor)
 			{
-				nodeRenderers[i].material.color = fadeColor;
+				for (int i = 0; i < nodeRenderers.Length; i++)
+				{
+					nodeRenderers[i].material.color = fadeColor;
+				}
 			}
 			if (fadeColor.a <= 0.01f)
 			{
