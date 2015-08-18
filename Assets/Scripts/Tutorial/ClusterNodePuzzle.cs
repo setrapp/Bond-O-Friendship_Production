@@ -17,7 +17,7 @@ public class ClusterNodePuzzle : MonoBehaviour {
     public float progress = 0;
 
 
-	void Awake()
+	void Start()
 	{
 		for (int i = 0; i < nodes.Count; i++)
 		{

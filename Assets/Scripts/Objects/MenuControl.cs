@@ -14,12 +14,26 @@ public class MenuControl : MonoBehaviour {
 
     public GameObject obscureMenuPanel;
 
-    
+	public GameObject mainMenu;
 
     public GameObject begin;
 
-    public GameObject inputSelect;  
+    public GameObject inputSelect;
 
+	public GameObject options;
+
+	public GameObject exitGameConfirm;
+
+	public enum MenuState{TitleScreen, MainMenu, Options, InputSelect, QuitGame, StartGame};
+
+	public MenuState menuState = MenuState.TitleScreen;
+
+	public FadeMainMenu fMainMenu;
+	public FadeInputSelect fInputSelect;
+	public FadeQuitGame fQuitGame;
+	public FadeOptions fOptions;
+	public MainMenuInputOutlines mainMenuInputOutlines;
+	public FollowPlayerInputKeyboard keyboardInputFollowing;
     //public GameObject levelCover;
     //public GameObject levelCover2;
 
@@ -47,36 +61,36 @@ public class MenuControl : MonoBehaviour {
     private Color startColor;
     private Color fadeColor;
 
-   
+	public ClusterNodePuzzle optionsNodePuzzle;
+	public ClusterNodePuzzle exitGameNodePuzzle;
+
+	public ClusterNodePuzzle optionsBackNodePuzzle;
+	public ClusterNodePuzzle optionsInputSelectNodePuzzle;
+
+	public ClusterNodePuzzle inputSelectBackNodePuzzle;
+
+	public ClusterNodePuzzle confirmQuitNodePuzzle;
+	public ClusterNodePuzzle cancelQuitNodePuzzle;
 
     private bool startLevelLoaded = false;
 
     private bool startPanelFade = false;
     private bool zoom = true;
-
-
-    public List<Renderer> inputSelectRenderers;
-    private List<Color> inputSelectColorsEmpty = new List<Color>();
-    private List<Color> inputSelectColorsFull = new List<Color>();
+	private bool startZoom = false;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
     {
         //startColor = levelCover.renderer.material.color;
        // fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
         //inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();   
-        Globals.Instance.allowInput = false;
+       // Globals.Instance.allowInput = false;
+		//mainMenu.SetActive (false);
+		//inputSelect.SetActive (false);
 
         if (Application.isEditor && !Globals.Instance.zoomIntroInEditor)
         {
             fadeInDuration = .1f;
-        }
-
-        foreach (Renderer renderer in inputSelectRenderers)
-        {
-            renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
-            inputSelectColorsEmpty.Add(renderer.material.color);
-            inputSelectColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
         }
 
         GameObject[] messages = GameObject.FindGameObjectsWithTag("TranslevelMessage");
@@ -106,6 +120,17 @@ public class MenuControl : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
+		if (menuState == MenuState.TitleScreen) 
+		{
+			if(mainMenu.activeInHierarchy)
+			mainMenu.SetActive(false);
+			if(inputSelect.activeInHierarchy)
+			inputSelect.SetActive(false);
+			if(exitGameConfirm.activeInHierarchy)
+				exitGameConfirm.SetActive(false);
+			if(options.activeInHierarchy)
+				options.SetActive(false);
+		}
         if (obscureMenuPanel.activeSelf && startPanelFade)
         {
             FadeInFadeOut();
@@ -115,66 +140,7 @@ public class MenuControl : MonoBehaviour {
             deviceCount = InputManager.controllerCount;
             if (!inputSelected)
             {
-                if (deviceCount > 0)
-                {
-                    device = InputManager.ActiveDevice;
-                    if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged)
-                    {
-                        Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
-                        Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
-                        Globals.Instance.rightContollerIndex = -2;
-                        Globals.Instance.rightControllerPreviousIndex = -2;
-
-                        if (deviceCount == 1)
-                        {
-                            Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
-                            Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
-                            Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
-                            Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
-                        }
-                        else
-                        {
-                            Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.Solo;
-                            Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.Solo;
-                            Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
-                            Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
-                        }
-
-                        inputSelected = true;
-                        inputSelect.SetActive(true);
-                        return;
-                    }
-                }
-                if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
-                {
-					if(!Input.GetKeyDown(KeyCode.F9))
-					{
-	                    if (deviceCount == 0)
-	                    {
-	                        Globals.Instance.leftControllerIndex = -3;
-	                        Globals.Instance.rightContollerIndex = -3;
-	                    }
-	                    else if (deviceCount == 1)
-	                    {
-	                        Globals.Instance.leftControllerIndex = -2;
-	                        Globals.Instance.rightContollerIndex = -3;
-	                    }
-	                    else
-	                    {
-	                        Globals.Instance.leftControllerIndex = -2;
-	                        Globals.Instance.rightContollerIndex = -2;
-	                    }
-
-	                    Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
-	                    Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
-	                    Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
-	                    Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
-
-	                    inputSelected = true;
-	                    inputSelect.SetActive(true);
-	                    return;
-					}
-                }
+				SetInputSelected();
             }
             else
             {
@@ -182,32 +148,222 @@ public class MenuControl : MonoBehaviour {
                     FadeStartMenu();
             }
 
-            if (inputSelected && newGameNodePuzzle != null && newGameNodePuzzle.solved)
-            {
-                Globals.Instance.allowInput = false;
-                readyUp = true;      
-            }
-            else
-            {
-                CameraSplitter.Instance.followPlayers = false;
-            }
 
-            if (readyUp)
-            {
-                if (!toggled)
-                {
-                    Invoke("StartGame", .5f);
-                    toggled = true;
-                }
+			switch(menuState)
+			{
 
-                if(startGame)
-                    FadeControls();
-            }
+	//Main Menu/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case MenuState.MainMenu:
+
+				ToggleFadeInputSelectMenu();
+				ToggleFadeExitGameConfirm();
+				ToggleFadeOptionsMenu();
+				
+				if(!mainMenu.activeInHierarchy)
+						mainMenu.SetActive(true);
+
+					if(fMainMenu.f != 1 && fInputSelect.f == 0 && fQuitGame.f == 0)
+						fMainMenu.FadeIn();
+				if (newGameNodePuzzle != null && newGameNodePuzzle.solved)
+				{
+					newGameNodePuzzle.solved = false;
+				     Globals.Instance.allowInput = false;
+					menuState = MenuState.StartGame;      
+				}
+				//Puzzle to switch to Input Select
+				if(optionsNodePuzzle != null && optionsNodePuzzle.solved)
+				{
+					optionsNodePuzzle.solved = false;
+					menuState = MenuState.Options;
+				}
+
+				//Puzzle to switch to Exit Game Confirm
+				if(exitGameNodePuzzle != null && exitGameNodePuzzle.solved)
+				{
+					exitGameNodePuzzle.solved = false;
+					menuState = MenuState.QuitGame;
+				}
+
+					break;
+	//Options   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			case MenuState.Options:
+				
+				ToggleFadeMainMenu();
+				ToggleFadeExitGameConfirm();
+				ToggleFadeInputSelectMenu();
+				if(!options.activeInHierarchy)
+					options.SetActive(true);						
+				if(fOptions.f != 1 && fMainMenu.f == 0 && fQuitGame.f == 0 && fInputSelect.f == 0)
+					fOptions.FadeIn();
+				
+				if(fOptions.f == 1)
+				{
+					if(!options.GetComponent<OptionsMenu>().soundChecked)
+						options.GetComponent<OptionsMenu>().CheckSoundSettings();
+
+					if(optionsInputSelectNodePuzzle != null && optionsInputSelectNodePuzzle.solved)
+					{
+						options.GetComponent<OptionsMenu>().soundChecked = false;
+						optionsInputSelectNodePuzzle.solved = false;
+						menuState = MenuState.InputSelect;
+					}
+
+					if(optionsBackNodePuzzle != null && optionsBackNodePuzzle.solved)
+					{
+						options.GetComponent<OptionsMenu>().soundChecked = false;
+						optionsBackNodePuzzle.solved = false;
+						menuState = MenuState.MainMenu;
+					}
+				}
+				
+				
+				break;
+	//Input Select/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case MenuState.InputSelect:
+
+					ToggleFadeMainMenu();
+					ToggleFadeOptionsMenu();
+					ToggleFadeExitGameConfirm();
+					if(!inputSelect.activeInHierarchy)
+						inputSelect.SetActive(true);						
+					if(fInputSelect.f != 1 && fMainMenu.f == 0 && fQuitGame.f == 0)
+						fInputSelect.FadeIn();
+					
+				if(fInputSelect.f == 1)
+				{
+					if(!inputFill.allowFill)
+						inputFill.allowFill = true;
+					keyboardInputFollowing.setColor = true;
+
+					if(inputSelectBackNodePuzzle != null && inputSelectBackNodePuzzle.solved)
+					{
+						keyboardInputFollowing.setColor = false;
+						inputSelectBackNodePuzzle.solved = false;
+						inputFill.allowFill = false;
+						menuState = MenuState.Options;
+					}
+				}
+
+					
+					break;
+	//Quit Game Confirm////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case MenuState.QuitGame:
+
+
+				ToggleFadeMainMenu();
+				ToggleFadeOptionsMenu();
+				ToggleFadeInputSelectMenu();
+				if(!exitGameConfirm.activeInHierarchy)
+					exitGameConfirm.SetActive(true);
+				if(fQuitGame.f != 1 && fMainMenu.f == 0 && fInputSelect.f == 0)
+					fQuitGame.FadeIn();
+
+				if(confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
+				{
+					confirmQuitNodePuzzle.solved = false;
+					if(Application.isEditor)
+						UnityEditor.EditorApplication.isPlaying = false;
+					else
+						Application.Quit();
+				}
+				if(cancelQuitNodePuzzle != null && cancelQuitNodePuzzle.solved)
+				{
+					cancelQuitNodePuzzle.solved = false;
+					menuState = MenuState.MainMenu;
+				}
+				
+					break;
+			case MenuState.StartGame:
+				ToggleFadeMainMenu();
+				ToggleFadeOptionsMenu();
+				ToggleFadeInputSelectMenu();
+				ToggleFadeExitGameConfirm();
+
+
+					if (!toggled)
+					{
+						  Invoke("StartGame", .5f);
+						CameraSplitter.Instance.movePlayers = true;
+						  toggled = true;
+					}
+						
+					if(startGame)
+						FadeControls();
+
+				break;
+			}
+
+			if(startZoom)
+			{
+				if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
+					CameraSplitter.Instance.Zoom(false);
+				else
+				{
+					CameraSplitter.Instance.followPlayers = true;
+					CameraSplitter.Instance.splittable = true;
+					CameraSplitter.Instance.zCameraOffset = -300.0f;
+					CameraSplitter.Instance.duration = 3.0f;
+					Globals.Instance.inMainMenu = false;
+					Globals.Instance.allowInput = true;
+
+					startZoom = false;
+				}
+			}
         }
 
     }	
 
-    private void StartGame()
+	private void ToggleFadeMainMenu ()
+	{
+		if(fMainMenu.f == 0)
+		{
+			if(mainMenu.activeInHierarchy)
+				mainMenu.SetActive(false);
+		}
+		else
+		{
+			fMainMenu.FadeOut();
+		}
+	}
+	private void ToggleFadeOptionsMenu()
+	{
+		if(fOptions.f == 0)
+		{
+			if(options.activeInHierarchy)
+				options.SetActive(false);
+		}
+		else
+		{
+			fOptions.FadeOut();
+		}
+	}
+
+	private void ToggleFadeInputSelectMenu()
+	{
+		if(fInputSelect.f == 0)
+		{
+			if(inputSelect.activeInHierarchy)
+				inputSelect.SetActive(false);
+		}
+		else
+		{
+			fInputSelect.FadeOut();
+		}
+	}
+	private void ToggleFadeExitGameConfirm()
+	{
+		if(fQuitGame.f == 0)
+		{
+			if(exitGameConfirm.activeInHierarchy)
+				exitGameConfirm.SetActive(false);
+		}
+		else
+		{
+			fQuitGame.FadeOut();
+		}
+	}
+	
+	private void StartGame()
     {
         startGame = true;
     }
@@ -223,12 +379,7 @@ public class MenuControl : MonoBehaviour {
         {
             if (f != 1)
             {
-                f = Mathf.Clamp(f + Time.deltaTime / .5f, 0.0f, 1.0f);
-                for (int i = 0; i < inputSelectRenderers.Count; i++)
-                {
-                    if (inputSelectRenderers[i].GetComponent<Renderer>().material.HasProperty("_Color"))
-                        inputSelectRenderers[i].GetComponent<Renderer>().material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], f);
-                }
+               
             }
             else
             {
@@ -240,40 +391,29 @@ public class MenuControl : MonoBehaviour {
     }
 
     private void FadeControls()
-    {
-        if (t != 0)
-        {            
-            CameraSplitter.Instance.movePlayers = true;
-            t -= Time.deltaTime / duration;
-            t = Mathf.Clamp(t, 0.0f, 1.0f);
-            for (int i = 0; i < inputSelectRenderers.Count; i++)
-            {
-                if (inputSelectRenderers[i].GetComponent<Renderer>() != null && inputSelectRenderers[i].GetComponent<Renderer>().material.HasProperty("_Color"))
-                    inputSelectRenderers[i].GetComponent<Renderer>().material.color = Color.Lerp(inputSelectColorsEmpty[i], inputSelectColorsFull[i], t);
-            }
+    {            
 
-            if (zoom)
-            {
-                if (!Application.isEditor || Globals.Instance.zoomIntroInEditor)
-                {
-                    Invoke("ZoomCamera", 0.5f);
-                }
-                else
-                {
-                    CameraSplitter.Instance.EndZoom();
-					CameraSplitter.Instance.transform.position = new Vector3(CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, -100.0f);
-                    CameraSplitter.Instance.splittable = true;
-                }
+		if (zoom) 
+		{
+			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor) 
+			{
 
-                zoom = false;
-            }
+				Invoke ("ZoomCamera", 0.5f);
+			} 
+			else 
+			{
+				CameraSplitter.Instance.transform.position = new Vector3 (CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, -100.0f);
+				CameraSplitter.Instance.splittable = true;
+				CameraSplitter.Instance.followPlayers = true;
+				Globals.Instance.inMainMenu = false;
+				Globals.Instance.allowInput = true;
+			}
 
-        }
-        else
-        {
-			
-        }
-    }
+			zoom = false;
+		}
+
+        
+	}
 
     private void FadeInFadeOut()
     {
@@ -281,9 +421,7 @@ public class MenuControl : MonoBehaviour {
             if (t != 0)
             {
                 t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
-                //float f = 1 - t;
                 obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
-               // begin.GetComponent<CanvasGroup>().alpha = f;
             }
             else
             {
@@ -306,8 +444,8 @@ public class MenuControl : MonoBehaviour {
 
     public void ZoomCamera()
     {
-		CameraSplitter.Instance.SetZoomTarget ();
-		CameraSplitter.Instance.zoom = true;
+		CameraSplitter.Instance.SetZoomTarget(false);
+		startZoom = true;
     }
 
     public IEnumerator MainMenuLoadLevel()
@@ -328,6 +466,74 @@ public class MenuControl : MonoBehaviour {
         }
     }
 
+	private void SetInputSelected()
+	{
+		
+		if (deviceCount > 0)
+		{
+			device = InputManager.ActiveDevice;
+			if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged)
+			{
+				Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
+				Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
+				Globals.Instance.rightContollerIndex = -2;
+				Globals.Instance.rightControllerPreviousIndex = -2;
+				
+				if (deviceCount == 1)
+				{
+					Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+					Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+					Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+					Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+				}
+				else
+				{
+					Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.Solo;
+					Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.Solo;
+					Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.LeftController;
+					Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.RightController;
+				}
+				
+				inputSelected = true;
+				//inputSelect.SetActive(true);
+				//mainMenu.SetActive(true);
+				menuState = MenuState.MainMenu;
+				return;
+			}
+		}
+		if (Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
+		{
+			if(!Input.GetKeyDown(KeyCode.F9))
+			{
+				if (deviceCount == 0)
+				{
+					Globals.Instance.leftControllerIndex = -3;
+					Globals.Instance.rightContollerIndex = -3;
+				}
+				else if (deviceCount == 1)
+				{
+					Globals.Instance.leftControllerIndex = -2;
+					Globals.Instance.rightContollerIndex = -3;
+				}
+				else
+				{
+					Globals.Instance.leftControllerIndex = -2;
+					Globals.Instance.rightContollerIndex = -2;
+				}
+				
+				Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
+				Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;
+				Globals.Instance.player1Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
+				Globals.Instance.player2Controls.inputNameSelected = Globals.InputNameSelected.Keyboard;
+				
+				inputSelected = true;
+				//inputSelect.SetActive(true);
+				//mainMenu.SetActive(true);
+				menuState = MenuState.MainMenu;
+				return;
+			}
+		}
+	}
 
     public void ExitGame()
     {
