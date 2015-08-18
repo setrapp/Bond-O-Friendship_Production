@@ -321,6 +321,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &154994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 421160}
+  - 33: {fileID: 3392550}
+  - 64: {fileID: 6446150}
+  - 23: {fileID: 2366138}
+  - 114: {fileID: 11416216}
+  - 114: {fileID: 11475118}
+  - 114: {fileID: 11419026}
+  - 114: {fileID: 11403752}
+  m_Layer: 0
+  m_Name: DarkMask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &194998
 GameObject:
   m_ObjectHideFlags: 1
@@ -385,6 +407,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &421160
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -145.157654, y: 202.913025, z: -0}
+  m_LocalScale: {x: 910.026245, y: 910.026367, z: 11.37533}
+  m_Children: []
+  m_Father: {fileID: 449134}
+  m_RootOrder: 4
 --- !u!4 &449118
 Transform:
   m_ObjectHideFlags: 1
@@ -508,6 +542,7 @@ Transform:
   - {fileID: 22449148}
   - {fileID: 449148}
   - {fileID: 449150}
+  - {fileID: 421160}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &449136
@@ -820,6 +855,30 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!23 &2366138
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: f873f40349cd3e64c930963681542717, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3349144
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -848,6 +907,25 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149146}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &3392550
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!64 &6446150
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Convex: 0
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!81 &8149150
 AudioListener:
   m_ObjectHideFlags: 1
@@ -1506,6 +1584,64 @@ Light:
   m_ShadowRadius: 0
   m_ShadowAngle: 0
   m_AreaSize: {x: 1, y: 1}
+--- !u!114 &11403752
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf0b58cbf93b7ee4e99497fa79195196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  luminusArray: []
+  l1: {fileID: 0}
+  l2: {fileID: 0}
+  p1: {fileID: 0}
+  p2: {fileID: 0}
+  darkMaskScript: {fileID: 0}
+  l1p1_sqMag: 0
+  l2p2_sqMag: 0
+--- !u!114 &11416216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65477d551d8e5bf488e62087e41dffad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p1: {fileID: 0}
+  p2: {fileID: 0}
+  l1: {fileID: 0}
+  l2: {fileID: 0}
+  oldL1: {fileID: 0}
+  oldL2: {fileID: 0}
+  l1p1_sqMag: 0
+  l2p2_sqMag: 0
+  maskRenderer: {fileID: 0}
+  fadeIn: 0
+  fadeTime: 1
+  trigger: {fileID: 0}
+  height: 3
+--- !u!114 &11419026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 3000
+  renderOffset: 300
+  forceRendererOn: 0
 --- !u!114 &11449120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1754,6 +1890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a38d45bc519f448837406257d75c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreAtmosphereBreaks: 0
 --- !u!114 &11449136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1770,11 +1907,12 @@ MonoBehaviour:
   startingPerspectiveFOV: 0
   orthographicSize: 20
   startingOrthographicSize: 0
-  zoomIntroInEditor: 1
+  zoomIntroInEditor: 0
   earlyBondInEditor: 1
+  editorFakeStreamRate: 0
   allowInput: 1
   audioVolume: -1
-  mute: 0
+  mute: 1
   bgm: {fileID: 8294998}
   levelsBackgroundAudio:
   - {fileID: 8294998}
@@ -1822,6 +1960,9 @@ MonoBehaviour:
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
   playersBonded: 0
+  darknessMask: {fileID: 11416216}
+  playerLuminIntensity: 1
+  defaultPlayerLuminIntensity: 1
 --- !u!114 &11449138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1943,6 +2084,18 @@ MonoBehaviour:
   allowMobileDevice: 0
   allowMouseInput: 0
   focusOnMouseHover: 0
+--- !u!114 &11475118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b87ddac5b4269d94891b34fe7e157a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extraWidth: 300
 --- !u!114 &11480856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2041,10 +2194,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: zoomIntroInEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: mute
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: fadeIn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: editorFakeStreamRate
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

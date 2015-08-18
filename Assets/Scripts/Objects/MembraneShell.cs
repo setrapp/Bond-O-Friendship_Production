@@ -101,12 +101,12 @@ public class MembraneShell : MonoBehaviour {
 			}
 			Transform parent = transform.parent;
 			transform.parent = null;
-			MembraneBroken(removeMembrane);
+			MembraneWallBroken(removeMembrane);
 			transform.parent = parent;
 		}
 	}
 
-	private void MembraneBreaking(MembraneWall BreakingMembrane)
+	private void MembraneWallBreaking(MembraneWall BreakingMembrane)
 	{
 		if (createdWalls.Contains(BreakingMembrane) && !Breaking)
 		{
@@ -118,14 +118,14 @@ public class MembraneShell : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (createdWalls.Count > 0)
 		{
 			createdWalls.Remove(brokenMembrane);
 			if (transform.parent != null)
 			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+				transform.parent.SendMessage("MembraneInShellBroken", this, SendMessageOptions.DontRequireReceiver);
 			}
 			if (createdWalls.Count == 0)
 			{
@@ -138,7 +138,7 @@ public class MembraneShell : MonoBehaviour {
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("AllMembranesBroken", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneShellBroken", this, SendMessageOptions.DontRequireReceiver);
 		}
 		if (destroyWhenBroken)
 		{
@@ -150,7 +150,7 @@ public class MembraneShell : MonoBehaviour {
 	{
 		if (bondingMembrane != null && createdWalls.Contains(bondingMembrane))
 		{
-			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneInShellBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 	}

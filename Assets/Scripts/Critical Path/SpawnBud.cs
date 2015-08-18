@@ -7,7 +7,7 @@ public class SpawnBud : MonoBehaviour {
 	public GameObject bud;
 	public bool spawned;
 	public Color parentColor;
-    public Color BudColor;
+    //public Color BudColor;
 
 	private float fadeTimer = 1.0f;
 	private bool fading;
@@ -17,7 +17,7 @@ public class SpawnBud : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		parentColor = GetComponent<Renderer>().material.color;
+		parentColor = transform.parent.GetComponent<Renderer>().material.color;
 	}
 	
 	// Update is called once per frame
@@ -27,13 +27,24 @@ public class SpawnBud : MonoBehaviour {
 			fadeTimer -= Time.deltaTime;
 			if(!scaling)
 				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f);
-			GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
+			transform.parent.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
 
 			if(fadeTimer <= 0)
 			{
 				fading = false;
 				scaling = false;
-				newBud.transform.parent = transform;
+				newBud.transform.parent = transform.parent;
+				DestroyInSpace budDestroy = newBud.GetComponent<DestroyInSpace>();
+				if (budDestroy)
+				{
+					budDestroy.spawner = this;
+					budDestroy.spawnRenderer = transform.parent.GetComponent<Renderer>();
+				}
+				SeasonObjectReaction seasonReaction = newBud.GetComponent<SeasonObjectReaction>();
+				if (seasonReaction != null)
+				{
+					seasonReaction.enabled = true;
+				}
 				fadeTimer = 1.0f;
 			}
 			//	Destroy(gameObject);
@@ -64,7 +75,7 @@ public class SpawnBud : MonoBehaviour {
 			newBud.transform.position = transform.position;
 			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
 			//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
-            newBud.GetComponent<Renderer>().material.color = BudColor;
+            //newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;
 			spawned = true;
 		}

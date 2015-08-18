@@ -12,7 +12,7 @@ public class SpawnLand : MonoBehaviour {
 	private Color threadColor;
 	private Color childColor;
 	private bool removed;
-	public float colliderZDepth = 0;
+	public float colliderZDepth = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +27,8 @@ public class SpawnLand : MonoBehaviour {
 			if(land == null)
 			{
 				land = (GameObject)Instantiate(landPrefab);
-				land.transform.position = transform.position + new Vector3(0, 0, .004f);
+				land.transform.position = transform.position + new Vector3(0, 0, 5.0f);
+				land.transform.parent = transform.parent;
 				Collider landCollider = land.GetComponentInChildren<Collider>();
 				if (landCollider != null)
 				{
@@ -37,11 +38,19 @@ public class SpawnLand : MonoBehaviour {
 			else if(land.transform.localScale.x <= maxLandSize)
 			{
 				land.transform.localScale += new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+				if (land.transform.localScale.x >= maxLandSize)
+				{
+					SendMessage("LandFull", SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 		else if(land != null && land.transform.localScale.x > 1.0f && transform.GetComponentInParent<ThreadParent>().solved == false)
 		{
 			land.transform.localScale -= new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+			if (land.transform.localScale.x < maxLandSize)
+			{
+				SendMessage("LandNotFull", SendMessageOptions.DontRequireReceiver);
+			}
 		}
 		if(transform.GetComponentInParent<ThreadParent>().solved == true)
 		{

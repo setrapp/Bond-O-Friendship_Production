@@ -31,7 +31,7 @@ public class StreamChannelSeries : MonoBehaviour {
 					if (maskBeds)
 					{
 						GameObject bedOverlay = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
-						bedOverlay.transform.position += new Vector3(0, 0, 3) - new Vector3(0, 0, bedOverlay.transform.position.z);
+						bedOverlay.transform.position += new Vector3(0, 0, -0.3f) - new Vector3(0, 0, bedOverlay.transform.position.z);
 						Renderer bedOverlayRenderer = bedOverlay.GetComponent<Renderer>();
 						if (bedOverlayRenderer != null)
 						{
@@ -40,7 +40,7 @@ public class StreamChannelSeries : MonoBehaviour {
 						}
 
 						GameObject bedMask = (GameObject)Instantiate(channels[i].bed, channels[i].bed.transform.position, channels[i].bed.transform.rotation);
-						bedMask.transform.position += new Vector3(0, 0, 4) - new Vector3(0, 0, bedMask.transform.position.z);
+						bedMask.transform.position += new Vector3(0, 0, 0.4f) - new Vector3(0, 0, bedMask.transform.position.z);
 						Renderer bedMaskRenderer = bedMask.GetComponent<Renderer>();
 						if (bedMaskRenderer != null)
 						{

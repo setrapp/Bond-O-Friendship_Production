@@ -11,7 +11,7 @@ public class Globals : MonoBehaviour {
 		{
 			if (instance == null)
 			{
-				GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
+                GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
 				if (instanceObject != null)
 				{
 					instance = instanceObject.GetComponent<Globals>();
@@ -31,6 +31,7 @@ public class Globals : MonoBehaviour {
 
 	public bool zoomIntroInEditor = true;
 	public bool earlyBondInEditor = false;
+	public float editorFakeStreamRate = 0;
 
 
     public bool allowInput = true;
@@ -113,7 +114,12 @@ public class Globals : MonoBehaviour {
 
 	public bool playersBonded = false;
 
+
 	public GameObject pauseMenu;
+
+	public SetShaderData_DarkAlphaMasker darknessMask = null;
+	public float playerLuminIntensity = 1;
+	public float defaultPlayerLuminIntensity = 1;
 
 	void Awake()
 	{
@@ -146,6 +152,8 @@ public class Globals : MonoBehaviour {
 		{
 			bgm.Play();
 		}
+
+		defaultPlayerLuminIntensity = playerLuminIntensity;
 	}
 
 	void Update()

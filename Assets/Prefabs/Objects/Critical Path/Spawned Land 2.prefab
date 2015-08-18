@@ -26,6 +26,7 @@ GameObject:
   - 4: {fileID: 469528}
   - 33: {fileID: 3369528}
   - 23: {fileID: 2369528}
+  - 114: {fileID: 11401018}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -43,6 +44,7 @@ GameObject:
   - 4: {fileID: 485500}
   - 33: {fileID: 3385500}
   - 23: {fileID: 2385500}
+  - 114: {fileID: 11496134}
   m_Layer: 0
   m_Name: Spawned Land 2
   m_TagString: Untagged
@@ -162,6 +164,39 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 1
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11401018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 169528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2369528}
+  renderBase: 3000
+  renderOffset: -4
+  forceRendererOn: 0
+--- !u!114 &11496134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 185500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6db71f82bb363764d9a535546e1c7726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  managerSearchTag: Island
+  manager: {fileID: 0}
+  seasonColors:
+  - {r: .897058845, g: 1, b: .916251242, a: 1}
+  - {r: .558823526, g: 1, b: .641076803, a: 1}
+  - {r: .90506053, g: .992647052, b: .921390235, a: 1}
+  seasonRenderer: {fileID: 2369528}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -177,6 +212,38 @@ Prefab:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonRenderer
+      value: 
+      objectReference: {fileID: 2369528}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].r
+      value: .558823526
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].b
+      value: .641076803
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].r
+      value: .897058845
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].b
+      value: .916251242
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderBase
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderOffset
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: targetRenderer
+      value: 
+      objectReference: {fileID: 2369528}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 185500}

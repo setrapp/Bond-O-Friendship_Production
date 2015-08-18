@@ -19,11 +19,10 @@ public class CharacterComponents : MonoBehaviour {
 	public BondAttachable bondAttachable;
 	public SimpleMover mover;
 	public FloatMoving floatMove;
-	public SphereCollider bodyCollider;
+	public CapsuleCollider bodyCollider;
 	public Rigidbody body;
 	public Attractor attractor;
 	public FlufflessPass flufflessPass;
-	public Light backLight;
 	[HideInInspector]
 	public float fillScale = 1;
 	public float flashFadeTime = 1;
@@ -56,8 +55,9 @@ public class CharacterComponents : MonoBehaviour {
 
 		fillRenderer.transform.localScale = new Vector3(fillScale, fillScale, fillScale);
 
-		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch;
-		bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
+		// Scale collider to smaller of the geometry scale directions, to accomodate squash and stretch.
+		// REMOVED: Causes players to get stuck in some places.
+		//bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
 
 		// Don't show mid-tail if a player bond is formed or cannot be formed.
 		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || Globals.Instance.playersBonded)
@@ -116,7 +116,7 @@ public class CharacterComponents : MonoBehaviour {
 			}
 			if (bodyCollider == null)
 			{
-				bodyCollider = GetComponent<SphereCollider>();
+				bodyCollider = GetComponent<CapsuleCollider>();
 			}
 			if (body == null)
 			{
@@ -128,5 +128,10 @@ public class CharacterComponents : MonoBehaviour {
 			}
 		}
 		componentsFound = true;
+	}
+
+	public void ChangeActiveLevel(Island activeIsland)
+	{
+		transform.parent = activeIsland.transform;
 	}
 }

@@ -22,7 +22,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
     public float toggleDis = 1.0f;
 
     public Transform target;
-    private Vector3 startPos;
+	private Vector3 startPos;
     private Vector3 endPos;
 
     public float duration = 2.5f;
@@ -117,10 +117,10 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 	public void BecomeFullSize()
 	{
 		fullSize = true;
-		/*startPos = transform.position;
+		startPos = transform.position;
 		endPos = target.position;
 		childStartSize = child.transform.localScale;
-		childEndSize = Vector3.zero;*/
+		childEndSize = Vector3.zero;
 	}
 
     override protected void OnTriggerEnter(Collider collide)

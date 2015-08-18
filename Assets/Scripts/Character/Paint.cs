@@ -21,6 +21,9 @@ public class Paint : MonoBehaviour {
 	public float b;
 	public float a;
     public bool eraserOn;
+
+	public CanvasBehavior paintCanvas;
+	public CanvasBehavior mirrorCanvas;
 	
 	// Use this for initialization
 	void Start () {
@@ -74,14 +77,28 @@ public class Paint : MonoBehaviour {
 
             paintPos = new Vector3(transform.position.x + paintJitter, transform.position.y + paintJitter, transform.position.z + zJitter);
 
-            if (painting == true && gameObject.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
-            {
-                if (paintTime == painttimeFloat)
-                {
-                    blot();
-                }
-                paintTime -= Time.deltaTime;
-            }
+			if(name != "Paint Copier")
+			{
+	            if (painting == true && gameObject.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
+	            {
+	                if (paintTime == painttimeFloat)
+	                {
+	                    blot(false);
+	                }
+	                paintTime -= Time.deltaTime;
+	            }
+			}
+			if(name == "Paint Copier")
+			{
+				if (painting == true && transform.parent.GetComponent<CanvasBehavior>().pairedPlayer.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
+				{
+					if (paintTime == painttimeFloat)
+					{
+						blot(true);
+					}
+					paintTime -= Time.deltaTime;
+				}
+			}
             if (paintTime <= 0.0f)
             {
                 paintTime = painttimeFloat;
@@ -93,7 +110,7 @@ public class Paint : MonoBehaviour {
         }
 	}
 
-	void blot()
+	void blot(bool inMirror)
 	{
 		paintCircle = Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot)) as GameObject;
 		paintCircle.GetComponent<Renderer>().material.color = paintColor;
@@ -112,6 +129,9 @@ public class Paint : MonoBehaviour {
 			paintCircle.GetComponent<PaintCircle>().rSizemin = 0.5f;
 			paintCircle.GetComponent<PaintCircle>().rSizemax = 3.0f;
 		}
+
+		if (inMirror)
+			mirrorCanvas.gameObject.GetComponent<PaintAndNodeCollisionTest> ().CheckPaintAndNodeCollision (paintCircle.GetComponent<PaintCircle>());
 	}
 
     void Erase()

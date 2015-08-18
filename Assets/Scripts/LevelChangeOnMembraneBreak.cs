@@ -8,7 +8,7 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 	public Island levelToUse;
 	public float newAudioVolume = 1;
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane != null && brokenMembrane == membraneWall)
 		{
@@ -20,6 +20,9 @@ public class LevelChangeOnMembraneBreak : MonoBehaviour {
 				{
 					StartCoroutine(BackgroundAudioCrossFade.Instance.CrossFade(backgroundAudio, newAudioVolume));
 				}
+
+				Globals.Instance.player1.SendMessage("ChangeActiveLevel", levelToUse, SendMessageOptions.DontRequireReceiver);
+				Globals.Instance.player2.SendMessage("ChangeActiveLevel", levelToUse, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 	}
