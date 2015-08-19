@@ -39,7 +39,8 @@ public class CanvasBehavior : MonoBehaviour {
 	public float b4;
 	public float a4;
 
-	private Vector3 mirrorDistance;
+	[HideInInspector]
+	public Vector3 mirrorDistance;
 
 	//public bool isMirror;
 	//public ClusterNodePuzzle puzzleToReveal;

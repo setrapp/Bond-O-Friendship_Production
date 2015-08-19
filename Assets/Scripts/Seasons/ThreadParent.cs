@@ -11,6 +11,8 @@ public class ThreadParent : MonoBehaviour {
 	private float defaultbondlength;
 	public bool wasThreading;
 	private Bond playerBond = null;
+	public float bondExtensionPerFluff = -1;
+	public float minBondFluffCount = -1;
 	public bool solved;
 	private int landsFull = 0;
 	public List<GameObject> landCompleteActivatees;
@@ -45,6 +47,10 @@ public class ThreadParent : MonoBehaviour {
 
 		if(anyThreader == true && !wasThreading)
 		{
+			if (playerBond != null && bondExtensionPerFluff >= 0)
+			{
+				playerBond.stats.extensionPerFluff = bondExtensionPerFluff;
+			}
 			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				defaultbondlength = playerBond.stats.maxDistance;
@@ -53,12 +59,29 @@ public class ThreadParent : MonoBehaviour {
 		}
 		else if(anyThreader == false && wasThreading)
 		{
+			if (playerBond != null)
+			{
+				if (bondExtensionPerFluff >= 0)
+				{
+					playerBond.stats.extensionPerFluff = playerBond.attachment1.attachee.bondOverrideStats.stats.extensionPerFluff;
+				}
+
+				if (playerBond.fluffsHeld.Count < minBondFluffCount)
+				{
+
+				}
+			}
 			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;
 			}*/
-		} 
+		}
+
+		if (anyThreader && playerBond != null && playerBond.fluffsHeld.Count < minBondFluffCount)
+		{
+			playerBond.stats.maxDistance = playerBond.attachment1.attachee.bondOverrideStats.stats.maxDistance + (minBondFluffCount * playerBond.stats.extensionPerFluff);
+		}
 
 		wasThreading = anyThreader;
 

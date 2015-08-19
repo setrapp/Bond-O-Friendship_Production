@@ -27,14 +27,22 @@ public class PaintAndNodeCollisionTest : MonoBehaviour {
 			float paintDropRadius = paintCircle.initialRadius / 2;
             Vector3 paintPos2D, nodePos2D;
 		
-			for (int i = 0; i < count; i++) {
-				if (nodes [i] as MirroringClusterNode != null) {
+			for (int i = 0; i < count; i++)
+			{
+				if (nodes [i] as MirroringClusterNode != null)
+				{
                     //check on same plane (z=0)
                     paintPos2D = new Vector3(paintCircle.transform.position.x, paintCircle.transform.position.y, 0);
                     nodePos2D = new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y, 0);
 					distanceSqr = Vector3.SqrMagnitude (paintPos2D - nodePos2D);
 					if (distanceSqr <= (paintDropRadius + nodeRadius) * (paintDropRadius + nodeRadius))
-						((MirroringClusterNode)nodes [i]).RevealNode ();
+					{
+						((MirroringClusterNode)nodes[i]).RevealNode();
+
+						// Fire pulses to show players something happened.
+						Helper.FirePulse(paintCircle.transform.position - GetComponent<CanvasBehavior>().mirrorDistance, Globals.Instance.defaultPulseStats);
+						Helper.FirePulse(paintCircle.transform.position, Globals.Instance.defaultPulseStats);
+					}
 				}
 			}
 		}

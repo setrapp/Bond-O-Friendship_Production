@@ -88,7 +88,7 @@ public class Paint : MonoBehaviour {
 	                paintTime -= Time.deltaTime;
 	            }
 			}
-			if(name == "Paint Copier")
+			else
 			{
 				if (painting == true && transform.parent.GetComponent<CanvasBehavior>().pairedPlayer.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
 				{
