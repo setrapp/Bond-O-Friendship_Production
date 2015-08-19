@@ -5,9 +5,12 @@ using System.Collections.Generic;
 public class BlockPlayerFromEntering : MonoBehaviour {
 
     public bool activated = false;
+	public ClusterNodePuzzle activatingPuzzle;
+	public List <BlockPlayerFromEntering> followingBlockers;
     public GameObject playerToAllow;
     public GameObject partnerBlocker;
-    public Material playerMaterial;
+    public Material p1Material;
+	public Material p2Material;
 
     [HideInInspector] public bool activateThisUpdate;
     [HideInInspector] public bool deactivateThisUpdate;
@@ -36,9 +39,18 @@ public class BlockPlayerFromEntering : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		//if responding to puzzle
+		if (activatingPuzzle != null) {
+			//If they solved the puzzle, activate
+			if (activatingPuzzle.solved) {
+				activateThisUpdate = true;
+			}
+		}
+
         //activating this update
         if (activateThisUpdate && !activated)
         {
+			//activate self and following blockers
             ActivateAndAllow(primary);
         }
 
@@ -46,12 +58,6 @@ public class BlockPlayerFromEntering : MonoBehaviour {
         {
             Deactivate();
         }
-
-        //testing
-        if (!activated && Input.GetKeyDown(KeyCode.Space))
-            activateThisUpdate = true;
-        if (activated && Input.GetKeyDown(KeyCode.Space))
-            deactivateThisUpdate = true;
 	}
 
     void ActivateAndAllow(GameObject player)
@@ -60,7 +66,21 @@ public class BlockPlayerFromEntering : MonoBehaviour {
         activateThisUpdate = false;
         springJointScript.connectedBody = player.GetComponent<Rigidbody>();
         springJointScript.GetComponent<BoxCollider>().isTrigger = false;
-  
+		//gameObject.GetComponent<MeshRenderer>().materials[0] = player.GetComponent<MeshRenderer> ().material;
+
+		//activate followers if any:
+		if (followingBlockers.Count > 0) {
+			int count = followingBlockers.Count;
+			for (int i=0; i<count; i++) {
+				SpringJoint followerSpringJointScript = followingBlockers [i].GetComponent<SpringJoint> ();
+				//Set same variables as this one:
+				followingBlockers[i].activated = true;
+				followerSpringJointScript.connectedBody = player.GetComponent<Rigidbody> ();
+				followerSpringJointScript.GetComponent<BoxCollider> ().isTrigger = false;
+				//Change Material
+				//followingBlockers[i].gameObject.GetComponent<MeshRenderer>().materials[0] = player.GetComponent<MeshRenderer> ().material;
+			}
+		}
         //Do more visuals stuff here
     }
 
@@ -72,6 +92,7 @@ public class BlockPlayerFromEntering : MonoBehaviour {
 
         //Do more visuals stuff here
     }
+
 
     void OnTriggerEnter(Collider other)
     {
