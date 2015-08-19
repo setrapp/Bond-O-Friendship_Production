@@ -127,7 +127,7 @@ public class PlayerInput : MonoBehaviour {
         }*/
         #endregion
 
-        if (!Globals.isPaused && (device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
+        if ((device != null || controlScheme.inputNameSelected == Globals.InputNameSelected.Keyboard) && Globals.Instance.allowInput)
 		{
             if (controlScheme.inputNameSelected != Globals.InputNameSelected.Keyboard)
 			{

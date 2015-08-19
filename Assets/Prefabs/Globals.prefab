@@ -1686,6 +1686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6657702c554729f498a976b44a0e0992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoomState: 2
   splittable: 0
   followPlayers: 0
   split: 0
@@ -1706,8 +1707,15 @@ MonoBehaviour:
   movePlayers: 0
   startPos: {x: 28.1000004, y: 22.1000004, z: -70}
   duration: 5
-  t: 0
+  zoomOutToggle: 0
+  zoomInToggle: 0
   startZoomComplete: 0
+  camerasCentered: 0
+  zoomedOut: 0
+  playersMoved: 0
+  player1Target: {fileID: 0}
+  player2Target: {fileID: 0}
+  zCameraOffset: -500
 --- !u!114 &11449126
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1928,6 +1936,7 @@ MonoBehaviour:
     smallRing: 0
     pauseInterval: -1
     retractInterval: -1
+  gameState: 0
   player1Controls:
     controlScheme: 0
     inputNameSelected: 0
@@ -1948,6 +1957,10 @@ MonoBehaviour:
   leftControllerPreviousIndex: -2
   rightControllerPreviousIndex: -2
   allowPreviousController: 0
+  player1PositionBeforePause: {x: 0, y: 0, z: 0}
+  player2PositionBeforePause: {x: 0, y: 0, z: 0}
+  camera1PositionBeforePause: {x: 0, y: 0, z: 0}
+  camera2PositionBeforePause: {x: 0, y: 0, z: 0}
   canvasPaused: {fileID: 149130}
   visibilityDepthMaskNeeded: 0
   depthMaskPrefab: {fileID: 100000, guid: eee34cdc27d68d34c8d79e97b72a5238, type: 2}
@@ -1960,6 +1973,7 @@ MonoBehaviour:
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
   playersBonded: 0
+  pauseMenu: {fileID: 0}
   darknessMask: {fileID: 11416216}
   playerLuminIntensity: 1
   defaultPlayerLuminIntensity: 1
