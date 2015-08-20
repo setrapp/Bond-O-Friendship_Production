@@ -12,11 +12,31 @@ public class PaintAndNodeCollisionTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //mirrorPuzzle = GetComponent<CanvasBehavior>().puzzleToReveal;
-        nodes = mirrorPuzzle.nodes;    
+        nodes = mirrorPuzzle.nodes;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+	}
+
+	public MirroringClusterNode FindNearestNode(Vector3 testPosition)
+	{
+		MirroringClusterNode nearestNode = null;
+		float nearestSqrDistance = -1;
+		for (int i = 0; i < nodes.Count; i++)
+		{
+			if (nodes[i] as MirroringClusterNode != null)
+			{
+				float sqrDistance = (nodes[i].transform.position - testPosition).sqrMagnitude;
+				if (sqrDistance < nearestSqrDistance || nearestSqrDistance < 0)
+				{
+					nearestSqrDistance = sqrDistance;
+					nearestNode = (MirroringClusterNode)nodes[i];
+				}
+			}
+		}
+
+		return nearestNode;
 	}
 
 	public void CheckPaintAndNodeCollision(PaintCircle paintCircle)

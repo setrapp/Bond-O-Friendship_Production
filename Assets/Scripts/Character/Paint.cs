@@ -4,7 +4,7 @@ using System.Collections;
 public class Paint : MonoBehaviour {
 
 	public GameObject paintPrefab;
-	private GameObject paintCircle;
+	private PaintCircle paintCircle;
 	private float paintTime;
 	private Vector3 paintPos;
 	private float paintJitter;
@@ -23,7 +23,6 @@ public class Paint : MonoBehaviour {
     public bool eraserOn;
 
 	public CanvasBehavior paintCanvas;
-	public CanvasBehavior mirrorCanvas;
 	
 	// Use this for initialization
 	void Start () {
@@ -88,7 +87,7 @@ public class Paint : MonoBehaviour {
 	                paintTime -= Time.deltaTime;
 	            }
 			}
-			else
+			/*else
 			{
 				if (painting == true && transform.parent.GetComponent<CanvasBehavior>().pairedPlayer.GetComponent<CharacterComponents>().mover.velocity.sqrMagnitude != 0)
 				{
@@ -98,7 +97,7 @@ public class Paint : MonoBehaviour {
 					}
 					paintTime -= Time.deltaTime;
 				}
-			}
+			}*/
             if (paintTime <= 0.0f)
             {
                 paintTime = painttimeFloat;
@@ -110,28 +109,79 @@ public class Paint : MonoBehaviour {
         }
 	}
 
-	void blot(bool inMirror)
+	public void blot(bool inMirror, float baseRadius = -1)
 	{
-		paintCircle = Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot)) as GameObject;
+		// Attempt to set a radius of paint based on proximity to a node.
+		if (baseRadius < 0)
+		{
+			// Find the nearest node on this canvas or the paired canvas.
+			MirroringClusterNode nearestNode, nearestPairNode;
+			float nearestDist = -1, nearestPairDist = -1;
+			if (paintCanvas != null && paintCanvas.nodeCollisionTest != null)
+			{
+				nearestNode = paintCanvas.nodeCollisionTest.FindNearestNode(transform.position);
+				if (nearestNode != null)
+				{
+					nearestDist = (transform.position - nearestNode.transform.position).magnitude;
+				}
+			}
+			if (paintCanvas != null && paintCanvas.pairedCanvas != null && paintCanvas.pairedCanvas.nodeCollisionTest != null)
+			{
+				nearestPairNode = paintCanvas.pairedCanvas.nodeCollisionTest.FindNearestNode(transform.position);
+				if (nearestPairNode != null)
+				{
+					nearestPairDist = (transform.position - nearestPairNode.transform.position).magnitude;
+				}
+			}
+
+			if (nearestDist >= 0 && nearestPairDist >= 0)
+			{
+				nearestDist = Mathf.Min(nearestDist, nearestPairDist);
+			}
+			else if (nearestPairDist >= 0)
+			{
+				nearestDist = nearestPairDist;
+			}
+
+			if (nearestDist >= 0)
+			{
+				float radiusFactor = nearestDist / paintCanvas.canvasCollider.radius;
+				baseRadius = ((1 - radiusFactor) * paintCanvas.maxPaintRadius) + (radiusFactor * paintCanvas.minPaintRadius);
+			}
+		}
+		
+
+		paintCircle = ((GameObject)Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot))).GetComponent<PaintCircle>();
 		paintCircle.GetComponent<Renderer>().material.color = paintColor;
-		paintCircle.GetComponent<PaintCircle>().paintCircColor = paintColor;
+		paintCircle.paintCircColor = paintColor;
 		if(Globals.Instance.player1.character.bondAttachable.IsBondMade(Globals.Instance.player2.character.bondAttachable))
 		{
-			paintCircle.GetComponent<PaintCircle>().rLifemin = 6.0f;
-			paintCircle.GetComponent<PaintCircle>().rLifemax = 7.0f;
-			paintCircle.GetComponent<PaintCircle>().rSizemin = 1.0f;
-			paintCircle.GetComponent<PaintCircle>().rSizemax = 5.0f;
+			paintCircle.rLifemin = 6.0f;
+			paintCircle.rLifemax = 7.0f;
+			paintCircle.rSizemin = 1.0f;
+			paintCircle.rSizemax = 5.0f;
 		}
 		else
 		{
-			paintCircle.GetComponent<PaintCircle>().rLifemin = 2.0f;
-			paintCircle.GetComponent<PaintCircle>().rLifemax = 3.0f;
-			paintCircle.GetComponent<PaintCircle>().rSizemin = 0.5f;
-			paintCircle.GetComponent<PaintCircle>().rSizemax = 3.0f;
+			paintCircle.rLifemin = 2.0f;
+			paintCircle.rLifemax = 3.0f;
+			paintCircle.rSizemin = 0.5f;
+			paintCircle.rSizemax = 3.0f;
 		}
 
-		if (inMirror)
-			mirrorCanvas.gameObject.GetComponent<PaintAndNodeCollisionTest> ().CheckPaintAndNodeCollision (paintCircle.GetComponent<PaintCircle>());
+		if (baseRadius >= 0)
+		{
+			paintCircle.rSizemax = baseRadius;
+			paintCircle.rSizemin = baseRadius;
+		}
+
+		if (paintCanvas.pairedCanvas != null && paintCanvas.paintCopier == null && paintCanvas.pairedCanvas.paintCopier != null)
+		{
+			paintCanvas.pairedCanvas.paintCopier.GetComponent<Paint>().blot(true, baseRadius);
+		}
+
+		//if (inMirror)
+		//	paintCanvas.gameObject.GetComponent<PaintAndNodeCollisionTest>().CheckPaintAndNodeCollision(paintCircle.GetComponent<PaintCircle>());
 	}
 
     void Erase()

@@ -4,13 +4,17 @@ using System.Collections;
 public class CanvasBehavior : MonoBehaviour {
 
 	public GameObject paintCopier;
-	public GameObject pairedCanvas;
+	public CanvasBehavior pairedCanvas;
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject pairedPlayer;
 	private Color canvasColor;
 	private float alpha;
 	public bool changeColor = true;
+	public float maxPaintRadius = 1;
+	public float minPaintRadius = 5;
+	[HideInInspector]
+	public CapsuleCollider canvasCollider;
 
 	public GameObject pal1;
 	public GameObject pal2;
@@ -42,6 +46,9 @@ public class CanvasBehavior : MonoBehaviour {
 	[HideInInspector]
 	public Vector3 mirrorDistance;
 
+	[HideInInspector]
+	public PaintAndNodeCollisionTest nodeCollisionTest;
+
 	//public bool isMirror;
 	//public ClusterNodePuzzle puzzleToReveal;
 
@@ -58,6 +65,8 @@ public class CanvasBehavior : MonoBehaviour {
 		if (pairedCanvas != null)
 			mirrorDistance = transform.position - pairedCanvas.transform.position;
 
+		nodeCollisionTest = GetComponent<PaintAndNodeCollisionTest>();
+		canvasCollider = GetComponent<CapsuleCollider>();
 	}
 	
 	// Update is called once per frame
@@ -111,16 +120,14 @@ public class CanvasBehavior : MonoBehaviour {
 				//Assign canvas variables to player
 				Paint paintScript = player1.GetComponent<Paint>();
 				paintScript.painting = true;
-				paintScript.paintCanvas = GetComponent<CanvasBehavior>();
-				paintScript.mirrorCanvas = pairedCanvas.GetComponent<CanvasBehavior>();
+				paintScript.paintCanvas = this;
 
 
-				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = player1;
+				pairedCanvas.pairedPlayer = player1;
 				//Assign canvas variables to pairedCanvas' copier
-				paintScript = pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>();
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
 				paintScript.painting = true;
-				paintScript.paintCanvas = GetComponent<CanvasBehavior>();
-				paintScript.mirrorCanvas = pairedCanvas.GetComponent<CanvasBehavior>();
+				paintScript.paintCanvas = pairedCanvas;
 			}
 			if(collide.gameObject.name == "Player 2")
 			{
@@ -129,15 +136,13 @@ public class CanvasBehavior : MonoBehaviour {
 				//Assign canvas variables to paint
 				Paint paintScript = player2.GetComponent<Paint>();
 				paintScript.painting = true;
-				paintScript.paintCanvas = GetComponent<CanvasBehavior>();
-				paintScript.mirrorCanvas = pairedCanvas.GetComponent<CanvasBehavior>();
+				paintScript.paintCanvas = this;
 
-				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = player2;
+				pairedCanvas.pairedPlayer = player2;
 				//Assign canvas variables to pairedCanvas' copier
-				paintScript = pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>();
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
 				paintScript.painting = true;
-				paintScript.paintCanvas = GetComponent<CanvasBehavior>();
-				paintScript.mirrorCanvas = pairedCanvas.GetComponent<CanvasBehavior>();
+				paintScript.paintCanvas = pairedCanvas;
 			}
 		}
 	}
@@ -154,14 +159,12 @@ public class CanvasBehavior : MonoBehaviour {
 				Paint paintScript = player1.GetComponent<Paint>();
 				paintScript.painting = false;
 				paintScript.paintCanvas = null;
-				paintScript.mirrorCanvas = null;
 
-				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = null;
+				pairedCanvas.pairedPlayer = null;
 				//De-reference canvas variables from pairedCanvas' copier
-				paintScript = pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>();
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
 				paintScript.painting = false;
 				paintScript.paintCanvas = null;
-				paintScript.mirrorCanvas = null;
 			}
 			if(collide.gameObject.name == "Player 2")
 			{
@@ -171,14 +174,12 @@ public class CanvasBehavior : MonoBehaviour {
 				Paint paintScript = player2.GetComponent<Paint>();
 				paintScript.painting = false;
 				paintScript.paintCanvas = null;
-				paintScript.mirrorCanvas = null;
 
-				pairedCanvas.GetComponent<CanvasBehavior>().pairedPlayer = null;
+				pairedCanvas.pairedPlayer = null;
 				//De-reference canvas variables from pairedCanvas' copier
-				paintScript = pairedCanvas.GetComponent<CanvasBehavior>().paintCopier.GetComponent<Paint>();
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
 				paintScript.painting = false;
 				paintScript.paintCanvas = null;
-				paintScript.mirrorCanvas = null;
 			}
 		}
 	}
