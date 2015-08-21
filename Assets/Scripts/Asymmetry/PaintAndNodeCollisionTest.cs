@@ -25,13 +25,14 @@ public class PaintAndNodeCollisionTest : MonoBehaviour {
 		float nearestSqrDistance = -1;
 		for (int i = 0; i < nodes.Count; i++)
 		{
-			if (nodes[i] as MirroringClusterNode != null)
+			if (nodes[i] as MirroringClusterNode != null && !((MirroringClusterNode)nodes[i]).revealed)
 			{
-				float sqrDistance = (nodes[i].transform.position - testPosition).sqrMagnitude;
+				float sqrDistance = ((Vector2)(nodes[i].transform.position - testPosition)).sqrMagnitude;
 				if (sqrDistance < nearestSqrDistance || nearestSqrDistance < 0)
 				{
 					nearestSqrDistance = sqrDistance;
 					nearestNode = (MirroringClusterNode)nodes[i];
+
 				}
 			}
 		}
@@ -44,12 +45,12 @@ public class PaintAndNodeCollisionTest : MonoBehaviour {
 		if (GetComponent<CanvasBehavior> ().paintCopier != null) {
 			int count = nodes.Count;
 			float distanceSqr;
-			float paintDropRadius = paintCircle.initialRadius / 2;
+			float paintDropRadius = paintCircle.initialRadius / 2; //TODO why is this divided by 2?
             Vector3 paintPos2D, nodePos2D;
 		
 			for (int i = 0; i < count; i++)
 			{
-				if (nodes [i] as MirroringClusterNode != null)
+				if (nodes [i] as MirroringClusterNode != null && !((MirroringClusterNode)nodes[i]).revealed)
 				{
                     //check on same plane (z=0)
                     paintPos2D = new Vector3(paintCircle.transform.position.x, paintCircle.transform.position.y, 0);

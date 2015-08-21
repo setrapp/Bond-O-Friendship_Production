@@ -11,8 +11,9 @@ public class CanvasBehavior : MonoBehaviour {
 	private Color canvasColor;
 	private float alpha;
 	public bool changeColor = true;
-	public float maxPaintRadius = 1;
-	public float minPaintRadius = 5;
+	public float maxCheckDistance = 2;
+	public float minPaintRadius = 1;
+	public float maxPaintRadius = 5;
 	[HideInInspector]
 	public CapsuleCollider canvasCollider;
 
@@ -43,7 +44,7 @@ public class CanvasBehavior : MonoBehaviour {
 	public float b4;
 	public float a4;
 
-	[HideInInspector]
+	//[HideInInspector]
 	public Vector3 mirrorDistance;
 
 	[HideInInspector]
