@@ -34,6 +34,10 @@ public class SpawnBud : MonoBehaviour {
 				fading = false;
 				scaling = false;
 				newBud.transform.parent = transform.parent;
+				if (spawnParent != null)
+				{
+					newBud.transform.parent = spawnParent;
+				}
 				DestroyInSpace budDestroy = newBud.GetComponent<DestroyInSpace>();
 				if (budDestroy)
 				{
@@ -74,10 +78,6 @@ public class SpawnBud : MonoBehaviour {
 			newBud = (GameObject)Instantiate(bud);
 			newBud.transform.position = transform.position;
 			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-			if (spawnParent != null)
-			{
-				newBud.transform.parent = spawnParent;
-			}
 			//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
             //newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;
