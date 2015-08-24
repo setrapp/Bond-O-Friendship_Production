@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FindClosestLuminus : MonoBehaviour {
 
-	[HideInInspector] public Luminus[] luminusArray;
+	public Luminus[] luminusArray;
 	public Luminus l1, l2;   //Closest to P1, P2
 	[HideInInspector] public GameObject p1, p2;   //Players
 	[HideInInspector] public SetShaderData_DarkAlphaMasker darkMaskScript;    //on the alpha masking plane
@@ -47,18 +47,15 @@ public class FindClosestLuminus : MonoBehaviour {
 			}
 		}
 
-		// If any luminus are found store the actual luminus components.
-		if (luminusCount > 0)
+		// Store the actual luminus components.
+		luminusArray = new Luminus[luminusCount];
+		int luminusIndex = 0;
+		for (int i = 0; i < luminusObjects.Length; i++)
 		{
-			luminusArray = new Luminus[luminusCount];
-			int luminusIndex = 0;
-			for (int i = 0; i < luminusObjects.Length; i++)
+			if (luminusObjects[i] != null)
 			{
-				if (luminusObjects[i] != null)
-				{
-					luminusArray[luminusIndex] = luminusObjects[i].GetComponentInChildren<Luminus>();
-					luminusIndex++;
-				}
+				luminusArray[luminusIndex] = luminusObjects[i].GetComponentInChildren<Luminus>();
+				luminusIndex++;
 			}
 		}
 	}
@@ -68,6 +65,15 @@ public class FindClosestLuminus : MonoBehaviour {
 		if (luminusArray.Length < 1)
 		{
 			return;
+		}
+
+		if (luminusArray[0] == null)
+		{
+			FindAllLumini();
+			if (luminusArray.Length < 1)
+			{
+				return;
+			}
 		}
 
 		Luminus newL1, newL2, l2Alt;

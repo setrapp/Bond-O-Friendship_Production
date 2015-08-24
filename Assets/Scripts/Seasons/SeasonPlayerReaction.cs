@@ -39,7 +39,7 @@ public class SeasonPlayerReaction : SeasonReaction {
 				BondAttachable bondPartner = character.bondAttachable.bonds[i].OtherPartner(character.bondAttachable);
 				if (bondPartner == Globals.Instance.player1.character.bondAttachable || bondPartner == Globals.Instance.player2.character.bondAttachable)
 				{
-					BondSeasionReact(character.bondAttachable.bonds[i]);
+					BondSeasonReact(character.bondAttachable.bonds[i]);
 				}
 			}
 		}
@@ -50,7 +50,7 @@ public class SeasonPlayerReaction : SeasonReaction {
 		}
 	}
 
-	private void BondSeasionReact(Bond reactingBond)
+	public void BondSeasonReact(Bond reactingBond)
 	{
 		BondStats attachableStats = character.bondAttachable.bondOverrideStats.stats;
 
@@ -80,6 +80,6 @@ public class SeasonPlayerReaction : SeasonReaction {
 
 	public void BondAttached(Bond newBond)
 	{
-		BondSeasionReact(newBond);
+		BondSeasonReact(newBond);
 	}
 }
