@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PaintCircle : MonoBehaviour {
 
+	private Renderer renderer;
     public bool erased;
 	public float myLife;
 	public Vector3 mySize;
@@ -20,6 +21,7 @@ public class PaintCircle : MonoBehaviour {
         initialRadius = sizeRand;
 		myLife = Random.Range(rLifemin,rLifemax);
         erased = false;
+		renderer = GetComponent<Renderer>();
 		//paintCircColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
@@ -29,7 +31,7 @@ public class PaintCircle : MonoBehaviour {
 		//myLife = Random.Range(6.0f,7.0f)
 		mySize = new Vector3(sizeRand,sizeRand,0.001f);
 		transform.localScale = mySize;
-		gameObject.GetComponent<Renderer>().material.color = paintCircColor;
+		renderer.material.color = paintCircColor;
 		myLife -= Time.deltaTime;
 		if(myLife <= 0)
 		{

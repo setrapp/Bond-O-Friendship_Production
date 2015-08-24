@@ -52,7 +52,6 @@ public class BlockPlayerFromEntering : MonoBehaviour {
         //activating this update
         if (activateThisUpdate && !activated)
         {
-			Debug.Log(gameObject.name);
 			//activate self and following blockers
             ActivateAndAllow(playerToAllow);
         }

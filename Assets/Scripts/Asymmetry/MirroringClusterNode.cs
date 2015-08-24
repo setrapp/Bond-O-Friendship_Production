@@ -7,7 +7,7 @@ public class MirroringClusterNode : ClusterNode {
 	[HideInInspector] public bool revealToNode = false;
     [HideInInspector] public bool revealToPaint = true;
     public bool revealed;
-    public float revealDuration = 60.0f;
+    public float revealDuration = -1;
 
     private float revealedAt = -1;
 
@@ -35,8 +35,10 @@ public class MirroringClusterNode : ClusterNode {
 
         if (revealed)
         {
-            if (Time.time - revealedAt > revealDuration)
-                HideNode();
+			if (revealDuration > 0 && Time.time - revealedAt > revealDuration)
+			{
+				HideNode();
+			}
         }
 	}
 
