@@ -11,6 +11,7 @@ public class JoinTogetherGroup : MonoBehaviour {
 	public bool solved = false;
 	public PulseStats basePulseStats;
 	public PulseStats pairedPulseStats;
+	public List<GameObject> joinCompleteActivatees;
 
 	void Start()
 	{
@@ -66,6 +67,11 @@ public class JoinTogetherGroup : MonoBehaviour {
 					{
 						joins[i].baseBody.isKinematic = true;
 					}
+				}
+
+				for (int i = 0; i < joinCompleteActivatees.Count; i++)
+				{
+					joinCompleteActivatees[i].gameObject.SetActive(true);
 				}
 
 				solved = true;

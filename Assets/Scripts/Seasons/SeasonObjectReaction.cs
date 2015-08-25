@@ -12,6 +12,7 @@ public class SeasonObjectReaction : SeasonReaction {
 	public Renderer reactionRenderer;
 	public Color[] seasonColors = new Color[3];
 	private Vector3 normalScale = new Vector3(1, 1, 1);
+	public Transform wetScaleTarget = null;
 	public Vector3 wetScale = new Vector3(1, 1, 1);
 
 	protected override void Start()
@@ -95,12 +96,15 @@ public class SeasonObjectReaction : SeasonReaction {
 		// Alter Scale if in wet season
 		if (season == SeasonManager.ActiveSeason.WET)
 		{
-			normalScale = transform.localScale;
-			transform.localScale = wetScale;
+			if(wetScaleTarget != null)
+			{
+				normalScale = wetScaleTarget.localScale;
+				wetScaleTarget.localScale = wetScale;
+			}
 		}
 		else
 		{
-			transform.localScale = normalScale;
+			wetScaleTarget.localScale = normalScale;
 		}
 		
 	}
