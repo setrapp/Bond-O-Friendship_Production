@@ -113,6 +113,7 @@ public class ThreadParent : MonoBehaviour {
 	{
 		// Return bond extention per fluff to normal size when leaving threader.
 		playerBond.stats.extensionPerFluff = playerBond.attachment1.attachee.bondOverrideStats.stats.extensionPerFluff;
+		playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
 		Globals.Instance.player1.GetComponent<SeasonPlayerReaction>().BondSeasonReact(playerBond);
 	}
 }
