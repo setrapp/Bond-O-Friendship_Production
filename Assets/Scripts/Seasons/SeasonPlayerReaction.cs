@@ -52,6 +52,11 @@ public class SeasonPlayerReaction : SeasonReaction {
 
 	public void BondSeasonReact(Bond reactingBond)
 	{
+		if (manager == null)
+		{
+			return;
+		}
+
 		BondStats attachableStats = character.bondAttachable.bondOverrideStats.stats;
 
 		switch (season)

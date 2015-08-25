@@ -3,19 +3,30 @@ using System.Collections;
 
 public class SeasonThreaderReaction : SeasonReaction {
 
-	public Threader targetThreader;
+	public ThreadParent targetThreadParent;
+	//public float wetMinFluffCount = 0;
 
-	protected virtual void Start()
+	protected override void Start()
 	{
 		base.Start();
 	}
 
-	protected virtual void ApplySeasonChanges()
+	protected override void ApplySeasonChanges()
 	{
 		base.ApplySeasonChanges();
+
+		if (targetThreadParent == null)
+		{
+			return;
+		}
+
 		if (season == SeasonManager.ActiveSeason.WET)
 		{
-			//todo set min fluffs
+			targetThreadParent.minBondFluffCount = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxFluffCapacity;
+		}
+		else
+		{
+			targetThreadParent.minBondFluffCount = -1;
 		}
 	}
 }
