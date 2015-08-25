@@ -8,7 +8,7 @@ public class SpawnBud : MonoBehaviour {
 	public bool spawned;
 	public Color parentColor;
     //public Color BudColor;
-
+	public Transform spawnParent;
 	private float fadeTimer = 1.0f;
 	private bool fading;
 	private Color playerColor;
@@ -34,6 +34,10 @@ public class SpawnBud : MonoBehaviour {
 				fading = false;
 				scaling = false;
 				newBud.transform.parent = transform.parent;
+				if (spawnParent != null)
+				{
+					newBud.transform.parent = spawnParent;
+				}
 				DestroyInSpace budDestroy = newBud.GetComponent<DestroyInSpace>();
 				if (budDestroy)
 				{
