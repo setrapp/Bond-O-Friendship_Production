@@ -402,7 +402,7 @@ public class MenuControl : MonoBehaviour {
 			} 
 			else 
 			{
-				CameraSplitter.Instance.transform.position = new Vector3 (CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, -100.0f);
+				CameraSplitter.Instance.transform.position = new Vector3 (CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, CameraSplitter.Instance.startPos.z);
 				CameraSplitter.Instance.splittable = true;
 				CameraSplitter.Instance.followPlayers = true;
 				Globals.Instance.inMainMenu = false;

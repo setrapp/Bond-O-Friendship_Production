@@ -6,7 +6,7 @@ public class ZoomCamera : MonoBehaviour {
 	public WaitPad triggerPad;
 	private Camera mainCamera;
 	private Camera splitCamera;
-	public float startZoom;
+	//public float startZoom;
 	public float zoomTarget;
 	public float startZoomPortion = 0;
 	public float endZoomPortion = 1;
@@ -31,7 +31,7 @@ public class ZoomCamera : MonoBehaviour {
 		{
 			mainCamera = CameraSplitter.Instance.splitCamera1;
 			splitCamera = CameraSplitter.Instance.splitCamera2;
-			startZoom = mainCamera.fieldOfView;
+			//startZoom = CameraSplitter.Instance.transform.position.z;//mainCamera.fieldOfView;
 			/*if (zoomToStartingSize)
 			{
 				zoomTarget = Globals.Instance.startingOrthographicSize;
@@ -79,11 +79,24 @@ public class ZoomCamera : MonoBehaviour {
 
 		if (updateZoom)
 		{
+			float startZoom = CameraSplitter.Instance.startPos.z;
 			float alterPortionComplete = Mathf.Clamp01((oldPortionComplete - startZoomPortion) / (endZoomPortion - startZoomPortion));
 			currentZoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
-			mainCamera.fieldOfView = currentZoom;
-			splitCamera.fieldOfView = currentZoom;
-			Globals.Instance.perspectiveFOV = currentZoom;
+			/*Vector3 zoomedPos = mainCamera.transform.position;
+			zoomedPos.z = currentZoom;
+			mainCamera.transform.position = zoomedPos;
+			//mainCamera.fieldOfView = currentZoom;
+
+			zoomedPos = splitCamera.transform.position;
+			zoomedPos.z = currentZoom;
+			splitCamera.transform.position = zoomedPos;
+			//splitCamera.fieldOfView = currentZoom;*/
+			Vector3 zoomedPos = CameraSplitter.Instance.transform.position;
+			zoomedPos.z = currentZoom;
+			CameraSplitter.Instance.transform.position = zoomedPos;
+
+
+			//Globals.Instance.perspectiveFOV = currentZoom;
 		}
 	}
 
