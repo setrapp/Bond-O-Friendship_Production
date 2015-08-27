@@ -39,7 +39,9 @@ public class ZipperPadElement : MonoBehaviour {
 			startToCurrent = Helper.ProjectVector (startToDestination, startToCurrent);
 			progress = startToCurrent.magnitude / startToDestination.magnitude;
 			float progressDirection = Vector3.Dot (startToCurrent, startToDestination);
-			
+
+			activated = false;
+
 			if (progressDirection < 0)
 			{
 				if (body != null) {
