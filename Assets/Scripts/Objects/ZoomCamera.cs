@@ -7,7 +7,7 @@ public class ZoomCamera : MonoBehaviour {
 	private Camera mainCamera;
 	private Camera splitCamera;
 	//public float startZoom;
-	public float zoomTarget;
+	public GameObject zoomTarget;
 	public float startZoomPortion = 0;
 	public float endZoomPortion = 1;
 	public float oldPortionComplete;
@@ -71,32 +71,43 @@ public class ZoomCamera : MonoBehaviour {
 
 		updateZoom = resetting;
 
+		/*if (triggerPad.portionComplete > oldPortionComplete)
+		{
+			CameraSplitter.Instance.followPlayers = false;
+		}
+		else if (triggerPad.portionComplete < oldPortionComplete)
+		{
+			CameraSplitter.Instance.followPlayers = true;
+		}*/
+
 		if (!triggerPad.activated && oldPortionComplete != triggerPad.portionComplete)
 		{
 			oldPortionComplete = triggerPad.portionComplete;
 			updateZoom = true;
 		}
 
+		float alterPortionComplete = oldPortionComplete;
 		if (updateZoom)
 		{
 			float startZoom = CameraSplitter.Instance.startPos.z;
-			float alterPortionComplete = Mathf.Clamp01((oldPortionComplete - startZoomPortion) / (endZoomPortion - startZoomPortion));
-			currentZoom = (startZoom * (1 - alterPortionComplete)) + (zoomTarget * alterPortionComplete);
-			/*Vector3 zoomedPos = mainCamera.transform.position;
-			zoomedPos.z = currentZoom;
-			mainCamera.transform.position = zoomedPos;
-			//mainCamera.fieldOfView = currentZoom;
+			float targetZoomZ = zoomTarget.transform.position.z;
 
-			zoomedPos = splitCamera.transform.position;
-			zoomedPos.z = currentZoom;
-			splitCamera.transform.position = zoomedPos;
-			//splitCamera.fieldOfView = currentZoom;*/
+			// Determine how much progress has been made based on start and end parameters.
+			alterPortionComplete = Mathf.Clamp01((oldPortionComplete - startZoomPortion) / (endZoomPortion - startZoomPortion));
+			currentZoom = (startZoom * (1 - alterPortionComplete)) + (targetZoomZ * alterPortionComplete);
+
+			// Change the camera system's depth to zoom the view.
 			Vector3 zoomedPos = CameraSplitter.Instance.transform.position;
 			zoomedPos.z = currentZoom;
 			CameraSplitter.Instance.transform.position = zoomedPos;
+		}
 
-
-			//Globals.Instance.perspectiveFOV = currentZoom;
+		// Interpolate xy positions of cameras between player center and target focal point.
+		if (alterPortionComplete > 0)
+		{
+			Vector3 focusOffset = zoomTarget.transform.position - ((Globals.Instance.player1.transform.position + Globals.Instance.player2.transform.position) / 2);
+			CameraSplitter.Instance.mainCameraFollow.centerOffset = focusOffset * alterPortionComplete;
+			CameraSplitter.Instance.splitCameraFollow.centerOffset = focusOffset * alterPortionComplete;
 		}
 	}
 
