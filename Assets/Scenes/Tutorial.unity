@@ -13928,7 +13928,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 254662843}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -.100000001, y: .100000001, z: .100000001}
+  m_LocalPosition: {x: 0, y: 0, z: .100000001}
   m_LocalScale: {x: 2, y: .100000001, z: 2}
   m_Children: []
   m_Father: {fileID: 2133243182}
@@ -13947,9 +13947,10 @@ MonoBehaviour:
   x: 1
   y: 0
   z: 1
-  useRandomValues: 1
-  scale: .100000001
+  useRandomValues: 0
+  scale: .0250000004
   speed: 1
+  centerOffset: {x: 0, y: 0, z: 0}
   useOtherValues: 0
   wilin: 1
   wasWilin: 0
@@ -32146,12 +32147,17 @@ MonoBehaviour:
   moving: 0
   atTarget: 0
   fullSize: 0
-  child: {fileID: 1984168819}
+  child: {fileID: 1984168820}
+  activeCrumpleSpeed: .100000001
+  crumpleReachOffset: {x: 0, y: 0, z: 1.5}
+  crumpleReachSpeed: 1
   playerNodeDis: 1
   toggleDis: 2
   target: {fileID: 1802435134}
   duration: 1
   moveBackDur: 3
+  transparentColor: {r: .669117689, g: .118079588, b: .631115079, a: .294117659}
+  childEndSize: {x: 0, y: 0, z: 0}
   bondAllow: {fileID: 1531550613}
   bondDisallow: {fileID: 1531550612}
 --- !u!23 &547739638
@@ -49015,11 +49021,11 @@ Prefab:
       objectReference: {fileID: 1375249576}
     - target: {fileID: 400012, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 137.100006
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 222.100006
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 261165805ff9bf8428c49694d734be3a, type: 2}
@@ -81814,6 +81820,7 @@ GameObject:
   - 114: {fileID: 1531550614}
   - 114: {fileID: 1531550613}
   - 114: {fileID: 1531550612}
+  - 114: {fileID: 1531550616}
   m_Layer: 0
   m_Name: Bond Making Nodes
   m_TagString: Untagged
@@ -81912,6 +81919,21 @@ MonoBehaviour:
   progress: 0
   dependsOn: {fileID: 0}
   solveWithDependent: 0
+--- !u!114 &1531550616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1531550610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 028b7478ba39cb342bd237623d9a9e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomControl1: {fileID: 547739635}
+  zoomControl2: {fileID: 2133243181}
+  endZoom: -50
+  endDistance: 0
 --- !u!1 &1532962206
 GameObject:
   m_ObjectHideFlags: 0
@@ -102948,7 +102970,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1984168817}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -.100000001, y: .100000001, z: .100000001}
+  m_LocalPosition: {x: 0, y: 0, z: .100000001}
   m_LocalScale: {x: 2, y: .100000001, z: 2}
   m_Children: []
   m_Father: {fileID: 547739636}
@@ -102991,9 +103013,10 @@ MonoBehaviour:
   x: 1
   y: 0
   z: 1
-  useRandomValues: 1
-  scale: .100000001
+  useRandomValues: 0
+  scale: .0250000004
   speed: 1
+  centerOffset: {x: 0, y: 0, z: 0}
   useOtherValues: 0
   wilin: 1
   wasWilin: 0
@@ -111376,12 +111399,17 @@ MonoBehaviour:
   moving: 0
   atTarget: 0
   fullSize: 0
-  child: {fileID: 254662846}
+  child: {fileID: 254662845}
+  activeCrumpleSpeed: .100000001
+  crumpleReachOffset: {x: 0, y: 0, z: -1.5}
+  crumpleReachSpeed: 1
   playerNodeDis: 1
   toggleDis: 2
   target: {fileID: 1802435134}
   duration: 1
   moveBackDur: 3
+  transparentColor: {r: .985294104, g: 0, b: .917342842, a: .294117659}
+  childEndSize: {x: 0, y: 0, z: 0}
   bondAllow: {fileID: 1531550613}
   bondDisallow: {fileID: 1531550612}
 --- !u!23 &2133243186
