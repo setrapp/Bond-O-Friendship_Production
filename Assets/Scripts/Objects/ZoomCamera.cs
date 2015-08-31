@@ -106,8 +106,8 @@ public class ZoomCamera : MonoBehaviour {
 		if (alterPortionComplete > 0)
 		{
 			Vector3 focusOffset = zoomTarget.transform.position - ((Globals.Instance.player1.transform.position + Globals.Instance.player2.transform.position) / 2);
-			CameraSplitter.Instance.mainCameraFollow.centerOffset = focusOffset * alterPortionComplete;
-			CameraSplitter.Instance.splitCameraFollow.centerOffset = focusOffset * alterPortionComplete;
+			CameraSplitter.Instance.mainCameraFollow.centerOffset = ((focusOffset * alterPortionComplete) + CameraSplitter.Instance.mainCameraFollow.centerOffset) / 2;
+			CameraSplitter.Instance.splitCameraFollow.centerOffset = ((focusOffset * alterPortionComplete) + CameraSplitter.Instance.splitCameraFollow.centerOffset) / 2;
 		}
 	}
 
