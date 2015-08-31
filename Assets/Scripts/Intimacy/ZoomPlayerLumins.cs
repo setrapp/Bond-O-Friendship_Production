@@ -16,9 +16,11 @@ public class ZoomPlayerLumins : MonoBehaviour {
 
 	void Update()
 	{
-		if(Globals.Instance != null && targetZoom != null && targetZoom.updateZoom && targetZoom.startZoom != targetZoom.zoomTarget)
+		float startZoom = CameraSplitter.Instance.startPos.z;
+
+		if(Globals.Instance != null && targetZoom != null && targetZoom.updateZoom && startZoom != targetZoom.zoomTarget.transform.position.z)
 		{
-			float progress = (targetZoom.currentZoom - targetZoom.startZoom) / (targetZoom.zoomTarget - targetZoom.startZoom);
+			float progress = (targetZoom.currentZoom - startZoom) / (targetZoom.zoomTarget.transform.position.z - startZoom);
 
 			Globals.Instance.playerLuminIntensity = ((1 - progress) * Globals.Instance.defaultPlayerLuminIntensity) + (progress * maxLuminIntensity);
 		}

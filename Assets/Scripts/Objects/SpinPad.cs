@@ -19,6 +19,7 @@ public class SpinPad : WaitPad {
 	private float oldRotateeRotation;
 	public bool completeOnIn = false;
 	public bool completeOnOut = false;
+	private bool wasCompleted = false;
 	public float inRadius = 5.5f;
 	public float outRadius = 5.5f;
 	public float currentRadius = 5.5f;
@@ -38,6 +39,7 @@ public class SpinPad : WaitPad {
 	public Color lineInactiveColor = new Color(0.5f, 0.5f, 0.5f, 0.4f);
 	public Color lineNotCompletedColor = new Color(0.75f, 0.75f, 0.75f, 0.5f);
 	public Color lineCompletedColor = new Color(1.0f, 1.0f, 1.0f, 0.8f);
+	public static float nonCompleteThreshold = 0.95f;
 
 	void Start()
 	{
@@ -118,32 +120,43 @@ public class SpinPad : WaitPad {
 			float progress = (rotationProgress / 2) + 0.5f;
 			currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
 
-			if (!neverActivate && ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END))))
+			if ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END)))
 			{
-				activated = true;
-				SetLineColors();
-				Helper.FirePulse(rotatee.transform.position, Globals.Instance.defaultPulseStats);
+				if (!wasCompleted)
+				{
+					SetLineColors();
+					Helper.FirePulse(rotatee.transform.position, Globals.Instance.defaultPulseStats);
+					wasCompleted = true;
 
-				if (membrane1 != null)
-				{
-					membrane1.BreakBond();
-				}
-				if (membrane2 != null)
-				{
-					membrane2.BreakBond();
-				}
+					if (!neverActivate)
+					{
+						activated = true;
+						if (membrane1 != null)
+						{
+							membrane1.BreakBond();
+						}
+						if (membrane2 != null)
+						{
+							membrane2.BreakBond();
+						}
 
-				if (membraneReaction1 != null)
-				{
-					membraneReaction1.reactionRate = 0;
-					membraneReaction1.reactable = false;
-				}
+						if (membraneReaction1 != null)
+						{
+							membraneReaction1.reactionRate = 0;
+							membraneReaction1.reactable = false;
+						}
 
-				if (membraneReaction2 != null)
-				{
-					membraneReaction2.reactionRate = 0;
-					membraneReaction2.reactable = false;
+						if (membraneReaction2 != null)
+						{
+							membraneReaction2.reactionRate = 0;
+							membraneReaction2.reactable = false;
+						}
+					}
 				}
+			}
+			else if (wasCompleted && Mathf.Abs(rotationProgress) < nonCompleteThreshold)
+			{
+				wasCompleted = false;
 			}
 		}
 
@@ -222,9 +235,28 @@ public class SpinPad : WaitPad {
 				membrane1.extraStats.defaultShapingForce = membrane2.extraStats.defaultShapingForce = 0;
 			}
 
-			// Update rotation progress.
-			currentRotation += rotationChange;
-			oldRotateeRotation = newRotateeRotation;
+			float changedRotation = currentRotation + rotationChange;
+			if (changedRotation >= fullInRotation || changedRotation <= fullOutRotation)
+			{
+				// Stop spining at ends of rotation range.
+				newWallEndPos1 = oldWallEndPos1;
+				newWallEndPos2 = oldWallEndPos2;
+				if (changedRotation >= fullInRotation)
+				{
+					currentRotation = fullInRotation;
+				}
+				else
+				{
+					currentRotation = fullOutRotation;
+				}
+				SetLineColors();
+			}
+			else
+			{
+				// If not at the ends of the rotation range, update rotation progress.
+				currentRotation = changedRotation;
+				oldRotateeRotation = newRotateeRotation;
+			}
 		}
 
 		// Move wall ends to new positions.
@@ -304,12 +336,13 @@ public class SpinPad : WaitPad {
 
 	public bool IsAtLimit(SpinLimit desiredLimit)
 	{
+		float progressLimit = wasCompleted ? nonCompleteThreshold : 1;
 		bool atLimit = false;
-		if ((desiredLimit & SpinLimit.PULL_END) == SpinLimit.PULL_END && rotationProgress >= 1)
+		if ((desiredLimit & SpinLimit.PULL_END) == SpinLimit.PULL_END && rotationProgress >= progressLimit)
 		{
 			atLimit = true;
 		}
-		if ((desiredLimit & SpinLimit.PUSH_END) == SpinLimit.PUSH_END && rotationProgress <= -1)
+		if ((desiredLimit & SpinLimit.PUSH_END) == SpinLimit.PUSH_END && rotationProgress <= -progressLimit)
 		{
 			atLimit = true;
 		}

@@ -209,7 +209,7 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		//Center CameraSplitter gameobject
 		Vector3 newCenterPos = ((player1.transform.position + player2.transform.position) / 2);
-		newCenterPos.z = -70.0f;
+		newCenterPos.z = startPos.z;
 
 		if(moveCamera)
 		transform.position = newCenterPos;

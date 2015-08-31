@@ -13,6 +13,7 @@ public class CrumpleMesh : MonoBehaviour
 
     public float scale = 1.0f;
     public float speed = 1.0f;
+	public Vector3 centerOffset = Vector3.zero;
     bool recalculateNormals = false;
 
     public bool useOtherValues = false;
@@ -68,14 +69,14 @@ public class CrumpleMesh : MonoBehaviour
             float timez = Time.time * speed + 2.5564f;
             for (var i = 0; i < vertices.Length; i++)
             {
-                var vertex = baseVertices[i];
+				Vector3 vertex = baseVertices[i];
 
                 if (x)
-                    vertex.x += (Mathf.PerlinNoise(timex + vertex.x, timex + vertex.z) - 0.5f) * scale;
+					vertex.x += (Mathf.PerlinNoise(timex + vertex.x, timex + vertex.z) - 0.5f + centerOffset.x) * scale;
                 if (y)
-                    vertex.y += (Mathf.PerlinNoise(timey + vertex.x, timey + vertex.y) - 0.5f) * scale;
+					vertex.y += (Mathf.PerlinNoise(timey + vertex.x, timey + vertex.y) - 0.5f + centerOffset.y) * scale;
                 if (z)
-					vertex.z += (Mathf.PerlinNoise(timez + vertex.x, timez + vertex.z) - 0.5f) * scale;
+					vertex.z += (Mathf.PerlinNoise(timez + vertex.x, timez + vertex.z) - 0.5f + centerOffset.z) * scale;
 
                 vertices[i] = vertex;
             }

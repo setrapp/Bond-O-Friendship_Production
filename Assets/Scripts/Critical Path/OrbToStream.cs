@@ -9,7 +9,10 @@ public class OrbToStream : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		streamSpawner.enabled = false;
+		if (enabled)
+		{
+			streamSpawner.enabled = false;
+		}
 	}
 	
 	// Update is called once per frame
