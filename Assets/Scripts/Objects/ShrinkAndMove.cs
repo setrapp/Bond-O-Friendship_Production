@@ -30,7 +30,11 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 
     public float duration = 2.5f;
     public float moveBackDur = 2.5f;
-    private float t = 0.0f;
+    public float t = 0.0f;
+	public float centerMaxRadius = 3;
+	public float centerMinRadius = 1;
+	private Vector3 centerStartScale;
+	public TimedCameraControl endingCameraControl;
 
     private Color fullColor;
     public Color transparentColor;
@@ -107,7 +111,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             if (moving == ShrinkMoveDirection.FORWARD)
 			{
 				// If the other node is also ready to move, move towards the other node.
-				if(otherPlayerNode == null || otherPlayerNode.moving == ShrinkMoveDirection.FORWARD)
+				//if(otherPlayerNode == null || otherPlayerNode.moving == ShrinkMoveDirection.FORWARD)
 				{
 					t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
 				}
@@ -137,12 +141,21 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             transform.position = Vector3.Lerp(startPos, endPos, t);
             GetComponent<Renderer>().material.color = Color.Lerp(fullColor, transparentColor, t);
             child.transform.localScale = Vector3.Lerp(childStartSize, childEndSize, t);
-            atTarget = t >= .8f;
+			atTarget = t >= 0.8f;
 
             //if (!moving)
             //{
             //    atTarget = false;
             //}
+
+			//TODO scale while atTarget
+			if (t >= 1 || (!Globals.Instance.playersBonded && transform.localScale.sqrMagnitude < centerStartScale.sqrMagnitude))
+			{
+				Vector3 betweenPlayers = Globals.Instance.player1.transform.position - Globals.Instance.player2.transform.position;
+				betweenPlayers.z = 0;
+				float centerScaleProgress = Mathf.Clamp01(1 - ((betweenPlayers.magnitude - centerMinRadius) / (centerMaxRadius - centerMinRadius)));
+				transform.localScale = (1 - centerScaleProgress) * centerStartScale;
+			}
 
 			if (atTarget && otherPlayerNode.atTarget)
 			{
@@ -157,6 +170,10 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
             {
                 lit = true;
                 targetPuzzle.NodeColored();
+				if (endingCameraControl != null)
+				{
+					endingCameraControl.InitiateCameraControl();
+				}
             }
         }
 	}
@@ -166,6 +183,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 		fullSize = true;
 		startPos = transform.position;
 		endPos = target.position;
+		centerStartScale = transform.localScale;
 		childStartSize = child.transform.localScale;
 		childEndSize = child.transform.localScale / 2;
 	}

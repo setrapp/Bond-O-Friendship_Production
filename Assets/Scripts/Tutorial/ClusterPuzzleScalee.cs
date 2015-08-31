@@ -16,7 +16,10 @@ public class ClusterPuzzleScalee : MonoBehaviour {
 
     void Update()
     {
-        transform.localScale = (startScale * (1 - triggerCluster.progress)) + (endScale * triggerCluster.progress);
+		if (!shrinkAndMove.fullSize)
+		{
+        	transform.localScale = (startScale * (1 - triggerCluster.progress)) + (endScale * triggerCluster.progress);
+		}
 
         if (triggerCluster.progress >= 1 && !shrinkAndMove.fullSize)
 		{
