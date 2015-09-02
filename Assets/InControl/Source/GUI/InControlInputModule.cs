@@ -187,7 +187,7 @@ namespace InControl
 
 		void ProcessMouseEvent()
 		{
-			var mouseData = GetMousePointerEventData();
+			var mouseData = GetMousePointerEventData(0);
 
 			var pressed = mouseData.AnyPressesThisFrame();
 			var released = mouseData.AnyReleasesThisFrame();
