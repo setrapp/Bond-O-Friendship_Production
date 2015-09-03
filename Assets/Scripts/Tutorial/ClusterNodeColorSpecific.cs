@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 public class ClusterNodeColorSpecific : ClusterNode {
 
 	public PlayerInput.Player neededPlayer;
@@ -23,6 +22,7 @@ public class ClusterNodeColorSpecific : ClusterNode {
 			nodeRenderers[i].material.color = neededCharacter.colors.baseColor - colorDesaturation;
 		}
 		startingcolor = nodeRenderers[0].material.color;
+		colorSet = true;
 	}
 
 	public override void CheckCollision(Collider col)

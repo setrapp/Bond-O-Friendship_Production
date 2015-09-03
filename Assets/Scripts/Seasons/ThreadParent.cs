@@ -11,6 +11,8 @@ public class ThreadParent : MonoBehaviour {
 	private float defaultbondlength;
 	public bool wasThreading;
 	private Bond playerBond = null;
+	public float bondExtensionPerFluff = -1;
+	public float minBondFluffCount = -1;
 	public bool solved;
 	private int landsFull = 0;
 	public List<GameObject> landCompleteActivatees;
@@ -45,6 +47,12 @@ public class ThreadParent : MonoBehaviour {
 
 		if(anyThreader == true && !wasThreading)
 		{
+			// Extend bond based on the altered per fluff length of the threader.
+			if (playerBond != null && bondExtensionPerFluff >= 0)
+			{
+				playerBond.stats.extensionPerFluff = bondExtensionPerFluff;
+				playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
+			}
 			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				defaultbondlength = playerBond.stats.maxDistance;
@@ -53,12 +61,22 @@ public class ThreadParent : MonoBehaviour {
 		}
 		else if(anyThreader == false && wasThreading)
 		{
+			if (playerBond != null)
+			{
+				ReturnBond(playerBond);
+			}
 			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
 				playerBond.stats.maxDistance = defaultbondlength;
 				playerBond = null;
 			}*/
-		} 
+		}
+
+		// If the bond is holding fewer fluffs than the minimum, fake the bond holding exactly the minimum (this allows control during wet season).
+		if (anyThreader && playerBond != null && playerBond.fluffsHeld.Count < minBondFluffCount)
+		{
+			playerBond.stats.maxDistance = playerBond.attachment1.attachee.bondOverrideStats.stats.maxDistance + (minBondFluffCount * playerBond.stats.extensionPerFluff);
+		}
 
 		wasThreading = anyThreader;
 
@@ -66,6 +84,7 @@ public class ThreadParent : MonoBehaviour {
 		{
 			//playerBond.stats.maxDistance = defaultbondlength;
 			solved = true;
+			ReturnBond(playerBond);
 			BroadcastMessage("MiniFire", SendMessageOptions.DontRequireReceiver);
 		}
 	
@@ -88,5 +107,13 @@ public class ThreadParent : MonoBehaviour {
 				landCompleteActivatees[i].gameObject.SetActive(true);
 			}
 		}
+	}
+
+	private void ReturnBond(Bond playerBond)
+	{
+		// Return bond extention per fluff to normal size when leaving threader.
+		playerBond.stats.extensionPerFluff = playerBond.attachment1.attachee.bondOverrideStats.stats.extensionPerFluff;
+		playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
+		Globals.Instance.player1.GetComponent<SeasonPlayerReaction>().BondSeasonReact(playerBond);
 	}
 }

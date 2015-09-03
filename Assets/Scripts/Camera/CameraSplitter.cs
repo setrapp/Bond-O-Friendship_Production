@@ -15,10 +15,13 @@ public class CameraSplitter : MonoBehaviour {
 		}
 	}
 
+	public enum ZoomState{ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut};
+
+	public ZoomState zoomState = ZoomState.ZoomedOut;
 
     [HideInInspector]
 	public bool splittable = true;
-    [HideInInspector]
+    //[HideInInspector]
     public bool followPlayers = true;
 
     [HideInInspector]
@@ -66,12 +69,25 @@ public class CameraSplitter : MonoBehaviour {
     [HideInInspector]
     public float duration = 5f;
     [HideInInspector]
-    public float t = 0f;
+    private float t = 1.0f;
 
+	private float f = 0f;
+
+	public bool zoomOutToggle = false;
+	public bool zoomInToggle = false;
 	
     private bool toggle = false;
 	[HideInInspector]
 	public bool startZoomComplete = false;
+
+	public bool camerasCentered = false;
+	public bool zoomedOut = false;
+	public bool playersMoved = false;
+
+	public GameObject player1Target;
+	public GameObject player2Target;
+
+	public float zCameraOffset = -500.0f;
 
 	void Start()
 	{
@@ -95,25 +111,6 @@ public class CameraSplitter : MonoBehaviour {
 
 	void Update()
 	{
-        
-        //if(!Globals.Instance.perspectiveCamera)
-           // transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
-        if(zoom)
-        {
-            ZoomIn();
-        }
-        else
-        {
-            if (toggle)
-            {
-                //transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
-                followPlayers = true;
-                Globals.Instance.allowInput = true;
-				toggle = false;
-				startZoomComplete = true;
-                // splittable = true;
-            }
-        }
 
 		if (splittable)
 			CheckSplit(false);	
@@ -185,56 +182,79 @@ public class CameraSplitter : MonoBehaviour {
 		}
 	}
 
-	public void SetZoomTarget()
+
+	public void MovePlayers(Vector3 player1StartPos, Vector3 player2StartPos, bool paused = true)
 	{
-		startPos = ((player1.transform.position + player2.transform.position) / 2);
-		startPos.z = -70.0f;
-	}
-
-    public void ZoomIn()
-    {
-		if (t < 1)
+		if (paused) 
 		{
-			t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
-			transform.position = Vector3.Lerp(zoomPos, startPos, t);
-
-			Vector3 heading = player1.transform.position - splitCamera1.transform.position;
-			float distance = Vector3.Dot(heading, splitCamera1.transform.forward);
-			float camHeight = 2.0f * (distance - 1f) * Mathf.Tan(splitCamera1.fieldOfView * 0.5f * Mathf.Deg2Rad);
-			Globals.Instance.orthographicSize = camHeight / 2.0f;
+			if (f < 1) 
+			{
+				f = Mathf.Clamp (f + Time.deltaTime / duration, 0.0f, 1.0f);
+				player1.transform.position = Vector3.Lerp (player1StartPos, player1Target.transform.position, f);
+				player2.transform.position = Vector3.Lerp (player2StartPos, player2Target.transform.position, f);
+			}
 		}
 		else
 		{
-			t = 0;
-			EndZoom();
-			// followPlayers = true;
-			splittable = true;
+			if (f > 0) 
+			{
+				f = Mathf.Clamp (f - Time.deltaTime / duration, 0.0f, 1.0f);
+				player1.transform.position = Vector3.Lerp (player1StartPos, player1Target.transform.position, f);
+				player2.transform.position = Vector3.Lerp (player2StartPos, player2Target.transform.position, f);
+			}
 		}
-    }
-           
-	public void EndZoom()
-	{
-		zoom = false;
-		zoomIn = false;
-		toggle = true;
-
-		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
-        Globals.Instance.inMainMenu = false;
 	}
 
-    public void ZoomOut()
-    {
-        if (t != 1)
-        {
-            Globals.Instance.perspectiveCamera = true;
-            t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
-            transform.position = Vector3.Lerp(startPos, zoomPos, t);
-        }
-        else
-        {
-            t = 0;
-            zoom = false;
-            zoomIn = true;
-        }
-    }
+	public void SetZoomTarget(bool moveCamera = true)
+	{
+		//Center CameraSplitter gameobject
+		Vector3 newCenterPos = ((player1.transform.position + player2.transform.position) / 2);
+		newCenterPos.z = startPos.z;
+
+		if(moveCamera)
+		transform.position = newCenterPos;
+		
+		startPos = newCenterPos;
+		//zoomPos = newCenterPos;
+		//zoomPos.z = -200f;
+	}
+
+	public void Zoom(bool zoomingOut)
+	{
+		Vector3 zoomPosition = startPos;
+		zoomPosition.z = zCameraOffset;
+
+		if (zoomingOut)
+		{			
+			if (t != 1)
+			{
+				zoomState = ZoomState.ZoomingOut;
+				t = Mathf.Clamp(t + Time.deltaTime / duration, 0.0f, 1.0f);
+				transform.position = Vector3.Lerp(startPos, zoomPosition, t);
+			}
+			else
+			{
+				zoomState = ZoomState.ZoomedOut;
+			}
+		} 
+		else 
+		{			
+			if (t != 0)
+			{
+				zoomState = ZoomState.ZoomingIn;
+				t = Mathf.Clamp(t - Time.deltaTime / duration, 0.0f, 1.0f);
+				transform.position = Vector3.Lerp(startPos, zoomPosition, t);
+			}
+			else
+			{
+				zoomState = ZoomState.ZoomedIn;
+			}
+		}
+	}
+
+
+
+
+
+  
 }

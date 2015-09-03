@@ -8,6 +8,7 @@ public class CameraFollow : MonoBehaviour {
 	public Transform player1;
 	//[HideInInspector]
 	public Transform player2;
+	public Vector3 centerOffset;
 
 	private Vector3 mainTargetPosition;
     private Vector3 betweenPlayers = Vector3.zero;
@@ -50,6 +51,7 @@ public class CameraFollow : MonoBehaviour {
 
         betweenPlayers = player2.position - player1.position;
         mainTargetPosition = CameraSplitter.Instance.split ? (player1.position + (betweenPlayers.normalized * centeringDistance)) : ((player1.position + player2.position) / 2);
+		mainTargetPosition += centerOffset;
 		mainTargetPosition.z = transform.position.z;
 		transform.position = mainTargetPosition;// + cameraOffset;
     }

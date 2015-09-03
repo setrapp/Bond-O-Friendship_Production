@@ -43,6 +43,16 @@ public class LevelHandler : MonoBehaviour {
 				{
 					islandContainer.SendMessage("IslandLoaded", checkIsland);
 					loadedIslands.Add(checkIsland);
+
+					CameraColorFade.Instance.FadeToColor(checkIsland.backgroundColor);
+					AudioSource backgroundAudio = Globals.Instance.levelsBackgroundAudio[(int)checkIsland.backgroundAudioId];
+					if (backgroundAudio != Globals.Instance.bgm)
+					{
+						StartCoroutine(BackgroundAudioCrossFade.Instance.CrossFade(backgroundAudio));
+					}
+
+					Globals.Instance.player1.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
+					Globals.Instance.player2.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
 				}
 			}
 		}
