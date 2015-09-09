@@ -261,9 +261,9 @@ public class MenuControl : MonoBehaviour {
 				if(confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
 				{
 					confirmQuitNodePuzzle.solved = false;
-					if(Application.isEditor)
-						UnityEditor.EditorApplication.isPlaying = false;
-					else
+					//if(Application.isEditor)
+					//	UnityEditor.EditorApplication.isPlaying = false;
+					//else
 						Application.Quit();
 				}
 				if(cancelQuitNodePuzzle != null && cancelQuitNodePuzzle.solved)

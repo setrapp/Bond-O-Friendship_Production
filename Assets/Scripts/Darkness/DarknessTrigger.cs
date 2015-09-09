@@ -6,7 +6,7 @@ public class DarknessTrigger : MonoBehaviour {
 	public SetShaderData_DarkAlphaMasker targetMask = null;
 	public bool forceOn = false;
 
-	void Awake()
+	void Start()
 	{
 		if (targetMask == null && Globals.Instance != null)
 		{
