@@ -187,7 +187,8 @@ namespace InControl
 
 		void ProcessMouseEvent()
 		{
-			var mouseData = GetMousePointerEventData(0);
+			// If this makes error, try either giving no argument or just 0.
+			var mouseData = GetMousePointerEventData();
 
 			var pressed = mouseData.AnyPressesThisFrame();
 			var released = mouseData.AnyReleasesThisFrame();
