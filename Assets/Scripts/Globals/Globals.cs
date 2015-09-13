@@ -160,8 +160,8 @@ public class Globals : MonoBehaviour {
 	{
         if(Input.GetKeyDown(KeyCode.Escape))
 		{
-            //ResetOrExit();
-			if(gameState == GameState.Unpaused)
+            ResetOrExit();
+			/*if(gameState == GameState.Unpaused)
 			{
 				gameState = GameState.Pausing;
 				OnPause();
@@ -171,7 +171,7 @@ public class Globals : MonoBehaviour {
 				allowInput = false;
 				CameraSplitter.Instance.splittable = true;
 				gameState = GameState.Unpausing;
-			}
+			}*/
 		}
 
 		if (Input.GetKeyDown(KeyCode.M))
