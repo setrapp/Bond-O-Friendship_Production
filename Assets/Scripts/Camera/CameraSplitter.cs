@@ -115,10 +115,10 @@ public class CameraSplitter : MonoBehaviour {
 		if (splittable)
 			CheckSplit(false);	
 
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            //Debug.Log(transform.position);
-        }
+        if (zoom)
+		{
+			Zoom(false);
+		}
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
 	}
@@ -248,11 +248,25 @@ public class CameraSplitter : MonoBehaviour {
 			else
 			{
 				zoomState = ZoomState.ZoomedIn;
+				EndZoom();
 			}
 		}
 	}
 
-
+	public void EndZoom()
+	{
+		zoom = false;
+		zoomIn = false;
+		toggle = true;
+		
+		Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+		Globals.Instance.inMainMenu = false;
+		Globals.Instance.allowInput = true;
+		followPlayers = true;
+		splittable = true;
+	}
+	
+	
 
 
 
