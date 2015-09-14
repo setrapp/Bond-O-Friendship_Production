@@ -6,6 +6,6 @@ public class TrailRotator : MonoBehaviour {
 
 	void Update()
 	{
-		transform.Rotate(new Vector3(0, speed * Time.deltaTime, speed * Time.deltaTime));
+		transform.Rotate(new Vector3(0, speed * Time.deltaTime, 0));
 	}
 }

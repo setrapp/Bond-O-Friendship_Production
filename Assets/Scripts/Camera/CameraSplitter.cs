@@ -211,10 +211,11 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 newCenterPos = ((player1.transform.position + player2.transform.position) / 2);
 		newCenterPos.z = startPos.z;
 
-		if(moveCamera)
-		transform.position = newCenterPos;
+		//if(moveCamera)
+		//    transform.position = newCenterPos;
 		
 		startPos = newCenterPos;
+        
 		//zoomPos = newCenterPos;
 		//zoomPos.z = -200f;
 	}
