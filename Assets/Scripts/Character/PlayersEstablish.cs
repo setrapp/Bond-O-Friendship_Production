@@ -33,6 +33,7 @@ public class PlayersEstablish : MonoBehaviour {
 
 	public void PlacePlayers()
 	{
+        //CameraSplitter.Instance.followPlayers = false;
 		if (Globals.Instance != null)
 		{
 			Transform player1Holder = Globals.Instance.player1.transform.parent;
@@ -132,7 +133,7 @@ public class PlayersEstablish : MonoBehaviour {
 				// Jump camera to players.
 				if (CameraSplitter.Instance != null)
 				{                    
-					CameraSplitter.Instance.JumpToPlayers();                    
+					//CameraSplitter.Instance.JumpToPlayers();                    
 				}
                 
 				Destroy(Globals.Instance.initialPlayerHolder);

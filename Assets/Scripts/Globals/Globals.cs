@@ -158,15 +158,14 @@ public class Globals : MonoBehaviour {
 
 	void Update()
 	{
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape) && !inMainMenu)
 		{
-            //ResetOrExit();
 			if(gameState == GameState.Unpaused)
 			{
 				gameState = GameState.Pausing;
 				OnPause();
 			}
-			if(gameState == GameState.Paused)
+			if(gameState == GameState.Paused && !zoomIntroInEditor && Application.isEditor)
 			{
 				allowInput = false;
 				CameraSplitter.Instance.splittable = true;
@@ -197,7 +196,7 @@ public class Globals : MonoBehaviour {
 		{
 			if(!pauseMenu.activeInHierarchy)
 				pauseMenu.SetActive(true);
-			CameraSplitter.Instance.splittable = false;
+			//CameraSplitter.Instance.splittable = false;
 			allowInput = true;
 		}
 

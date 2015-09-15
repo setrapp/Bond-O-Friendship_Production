@@ -3,15 +3,15 @@ using System.Collections;
 
 public class MainMenuInputOutlines : MonoBehaviour {
 
-	public GameObject controlsPlayer1;
+	//public GameObject controlsPlayer1;
 	public GameObject gamepadPlayer1;
 	public GameObject keyboardPlayer1;
 
-	public GameObject controlsPlayer2;
+	//public GameObject controlsPlayer2;
 	public GameObject gamepadPlayer2;
 	public GameObject keyboardPlayer2;
 
-	public GameObject controlsShared;
+	//public GameObject controlsShared;
 	public GameObject gamepadSharedPlayer1Left;
 	public GameObject gamepadSharedPlayer2Left;
 	public GameObject keyboardSharedPlayer1Left;
@@ -40,15 +40,7 @@ public class MainMenuInputOutlines : MonoBehaviour {
 		player2Keyboard = Globals.Instance.player2Controls.inputNameSelected == Globals.InputNameSelected.Keyboard;
 		player2SharedLeft = Globals.Instance.player2Controls.controlScheme == Globals.ControlScheme.SharedLeft;
 
-		float zDistance = Mathf.Abs(testCam.transform.position.z - controlsPlayer1.transform.position.z);
-
-		Vector3 player1ControllerPosition = testCam.ViewportToWorldPoint (new Vector3(0.06f, 0.91f, zDistance));
-		Vector3 player2ControllerPosition = testCam.ViewportToWorldPoint (new Vector3(0.94f, 0.91f, zDistance));
-		Vector3 sharedControllerPosition = testCam.ViewportToWorldPoint (new Vector3(0.5f, 0.91f, zDistance));
-
-		controlsPlayer1.transform.position = player1ControllerPosition;
-		controlsPlayer2.transform.position = player2ControllerPosition;
-		controlsShared.transform.position = sharedControllerPosition;
+        //PositionOutlines();
 
 		ToggleInputOutlines ();
 
@@ -60,6 +52,19 @@ public class MainMenuInputOutlines : MonoBehaviour {
 		if (CheckInputChange() || forceCheck)
 			ToggleInputOutlines();	
 	}
+
+    /*private void PositionOutlines()
+    {
+        float zDistance = Mathf.Abs(testCam.transform.position.z - controlsPlayer1.transform.position.z);
+
+        Vector3 player1ControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.06f, 0.91f, zDistance));
+        Vector3 player2ControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.94f, 0.91f, zDistance));
+        Vector3 sharedControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.5f, 0.91f, zDistance));
+
+        controlsPlayer1.transform.position = player1ControllerPosition;
+        controlsPlayer2.transform.position = player2ControllerPosition;
+        controlsShared.transform.position = sharedControllerPosition;
+    }*/
 
 	private bool CheckInputChange()
 	{
@@ -90,9 +95,14 @@ public class MainMenuInputOutlines : MonoBehaviour {
 	{
 		if (player1Solo && player2Solo) 
 		{
-			controlsPlayer1.SetActive (true);
-			controlsPlayer2.SetActive (true);
-			controlsShared.SetActive (false);
+			//controlsPlayer1.SetActive (true);
+			//controlsPlayer2.SetActive (true);
+			//controlsShared.SetActive (false);
+            gamepadSharedPlayer1Left.SetActive(false);
+            gamepadSharedPlayer2Left.SetActive(false);
+
+            keyboardSharedPlayer1Left.SetActive(false);
+            keyboardSharedPlayer2Left.SetActive(false);
 		
 			gamepadPlayer1.SetActive (!player1Keyboard);
 			keyboardPlayer1.SetActive (player1Keyboard);
@@ -104,9 +114,14 @@ public class MainMenuInputOutlines : MonoBehaviour {
 		else if(!player1Solo && !player2Solo)
 		{
 
-			controlsPlayer1.SetActive (false);
-			controlsPlayer2.SetActive (false);
-			controlsShared.SetActive (true);
+			//controlsPlayer1.SetActive (false);
+			//controlsPlayer2.SetActive (false);
+			//controlsShared.SetActive (true);
+            gamepadPlayer1.SetActive(false);
+            keyboardPlayer1.SetActive(false);
+
+            gamepadPlayer2.SetActive(false);
+            keyboardPlayer2.SetActive(false);
 
 			if(player1Keyboard && player2Keyboard)
 			{
