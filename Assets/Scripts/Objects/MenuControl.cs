@@ -12,9 +12,7 @@ public class MenuControl : MonoBehaviour {
 
     public GameObject startMenu;
 
-    public GameObject obscureMenuPanel;
-
-    
+    public GameObject obscureMenuPanel; 
 
     public GameObject begin;
 
