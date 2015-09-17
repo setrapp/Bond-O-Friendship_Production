@@ -6,8 +6,8 @@ public class PaintAndNodeCollisionTest : MonoBehaviour {
 
     public ClusterNodePuzzle mirrorPuzzle;
     public List <ClusterNode> nodes;
-    public float nodeRadius = 0.6f;
-    public float paintDropRadius;
+    public float nodeRadius = 1.5f;
+    public float paintDropRadius = 2.0f;
 
 	// Use this for initialization
 	void Start () {
