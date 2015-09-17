@@ -27,8 +27,8 @@ public class ToggleControllers : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        leftControllerLocation = leftController.transform.position;
-        rightControllerLocation = rightController.transform.position;
+        leftControllerLocation = leftController.transform.localPosition;
+        rightControllerLocation = rightController.transform.localPosition;
 
         centerLocation = (leftControllerLocation + rightControllerLocation) / 2.0f;
 	}
@@ -88,8 +88,8 @@ public class ToggleControllers : MonoBehaviour {
 
 
 
-        leftController.transform.position = Vector3.Lerp(centerLocation, leftControllerLocation, t);
-        rightController.transform.position = Vector3.Lerp(centerLocation, rightControllerLocation, t);
+        leftController.transform.localPosition = Vector3.Lerp(centerLocation, leftControllerLocation, t);
+        rightController.transform.localPosition = Vector3.Lerp(centerLocation, rightControllerLocation, t);
 
     }
 }

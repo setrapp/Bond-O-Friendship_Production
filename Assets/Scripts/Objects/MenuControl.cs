@@ -155,122 +155,65 @@ public class MenuControl : MonoBehaviour {
 	//Main Menu/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case MenuState.MainMenu:
 
-				ToggleFadeInputSelectMenu();
-				ToggleFadeExitGameConfirm();
-				ToggleFadeOptionsMenu();
 				
 				if(!mainMenu.activeInHierarchy)
 						mainMenu.SetActive(true);
 
-					if(fMainMenu.f != 1 && fInputSelect.f == 0 && fQuitGame.f == 0)
+				if(fMainMenu.f != 1)
 						fMainMenu.FadeIn();
+
+
+			if(!inputSelect.activeInHierarchy)
+			inputSelect.SetActive(true);
+
+            if (fInputSelect.f != 1)
+                fInputSelect.FadeIn();
+
+			if(!exitGameConfirm.activeInHierarchy)
+				exitGameConfirm.SetActive(true);
+
+            if (fQuitGame.f != 1)
+                fQuitGame.FadeIn();
+
+			if(!options.activeInHierarchy)
+				options.SetActive(true);
+
+            if (fOptions.f != 1)
+                fOptions.FadeIn();
+
 				if (newGameNodePuzzle != null && newGameNodePuzzle.solved)
 				{
 					newGameNodePuzzle.solved = false;
 				     Globals.Instance.allowInput = false;
 					menuState = MenuState.StartGame;      
 				}
-				//Puzzle to switch to Input Select
-				if(optionsNodePuzzle != null && optionsNodePuzzle.solved)
-				{
-					optionsNodePuzzle.solved = false;
-					menuState = MenuState.Options;
-				}
 
-				//Puzzle to switch to Exit Game Confirm
-				if(exitGameNodePuzzle != null && exitGameNodePuzzle.solved)
-				{
-					exitGameNodePuzzle.solved = false;
-					menuState = MenuState.QuitGame;
-				}
+                if (fOptions.f == 1)
+                {
+                    if (!options.GetComponent<OptionsMenu>().soundChecked)
+                        options.GetComponent<OptionsMenu>().CheckSoundSettings();
+                }
 
-					break;
-	//Options   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			case MenuState.Options:
-				
-				ToggleFadeMainMenu();
-				ToggleFadeExitGameConfirm();
-				ToggleFadeInputSelectMenu();
-				if(!options.activeInHierarchy)
-					options.SetActive(true);						
-				if(fOptions.f != 1 && fMainMenu.f == 0 && fQuitGame.f == 0 && fInputSelect.f == 0)
-					fOptions.FadeIn();
-				
-				if(fOptions.f == 1)
-				{
-					if(!options.GetComponent<OptionsMenu>().soundChecked)
-						options.GetComponent<OptionsMenu>().CheckSoundSettings();
-
-					if(optionsInputSelectNodePuzzle != null && optionsInputSelectNodePuzzle.solved)
-					{
-						options.GetComponent<OptionsMenu>().soundChecked = false;
-						optionsInputSelectNodePuzzle.solved = false;
-						menuState = MenuState.InputSelect;
-					}
-
-					if(optionsBackNodePuzzle != null && optionsBackNodePuzzle.solved)
-					{
-						options.GetComponent<OptionsMenu>().soundChecked = false;
-						optionsBackNodePuzzle.solved = false;
-						menuState = MenuState.MainMenu;
-					}
-				}
-				
-				
-				break;
-	//Input Select/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				case MenuState.InputSelect:
-
-					ToggleFadeMainMenu();
-					ToggleFadeOptionsMenu();
-					ToggleFadeExitGameConfirm();
-					if(!inputSelect.activeInHierarchy)
-						inputSelect.SetActive(true);						
-					if(fInputSelect.f != 1 && fMainMenu.f == 0 && fQuitGame.f == 0)
-						fInputSelect.FadeIn();
-					
-				if(fInputSelect.f == 1)
-				{
-					if(!inputFill.allowFill)
+                    if(!inputFill.allowFill)
 						inputFill.allowFill = true;
 					keyboardInputFollowing.setColor = true;
 
-					if(inputSelectBackNodePuzzle != null && inputSelectBackNodePuzzle.solved)
-					{
-						keyboardInputFollowing.setColor = false;
-						inputSelectBackNodePuzzle.solved = false;
-						inputFill.allowFill = false;
-						menuState = MenuState.Options;
-					}
-				}
+                    if (confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
+                    {
+                        confirmQuitNodePuzzle.solved = false;
+                        Application.Quit();
+                    }
 
-					
+                //options.GetComponent<OptionsMenu>().soundChecked = false;
+                    break;
+	//Options   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			case MenuState.Options:				
+				break;
+	//Input Select/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case MenuState.InputSelect:					
 					break;
 	//Quit Game Confirm////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case MenuState.QuitGame:
-
-
-				ToggleFadeMainMenu();
-				ToggleFadeOptionsMenu();
-				ToggleFadeInputSelectMenu();
-				if(!exitGameConfirm.activeInHierarchy)
-					exitGameConfirm.SetActive(true);
-				if(fQuitGame.f != 1 && fMainMenu.f == 0 && fInputSelect.f == 0)
-					fQuitGame.FadeIn();
-
-				if(confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
-				{
-					confirmQuitNodePuzzle.solved = false;
-					if(Application.isEditor)
-						UnityEditor.EditorApplication.isPlaying = false;
-					else
-						Application.Quit();
-				}
-				if(cancelQuitNodePuzzle != null && cancelQuitNodePuzzle.solved)
-				{
-					cancelQuitNodePuzzle.solved = false;
-					menuState = MenuState.MainMenu;
-				}
 				
 					break;
 			case MenuState.StartGame:
@@ -283,12 +226,19 @@ public class MenuControl : MonoBehaviour {
 					if (!toggled)
 					{
 						  Invoke("StartGame", .5f);
-						CameraSplitter.Instance.movePlayers = true;
+                          CameraSplitter.Instance.JumpToPlayers();
+                          
 						  toggled = true;
 					}
-						
-					if(startGame)
-						FadeControls();
+
+                    if (startGame)
+                    {
+                        
+                         CameraSplitter.Instance.followPlayers = false;
+                         CameraSplitter.Instance.movePlayers = true;
+                        
+                        FadeControls();
+                    }
 
 				break;
 			}
@@ -296,15 +246,17 @@ public class MenuControl : MonoBehaviour {
 			if(startZoom)
 			{
 				if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
-					CameraSplitter.Instance.Zoom(false);
+					CameraSplitter.Instance.Zoom(false, true);
 				else
 				{
 					CameraSplitter.Instance.followPlayers = true;
 					CameraSplitter.Instance.splittable = true;
 					CameraSplitter.Instance.zCameraOffset = -300.0f;
 					CameraSplitter.Instance.duration = 3.0f;
-					Globals.Instance.inMainMenu = false;
 					Globals.Instance.allowInput = true;
+
+                    Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+                    Globals.Instance.inMainMenu = false;
 
 					startZoom = false;
 				}
@@ -405,7 +357,8 @@ public class MenuControl : MonoBehaviour {
 				CameraSplitter.Instance.transform.position = new Vector3 (CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, CameraSplitter.Instance.startPos.z);
 				CameraSplitter.Instance.splittable = true;
 				CameraSplitter.Instance.followPlayers = true;
-				Globals.Instance.inMainMenu = false;
+                Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
+                Globals.Instance.inMainMenu = false;
 				Globals.Instance.allowInput = true;
 			}
 
@@ -472,7 +425,7 @@ public class MenuControl : MonoBehaviour {
 		if (deviceCount > 0)
 		{
 			device = InputManager.ActiveDevice;
-			if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged)
+			if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged || device.MenuWasPressed)
 			{
 				Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
 				Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;

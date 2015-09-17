@@ -50,7 +50,7 @@ public class OptionsMenu : MonoBehaviour {
 			if(soundOnPuzzle.solved)
 			{
 				Globals.Instance.mute = false;
-				CheckSoundSettings(false);
+				CheckSoundSettings();
 			}
 		}
 
@@ -59,7 +59,7 @@ public class OptionsMenu : MonoBehaviour {
 			if(soundOffPuzzle.solved)
 			{
 				Globals.Instance.mute = true;
-				CheckSoundSettings(false);
+				CheckSoundSettings();
 			}
 		}
 	}

@@ -19,7 +19,7 @@ public class CameraSplitter : MonoBehaviour {
 
 	public ZoomState zoomState = ZoomState.ZoomedOut;
 
-    [HideInInspector]
+    //[HideInInspector]
 	public bool splittable = true;
     //[HideInInspector]
     public bool followPlayers = true;
@@ -213,16 +213,21 @@ public class CameraSplitter : MonoBehaviour {
 
 		if(moveCamera)
 		transform.position = newCenterPos;
+
+        startPos = newCenterPos;
 		
-		startPos = newCenterPos;
-		//zoomPos = newCenterPos;
+        if(!moveCamera)
+        zoomPos = transform.position;
 		//zoomPos.z = -200f;
 	}
 
-	public void Zoom(bool zoomingOut)
+	public void Zoom(bool zoomingOut, bool isNewGameZoom = false)
 	{
 		Vector3 zoomPosition = startPos;
 		zoomPosition.z = zCameraOffset;
+
+        if (isNewGameZoom)
+            zoomPosition = zoomPos;
 
 		if (zoomingOut)
 		{			
