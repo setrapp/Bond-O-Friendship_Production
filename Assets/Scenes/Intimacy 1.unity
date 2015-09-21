@@ -37,9 +37,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
---- !u!127 &3
-LevelGameManager:
-  m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -68,6 +65,7 @@ LightmapSettings:
     m_TextureCompression: 0
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
+    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &5
@@ -6904,7 +6902,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 151249065}
-  m_LocalRotation: {x: -.264490396, y: .65577805, z: .655777991, w: -.264490366}
+  m_LocalRotation: {x: -.264490426, y: .65577811, z: .65577805, w: -.264490396}
   m_LocalPosition: {x: 5.14785957, y: 12.030365, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -9432,14 +9430,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &209559223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18942,7 +18944,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 344527928}
-  m_LocalRotation: {x: -.301108956, y: .639791667, z: .639791667, w: -.301108956}
+  m_LocalRotation: {x: -.301108986, y: .639791727, z: .639791727, w: -.301108986}
   m_LocalPosition: {x: -18.4681473, y: 16.7565403, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -21925,6 +21927,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -22066,7 +22069,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 423250735}
-  m_LocalRotation: {x: -.352509469, y: .612974048, z: .612974048, w: -.352509439}
+  m_LocalRotation: {x: -.352509439, y: .612973988, z: .612973988, w: -.352509409}
   m_LocalPosition: {x: -15.0263405, y: 14.7537422, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -23462,6 +23465,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -27934,14 +27938,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &520448407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35840,14 +35848,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &661018433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37892,14 +37904,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &700405028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39795,6 +39811,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -40763,7 +40780,6 @@ GameObject:
   - 33: {fileID: 756639628}
   - 23: {fileID: 756639627}
   - 135: {fileID: 756639626}
-  - 114: {fileID: 756639625}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -40783,19 +40799,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1355865908}
   m_RootOrder: 0
---- !u!114 &756639625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431224, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 756639623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &756639626
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -41679,7 +41682,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 770519796}
-  m_LocalRotation: {x: -.358162314, y: .609688342, z: .609688282, w: -.358162314}
+  m_LocalRotation: {x: -.358162284, y: .609688282, z: .609688222, w: -.358162284}
   m_LocalPosition: {x: 2.60816193, y: 13.2153015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -46891,14 +46894,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &874493104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49318,7 +49325,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 914200152}
-  m_LocalRotation: {x: -.297726989, y: .641372561, z: .641372502, w: -.297726989}
+  m_LocalRotation: {x: -.297726959, y: .641372502, z: .641372442, w: -.297726959}
   m_LocalPosition: {x: -146.110443, y: 114.579384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -50369,7 +50376,6 @@ GameObject:
   - 33: {fileID: 935057168}
   - 23: {fileID: 935057167}
   - 135: {fileID: 935057166}
-  - 114: {fileID: 935057165}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -50389,19 +50395,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 209559221}
   m_RootOrder: 0
---- !u!114 &935057165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431216, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 935057163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &935057166
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -53556,7 +53549,6 @@ GameObject:
   - 33: {fileID: 995250048}
   - 23: {fileID: 995250047}
   - 135: {fileID: 995250046}
-  - 114: {fileID: 995250045}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -53576,19 +53568,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 661018431}
   m_RootOrder: 0
---- !u!114 &995250045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11475080, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 995250043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &995250046
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -54860,14 +54839,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &1016671994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56667,7 +56650,6 @@ GameObject:
   - 33: {fileID: 1040100383}
   - 23: {fileID: 1040100382}
   - 135: {fileID: 1040100381}
-  - 114: {fileID: 1040100380}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -56687,19 +56669,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 520448405}
   m_RootOrder: 0
---- !u!114 &1040100380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11475080, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1040100378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1040100381
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -58883,7 +58852,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1070369205}
-  m_LocalRotation: {x: -.369555503, y: .602850556, z: .602850616, w: -.369555503}
+  m_LocalRotation: {x: -.369555473, y: .602850497, z: .602850556, w: -.369555473}
   m_LocalPosition: {x: -26.9310532, y: 35.3901482, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -59911,7 +59880,6 @@ GameObject:
   - 33: {fileID: 1096752524}
   - 23: {fileID: 1096752523}
   - 135: {fileID: 1096752522}
-  - 114: {fileID: 1096752521}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -59931,19 +59899,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1016671992}
   m_RootOrder: 0
---- !u!114 &1096752521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431220, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1096752519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1096752522
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -61240,7 +61195,6 @@ GameObject:
   - 33: {fileID: 1121753359}
   - 23: {fileID: 1121753358}
   - 135: {fileID: 1121753357}
-  - 114: {fileID: 1121753356}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -61260,19 +61214,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 700405026}
   m_RootOrder: 0
---- !u!114 &1121753356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431224, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1121753354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1121753357
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -64753,7 +64694,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1177218564}
-  m_LocalRotation: {x: .272884309, y: .652329862, z: .652329862, w: .272884309}
+  m_LocalRotation: {x: .272884279, y: .652329803, z: .652329803, w: .272884279}
   m_LocalPosition: {x: -7.4167099, y: 22.3934631, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -65861,6 +65802,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -71163,14 +71105,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &1306681157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71436,7 +71382,6 @@ GameObject:
   - 33: {fileID: 1309388953}
   - 23: {fileID: 1309388952}
   - 135: {fileID: 1309388951}
-  - 114: {fileID: 1309388950}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -71456,19 +71401,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1866243015}
   m_RootOrder: 0
---- !u!114 &1309388950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431216, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1309388948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1309388951
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -73619,7 +73551,6 @@ GameObject:
   - 33: {fileID: 1349293366}
   - 23: {fileID: 1349293365}
   - 135: {fileID: 1349293364}
-  - 114: {fileID: 1349293363}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -73639,19 +73570,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 874493102}
   m_RootOrder: 0
---- !u!114 &1349293363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431220, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1349293361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1349293364
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -73957,14 +73875,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &1355865910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78312,7 +78234,6 @@ GameObject:
   - 33: {fileID: 1433760598}
   - 23: {fileID: 1433760597}
   - 135: {fileID: 1433760596}
-  - 114: {fileID: 1433760595}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -78332,19 +78253,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1306681155}
   m_RootOrder: 0
---- !u!114 &1433760595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431232, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1433760593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1433760596
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -79832,6 +79740,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -80072,7 +79981,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1463219701}
-  m_LocalRotation: {x: -.360895723, y: .608074248, z: .608074188, w: -.360895723}
+  m_LocalRotation: {x: -.360895753, y: .608074307, z: .608074248, w: -.360895753}
   m_LocalPosition: {x: 1.62054825, y: 18.090332, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -83210,6 +83119,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -83769,7 +83679,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1504392315}
-  m_LocalRotation: {x: .301630706, y: .639545858, z: .639545858, w: .301630676}
+  m_LocalRotation: {x: .301630735, y: .639545918, z: .639545918, w: .301630706}
   m_LocalPosition: {x: 3.30031586, y: 10.7807007, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -84284,6 +84194,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -92894,7 +92805,6 @@ GameObject:
   - 33: {fileID: 1698863467}
   - 23: {fileID: 1698863466}
   - 135: {fileID: 1698863465}
-  - 114: {fileID: 1698863464}
   m_Layer: 16
   m_Name: Symbol
   m_TagString: Untagged
@@ -92914,19 +92824,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1814303009}
   m_RootOrder: 0
---- !u!114 &1698863464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11431232, guid: 032ca4c2a57ff5341a98cb81ed07825c,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1698863462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41531a49ea9f54449526e1370b98dd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotSpeed: 25
 --- !u!135 &1698863465
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -93212,6 +93109,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -94806,6 +94704,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -100022,14 +99921,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!114 &1814303011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102811,14 +102714,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
   waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: 60
 --- !u!54 &1866243018
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -105182,6 +105089,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -108325,6 +108233,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -116474,6 +116383,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
