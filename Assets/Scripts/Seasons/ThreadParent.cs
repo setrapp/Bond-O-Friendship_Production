@@ -31,10 +31,10 @@ public class ThreadParent : MonoBehaviour {
 
 		for(int i = 0;i < myThreaders.Count; i++)
 		{
-			if(myThreaders[i].bondCount > 0)
+			if(myThreaders[i].bondCount > 0 || myThreaders[i].players.Count > 0)
 			{
 				anyThreader = true;
-				if(playerBond == null)
+				if(playerBond == null && myThreaders[i].threadedbond != null)
 				{
 					playerBond = myThreaders[i].threadedbond;
 				}
@@ -111,6 +111,10 @@ public class ThreadParent : MonoBehaviour {
 
 	private void ReturnBond(Bond playerBond)
 	{
+		if (playerBond == null)
+		{
+			return;
+		}
 		// Return bond extention per fluff to normal size when leaving threader.
 		playerBond.stats.extensionPerFluff = playerBond.attachment1.attachee.bondOverrideStats.stats.extensionPerFluff;
 		playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);

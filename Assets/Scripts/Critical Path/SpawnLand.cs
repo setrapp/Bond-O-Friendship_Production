@@ -13,11 +13,14 @@ public class SpawnLand : MonoBehaviour {
 	private Color childColor;
 	private bool removed;
 	public float colliderZDepth = 5;
+	private Renderer[] renderers;
 
 	// Use this for initialization
 	void Start () {
 		threader = GetComponent<Threader>();
 		threadColor = GetComponent<Renderer>().material.color;
+
+		renderers = GetComponentsInChildren<Renderer>();
 	}
 	
 	// Update is called once per frame
@@ -54,10 +57,16 @@ public class SpawnLand : MonoBehaviour {
 		}
 		if(transform.GetComponentInParent<ThreadParent>().solved == true)
 		{
-			threadColor.a -= Time.deltaTime;
+			for (int i = 0; i < renderers.Length; i++)
+			{
+				Color color = renderers[i].material.color;
+				color.a -= Time.deltaTime;
+				renderers[i].material.color = color;
+			}
+			/*threadColor.a -= Time.deltaTime;
 			childColor.a -= Time.deltaTime;
 			GetComponent<Renderer>().material.color = threadColor;
-			transform.GetChild(0).GetComponent<Renderer>().material.color = childColor;
+			transform.GetChild(0).GetComponent<Renderer>().material.color = childColor;*/
 			if(!removed)
 			{
 				for(int i = 0; i < GetComponents<Collider>().Length; i++)
