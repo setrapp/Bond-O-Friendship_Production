@@ -22,7 +22,9 @@ public class ScaleDarkAlphaMasker : MonoBehaviour {
         p2Pos = Globals.Instance.player2.transform.position;
 
         //center of diagonal
+        float z = transform.position.z;
         this.transform.position = (p1Pos + p2Pos) / 2;
+        transform.position += new Vector3(0, 0, z - transform.position.z);
 
         //calculate diagonal distance
         Vector3 diagonal = p2Pos - p1Pos;

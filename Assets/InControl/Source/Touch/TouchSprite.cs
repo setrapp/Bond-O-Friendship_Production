@@ -197,8 +197,8 @@ namespace InControl
 			}
 			else
 			{
-				var dx = Mathf.Abs( testWorldPoint.x - Position.x ) * 2.0f;
-				var dy = Mathf.Abs( testWorldPoint.y - Position.y ) * 2.0f;
+				var dx = Utility.Abs( testWorldPoint.x - Position.x ) * 2.0f;
+				var dy = Utility.Abs( testWorldPoint.y - Position.y ) * 2.0f;
 				return dx <= worldSize.x && dy <= worldSize.y;
 			}
 		}

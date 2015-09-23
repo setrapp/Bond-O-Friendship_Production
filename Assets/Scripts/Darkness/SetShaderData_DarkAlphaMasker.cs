@@ -86,6 +86,7 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		{
 			lightingMultiples = mul_sameLuminus;
 		}
+        
 
 		// Ignore luminus if it is not turned on.
 		if (l1 != null && !l1.isOn)

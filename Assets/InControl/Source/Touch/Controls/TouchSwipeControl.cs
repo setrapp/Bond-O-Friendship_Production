@@ -31,11 +31,13 @@ namespace InControl
 		public ButtonTarget downTarget = ButtonTarget.None;
 		public ButtonTarget leftTarget = ButtonTarget.None;
 		public ButtonTarget rightTarget = ButtonTarget.None;
+		public ButtonTarget tapTarget = ButtonTarget.None;
 		public bool oneSwipePerTouch = false;
 
 
 		Rect worldActiveArea;
 		Vector3 currentVector;
+		Vector3 beganPosition;
 		Vector3 lastPosition;
 		Touch currentTouch;
 		bool fireButtonTarget;
@@ -92,6 +94,7 @@ namespace InControl
 			SubmitButtonState( downTarget, fireButtonTarget && nextButtonTarget == downTarget, updateTick, deltaTime );
 			SubmitButtonState( leftTarget, fireButtonTarget && nextButtonTarget == leftTarget, updateTick, deltaTime );
 			SubmitButtonState( rightTarget, fireButtonTarget && nextButtonTarget == rightTarget, updateTick, deltaTime );
+			SubmitButtonState( tapTarget, fireButtonTarget && nextButtonTarget == tapTarget, updateTick, deltaTime );
 
 			if (fireButtonTarget && nextButtonTarget != ButtonTarget.None)
 			{
@@ -109,6 +112,7 @@ namespace InControl
 			CommitButton( downTarget );
 			CommitButton( leftTarget );
 			CommitButton( rightTarget );
+			CommitButton( tapTarget );
 		}
 		
 		
@@ -119,7 +123,7 @@ namespace InControl
 				return;
 			}
 
-			var beganPosition = TouchManager.ScreenToWorldPoint( touch.position );
+			beganPosition = TouchManager.ScreenToWorldPoint( touch.position );
 			if (worldActiveArea.Contains( beganPosition ))
 			{
 				lastPosition = beganPosition;
@@ -142,7 +146,7 @@ namespace InControl
 
 			var movedPosition = TouchManager.ScreenToWorldPoint( touch.position );
 			var delta = movedPosition - lastPosition;
-			if (delta.magnitude > sensitivity)
+			if (delta.magnitude >= sensitivity)
 			{
 				lastPosition = movedPosition;
 				currentVector = delta.normalized;
@@ -168,6 +172,16 @@ namespace InControl
 
 			currentTouch = null;
 			currentVector = Vector2.zero;
+
+			var touchPosition = TouchManager.ScreenToWorldPoint( touch.position );
+			var delta = beganPosition - touchPosition;
+			if (delta.magnitude < sensitivity)
+			{
+				fireButtonTarget = true;
+				nextButtonTarget = tapTarget;
+				lastButtonTarget = ButtonTarget.None;
+				return;
+			}
 
 			fireButtonTarget = false;
 			nextButtonTarget = ButtonTarget.None;

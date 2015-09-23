@@ -64,7 +64,7 @@ namespace InControl
 				},
 				new InputControlMapping {
 					Handle = "Back",
-					Target = InputControlType.Select,
+					Target = InputControlType.Back,
 					Source = EscapeKey
 				},
 				new InputControlMapping {

@@ -18,7 +18,6 @@ namespace InControl
 			};
 
 			JoystickNames = new[] {
-				"", // Yes, really.
 				"PLAYSTATION(R)3 Controller",
 				"SHENGHIC 2009/0708ZXW-V1Inc. PLAYSTATION(R)3Conteroller", // Not a typo.
 				"Sony PLAYSTATION(R)3 Controller"

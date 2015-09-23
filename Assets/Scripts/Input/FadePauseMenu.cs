@@ -11,7 +11,7 @@ public class FadePauseMenu : MonoBehaviour {
 	public float f = 0.0f;
 	public float duration = 1.0f;
 
-	private bool colorsSet = false;
+	public bool colorsSet = false;
 
 	// Use this for initialization
 	void Start () 

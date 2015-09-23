@@ -344,7 +344,7 @@ public class InputFill : MonoBehaviour
     {
         playerHolder = isPlayer1 ? player1 : player2;
 
-        if (controlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && Globals.Instance.leftControllerIndex >= 0)
+        if (controlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && Globals.Instance.leftControllerInputDevice != null)
         {
             if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft && playerHolder.PlayerControllerSharedMovement() != Vector3.zero)
             {
@@ -377,7 +377,7 @@ public class InputFill : MonoBehaviour
                     player2ControlsChanged = false;
             }
         }
-        else if (controlScheme.inputNameSelected == Globals.InputNameSelected.RightController && Globals.Instance.rightContollerIndex >= 0)
+        else if (controlScheme.inputNameSelected == Globals.InputNameSelected.RightController && Globals.Instance.rightControllerInputDevice != null)
         {
             if (controlScheme.controlScheme == Globals.ControlScheme.SharedLeft && playerHolder.PlayerControllerSharedMovement() != Vector3.zero)
             {

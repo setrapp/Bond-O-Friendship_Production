@@ -24,7 +24,6 @@ namespace InControl
 		public void Set( float value )
 		{
 			Value = value;
-//			State = !Mathf.Approximately( value, 0.0f );
 			State = Utility.IsNotZero( value );
 		}
 
@@ -32,7 +31,6 @@ namespace InControl
 		public void Set( float value, float threshold )
 		{
 			Value = value;
-//			State = Mathf.Abs( value ) > threshold;
 			State = Utility.AbsoluteIsOverThreshold( value, threshold );
 		}
 
@@ -66,7 +64,7 @@ namespace InControl
 
 		public static bool operator !=( InputControlState a, InputControlState b )
 		{
-			if (a.State == b.State) return false;
+			if (a.State != b.State) return true;
 			return !Utility.Approximately( a.Value, b.Value );
 		}
 	}

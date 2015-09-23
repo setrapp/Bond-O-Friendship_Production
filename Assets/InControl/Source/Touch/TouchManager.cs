@@ -64,7 +64,10 @@ namespace InControl
 
 		void OnEnable()
 		{
-			SetupSingleton();
+			if (!SetupSingleton())
+			{
+				return;
+			}
 
 			touchControls = GetComponentsInChildren<TouchControl>( true );
 
@@ -282,7 +285,7 @@ namespace InControl
 		{
 			activeTouches.Clear();
 
-			#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
+			#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER || UNITY_WEBGL
 			if (mouseTouch.SetWithMouseData( updateTick, deltaTime ))
 			{
 				activeTouches.Add( mouseTouch );
@@ -399,17 +402,17 @@ namespace InControl
 				return false;
 			}
 
-			if (Mathf.Approximately( touchCamera.orthographicSize, 0.0f ))
+			if (Utility.IsZero( touchCamera.orthographicSize ))
 			{
 				return false;
 			}
 
-			if (Mathf.Approximately( touchCamera.rect.width, 0.0f ) && Mathf.Approximately( touchCamera.rect.height, 0.0f ))
+			if (Utility.IsZero( touchCamera.rect.width ) && Utility.IsZero( touchCamera.rect.height ))
 			{
 				return false;
 			}
 
-			if (Mathf.Approximately( touchCamera.pixelRect.width, 0.0f ) && Mathf.Approximately( touchCamera.pixelRect.height, 0.0f ))
+			if (Utility.IsZero( touchCamera.pixelRect.width ) && Utility.IsZero( touchCamera.pixelRect.height ))
 			{
 				return false;
 			}
