@@ -7,13 +7,9 @@ namespace InControl
 	{
 		public UnknownUnityDeviceProfile( string joystickName )
 		{
-			Name = "";
-			//if (joystickName != "")
-			//{
-			//	Name += " (" + joystickName + ")";
-			//}
+			Name = "Unknown Controller";
+			Meta = "\"" + joystickName + "\"";
 
-			Meta = "";
 			Sensitivity = 1.0f;
 			LowerDeadZone = 0.2f;
 			UpperDeadZone = 0.9f;

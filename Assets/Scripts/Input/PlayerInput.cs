@@ -59,20 +59,20 @@ public class PlayerInput : MonoBehaviour {
         controlScheme = playerNumber == Player.Player1 ? Globals.Instance.player1Controls : Globals.Instance.player2Controls;
 
         if (controlScheme.inputNameSelected == Globals.InputNameSelected.LeftController)
-            deviceNumber = Globals.Instance.leftControllerIndex;
+            device = Globals.Instance.leftControllerInputDevice;
         else if (controlScheme.inputNameSelected == Globals.InputNameSelected.RightController)
-            deviceNumber = Globals.Instance.rightContollerIndex;
+            device = Globals.Instance.rightControllerInputDevice;
         else
-            deviceNumber = -1;
+            device = null;
 
-        device = deviceNumber >= 0 && deviceNumber < InputManager.Devices.Count ? InputManager.Devices[deviceNumber] : null;
+       // device = deviceNumber >= 0 && deviceNumber < InputManager.Devices.Count ? InputManager.Devices[deviceNumber] : null;
 
         if (device != null)
         {
 			controllerInput.Device = device;
         }
 
-        if(deviceNumber == -3)
+        /*if(deviceNumber == -3)
         {
             if (playerNumber == Player.Player1)
             {
@@ -88,7 +88,7 @@ public class PlayerInput : MonoBehaviour {
                 Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSharedInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
                 Globals.Instance.player1Controls.controlScheme = Globals.Instance.CheckSoloInput(Globals.Instance.player1Controls, Globals.Instance.player2Controls);
             }
-        }
+        }*/
 
         #region Pause
         /*if (player1ControlScheme == Globals.ControlScheme.ControllerSolo)//Globals.usingController)

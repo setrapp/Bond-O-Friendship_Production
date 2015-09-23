@@ -14,7 +14,7 @@ namespace XInputDotNetPure
 		private const int TriggerDeadZone = 30;
 
 
-		public static float ApplyTriggerDeadZone( byte value, GamePadDeadZone deadZoneMode )
+		/*public static float ApplyTriggerDeadZone( byte value, GamePadDeadZone deadZoneMode )
 		{
 			if (deadZoneMode == GamePadDeadZone.None)
 			{
@@ -25,9 +25,9 @@ namespace XInputDotNetPure
 				return ApplyDeadZone( value, byte.MaxValue, TriggerDeadZone );
 			}
 		}
+        */
 
-
-		public static GamePadThumbSticks.StickValue ApplyLeftStickDeadZone( short valueX, short valueY, GamePadDeadZone deadZoneMode )
+		/*public static GamePadThumbSticks.StickValue ApplyLeftStickDeadZone( short valueX, short valueY, GamePadDeadZone deadZoneMode )
 		{
 			return ApplyStickDeadZone( valueX, valueY, deadZoneMode, LeftStickDeadZone );
 		}
@@ -66,7 +66,7 @@ namespace XInputDotNetPure
 					ApplyDeadZone(valueY, short.MaxValue, 0.0f)
 				);
 			}
-		}
+		}*/
 
 
 		private static float Clamp( float value )

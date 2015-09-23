@@ -8,7 +8,7 @@ public class FadeOptions: MonoBehaviour {
 	private List<Color> optionsColorsEmpty = new List<Color>();
 	private List<Color> optionsColorsFull = new List<Color>();
 
-    private bool colorsSet = false;
+    public bool colorsSet = false;
 
 	public float f = 0.0f;
 	public float duration = 2.0f;
@@ -32,7 +32,8 @@ public class FadeOptions: MonoBehaviour {
 	{	if (f != 1) 
 	{
 			f = Mathf.Clamp (f + Time.deltaTime / duration, 0.0f, 1.0f);
-			for (int i = 0; i < optionsRenderers.Count; i++) {		
+			for (int i = 0; i < optionsRenderers.Count; i++) 
+            {		
 				optionsRenderers [i].material.color = Color.Lerp (optionsColorsEmpty [i], optionsColorsFull [i], f);
 			}
 			

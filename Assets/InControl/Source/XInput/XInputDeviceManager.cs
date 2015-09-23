@@ -53,7 +53,7 @@ namespace InControl
 		{
 			if (thread == null)
 			{
-				thread = new Thread( SetState );
+				thread = new Thread( Worker );
 				thread.IsBackground = true;
 				thread.Start();
 			}
@@ -71,13 +71,13 @@ namespace InControl
 		}
 
 
-		public void SetState()
+		void Worker()
 		{
 			while (true)
 			{
 				for (int deviceIndex = 0; deviceIndex < maxDevices; deviceIndex++)
 				{
-					gamePadState[deviceIndex].Enqueue( GamePad.GetState( (PlayerIndex) deviceIndex, GamePadDeadZone.Circular ) );
+					gamePadState[deviceIndex].Enqueue( GamePad.GetState( (PlayerIndex) deviceIndex ) );
 				}
 				
 				Thread.Sleep( timeStep );
@@ -151,7 +151,7 @@ namespace InControl
 		}
 
 
-		public static void Enable()
+		internal static void Enable()
 		{
 			var errors = new List<string>();
 			if (XInputDeviceManager.CheckPlatformSupport( errors ))

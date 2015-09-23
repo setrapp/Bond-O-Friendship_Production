@@ -59,6 +59,7 @@ namespace InControl
 		Share,
 		Home,
 		View,
+		Power,
 
 		// Unusual controls.
 		//

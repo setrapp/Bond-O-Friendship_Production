@@ -11,6 +11,11 @@ namespace InControl
 		public bool IncludeControllers = true;
 
 		/// <summary>
+		/// Include unknown controllers when listening for new bindings.
+		/// </summary>
+		public bool IncludeUnknownControllers = false;
+
+		/// <summary>
 		/// Include non-standard controls on controllers when listening for new bindings.
 		/// </summary>
 		public bool IncludeNonStandardControls = true;
@@ -52,6 +57,14 @@ namespace InControl
 		/// Allow bindings that are already bound to any other action in the set.
 		/// </summary>
 		public bool AllowDuplicateBindingsPerSet = false;
+
+
+		/// <summary>
+		/// If an existing duplicate binding exists, remove it before adding the new one.
+		/// When <code>true</code>, the value of AllowDuplicateBindingsPerSet is irrelevant.
+		/// </summary>
+		public bool UnsetDuplicateBindingsOnSet = false;
+
 
 		/// <summary>
 		/// This function is called when a binding is found but before it is added.

@@ -42,7 +42,7 @@ public class PauseMenuControl : MonoBehaviour {
 
 				
 				if(!mainMenu.activeInHierarchy)
-						mainMenu.SetActive(true);
+					mainMenu.SetActive(true);
                 if (!exitGameConfirm.activeInHierarchy)
                     exitGameConfirm.SetActive(true);
                 if (!options.activeInHierarchy)
@@ -108,7 +108,7 @@ public class PauseMenuControl : MonoBehaviour {
 	{
 		if(fMainMenu.f == 0)
 		{
-			if(mainMenu.activeInHierarchy)
+			if(mainMenu.activeInHierarchy && fMainMenu.colorsSet)
 				mainMenu.SetActive(false);
 		}
 		else
@@ -120,7 +120,7 @@ public class PauseMenuControl : MonoBehaviour {
 	{
 		if(fOptions.f == 0)
 		{
-			if(options.activeInHierarchy)
+			if(options.activeInHierarchy && fOptions.colorsSet)
 				options.SetActive(false);
 		}
 		else

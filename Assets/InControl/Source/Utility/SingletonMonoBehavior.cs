@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using System.Reflection;
+using UnityEngine;
 
 
 namespace InControl
@@ -71,7 +72,12 @@ namespace InControl
 					return instance;
 				}
 
+				#if NETFX_CORE
+				var attribute = type.GetTypeInfo().GetCustomAttribute<SingletonPrefabAttribute>();
+				#else
 				var attribute = Attribute.GetCustomAttribute( type, typeof(SingletonPrefabAttribute) ) as SingletonPrefabAttribute;
+				#endif
+
 				if (attribute == null)
 				{
 					CreateInstance();
@@ -104,9 +110,29 @@ namespace InControl
 		}
 
 
-		protected void SetupSingleton()
+		static void EnforceSingleton()
 		{
-			GetInstance();
+			lock (lockObject)
+			{
+				if (hasInstance)
+				{
+					var objects = FindObjectsOfType<T>();
+					for (int i = 0; i < objects.Length; i++)
+					{
+						if (objects[i].GetInstanceID() != instance.GetInstanceID())
+						{
+							DestroyImmediate( objects[i].gameObject );
+						}
+					}
+				}
+			}
+		}
+
+
+		protected bool SetupSingleton()
+		{
+			EnforceSingleton();
+			return GetInstanceID() == Instance.GetInstanceID();
 		}
 
 

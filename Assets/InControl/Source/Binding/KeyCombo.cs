@@ -10,7 +10,7 @@ namespace InControl
 	/// <summary>
 	/// Represents a combination of one or more keys, including modifiers, up to a maximum of eight.
 	/// </summary>
-	public struct KeyCombo : IEnumerable<int>
+	public struct KeyCombo
 	{
 		int size;
 		ulong data;
@@ -27,13 +27,7 @@ namespace InControl
 		}
 
 
-		public void Add( Key key )
-		{
-			Add( (int) key );
-		}
-
-
-		void Add( int key )
+		void AddInt( int key )
 		{
 			if (size == 8)
 			{
@@ -45,25 +39,32 @@ namespace InControl
 		}
 
 
+		int GetInt( int index )
+		{
+			return (int) ((data >> (index * 8)) & 0xFF);
+		}
+
+
+		public void Add( Key key )
+		{
+			AddInt( (int) key );
+		}
+
+
+		public Key Get( int index )
+		{
+			if (index < 0 || index >= size)
+			{
+				throw new IndexOutOfRangeException( "Index " + index + " is out of the range 0.." + size );
+			}
+			return (Key) GetInt( index );
+		}
+
+
 		public void Clear()
 		{
 			data = 0;
 			size = 0;
-		}
-
-
-		public IEnumerator<int> GetEnumerator()
-		{
-			for (var i = 0; i < size; i++)
-			{
-				yield return (int) ((data >> (i * 8)) & 0xFF);
-			}
-		}
-
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.GetEnumerator();
 		}
 
 
@@ -84,11 +85,14 @@ namespace InControl
 				{
 					return false;
 				}
+
 				bool isPressed = true;
-				foreach (var key in this)
+				for (var i = 0; i < size; i++)
 				{
+					var key = GetInt( i );
 					isPressed = isPressed && KeyInfo.KeyList[key].IsPressed;
 				}
+
 				return isPressed;
 			}
 		}
@@ -104,7 +108,7 @@ namespace InControl
 				{
 					if (KeyInfo.KeyList[i].IsPressed)
 					{
-						keyCombo.Add( i );
+						keyCombo.AddInt( i );
 					}
 				}
 			}
@@ -114,7 +118,7 @@ namespace InControl
 				{
 					if (KeyInfo.KeyList[i].IsPressed)
 					{
-						keyCombo.Add( i );
+						keyCombo.AddInt( i );
 						return keyCombo;
 					}
 				}
@@ -124,7 +128,7 @@ namespace InControl
 			{
 				if (KeyInfo.KeyList[i].IsPressed)
 				{
-					keyCombo.Add( i );
+					keyCombo.AddInt( i );
 					return keyCombo;
 				}
 			}
@@ -134,14 +138,24 @@ namespace InControl
 		}
 
 
+		static Dictionary<ulong, string> cachedStrings = new Dictionary<ulong, string>();
 		public override string ToString()
 		{
-			var s = "";
-			foreach (var key in this)
+			string value;
+			if (!cachedStrings.TryGetValue( data, out value ))
 			{
-				s = s + " " + KeyInfo.KeyList[key].Name;
+				value = "";
+				for (var i = 0; i < size; i++)
+				{
+					if (i != 0)
+					{
+						value += " ";
+					}
+					var key = GetInt( i );
+					value += KeyInfo.KeyList[key].Name;
+				}
 			}
-			return s;
+			return value;
 		}
 
 
