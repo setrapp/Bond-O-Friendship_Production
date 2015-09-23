@@ -20,6 +20,8 @@ namespace InControl
 		SerializedProperty xInputUpdateRate;
 		SerializedProperty xInputBufferSize;
 
+		SerializedProperty enableICade;
+
 		Texture headerTexture;
 		
 
@@ -35,8 +37,10 @@ namespace InControl
 			xInputUpdateRate = serializedObject.FindProperty( "xInputUpdateRate" );
 			xInputBufferSize = serializedObject.FindProperty( "xInputBufferSize" );
 
+			enableICade = serializedObject.FindProperty( "enableICade" );
+
 			var path = AssetDatabase.GetAssetPath( MonoScript.FromScriptableObject( this ) );
-			headerTexture = AssetDatabase.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/InControlHeader.png" );
+			headerTexture = EditorUtility.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/InControlHeader.png" );
 		}
 
 
@@ -59,7 +63,9 @@ namespace InControl
 			useFixedUpdate.boolValue = EditorGUILayout.ToggleLeft( "Use Fixed Update", useFixedUpdate.boolValue );
 			dontDestroyOnLoad.boolValue = EditorGUILayout.ToggleLeft( "Don't Destroy On Load", dontDestroyOnLoad.boolValue );
 
-			enableXInput.boolValue = EditorGUILayout.ToggleLeft( "Enable XInput (Windows)", enableXInput.boolValue );
+			enableICade.boolValue = EditorGUILayout.ToggleLeft( "Enable ICade (iOS only)", enableICade.boolValue );
+
+			enableXInput.boolValue = EditorGUILayout.ToggleLeft( "Enable XInput (Windows only)", enableXInput.boolValue );
 			if (enableXInput.boolValue)
 			{
 				GUIStyle style = new GUIStyle( GUI.skin.box );

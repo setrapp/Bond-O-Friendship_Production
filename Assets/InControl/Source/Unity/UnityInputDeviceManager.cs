@@ -66,6 +66,7 @@ namespace InControl
 
 		public void ReloadDevices()
 		{
+            Debug.Log("Here");
 			DetachDevices();
 			AttachDevices();
 		}
@@ -150,7 +151,7 @@ namespace InControl
 			}
 
 			// As of Unity 4.6.3p1, empty strings on windows represent disconnected devices.
-			/*if (InputManager.UnityVersion >= new VersionInfo( 4, 6, 3, 0 ))
+			if (InputManager.UnityVersion >= new VersionInfo( 4, 6, 3, 0 ))
 			{
 				if (Application.platform == RuntimePlatform.WindowsEditor ||
 				    Application.platform == RuntimePlatform.WindowsPlayer ||
@@ -161,57 +162,44 @@ namespace InControl
 						return;
 					}
 				}
-			}*/
-
-			InputDeviceProfile matchedDeviceProfile = null;
-
-			if (matchedDeviceProfile == null)
-			{
-				matchedDeviceProfile = customDeviceProfiles.Find( config => config.HasJoystickName( unityJoystickName ) );
 			}
-
-			if (matchedDeviceProfile == null)
-			{
-				matchedDeviceProfile = systemDeviceProfiles.Find( config => config.HasJoystickName( unityJoystickName ) );
-			}
-
-			if (matchedDeviceProfile == null)
-			{
-				matchedDeviceProfile = customDeviceProfiles.Find( config => config.HasLastResortRegex( unityJoystickName ) );
-			}
-
-			if (matchedDeviceProfile == null)
-			{
-				matchedDeviceProfile = systemDeviceProfiles.Find( config => config.HasLastResortRegex( unityJoystickName ) );
-			}
-
-//			Logger.LogInfo( "Device " + unityJoystickId + " with name \"" + unityJoystickName + "\" detected." );
 
 			InputDeviceProfile deviceProfile = null;
 
-			if (matchedDeviceProfile == null)
+			if (deviceProfile == null)
 			{
-				deviceProfile = new UnknownUnityDeviceProfile( unityJoystickName );
-				systemDeviceProfiles.Add( deviceProfile );
+				deviceProfile = customDeviceProfiles.Find( config => config.HasJoystickName( unityJoystickName ) );
 			}
-			else
+
+			if (deviceProfile == null)
 			{
-				deviceProfile = matchedDeviceProfile;
+				deviceProfile = systemDeviceProfiles.Find( config => config.HasJoystickName( unityJoystickName ) );
+			}
+
+			if (deviceProfile == null)
+			{
+				deviceProfile = customDeviceProfiles.Find( config => config.HasLastResortRegex( unityJoystickName ) );
+			}
+
+			if (deviceProfile == null)
+			{
+				deviceProfile = systemDeviceProfiles.Find( config => config.HasLastResortRegex( unityJoystickName ) );
+			}
+
+			if (deviceProfile == null)
+			{
+				Logger.LogWarning( "Device " + unityJoystickId + " with name \"" + unityJoystickName + "\" does not match any supported profiles and will be considered an unknown controller." );
+				var unknownDeviceProfile = new UnknownUnityDeviceProfile( unityJoystickName );
+				var joystickDevice = new UnknownUnityInputDevice( unknownDeviceProfile, unityJoystickId );
+				AttachDevice( joystickDevice );
+				return;
 			}
 
 			if (!deviceProfile.IsHidden)
 			{
 				var joystickDevice = new UnityInputDevice( deviceProfile, unityJoystickId );
 				AttachDevice( joystickDevice );
-
-				if (matchedDeviceProfile == null)
-				{
-					Logger.LogWarning( "Device " + unityJoystickId + " with name \"" + unityJoystickName + "\" does not match any known profiles." );
-				}
-				else
-				{
-					Logger.LogInfo( "Device " + unityJoystickId + " matched profile " + deviceProfile.GetType().Name + " (" + deviceProfile.Name + ")" );
-				}
+				Logger.LogInfo( "Device " + unityJoystickId + " matched profile " + deviceProfile.GetType().Name + " (" + deviceProfile.Name + ")" );
 			}
 			else
 			{

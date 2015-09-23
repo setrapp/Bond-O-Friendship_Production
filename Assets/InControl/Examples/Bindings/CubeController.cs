@@ -8,7 +8,7 @@ using InControl;
 
 namespace BindingsExample
 {
-	public class PlayerActions : PlayerActionSet
+	/*public class PlayerActions : PlayerActionSet
 	{
 		public PlayerAction Fire;
 		public PlayerAction Jump;
@@ -29,7 +29,7 @@ namespace BindingsExample
 			Down = CreatePlayerAction( "Move Down" );
 			Move = CreateTwoAxisPlayerAction( Left, Right, Down, Up );
 		}
-	}
+	}*/
 
 
 	public class CubeController : MonoBehaviour

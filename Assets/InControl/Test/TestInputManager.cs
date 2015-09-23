@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using InControl;
 
@@ -62,6 +63,29 @@ namespace InControl
 //			{
 //				Debug.Log( "Left.WasReleased" );
 //			}
+//			if (inputDevice.Action1.WasPressed)
+//			{
+//				Debug.Log( "Action1.WasPressed" );
+//			}
+
+//			var inputDevice = InputManager.ActiveDevice;
+//			if (inputDevice.IsUnknown)
+//			{
+//				var unknownDevice = inputDevice as UnknownUnityInputDevice;
+//				if (unknownDevice != null)
+//				{
+//					if (inputDevice.GetControl( InputControlType.Button16 ).WasReleased)
+//					{
+//						unknownDevice.TakeSnapshot();
+//					}
+//
+//					var analog = unknownDevice.GetFirstPressedAnalog();
+//					if (analog)
+//					{
+//						Debug.Log( analog.Control + " : " + analog.SourceRange );
+//					}
+//				}
+//			}
 		}
 
 
@@ -70,12 +94,18 @@ namespace InControl
 //			var unityDeviceManager = InputManager.GetDeviceManager<UnityInputDeviceManager>();
 //			unityDeviceManager.ReloadDevices();
 
-			Debug.Log( "IntPtr.Size = " + IntPtr.Size );
+//			Debug.Log( "IntPtr.Size = " + IntPtr.Size );
+
+			#if UNITY_IOS
+			ICadeDeviceManager.Active = true;
+			#endif
 		}
 
 
 		void Update()
 		{
+//			Thread.Sleep( 250 );
+
 			if (Input.GetKeyDown( KeyCode.R ))
 			{
 				Application.LoadLevel( "TestInputManager" );
@@ -143,6 +173,12 @@ namespace InControl
 				GUI.Label( new Rect( x, y, x + w, y + 10 ), inputDevice.Name, style );
 				y += lineHeight;
 
+				if (inputDevice.IsUnknown)
+				{
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), inputDevice.Meta, style );
+					y += lineHeight;
+				}
+
 				GUI.Label( new Rect( x, y, x + w, y + 10 ), "SortOrder: " + inputDevice.SortOrder, style );
 				y += lineHeight;
 
@@ -188,6 +224,11 @@ namespace InControl
 					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
 					y += lineHeight;
 
+					SetColor( inputDevice.LeftStick.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "Left Stick A", inputDevice.LeftStick.State ? "= " + inputDevice.LeftStick.Angle : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
 					control = inputDevice.RightStickX;
 					SetColor( control.State ? Color.green : color );
 					label = string.Format( "{0} {1}", "Right Stick X", control.State ? "= " + control.Value : "" );
@@ -197,6 +238,11 @@ namespace InControl
 					control = inputDevice.RightStickY;
 					SetColor( control.State ? Color.green : color );
 					label = string.Format( "{0} {1}", "Right Stick Y", control.State ? "= " + control.Value : "" );
+					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
+					y += lineHeight;
+
+					SetColor( inputDevice.RightStick.State ? Color.green : color );
+					label = string.Format( "{0} {1}", "Right Stick A", inputDevice.RightStick.State ? "= " + inputDevice.RightStick.Angle : "" );
 					GUI.Label( new Rect( x, y, x + w, y + 10 ), label, style );
 					y += lineHeight;
 
@@ -238,21 +284,80 @@ namespace InControl
 					y -= lineHeight;
 				}
 			}
+
+
+//			DrawUnityInputDebugger();
+		}
+
+
+		void DrawUnityInputDebugger()
+		{
+			var w = 300;
+			var x = Screen.width / 2;
+			var y = 10;
+			var lineHeight = 20;
+			SetColor( Color.white );
+
+			var joystickNames = Input.GetJoystickNames();
+			var numJoysticks = joystickNames.Length;
+			for (var i = 0; i < numJoysticks; i++)
+			{
+				var joystickName = joystickNames[i];
+				var joystickId = i + 1;
+
+				GUI.Label( new Rect( x, y, x + w, y + 10 ), "Joystick " + joystickId + ": \"" + joystickName + "\"", style );
+				y += lineHeight;
+
+				var buttonInfo = "Buttons: ";
+				for (int button = 0; button < 20; button++)
+				{
+					var buttonQuery = "joystick " + joystickId + " button " + button;
+					var buttonState = Input.GetKey( buttonQuery );
+					if (buttonState)
+					{
+						buttonInfo += "B" + button + "  ";
+					}
+				}
+
+				GUI.Label( new Rect( x, y, x + w, y + 10 ), buttonInfo, style );
+				y += lineHeight;
+
+				var analogInfo = "Analogs: ";
+				for (int analog = 0; analog < 20; analog++)
+				{
+					var analogQuery = "joystick " + joystickId + " analog " + analog;
+					var analogValue = Input.GetAxisRaw( analogQuery );
+
+					if (Utility.AbsoluteIsOverThreshold( analogValue, 0.2f ))
+					{
+						analogInfo += "A" + analog + ": " + analogValue.ToString( "0.00" ) + "  ";
+					}
+				}
+
+				GUI.Label( new Rect( x, y, x + w, y + 10 ), analogInfo, style );
+				y += lineHeight;
+
+				y += 25;
+			}
 		}
 
 
 		void OnDrawGizmos()
 		{
+			var inputDevice = InputManager.ActiveDevice;
+			var vector = new Vector2( inputDevice.LeftStickX, inputDevice.LeftStickY );
+//			var vector = inputDevice.LeftStick.Vector;
+
 			Gizmos.color = Color.blue;
 			var lz = new Vector2( -3.0f, -1.0f );
-			var lp = lz + (InputManager.ActiveDevice.Direction.Vector * 2.0f);
+			var lp = lz + (vector * 2.0f);
 			Gizmos.DrawSphere( lz, 0.1f );
 			Gizmos.DrawLine( lz, lp );
 			Gizmos.DrawSphere( lp, 1.0f );
 
 			Gizmos.color = Color.red;
 			var rz = new Vector2( +3.0f, -1.0f );
-			var rp = rz + (InputManager.ActiveDevice.RightStick.Vector * 2.0f);
+			var rp = rz + (inputDevice.RightStick.Vector * 2.0f);
 			Gizmos.DrawSphere( rz, 0.1f );
 			Gizmos.DrawLine( rz, rp );
 			Gizmos.DrawSphere( rp, 1.0f );

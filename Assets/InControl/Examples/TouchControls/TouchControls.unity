@@ -37,9 +37,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
---- !u!127 &3
-LevelGameManager:
-  m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -68,6 +65,7 @@ LightmapSettings:
     m_TextureCompression: 0
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
+    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &5
@@ -138,7 +136,7 @@ MonoBehaviour:
     sizeUnitType: 0
     size: {x: 15, y: 15}
     lockAspectRatio: 1
-    worldSize: {x: 1.49999988, y: 1.49999988}
+    worldSize: {x: 1.40344059, y: 1.40344059}
 --- !u!4 &203172303
 Transform:
   m_ObjectHideFlags: 0
@@ -146,7 +144,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 203172301}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4313724, y: -3.80000019, z: 0}
+  m_LocalPosition: {x: 2.3390677, y: -3.87724757, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364669223}
@@ -246,7 +244,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 674590780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.93137217, y: -3, z: 0}
+  m_LocalPosition: {x: -2.80688119, y: -3.12874579, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364669223}
@@ -272,6 +270,7 @@ MonoBehaviour:
     width: 50
     height: 100
   target: 1
+  snapAngles: 0
   lowerDeadZone: .100000001
   upperDeadZone: .899999976
   inputCurve:
@@ -309,7 +308,7 @@ MonoBehaviour:
     sizeUnitType: 0
     size: {x: 20, y: 20}
     lockAspectRatio: 1
-    worldSize: {x: 1.99999988, y: 1.99999988}
+    worldSize: {x: 1.87125421, y: 1.87125421}
   knob:
     idleSprite: {fileID: 21300000, guid: 54a1d28b302b6484d8633cc09baf1238, type: 3}
     busySprite: {fileID: 21300000, guid: 54a1d28b302b6484d8633cc09baf1238, type: 3}
@@ -327,7 +326,7 @@ MonoBehaviour:
     sizeUnitType: 0
     size: {x: 10, y: 10}
     lockAspectRatio: 1
-    worldSize: {x: .99999994, y: .99999994}
+    worldSize: {x: .935627103, y: .935627103}
   knobRange: 7.5
 --- !u!1 &730375495
 GameObject:
@@ -352,7 +351,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 730375495}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.73137236, y: -2.50000024, z: 0}
+  m_LocalPosition: {x: 3.55538297, y: -2.6609323, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364669223}
@@ -392,7 +391,7 @@ MonoBehaviour:
     sizeUnitType: 0
     size: {x: 15, y: 15}
     lockAspectRatio: 1
-    worldSize: {x: 1.49999988, y: 1.49999988}
+    worldSize: {x: 1.40344059, y: 1.40344059}
 --- !u!1 &759222509
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +436,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -544,9 +544,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logDebugInfo: 1
   invertYAxis: 0
-  enableXInput: 0
   useFixedUpdate: 0
   dontDestroyOnLoad: 0
+  enableXInput: 0
+  xInputUpdateRate: 0
+  xInputBufferSize: 0
+  enableICade: 0
   customProfiles: []
 --- !u!4 &1364669223
 Transform:
@@ -604,7 +607,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1368722449}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.96568608, y: 0, z: 0}
+  m_LocalPosition: {x: 2.3390677, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364669223}
@@ -644,7 +647,7 @@ MonoBehaviour:
     sizeUnitType: 0
     size: {x: 50, y: 100}
     lockAspectRatio: 0
-    worldSize: {x: 5.93137217, y: 9.99999905}
+    worldSize: {x: 4.6781354, y: 9.99999905}
 --- !u!1 &1711878204
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,6 +776,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10

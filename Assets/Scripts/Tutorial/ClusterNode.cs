@@ -21,6 +21,7 @@ public class ClusterNode : MonoBehaviour {
 	protected Color startingcolor;
 	protected Collider lighter = null;
 	public Color bondColor;
+	public bool particlesAtCollision = false;
 
 	[Header("Optional Wall Pairing")]
 	public GameObject pairedWall;
@@ -141,12 +142,12 @@ public class ClusterNode : MonoBehaviour {
 
    
 
-    virtual protected void OnCollisionEnter(Collision col)
+	virtual protected void OnCollisionEnter(Collision col)
 	{
 		CheckCollision(col.collider);
 	}
 
-    virtual protected void OnTriggerEnter(Collider col)
+	virtual protected void OnTriggerEnter(Collider col)
 	{
 		CheckCollision(col);
 	}
@@ -187,7 +188,7 @@ public class ClusterNode : MonoBehaviour {
 		if (targetPuzzle.nodeParticle != null)
 		{
 			ParticleSystem part = (ParticleSystem)Instantiate(targetPuzzle.nodeParticle);
-			part.transform.position = transform.position;
+			part.transform.position = (particlesAtCollision) ? part.transform.position = col.transform.position : transform.position;
 			part.startColor = playerColor;
 			part.transform.parent = transform;
 			part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
