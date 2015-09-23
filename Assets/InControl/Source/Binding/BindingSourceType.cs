@@ -8,7 +8,8 @@ namespace InControl
 		None = 0,
 		DeviceBindingSource,
 		KeyBindingSource,
-		MouseBindingSource
+		MouseBindingSource,
+		UnknownDeviceBindingSource
 	}
 }
 

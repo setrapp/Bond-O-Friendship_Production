@@ -23,16 +23,8 @@ namespace InControl
 
 		internal void Update( ulong updateTick, float deltaTime )
 		{
-			var value = ValueFromSides( negativeAction, positiveAction );
+			var value = Utility.ValueFromSides( negativeAction, positiveAction );
 			CommitWithValue( value, updateTick, deltaTime );
-		}
-
-
-		float ValueFromSides( float negativeSideValue, float positiveSideValue )
-		{
-			var nsv = Mathf.Abs( negativeSideValue );
-			var psv = Mathf.Abs( positiveSideValue );
-			return nsv > psv ? -nsv : psv;
 		}
 	}
 }

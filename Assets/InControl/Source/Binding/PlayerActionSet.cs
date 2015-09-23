@@ -64,6 +64,10 @@ namespace InControl
 		}
 
 
+		/// <summary>
+		/// Properly dispose of this action set. You should make sure to call this when the action set
+		/// will no longer be used or it will result in unnecessary internal processing every frame.
+		/// </summary>
 		public void Destroy()
 		{
 			InputManager.OnUpdate -= Update;
@@ -196,6 +200,21 @@ namespace InControl
 		}
 
 
+		internal void RemoveBinding( BindingSource binding )
+		{
+			if (binding == null)
+			{
+				return;
+			}
+
+			var actionsCount = actions.Count;
+			for (int i = 0; i < actionsCount; i++)
+			{
+				actions[i].FindAndRemoveBinding( binding );
+			}
+		}
+
+
 		/// <summary>
 		/// Returns the state of this action set and all bindings encoded into a string 
 		/// that you can save somewhere.
@@ -216,12 +235,12 @@ namespace InControl
 					// Write version.
 					writer.Write( (UInt16) 1 );
 
+					// Write actions.
 					var actionCount = actions.Count;
 					writer.Write( actionCount );
 					for (int i = 0; i < actionCount; i++)
 					{
-						var action = actions[i];
-						action.Save( writer );
+						actions[i].Save( writer );
 					}
 				}
 

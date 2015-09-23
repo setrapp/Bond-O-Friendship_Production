@@ -13,7 +13,8 @@ namespace InControl
 			Meta = "XBox One Controller on Windows";
 
 			SupportedPlatforms = new[] {
-				"Windows"
+				"Windows 7",
+				"Windows 8"
 			};
 
 			JoystickNames = new[] {

@@ -88,13 +88,13 @@ namespace InControl
 		}
 
 
-		internal void UpdateWithAxes( OneAxisInputControl horizontalAxis, OneAxisInputControl verticalAxis, ulong updateTick, float deltaTime )
-		{
-			LowerDeadZone = Mathf.Max( horizontalAxis.LowerDeadZone, verticalAxis.LowerDeadZone );
-			UpperDeadZone = Mathf.Min( horizontalAxis.UpperDeadZone, verticalAxis.UpperDeadZone );
-			Raw = horizontalAxis.Raw || verticalAxis.Raw;
-			UpdateWithAxes( horizontalAxis.RawValue, verticalAxis.RawValue, updateTick, deltaTime );
-		}
+		//		internal void UpdateWithAxes( OneAxisInputControl horizontalAxis, OneAxisInputControl verticalAxis, ulong updateTick, float deltaTime )
+		//		{
+		//			LowerDeadZone = Mathf.Max( horizontalAxis.LowerDeadZone, verticalAxis.LowerDeadZone );
+		//			UpperDeadZone = Mathf.Min( horizontalAxis.UpperDeadZone, verticalAxis.UpperDeadZone );
+		//			Raw = horizontalAxis.Raw || verticalAxis.Raw;
+		//			UpdateWithAxes( horizontalAxis.RawValue, verticalAxis.RawValue, updateTick, deltaTime );
+		//		}
 
 
 		float stateThreshold = 0.0f;
@@ -168,6 +168,15 @@ namespace InControl
 		public bool WasReleased
 		{
 			get { return !thisState && lastState; }
+		}
+
+
+		public float Angle
+		{
+			get
+			{
+				return Utility.VectorToAngle( thisValue );
+			}
 		}
 
 

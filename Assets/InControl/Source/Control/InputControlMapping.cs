@@ -49,7 +49,7 @@ namespace InControl
 				value = InputRange.Remap( value, SourceRange, TargetRange );
 			}
 
-			if (Invert ^ InputManager.InvertYAxis)
+			if (Invert)
 			{
 				value = -value;
 			}

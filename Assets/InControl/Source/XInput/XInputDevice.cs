@@ -10,14 +10,17 @@ namespace InControl
 {
 	public class XInputDevice : InputDevice
 	{
-		public int DeviceIndex { get; private set; }
+		const float LowerDeadZone = 0.2f;
+		const float UpperDeadZone = 0.9f;
 
 		XInputDeviceManager owner;
 		GamePadState state;
 
+		public int DeviceIndex { get; private set; }
+
 
 		public XInputDevice( int deviceIndex, XInputDeviceManager owner )
-			: base( "Xbox 360 Controller (XInput)" )
+			: base( "XInput Controller" )
 		{
 			this.owner = owner;
 
@@ -26,23 +29,23 @@ namespace InControl
 
 			Meta = "XInput Device #" + deviceIndex;
 
-			AddControl( InputControlType.LeftStickLeft, "Left Stick Left" );
-			AddControl( InputControlType.LeftStickRight, "Left Stick Right" );
-			AddControl( InputControlType.LeftStickUp, "Left Stick Up" );
-			AddControl( InputControlType.LeftStickDown, "Left Stick Down" );
+			AddControl( InputControlType.LeftStickLeft, "Left Stick Left", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.LeftStickRight, "Left Stick Right", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.LeftStickUp, "Left Stick Up", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.LeftStickDown, "Left Stick Down", LowerDeadZone, UpperDeadZone );
 
-			AddControl( InputControlType.RightStickLeft, "Right Stick Left" );
-			AddControl( InputControlType.RightStickRight, "Right Stick Right" );
-			AddControl( InputControlType.RightStickUp, "Right Stick Up" );
-			AddControl( InputControlType.RightStickDown, "Right Stick Down" );
+			AddControl( InputControlType.RightStickLeft, "Right Stick Left", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.RightStickRight, "Right Stick Right", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.RightStickUp, "Right Stick Up", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.RightStickDown, "Right Stick Down", LowerDeadZone, UpperDeadZone );
 
-			AddControl( InputControlType.LeftTrigger, "Left Trigger" );
-			AddControl( InputControlType.RightTrigger, "Right Trigger" );
+			AddControl( InputControlType.LeftTrigger, "Left Trigger", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.RightTrigger, "Right Trigger", LowerDeadZone, UpperDeadZone );
 
-			AddControl( InputControlType.DPadUp, "DPad Up" );
-			AddControl( InputControlType.DPadDown, "DPad Down" );
-			AddControl( InputControlType.DPadLeft, "DPad Left" );
-			AddControl( InputControlType.DPadRight, "DPad Right" );
+			AddControl( InputControlType.DPadUp, "DPad Up", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.DPadDown, "DPad Down", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.DPadLeft, "DPad Left", LowerDeadZone, UpperDeadZone );
+			AddControl( InputControlType.DPadRight, "DPad Right", LowerDeadZone, UpperDeadZone );
 
 			AddControl( InputControlType.Action1, "A" );
 			AddControl( InputControlType.Action2, "B" );

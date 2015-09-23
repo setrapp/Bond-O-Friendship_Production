@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace InControl
 {
-	// This is kind of "beta"... while it works on iOS, gyro controls are
+	// This is kind of "experimental"... while it works on iOS, gyro controls are
 	// inconsistent and are usually fine tuned to the games that use them
 	// which is somewhat beyond the scope of this project. But, if you
 	// are curious how to go about it, here you go.
@@ -42,7 +42,7 @@ namespace InControl
 		
 		public bool GetState( InputDevice inputDevice )
 		{
-			return !Mathf.Approximately( GetValue( inputDevice ), 0.0f );
+			return Utility.IsNotZero( GetValue( inputDevice ) );
 		}
 
 
@@ -63,7 +63,7 @@ namespace InControl
 
 		static float ApplyDeadZone( float value )
 		{
-			return Mathf.InverseLerp( 0.05f, 1.0f, Mathf.Abs( value ) ) * Mathf.Sign( value );
+			return Mathf.InverseLerp( 0.05f, 1.0f, Utility.Abs( value ) ) * Mathf.Sign( value );
 		}
 
 

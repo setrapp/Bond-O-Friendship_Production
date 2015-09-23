@@ -18,7 +18,7 @@ namespace InControl
 			touchManager = target as TouchManager;
 
 			var path = AssetDatabase.GetAssetPath( MonoScript.FromScriptableObject( this ) );
-			headerTexture = AssetDatabase.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/TouchManagerHeader.png" );
+			headerTexture = EditorUtility.LoadAssetAtPath<Texture>( Path.GetDirectoryName( path ) + "/Images/TouchManagerHeader.png" );
 		}
 		
 		
@@ -93,7 +93,7 @@ namespace InControl
 			{
 				if (camera != touchManager.touchCamera && (camera.cullingMask & (1 << controlsLayer)) > 0)
 				{
-					text += "\n  â€¢ " + camera.gameObject.name;
+					text += "\n  • " + camera.gameObject.name;
 					showWarning = true;
 				}
 			}
@@ -125,7 +125,7 @@ namespace InControl
 			{				
 				if (control.gameObject.layer != controlsLayer)
 				{
-					text += "\n  â€¢ " + control.gameObject.name;
+					text += "\n  • " + control.gameObject.name;
 					showWarning = true;
 				}
 			}

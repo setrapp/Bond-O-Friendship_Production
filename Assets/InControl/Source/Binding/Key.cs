@@ -78,7 +78,7 @@ namespace InControl
 
 		Backquote,
 		Minus,
-		Plus,
+		Equals,
 		Backspace,
 
 		Tab,
