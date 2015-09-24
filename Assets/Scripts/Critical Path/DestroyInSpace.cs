@@ -8,6 +8,7 @@ public class DestroyInSpace : MonoBehaviour {
 	private bool falling;
 	public SpawnBud spawner;
 	public Renderer spawnRenderer;
+	public float checkRadius = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,7 @@ public class DestroyInSpace : MonoBehaviour {
 		RaycastHit hit;
 		if(!Physics.Raycast(transform.position, Vector3.forward, out hit, Mathf.Infinity, ~ignoreLayers))
 		{
-			if (!wasFloating)
+			if (!wasFloating && !Physics.CheckSphere(transform.position, checkRadius, ~ignoreLayers))
 			{
 				wasFloating = true;
 				spawnRenderer.material.color = spawner.parentColor;
