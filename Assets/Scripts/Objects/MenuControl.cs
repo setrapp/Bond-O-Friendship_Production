@@ -137,7 +137,7 @@ public class MenuControl : MonoBehaviour {
         }
         else
         {
-            deviceCount = InputManager.controllerCount;
+            //deviceCount = InputManager.controllerCount;
             if (!inputSelected)
             {
 				SetInputSelected();
@@ -422,17 +422,19 @@ public class MenuControl : MonoBehaviour {
 	private void SetInputSelected()
 	{
 		
-		if (deviceCount > 0)
+		if (InputManager.Devices.Count > 0)
 		{
 			device = InputManager.ActiveDevice;
-			if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged || device.MenuWasPressed)
+			if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged || device.Command.HasChanged)
 			{
-				Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
-				Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
-				Globals.Instance.rightContollerIndex = -2;
-				Globals.Instance.rightControllerPreviousIndex = -2;
-				
-				if (deviceCount == 1)
+                Globals.Instance.leftControllerInputDevice = device;
+				//Globals.Instance.leftControllerIndex = InputManager.Devices.IndexOf(device);
+				//Globals.Instance.leftControllerPreviousIndex = Globals.Instance.leftControllerIndex;
+                Globals.Instance.rightControllerInputDevice = null;
+				//Globals.Instance.rightContollerIndex = -2;
+				//Globals.Instance.rightControllerPreviousIndex = -2;
+
+                if (InputManager.Devices.Count == 1)
 				{
 					Globals.Instance.player1Controls.controlScheme = Globals.ControlScheme.SharedLeft;
 					Globals.Instance.player2Controls.controlScheme = Globals.ControlScheme.SharedRight;

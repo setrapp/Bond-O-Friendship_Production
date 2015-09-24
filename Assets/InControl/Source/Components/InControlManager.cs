@@ -18,36 +18,47 @@ namespace InControl
 		public int xInputUpdateRate = 0;
 		public int xInputBufferSize = 0;
 
+		public bool enableICade = false;
+
 		public List<string> customProfiles = new List<string>();
 
 
 		void OnEnable()
 		{
-			SetupSingleton();
-
-			if (logDebugInfo)
+			if (!SetupSingleton())
 			{
-				Debug.Log( "InControl (version " + InputManager.Version + ")" );
-				Logger.OnLogMessage += LogMessage;
+				return;
 			}
 
 			InputManager.InvertYAxis = invertYAxis;
 			InputManager.EnableXInput = enableXInput;
 			InputManager.XInputUpdateRate = (uint) Mathf.Max( xInputUpdateRate, 0 );
 			InputManager.XInputBufferSize = (uint) Mathf.Max( xInputBufferSize, 0 );
-			InputManager.SetupInternal();
+			InputManager.EnableICade = enableICade;
 
-			foreach (var className in customProfiles)
+			if (InputManager.SetupInternal())
 			{
-				var classType = Type.GetType( className );
-				if (classType == null)
+				if (logDebugInfo)
 				{
-					Debug.LogError( "Cannot find class for custom profile: " + className );
+					Debug.Log( "InControl (version " + InputManager.Version + ")" );
+					Logger.OnLogMessage += LogMessage;
 				}
-				else
+
+				foreach (var className in customProfiles)
 				{
-					var customProfileInstance = Activator.CreateInstance( classType ) as InputDeviceProfile;
-					InputManager.AttachDevice( new UnityInputDevice( customProfileInstance ) );
+					var classType = Type.GetType( className );
+					if (classType == null)
+					{
+						Debug.LogError( "Cannot find class for custom profile: " + className );
+					}
+					else
+					{
+						var customProfileInstance = Activator.CreateInstance( classType ) as InputDeviceProfile;
+						if (customProfileInstance != null)
+						{
+							InputManager.AttachDevice( new UnityInputDevice( customProfileInstance ) );
+						}
+					}
 				}
 			}
 
@@ -60,7 +71,10 @@ namespace InControl
 
 		void OnDisable()
 		{
-			InputManager.ResetInternal();
+			if (InControlManager.Instance == this)
+			{
+				InputManager.ResetInternal();
+			}
 		}
 
 
@@ -89,7 +103,7 @@ namespace InControl
 
 		void Update()
 		{
-			if (!useFixedUpdate || Mathf.Approximately( Time.timeScale, 0.0f ))
+			if (!useFixedUpdate || Utility.IsZero( Time.timeScale ))
 			{
 				InputManager.UpdateInternal();
 			}

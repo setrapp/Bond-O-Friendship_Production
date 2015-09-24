@@ -18,6 +18,8 @@ namespace InControl
 
 		public bool Raw;
 
+		internal bool Enabled = true;
+
 		ulong pendingTick;
 		bool pendingCommit;
 
@@ -25,9 +27,9 @@ namespace InControl
 		float lastPressedTime;
 		bool wasRepeated;
 
-		InputControlState thisState;
 		InputControlState lastState;
-		InputControlState tempState;
+		InputControlState nextState;
+		InputControlState thisState;
 
 
 		void PrepareForUpdate( ulong updateTick )
@@ -45,7 +47,7 @@ namespace InControl
 			if (updateTick > pendingTick)
 			{
 				lastState = thisState;
-				tempState.Reset();
+				nextState.Reset();
 				pendingTick = updateTick;
 				pendingCommit = true;
 			}
@@ -56,7 +58,7 @@ namespace InControl
 		{
 			PrepareForUpdate( updateTick );
 
-			tempState.Set( state || tempState.State );
+			nextState.Set( state || nextState.State );
 
 			return state;
 		}
@@ -66,18 +68,17 @@ namespace InControl
 		{
 			PrepareForUpdate( updateTick );
 
-			//if (Mathf.Abs( value ) > Mathf.Abs( tempState.RawValue ))
-			if (Math.Abs( value ) > Math.Abs( tempState.RawValue ))
+			if (Utility.Abs( value ) > Utility.Abs( nextState.RawValue ))
 			{
-				tempState.RawValue = value;
+				nextState.RawValue = value;
 
 				if (!Raw)
 				{
-					value = Utility.ApplyDeadZone( value, LowerDeadZone, UpperDeadZone );
-					value = Utility.ApplySmoothing( value, LastValue, deltaTime, Sensitivity );
+					value = Utility.ApplyDeadZone( value, lowerDeadZone, upperDeadZone );
+//					value = Utility.ApplySmoothing( value, lastState.Value, deltaTime, sensitivity );
 				}
 
-				tempState.Set( value, StateThreshold );
+				nextState.Set( value, stateThreshold );
 
 				return true;
 			}
@@ -86,22 +87,39 @@ namespace InControl
 		}
 
 
+		internal void SetValue( float value, ulong updateTick )
+		{
+			if (updateTick > pendingTick)
+			{
+				lastState = thisState;
+				nextState.Reset();
+				pendingTick = updateTick;
+				pendingCommit = true;
+			}
+
+			nextState.RawValue = value;
+			nextState.Set( value, StateThreshold );
+		}
+
+
 		public void Commit()
 		{
-			thisState = tempState;
+//			nextState.Set( Utility.ApplySmoothing( nextState.Value, lastState.Value, Time.deltaTime, sensitivity ), stateThreshold );
+
+			thisState = nextState;
 
 			var lastPressed = lastState.State;
 			var thisPressed = thisState.State;
 
 			wasRepeated = false;
-			if (lastPressed && !thisPressed) // if (WasReleased)
+			if (lastPressed && !thisPressed) // if was released...
 			{
 				nextRepeatTime = 0.0f;
 			}
 			else
-			if (thisPressed) // if (IsPressed)
+			if (thisPressed) // if is pressed...
 			{
-				if (lastPressed != thisPressed) // if (HasChanged)
+				if (lastPressed != thisPressed) // if has changed...
 				{
 					nextRepeatTime = Time.realtimeSinceStartup + FirstRepeatDelay;
 				}
@@ -138,67 +156,114 @@ namespace InControl
 
 		public bool State
 		{
-			get { return thisState.State; }
+			get
+			{ 
+				return Enabled && thisState.State;
+			}
 		}
 
 
 		public bool LastState
 		{
-			get { return lastState.State; }
+			get
+			{ 
+				return Enabled && lastState.State;
+			}
 		}
 
 
 		public float Value
 		{
-			get { return thisState.Value; }
+			get
+			{ 
+				return Enabled ? thisState.Value : 0.0f;
+			}
 		}
 
 
 		public float LastValue
 		{
-			get { return lastState.Value; }
+			get
+			{ 
+				return Enabled ? lastState.Value : 0.0f;
+			}
 		}
 
 
 		public float RawValue
 		{
-			get { return thisState.RawValue; }
+			get
+			{ 
+				return Enabled ? thisState.RawValue : 0.0f;
+			}
 		}
+
+
+		internal float NextRawValue
+		{
+			get
+			{ 
+				return Enabled ? nextState.RawValue : 0.0f;
+			}
+		}
+
 
 		public bool HasChanged
 		{
-			get { return thisState != lastState; }
+			get
+			{ 
+				return Enabled && thisState != lastState; 
+			}
 		}
 
 
 		public bool IsPressed
 		{
-			get { return thisState.State; }
+			get
+			{ 
+				return Enabled && thisState.State;
+			}
 		}
 
 
 		public bool WasPressed
 		{
-			get { return thisState && !lastState; }
+			get
+			{ 
+				return Enabled && thisState && !lastState;
+			}
 		}
 
 
 		public bool WasReleased
 		{
-			get { return !thisState && lastState; }
+			get
+			{ 
+				return Enabled && !thisState && lastState;
+			}
 		}
 
 
 		public bool WasRepeated
 		{
-			get { return wasRepeated; }
+			get
+			{ 
+				return Enabled && wasRepeated;
+			}
 		}
 
 
 		public float Sensitivity
 		{ 
-			get { return sensitivity; }
-			set { sensitivity = Mathf.Clamp01( value ); }
+			get
+			{ 
+				return sensitivity; 
+			}
+
+			set
+			{
+				sensitivity = Mathf.Clamp01( value );
+			}
 		}
 
 

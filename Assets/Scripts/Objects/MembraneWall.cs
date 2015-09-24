@@ -9,6 +9,7 @@ public class MembraneWall : MonoBehaviour {
 	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
+	public bool baseOnPosts = false;
 	public Vector3 membraneDirection;
 	public float membraneLength;
 	public bool showPosts = false;
@@ -219,6 +220,14 @@ public class MembraneWall : MonoBehaviour {
 		if (shapingIndices.Count != shapingPoints.Count)
 		{
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
+		}
+
+		// If posts are already placed correctly, calculate membrane length and direction based on them.
+		if (baseOnPosts)
+		{
+			Vector3 postToPost = endPost.transform.position - startPost.transform.position;
+			membraneLength = postToPost.magnitude;
+			membraneDirection = postToPost / membraneLength;
 		}
 
 		// Update override stats to account for starting distance between endpoints.

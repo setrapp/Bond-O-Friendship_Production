@@ -80,6 +80,9 @@ public class Globals : MonoBehaviour {
 	public int leftControllerPreviousIndex = -2;
 	public int rightControllerPreviousIndex = -2;
 
+    public InputDevice leftControllerInputDevice;
+    public InputDevice rightControllerInputDevice;
+
 	public bool allowPreviousController = false;
 
 
@@ -120,6 +123,18 @@ public class Globals : MonoBehaviour {
 	public SetShaderData_DarkAlphaMasker darknessMask = null;
 	public float playerLuminIntensity = 1;
 	public float defaultPlayerLuminIntensity = 1;
+
+    public bool configureControls = false;
+
+    void OnEnable()
+    {
+        InputManager.OnDeviceDetached += OnDeviceDetached;
+    }
+
+    void OnDisable()
+    {
+        InputManager.OnDeviceDetached -= OnDeviceDetached;
+    }
 
 	void Awake()
 	{
@@ -216,11 +231,11 @@ public class Globals : MonoBehaviour {
 			}
 		}
 		
-		leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
-		rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
-		ResetDeviceIndex();
+		//leftControllerIndex = HandleDeviceDisconnect(leftControllerIndex);
+		//rightContollerIndex = HandleDeviceDisconnect(rightContollerIndex);
+		//ResetDeviceIndex();
 		WaitForInput();
-
+        ResetDevices();
 		CheckCameraPerspective();
 		CheckVolume();
 
@@ -325,57 +340,94 @@ public class Globals : MonoBehaviour {
 		}
 	}
 
-	private void ResetDeviceIndex()
+	private void ResetDevices()
 	{
-		if (player1Controls.inputNameSelected != InputNameSelected.LeftController && player2Controls.inputNameSelected != InputNameSelected.LeftController && InputManager.controllerCount >= 1)
-			leftControllerIndex = -2;
-		if (player1Controls.inputNameSelected != InputNameSelected.RightController && player2Controls.inputNameSelected != InputNameSelected.RightController && InputManager.controllerCount >=2)
-			rightContollerIndex = -2;
-        if (InputManager.controllerCount < 2)
-            rightContollerIndex = -3;
-        if (InputManager.controllerCount == 0)
-            leftControllerIndex = -3;
+        if (configureControls)
+        {
+            if (InputManager.Devices.Count == 1)
+            {
+                if (player1Controls.inputNameSelected == InputNameSelected.RightController)
+                {
+                    player1Controls.inputNameSelected = InputNameSelected.LeftController;
+                    player1Controls.controlScheme = ControlScheme.SharedLeft;
+                    player1Controls.controlScheme = CheckSoloInput(player1Controls, player2Controls);
+                    player2Controls.controlScheme = CheckSharedInput(player2Controls, player1Controls);
+                    player2Controls.controlScheme = CheckSoloInput(player2Controls, player1Controls);
+                }
+
+                if (player2Controls.inputNameSelected == InputNameSelected.RightController)
+                {
+                    player2Controls.inputNameSelected = InputNameSelected.LeftController;
+                    player2Controls.controlScheme = ControlScheme.SharedRight;
+                    player2Controls.controlScheme = CheckSoloInput(player2Controls, player1Controls);
+                    player1Controls.controlScheme = CheckSharedInput(player1Controls, player2Controls);
+                    player1Controls.controlScheme = CheckSoloInput(player1Controls, player2Controls);
+                }
+            }
+            if(InputManager.Devices.Count == 0)
+            {
+                if (player1Controls.inputNameSelected != InputNameSelected.Keyboard)
+                {
+                    player1Controls.inputNameSelected = InputNameSelected.Keyboard;
+                    player1Controls.controlScheme = ControlScheme.SharedLeft;
+                    player1Controls.controlScheme = CheckSoloInput(player1Controls, player2Controls);
+                    player2Controls.controlScheme = CheckSharedInput(player2Controls, player1Controls);
+                    player2Controls.controlScheme = CheckSoloInput(player2Controls, player1Controls);
+                }
+                if (player2Controls.inputNameSelected != InputNameSelected.Keyboard)
+                {
+                    player2Controls.inputNameSelected = InputNameSelected.Keyboard;
+                    player2Controls.controlScheme = ControlScheme.SharedRight;
+                    player2Controls.controlScheme = CheckSoloInput(player2Controls, player1Controls);
+                    player1Controls.controlScheme = CheckSharedInput(player1Controls, player2Controls);
+                    player1Controls.controlScheme = CheckSoloInput(player1Controls, player2Controls);
+                }
+            }
+            configureControls = false;
+        }
+		//if (player1Controls.inputNameSelected != InputNameSelected.LeftController && player2Controls.inputNameSelected != InputNameSelected.LeftController && InputManager.controllerCount >= 1)
+		//	leftControllerIndex = -2;
+		//if (player1Controls.inputNameSelected != InputNameSelected.RightController && player2Controls.inputNameSelected != InputNameSelected.RightController && InputManager.controllerCount >=2)
+		//	rightContollerIndex = -2;
+        //if (InputManager.controllerCount < 2)
+         //   rightContollerIndex = -3;
+      //  if (InputManager.controllerCount == 0)
+           // leftControllerIndex = -3;
 
 	}
 
 	private void WaitForInput()
 	{
-		if (leftControllerIndex == -2 && (player1Controls.inputNameSelected == InputNameSelected.LeftController || player2Controls.inputNameSelected == InputNameSelected.LeftController))
+		if (leftControllerInputDevice == null && (player1Controls.inputNameSelected == InputNameSelected.LeftController || player2Controls.inputNameSelected == InputNameSelected.LeftController))
 		{
 			var device = InputManager.ActiveDevice;
 
-			if (InputManager.Devices.IndexOf(device) != rightContollerIndex && device.Name != "")
-			{
-				if (InputManager.Devices.IndexOf(device) == rightControllerPreviousIndex && !allowPreviousController)
-				{
-				}
-				else
-				{
-					leftControllerIndex = InputManager.Devices.IndexOf(device);
-					leftControllerPreviousIndex = leftControllerIndex;
-				}
-			}
+            if (device != rightControllerInputDevice && device.Name != "")
+            {
+                if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged || device.Command.HasChanged)
+                {
+                    leftControllerInputDevice = device;
+                    //leftControllerPreviousIndex = leftControllerIndex;
+                }
+            }
 		}
 
-		if (rightContollerIndex == -2 && (player1Controls.inputNameSelected == InputNameSelected.RightController || player2Controls.inputNameSelected == InputNameSelected.RightController))
+		if (rightControllerInputDevice == null && (player1Controls.inputNameSelected == InputNameSelected.RightController || player2Controls.inputNameSelected == InputNameSelected.RightController))
 		{
 			var device = InputManager.ActiveDevice;
-			if (InputManager.Devices.IndexOf(device) != leftControllerIndex && device.Name != "")
+			if (device != leftControllerInputDevice && device.Name != "")
 			{
-				if (InputManager.Devices.IndexOf(device) == leftControllerPreviousIndex && !allowPreviousController)
-				{
-				}
-				else
-				{
-					rightContollerIndex = InputManager.Devices.IndexOf(device);
-					rightControllerPreviousIndex = rightContollerIndex;
+                if (device.AnyButton || device.LeftStick.HasChanged || device.RightStick.HasChanged || device.Command.HasChanged)
+                {
+                    rightControllerInputDevice = device;
+                }
+					//rightControllerPreviousIndex = rightContollerIndex;
 
-				}
 			}
 		}
 	}
 
-	private int HandleDeviceDisconnect(int deviceIndex)
+	/*private int HandleDeviceDisconnect(int deviceIndex)
 	{
 		var device = deviceIndex >= 0 && deviceIndex < InputManager.Devices.Count ? InputManager.Devices[deviceIndex] : null;
 
@@ -383,14 +435,33 @@ public class Globals : MonoBehaviour {
 		{
 			if (device.Name == "")
 			{
-				if (InputManager.controllerCount < 2)
-					return -3;
-				else
+				//if (InputManager.controllerCount < 2)
+					//return -3;
+				//else
 					return -2;
 			}
 		}
 		return deviceIndex;
-	}
+	}*/
+
+    void OnDeviceDetached(InputDevice inputDevice)
+    {
+        leftControllerInputDevice = null;
+        rightControllerInputDevice = null;
+
+       // if(gameState == GameState.Unpaused && !inMainMenu)
+       // {
+        //    gameState = GameState.Pausing;
+        //    OnPause();
+       // }
+
+        configureControls = true;
+
+        //player1Controls.inputNameSelected = InputNameSelected.Keyboard;
+        //player1Controls.controlScheme = ControlScheme.SharedLeft;
+        //player2Controls.inputNameSelected = InputNameSelected.Keyboard;
+        //player2Controls.controlScheme = ControlScheme.SharedRight;
+    }
 
 	public ControlScheme CheckSoloInput(ControlsAndInput playerCAI, ControlsAndInput otherPlayerCAI)
 	{

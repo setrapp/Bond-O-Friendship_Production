@@ -3,9 +3,6 @@
 
 namespace InControl
 {
-	// Tested with ADT-1
-	// Profile by Artūras 'arturaz' Šlajus <arturas@tinylabproductions.com>
-	//
 	// @cond nodoc
 	[AutoDiscover]
 	public class AndroidTVProfile : UnityInputDeviceProfile
@@ -17,6 +14,10 @@ namespace InControl
 
 			SupportedPlatforms = new[] {
 				"Android"
+			};
+
+			ExcludePlatforms = new[] {
+				"Amazon AFT"
 			};
 
 			JoystickNames = new[] {
@@ -63,7 +64,17 @@ namespace InControl
 					Handle = "Right Stick Button",
 					Target = InputControlType.RightStickButton,
 					Source = Button9
-				}
+				},
+				new InputControlMapping {
+					Handle = "Start",
+					Target = InputControlType.Start,
+					Source = Button12
+				},
+				new InputControlMapping {
+					Handle = "Back",
+					Target = InputControlType.Back,
+					Source = EscapeKey
+				},
 			};
 
 			AnalogMappings = new[] {

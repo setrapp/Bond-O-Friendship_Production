@@ -75,6 +75,7 @@ namespace InControl
 			if (Input.GetMouseButtonDown( 0 ))
 			{
 				phase = TouchPhase.Began;
+
 				tapCount = 1;
 
 				deltaPosition = Vector2.zero;
