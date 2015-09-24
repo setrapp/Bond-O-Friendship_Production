@@ -37,9 +37,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
---- !u!127 &3
-LevelGameManager:
-  m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -68,6 +65,7 @@ LightmapSettings:
     m_TextureCompression: 0
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
+    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &5
@@ -7410,7 +7408,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 151249065}
-  m_LocalRotation: {x: -.264490396, y: .65577805, z: .655777991, w: -.264490366}
+  m_LocalRotation: {x: -.264490426, y: .65577811, z: .65577805, w: -.264490396}
   m_LocalPosition: {x: 5.14785957, y: 12.030365, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -11782,6 +11780,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &233922539
@@ -12529,6 +12528,7 @@ GameObject:
   - 4: {fileID: 240675753}
   - 198: {fileID: 240675755}
   - 199: {fileID: 240675754}
+  - 114: {fileID: 240675756}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -13627,6 +13627,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &240675756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 240675752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &241515134
 GameObject:
   m_ObjectHideFlags: 0
@@ -15276,6 +15291,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &272224520
@@ -19718,7 +19734,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 344527928}
-  m_LocalRotation: {x: -.301108956, y: .639791667, z: .639791667, w: -.301108956}
+  m_LocalRotation: {x: -.301108986, y: .639791727, z: .639791727, w: -.301108986}
   m_LocalPosition: {x: -18.4681473, y: 16.7565403, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -23089,6 +23105,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -23230,7 +23247,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 423250735}
-  m_LocalRotation: {x: -.352509469, y: .612974048, z: .612974048, w: -.352509439}
+  m_LocalRotation: {x: -.352509439, y: .612973988, z: .612973988, w: -.352509409}
   m_LocalPosition: {x: -15.0263405, y: 14.7537422, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -24811,6 +24828,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -29458,7 +29476,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 523846283}
-  m_LocalRotation: {x: -.0554824062, y: .70492667, z: .704926789, w: -.0554824062}
+  m_LocalRotation: {x: -.0554824099, y: .704926729, z: .704926848, w: -.0554824099}
   m_LocalPosition: {x: -.795318604, y: 2.07437134, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -41894,6 +41912,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -43968,7 +43987,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 770519796}
-  m_LocalRotation: {x: -.358162314, y: .609688342, z: .609688282, w: -.358162314}
+  m_LocalRotation: {x: -.358162284, y: .609688282, z: .609688222, w: -.358162284}
   m_LocalPosition: {x: 2.60816193, y: 13.2153015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -47730,6 +47749,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &837513173
@@ -50553,6 +50573,7 @@ GameObject:
   - 4: {fileID: 903802826}
   - 198: {fileID: 903802828}
   - 199: {fileID: 903802827}
+  - 114: {fileID: 903802829}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -51651,6 +51672,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &903802829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 903802825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &903877636
 GameObject:
   m_ObjectHideFlags: 0
@@ -52156,7 +52192,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 914200152}
-  m_LocalRotation: {x: -.297726989, y: .641372561, z: .641372502, w: -.297726989}
+  m_LocalRotation: {x: -.297726959, y: .641372502, z: .641372442, w: -.297726959}
   m_LocalPosition: {x: -146.110443, y: 114.579384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -56036,6 +56072,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &986965606
@@ -61220,6 +61257,7 @@ GameObject:
   - 4: {fileID: 1068441192}
   - 198: {fileID: 1068441194}
   - 199: {fileID: 1068441193}
+  - 114: {fileID: 1068441195}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -62318,6 +62356,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &1068441195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1068441191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &1069616940 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: c672a223c9d0d094795b79bf79791cc9, type: 2}
@@ -62359,7 +62412,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1070369205}
-  m_LocalRotation: {x: -.369555503, y: .602850556, z: .602850616, w: -.369555503}
+  m_LocalRotation: {x: -.369555473, y: .602850497, z: .602850556, w: -.369555473}
   m_LocalPosition: {x: -26.9310532, y: 35.3901482, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -65267,6 +65320,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &1132487244
@@ -68102,7 +68156,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1177218564}
-  m_LocalRotation: {x: .272884309, y: .652329862, z: .652329862, w: .272884309}
+  m_LocalRotation: {x: .272884279, y: .652329803, z: .652329803, w: .272884279}
   m_LocalPosition: {x: -7.4167099, y: 22.3934631, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -69333,6 +69387,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -81608,6 +81663,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!1001 &1410040423
@@ -83240,6 +83296,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!1 &1438914598
@@ -84428,6 +84485,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -84602,7 +84660,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1463219701}
-  m_LocalRotation: {x: -.360895723, y: .608074248, z: .608074188, w: -.360895723}
+  m_LocalRotation: {x: -.360895753, y: .608074307, z: .608074248, w: -.360895753}
   m_LocalPosition: {x: 1.62054825, y: 18.090332, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -84619,6 +84677,7 @@ GameObject:
   - 4: {fileID: 1463490239}
   - 198: {fileID: 1463490241}
   - 199: {fileID: 1463490240}
+  - 114: {fileID: 1463490242}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -85717,6 +85776,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &1463490242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1463490238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &1464520636
 GameObject:
   m_ObjectHideFlags: 0
@@ -87948,6 +88022,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -88490,7 +88565,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1504392315}
-  m_LocalRotation: {x: .301630706, y: .639545858, z: .639545858, w: .301630676}
+  m_LocalRotation: {x: .301630735, y: .639545918, z: .639545918, w: .301630706}
   m_LocalPosition: {x: 3.30031586, y: 10.7807007, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -88997,6 +89072,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -92929,6 +93005,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!1 &1618187908
@@ -96041,6 +96118,7 @@ GameObject:
   - 4: {fileID: 1683546827}
   - 198: {fileID: 1683546829}
   - 199: {fileID: 1683546828}
+  - 114: {fileID: 1683546830}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -97139,6 +97217,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &1683546830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1683546826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &1685868653
 GameObject:
   m_ObjectHideFlags: 0
@@ -98400,6 +98493,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -98672,6 +98766,7 @@ GameObject:
   - 4: {fileID: 1711314403}
   - 198: {fileID: 1711314405}
   - 199: {fileID: 1711314404}
+  - 114: {fileID: 1711314406}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -99770,6 +99865,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &1711314406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1711314402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &1711695587
 GameObject:
   m_ObjectHideFlags: 0
@@ -99994,6 +100104,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -102197,6 +102308,7 @@ GameObject:
   - 4: {fileID: 1769520097}
   - 198: {fileID: 1769520099}
   - 199: {fileID: 1769520098}
+  - 114: {fileID: 1769520100}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -103295,6 +103407,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &1769520100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1769520096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1001 &1771608009
 Prefab:
   m_ObjectHideFlags: 0
@@ -110723,6 +110850,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &1924796057
@@ -110967,6 +111095,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -113187,6 +113316,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!1 &1966285995
@@ -114067,6 +114197,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!1 &1979781666
@@ -114134,6 +114265,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -118450,6 +118582,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 2100000, guid: a58afd809cdb2b54693759e17d963b4e, type: 2}
   bondColor: {r: .741253495, g: .491349488, b: .941176474, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!23 &2049486294
@@ -120119,6 +120252,7 @@ GameObject:
   - 4: {fileID: 2087251458}
   - 198: {fileID: 2087251460}
   - 199: {fileID: 2087251459}
+  - 114: {fileID: 2087251461}
   m_Layer: 0
   m_Name: Background Particles
   m_TagString: Untagged
@@ -121217,6 +121351,21 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!114 &2087251461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2087251457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 2000
+  renderOffset: 0
+  forceRendererOn: 0
 --- !u!1 &2087281853
 GameObject:
   m_ObjectHideFlags: 0
@@ -122812,6 +122961,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
