@@ -160,6 +160,11 @@ public class SpinPad : WaitPad {
 			}
 		}
 
+		if (activated && membrane1 == null && membrane2 == null)
+		{
+			rotatee.SetActive(false);
+		}
+
 		if (wallEnd1 != null && wallEnd1Collider != null)
 		{
 			wallEnd1Collider.transform.position = wallEnd1.transform.position;
