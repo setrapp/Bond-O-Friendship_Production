@@ -126,6 +126,9 @@ public class Globals : MonoBehaviour {
 
     public bool configureControls = false;
 
+	// Flags from completed levels [None, Tutorial, Harmony, Intimacy, Asymmetry]
+	public bool[] levelsCompleted = new bool[5];
+
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
@@ -149,6 +152,8 @@ public class Globals : MonoBehaviour {
 			Cursor.visible = false;
 		}
 		//Debug.Log(leftControllerIndex);
+
+		ResetLevels();
 
 		startingPerspectiveFOV = perspectiveFOV;
 		startingOrthographicSize = orthographicSize;
@@ -248,6 +253,16 @@ public class Globals : MonoBehaviour {
 		}*/
 
 		
+	}
+
+	public void ResetLevels()
+	{
+		for (int i = 0; i < levelsCompleted.Length; i++)
+		{
+			levelsCompleted = false;
+		}
+		// The first element is garbage data.
+		levelsCompleted[0] = true;
 	}
 
 	public void OnPause()
@@ -494,7 +509,6 @@ public class Globals : MonoBehaviour {
 		ASYMMETRY
 	}
 }
-
 
 [System.Serializable]
 public class ControlsAndInput
