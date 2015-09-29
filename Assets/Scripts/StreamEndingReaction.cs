@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class StreamBlockingReaction : StreamReaction {
+public class StreamEndingReaction : StreamReaction {
 
 	public Island completedLevel;
 
@@ -15,7 +15,7 @@ public class StreamBlockingReaction : StreamReaction {
 			{
 				if (Globals.Instance != null && Globals.Instance.levelsCompleted != null)
 				{
-					Globals.Instance.levelsCompleted
+					Globals.Instance.levelsCompleted[(int)completedLevel.islandId] = true;
 				}
 			}
 		}
