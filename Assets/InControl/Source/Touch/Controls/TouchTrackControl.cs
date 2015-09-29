@@ -70,11 +70,8 @@ namespace InControl
 		public override void SubmitControlState( ulong updateTick, float deltaTime )
 		{
 			var delta = thisPosition - lastPosition;
-			if (delta != Vector3.zero)
-			{
-				SubmitRawAnalogValue( target, delta * scale, updateTick, deltaTime );
-				lastPosition = thisPosition;
-			}
+			SubmitRawAnalogValue( target, delta * scale, updateTick, deltaTime );
+			lastPosition = thisPosition;
 		}
 
 

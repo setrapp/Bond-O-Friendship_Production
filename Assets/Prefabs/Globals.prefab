@@ -3656,7 +3656,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 20
+  near clip plane: 30
   far clip plane: 750
   field of view: 25
   orthographic: 0
@@ -3690,7 +3690,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 20
+  near clip plane: 30
   far clip plane: 750
   field of view: 25
   orthographic: 0
@@ -7382,7 +7382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
-  controlColor: 0
+  controlColor: 1
   colorSet: 0
   disappearOnSolve: 0
   nodeRenderers: []
@@ -7390,6 +7390,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: .696551323, g: 0, b: 1, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11408318
@@ -7433,6 +7434,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11413194
@@ -7468,6 +7470,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11413566
@@ -7576,6 +7579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 0}
+  targetParticleSystem: {fileID: 0}
   renderBase: 3000
   renderOffset: 300
   forceRendererOn: 0
@@ -7599,6 +7603,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11420810
@@ -7645,7 +7650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
-  controlColor: 0
+  controlColor: 1
   colorSet: 0
   disappearOnSolve: 0
   nodeRenderers: []
@@ -7653,6 +7658,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: .696551323, g: 0, b: 1, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11424996
@@ -7675,6 +7681,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 0
@@ -7722,6 +7729,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 1
@@ -7746,6 +7754,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 1
@@ -7915,6 +7924,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 1
@@ -8102,12 +8112,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionsRenderers:
-  - {fileID: 2347712}
   - {fileID: 2336746}
   - {fileID: 2350468}
   - {fileID: 2352868}
   - {fileID: 2342656}
   - {fileID: 2323828}
+  colorsSet: 0
   f: 0
   duration: 1
   fadeOut: 0
@@ -8341,6 +8351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 2349146}
+  targetParticleSystem: {fileID: 0}
   renderBase: 1000
   renderOffset: 1
   forceRendererOn: 0
@@ -8399,7 +8410,7 @@ MonoBehaviour:
   startingPerspectiveFOV: 0
   orthographicSize: 20
   startingOrthographicSize: 0
-  zoomIntroInEditor: 0
+  zoomIntroInEditor: 1
   earlyBondInEditor: 1
   editorFakeStreamRate: 0
   allowInput: 1
@@ -8461,6 +8472,7 @@ MonoBehaviour:
   darknessMask: {fileID: 11416216}
   playerLuminIntensity: 1
   defaultPlayerLuminIntensity: 1
+  configureControls: 0
 --- !u!114 &11449138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8490,6 +8502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 2349148}
+  targetParticleSystem: {fileID: 0}
   renderBase: 1000
   renderOffset: 0
   forceRendererOn: 0
@@ -8543,6 +8556,7 @@ MonoBehaviour:
   enableXInput: 0
   xInputUpdateRate: 0
   xInputBufferSize: 0
+  enableICade: 0
   customProfiles: []
 --- !u!114 &11449146
 MonoBehaviour:
@@ -8581,6 +8595,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24994c7bab8d436a8b302ce62dfa856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
+  m_ForceModuleActive: 0
   submitButton: 14
   cancelButton: 12
   analogMoveThreshold: .5
@@ -8729,6 +8750,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 1
@@ -8756,7 +8778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
-  controlColor: 0
+  controlColor: 1
   colorSet: 0
   disappearOnSolve: 0
   nodeRenderers: []
@@ -8764,6 +8786,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: .696551323, g: 0, b: 1, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11471794
@@ -8853,6 +8876,7 @@ MonoBehaviour:
   - {fileID: 2371462}
   f: 0
   duration: 1
+  colorsSet: 0
 --- !u!114 &11474424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8898,6 +8922,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 0
@@ -8914,7 +8939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
-  controlColor: 0
+  controlColor: 1
   colorSet: 0
   disappearOnSolve: 0
   nodeRenderers: []
@@ -8922,6 +8947,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: .696551323, g: 0, b: 1, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11478378
@@ -9230,7 +9256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPuzzle: {fileID: 0}
-  controlColor: 0
+  controlColor: 1
   colorSet: 0
   disappearOnSolve: 0
   nodeRenderers: []
@@ -9238,6 +9264,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: .696551323, g: 0, b: 1, a: 1}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
 --- !u!114 &11493540
@@ -9286,6 +9313,7 @@ MonoBehaviour:
   lit: 0
   lineMaterial: {fileID: 0}
   bondColor: {r: 0, g: 0, b: 0, a: 0}
+  particlesAtCollision: 0
   pairedWall: {fileID: 0}
   wallRenderers: []
   neededPlayer: 0
@@ -9491,6 +9519,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: extraWidth
       value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: allowInput
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -28,7 +28,7 @@ namespace InControl
 		
 		public bool GetState( InputDevice inputDevice )
 		{
-			return !Mathf.Approximately( GetValue( inputDevice ), 0.0f );
+			return Utility.IsNotZero( GetValue( inputDevice ) );
 		}
 	}
 }

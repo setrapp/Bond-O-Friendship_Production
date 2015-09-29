@@ -36,7 +36,7 @@ public class ToggleControllers : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        if (Globals.Instance.leftControllerIndex == -3)
+        if (InputManager.Devices.Count == 0)
         {
             leftController.SetActive(false);
             if (inputFill.player1FutureControls.inputNameSelected == Globals.InputNameSelected.LeftController)
@@ -54,7 +54,7 @@ public class ToggleControllers : MonoBehaviour {
         {
             leftController.SetActive(true);
         }
-        if (Globals.Instance.rightContollerIndex == -3)
+        if (InputManager.Devices.Count < 2)
         {
             if (inputFill.player1FutureControls.inputNameSelected == Globals.InputNameSelected.RightController)
             {

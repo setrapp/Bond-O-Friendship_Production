@@ -1,13 +1,12 @@
 // Copyright (c) 2012-2013 Rotorz Limited. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-
 using System.Collections.Generic;
-
 using InControl.ReorderableList.Internal;
+
 
 namespace InControl.ReorderableList
 {
@@ -382,7 +381,8 @@ namespace InControl.ReorderableList
 			{
 				defaultListControl.flags = flags;
 				return defaultListControl.CalculateListHeight( itemCount, itemHeight );
-			} finally
+			}
+			finally
 			{
 				defaultListControl.flags = restoreFlags;
 			}
@@ -499,7 +499,8 @@ namespace InControl.ReorderableList
 			{
 				defaultListControl.flags = flags;
 				return defaultListControl.CalculateListHeight( new SerializedPropertyAdaptor( arrayProperty ) );
-			} finally
+			}
+			finally
 			{
 				defaultListControl.flags = restoreFlags;
 			}
@@ -665,7 +666,8 @@ namespace InControl.ReorderableList
 			{
 				defaultListControl.flags = flags;
 				return defaultListControl.CalculateListHeight( adaptor );
-			} finally
+			}
+			finally
 			{
 				defaultListControl.flags = restoreFlags;
 			}
@@ -678,7 +680,6 @@ namespace InControl.ReorderableList
 		}
 
 		#endregion
-
 	}
-
 }
+#endif

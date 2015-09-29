@@ -19,7 +19,7 @@ namespace InControl
 
 		public BindingSource Listen( BindingListenOptions listenOptions, InputDevice device )
 		{
-			if (!listenOptions.IncludeControllers)
+			if (!listenOptions.IncludeControllers || device.IsUnknown)
 			{
 				return null;
 			}
@@ -58,9 +58,15 @@ namespace InControl
 		}
 
 
+		bool IsPressed( InputControl control )
+		{
+			return Utility.AbsoluteIsOverThreshold( control.Value, 0.5f );
+		}
+
+
 		bool IsPressed( InputControlType control, InputDevice device )
 		{
-			return device.GetControl( control ).IsPressed;
+			return IsPressed( device.GetControl( control ) );
 		}
 
 
@@ -72,7 +78,7 @@ namespace InControl
 				for (int i = 0; i < controlCount; i++)
 				{
 					var control = device.Controls[i];
-					if (control != null && control.IsPressed)
+					if (control != null && IsPressed( control ))
 					{
 						if (listenOptions.IncludeNonStandardControls || control.IsStandard)
 						{

@@ -27,6 +27,7 @@ namespace InControl
 		[Header( "Options" )]
 
 		public AnalogTarget target = AnalogTarget.LeftStick;
+		public SnapAngles snapAngles = SnapAngles.None;
 
 		[Range( 0, 1 )] 
 		public float lowerDeadZone = 0.1f;
@@ -57,6 +58,7 @@ namespace InControl
 		Rect worldActiveArea;
 		float worldKnobRange;
 		Vector3 value;
+		Vector3 snappedValue;
 		Touch currentTouch;
 		bool dirty;
 
@@ -135,7 +137,7 @@ namespace InControl
 
 		public override void SubmitControlState( ulong updateTick, float deltaTime )
 		{
-			SubmitAnalogValue( target, value, lowerDeadZone, upperDeadZone, updateTick, deltaTime );
+			SubmitAnalogValue( target, snappedValue, lowerDeadZone, upperDeadZone, updateTick, deltaTime );
 		}
 
 
@@ -208,10 +210,20 @@ namespace InControl
 			movedPosition = beganPosition + (Mathf.Clamp( length, 0.0f, worldKnobRange ) * normal);
 
 			value = (movedPosition - beganPosition) / worldKnobRange;
-			value.x = inputCurve.Evaluate( Mathf.Abs( value.x ) ) * Mathf.Sign( value.x );
-			value.y = inputCurve.Evaluate( Mathf.Abs( value.y ) ) * Mathf.Sign( value.y );
+			value.x = inputCurve.Evaluate( Utility.Abs( value.x ) ) * Mathf.Sign( value.x );
+			value.y = inputCurve.Evaluate( Utility.Abs( value.y ) ) * Mathf.Sign( value.y );
 
-			KnobPosition = movedPosition;
+			if (snapAngles == SnapAngles.None)
+			{
+				snappedValue = value;
+				KnobPosition = movedPosition;	
+			}
+			else
+			{
+				snappedValue = SnapTo( value, snapAngles );
+				KnobPosition = beganPosition + (snappedValue * worldKnobRange);
+			}
+
 			RingPosition = beganPosition;
 		}
 
@@ -224,12 +236,13 @@ namespace InControl
 			}
 
 			value = Vector3.zero;
+			snappedValue = Vector3.zero;
 
 			var ringResetDelta = (resetPosition - RingPosition).magnitude;
-			ringResetSpeed = Mathf.Approximately( resetDuration, 0.0f ) ? ringResetDelta : (ringResetDelta / resetDuration);
+			ringResetSpeed = Utility.IsZero( resetDuration ) ? ringResetDelta : (ringResetDelta / resetDuration);
 
 			var knobResetDelta = (RingPosition - KnobPosition).magnitude;
-			knobResetSpeed = Mathf.Approximately( resetDuration, 0.0f ) ? knobRange : (knobResetDelta / resetDuration);
+			knobResetSpeed = Utility.IsZero( resetDuration ) ? knobRange : (knobResetDelta / resetDuration);
 
 			currentTouch = null;
 

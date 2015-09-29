@@ -1,8 +1,9 @@
 // Copyright (c) 2012-2013 Rotorz Limited. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
+#if UNITY_EDITOR
 using UnityEngine;
+
 
 namespace InControl.ReorderableList
 {
@@ -91,7 +92,6 @@ namespace InControl.ReorderableList
 		/// Measurement in pixels.
 		/// </returns>
 		float GetItemHeight( int index );
-
 	}
-
 }
+#endif

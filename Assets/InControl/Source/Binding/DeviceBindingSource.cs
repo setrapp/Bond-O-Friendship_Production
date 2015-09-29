@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 
@@ -13,6 +14,7 @@ namespace InControl
 
 		internal DeviceBindingSource()
 		{
+			Control = InputControlType.None;
 		}
 
 
@@ -50,8 +52,8 @@ namespace InControl
 			{
 				if (BoundTo == null)
 				{
-					Debug.LogError( "Cannot query property 'Name' for unbound BindingSource." );
-					return null;
+//					Debug.LogWarning( "Cannot query property 'Name' for unbound BindingSource." );
+					return "";
 				}
 				else
 				{
@@ -73,8 +75,8 @@ namespace InControl
 			{
 				if (BoundTo == null)
 				{
-					Debug.LogError( "Cannot query property 'DeviceName' for unbound BindingSource." );
-					return null;
+//					Debug.LogWarning( "Cannot query property 'DeviceName' for unbound BindingSource." );
+					return "";
 				}
 				else
 				{

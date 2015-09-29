@@ -16,7 +16,7 @@ namespace XInputDotNetPure
 		[DllImport( "XInputInterface64", EntryPoint = "XInputGamePadGetState" )]
 		public static extern uint XInputGamePadGetState64( uint playerIndex, IntPtr state );
 		[DllImport( "XInputInterface64", EntryPoint = "XInputGamePadSetState" )]
-		public static extern void XInputGamePadSetState64( uint playerIndex, float leftMotor, float rightMotor );	
+		public static extern void XInputGamePadSetState64( uint playerIndex, float leftMotor, float rightMotor );
 
 
 		public static uint XInputGamePadGetState( uint playerIndex, IntPtr state )
@@ -294,7 +294,7 @@ namespace XInputDotNetPure
 		}
 
 
-		internal GamePadState( bool isConnected, RawState rawState, GamePadDeadZone deadZone )
+		internal GamePadState( bool isConnected, RawState rawState )
 		{
 			this.isConnected = isConnected;
 
@@ -331,13 +331,11 @@ namespace XInputDotNetPure
 			);
 
 			thumbSticks = new GamePadThumbSticks(
-				Utils.ApplyLeftStickDeadZone( rawState.Gamepad.sThumbLX, rawState.Gamepad.sThumbLY, deadZone ),
-				Utils.ApplyRightStickDeadZone( rawState.Gamepad.sThumbRX, rawState.Gamepad.sThumbRY, deadZone )
+				new GamePadThumbSticks.StickValue( rawState.Gamepad.sThumbLX / (float) short.MaxValue, rawState.Gamepad.sThumbLY / (float) short.MaxValue ),
+				new GamePadThumbSticks.StickValue( rawState.Gamepad.sThumbRX / (float) short.MaxValue, rawState.Gamepad.sThumbRY / (float) short.MaxValue )
 			);
-			triggers = new GamePadTriggers(
-				Utils.ApplyTriggerDeadZone( rawState.Gamepad.bLeftTrigger, deadZone ),
-				Utils.ApplyTriggerDeadZone( rawState.Gamepad.bRightTrigger, deadZone )
-			);
+
+			triggers = new GamePadTriggers( rawState.Gamepad.bLeftTrigger / (float) byte.MaxValue, rawState.Gamepad.bRightTrigger / (float) byte.MaxValue );
 		}
 
 
@@ -387,28 +385,16 @@ namespace XInputDotNetPure
 	}
 
 
-	public enum GamePadDeadZone
-	{
-		Circular,
-		IndependentAxes,
-		None
-	}
-
-
 	public class GamePad
 	{
 		public static GamePadState GetState( PlayerIndex playerIndex )
 		{
-			return GetState( playerIndex, GamePadDeadZone.IndependentAxes );
-		}
-
-		public static GamePadState GetState( PlayerIndex playerIndex, GamePadDeadZone deadZone )
-		{
 			IntPtr gamePadStatePointer = Marshal.AllocHGlobal( Marshal.SizeOf( typeof(GamePadState.RawState) ) );
 			uint result = Imports.XInputGamePadGetState( (uint) playerIndex, gamePadStatePointer );
 			GamePadState.RawState state = (GamePadState.RawState) Marshal.PtrToStructure( gamePadStatePointer, typeof(GamePadState.RawState) );
-			return new GamePadState( result == Utils.Success, state, deadZone );
+			return new GamePadState( result == 0, state );
 		}
+
 
 		public static void SetVibration( PlayerIndex playerIndex, float leftMotor, float rightMotor )
 		{
