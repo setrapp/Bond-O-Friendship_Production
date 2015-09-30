@@ -184,7 +184,7 @@ public class MenuControl : MonoBehaviour {
 				if (newGameNodePuzzle != null && newGameNodePuzzle.solved)
 				{
 					newGameNodePuzzle.solved = false;
-				     Globals.Instance.allowInput = false;
+				    Globals.Instance.allowInput = false;
 					menuState = MenuState.StartGame;      
 				}
 
@@ -234,7 +234,7 @@ public class MenuControl : MonoBehaviour {
                     if (startGame)
                     {
                         
-                         CameraSplitter.Instance.followPlayers = false;
+                         //CameraSplitter.Instance.followPlayers = false;
                          CameraSplitter.Instance.movePlayers = true;
                         
                         FadeControls();
@@ -245,21 +245,26 @@ public class MenuControl : MonoBehaviour {
 
 			if(startZoom)
 			{
-				if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
-					CameraSplitter.Instance.Zoom(false, true);
-				else
-				{
-					CameraSplitter.Instance.followPlayers = true;
-					CameraSplitter.Instance.splittable = true;
-					CameraSplitter.Instance.zCameraOffset = -300.0f;
-					CameraSplitter.Instance.duration = 3.0f;
-					Globals.Instance.allowInput = true;
-
+                if (CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
+                {
+                    CameraSplitter.Instance.MovePlayers(Globals.Instance.player1PositionBeforePause, Globals.Instance.player2PositionBeforePause, false);
+                    CameraSplitter.Instance.Zoom(false);
+                    
+                }
+                else
+                {
+                    CameraSplitter.Instance.followPlayers = true;
+                    CameraSplitter.Instance.splittable = true;
+                    CameraSplitter.Instance.zCameraOffset = -300.0f;
+                    CameraSplitter.Instance.duration = 3.0f;
+                    Globals.Instance.allowInput = true;
+                    CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
+                    CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
                     Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
                     Globals.Instance.inMainMenu = false;
 
-					startZoom = false;
-				}
+                    startZoom = false;
+                }
 			}
         }
 
@@ -350,7 +355,7 @@ public class MenuControl : MonoBehaviour {
 			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor) 
 			{
 
-				Invoke ("ZoomCamera", 0.5f);
+				Invoke ("ZoomCamera", 0.25f);
 			} 
 			else 
 			{
@@ -397,6 +402,9 @@ public class MenuControl : MonoBehaviour {
 
     public void ZoomCamera()
     {
+
+        CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
+        CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
 		CameraSplitter.Instance.SetZoomTarget(false);
 		startZoom = true;
     }
