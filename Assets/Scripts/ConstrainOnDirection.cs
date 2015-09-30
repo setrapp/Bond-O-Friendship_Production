@@ -39,6 +39,12 @@ public class ConstrainOnDirection : MonoBehaviour {
 		}
 	}
 
+	public void ResetWithDirection(Vector3 newDirection)
+	{
+		constrainToDirection = newDirection;
+		oldPosition = transform.position;
+	}
+
 	void OnDrawGizmos()
 	{
 		Vector3 usableDirection = constrainToDirection;
