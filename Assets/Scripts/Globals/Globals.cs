@@ -11,7 +11,7 @@ public class Globals : MonoBehaviour {
 		{
 			if (instance == null)
 			{
-                GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
+				GameObject instanceObject = GameObject.FindGameObjectWithTag("Globals");
 				if (instanceObject != null)
 				{
 					instance = instanceObject.GetComponent<Globals>();
@@ -34,7 +34,7 @@ public class Globals : MonoBehaviour {
 	public float editorFakeStreamRate = 0;
 
 
-    public bool allowInput = true;
+	public bool allowInput = true;
 
 	public float audioVolume = -1;
 	public bool mute = false;
@@ -55,14 +55,14 @@ public class Globals : MonoBehaviour {
 	public ControlsAndInput player2Controls;
 
 
-   // public ControlScheme player1ControlScheme;
+	// public ControlScheme player1ControlScheme;
 	//public ControlScheme player2ControlScheme;
 
 	public PlayerInput player1;
 	public PlayerInput player2;
 
-   // public InputNameSelected player1InputNameSelected;
-   // public InputNameSelected player2InputNameSelected;
+	// public InputNameSelected player1InputNameSelected;
+	// public InputNameSelected player2InputNameSelected;
 
 	public GameObject initialPlayerHolder = null;
 
@@ -72,7 +72,7 @@ public class Globals : MonoBehaviour {
 	public float fluffLeaveAttractWait = 3.0f;
 	public float fluffLeaveEmbed = 1.0f;
 
-    public bool inMainMenu = true;
+	public bool inMainMenu = true;
 
 	//Index of the player's controller, -1 means keyboard, -2 means waiting for input
 	public int leftControllerIndex;
@@ -80,8 +80,8 @@ public class Globals : MonoBehaviour {
 	public int leftControllerPreviousIndex = -2;
 	public int rightControllerPreviousIndex = -2;
 
-    public InputDevice leftControllerInputDevice;
-    public InputDevice rightControllerInputDevice;
+	public InputDevice leftControllerInputDevice;
+	public InputDevice rightControllerInputDevice;
 
 	public bool allowPreviousController = false;
 
@@ -126,6 +126,9 @@ public class Globals : MonoBehaviour {
 
     public bool configureControls = false;
 
+	// Flags from completed levels [None, Tutorial, Harmony, Intimacy, Asymmetry]
+	public bool[] levelsCompleted = new bool[5];
+
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
@@ -149,6 +152,8 @@ public class Globals : MonoBehaviour {
 			Cursor.visible = false;
 		}
 		//Debug.Log(leftControllerIndex);
+
+		ResetLevels();
 
 		startingPerspectiveFOV = perspectiveFOV;
 		startingOrthographicSize = orthographicSize;
@@ -250,6 +255,16 @@ public class Globals : MonoBehaviour {
 		}*/
 
 		
+	}
+
+	public void ResetLevels()
+	{
+		for (int i = 0; i < levelsCompleted.Length; i++)
+		{
+			levelsCompleted[i] = false;
+		}
+		// The first element is garbage data.
+		levelsCompleted[0] = true;
 	}
 
 	public void OnPause()
@@ -496,7 +511,6 @@ public class Globals : MonoBehaviour {
 		ASYMMETRY
 	}
 }
-
 
 [System.Serializable]
 public class ControlsAndInput
