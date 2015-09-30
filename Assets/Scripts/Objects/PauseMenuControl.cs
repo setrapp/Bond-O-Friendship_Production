@@ -37,7 +37,7 @@ public class PauseMenuControl : MonoBehaviour {
 
 	//Main Menu/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			if(Globals.Instance.gameState == Globals.GameState.Paused)
+			if(Globals.Instance.gameState == Globals.GameState.Paused && !Globals.Instance.inMainMenu)
 			{
 
 				
@@ -69,6 +69,8 @@ public class PauseMenuControl : MonoBehaviour {
 				if (resumeGameNodePuzzle != null && resumeGameNodePuzzle.solved)
 				{
 					resumeGameNodePuzzle.solved = false;
+                    CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
+                    CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
 					Globals.Instance.gameState = Globals.GameState.Unpausing;
 				}
 
