@@ -70,7 +70,8 @@ public class PlayersEstablish : MonoBehaviour {
 					if (Globals.Instance.updatePlayersOnLoad)
 					{
 						Globals.Instance.player1.transform.parent = player1Spawn.transform.parent;
-						Globals.Instance.player1.transform.position = player1Spawn.transform.position;
+						//Globals.Instance.player1.transform.position = player1Spawn.transform.position;
+                        Globals.Instance.player1PositionBeforePause = player1Spawn.transform.position;
 						Globals.Instance.player1.transform.rotation = player1Spawn.transform.rotation;
 						Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
 					}
@@ -100,7 +101,8 @@ public class PlayersEstablish : MonoBehaviour {
 					if (Globals.Instance.updatePlayersOnLoad)
 					{
 						Globals.Instance.player2.transform.parent = player2Spawn.transform.parent;
-						Globals.Instance.player2.transform.position = player2Spawn.transform.position;
+						//Globals.Instance.player2.transform.position = player2Spawn.transform.position;
+                        Globals.Instance.player2PositionBeforePause = player2Spawn.transform.position;
 						Globals.Instance.player2.transform.rotation = player2Spawn.transform.rotation;
 						Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
 					}
