@@ -25,7 +25,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 466606}
-  - 136: {fileID: 13619008}
   m_Layer: 16
   m_Name: Upper Collider
   m_TagString: Untagged
@@ -70,6 +69,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &193168
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 460378}
+  - 136: {fileID: 13668064}
+  m_Layer: 16
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &197364
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,6 +94,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 434154}
   - 114: {fileID: 11470486}
+  - 114: {fileID: 11420636}
   m_Layer: 16
   m_Name: Stream Blocker
   m_TagString: Untagged
@@ -117,7 +133,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 197364}
   m_LocalRotation: {x: 0, y: 0, z: -.96162796, w: .274356991}
-  m_LocalPosition: {x: 2.75, y: 7.02999878, z: 0}
+  m_LocalPosition: {x: 25.7087383, y: 379.90921, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 466606}
@@ -136,6 +152,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 434154}
   m_RootOrder: 1
+--- !u!4 &460378
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 193168}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4.13860035, y: 4.13859987, z: 1}
+  m_Children: []
+  m_Father: {fileID: 466606}
+  m_RootOrder: 2
 --- !u!4 &466606
 Transform:
   m_ObjectHideFlags: 1
@@ -148,6 +176,7 @@ Transform:
   m_Children:
   - {fileID: 430362}
   - {fileID: 414998}
+  - {fileID: 460378}
   m_Father: {fileID: 434154}
   m_RootOrder: 0
 --- !u!23 &2301958
@@ -270,6 +299,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11420636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c5d83c68f3bc6448a77b06a61f300b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionProgress: 0
+  reactionRate: 1
+  decayRate: 0
+  decayDelay: 0
+  reactable: 1
+  superiors: []
+  streamsTouched: 0
+  stopReactionOnComplete: 0
+  toActive: 1
+  reactionObjects:
+  - {fileID: 193168}
+  startOpposite: 1
 --- !u!114 &11424778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -312,12 +364,12 @@ MonoBehaviour:
   - scalee: {fileID: 466606}
     unscaled: {x: 0, y: 0, z: 1}
     scaled: {x: 1, y: 1, z: 1}
---- !u!136 &13619008
+--- !u!136 &13668064
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 148268}
+  m_GameObject: {fileID: 193168}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -331,7 +383,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: reactionColliders.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 197364}
