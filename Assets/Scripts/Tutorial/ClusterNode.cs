@@ -74,8 +74,19 @@ public class ClusterNode : MonoBehaviour {
 
 			if (pairedWall != null && (wallRenderers[0].material.color.a > startWallAlpha / 2 || wallRenderers[0].material.color.a > 0 && targetPuzzle.solved))
 			{
-				if(controlColor)
-					{
+                if (targetPuzzle.individualBlockerFade == true)
+                {
+                    for(int i = 0; i < pairedWall.transform.childCount; i++)
+                    {
+                        if (pairedWall.transform.GetChild(i).name == "Blocker Base")
+                            pairedWall.transform.GetChild(i).gameObject.SetActive(false);
+                        if (pairedWall.transform.GetChild(i).name == "Blocker Top")
+                            pairedWall.transform.GetChild(i).gameObject.SetActive(false);
+                    }
+                    pairedWall.GetComponent<Collider>().enabled = false;
+                }
+				else if(controlColor)
+				{
 					for (int i = 0; i < wallRenderers.Length; i++)
 					{
 						Color newWallColor = wallRenderers[i].material.color;
@@ -85,7 +96,7 @@ public class ClusterNode : MonoBehaviour {
 				}
 				if (wallRenderers[0].material.color.a <= 0)
 				{
-					pairedWall.GetComponent<Collider>().enabled = false; ;
+					pairedWall.GetComponent<Collider>().enabled = false;
 				}
 			}
 			
@@ -96,7 +107,18 @@ public class ClusterNode : MonoBehaviour {
 				if (timer <= 0)
 				{
 					lit = false;
-					if(controlColor)
+                    if (targetPuzzle.individualBlockerFade == true)
+                    {
+                        for (int i = 0; i < pairedWall.transform.childCount; i++)
+                        {
+                            if (pairedWall.transform.GetChild(i).name == "Blocker Base")
+                                pairedWall.transform.GetChild(i).gameObject.SetActive(true);
+                            if (pairedWall.transform.GetChild(i).name == "Blocker Top")
+                                pairedWall.transform.GetChild(i).gameObject.SetActive(true);
+                        }
+                        pairedWall.GetComponent<Collider>().enabled = true;
+                    }
+                    else if (controlColor)
 					{
 						for (int i = 0; i < nodeRenderers.Length; i++)
 						{
