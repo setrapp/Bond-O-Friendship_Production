@@ -80,7 +80,13 @@ public class JoinTogether : MonoBehaviour {
 	{
 		if (movementConstraint != null && baseBody != null && separationTarget.baseObject != null && joinTarget.baseObject != null)
 		{
+
+			// Hmmm make this not happen and actually figure out self stuff.
 			movementConstraint.directionSpace = Space.World;
+			//if (movementConstraint.directionSpace == Space.Self)
+			//{
+
+
 			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position).normalized;
 		}
 	}
