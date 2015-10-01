@@ -10,6 +10,8 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	public bool solved;
 	public StreamReactionList streamReaction;
 
+    public bool individualBlockerFade = false;
+
 	public GameObject streamBlocker;
 	public GameObject streamBlocker2;
 

@@ -104,6 +104,23 @@ public class Helper {
 
 		return pulse;
 	}
+
+	/*public static RingPulse FirePulseArray(int pulseCount, float pulseInterval, Vector3 position, PulseStats pulseStats, RingPulse alternativePulsePrefab = null)
+	{
+		
+	}
+
+	private IEnumerable ProcessPulseArray(int pulseCount, float pulseInterval, Vector3 position, PulseStats pulseStats, RingPulse alternativePulsePrefab = null)
+	{
+		int pulsesFired = 0;
+
+		while(pulsesFired < pulseCount)
+		{
+			FirePulse(position, pulseStats, alternativePulsePrefab);
+			yield return null;
+		}
+
+	}*/
 }
 
 [System.Serializable]
