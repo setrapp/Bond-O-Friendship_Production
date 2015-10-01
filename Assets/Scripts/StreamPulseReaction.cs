@@ -9,6 +9,7 @@ public class StreamPulseReaction : StreamReaction {
 	public bool useDefaultStats = true;
 	public PulseStats optionalPulseStats;
 	private RingPulse createdPulse;
+    public AudioSource fillSound;
 
 	public override bool React(float actionRate)
 	{
@@ -24,7 +25,11 @@ public class StreamPulseReaction : StreamReaction {
 				{
 					pulseStats = Globals.Instance.defaultPulseStats;
 				}
-				createdPulse = Helper.FirePulse(transform.TransformPoint(pulsePositionOffset), pulseStats, optionalPulsePrefab);
+                createdPulse = Helper.FirePulse(transform.TransformPoint(pulsePositionOffset), pulseStats, optionalPulsePrefab);
+                if (fillSound != null)
+                {
+                    fillSound.Play();
+                }
 			}
 		}
 		return reacted;

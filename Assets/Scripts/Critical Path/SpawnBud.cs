@@ -14,6 +14,7 @@ public class SpawnBud : MonoBehaviour {
 	private Color playerColor;
 	private GameObject newBud;
 	private bool scaling;
+    public AudioSource spawnBud;
 
 	// Use this for initialization
 	void Start () {
@@ -68,7 +69,8 @@ public class SpawnBud : MonoBehaviour {
 			{
 				playerColor = Globals.Instance.player2.character.colors.baseColor;
 			}
-			ParticleSystem nodePart = (ParticleSystem)Instantiate(part);
+            spawnBud.Play();
+            ParticleSystem nodePart = (ParticleSystem)Instantiate(part);
 			nodePart.startColor = playerColor;
 			nodePart.transform.position = transform.position;
 			nodePart.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
@@ -78,7 +80,7 @@ public class SpawnBud : MonoBehaviour {
 			newBud = (GameObject)Instantiate(bud);
 			newBud.transform.position = transform.position;
 			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-			//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
+            //newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
             //newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;
 			spawned = true;
