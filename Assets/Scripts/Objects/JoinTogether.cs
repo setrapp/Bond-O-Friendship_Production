@@ -34,7 +34,7 @@ public class JoinTogether : MonoBehaviour {
 	{
 		requiredProgress = Mathf.Clamp01(requiredProgress);
 
-		if (moveable.baseObject.transform.position != oldMoveablePosition)
+		if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
 		{
 			atJoin = false;
 
@@ -95,6 +95,11 @@ public class JoinTogether : MonoBehaviour {
 			}
 		}
 		moveable.baseObject.transform.position = joinTarget.baseObject.transform.position;
+	}
+
+	private bool TargetsKnown()
+	{
+		return joinTarget.baseObject != null && joinTarget.pairedObject != null && sepatationTarget.baseObject && sepatationTarget.pairedObject != null;
 	}
 }
 

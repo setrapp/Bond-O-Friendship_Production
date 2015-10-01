@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class JoinTogetherGroupConsolidator : MonoBehaviour {
 
 	public JoinTogetherGroup triggerGroup;
-	public bool reorganized = false;
+	public bool consolidateReady = false;
+	public bool consolidated = false;
 	public List<Rigidbody> joinedBodies;
 	public List<JoinTogether> joinedPieces;
 
@@ -19,7 +20,17 @@ public class JoinTogetherGroupConsolidator : MonoBehaviour {
 
 	void Update()
 	{
-		if (triggerGroup != null && triggerGroup.solved && !reorganized)
+		if (triggerGroup != null && triggerGroup.solved && !consolidateReady)
+		{
+			triggerGroup.enabled = false;
+			consolidateReady = true;
+			Consolidate();
+		}
+	}
+
+	public void Consolidate()
+	{
+		if (consolidateReady && !consolidated)
 		{
 			// Fix joined bodies together and ensure that they are not kinematic.
 			for (int i = 0; i < joinedBodies.Count; i++)
@@ -42,11 +53,13 @@ public class JoinTogetherGroupConsolidator : MonoBehaviour {
 					joinedPieces[i].movementConstraint.enabled = false;
 				}
 				// TODO just set it to not 'atJoin' fixed joint should keep the bits together.
-				joinedPieces[i].enabled = false;
+				//joinedPieces[i].enabled = false;
+				joinedPieces[i].atJoin = false;
+				joinedPieces[i].joinTarget.baseObject = null;
+				joinedPieces[i].joinTarget.pairedObject = null;
 			}
 
-			triggerGroup.enabled = false;
-			reorganized = true;
+			consolidated = true;
 		}
 	}
 }

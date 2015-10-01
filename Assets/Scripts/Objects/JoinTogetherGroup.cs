@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class JoinTogetherGroup : MonoBehaviour {
 
 	public bool allChildJoins = true;
+	public bool forceDirection = false;
 	[SerializeField]
 	public List<JoinTogether> joins;
 	public JoinTogetherPair groupJoinTarget;
@@ -31,11 +32,11 @@ public class JoinTogetherGroup : MonoBehaviour {
 		// Direct all attached joins to the specified group target.
 		for (int i = 0; i < joins.Count; i++)
 		{
-			if (joins[i].joinTarget.baseObject == null)
+			if (joins[i].joinTarget.baseObject == null || forceDirection)
 			{
 				joins[i].joinTarget.baseObject = groupJoinTarget.baseObject;
 			}
-			if (joins[i].joinTarget.pairedObject == null)
+			if (joins[i].joinTarget.pairedObject == null || forceDirection)
 			{
 				joins[i].joinTarget.pairedObject = groupJoinTarget.pairedObject;
 			}
