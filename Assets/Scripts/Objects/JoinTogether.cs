@@ -6,7 +6,7 @@ public class JoinTogether : MonoBehaviour {
 	public Rigidbody baseBody = null;
 	public ConstrainOnDirection movementConstraint;
 	public JoinTogetherPair moveable;
-	public JoinTogetherPair sepatationTarget;
+	public JoinTogetherPair separationTarget;
 	public JoinTogetherPair joinTarget;
 	private Vector3 oldMoveablePosition;
 	public float requiredProgress = 0.975f;
@@ -38,8 +38,8 @@ public class JoinTogether : MonoBehaviour {
 		{
 			atJoin = false;
 
-			Vector3 separationToMoveable = moveable.baseObject.transform.position - sepatationTarget.baseObject.transform.position;
-			Vector3 separationToJoin = joinTarget.baseObject.transform.position - sepatationTarget.baseObject.transform.position;
+			Vector3 separationToMoveable = moveable.baseObject.transform.position - separationTarget.baseObject.transform.position;
+			Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
 
 			separationToMoveable = Helper.ProjectVector(separationToJoin, separationToMoveable);
 			float progress = separationToMoveable.magnitude / separationToJoin.magnitude;
@@ -55,7 +55,7 @@ public class JoinTogether : MonoBehaviour {
 						baseBody.velocity = Vector3.zero;
 					}
 				}
-				moveable.baseObject.transform.position = sepatationTarget.baseObject.transform.position;
+				moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;
 				progress = 0;
 			}
 			// Else if the base body is close enough to the join goal, but not beyond, flag it as ready to join.
@@ -70,7 +70,7 @@ public class JoinTogether : MonoBehaviour {
 				atJoin = true;
 			}
 
-			moveable.pairedObject.transform.position = sepatationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - sepatationTarget.pairedObject.transform.position) * progress);
+			moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
 
 			oldMoveablePosition = moveable.baseObject.transform.position;
 		}
@@ -78,10 +78,10 @@ public class JoinTogether : MonoBehaviour {
 
 	public void EstablishConstraints()
 	{
-		if (movementConstraint != null && baseBody != null && sepatationTarget.baseObject != null && joinTarget.baseObject != null)
+		if (movementConstraint != null && baseBody != null && separationTarget.baseObject != null && joinTarget.baseObject != null)
 		{
 			movementConstraint.directionSpace = Space.World;
-			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - sepatationTarget.baseObject.transform.position).normalized;
+			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position).normalized;
 		}
 	}
 
@@ -99,7 +99,7 @@ public class JoinTogether : MonoBehaviour {
 
 	private bool TargetsKnown()
 	{
-		return joinTarget.baseObject != null && joinTarget.pairedObject != null && sepatationTarget.baseObject && sepatationTarget.pairedObject != null;
+		return joinTarget.baseObject != null && joinTarget.pairedObject != null && separationTarget.baseObject && separationTarget.pairedObject != null;
 	}
 }
 

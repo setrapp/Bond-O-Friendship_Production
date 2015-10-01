@@ -23,22 +23,22 @@ public class JoinTogetherReGrouper : MonoBehaviour {
 	{
 		if (newGroup != null && !newGroup.enabled)
 		{
-			bool allReady = true;
+			bool allConsolidated = true;
 			for (int i = 0; i < triggerConsolidators.Count; i++)
 			{
-				if (!triggerConsolidators[i].consolidateReady)
+				if (!triggerConsolidators[i].consolidated)
 				{
-					allReady = false;
+					allConsolidated = false;
 				}
 			}
 
-			if (allReady)
+			if (allConsolidated)
 			{
-				newGroup.enabled = true;
 				for (int i = 0; i < triggerConsolidators.Count; i++)
 				{
-					triggerConsolidators[i].Consolidate();
+					triggerConsolidators[i].ResetConstraints();
 				}
+				newGroup.enabled = true;
 			}
 		}
 	}
