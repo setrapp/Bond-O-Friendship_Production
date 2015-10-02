@@ -82,12 +82,15 @@ public class JoinTogether : MonoBehaviour {
 		{
 
 			// Hmmm make this not happen and actually figure out self stuff.
-			movementConstraint.directionSpace = Space.World;
-			//if (movementConstraint.directionSpace == Space.Self)
-			//{
+			//movementConstraint.directionSpace = Space.World;
+
 
 
 			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position).normalized;
+			if (movementConstraint.directionSpace == Space.Self)
+			{
+				movementConstraint.constrainToDirection = transform.InverseTransformDirection(movementConstraint.constrainToDirection);
+			}
 		}
 	}
 
