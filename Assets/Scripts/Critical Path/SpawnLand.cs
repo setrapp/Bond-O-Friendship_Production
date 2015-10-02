@@ -14,12 +14,13 @@ public class SpawnLand : MonoBehaviour {
 	private bool removed;
 	public float colliderZDepth = 5;
 	private Renderer[] renderers;
+    public float spawnRate;
 
 	// Use this for initialization
 	void Start () {
 		threader = GetComponent<Threader>();
 		threadColor = GetComponent<Renderer>().material.color;
-
+        spawnRate = 4.0f;
 		renderers = GetComponentsInChildren<Renderer>();
 	}
 	
@@ -40,7 +41,7 @@ public class SpawnLand : MonoBehaviour {
 			}
 			else if(land.transform.localScale.x <= maxLandSize)
 			{
-				land.transform.localScale += new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+				land.transform.localScale += new Vector3(Time.deltaTime*spawnRate, 0, Time.deltaTime*spawnRate);
 				if (land.transform.localScale.x >= maxLandSize)
 				{
 					SendMessage("LandFull", SendMessageOptions.DontRequireReceiver);
@@ -49,7 +50,7 @@ public class SpawnLand : MonoBehaviour {
 		}
 		else if(land != null && land.transform.localScale.x > 1.0f && transform.GetComponentInParent<ThreadParent>().solved == false)
 		{
-			land.transform.localScale -= new Vector3(Time.deltaTime*2, 0, Time.deltaTime*2);
+			land.transform.localScale -= new Vector3(Time.deltaTime*spawnRate, 0, Time.deltaTime*spawnRate);
 			if (land.transform.localScale.x < maxLandSize)
 			{
 				SendMessage("LandNotFull", SendMessageOptions.DontRequireReceiver);
