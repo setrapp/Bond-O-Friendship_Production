@@ -3,6 +3,7 @@ using System.Collections;
 
 public class JoinTogether : MonoBehaviour {
 
+	public bool includePairs;
 	public Rigidbody baseBody = null;
 	public ConstrainOnDirection movementConstraint;
 	public JoinTogetherPair moveable;
@@ -70,7 +71,10 @@ public class JoinTogether : MonoBehaviour {
 				atJoin = true;
 			}
 
-			moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
+			if (includePairs)
+			{
+				moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
+			}
 
 			oldMoveablePosition = moveable.baseObject.transform.position;
 		}
@@ -80,12 +84,6 @@ public class JoinTogether : MonoBehaviour {
 	{
 		if (movementConstraint != null && baseBody != null && separationTarget.baseObject != null && joinTarget.baseObject != null)
 		{
-
-			// Hmmm make this not happen and actually figure out self stuff.
-			//movementConstraint.directionSpace = Space.World;
-
-
-
 			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position).normalized;
 			if (movementConstraint.directionSpace == Space.Self)
 			{
@@ -106,9 +104,18 @@ public class JoinTogether : MonoBehaviour {
 		moveable.baseObject.transform.position = joinTarget.baseObject.transform.position;
 	}
 
+	public void HidePaired()
+	{
+		includePairs = false;
+		if (moveable.pairedObject != null) { moveable.pairedObject.gameObject.SetActive(false); }
+		if (joinTarget.pairedObject != null) { joinTarget.pairedObject.gameObject.SetActive(false); }
+		if (separationTarget.pairedObject != null) { separationTarget.pairedObject.gameObject.SetActive(false); }
+
+	}
+
 	private bool TargetsKnown()
 	{
-		return joinTarget.baseObject != null && joinTarget.pairedObject != null && separationTarget.baseObject && separationTarget.pairedObject != null;
+		return joinTarget.baseObject != null && separationTarget.baseObject && (!includePairs || (joinTarget.pairedObject != null && separationTarget.pairedObject != null));
 	}
 }
 
