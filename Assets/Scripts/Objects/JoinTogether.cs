@@ -10,6 +10,7 @@ public class JoinTogether : MonoBehaviour {
 	public JoinTogetherPair separationTarget;
 	public JoinTogetherPair joinTarget;
 	private Vector3 oldMoveablePosition;
+	public float progress = 0;
 	public float requiredProgress = 0.975f;
 	public bool atJoin = false;
 
@@ -35,25 +36,25 @@ public class JoinTogether : MonoBehaviour {
 	{
 		requiredProgress = Mathf.Clamp01(requiredProgress);
 
-		if (!atJoin)
+		Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
+
+		if (separationToJoin.sqrMagnitude < 0.001f)
 		{
-			float separationToJoinSqrDist = (separationTarget.baseObject.transform.position - joinTarget.baseObject.transform.position).sqrMagnitude;
-			if (separationToJoinSqrDist < 0.001f)
+			if (!atJoin)
 			{
 				JumpToJoinGoal();
+				progress = 1;
 				atJoin = true;
 			}
 		}
-
-		if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
+		else if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
 		{
 			atJoin = false;
 
 			Vector3 separationToMoveable = moveable.baseObject.transform.position - separationTarget.baseObject.transform.position;
-			Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
 
 			separationToMoveable = Helper.ProjectVector(separationToJoin, separationToMoveable);
-			float progress = separationToMoveable.magnitude / separationToJoin.magnitude;
+			progress = separationToMoveable.magnitude / separationToJoin.magnitude;
 			float progressDirection = Vector3.Dot(separationToMoveable, separationToJoin);
 
 			// If the base body is beyond the most separated point, place it at that point.

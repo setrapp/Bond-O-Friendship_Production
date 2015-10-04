@@ -10,12 +10,14 @@ public class Luminus : MonoBehaviour {
 	private float player1Dist;
 	private float player2Dist;
 	private float maxDist;
+
 	public bool isOn;
 	public bool stayOn = false;
 	private bool playerInRange;
 	private float intense;
 	private float range;
 	public float timeMult;
+	public float maxOffIntensity = 0.5f;
 	public float maxIntensity = 1;
 	public float intensity = 0;
 	public float fadeTime = 1;
@@ -42,7 +44,19 @@ public class Luminus : MonoBehaviour {
 			turnOnSound.Play();
 		}
 
-		player1Dist = Vector3.Distance (transform.position, player1.transform.position);
+		isOn = true;
+		if (triggerJoinGroup != null)
+		{
+			float totalProgress = 0;
+			for (int i = 0; i < triggerJoinGroup.joins.Count; i++)
+			{
+				totalProgress += triggerJoinGroup.joins[i].progress;
+			}
+			totalProgress /= triggerJoinGroup.joins.Count;
+			intensity = totalProgress * maxIntensity;
+		}// todofade in and out based on player distance to other luminus, scale up to maxOffIntensity (nonlinear?) and then expand to actual max on completion.
+
+		/*player1Dist = Vector3.Distance (transform.position, player1.transform.position);
 		player2Dist = Vector3.Distance (transform.position, player2.transform.position);
 
 		if ((player1Dist <= maxDist) && (player2Dist <= maxDist)) {
@@ -106,7 +120,7 @@ public class Luminus : MonoBehaviour {
 			}
 			//myLight.range = 1.0f;
 			//myLight.intensity = 1.0f;
-		}
+		}*/
 	}
 
 	/*void OnTriggerEnter(Collider collide)
