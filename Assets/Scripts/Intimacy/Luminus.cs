@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Luminus : MonoBehaviour {
 
-	public Light myLight;
+	public JoinTogetherGroup triggerJoinGroup;
 	//public GameObject ring;
 	private GameObject player1;
 	private GameObject player2;
@@ -36,8 +36,11 @@ public class Luminus : MonoBehaviour {
 	// Update is called once per frame
 	void Update (){
 
-		//myLight.range = range;
-		myLight.intensity = 0;//myLight.intensity = intense;
+		if (!isOn && triggerJoinGroup != null && triggerJoinGroup.solved)
+		{
+			isOn = true;
+			turnOnSound.Play();
+		}
 
 		player1Dist = Vector3.Distance (transform.position, player1.transform.position);
 		player2Dist = Vector3.Distance (transform.position, player2.transform.position);
@@ -106,7 +109,7 @@ public class Luminus : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider collide)
+	/*void OnTriggerEnter(Collider collide)
 	{
 		if (collide.gameObject.layer == LayerMask.NameToLayer("Bond")) 
 		{
@@ -118,5 +121,5 @@ public class Luminus : MonoBehaviour {
 
 			}
 		}
-	}
+	}*/
 }

@@ -35,6 +35,16 @@ public class JoinTogether : MonoBehaviour {
 	{
 		requiredProgress = Mathf.Clamp01(requiredProgress);
 
+		if (!atJoin)
+		{
+			float separationToJoinSqrDist = (separationTarget.baseObject.transform.position - joinTarget.baseObject.transform.position).sqrMagnitude;
+			if (separationToJoinSqrDist < 0.001f)
+			{
+				JumpToJoinGoal();
+				atJoin = true;
+			}
+		}
+
 		if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
 		{
 			atJoin = false;
