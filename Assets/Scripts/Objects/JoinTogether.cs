@@ -3,7 +3,7 @@ using System.Collections;
 
 public class JoinTogether : MonoBehaviour {
 
-	public bool includePairs;
+	public bool includePairs = true;
 	public Rigidbody baseBody = null;
 	public ConstrainOnDirection movementConstraint;
 	public JoinTogetherPair moveable;
@@ -36,58 +36,50 @@ public class JoinTogether : MonoBehaviour {
 	{
 		requiredProgress = Mathf.Clamp01(requiredProgress);
 
-		Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
+		if (TargetsKnown ()) {
+			Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
 
-		if (separationToJoin.sqrMagnitude < 0.001f)
-		{
-			if (!atJoin)
-			{
-				JumpToJoinGoal();
-				progress = 1;
-				atJoin = true;
-			}
-		}
-		else if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
-		{
-			atJoin = false;
-
-			Vector3 separationToMoveable = moveable.baseObject.transform.position - separationTarget.baseObject.transform.position;
-
-			separationToMoveable = Helper.ProjectVector(separationToJoin, separationToMoveable);
-			progress = separationToMoveable.magnitude / separationToJoin.magnitude;
-			float progressDirection = Vector3.Dot(separationToMoveable, separationToJoin);
-
-			// If the base body is beyond the most separated point, place it at that point.
-			if (progressDirection < 0)
-			{
-				if (baseBody != null)
-				{
-					if (!baseBody.isKinematic)
-					{
-						baseBody.velocity = Vector3.zero;
-					}
-				}
-				moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;
-				progress = 0;
-			}
-			// Else if the base body is close enough to the join goal, but not beyond, flag it as ready to join.
-			else if (progress >= requiredProgress)
-			{
-				// If beyond the join goal, place it there.
-				if (progress > 1)
-				{
-					JumpToJoinGoal();
+			if (separationToJoin.sqrMagnitude < 0.001f) {
+				if (!atJoin) {
+					JumpToJoinGoal ();
 					progress = 1;
+					atJoin = true;
 				}
-				atJoin = true;
-			}
+			} else if (moveable.baseObject.transform.position != oldMoveablePosition) {
+				atJoin = false;
 
-			if (includePairs)
-			{
-				moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
-			}
+				Vector3 separationToMoveable = moveable.baseObject.transform.position - separationTarget.baseObject.transform.position;
 
-			oldMoveablePosition = moveable.baseObject.transform.position;
+				separationToMoveable = Helper.ProjectVector (separationToJoin, separationToMoveable);
+				progress = separationToMoveable.magnitude / separationToJoin.magnitude;
+				float progressDirection = Vector3.Dot (separationToMoveable, separationToJoin);
+
+				// If the base body is beyond the most separated point, place it at that point.
+				if (progressDirection < 0) {
+					if (baseBody != null) {
+						if (!baseBody.isKinematic) {
+							baseBody.velocity = Vector3.zero;
+						}
+					}
+					moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;
+					progress = 0;
+				}
+				// Else if the base body is close enough to the join goal, but not beyond, flag it as ready to join.
+				else if (progress >= requiredProgress) {
+					// If beyond the join goal, place it there.
+					if (progress > 1) {
+						JumpToJoinGoal ();
+						progress = 1;
+					}
+					atJoin = true;
+				}
+
+				if (includePairs) {
+					moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
+				}
+
+				oldMoveablePosition = moveable.baseObject.transform.position;
+			}
 		}
 	}
 

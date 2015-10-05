@@ -400,6 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a622fb17a45aa849a29c00aee2ad0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  includePairs: 1
   baseBody: {fileID: 0}
   movementConstraint: {fileID: 11441484}
   moveable:
@@ -411,9 +412,9 @@ MonoBehaviour:
   joinTarget:
     baseObject: {fileID: 0}
     pairedObject: {fileID: 0}
+  progress: 0
   requiredProgress: .975000024
   atJoin: 0
-  progress: 0
 --- !u!145 &14541486
 SpringJoint:
   m_ObjectHideFlags: 1
@@ -471,6 +472,10 @@ Prefab:
       propertyPath: separationTarget.pairedObject
       value: 
       objectReference: {fileID: 141478}
+    - target: {fileID: 0}
+      propertyPath: includePairs
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 141484}
