@@ -66,12 +66,12 @@ public class CameraSplitter : MonoBehaviour {
 	public Vector3 startPos = new Vector3(28.1f, 22.1f, -70f);
     private Vector3 zoomPos = new Vector3(28.1f, 22.1f, -500f);
 
-    [HideInInspector]
-    public float duration = 5f;
+   // [HideInInspector]
+    public float duration = 10f;
     [HideInInspector]
     private float t = 1.0f;
 
-	private float f = 0f;
+	private float f = 1.0f;
 
 	public bool zoomOutToggle = false;
 	public bool zoomInToggle = false;
@@ -86,6 +86,9 @@ public class CameraSplitter : MonoBehaviour {
 
 	public GameObject player1Target;
 	public GameObject player2Target;
+
+    public Vector3 player1TargetStartPosition;
+    public Vector3 player2TargetStartPosition;
 
 	public float zCameraOffset = -500.0f;
 
@@ -107,6 +110,12 @@ public class CameraSplitter : MonoBehaviour {
 		}
 		wasSplit = split;
 		CheckSplit(true);
+
+        player1Target.transform.position = player1.transform.position;
+        player2Target.transform.position = player2.transform.position;
+
+        player1TargetStartPosition = player1Target.transform.localPosition;
+        player2TargetStartPosition = player2Target.transform.localPosition;
 	}
 
 	void Update()
@@ -226,8 +235,8 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 zoomPosition = startPos;
 		zoomPosition.z = zCameraOffset;
 
-        if (isNewGameZoom)
-            zoomPosition = zoomPos;
+        //if (isNewGameZoom)
+           // zoomPosition = zoomPos;
 
 		if (zoomingOut)
 		{			

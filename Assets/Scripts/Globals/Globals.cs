@@ -232,6 +232,8 @@ public class Globals : MonoBehaviour {
 			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedIn)
 			{
 				gameState = GameState.Unpaused;
+                CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
+                CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
 				allowInput = true;
 			}
 		}

@@ -20,6 +20,7 @@ public class Luminus : MonoBehaviour {
 	public float intensity = 0;
 	public float fadeTime = 1;
 	public bool fadingIn = true;
+    public AudioSource turnOnSound;
 
 	// Use this for initialization
 	void Start () {
@@ -112,6 +113,7 @@ public class Luminus : MonoBehaviour {
 			if(isOn == false)
 			{
 				isOn = true;
+                turnOnSound.Play();
 				Helper.FirePulse(transform.position, Globals.Instance.defaultPulseStats);
 
 			}
