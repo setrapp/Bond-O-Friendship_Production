@@ -88,12 +88,12 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		}
         
 
-		// Ignore luminus if it is not turned on.
-		if (l1 != null && !l1.isOn)
+		// Ignore luminus if it has no intensity.
+		if (l1 != null && l1.intensity <= 0)
 		{
 			lightingMultiples.z = 0;
 		}
-		if (l2 != null && !l2.isOn)
+		if (l2 != null && l2.intensity <= 0)
 		{
 			lightingMultiples.w = 0;
 		}

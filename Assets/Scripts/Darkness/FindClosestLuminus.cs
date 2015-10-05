@@ -89,38 +89,35 @@ public class FindClosestLuminus : MonoBehaviour {
 
 		for (int i = 1; i < luminusArray.Length; i++)
 		{
-			if (true || luminusArray[i].isOn)
+			//Closest to p1
+			temp = p1.transform.position - luminusArray[i].transform.position;
+			//if a different luminus is closer
+			if (temp.sqrMagnitude < l1p1_sqMag)
 			{
-				//Closest to p1
-				temp = p1.transform.position - luminusArray[i].transform.position;
-				//if a different luminus is closer
-				if (temp.sqrMagnitude < l1p1_sqMag)
+				newL1 = luminusArray[i];
+				l1p1_sqMag = temp.sqrMagnitude;
+			}
+
+			//Closest to P2
+			temp = p2.transform.position - luminusArray[i].transform.position;
+			//if a different luminus is closer
+			if (temp.sqrMagnitude < l2p2_sqMag)
+			{
+				// Store the previous nearest luminus, in case the nearest is shared with player one.
+				if ((!l2Alt.isOn || l2Alt == newL1 || l2p2_sqMag < l2Altp2_sqMag) && newL1 != newL2)
 				{
-					newL1 = luminusArray[i];
-					l1p1_sqMag = temp.sqrMagnitude;
+					l2Alt = newL2;
+					l2Altp2_sqMag = l2p2_sqMag;
 				}
 
-				//Closest to P2
-				temp = p2.transform.position - luminusArray[i].transform.position;
-				//if a different luminus is closer
-				if (temp.sqrMagnitude < l2p2_sqMag)
-				{
-					// Store the previous nearest luminus, in case the nearest is shared with player one.
-					if ((!l2Alt.isOn || l2Alt == newL1 || l2p2_sqMag < l2Altp2_sqMag) && newL1 != newL2)
-					{
-						l2Alt = newL2;
-						l2Altp2_sqMag = l2p2_sqMag;
-					}
-
-					newL2 = luminusArray[i];
-					l2p2_sqMag = temp.sqrMagnitude;
-				}
-				// Store the second nearest luminus, in case the nearest is shared with player one.
-				else if ((l2Alt == newL1 || temp.sqrMagnitude < l2Altp2_sqMag) && newL1 != luminusArray[i])
-				{
-					l2Alt = luminusArray[i];
-					l2Altp2_sqMag = temp.sqrMagnitude;
-				}
+				newL2 = luminusArray[i];
+				l2p2_sqMag = temp.sqrMagnitude;
+			}
+			// Store the second nearest luminus, in case the nearest is shared with player one.
+			else if ((l2Alt == newL1 || temp.sqrMagnitude < l2Altp2_sqMag) && newL1 != luminusArray[i])
+			{
+				l2Alt = luminusArray[i];
+				l2Altp2_sqMag = temp.sqrMagnitude;
 			}
 		}
 

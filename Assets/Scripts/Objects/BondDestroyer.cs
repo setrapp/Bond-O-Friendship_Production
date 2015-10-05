@@ -71,6 +71,7 @@ public class BondDestroyer : MonoBehaviour {
 			initialDelay = 0;
 
 			RingPulse shotPulse = Helper.FirePulse(transform.position, pulseStats, DangerPulse);
+			shotPulse.transform.parent = transform.parent;
 			shotPulse.gameObject.name = "Destroyer Pulse";
 			shotPulse.gameObject.layer = gameObject.layer;
 			Renderer pulseRenderer = shotPulse.renderer;
