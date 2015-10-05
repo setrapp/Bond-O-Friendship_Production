@@ -27,9 +27,15 @@ public class ClusterNode : MonoBehaviour {
 	public GameObject pairedWall;
 	public Renderer[] wallRenderers;
 	private float startWallAlpha;
+    public bool shrinking;
+    private Vector3 pairedWallStartingSize;
+    public float shrinkSpeed = 3.0f;
+    private float shrinkTimer;
+    public float growSpeed = 3.0f;
+    private float growTimer = 0;
 
-	// Use this for initialization
-	virtual protected void Start () {
+    // Use this for initialization
+    virtual protected void Start () {
 		if(nodeRenderers == null || nodeRenderers.Length < 1)
 		{
 			nodeRenderers = GetComponentsInChildren<Renderer>();
@@ -42,8 +48,9 @@ public class ClusterNode : MonoBehaviour {
 		{
 			wallRenderers = pairedWall.GetComponentsInChildren<Renderer>();
 			startWallAlpha = wallRenderers[0].material.color.a;
-		}
-		colorSet = true;
+            pairedWallStartingSize = pairedWall.transform.localScale;
+        }
+        colorSet = true;
 	}
 	
 	// Update is called once per frame
@@ -75,16 +82,7 @@ public class ClusterNode : MonoBehaviour {
 			if (pairedWall != null && (wallRenderers[0].material.color.a > startWallAlpha / 2 || wallRenderers[0].material.color.a > 0 && targetPuzzle.solved))
 			{
                 if (targetPuzzle.individualBlockerFade == true)
-                {
-                    for(int i = 0; i < pairedWall.transform.childCount; i++)
-                    {
-                        if (pairedWall.transform.GetChild(i).name == "Blocker Base")
-                            pairedWall.transform.GetChild(i).gameObject.SetActive(false);
-                        if (pairedWall.transform.GetChild(i).name == "Blocker Top")
-                            pairedWall.transform.GetChild(i).gameObject.SetActive(false);
-                    }
-                    pairedWall.GetComponent<Collider>().enabled = false;
-                }
+                    shrinking = true;
 				else if(controlColor)
 				{
 					for (int i = 0; i < wallRenderers.Length; i++)
@@ -108,16 +106,7 @@ public class ClusterNode : MonoBehaviour {
 				{
 					lit = false;
                     if (targetPuzzle.individualBlockerFade == true)
-                    {
-                        for (int i = 0; i < pairedWall.transform.childCount; i++)
-                        {
-                            if (pairedWall.transform.GetChild(i).name == "Blocker Base")
-                                pairedWall.transform.GetChild(i).gameObject.SetActive(true);
-                            if (pairedWall.transform.GetChild(i).name == "Blocker Top")
-                                pairedWall.transform.GetChild(i).gameObject.SetActive(true);
-                        }
-                        pairedWall.GetComponent<Collider>().enabled = true;
-                    }
+                        shrinking = false;
                     else if (controlColor)
 					{
 						for (int i = 0; i < nodeRenderers.Length; i++)
@@ -128,9 +117,22 @@ public class ClusterNode : MonoBehaviour {
 				}
 				
 			}
-			
-		}
-		else if (pairedWall != null && wallRenderers[0].material.color.a < startWallAlpha)
+            if (pairedWall != null && shrinking && pairedWall.transform.localScale.x > 0.05f)
+            {
+                pairedWall.transform.localScale -= pairedWall.transform.localScale * shrinkSpeed * Time.deltaTime;
+                if (pairedWall.transform.localScale.x <= 0.1f)
+                    pairedWall.GetComponent<Collider>().enabled = false;
+            }
+        }
+        if (pairedWall != null && !shrinking && pairedWall.transform.localScale.x < pairedWallStartingSize.x)
+        {
+            pairedWall.transform.localScale += pairedWall.transform.localScale * growSpeed * Time.deltaTime;
+            if (pairedWall.transform.localScale.x >= 0.01f)
+                pairedWall.GetComponent<Collider>().enabled = true;
+            if (pairedWall.transform.localScale.x > pairedWallStartingSize.x)
+                pairedWall.transform.localScale = pairedWallStartingSize;
+        }
+        else if (pairedWall != null && wallRenderers[0].material.color.a < startWallAlpha)
 		{
 			if(controlColor)
 			{
