@@ -1465,6 +1465,7 @@ MonoBehaviour:
   joinTarget:
     baseObject: {fileID: 0}
     pairedObject: {fileID: 0}
+  progress: 0
   requiredProgress: .975000024
   atJoin: 0
 --- !u!114 &11418298
@@ -1518,6 +1519,7 @@ MonoBehaviour:
   joinTarget:
     baseObject: {fileID: 0}
     pairedObject: {fileID: 0}
+  progress: 0
   requiredProgress: .975000024
   atJoin: 0
 --- !u!114 &11456430
@@ -1569,10 +1571,13 @@ MonoBehaviour:
   triggerJoinGroup: {fileID: 11456430}
   isOn: 0
   stayOn: 1
-  timeMult: 0
+  onDelay: 1
+  maxOffIntensity: .75
   maxIntensity: 1
+  pureIntensity: 0
   intensity: 0
   fadeTime: 1
+  fadePortion: 1
   fadingIn: 1
   turnOnSound: {fileID: 8226830}
 --- !u!114 &11472358
@@ -1598,6 +1603,7 @@ MonoBehaviour:
   joinTarget:
     baseObject: {fileID: 0}
     pairedObject: {fileID: 0}
+  progress: 0
   requiredProgress: .975000024
   atJoin: 0
 --- !u!114 &11480356
@@ -1844,6 +1850,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: stayOn
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: onDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: maxOffIntensity
+      value: .75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
