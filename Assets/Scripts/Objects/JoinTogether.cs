@@ -3,12 +3,14 @@ using System.Collections;
 
 public class JoinTogether : MonoBehaviour {
 
+	public bool includePairs;
 	public Rigidbody baseBody = null;
 	public ConstrainOnDirection movementConstraint;
 	public JoinTogetherPair moveable;
-	public JoinTogetherPair sepatationTarget;
+	public JoinTogetherPair separationTarget;
 	public JoinTogetherPair joinTarget;
 	private Vector3 oldMoveablePosition;
+	public float progress = 0;
 	public float requiredProgress = 0.975f;
 	public bool atJoin = false;
 
@@ -34,15 +36,25 @@ public class JoinTogether : MonoBehaviour {
 	{
 		requiredProgress = Mathf.Clamp01(requiredProgress);
 
-		if (moveable.baseObject.transform.position != oldMoveablePosition)
+		Vector3 separationToJoin = joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position;
+
+		if (separationToJoin.sqrMagnitude < 0.001f)
+		{
+			if (!atJoin)
+			{
+				JumpToJoinGoal();
+				progress = 1;
+				atJoin = true;
+			}
+		}
+		else if (moveable.baseObject.transform.position != oldMoveablePosition && TargetsKnown())
 		{
 			atJoin = false;
 
-			Vector3 separationToMoveable = moveable.baseObject.transform.position - sepatationTarget.baseObject.transform.position;
-			Vector3 separationToJoin = joinTarget.baseObject.transform.position - sepatationTarget.baseObject.transform.position;
+			Vector3 separationToMoveable = moveable.baseObject.transform.position - separationTarget.baseObject.transform.position;
 
 			separationToMoveable = Helper.ProjectVector(separationToJoin, separationToMoveable);
-			float progress = separationToMoveable.magnitude / separationToJoin.magnitude;
+			progress = separationToMoveable.magnitude / separationToJoin.magnitude;
 			float progressDirection = Vector3.Dot(separationToMoveable, separationToJoin);
 
 			// If the base body is beyond the most separated point, place it at that point.
@@ -55,7 +67,7 @@ public class JoinTogether : MonoBehaviour {
 						baseBody.velocity = Vector3.zero;
 					}
 				}
-				moveable.baseObject.transform.position = sepatationTarget.baseObject.transform.position;
+				moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;
 				progress = 0;
 			}
 			// Else if the base body is close enough to the join goal, but not beyond, flag it as ready to join.
@@ -70,7 +82,10 @@ public class JoinTogether : MonoBehaviour {
 				atJoin = true;
 			}
 
-			moveable.pairedObject.transform.position = sepatationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - sepatationTarget.pairedObject.transform.position) * progress);
+			if (includePairs)
+			{
+				moveable.pairedObject.transform.position = separationTarget.pairedObject.transform.position + ((joinTarget.pairedObject.transform.position - separationTarget.pairedObject.transform.position) * progress);
+			}
 
 			oldMoveablePosition = moveable.baseObject.transform.position;
 		}
@@ -78,10 +93,13 @@ public class JoinTogether : MonoBehaviour {
 
 	public void EstablishConstraints()
 	{
-		if (movementConstraint != null && baseBody != null && sepatationTarget.baseObject != null && joinTarget.baseObject != null)
+		if (movementConstraint != null && baseBody != null && separationTarget.baseObject != null && joinTarget.baseObject != null)
 		{
-			movementConstraint.directionSpace = Space.World;
-			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - sepatationTarget.baseObject.transform.position).normalized;
+			movementConstraint.constrainToDirection = (joinTarget.baseObject.transform.position - separationTarget.baseObject.transform.position).normalized;
+			if (movementConstraint.directionSpace == Space.Self)
+			{
+				movementConstraint.constrainToDirection = transform.InverseTransformDirection(movementConstraint.constrainToDirection);
+			}
 		}
 	}
 
@@ -95,6 +113,20 @@ public class JoinTogether : MonoBehaviour {
 			}
 		}
 		moveable.baseObject.transform.position = joinTarget.baseObject.transform.position;
+	}
+
+	public void HidePaired()
+	{
+		includePairs = false;
+		if (moveable.pairedObject != null) { moveable.pairedObject.gameObject.SetActive(false); }
+		if (joinTarget.pairedObject != null) { joinTarget.pairedObject.gameObject.SetActive(false); }
+		if (separationTarget.pairedObject != null) { separationTarget.pairedObject.gameObject.SetActive(false); }
+
+	}
+
+	private bool TargetsKnown()
+	{
+		return joinTarget.baseObject != null && separationTarget.baseObject && (!includePairs || (joinTarget.pairedObject != null && separationTarget.pairedObject != null));
 	}
 }
 

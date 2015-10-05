@@ -405,7 +405,7 @@ MonoBehaviour:
   moveable:
     baseObject: {fileID: 141482}
     pairedObject: {fileID: 141474}
-  sepatationTarget:
+  separationTarget:
     baseObject: {fileID: 141476}
     pairedObject: {fileID: 141478}
   joinTarget:
@@ -413,6 +413,7 @@ MonoBehaviour:
     pairedObject: {fileID: 0}
   requiredProgress: .975000024
   atJoin: 0
+  progress: 0
 --- !u!145 &14541486
 SpringJoint:
   m_ObjectHideFlags: 1
@@ -462,6 +463,14 @@ Prefab:
       propertyPath: m_Damper
       value: .5
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: separationTarget.baseObject
+      value: 
+      objectReference: {fileID: 141476}
+    - target: {fileID: 0}
+      propertyPath: separationTarget.pairedObject
+      value: 
+      objectReference: {fileID: 141478}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 141484}
