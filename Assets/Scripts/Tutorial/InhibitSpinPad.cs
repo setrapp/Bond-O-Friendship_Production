@@ -19,7 +19,6 @@ public class InhibitSpinPad : MonoBehaviour {
 			return;
 		}
 
-		/*TODO check for spin and back spin ignore*/
 		if (!CheckIgnore(col.collider, true))
 		{
 			spinPad.spinInhibitors++;
@@ -39,11 +38,13 @@ public class InhibitSpinPad : MonoBehaviour {
 
 		if (!CheckIgnore(col.collider, false))
 		{
-			spinPad.spinInhibitors++;
+			//TODO for some reason this is not being called after the spin pad is move away.
+			Debug.Log("???");
+			spinPad.spinInhibitors--;
 		}
 		if (!CheckBackIgnore(col.collider, false))
 		{
-			spinPad.spinBackInhibitors++;
+			spinPad.spinBackInhibitors--;
 		}
 	}
 
@@ -55,19 +56,20 @@ public class InhibitSpinPad : MonoBehaviour {
 			bool inRange = spinPad.rotationProgress >= spinIgnoreCollisions[i].ignoreMinProgress && spinPad.rotationProgress <= spinIgnoreCollisions[i].ignoreMaxProgress;
 			if (spinIgnoreCollisions[i].ignoreCollider == collider && (!considerRange || inRange))
 			{
+				Debug.Log("hi");
 				found = true;
 			}
 		}
 		return found;
 	}
 
-	private bool CheckBackIgnore(Collider collider, bool considerRange)
+	private bool CheckBackIgnore(Collider hitCollider, bool considerRange)
 	{
 		bool found = false;
-		for (int i = 0; i < spinIgnoreCollisions.Count; i++)
+		for (int i = 0; i < backSpinIgnoreCollisions.Count; i++)
 		{
 			bool inRange = spinPad.rotationProgress >= backSpinIgnoreCollisions[i].ignoreMinProgress && spinPad.rotationProgress <= backSpinIgnoreCollisions[i].ignoreMaxProgress;
-			if (backSpinIgnoreCollisions[i].ignoreCollider == collider && (!considerRange || inRange))
+			if (backSpinIgnoreCollisions[i].ignoreCollider == hitCollider && (!considerRange || inRange))
 			{
 				found = true;
 			}
