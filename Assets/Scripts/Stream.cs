@@ -69,7 +69,7 @@ public class Stream : StreamBody {
 	{
 		if (streamBlockers <= 0)
 		{
-			if (!ending)
+			if (!ending && targetChannel != null && oldChannel != null)
 			{
 				if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
 				{
@@ -136,8 +136,10 @@ public class Stream : StreamBody {
 
 	public void UpdateMovement()
 	{
-		Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
-
+		if (targetChannel != null)
+		{
+			Vector3 toTarget = (targetChannel.transform.position + seekOffset) - transform.position;
+		}
 	}
 
 	private void PrepareForDestroy()
