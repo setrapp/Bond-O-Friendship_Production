@@ -57,9 +57,12 @@ public class SimpleMover : MonoBehaviour {
 		}
 
 		// Move, using rigidbody if attached.
-		if (body != null && !body.isKinematic)
+		if (body != null)
 		{
+			bool wasKinematic = body.isKinematic;
+			body.isKinematic = false;
 			body.velocity = velocity;
+			body.isKinematic = wasKinematic;
 		}
 		else
 		{
@@ -89,9 +92,12 @@ public class SimpleMover : MonoBehaviour {
 	{
 		velocity = Vector3.zero;
 		unfixedVelocity = Vector3.zero;
-		if (body != null && !body.isKinematic)
+		if (body != null)
 		{
+			bool wasKinematic = body.isKinematic;
+			body.isKinematic = false;
 			body.velocity = Vector3.zero;
+			body.isKinematic = wasKinematic;
 		}
 		moving = false;
 	}
