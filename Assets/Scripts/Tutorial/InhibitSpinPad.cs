@@ -14,16 +14,17 @@ public class InhibitSpinPad : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
+
 		if (ignoreStream && LayerMask.LayerToName(col.gameObject.layer) == "Water")
 		{
 			return;
 		}
 
-		if (!CheckIgnore(col.collider, true))
+		if (!CheckIgnore(col.collider))
 		{
 			spinPad.spinInhibitors++;
 		}
-		if (!CheckBackIgnore(col.collider, true))
+		if (!CheckBackIgnore(col.collider))
 		{
 			spinPad.spinBackInhibitors++;
 		}
@@ -35,41 +36,38 @@ public class InhibitSpinPad : MonoBehaviour {
 		{
 			return;
 		}
-
-		if (!CheckIgnore(col.collider, false))
+		if (!CheckIgnore(col.collider))
 		{
-			//TODO for some reason this is not being called after the spin pad is move away.
-			Debug.Log("???");
 			spinPad.spinInhibitors--;
 		}
-		if (!CheckBackIgnore(col.collider, false))
+		if (!CheckBackIgnore(col.collider))
 		{
 			spinPad.spinBackInhibitors--;
 		}
 	}
 
-	private bool CheckIgnore(Collider collider, bool considerRange)
+	private bool CheckIgnore(Collider collider)
 	{
 		bool found = false;
 		for (int i = 0; i < spinIgnoreCollisions.Count; i++)
 		{
 			bool inRange = spinPad.rotationProgress >= spinIgnoreCollisions[i].ignoreMinProgress && spinPad.rotationProgress <= spinIgnoreCollisions[i].ignoreMaxProgress;
-			if (spinIgnoreCollisions[i].ignoreCollider == collider && (!considerRange || inRange))
+			if (spinIgnoreCollisions[i].ignoreCollider == collider && inRange)
 			{
-				Debug.Log("hi");
+
 				found = true;
 			}
 		}
 		return found;
 	}
 
-	private bool CheckBackIgnore(Collider hitCollider, bool considerRange)
+	private bool CheckBackIgnore(Collider hitCollider)
 	{
 		bool found = false;
 		for (int i = 0; i < backSpinIgnoreCollisions.Count; i++)
 		{
 			bool inRange = spinPad.rotationProgress >= backSpinIgnoreCollisions[i].ignoreMinProgress && spinPad.rotationProgress <= backSpinIgnoreCollisions[i].ignoreMaxProgress;
-			if (backSpinIgnoreCollisions[i].ignoreCollider == hitCollider && (!considerRange || inRange))
+			if (backSpinIgnoreCollisions[i].ignoreCollider == hitCollider && inRange)
 			{
 				found = true;
 			}
