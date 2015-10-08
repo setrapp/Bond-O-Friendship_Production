@@ -115,6 +115,7 @@ public class Globals : MonoBehaviour {
 
 	public EtherRing existingEther = null;
 
+	public bool bondAllowed = false;
 	public bool playersBonded = false;
 
 
@@ -152,6 +153,11 @@ public class Globals : MonoBehaviour {
 			Cursor.visible = false;
 		}
 		//Debug.Log(leftControllerIndex);
+
+		if (Application.isEditor && earlyBondInEditor)
+		{
+			bondAllowed = true;
+		}
 
 		ResetLevels();
 

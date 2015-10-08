@@ -91,7 +91,10 @@ public class OrbWaitPad : WaitPad {
 					}
 
 					Destroy(collide.gameObject);
-                    complete.Play();
+					if(complete != null)
+					{
+						complete.Play();
+					}
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;
