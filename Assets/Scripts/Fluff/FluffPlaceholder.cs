@@ -15,6 +15,8 @@ public class FluffPlaceholder : MonoBehaviour {
 	public bool dropParent = false;
 	public bool spawnFakeMoving = false;
 	public bool sproutFluff = false;
+	[HideInInspector]
+	public bool readyForSpawn = false;
 
 	void Awake()
 	{
@@ -53,12 +55,17 @@ public class FluffPlaceholder : MonoBehaviour {
 
 	void Update()
 	{
-		if (autoSpawn)
+
+		if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
 		{
-			if (pickTime >= 0 && Time.time - pickTime >= respawnDelay)
+			if (autoSpawn)
 			{
 				fluffRespawns = Mathf.Max(fluffRespawns - 1, -1);
 				SpawnFluff();
+			}
+			else
+			{
+				readyForSpawn = true;
 			}
 		}
 
@@ -124,6 +131,7 @@ public class FluffPlaceholder : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		pickTime = -1;
+		readyForSpawn = false;
 		respawnDelay = Random.Range(respawnDelayMin, respawnDelayMax);
 	}
 }

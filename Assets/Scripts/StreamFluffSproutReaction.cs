@@ -66,7 +66,7 @@ public class StreamFluffSproutReaction : StreamReaction {
 					else
 					{
 						// Keep a list all fluffs spots that are open for fluff spawns.
-						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
+						if (fluffPlaceholders[i].createdFluff == null && fluffPlaceholders[i].readyForSpawn && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
 						{
 							openPlaceholders.Add(fluffPlaceholders[i]);
 						}
