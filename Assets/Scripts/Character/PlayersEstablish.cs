@@ -26,6 +26,15 @@ public class PlayersEstablish : MonoBehaviour {
     {
         if(!placed && CameraSplitter.Instance.movePlayers)
         {
+            if (!Globals.Instance.fromContinue && Globals.Instance.startSpawnLocation != null)
+            {
+                transform.position = Globals.Instance.startSpawnLocation.transform.position;
+            }
+            else if (Globals.Instance.fromContinue && Globals.Instance.continueSpawnLocation != null)
+            {
+                transform.position = Globals.Instance.continueSpawnLocation.transform.position;
+            }
+
             PlacePlayers();
 			placed = true;
        }

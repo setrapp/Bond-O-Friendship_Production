@@ -130,6 +130,10 @@ public class Globals : MonoBehaviour {
 	// Flags from completed levels [None, Tutorial, Harmony, Intimacy, Asymmetry]
 	public bool[] levelsCompleted = new bool[5];
 
+    public GameObject startSpawnLocation = null;
+    public GameObject continueSpawnLocation = null;
+    public bool fromContinue = false;
+
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
