@@ -8,6 +8,8 @@ public class DestroyInSpace : MonoBehaviour {
 	private bool falling;
 	public SpawnBud spawner;
 	public Renderer spawnRenderer;
+	public Rigidbody body;
+	public Collider blossomCollider;
 	public float checkRadius = 1;
 
 	// Use this for initialization
@@ -26,6 +28,14 @@ public class DestroyInSpace : MonoBehaviour {
 				spawnRenderer.material.color = spawner.parentColor;
 				spawner.spawned = false;
 				falling = true;
+				if (body != null && !body.isKinematic)
+				{
+					body.velocity = Vector3.zero;
+				}
+				if (blossomCollider != null)
+				{
+					blossomCollider.enabled = false;
+				}
 			}
 		}
 		if(falling)
