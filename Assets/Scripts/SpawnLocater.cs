@@ -7,7 +7,7 @@ public class SpawnLocater : MonoBehaviour {
 
 	void Start()
     {
-        if (Globals.Instance != null)
+        if (Globals.Instance != null && ! Globals.Instance.editorIgnoreSpecialStart)
         {
             if (isStart)
             {

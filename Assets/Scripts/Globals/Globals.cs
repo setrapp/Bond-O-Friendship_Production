@@ -32,6 +32,7 @@ public class Globals : MonoBehaviour {
 	public bool zoomIntroInEditor = true;
 	public bool earlyBondInEditor = false;
 	public float editorFakeStreamRate = 0;
+	public bool editorIgnoreSpecialStart = false;
 
 
 	public bool allowInput = true;
