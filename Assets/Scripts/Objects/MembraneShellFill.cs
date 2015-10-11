@@ -5,21 +5,32 @@ using System.Collections.Generic;
 public class MembraneShellFill : MonoBehaviour {
 
 	public MembraneShell membraneShell;
+	public MeshRenderer meshRenderer;
 	public MeshFilter meshFilter;
+	public CrumpleMesh crumpleMesh;
 	private Mesh mesh;
 	public Vector3[] vertices;
 	public Vector2[] uvs;
 	public int[] triangles;
 	private List<Vector3> vertexList = new List<Vector3>();
+	private List<Vector2> uvList = new List<Vector2>();
 	private List<int> triangleList = new List<int>();
 	public float maxBurstRadius;
-	private bool atMaxBurst = false;
+	public bool atMaxBurst = false;
 	public float meshBurstRate = 1.02f;
 	public float vertexBurstRate = 0.5f;
 	public bool recalculateNormals = false;
 
 	void Start()
 	{
+		if (meshRenderer == null)
+		{
+			meshRenderer = GetComponent<MeshRenderer>();
+		}
+		if (crumpleMesh == null)
+		{
+			crumpleMesh = GetComponent<CrumpleMesh>();
+		}
 		if (meshFilter == null)
 		{
 			meshFilter = GetComponent<MeshFilter>();
@@ -61,9 +72,11 @@ public class MembraneShellFill : MonoBehaviour {
 
 		if (membraneShell != null && !membraneShell.breaking) {
 			vertexList = new List<Vector3> ();
+			uvList = new List<Vector2>();
 			triangleList = new List<int> ();
 
 			vertexList.Add (Vector3.zero);
+			uvList.Add(new Vector2(0.5f, 0.5f));
 			for (int i = 0; i < membraneShell.createdWalls.Count; i++) {
 				Membrane membrane = (Membrane)membraneShell.createdWalls [i].membraneCreator.createdBond;
 				for (int j = 0; j < membrane.links.Count; j++) {
@@ -75,6 +88,17 @@ public class MembraneShellFill : MonoBehaviour {
 				}
 			}
 
+			float highRadius = FindLargestRadius();
+			if (highRadius > 0)
+			{
+				for (int i = 1; i < vertexList.Count; i++)
+				{
+					Vector3 uvPos = vertexList[i] / (highRadius * 2);
+					uvList.Add(new Vector2(uvPos.x + 0.5f, uvPos.y + 0.5f));
+				}
+			}
+
+			/*TODO figure out how to prevent creasing caused by overlap.*/
 			for (int i = 2; i < vertexList.Count; i++) {
 				triangleList.Add (0);
 				triangleList.Add (i - 1);
@@ -90,20 +114,16 @@ public class MembraneShellFill : MonoBehaviour {
 			{
 				vertexList.Clear();
 				triangleList.Clear();
+				if (crumpleMesh != null)
+				{
+					crumpleMesh.enabled = true;
+				}
 			}
 
 			if (!atMaxBurst)
 			{
 				transform.localScale *= meshBurstRate;
-				float highSqrRadius = 0;
-				for (int i = 1; i < vertices.Length; i++)
-				{
-					float toVertSqrDist = (vertices[i] - vertices[0]).sqrMagnitude;
-					if (toVertSqrDist > highSqrRadius)
-					{
-						highSqrRadius = toVertSqrDist;
-					}
-				}
+				float highSqrRadius = FindLargestSquareRadius();
 				for (int i = 0; i < vertices.Length; i++)
 				{
 					float sqrRadius = (vertices[i] - vertices[0]).sqrMagnitude;
@@ -116,8 +136,32 @@ public class MembraneShellFill : MonoBehaviour {
 				}
 
 				ApplyChanges(false);
+
+				if (transform.localScale.x >= maxBurstRadius)
+				{
+					atMaxBurst = true;
+				}
 			}
 		}
+	}
+
+	private float FindLargestSquareRadius()
+	{
+		float highSqrRadius = 0;
+		for (int i = 1; i < vertices.Length; i++)
+		{
+			float toVertSqrDist = (vertices[i] - vertices[0]).sqrMagnitude;
+			if (toVertSqrDist > highSqrRadius)
+			{
+				highSqrRadius = toVertSqrDist;
+			}
+		}
+		return highSqrRadius;
+	}
+
+	private float FindLargestRadius()
+	{
+		return Mathf.Sqrt(FindLargestSquareRadius());
 	}
 
 	private void ApplyChanges(bool updateBuffers = true)
@@ -128,15 +172,27 @@ public class MembraneShellFill : MonoBehaviour {
 				vertices [i] = vertexList [i];
 			}
 
+			uvs = new Vector2[uvList.Count];
+			for (int i = 0; i < uvList.Count; i++)
+			{
+				uvs[i] = uvList[i];
+			}
+
 			triangles = new int[triangleList.Count];
 			for (int i = 0; i < triangleList.Count; i++) {
 				triangles [i] = triangleList [i];
 			}
 		}
 
-		mesh.Clear();
-		mesh.vertices = vertices;
-		mesh.triangles = triangles;
+
+		if (vertices.Length == uvs.Length)
+		{
+			mesh.Clear();
+			mesh.vertices = vertices;
+			mesh.uv = uvs;
+			mesh.triangles = triangles;
+		}
+		
 
 		if (recalculateNormals)
 		{
