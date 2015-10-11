@@ -17,8 +17,8 @@ public class BorderTeleport : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		player1 = Globals.Instance.player1.gameObject;
-		player2 = Globals.Instance.player2.gameObject;
+		player1 = Globals.Instance.Player1.gameObject;
+		player2 = Globals.Instance.Player2.gameObject;
 		trailTimerP1 = trailTimeMax;
 		trailTimerP2 = trailTimeMax;
 	}
@@ -30,9 +30,9 @@ public class BorderTeleport : MonoBehaviour {
 			trailTimerP1 -= Time.deltaTime;
 			if(trailTimerP1 < 0)
 			{
-				Globals.Instance.player1.character.leftTrail.enabled = true;
-				Globals.Instance.player1.character.midTrail.enabled = true;
-				Globals.Instance.player1.character.rightTrail.enabled = true;
+				Globals.Instance.Player1.character.leftTrail.enabled = true;
+				Globals.Instance.Player1.character.midTrail.enabled = true;
+				Globals.Instance.Player1.character.rightTrail.enabled = true;
 				teleportedP1 = false;
 				trailTimerP1 = trailTimeMax;
 			}
@@ -42,9 +42,9 @@ public class BorderTeleport : MonoBehaviour {
 			trailTimerP2 -= Time.deltaTime;
 			if(trailTimerP2 < 0)
 			{
-				Globals.Instance.player2.character.leftTrail.enabled = true;
-				Globals.Instance.player2.character.midTrail.enabled = true;
-				Globals.Instance.player2.character.rightTrail.enabled = true;
+				Globals.Instance.Player2.character.leftTrail.enabled = true;
+				Globals.Instance.Player2.character.midTrail.enabled = true;
+				Globals.Instance.Player2.character.rightTrail.enabled = true;
 				teleportedP2 = false;
 				trailTimerP2 = trailTimeMax;
 			}
@@ -99,15 +99,15 @@ public class BorderTeleport : MonoBehaviour {
 		}
 		if(teleportedP1 == true)
 		{
-			Globals.Instance.player1.character.leftTrail.enabled = false;
-			Globals.Instance.player1.character.midTrail.enabled = false;
-			Globals.Instance.player1.character.rightTrail.enabled = false;
+			Globals.Instance.Player1.character.leftTrail.enabled = false;
+			Globals.Instance.Player1.character.midTrail.enabled = false;
+			Globals.Instance.Player1.character.rightTrail.enabled = false;
 		}
 		if(teleportedP2 == true)
 		{
-			Globals.Instance.player2.character.leftTrail.enabled = false;
-			Globals.Instance.player2.character.midTrail.enabled = false;
-			Globals.Instance.player2.character.rightTrail.enabled = false;
+			Globals.Instance.Player2.character.leftTrail.enabled = false;
+			Globals.Instance.Player2.character.midTrail.enabled = false;
+			Globals.Instance.Player2.character.rightTrail.enabled = false;
 		}
 	}
 }

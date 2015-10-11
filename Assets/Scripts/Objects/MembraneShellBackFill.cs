@@ -8,6 +8,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 	private bool filling = false;
 	public Renderer backFillRenderer;
 	public float fadeSpeed = 1;
+	public bool resetOnBlack = true;
 
 	void Start()
 	{
@@ -44,7 +45,16 @@ public class MembraneShellBackFill : MonoBehaviour {
 					color.r -= Time.deltaTime * fadeSpeed * (color.r / maxComponent);
 					color.g -= Time.deltaTime * fadeSpeed * (color.g / maxComponent);
 					color.b -= Time.deltaTime * fadeSpeed * (color.b / maxComponent);
+
+					if (color.r < 0) { color.r = 0; }
+					if (color.g < 0) { color.g = 0; }
+					if (color.b < 0) { color.b = 0; }
+
 					backFillRenderer.material.color = color;
+					if (backFillRenderer.material.color.r <= 0 && backFillRenderer.material.color.g <= 0 && backFillRenderer.material.color.b <= 0)
+					{
+						Globals.Instance.ResetOrExit();
+					}
 				}
 			}
 		}

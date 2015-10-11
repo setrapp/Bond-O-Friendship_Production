@@ -129,11 +129,11 @@ public class MembraneWall : MonoBehaviour {
 			if (requiredPlayersToBreak > 0)
 			{
 				int playersBonded = 0;
-				if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+				if (createdMembrane.IsBondMade(Globals.Instance.Player1.character.bondAttachable))
 				{
 					playersBonded++;
 				}
-				if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+				if (createdMembrane.IsBondMade(Globals.Instance.Player2.character.bondAttachable))
 				{
 					playersBonded++;
 				}
@@ -194,8 +194,8 @@ public class MembraneWall : MonoBehaviour {
 			if (disableAtFar)
 			{
 				Vector3 midPoint = (startPost.transform.position + endPost.transform.position) / 2;
-				float sqrToPlayer1 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
-				float sqrToPlayer2 = (midPoint - Globals.Instance.player2.transform.position).sqrMagnitude;
+				float sqrToPlayer1 = (midPoint - Globals.Instance.Player1.transform.position).sqrMagnitude;
+				float sqrToPlayer2 = (midPoint - Globals.Instance.Player2.transform.position).sqrMagnitude;
 				bool playerNearPosts = (sqrToPlayer1 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2) || sqrToPlayer2 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2));
 
 				if (createdMembrane.gameObject.activeSelf && (!playerNearPosts && createdMembrane.currentDetail <= createdMembrane.stats.sparseDetailFactor))

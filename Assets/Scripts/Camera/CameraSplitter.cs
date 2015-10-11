@@ -7,12 +7,13 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		get
 		{
- 			if (instance == null)
+			if (instance == null)
 			{
 				instance = GameObject.FindGameObjectWithTag("CameraSystem").GetComponent<CameraSplitter>();
 			}
 			return instance;
 		}
+		set { instance = value; }
 	}
 
 	public enum ZoomState{ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut};
@@ -96,11 +97,7 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		if (Globals.Instance != null)
 		{
-			player1 = Globals.Instance.player1.gameObject;
-			player2 = Globals.Instance.player2.gameObject;
-
-            mainCameraFollow.player1 = splitCameraFollow.player2 = player1.transform;
-            mainCameraFollow.player2 = splitCameraFollow.player1 = player2.transform;
+			SetPlayers();
 
 			splitCamera1 = mainCameraFollow.GetComponentInChildren<Camera>();
 			splitCamera2 = splitCameraFollow.GetComponentInChildren<Camera>();
@@ -124,12 +121,24 @@ public class CameraSplitter : MonoBehaviour {
 		if (splittable)
 			CheckSplit(false);	
 
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            //Debug.Log(transform.position);
-        }
+		if (audioListener == null)
+		{
+			audioListener = GetComponentInChildren<AudioListener>();
+		}
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
+	}
+
+	public void SetPlayers()
+	{
+		if (Globals.Instance != null)
+		{
+			player1 = Globals.Instance.Player1.gameObject;
+			player2 = Globals.Instance.Player2.gameObject;
+
+			mainCameraFollow.player1 = splitCameraFollow.player2 = player1.transform;
+			mainCameraFollow.player2 = splitCameraFollow.player1 = player2.transform;
+		}
 	}
 
     void SetSplitDistanceInWorldSpace()
@@ -183,7 +192,7 @@ public class CameraSplitter : MonoBehaviour {
 
 	public void JumpToPlayers()
 	{
-		if (Globals.Instance != null && Globals.Instance.player1 != null && Globals.Instance.player2 != null)
+		if (Globals.Instance != null && Globals.Instance.Player1 != null && Globals.Instance.Player2 != null)
 		{
 			Vector3 oldCamPos = transform.position;
             Vector3 splitCamera1Pos = mainCameraFollow.transform.position;

@@ -138,7 +138,7 @@ public class Threader : MonoBehaviour {
 			{
 				for (int i = 0; i < attachable.bonds.Count && bond == null; i++)
 				{
-					if (attachable.bonds[i].OtherPartner(attachable) == Globals.Instance.player1.character.bondAttachable || attachable.bonds[i].OtherPartner(attachable) == Globals.Instance.player2.character.bondAttachable)
+					if (attachable.bonds[i].OtherPartner(attachable) == Globals.Instance.Player1.character.bondAttachable || attachable.bonds[i].OtherPartner(attachable) == Globals.Instance.Player2.character.bondAttachable)
 					{
 						bond = attachable.bonds[i];
 					}
@@ -153,8 +153,8 @@ public class Threader : MonoBehaviour {
 
 		if (bond != null) 
 		{
-			BondAttachable player1 = Globals.Instance.player1.character.bondAttachable;
-			BondAttachable player2 = Globals.Instance.player2.character.bondAttachable;
+			BondAttachable player1 = Globals.Instance.Player1.character.bondAttachable;
+			BondAttachable player2 = Globals.Instance.Player2.character.bondAttachable;
 			if(bond != null && (bond.attachment1.attachee == player1 || bond.attachment2.attachee == player1) || (bond.attachment1.attachee == player2 || bond.attachment2.attachee == player2))
 			{
 				if (LayerMask.LayerToName(collide.gameObject.layer) == "Bond")

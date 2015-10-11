@@ -13,8 +13,8 @@ public class FindClosestLuminus : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		p1 = Globals.Instance.player1.gameObject;
-		p2 = Globals.Instance.player2.gameObject;
+		p1 = Globals.Instance.Player1.gameObject;
+		p2 = Globals.Instance.Player2.gameObject;
 
 		//FindAllLumini();
 

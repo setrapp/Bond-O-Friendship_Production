@@ -49,6 +49,7 @@ public class CameraFollow : MonoBehaviour {
     {
         centeringDistance = CameraSplitter.Instance.splitterDistanceInWorldSpace / 2.0f;
 
+		CheckPlayers();
         betweenPlayers = player2.position - player1.position;
         mainTargetPosition = CameraSplitter.Instance.split ? (player1.position + (betweenPlayers.normalized * centeringDistance)) : ((player1.position + player2.position) / 2);
 		mainTargetPosition += centerOffset;
@@ -76,6 +77,8 @@ public class CameraFollow : MonoBehaviour {
 
     private void RotateAndResizeMasks()
     {
+		CheckPlayers();
+
         if (childMainCamera.orthographic)
             ResizeMaskOrthographic();
         else
@@ -127,4 +130,12 @@ public class CameraFollow : MonoBehaviour {
             currentCamWidth = camWidth;
         }
     }
+
+	private void CheckPlayers()
+	{
+		if (player1 == null || player2 == null)
+		{
+			CameraSplitter.Instance.SetPlayers();
+		}
+	}
 }

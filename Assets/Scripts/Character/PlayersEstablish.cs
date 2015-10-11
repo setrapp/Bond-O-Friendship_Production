@@ -45,8 +45,8 @@ public class PlayersEstablish : MonoBehaviour {
         //CameraSplitter.Instance.followPlayers = false;
 		if (Globals.Instance != null)
 		{
-			Transform player1Holder = Globals.Instance.player1.transform.parent;
-			Transform player2Holder = Globals.Instance.player2.transform.parent;
+			Transform player1Holder = Globals.Instance.Player1.transform.parent;
+			Transform player2Holder = Globals.Instance.Player2.transform.parent;
 
 			/* TODO check if players already exist in scene.*/
 			PlayerInput player1 = null;
@@ -55,7 +55,7 @@ public class PlayersEstablish : MonoBehaviour {
 			for (int i = 0; i < characters.Length; i++)
 			{
 				PlayerInput player = characters[i].GetComponent<PlayerInput>();
-				if (player != Globals.Instance.player1 && player != Globals.Instance.player2)
+				if (player != Globals.Instance.Player1 && player != Globals.Instance.Player2)
 				{
 					if (player != null)
 					{
@@ -72,26 +72,26 @@ public class PlayersEstablish : MonoBehaviour {
 			}
 
 			// Place player 1.
-			if (Globals.Instance.player1 != null)
+			if (Globals.Instance.Player1 != null)
 			{
 				if (player1 == null || !Globals.Instance.updatePlayersOnLoad)
 				{
 					if (Globals.Instance.updatePlayersOnLoad)
 					{
-						Globals.Instance.player1.transform.parent = player1Spawn.transform.parent;
+						Globals.Instance.Player1.transform.parent = player1Spawn.transform.parent;
 						//Globals.Instance.player1.transform.position = player1Spawn.transform.position;
                         Globals.Instance.player1PositionBeforePause = player1Spawn.transform.position;
-						Globals.Instance.player1.transform.rotation = player1Spawn.transform.rotation;
-						Globals.Instance.player1.transform.localScale = player1Spawn.transform.localScale;
+						Globals.Instance.Player1.transform.rotation = player1Spawn.transform.rotation;
+						Globals.Instance.Player1.transform.localScale = player1Spawn.transform.localScale;
 					}
-					player1 = Globals.Instance.player1;
+					player1 = Globals.Instance.Player1;
 					player1.gameObject.SetActive(true);
 					setPlayer1Fluff = true;
 				}
 				else
 				{
-					Destroy(Globals.Instance.player1.gameObject);
-					Globals.Instance.player1 = player1;
+					Destroy(Globals.Instance.Player1.gameObject);
+					Globals.Instance.Player1 = player1;
 					//player1.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
@@ -103,26 +103,26 @@ public class PlayersEstablish : MonoBehaviour {
 			}
 
 			// Place player 2.
-			if (Globals.Instance.player2 != null)
+			if (Globals.Instance.Player2 != null)
 			{
 				if (player2 == null || !Globals.Instance.updatePlayersOnLoad)
 				{
 					if (Globals.Instance.updatePlayersOnLoad)
 					{
-						Globals.Instance.player2.transform.parent = player2Spawn.transform.parent;
+						Globals.Instance.Player2.transform.parent = player2Spawn.transform.parent;
 						//Globals.Instance.player2.transform.position = player2Spawn.transform.position;
                         Globals.Instance.player2PositionBeforePause = player2Spawn.transform.position;
-						Globals.Instance.player2.transform.rotation = player2Spawn.transform.rotation;
-						Globals.Instance.player2.transform.localScale = player2Spawn.transform.localScale;
+						Globals.Instance.Player2.transform.rotation = player2Spawn.transform.rotation;
+						Globals.Instance.Player2.transform.localScale = player2Spawn.transform.localScale;
 					}
-					player2 = Globals.Instance.player2;
+					player2 = Globals.Instance.Player2;
 					player2.gameObject.SetActive(true);
 					setPlayer2Fluff = true;
 				}
 				else
 				{
-					Destroy(Globals.Instance.player2.gameObject);
-					Globals.Instance.player2 = player2;
+					Destroy(Globals.Instance.Player2.gameObject);
+					Globals.Instance.Player2 = player2;
 					//player2.canvasPaused = Globals.Instance.canvasPaused;
 				}
 
@@ -173,8 +173,8 @@ public class PlayersEstablish : MonoBehaviour {
 	{
 		if (Globals.Instance != null)
 		{
-			PlayerInput player1 = Globals.Instance.player1;
-			PlayerInput player2 = Globals.Instance.player2;
+			PlayerInput player1 = Globals.Instance.Player1;
+			PlayerInput player2 = Globals.Instance.Player2;
 
 			if (setPlayer1Fluff && player1 != null)
 			{

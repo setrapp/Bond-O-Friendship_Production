@@ -105,8 +105,8 @@ public class IslandContainer : MonoBehaviour {
 		if (breakingMembrane != null && atmosphere.Contains(breakingMembrane))
 		{
 			// TODO: How should player parenting be handled?
-			Globals.Instance.player1.transform.parent = transform.parent;
-			Globals.Instance.player2.transform.parent = transform.parent;
+			Globals.Instance.Player1.transform.parent = transform.parent;
+			Globals.Instance.Player2.transform.parent = transform.parent;
 
 			// Entering Level.
 			if (island == null)

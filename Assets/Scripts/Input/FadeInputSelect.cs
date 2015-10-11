@@ -62,7 +62,7 @@ public class FadeInputSelect : MonoBehaviour {
     }
     private bool Player1InRange()
     {
-        player1NoZ = new Vector3(Globals.Instance.player1.transform.position.x, Globals.Instance.player1.transform.position.y, 0.0f);
+        player1NoZ = new Vector3(Globals.Instance.Player1.transform.position.x, Globals.Instance.Player1.transform.position.y, 0.0f);
         disToPlayer1 = Vector3.SqrMagnitude(player1NoZ - posNoZ);
         player1Toggled = disToPlayer1 < distancePow;
         return player1Toggled;
@@ -70,7 +70,7 @@ public class FadeInputSelect : MonoBehaviour {
 
     private bool Player2InRange()
     {
-        player2NoZ = new Vector3(Globals.Instance.player2.transform.position.x, Globals.Instance.player2.transform.position.y, 0.0f);
+        player2NoZ = new Vector3(Globals.Instance.Player2.transform.position.x, Globals.Instance.Player2.transform.position.y, 0.0f);
         disToPlayer2 = Vector3.SqrMagnitude(player2NoZ - posNoZ);
         player2Toggled = disToPlayer2 < distancePow;
         return player2Toggled;

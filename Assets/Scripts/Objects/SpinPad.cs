@@ -288,7 +288,7 @@ public class SpinPad : WaitPad {
 		}
 		else
 		{
-			wall1Bonded = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+			wall1Bonded = membrane1.IsBondMade(Globals.Instance.Player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.Player2.character.bondAttachable);
 		}
 
 		bool wall2Bonded = false;
@@ -298,7 +298,7 @@ public class SpinPad : WaitPad {
 		}
 		else
 		{
-			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+			wall2Bonded = membrane2.IsBondMade(Globals.Instance.Player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.Player2.character.bondAttachable);
 		}
 
 		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy);

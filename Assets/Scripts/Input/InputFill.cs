@@ -242,10 +242,10 @@ public class InputFill : MonoBehaviour
     //Make sure players are set
     void SetPlayers()
     {
-        if (Globals.Instance.player1 != null)
-            player1 = Globals.Instance.player1;
-        if (Globals.Instance.player2 != null)
-            player2 = Globals.Instance.player2;
+        if (Globals.Instance.Player1 != null)
+            player1 = Globals.Instance.Player1;
+        if (Globals.Instance.Player2 != null)
+            player2 = Globals.Instance.Player2;
     }
 
     void SetInputSizes()
@@ -333,8 +333,8 @@ public class InputFill : MonoBehaviour
         {
             firstFill = false;
             CheckForInputChange(true);
-            Helper.FirePulse(Globals.Instance.player1.transform.position, Globals.Instance.defaultPulseStats);
-            Helper.FirePulse(Globals.Instance.player2.transform.position, Globals.Instance.defaultPulseStats);
+            Helper.FirePulse(Globals.Instance.Player1.transform.position, Globals.Instance.defaultPulseStats);
+            Helper.FirePulse(Globals.Instance.Player2.transform.position, Globals.Instance.defaultPulseStats);
             Globals.Instance.allowInput = true;
             duration = 2.0f;
         }

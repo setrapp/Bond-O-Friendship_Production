@@ -59,8 +59,49 @@ public class Globals : MonoBehaviour {
 	// public ControlScheme player1ControlScheme;
 	//public ControlScheme player2ControlScheme;
 
-	public PlayerInput player1;
-	public PlayerInput player2;
+	private PlayerInput player1;
+	public PlayerInput Player1
+	{
+		get
+		{
+			if(player1 == null)
+			{
+				GameObject[] players = GameObject.FindGameObjectsWithTag("Character");
+				for (int i = 0; i < players.Length && player1 == null; i++)
+				{
+					PlayerInput player = players[i].GetComponent<PlayerInput>();
+					if (player != null && player.playerNumber == PlayerInput.Player.Player1)
+					{
+						player1 = player;
+					}
+				}
+			}
+			return player1;
+		}
+		set { player1 = value; }
+	}
+
+	private PlayerInput player2;
+	public PlayerInput Player2
+	{
+		get
+		{
+			if (player2 == null)
+			{
+				GameObject[] players = GameObject.FindGameObjectsWithTag("Character");
+				for (int i = 0; i < players.Length && player2 == null; i++)
+				{
+					PlayerInput player = players[i].GetComponent<PlayerInput>();
+					if (player != null && player.playerNumber == PlayerInput.Player.Player1)
+					{
+						player2 = player;
+					}
+				}
+			}
+			return player2;
+		}
+		set { player2 = value; }
+	}
 
 	// public InputNameSelected player1InputNameSelected;
 	// public InputNameSelected player2InputNameSelected;
@@ -147,11 +188,10 @@ public class Globals : MonoBehaviour {
 
 	void Awake()
 	{
-        //if (instance != null && instance != this)
-        //{
-        //    Destroy(gameObject);
-        //    return;
-       // }
+		if (CheckExistingGlobals())
+		{
+			return;
+		}
 
 		if (!Application.isEditor)
 		{
@@ -189,6 +229,11 @@ public class Globals : MonoBehaviour {
 
 	void Update()
 	{
+		if (Player1 == null || Player2 == null)
+		{
+			CameraSplitter.Instance.SetPlayers();
+		}
+
         if(Input.GetKeyDown(KeyCode.Escape) && !inMainMenu)
 		{
 			if(gameState == GameState.Unpaused)
@@ -208,7 +253,12 @@ public class Globals : MonoBehaviour {
 		{
 			mute = !mute;
 		}
-        
+
+		if (pauseMenu == null)
+		{
+			pauseMenu = GetComponentInChildren<PauseMenuControl>().gameObject;
+		}
+
 		if (gameState == GameState.Pausing) 
 		{
 			
@@ -287,14 +337,14 @@ public class Globals : MonoBehaviour {
 
 	public void SetPauseLocations()
 	{
-		player1PositionBeforePause = player1.transform.position;
-		player2PositionBeforePause = player2.transform.position;
+		player1PositionBeforePause = Player1.transform.position;
+		player2PositionBeforePause = Player2.transform.position;
 		camera1PositionBeforePause = CameraSplitter.Instance.splitCamera1.transform.position;
 		camera2PositionBeforePause = CameraSplitter.Instance.splitCamera2.transform.position;
 	}
 
 
-    public void ResetOrExit(bool destroyGlobals = true)
+    public void ResetOrExit()
     {
         if (inMainMenu)
         {
@@ -305,9 +355,6 @@ public class Globals : MonoBehaviour {
         }
         else
         {
-            if(destroyGlobals)
-                Destroy(gameObject);
-            instance = null;
             Application.LoadLevel(0);
         }
     }
@@ -345,13 +392,13 @@ public class Globals : MonoBehaviour {
 	public void BondFormed(Bond bond)
 	{
 		// Track if a bond between the players has been formed.
-		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
-			&& bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		if (bond.OtherPartner(Player1.character.bondAttachable) == Player2.character.bondAttachable
+			&& bond.OtherPartner(Player2.character.bondAttachable) == Player1.character.bondAttachable)
 		{
 			if (!playersBonded)
 			{
-				Helper.FirePulse(player1.transform.position, defaultPulseStats);
-				Helper.FirePulse(player2.transform.position, defaultPulseStats);
+				Helper.FirePulse(Player1.transform.position, defaultPulseStats);
+				Helper.FirePulse(Player2.transform.position, defaultPulseStats);
 			}
 
 			playersBonded = true;
@@ -361,11 +408,59 @@ public class Globals : MonoBehaviour {
 	public void BondBroken(Bond bond)
 	{
 		// Track if a bond between the players has been broken.
-		if (bond.OtherPartner(player1.character.bondAttachable) == player2.character.bondAttachable
-			&& bond.OtherPartner(player2.character.bondAttachable) == player1.character.bondAttachable)
+		if (bond.OtherPartner(Player1.character.bondAttachable) == Player2.character.bondAttachable
+			&& bond.OtherPartner(Player2.character.bondAttachable) == Player1.character.bondAttachable)
 		{
 			playersBonded = false;
 		}
+	}
+
+	private bool CheckExistingGlobals()
+	{
+		if (instance != null && instance != this)
+		{
+			// Reference new camera system from this globals to replace the camera system of the existing globals.
+			CameraSplitter newCameraSystem = GetComponentInChildren<CameraSplitter>();
+
+			// Swap old audio listener into new camera system.
+			AudioListener trashAudioListener = newCameraSystem.GetComponentInChildren<AudioListener>();
+			CameraSplitter.Instance.GetComponentInChildren<AudioListener>().transform.parent = trashAudioListener.transform.parent;
+			Destroy(trashAudioListener.gameObject);
+			CameraSplitter.Instance.gameObject.SetActive(false);
+
+			// Choose the correct starting background music by applying this global's defaults to the existing globals.
+			int bgmIndex = -1;
+			for (int i = 0; i < levelsBackgroundAudio.Length && bgmIndex < 0; i++)
+			{
+				if (bgm == levelsBackgroundAudio[i])
+				{
+					bgmIndex = i;
+				}
+			}
+			if (bgmIndex > 0)
+			{
+				Globals.Instance.bgm = Globals.Instance.levelsBackgroundAudio[bgmIndex];
+			}
+
+			// Move new camera system into existing globals and destroy old camera system.
+			newCameraSystem.transform.parent = CameraSplitter.Instance.transform.parent;
+			Destroy(CameraSplitter.Instance.gameObject);
+			newCameraSystem.gameObject.SetActive(true);
+			CameraSplitter.Instance = newCameraSystem;
+
+			// Ensure that all background music is at the correct volume.
+			for (int i = 0; i < Globals.Instance.levelsBackgroundAudio.Length; i++)
+			{
+				Globals.Instance.levelsBackgroundAudio[i].volume = 0;
+			}
+			Globals.Instance.bgm.volume = 1;
+			Globals.Instance.bgm.Play();
+
+			// Destoy this globals and allow the existing one to continue.
+			Destroy(gameObject);
+			return true;
+		}
+		return false;
 	}
 
 	private void ResetDevices()

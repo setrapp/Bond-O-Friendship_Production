@@ -369,8 +369,8 @@ public class MenuControl : MonoBehaviour {
     public void ZoomCamera()
     {
 
-        CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
-        CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
+        CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.Player1.transform.position;
+        CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.Player2.transform.position;
 		CameraSplitter.Instance.SetZoomTarget(false);
 		startZoom = true;
     }
