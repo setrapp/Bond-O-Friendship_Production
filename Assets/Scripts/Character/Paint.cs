@@ -41,7 +41,7 @@ public class Paint : MonoBehaviour {
     {
         if (!eraserOn)
         {
-            if (Globals.Instance.player1.character.bondAttachable.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+            if (Globals.Instance.Player1.character.bondAttachable.IsBondMade(Globals.Instance.Player2.character.bondAttachable))
             {
                 painttimeFloat = 0.09f;
             }
@@ -154,7 +154,7 @@ public class Paint : MonoBehaviour {
 		paintCircle = ((GameObject)Instantiate(paintPrefab, paintPos, Quaternion.Euler(0,0,randRot))).GetComponent<PaintCircle>();
 		paintCircle.GetComponent<Renderer>().material.color = paintColor;
 		paintCircle.paintCircColor = paintColor;
-		if(Globals.Instance.player1.character.bondAttachable.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+		if(Globals.Instance.Player1.character.bondAttachable.IsBondMade(Globals.Instance.Player2.character.bondAttachable))
 		{
 			paintCircle.rLifemin = 6.0f;
 			paintCircle.rLifemax = 7.0f;

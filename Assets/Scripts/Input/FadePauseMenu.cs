@@ -74,7 +74,7 @@ public class FadePauseMenu : MonoBehaviour {
 		{
 			if(renderer.GetComponent<ClusterNodeColorSpecific>().colorSet)
 			{
-				renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
+				renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f);
 				textColorsEmpty.Add(renderer.material.color);
 				textColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
 				colorSetCount++;

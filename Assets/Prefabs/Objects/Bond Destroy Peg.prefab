@@ -8,11 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 404500}
-  - 54: {fileID: 5404500}
-  - 114: {fileID: 11404500}
-  - 23: {fileID: 2304500}
-  - 33: {fileID: 3304500}
-  - 64: {fileID: 6404500}
   m_Layer: 16
   m_Name: Bond Destroy Peg
   m_TagString: Untagged
@@ -22,7 +17,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &104502
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -39,7 +34,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &112026
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -54,6 +49,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &182492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 407798}
+  - 54: {fileID: 5434102}
+  - 114: {fileID: 11493326}
+  - 23: {fileID: 2392008}
+  - 33: {fileID: 3397254}
+  - 64: {fileID: 6403504}
+  m_Layer: 16
+  m_Name: Destroyer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &404500
 Transform:
   m_ObjectHideFlags: 1
@@ -61,11 +76,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 104500}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 313.15033, y: 110.423416, z: 0}
-  m_LocalScale: {x: 2, y: 4, z: 2}
+  m_LocalPosition: {x: -21.0613518, y: 150.153198, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 404502}
-  - {fileID: 412026}
+  - {fileID: 407798}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &404502
@@ -78,6 +92,20 @@ Transform:
   m_LocalPosition: {x: 0, y: -.00999999978, z: 0}
   m_LocalScale: {x: 1, y: .100000001, z: 1}
   m_Children: []
+  m_Father: {fileID: 407798}
+  m_RootOrder: 0
+--- !u!4 &407798
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182492}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 4, z: 2}
+  m_Children:
+  - {fileID: 404502}
+  - {fileID: 412026}
   m_Father: {fileID: 404500}
   m_RootOrder: 0
 --- !u!4 &412026
@@ -90,32 +118,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.06898189, y: 3.06898308, z: 1.53449154}
   m_Children: []
-  m_Father: {fileID: 404500}
+  m_Father: {fileID: 407798}
   m_RootOrder: 1
---- !u!23 &2304500
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104500}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: a659a50561a476449a7251fe051007cd, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!23 &2304502
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -164,13 +168,30 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3304500
-MeshFilter:
+--- !u!23 &2392008
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104500}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_GameObject: {fileID: 182492}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: a659a50561a476449a7251fe051007cd, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3304502
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -185,12 +206,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112026}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &5404500
+--- !u!33 &3397254
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182492}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5434102
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104500}
+  m_GameObject: {fileID: 182492}
   serializedVersion: 2
   m_Mass: 10
   m_Drag: 2
@@ -200,24 +228,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
---- !u!64 &6404500
+--- !u!64 &6403504
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104500}
+  m_GameObject: {fileID: 182492}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Convex: 1
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11404500
+--- !u!114 &11493326
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104500}
+  m_GameObject: {fileID: 182492}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10c1be782fda68d41a2a1150807fecc3, type: 3}
@@ -231,7 +259,7 @@ MonoBehaviour:
   bondStrain:
     intensity: 50
     duration: 3
-    strainer: {fileID: 104500}
+    strainer: {fileID: 182492}
   defaultStrainerToSelf: 1
   initialDelay: 0
   pulseDelay: 3

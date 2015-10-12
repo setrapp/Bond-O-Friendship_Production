@@ -34,6 +34,7 @@ public class SpinPad : WaitPad {
 	public float dragIncreaseSpeed = 50;
 	public float membraneAttachmentSpring = 50;
 	public int spinInhibitors = 0;
+	public int spinBackInhibitors = 0;
 	public LineRenderer innerLine;
 	public LineRenderer outerLine;
 	public Color lineInactiveColor = new Color(0.5f, 0.5f, 0.5f, 0.4f);
@@ -256,6 +257,11 @@ public class SpinPad : WaitPad {
 				}
 				SetLineColors();
 			}
+			else if ((rotationChange > 0 && spinInhibitors > 0) || (rotationChange < 0 && spinBackInhibitors > 0))
+			{
+				newWallEndPos1 = oldWallEndPos1;
+				newWallEndPos2 = oldWallEndPos2;
+			}
 			else
 			{
 				// If not at the ends of the rotation range, update rotation progress.
@@ -282,7 +288,7 @@ public class SpinPad : WaitPad {
 		}
 		else
 		{
-			wall1Bonded = membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+			wall1Bonded = membrane1.IsBondMade(Globals.Instance.Player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.Player2.character.bondAttachable);
 		}
 
 		bool wall2Bonded = false;
@@ -292,13 +298,13 @@ public class SpinPad : WaitPad {
 		}
 		else
 		{
-			wall2Bonded = membrane2.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.player2.character.bondAttachable);
+			wall2Bonded = membrane2.IsBondMade(Globals.Instance.Player1.character.bondAttachable) || membrane2.IsBondMade(Globals.Instance.Player2.character.bondAttachable);
 		}
 
 		bool helmetsExist = (helmet1 != null && helmet2 != null) && (helmet1.gameObject.activeInHierarchy && helmet2.gameObject.activeInHierarchy);
-		bool spinInhibited = spinInhibitors > 0;
+		//bool spinInhibited = spinInhibitors > 0;
 
-		return wall1Bonded && wall2Bonded && !helmetsExist && !spinInhibited;
+		return wall1Bonded && wall2Bonded && !helmetsExist;// && !spinInhibited;
 	}
 
 	private void CheckHelmets()

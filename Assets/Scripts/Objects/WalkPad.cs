@@ -21,8 +21,8 @@ public class WalkPad : WaitPad {
 	{
 		if (pOonPad && pTonPad && !activated)
 		{
-			CharacterComponents player1 = Globals.Instance.player1.character;
-			CharacterComponents player2 = Globals.Instance.player2.character;
+			CharacterComponents player1 = Globals.Instance.Player1.character;
+			CharacterComponents player2 = Globals.Instance.Player2.character;
 		
 			Vector3 toEnd = endPoint.transform.position - startPoint.transform.position;
 			/*TODO something is wrong with vector projection here.*/

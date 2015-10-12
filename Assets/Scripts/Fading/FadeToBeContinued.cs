@@ -141,7 +141,7 @@ public class FadeToBeContinued : MonoBehaviour {
 				}
 			}*/
             
-            Globals.Instance.ResetOrExit(false);
+            Globals.Instance.ResetOrExit();
 		//}
 
 

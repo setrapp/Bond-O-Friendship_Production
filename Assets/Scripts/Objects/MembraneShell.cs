@@ -9,7 +9,7 @@ public class MembraneShell : MonoBehaviour {
 	public GameObject membraneWallOriginal;
 	public bool createOnStart = true;
 	public int wallCount = 4;
-	private bool Breaking = false;
+	public bool breaking = false;
 	public float buildDelay = -1;
 
 	void Start()
@@ -72,7 +72,7 @@ public class MembraneShell : MonoBehaviour {
 			}
 		}
 
-		Breaking = false;
+		breaking = false;
 	}
 
 	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
@@ -108,9 +108,9 @@ public class MembraneShell : MonoBehaviour {
 
 	private void MembraneWallBreaking(MembraneWall BreakingMembrane)
 	{
-		if (createdWalls.Contains(BreakingMembrane) && !Breaking)
+		if (createdWalls.Contains(BreakingMembrane) && !breaking)
 		{
-			Breaking = true;
+			breaking = true;
 			if (transform.parent != null)
 			{
 				transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);

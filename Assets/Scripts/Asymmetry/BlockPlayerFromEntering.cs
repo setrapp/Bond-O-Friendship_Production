@@ -27,8 +27,8 @@ public class BlockPlayerFromEntering : MonoBehaviour {
         //disable collision with spring joint partner
         springJointScript.enableCollision = false;
 
-        player1 = Globals.Instance.player1.gameObject;
-        player2 = Globals.Instance.player2.gameObject;
+        player1 = Globals.Instance.Player1.gameObject;
+        player2 = Globals.Instance.Player2.gameObject;
 
 		Color startColor = GetComponent<MeshRenderer> ().material.color;
 		startColor.a = 0;

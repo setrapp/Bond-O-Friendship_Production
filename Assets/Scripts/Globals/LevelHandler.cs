@@ -51,8 +51,8 @@ public class LevelHandler : MonoBehaviour {
 						StartCoroutine(BackgroundAudioCrossFade.Instance.CrossFade(backgroundAudio));
 					}
 
-					Globals.Instance.player1.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
-					Globals.Instance.player2.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
+					Globals.Instance.Player1.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
+					Globals.Instance.Player2.SendMessage("ChangeActiveLevel", checkIsland, SendMessageOptions.DontRequireReceiver);
 				}
 			}
 		}

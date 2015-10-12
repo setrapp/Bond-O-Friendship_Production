@@ -37,7 +37,7 @@ public class SeasonPlayerReaction : SeasonReaction {
 			for (int i = 0; i < character.bondAttachable.bonds.Count; i++)
 			{
 				BondAttachable bondPartner = character.bondAttachable.bonds[i].OtherPartner(character.bondAttachable);
-				if (bondPartner == Globals.Instance.player1.character.bondAttachable || bondPartner == Globals.Instance.player2.character.bondAttachable)
+				if (bondPartner == Globals.Instance.Player1.character.bondAttachable || bondPartner == Globals.Instance.Player2.character.bondAttachable)
 				{
 					BondSeasonReact(character.bondAttachable.bonds[i]);
 				}

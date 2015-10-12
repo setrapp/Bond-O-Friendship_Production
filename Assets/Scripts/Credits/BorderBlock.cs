@@ -14,8 +14,8 @@ public class BorderBlock : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		player1 = Globals.Instance.player1.gameObject;
-		player2 = Globals.Instance.player2.gameObject;
+		player1 = Globals.Instance.Player1.gameObject;
+		player2 = Globals.Instance.Player2.gameObject;
 		cameraSplit = GameObject.Find("Camera System").GetComponent<CameraSplitter>();
 		cameraSplit.enabled = false;
 	}

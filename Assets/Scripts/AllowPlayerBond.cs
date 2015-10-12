@@ -33,14 +33,20 @@ public class AllowPlayerBond : MonoBehaviour {
 	public void AllowBond()
 	{
 		// If disabled in editor, do not change player bond stats.
-		if (!(editorDisablable && Globals.Instance.earlyBondInEditor && Application.isEditor))
+		if (!(editorDisablable && Globals.Instance.earlyBondInEditor && Application.isEditor) && !Globals.Instance.bondAllowed)
 		{
-			Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
-			Globals.Instance.player2.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
+			Globals.Instance.Player1.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
+			Globals.Instance.Player2.character.bondAttachable.bondOverrideStats.stats.maxDistance = startingBondLength;
 			
 			if (makeBond)
 			{
-				Globals.Instance.player1.character.bondAttachable.AttemptBond(Globals.Instance.player2.character.bondAttachable, Globals.Instance.player1.transform.position, true);
+				Globals.Instance.Player1.character.bondAttachable.AttemptBond(Globals.Instance.Player2.character.bondAttachable, Globals.Instance.Player1.transform.position, true);
+
+			}
+
+			if (startingBondLength > 0)
+			{
+				Globals.Instance.bondAllowed = true;
 			}
 		}
 

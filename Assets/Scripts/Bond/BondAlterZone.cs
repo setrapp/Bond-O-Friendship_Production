@@ -28,7 +28,7 @@ public class BondAlterZone : MonoBehaviour {
 		// If desired, maintain a depth that the players should hit.
 		if (followPlayerDepth)
 		{
-			transform.position = new Vector3(transform.position.x, transform.position.y, (Globals.Instance.player1.transform.position.z + Globals.Instance.player2.transform.position.z) / 2);
+			transform.position = new Vector3(transform.position.x, transform.position.y, (Globals.Instance.Player1.transform.position.z + Globals.Instance.Player2.transform.position.z) / 2);
 		}
 	}
 

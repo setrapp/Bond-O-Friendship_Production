@@ -99,8 +99,8 @@ public class ZipperPadElement : MonoBehaviour {
 		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
 		{
 			Bond bond = collide.gameObject.GetComponentInParent<Bond>();
-			BondAttachable player1 = Globals.Instance.player1.character.bondAttachable;
-			BondAttachable player2 = Globals.Instance.player2.character.bondAttachable;
+			BondAttachable player1 = Globals.Instance.Player1.character.bondAttachable;
+			BondAttachable player2 = Globals.Instance.Player2.character.bondAttachable;
 			if(bond != null && (bond.attachment1.attachee == player1 || bond.attachment2.attachee == player1) || (bond.attachment1.attachee == player2 || bond.attachment2.attachee == player2))
 			{
 				bondLinks.Add(collide.gameObject);

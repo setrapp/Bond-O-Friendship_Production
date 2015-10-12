@@ -81,7 +81,7 @@ public class SpinPadPushee : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
+		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.Player1.gameObject)
 		{
 			if (pusheeColorer != null)
 			{
@@ -89,7 +89,7 @@ public class SpinPadPushee : MonoBehaviour {
 			}
 			pushing = true;
 		}
-		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
+		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.Player2.gameObject)
 		{
 			if (pusheeColorer != null)
 			{
@@ -101,7 +101,7 @@ public class SpinPadPushee : MonoBehaviour {
 
 	void OnTriggerExit(Collider col)
 	{
-		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.player1.gameObject)
+		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1 && col.gameObject == Globals.Instance.Player1.gameObject)
 		{
 			if (pusheeColorer != null)
 			{
@@ -109,7 +109,7 @@ public class SpinPadPushee : MonoBehaviour {
 			}
 			pushing = false;
 		}
-		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.player2.gameObject)
+		else if (targetSidePad.targetPlayer == PlayerInput.Player.Player2 && col.gameObject == Globals.Instance.Player2.gameObject)
 		{
 			if (pusheeColorer != null)
 			{

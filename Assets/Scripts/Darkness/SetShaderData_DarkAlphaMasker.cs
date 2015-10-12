@@ -22,15 +22,15 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		{
 			maskRenderer = GetComponent<Renderer>();
 		}
-
-		p1 = Globals.Instance.player1.gameObject;
-		p2 = Globals.Instance.player2.gameObject;
 		mul_sameLuminus = new Vector4(1.0f, 1.0f, 1.0f, 0.0f);
 		mul_diffLuminus = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		p1 = Globals.Instance.Player1.gameObject;
+		p2 = Globals.Instance.Player2.gameObject;
+
 		if (trigger != null)
 		{
 			fadeIn = trigger.isActiveAndEnabled;
@@ -88,12 +88,12 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		}
         
 
-		// Ignore luminus if it is not turned on.
-		if (l1 != null && !l1.isOn)
+		// Ignore luminus if it has no intensity.
+		if (l1 != null && l1.intensity <= 0)
 		{
 			lightingMultiples.z = 0;
 		}
-		if (l2 != null && !l2.isOn)
+		if (l2 != null && l2.intensity <= 0)
 		{
 			lightingMultiples.w = 0;
 		}
