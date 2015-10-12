@@ -12,8 +12,8 @@ public class ShrinkingPuzzle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player1 = Globals.Instance.player1.gameObject;
-		player2 = Globals.Instance.player2.gameObject;
+		player1 = Globals.Instance.Player1.gameObject;
+		player2 = Globals.Instance.Player2.gameObject;
 		orange = new Color(1.0f, 0.61f, 0);
 		blue = new Color(0.2f, 0.6f, 1.0f);
 	}

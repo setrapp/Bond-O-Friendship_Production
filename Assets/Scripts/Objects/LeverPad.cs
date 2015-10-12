@@ -139,7 +139,7 @@ public class LeverPad : MonoBehaviour//WaitPad
 
 	private bool PlayersPushing()
 	{
-		return membrane1.IsBondMade(Globals.Instance.player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.player2.character.bondAttachable);            
+		return membrane1.IsBondMade(Globals.Instance.Player1.character.bondAttachable) || membrane1.IsBondMade(Globals.Instance.Player2.character.bondAttachable);            
 	}
 
 

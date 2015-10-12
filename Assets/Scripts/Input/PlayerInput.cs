@@ -43,11 +43,11 @@ public class PlayerInput : MonoBehaviour {
         {
             if(playerNumber == Player.Player1)
             {
-                Globals.Instance.player1 = this;
+                Globals.Instance.Player1 = this;
             }
             if (playerNumber == Player.Player2)
             {
-                Globals.Instance.player2 = this;
+                Globals.Instance.Player2 = this;
             }
         }
 

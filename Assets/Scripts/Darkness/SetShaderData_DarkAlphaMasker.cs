@@ -22,15 +22,15 @@ public class SetShaderData_DarkAlphaMasker : MonoBehaviour {
 		{
 			maskRenderer = GetComponent<Renderer>();
 		}
-
-		p1 = Globals.Instance.player1.gameObject;
-		p2 = Globals.Instance.player2.gameObject;
 		mul_sameLuminus = new Vector4(1.0f, 1.0f, 1.0f, 0.0f);
 		mul_diffLuminus = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		p1 = Globals.Instance.Player1.gameObject;
+		p2 = Globals.Instance.Player2.gameObject;
+
 		if (trigger != null)
 		{
 			fadeIn = trigger.isActiveAndEnabled;

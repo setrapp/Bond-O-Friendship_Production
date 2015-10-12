@@ -51,7 +51,7 @@ public class ThreadParent : MonoBehaviour {
 			if (playerBond != null && bondExtensionPerFluff >= 0)
 			{
 				playerBond.stats.extensionPerFluff = bondExtensionPerFluff;
-				playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
+				playerBond.stats.maxDistance = Globals.Instance.Player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
 			}
 			/*if (playerBond != null && desiredbondLength > playerBond.stats.maxDistance)
 			{
@@ -117,7 +117,7 @@ public class ThreadParent : MonoBehaviour {
 		}
 		// Return bond extention per fluff to normal size when leaving threader.
 		playerBond.stats.extensionPerFluff = playerBond.attachment1.attachee.bondOverrideStats.stats.extensionPerFluff;
-		playerBond.stats.maxDistance = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
-		Globals.Instance.player1.GetComponent<SeasonPlayerReaction>().BondSeasonReact(playerBond);
+		playerBond.stats.maxDistance = Globals.Instance.Player1.character.bondAttachable.bondOverrideStats.stats.maxDistance + (playerBond.fluffsHeld.Count * playerBond.stats.extensionPerFluff);
+		Globals.Instance.Player1.GetComponent<SeasonPlayerReaction>().BondSeasonReact(playerBond);
 	}
 }

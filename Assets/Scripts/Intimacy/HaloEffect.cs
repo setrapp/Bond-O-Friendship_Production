@@ -21,14 +21,14 @@ public class HaloEffect : MonoBehaviour {
 		//TODO attach to attached player rather than using name
 		if(attachedPlayer == PlayerInput.Player.Player1)
 		{
-			fluffHandler = Globals.Instance.player1.gameObject.GetComponent<FluffHandler>();
-			transform.parent = Globals.Instance.player1.transform;
+			fluffHandler = Globals.Instance.Player1.gameObject.GetComponent<FluffHandler>();
+			transform.parent = Globals.Instance.Player1.transform;
 			transform.localPosition = Vector3.zero;
 		}
 		else
 		{
-			fluffHandler = Globals.Instance.player2.gameObject.GetComponent<FluffHandler>();
-			transform.parent = Globals.Instance.player2.transform;
+			fluffHandler = Globals.Instance.Player2.gameObject.GetComponent<FluffHandler>();
+			transform.parent = Globals.Instance.Player2.transform;
 			transform.localPosition = Vector3.zero;
 		}
 	}
@@ -36,12 +36,12 @@ public class HaloEffect : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		fluffCountAdjust = (int)Mathf.Round(fluffMax - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
+		fluffCountAdjust = (int)Mathf.Round(fluffMax - Vector3.Distance(Globals.Instance.Player1.transform.position, Globals.Instance.Player2.transform.position));
 		if(fluffCountAdjust < 1)
 			fluffCountAdjust = 1;
 		fluffHandler.naturalFluffCount = fluffCountAdjust;
-		float maskRange = Mathf.Max(minRange, (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position)));
-		targetLight.range = (haloRange - Vector3.Distance(Globals.Instance.player1.transform.position, Globals.Instance.player2.transform.position));
+		float maskRange = Mathf.Max(minRange, (haloRange - Vector3.Distance(Globals.Instance.Player1.transform.position, Globals.Instance.Player2.transform.position)));
+		targetLight.range = (haloRange - Vector3.Distance(Globals.Instance.Player1.transform.position, Globals.Instance.Player2.transform.position));
 		if (targetMask != null && targetMask.depthMask != null)
 		{
 			

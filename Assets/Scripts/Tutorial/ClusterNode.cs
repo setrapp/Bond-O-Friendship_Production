@@ -184,13 +184,13 @@ public class ClusterNode : MonoBehaviour {
 		}
 
 		Color playerColor = new Color();
-		if (col == Globals.Instance.player1.character.bodyCollider)
+		if (col == Globals.Instance.Player1.character.bodyCollider)
 		{
-			playerColor = Globals.Instance.player1.character.colors.baseColor;
+			playerColor = Globals.Instance.Player1.character.colors.baseColor;
 		}
-		else if (col == Globals.Instance.player2.character.bodyCollider)
+		else if (col == Globals.Instance.Player2.character.bodyCollider)
 		{
-			playerColor = Globals.Instance.player2.character.colors.baseColor;
+			playerColor = Globals.Instance.Player2.character.colors.baseColor;
 		}
 		else if (col.gameObject.layer == LayerMask.NameToLayer("Bond"))
 		{
