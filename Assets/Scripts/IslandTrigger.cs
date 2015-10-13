@@ -7,7 +7,7 @@ public class IslandTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (targetIsland != null && (other.gameObject == Globals.Instance.player1.gameObject || other.gameObject == Globals.Instance.player2.gameObject))
+		if (targetIsland != null && (other.gameObject == Globals.Instance.Player1.gameObject || other.gameObject == Globals.Instance.Player2.gameObject))
 		{
 			if (toggleLandingOn)
 			{

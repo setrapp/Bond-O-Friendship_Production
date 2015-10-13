@@ -19,10 +19,10 @@ public class CopyPlayerColor : MonoBehaviour {
 
 	public void ApplyTint(float tintFactor = 1)
 	{
-		Color renderColor = Globals.Instance.player1.character.colors.baseColor;
+		Color renderColor = Globals.Instance.Player1.character.colors.baseColor;
 		if (targetPlayer == PlayerInput.Player.Player2)
 		{
-			renderColor = Globals.Instance.player2.character.colors.baseColor;
+			renderColor = Globals.Instance.Player2.character.colors.baseColor;
 		}
 		
 		if (isAdditive)

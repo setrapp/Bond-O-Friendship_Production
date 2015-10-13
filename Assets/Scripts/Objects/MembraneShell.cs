@@ -9,7 +9,7 @@ public class MembraneShell : MonoBehaviour {
 	public GameObject membraneWallOriginal;
 	public bool createOnStart = true;
 	public int wallCount = 4;
-	private bool Breaking = false;
+	public bool breaking = false;
 	public float buildDelay = -1;
 
 	void Start()
@@ -72,7 +72,7 @@ public class MembraneShell : MonoBehaviour {
 			}
 		}
 
-		Breaking = false;
+		breaking = false;
 	}
 
 	public bool IsBondMade(BondAttachable partner = null, List<Membrane> ignoreMembranes = null)
@@ -101,16 +101,16 @@ public class MembraneShell : MonoBehaviour {
 			}
 			Transform parent = transform.parent;
 			transform.parent = null;
-			MembraneBroken(removeMembrane);
+			MembraneWallBroken(removeMembrane);
 			transform.parent = parent;
 		}
 	}
 
-	private void MembraneBreaking(MembraneWall BreakingMembrane)
+	private void MembraneWallBreaking(MembraneWall BreakingMembrane)
 	{
-		if (createdWalls.Contains(BreakingMembrane) && !Breaking)
+		if (createdWalls.Contains(BreakingMembrane) && !breaking)
 		{
-			Breaking = true;
+			breaking = true;
 			if (transform.parent != null)
 			{
 				transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
@@ -118,14 +118,14 @@ public class MembraneShell : MonoBehaviour {
 		}
 	}
 
-	private void MembraneBroken(MembraneWall brokenMembrane)
+	private void MembraneWallBroken(MembraneWall brokenMembrane)
 	{
 		if (createdWalls.Count > 0)
 		{
 			createdWalls.Remove(brokenMembrane);
 			if (transform.parent != null)
 			{
-				transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+				transform.parent.SendMessage("MembraneInShellBroken", this, SendMessageOptions.DontRequireReceiver);
 			}
 			if (createdWalls.Count == 0)
 			{
@@ -138,7 +138,7 @@ public class MembraneShell : MonoBehaviour {
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("AllMembranesBroken", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneShellBroken", this, SendMessageOptions.DontRequireReceiver);
 		}
 		if (destroyWhenBroken)
 		{
@@ -150,7 +150,7 @@ public class MembraneShell : MonoBehaviour {
 	{
 		if (bondingMembrane != null && createdWalls.Contains(bondingMembrane))
 		{
-			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneInShellBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 	}

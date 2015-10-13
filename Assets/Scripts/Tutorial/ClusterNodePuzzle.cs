@@ -8,6 +8,9 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	public List<GameObject> listeners;
 	public ParticleSystem nodeParticle;
 	public bool solved;
+	public StreamReactionList streamReaction;
+
+    public bool individualBlockerFade = false;
 
 	public GameObject streamBlocker;
 	public GameObject streamBlocker2;
@@ -15,9 +18,13 @@ public class ClusterNodePuzzle : MonoBehaviour {
 	private float startingSize;
 	private int litCount;
     public float progress = 0;
+    [Header("Optional")]
+    public ClusterNodePuzzle dependsOn;
+    private bool dependentSolved = false;
+    public bool solveWithDependent = false;
 
 
-	void Awake()
+	void Start()
 	{
 		for (int i = 0; i < nodes.Count; i++)
 		{
@@ -35,9 +42,23 @@ public class ClusterNodePuzzle : MonoBehaviour {
 			
 		}
 
+		if (streamReaction == null)
+		{
+			streamReaction = GetComponent<StreamReactionList>();
+		}
+
 		if(streamBlocker != null && streamBlocker2 != null)
 			startingSize = streamBlocker.transform.localScale.y;
 	}
+
+    void Update()
+    {
+        if (dependsOn != null && dependsOn.solved && !dependentSolved)
+        {
+            dependentSolved = true;
+            NodeColored();
+        }
+    }
 	
 	public void NodeColored()
 	{
@@ -95,7 +116,10 @@ public class ClusterNodePuzzle : MonoBehaviour {
 			}
 		}
 
-		if (allLit && !solved)
+        bool litAndReady = allLit && !solved && (dependsOn == null || dependsOn.solved);
+        bool readyByDependent = solveWithDependent && dependsOn != null && dependsOn.solved && !solved;
+
+		if (litAndReady || readyByDependent)
 		{
 			solved = true;
 			if(streamBlocker != null)

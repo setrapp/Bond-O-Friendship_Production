@@ -16,6 +16,7 @@ public class OrbWaitPad : WaitPad {
 	public float gateCloseTime = 20;
 	private int sphereCount;
 	public bool requirePlayers = true;
+    public AudioSource complete;
 
 	override protected void Start () {
         red = 0.8f;
@@ -90,6 +91,10 @@ public class OrbWaitPad : WaitPad {
 					}
 
 					Destroy(collide.gameObject);
+					if(complete != null)
+					{
+						complete.Play();
+					}
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
 					tempParticle.transform.position = activationSpheres[i].transform.position;

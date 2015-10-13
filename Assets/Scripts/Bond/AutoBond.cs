@@ -34,22 +34,22 @@ public class AutoBond : MonoBehaviour {
 			{
 				if (playerNumber == PlayerInput.Player.Player1)
 				{
-					attachable1 = Globals.Instance.player1.GetComponent<BondAttachable>();
+					attachable1 = Globals.Instance.Player1.GetComponent<BondAttachable>();
 				}
 				else if (playerNumber == PlayerInput.Player.Player2)
 				{
-					attachable1 = Globals.Instance.player2.GetComponent<BondAttachable>();
+					attachable1 = Globals.Instance.Player2.GetComponent<BondAttachable>();
 				}
 			}
 			if (attachable2 == null)
 			{
 				if (playerNumber == PlayerInput.Player.Player1)
 				{
-					attachable2 = Globals.Instance.player1.GetComponent<BondAttachable>();
+					attachable2 = Globals.Instance.Player1.GetComponent<BondAttachable>();
 				}
 				else if (playerNumber == PlayerInput.Player.Player2)
 				{
-					attachable2 = Globals.Instance.player2.GetComponent<BondAttachable>();
+					attachable2 = Globals.Instance.Player2.GetComponent<BondAttachable>();
 				}
 			}
 		}

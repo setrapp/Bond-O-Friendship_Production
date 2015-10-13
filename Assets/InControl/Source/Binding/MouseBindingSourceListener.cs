@@ -26,7 +26,7 @@ namespace InControl
 
 			if (detectFound != Mouse.None)
 			{
-				if (!IsPressed( detectFound ))
+				if (!MouseBindingSource.ButtonIsPressed( detectFound ))
 				{
 					if (detectPhase == 2)
 					{
@@ -58,44 +58,15 @@ namespace InControl
 		}
 
 
-		bool IsPressed( Mouse control )
-		{
-			if (control == Mouse.LeftButton)
-			{
-				return Input.GetMouseButton( 0 );
-			}
-
-			if (control == Mouse.RightButton)
-			{
-				return Input.GetMouseButton( 1 );
-			}
-
-			if (control == Mouse.MiddleButton)
-			{
-				return Input.GetMouseButton( 2 );
-			}
-
-			return false;
-		}
-
-
 		Mouse ListenForControl()
 		{
-			if (Input.GetMouseButton( 0 ))
+			for (var control = Mouse.None; control <= Mouse.Button9; control++)
 			{
-				return Mouse.LeftButton;
+				if (MouseBindingSource.ButtonIsPressed( control ))
+				{
+					return control;
+				}
 			}
-
-			if (Input.GetMouseButton( 1 ))
-			{
-				return Mouse.RightButton;
-			}
-
-			if (Input.GetMouseButton( 2 ))
-			{
-				return Mouse.MiddleButton;
-			}
-
 			return Mouse.None;
 		}
 	}

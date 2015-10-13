@@ -46,7 +46,7 @@ public class FollowPlayerInput : MonoBehaviour
     void HandleControllers(bool isLeftController)
     {
         
-        if (p1ControlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && isLeftController && Globals.Instance.leftControllerIndex >= 0)
+        if (p1ControlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && isLeftController && Globals.Instance.leftControllerInputDevice != null)
         {
             if (p1ControlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
             {
@@ -67,7 +67,7 @@ public class FollowPlayerInput : MonoBehaviour
                 rightStickMoved = true;
             }
         }
-        else if (p1ControlScheme.inputNameSelected == Globals.InputNameSelected.RightController && !isLeftController && Globals.Instance.rightContollerIndex >= 0)
+        else if (p1ControlScheme.inputNameSelected == Globals.InputNameSelected.RightController && !isLeftController && Globals.Instance.rightControllerInputDevice != null)
         {
             if (p1ControlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
             {
@@ -92,7 +92,7 @@ public class FollowPlayerInput : MonoBehaviour
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (p2ControlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && isLeftController && Globals.Instance.leftControllerIndex >= 0)
+        if (p2ControlScheme.inputNameSelected == Globals.InputNameSelected.LeftController && isLeftController && Globals.Instance.leftControllerInputDevice != null)
         {
             if (p2ControlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
             {
@@ -113,7 +113,7 @@ public class FollowPlayerInput : MonoBehaviour
                 rightStickMoved = true;
             }
         }
-        else if (p2ControlScheme.inputNameSelected == Globals.InputNameSelected.RightController && !isLeftController && Globals.Instance.rightContollerIndex >= 0)
+        else if (p2ControlScheme.inputNameSelected == Globals.InputNameSelected.RightController && !isLeftController && Globals.Instance.rightControllerInputDevice != null)
         {
             
             if (p2ControlScheme.controlScheme == Globals.ControlScheme.SharedLeft)
@@ -148,9 +148,9 @@ public class FollowPlayerInput : MonoBehaviour
 
     void SetPlayers()
     {
-        if (Globals.Instance.player1 != null)
-            player1 = Globals.Instance.player1;
-        if (Globals.Instance.player2 != null)
-            player2 = Globals.Instance.player2;
+        if (Globals.Instance.Player1 != null)
+            player1 = Globals.Instance.Player1;
+        if (Globals.Instance.Player2 != null)
+            player2 = Globals.Instance.Player2;
     }
 }

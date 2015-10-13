@@ -3,11 +3,19 @@ using System.Collections;
 
 public class CanvasBehavior : MonoBehaviour {
 
+	public GameObject paintCopier;
+	public CanvasBehavior pairedCanvas;
 	public GameObject player1;
 	public GameObject player2;
+	public GameObject pairedPlayer;
 	private Color canvasColor;
 	private float alpha;
 	public bool changeColor = true;
+	public float maxCheckDistance = 2;
+	public float minPaintRadius = 1;
+	public float maxPaintRadius = 5;
+	[HideInInspector]
+	public CapsuleCollider canvasCollider;
 
 	public GameObject pal1;
 	public GameObject pal2;
@@ -36,7 +44,14 @@ public class CanvasBehavior : MonoBehaviour {
 	public float b4;
 	public float a4;
 
+	//[HideInInspector]
+	public Vector3 mirrorDistance;
 
+	[HideInInspector]
+	public PaintAndNodeCollisionTest nodeCollisionTest;
+
+	//public bool isMirror;
+	//public ClusterNodePuzzle puzzleToReveal;
 
 
 	// Use this for initialization
@@ -48,7 +63,11 @@ public class CanvasBehavior : MonoBehaviour {
 		{
 			gameObject.GetComponent<Renderer>().material.color = canvasColor;
 		}
+		if (pairedCanvas != null)
+			mirrorDistance = transform.position - pairedCanvas.transform.position;
 
+		nodeCollisionTest = GetComponent<PaintAndNodeCollisionTest>();
+		canvasCollider = GetComponent<CapsuleCollider>();
 	}
 	
 	// Update is called once per frame
@@ -85,38 +104,84 @@ public class CanvasBehavior : MonoBehaviour {
 				alpha += Time.deltaTime * 0.5f;
 			}
 		}
-	
+		if(pairedPlayer != null && paintCopier != null)
+		{
+			paintCopier.transform.position = pairedPlayer.transform.position + mirrorDistance;
+		}
 	}
 
 	void OnTriggerEnter (Collider collide)
 	{
-		if(collide.gameObject.name == "Player 1")
+		if(paintCopier == null)
 		{
-			player1 = collide.gameObject;
-			player1.GetComponent<Paint>().painting = true;
+			if(collide.gameObject.name == "Player 1")
+			{
+				player1 = collide.gameObject;
 
-		}
-		if(collide.gameObject.name == "Player 2")
-		{
-			player2 = collide.gameObject;
-			player2.GetComponent<Paint>().painting = true;
+				//Assign canvas variables to player
+				Paint paintScript = player1.GetComponent<Paint>();
+				paintScript.painting = true;
+				paintScript.paintCanvas = this;
 
+
+				pairedCanvas.pairedPlayer = player1;
+				//Assign canvas variables to pairedCanvas' copier
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
+				paintScript.painting = true;
+				paintScript.paintCanvas = pairedCanvas;
+			}
+			if(collide.gameObject.name == "Player 2")
+			{
+				player2 = collide.gameObject;
+
+				//Assign canvas variables to paint
+				Paint paintScript = player2.GetComponent<Paint>();
+				paintScript.painting = true;
+				paintScript.paintCanvas = this;
+
+				pairedCanvas.pairedPlayer = player2;
+				//Assign canvas variables to pairedCanvas' copier
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
+				paintScript.painting = true;
+				paintScript.paintCanvas = pairedCanvas;
+			}
 		}
 	}
 
 	void OnTriggerExit (Collider collide)
 	{
-		if(collide.gameObject.name == "Player 1")
+		if(paintCopier == null)
 		{
-			player1 = collide.gameObject;
-			player1.GetComponent<Paint>().painting = false;
-			//print ("Paintfalse");
-		}
-		if(collide.gameObject.name == "Player 2")
-		{
-			player2 = collide.gameObject;
-			player2.GetComponent<Paint>().painting = false;
-			//print ("Paint");
+			if(collide.gameObject.name == "Player 1")
+			{
+				player1 = collide.gameObject;
+
+				//Assign canvas variables to paint
+				Paint paintScript = player1.GetComponent<Paint>();
+				paintScript.painting = false;
+				paintScript.paintCanvas = null;
+
+				pairedCanvas.pairedPlayer = null;
+				//De-reference canvas variables from pairedCanvas' copier
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
+				paintScript.painting = false;
+				paintScript.paintCanvas = null;
+			}
+			if(collide.gameObject.name == "Player 2")
+			{
+				player2 = collide.gameObject;
+
+				//Assign canvas variables to paint
+				Paint paintScript = player2.GetComponent<Paint>();
+				paintScript.painting = false;
+				paintScript.paintCanvas = null;
+
+				pairedCanvas.pairedPlayer = null;
+				//De-reference canvas variables from pairedCanvas' copier
+				paintScript = pairedCanvas.paintCopier.GetComponent<Paint>();
+				paintScript.painting = false;
+				paintScript.paintCanvas = null;
+			}
 		}
 	}
 }

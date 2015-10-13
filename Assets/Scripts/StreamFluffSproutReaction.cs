@@ -52,9 +52,10 @@ public class StreamFluffSproutReaction : StreamReaction {
 		bool reacted = base.React(actionRate);
 		if (reacted)
 		{
+			
 			if (reactionProgress >= 1 && streamsTouched > 0)
 			{
-				bool spawned = false;
+				List<FluffPlaceholder> openPlaceholders = new List<FluffPlaceholder>();
 				for (int i = 0; i < fluffPlaceholders.Count; i++)
 				{
 					if (fluffPlaceholders[i] == null)
@@ -62,33 +63,34 @@ public class StreamFluffSproutReaction : StreamReaction {
 						fluffPlaceholders.RemoveAt(i);
 						i--;
 					}
-					else if (spawnAll || !spawned)
+					else
 					{
-						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
+						// Keep a list all fluffs spots that are open for fluff spawns.
+						if (fluffPlaceholders[i].createdFluff == null && fluffPlaceholders[i].readyForSpawn && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
 						{
-							fluffPlaceholders[i].SpawnFluff();
-							spawned = true;
+							openPlaceholders.Add(fluffPlaceholders[i]);
 						}
 					}
 				}
 
-				if (!spawnAll)
+				if (spawnAll)
 				{
-					/*while (!spawned)
+					// Spawn all fluffs in needed.
+					for (int i = 0; i < openPlaceholders.Count; i++)
 					{
-						int i = Random.Range(0, fluffPlaceholders.Count);
-						if (fluffPlaceholders[i].createdFluff == null && (fluffPlaceholders[i].attachee == null || fluffPlaceholders[i].attachee.root == null || fluffPlaceholders[i].attachee.root.trackStuckFluffs || fluffPlaceholders[i].attachee.stuckFluff == null))
-						{
-							fluffPlaceholders[i].SpawnFluff();
-							spawned = true;
-						}
-					}*/
+						openPlaceholders[i].SpawnFluff();
+					}
+
+				}
+				else if (openPlaceholders.Count > 0)
+				{
+					// If not spawning all fluffs at once, spawn a random fluff.
+					int nextFluffSpawn = Random.Range(0, openPlaceholders.Count);
+					openPlaceholders[nextFluffSpawn].SpawnFluff();
 				}
 
-				//if (spawned)
-				//{
-					reactionProgress = 0;
-				//}
+				// Reset to start of spawn cycle.
+				reactionProgress = 0;
 			}
 		}
 

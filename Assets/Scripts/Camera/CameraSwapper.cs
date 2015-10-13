@@ -39,7 +39,7 @@ public class CameraSwapper : MonoBehaviour {
 				}
 				break;
 			default:
-				if (cameraPlayer1 != Globals.Instance.player1.transform)
+				if (cameraPlayer1 != Globals.Instance.Player1.transform)
 				{
 					swap = true;
 				}

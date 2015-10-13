@@ -131,11 +131,11 @@ public class Membrane : Bond {
 
 				// Check for bonds with the players on this membrane only (ignoring neighbors).
 				MembraneLink bondedLink;
-				if (IsBondMade(out bondedLink, Globals.Instance.player1.character.bondAttachable, ignoreNeighbors))
+				if (IsBondMade(out bondedLink, Globals.Instance.Player1.character.bondAttachable, ignoreNeighbors))
 				{
 					breakLinks.Add(bondedLink);
 				}
-				if (IsBondMade(out bondedLink, Globals.Instance.player2.character.bondAttachable, ignoreNeighbors))
+				if (IsBondMade(out bondedLink, Globals.Instance.Player2.character.bondAttachable, ignoreNeighbors))
 				{
 					breakLinks.Add(bondedLink);
 				}

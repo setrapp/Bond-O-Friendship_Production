@@ -53,25 +53,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &170230
+--- !u!1 &166334
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 470230}
-  - 114: {fileID: 11470236}
-  - 114: {fileID: 11470234}
-  - 114: {fileID: 11470232}
-  - 114: {fileID: 11470230}
+  - 4: {fileID: 435202}
   m_Layer: 0
-  m_Name: Ring Breaker Spawn
+  m_Name: Zoom Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -79,12 +75,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.5999985, y: 156.800003, z: .970000029}
-  m_LocalScale: {x: 4.75, y: 4.74999952, z: .949999928}
+  m_LocalPosition: {x: 52.405014, y: 186.402283, z: 0}
+  m_LocalScale: {x: 4.75, y: 4.74999952, z: 1}
   m_Children:
   - {fileID: 400004}
   - {fileID: 400002}
-  - {fileID: 470230}
+  - {fileID: 435202}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400002
@@ -94,8 +90,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .219999999}
-  m_LocalScale: {x: 5.49725723, y: 5.4972558, z: 4.76428843}
+  m_LocalPosition: {x: 0, y: 0, z: .208999977}
+  m_LocalScale: {x: 5.49725771, y: 5.4972558, z: 4.52607346}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 1
@@ -106,25 +102,25 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .400000006}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: .379999965}
+  m_LocalScale: {x: 5, y: 5, z: 4.74999952}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 0
---- !u!4 &470230
+--- !u!4 &435202
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170230}
+  m_GameObject: {fileID: 166334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: .5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -150}
+  m_LocalScale: {x: .210526317, y: .210526332, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 2
 --- !u!23 &2300000
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -132,19 +128,23 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 89f616a1a7374ed40ac948e800ada0e9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2300002
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -152,15 +152,19 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 41443bff166cd04418a937155080cfc7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300000
@@ -206,117 +210,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerPad: {fileID: 11400000}
-  startZoom: 0
-  zoomTarget: 40
+  zoomTarget: {fileID: 166334}
   startZoomPortion: 0
   endZoomPortion: 1
   oldPortionComplete: 0
+  currentZoom: 0
+  updateZoom: 0
   resetOnComplete: 1
   resetDelay: .5
   resetAcceleration: 0
   resetMaxSpeed: 0
   resetSpeed: 0
-  zoomToStartingSize: 0
---- !u!114 &11470230
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61bffc622b818e1439d56d2e8a7b066d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stats:
-    attachSpring1: 0
-    attachSpring2: 0
-    linkMass: -1
-    linkDrag: -1
-    pullApartMaxFactor: 0
-    maxDistance: -1
-    relativeWarningDistance: -1
-    endsWidth: 5
-    midWidth: 7
-    addLinkDistance: 2
-    removeLinkDistance: 1.79999995
-    springForce: 5000
-    springDamper: 5
-    relativeRequestDistance: -1
-    fluffRequestDelay: -1
-    fluffPullForce: -1
-    fluffPullLinks: -1
-    maxFluffCapacity: -1
-    extensionPerFluff: -1
-    manualAttachment1: 0
-    manualAttachment2: 0
-    manualLinks: 0
-    disableColliders: 1
-    fullDetailDistance: 20
-    sparseDetailDistance: 50
-    sparseDetailFactor: .100000001
-    sparseDetailLinksCheck: 1
---- !u!114 &11470232
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a97608f0f6c9bbb41a04584ce96f48bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  body: {fileID: 0}
-  handleFluffAttachment: 1
-  bondAtContactPoint: 1
-  attachmentColor: {r: .666666687, g: .831372559, b: .835294127, a: .65882355}
-  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  bondOverrideStats: {fileID: 0}
-  bonds: []
-  volleysToBond: 0
-  volleys: 0
-  volleyPartner: {fileID: 0}
---- !u!114 &11470234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b2bcfbf7b5f9544a8fd0639a28982ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  createdBond: {fileID: 0}
-  createOnStart: 0
-  attachable1: {fileID: 0}
-  attachable2: {fileID: 0}
-  bondPrefab: {fileID: 100004, guid: c4c8c595c2d0c264a9671718ccf2e822, type: 2}
-  bondOffset1: {x: 0, y: 0, z: 0}
-  bondOffset2: {x: 0, y: 0, z: 0}
-  bondOverrideStats: {fileID: 11470230}
-  bondToPlayer: 0
-  playerNumber: 0
---- !u!114 &11470236
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b98d0b861d8e21448ecb2ea4a1047bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ringBreakerPrefab: {fileID: 129982, guid: 61f744c65551f18458992cc0eca82424, type: 2}
-  triggerPad: {fileID: 11400000}
-  delay: .200000003
-  offset: {x: 0, y: 0, z: 0}
-  createdRingBreaker: {fileID: 0}
-  bondCreator: {fileID: 11470234}
-  bondAttachable: {fileID: 11470232}
-  attachedIsland: {fileID: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -349,9 +253,16 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.z
+      value: .219999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: zoomTarget
+      value: 
+      objectReference: {fileID: 166334}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

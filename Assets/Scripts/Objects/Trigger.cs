@@ -62,14 +62,14 @@ public class Trigger : MonoBehaviour {
 			Fluff fluff = collide.collider.gameObject.GetComponent<Fluff>();
 			if (fluff != null)
 			{
-				if(fluff.creator != null && fluff.creator.gameObject == Globals.Instance.player1.gameObject)
+				if(fluff.creator != null && fluff.creator.gameObject == Globals.Instance.Player1.gameObject)
 				{
 					//print("Collide");
 					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<Fluff>().creator.attachmentColor;
 					pOneTriggered = true;
 					pTwoTriggered = false;
 				}
-				else if (fluff.creator != null && fluff.creator.gameObject == Globals.Instance.player2.gameObject)
+				else if (fluff.creator != null && fluff.creator.gameObject == Globals.Instance.Player2.gameObject)
 				{
 					//print("Collide");
 					GetComponent<Renderer>().material.color = collide.collider.gameObject.GetComponent<Fluff>().creator.attachmentColor;

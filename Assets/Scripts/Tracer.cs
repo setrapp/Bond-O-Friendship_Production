@@ -100,9 +100,14 @@ public class Tracer : MonoBehaviour {
 
 	public void DestroyLine()
 	{
-		if (lineRenderer != null)
+		if (vertices != null)
 		{
 			vertices.Clear();
+		}
+		
+		if (lineRenderer != null)
+		{
+			
 			lineRenderer.SetVertexCount(0);
 			GameObject.Destroy(lineRenderer.gameObject);
 			lineRenderer = null;

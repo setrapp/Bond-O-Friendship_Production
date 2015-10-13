@@ -13,11 +13,12 @@ public class BondDestroyer : MonoBehaviour {
 	public BondStrain bondStrain;
 	public bool defaultStrainerToSelf = true;
 	[Header("Destroy Pulse")]
+	public float initialDelay = 0;
 	public float pulseDelay = -1;
 	private float lastPulseTime = 0;
 	public PulseStats pulseStats;
 	private BondDestroyerPulse destroyerPulse;
-    public RingPulse DangerPulse;
+	public RingPulse DangerPulse;
 
 	void Awake()
 	{
@@ -65,9 +66,12 @@ public class BondDestroyer : MonoBehaviour {
 			pulseDelay = pulseStats.lifeTime;
 		}
 
-		if (pulseDelay >= 0 && Time.time - lastPulseTime >= pulseDelay)
+		if (pulseDelay >= 0 && Time.time - lastPulseTime >= pulseDelay + Mathf.Max(initialDelay, 0))
 		{
+			initialDelay = 0;
+
 			RingPulse shotPulse = Helper.FirePulse(transform.position, pulseStats, DangerPulse);
+			shotPulse.transform.parent = transform.parent;
 			shotPulse.gameObject.name = "Destroyer Pulse";
 			shotPulse.gameObject.layer = gameObject.layer;
 			Renderer pulseRenderer = shotPulse.renderer;

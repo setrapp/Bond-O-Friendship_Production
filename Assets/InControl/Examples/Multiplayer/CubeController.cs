@@ -11,6 +11,7 @@ namespace MultiplayerExample
 
 		public int playerNum;
 
+        public InputDevice inputDevice;
 
 		void Start()
 		{
@@ -18,9 +19,12 @@ namespace MultiplayerExample
 		}
 
 
+
 		void Update()
 		{
-			var inputDevice = (InputManager.Devices.Count > playerNum) ? InputManager.Devices[playerNum] : null;
+
+           
+
 			if (inputDevice == null)
 			{
 				// If no controller exists for this cube, just make it translucent.
@@ -28,9 +32,32 @@ namespace MultiplayerExample
 			}
 			else
 			{
-				UpdateCubeWithInputDevice( inputDevice );
+                if (!inputDevice.IsAttached)
+                {
+                    if(playerNum == 0)
+                    Debug.Log(InputManager.Devices.IndexOf(inputDevice));
+                   // Debug.Log("Here");
+                }
+                else
+                {
+                    
+                    UpdateCubeWithInputDevice(inputDevice);
+                }
 			}
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                CheckForController();
+            }
+
+            
+            
 		}
+
+        void CheckForController()
+        {
+            inputDevice = (InputManager.Devices.Count > playerNum) ? InputManager.Devices[playerNum] : null;
+        }
 
 
 		void UpdateCubeWithInputDevice( InputDevice inputDevice )

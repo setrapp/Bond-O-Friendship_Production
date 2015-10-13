@@ -13,6 +13,13 @@ namespace InControl
 		PlayerAction negativeYAction;
 		PlayerAction positiveYAction;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the Y axis should be inverted for
+		/// this action. When false (default), the Y axis will be positive up,
+		/// the same as Unity.
+		/// </summary>
+		public bool InvertYAxis { get; set; }
+
 
 		internal PlayerTwoAxisAction( PlayerAction negativeXAction, PlayerAction positiveXAction, PlayerAction negativeYAction, PlayerAction positiveYAction )
 		{
@@ -21,23 +28,16 @@ namespace InControl
 			this.negativeYAction = negativeYAction;
 			this.positiveYAction = positiveYAction;
 
+			InvertYAxis = false;
 			Raw = true;
 		}
 
 
 		internal void Update( ulong updateTick, float deltaTime )
 		{
-			var x = ValueFromSides( negativeXAction, positiveXAction );
-			var y = ValueFromSides( negativeYAction, positiveYAction );
+			var x = Utility.ValueFromSides( negativeXAction, positiveXAction, false );
+			var y = Utility.ValueFromSides( negativeYAction, positiveYAction, InputManager.InvertYAxis || InvertYAxis );
 			UpdateWithAxes( x, y, updateTick, deltaTime );
-		}
-
-
-		float ValueFromSides( float negativeSideValue, float positiveSideValue )
-		{
-			var nsv = Mathf.Abs( negativeSideValue );
-			var psv = Mathf.Abs( positiveSideValue );
-			return nsv > psv ? -nsv : psv;
 		}
 	}
 }

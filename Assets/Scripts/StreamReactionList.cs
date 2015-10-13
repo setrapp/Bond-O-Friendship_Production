@@ -8,6 +8,8 @@ public class StreamReactionList : StreamReaction {
 	public List<StreamReaction> streamReactions;
 	public bool trackObjectReactions = true;
 	public bool trackChildReactions = true;
+	[Header("Editor Testing")]
+	public float editorFakeStreamRate = 0;
 
 	void Awake()
 	{
@@ -33,6 +35,28 @@ public class StreamReactionList : StreamReaction {
 				}
 			}
 		}
+
+		if (Globals.Instance != null && editorFakeStreamRate < Globals.Instance.editorFakeStreamRate)
+		{
+			editorFakeStreamRate = Globals.Instance.editorFakeStreamRate;
+		}
+
+		if (editorFakeStreamRate > 0 && Application.isEditor)
+		{
+			for (int i = 0; i < streamReactions.Count; i++)
+			{
+				streamReactions[i].streamsTouched = 1;
+			}
+		}
+	}
+
+	override protected void Update()
+	{
+		// If testing object without stream present, fake reaction to stream.
+		if (editorFakeStreamRate > 0 && Application.isEditor)
+		{
+			React(editorFakeStreamRate);
+		}
 	}
 
 	public override bool React(float actionRate)
@@ -49,7 +73,7 @@ public class StreamReactionList : StreamReaction {
 					streamReactions.RemoveAt(i);
 					i--;
 				}
-				else
+				else if (streamReactions[i].enabled && streamReactions[i].gameObject.activeInHierarchy)
 				{
 					streamReactions[i].React(actionRate * reactionRate);
 

@@ -1279,7 +1279,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 94
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!54 &5448178
 Rigidbody:
@@ -1294,7 +1294,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 94
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!54 &5455970
 Rigidbody:
@@ -1671,7 +1671,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11455972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1718,7 +1717,7 @@ MonoBehaviour:
     midWidth: 1
     addLinkDistance: .600000024
     removeLinkDistance: .300000012
-    springForce: 400
+    springForce: 600
     springDamper: .400000006
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -1733,7 +1732,6 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
-    sparseDetailLinksCheck: 1
 --- !u!114 &11455976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1773,6 +1771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 11455976}
   createOnStart: 1
+  creationLink: {fileID: 0}
   space: 1
   destroyWhenBroken: 0
   wallIsCentered: 0
@@ -1853,7 +1852,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11455984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2056,7 +2054,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11456000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2139,7 +2136,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11456006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2286,7 +2282,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11456018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2406,7 +2401,6 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
-    sparseDetailLinksCheck: 1
 --- !u!114 &11456028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2453,7 +2447,7 @@ MonoBehaviour:
     midWidth: 1
     addLinkDistance: .600000024
     removeLinkDistance: .300000012
-    springForce: 400
+    springForce: 600
     springDamper: .400000006
     relativeRequestDistance: -1
     fluffRequestDelay: -1
@@ -2468,7 +2462,6 @@ MonoBehaviour:
     fullDetailDistance: 20
     sparseDetailDistance: 50
     sparseDetailFactor: .100000001
-    sparseDetailLinksCheck: 1
 --- !u!114 &11456032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2508,6 +2501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   membraneCreator: {fileID: 11456032}
   createOnStart: 1
+  creationLink: {fileID: 0}
   space: 1
   destroyWhenBroken: 0
   wallIsCentered: 0
@@ -2554,8 +2548,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc488f88d5fdef9439b95b53cda86cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reactionProgress: 1
-  reactionRate: 100000
+  reactionProgress: 0
+  reactionRate: 1
   decayRate: -1
   decayDelay: 5
   reactable: 1
@@ -2565,6 +2559,7 @@ MonoBehaviour:
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 0
+  editorFakeStreamRate: 0
 --- !u!114 &11469996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2577,10 +2572,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reactionProgress: 0
-  reactionRate: 0
+  reactionRate: 1
   decayRate: -1
   decayDelay: 5
-  reactable: 0
+  reactable: 1
   superiors:
   - {fileID: 11469998}
   streamsTouched: 0
@@ -2608,6 +2603,7 @@ MonoBehaviour:
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
+  editorFakeStreamRate: 0
 --- !u!114 &11470000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2631,6 +2627,7 @@ MonoBehaviour:
   - {fileID: 2370014}
   unfilledTint: {r: .5, g: .5, b: .5, a: 1}
   filledTint: {r: 1, g: 1, b: 1, a: 1}
+  baseColors: []
 --- !u!114 &11470002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2679,6 +2676,7 @@ MonoBehaviour:
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
+  editorFakeStreamRate: 0
 --- !u!114 &11470006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2702,6 +2700,7 @@ MonoBehaviour:
   - {fileID: 2370012}
   unfilledTint: {r: .5, g: .5, b: .5, a: 1}
   filledTint: {r: 1, g: 1, b: 1, a: 1}
+  baseColors: []
 --- !u!114 &11470010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2713,8 +2712,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc488f88d5fdef9439b95b53cda86cee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reactionProgress: 1
-  reactionRate: 100000
+  reactionProgress: 0
+  reactionRate: 1
   decayRate: -1
   decayDelay: 5
   reactable: 1
@@ -2724,6 +2723,7 @@ MonoBehaviour:
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 0
+  editorFakeStreamRate: 0
 --- !u!114 &11470012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2736,10 +2736,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reactionProgress: 0
-  reactionRate: 0
+  reactionRate: 1
   decayRate: -1
   decayDelay: 5
-  reactable: 0
+  reactable: 1
   superiors:
   - {fileID: 11470004}
   streamsTouched: 0
@@ -3034,6 +3034,18 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: stats.springForce
       value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reactionRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reactionProgress
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

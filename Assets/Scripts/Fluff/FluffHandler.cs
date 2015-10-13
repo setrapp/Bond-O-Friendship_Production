@@ -294,7 +294,7 @@ public class FluffHandler : MonoBehaviour {
 	{
 		if (fluff != null && (fluff.attachee == null || fluff.attachee.gameObject == gameObject || !fluff.attachee.possessive))
 		{
-			character.bondAttachable.AttemptBond(fluff.creator, fluff.transform.position);
+			//character.bondAttachable.AttemptBond(fluff.creator, fluff.transform.position);
 
 			if (fluff.creator != null && fluff.creator != character.bondAttachable)
 			{

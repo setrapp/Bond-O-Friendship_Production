@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &147310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 492342}
+  - 64: {fileID: 6476666}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &169528
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,8 +25,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 469528}
   - 33: {fileID: 3369528}
-  - 64: {fileID: 6469528}
   - 23: {fileID: 2369528}
+  - 114: {fileID: 11401018}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -27,8 +43,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 485500}
   - 33: {fileID: 3385500}
-  - 64: {fileID: 6485500}
   - 23: {fileID: 2385500}
+  - 114: {fileID: 11496134}
   m_Layer: 0
   m_Name: Spawned Land 2
   m_TagString: Untagged
@@ -55,14 +71,27 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185500}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 402.404419, y: 157.377533, z: -56.5323181}
+  m_LocalPosition: {x: 166.182968, y: 181.157852, z: -56.5323181}
   m_LocalScale: {x: 1, y: .00999999978, z: 1}
   m_Children:
   - {fileID: 469528}
+  - {fileID: 492342}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &492342
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147310}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 485500}
+  m_RootOrder: 1
 --- !u!23 &2369528
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -70,19 +99,23 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 15cec847d55b7304f81b90fb52258d8e, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2385500
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -90,15 +123,19 @@ Renderer:
   m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 48e8b4ce3efe83b488575d91d85101b8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3369528
@@ -115,41 +152,99 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185500}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6469528
+--- !u!64 &6476666
 MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147310}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11401018
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 169528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6485500
-MeshCollider:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2369528}
+  renderBase: 3000
+  renderOffset: -4
+  forceRendererOn: 0
+--- !u!114 &11496134
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185500}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6db71f82bb363764d9a535546e1c7726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  managerSearchTag: Island
+  manager: {fileID: 0}
+  seasonColors:
+  - {r: .897058845, g: 1, b: .916251242, a: 1}
+  - {r: .558823526, g: 1, b: .641076803, a: 1}
+  - {r: .90506053, g: .992647052, b: .921390235, a: 1}
+  seasonRenderer: {fileID: 2369528}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonRenderer
+      value: 
+      objectReference: {fileID: 2369528}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].r
+      value: .558823526
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[1].b
+      value: .641076803
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].r
+      value: .897058845
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: seasonColors.Array.data[0].b
+      value: .916251242
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderBase
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: renderOffset
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: targetRenderer
+      value: 
+      objectReference: {fileID: 2369528}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 185500}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

@@ -5,9 +5,11 @@ using System.Collections.Generic;
 public class MembraneWall : MonoBehaviour {
 	public AutoMembrane membraneCreator;
 	public bool createOnStart = true;
+	public MembraneCreationLink creationLink = null;
 	public Space space = Space.World;
 	public bool destroyWhenBroken = true;
 	public bool wallIsCentered = true;
+	public bool baseOnPosts = false;
 	public Vector3 membraneDirection;
 	public float membraneLength;
 	public bool showPosts = false;
@@ -68,6 +70,11 @@ public class MembraneWall : MonoBehaviour {
 			membraneCreator = GetComponent<AutoMembrane>();
 		}
 
+		if (creationLink == null)
+		{
+			creationLink = GetComponent<MembraneCreationLink>();
+		}
+
 		if (membraneCreator != null)
 		{
 			membraneCreator.createOnStart = false;
@@ -122,11 +129,11 @@ public class MembraneWall : MonoBehaviour {
 			if (requiredPlayersToBreak > 0)
 			{
 				int playersBonded = 0;
-				if (createdMembrane.IsBondMade(Globals.Instance.player1.character.bondAttachable))
+				if (createdMembrane.IsBondMade(Globals.Instance.Player1.character.bondAttachable))
 				{
 					playersBonded++;
 				}
-				if (createdMembrane.IsBondMade(Globals.Instance.player2.character.bondAttachable))
+				if (createdMembrane.IsBondMade(Globals.Instance.Player2.character.bondAttachable))
 				{
 					playersBonded++;
 				}
@@ -187,8 +194,8 @@ public class MembraneWall : MonoBehaviour {
 			if (disableAtFar)
 			{
 				Vector3 midPoint = (startPost.transform.position + endPost.transform.position) / 2;
-				float sqrToPlayer1 = (midPoint - Globals.Instance.player1.transform.position).sqrMagnitude;
-				float sqrToPlayer2 = (midPoint - Globals.Instance.player2.transform.position).sqrMagnitude;
+				float sqrToPlayer1 = (midPoint - Globals.Instance.Player1.transform.position).sqrMagnitude;
+				float sqrToPlayer2 = (midPoint - Globals.Instance.Player2.transform.position).sqrMagnitude;
 				bool playerNearPosts = (sqrToPlayer1 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2) || sqrToPlayer2 <= Mathf.Pow(createdMembrane.stats.sparseDetailDistance, 2));
 
 				if (createdMembrane.gameObject.activeSelf && (!playerNearPosts && createdMembrane.currentDetail <= createdMembrane.stats.sparseDetailFactor))
@@ -213,6 +220,14 @@ public class MembraneWall : MonoBehaviour {
 		if (shapingIndices.Count != shapingPoints.Count)
 		{
 			Debug.LogError("Membrane wall has incorrect number of shaping indices. Ensure that shaping point count and shaping index count are equal.");
+		}
+
+		// If posts are already placed correctly, calculate membrane length and direction based on them.
+		if (baseOnPosts)
+		{
+			Vector3 postToPost = endPost.transform.position - startPost.transform.position;
+			membraneLength = postToPost.magnitude;
+			membraneDirection = postToPost / membraneLength;
 		}
 
 		// Update override stats to account for starting distance between endpoints.
@@ -296,7 +311,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBreaking", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBreaking", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -309,7 +324,7 @@ public class MembraneWall : MonoBehaviour {
 
 		if (transform.parent != null)
 		{
-			transform.parent.SendMessage("MembraneBroken", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBroken", this, SendMessageOptions.DontRequireReceiver);
 		}
 		if (destroyWhenBroken)
 		{
@@ -321,7 +336,7 @@ public class MembraneWall : MonoBehaviour {
 	{
 		if (transform.parent != null && membraneCreator != null && bondingMembrane != null && bondingMembrane == membraneCreator.createdBond)
 		{
-			transform.parent.SendMessage("MembraneBonding", this, SendMessageOptions.DontRequireReceiver);
+			transform.parent.SendMessage("MembraneWallBonding", this, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }
