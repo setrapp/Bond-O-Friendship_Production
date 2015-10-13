@@ -16,6 +16,8 @@ public class MenuControl : MonoBehaviour {
 
 	public GameObject mainMenu;
 
+    public GameObject logo;
+
     public GameObject begin;
 
     public GameObject inputSelect;
@@ -53,7 +55,7 @@ public class MenuControl : MonoBehaviour {
     private bool inputSelected = false;
 
     private float f = 0f;
-    private float t = 1f;
+    private float t = 0f;
     public float duration = 3.0f;
 
     public float fadeInDuration = 1.5f;
@@ -71,6 +73,8 @@ public class MenuControl : MonoBehaviour {
     private bool startPanelFade = false;
     private bool zoom = true;
 	private bool startZoom = false;
+
+    private bool fadeStartScreen = false;
 
 	// Use this for initialization
 	void Awake () 
@@ -114,7 +118,7 @@ public class MenuControl : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        if (obscureMenuPanel.activeSelf && startPanelFade)
+        if (!fadeStartScreen && startPanelFade)
         {
             FadeInFadeOut();
         }
@@ -295,7 +299,7 @@ public class MenuControl : MonoBehaviour {
     {
         if (startMenu.GetComponent<CanvasGroup>().alpha != 0.0f)
         {
-            t = Mathf.Clamp(t - Time.deltaTime/1.0f, 0.0f, 1.0f);
+            t = Mathf.Clamp(t - Time.deltaTime/2.0f, 0.0f, 1.0f);
             startMenu.GetComponent<CanvasGroup>().alpha = t;            
         }
         else
@@ -341,14 +345,21 @@ public class MenuControl : MonoBehaviour {
 
     private void FadeInFadeOut()
     {
-        
-            if (t != 0)
-            {
-                t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
-                obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
-            }
-            else
-            {
+        if (logo.GetComponent<CanvasGroup>().alpha != 1.0f)
+        {
+            t = Mathf.Clamp(t + Time.deltaTime / 5.0f, 0.0f, 1.0f);
+            logo.GetComponent<CanvasGroup>().alpha = t;
+        }
+        else
+        {
+
+            //if (t != 0)
+           // {
+            //    t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
+            //    obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
+            //}
+            //else
+           // {
 
                 if (f != 1)
                 {
@@ -359,10 +370,12 @@ public class MenuControl : MonoBehaviour {
                 {
                     t = 1;
                     f = 0;
-                    obscureMenuPanel.SetActive(false);
+                    fadeStartScreen = true;
+                    //obscureMenuPanel.SetActive(false);
                 }
-                
-            }
+
+            //}
+        }
         
 	}
 
@@ -372,6 +385,8 @@ public class MenuControl : MonoBehaviour {
         CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.Player1.transform.position;
         CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.Player2.transform.position;
 		CameraSplitter.Instance.SetZoomTarget(false);
+        Globals.Instance.camera1PositionBeforePause = CameraSplitter.Instance.startPos;
+        Globals.Instance.camera2PositionBeforePause = CameraSplitter.Instance.startPos;
 		startZoom = true;
     }
 
