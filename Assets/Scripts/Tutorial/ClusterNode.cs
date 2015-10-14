@@ -32,7 +32,6 @@ public class ClusterNode : MonoBehaviour {
     public float shrinkSpeed = 3.0f;
     private float shrinkTimer;
     public float growSpeed = 3.0f;
-    private float growTimer = 0;
 
     // Use this for initialization
     virtual protected void Start () {
@@ -124,7 +123,7 @@ public class ClusterNode : MonoBehaviour {
                     pairedWall.GetComponent<Collider>().enabled = false;
             }
         }
-        if (pairedWall != null && !shrinking && pairedWall.transform.localScale.x < pairedWallStartingSize.x)
+        if (pairedWall != null && !shrinking && pairedWall.transform.localScale.x < pairedWallStartingSize.x && targetPuzzle.individualBlockerFade == true)
         {
             pairedWall.transform.localScale += pairedWall.transform.localScale * growSpeed * Time.deltaTime;
             if (pairedWall.transform.localScale.x >= 0.01f)
