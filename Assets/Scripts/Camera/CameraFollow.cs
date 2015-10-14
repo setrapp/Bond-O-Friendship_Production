@@ -28,6 +28,10 @@ public class CameraFollow : MonoBehaviour {
     private float currentCamHeight = 0f;
     private float currentCamWidth = 0f;
 
+    public float dampTime = .15f;
+    public float dampingMultiplyer = .15f;
+    private Vector3 velocity = Vector3.zero;
+
     void Start()
     {
         line = pivot.transform.FindChild("Line").gameObject;
@@ -49,14 +53,43 @@ public class CameraFollow : MonoBehaviour {
     {
         centeringDistance = CameraSplitter.Instance.splitterDistanceInWorldSpace / 2.0f;
 
-		CheckPlayers();
+        CheckPlayers();
         betweenPlayers = player2.position - player1.position;
         mainTargetPosition = CameraSplitter.Instance.split ? (player1.position + (betweenPlayers.normalized * centeringDistance)) : ((player1.position + player2.position) / 2);
-		mainTargetPosition += centerOffset;
-		mainTargetPosition.z = transform.position.z;
-		transform.position = mainTargetPosition;// + cameraOffset;
-    }
+        mainTargetPosition += centerOffset;
+        mainTargetPosition.z = transform.position.z;
 
+        if (CameraSplitter.Instance.split)
+        {
+            if (CameraSplitter.Instance.playerDistance < CameraSplitter.Instance.cameraDampDistanceInWorldSpace)
+            {
+                float distanceShift = CameraSplitter.Instance.cameraDampDistanceInWorldSpace - CameraSplitter.Instance.playerDistance;
+                float splitShift = CameraSplitter.Instance.cameraDampDistanceInWorldSpace - CameraSplitter.Instance.splitterDistanceInWorldSpace;
+                dampTime = (1.0f - Mathf.Clamp((distanceShift / splitShift), 0.0f, 1.0f)) * dampingMultiplyer;
+            }
+            else
+            {
+                dampTime = dampingMultiplyer;
+            }
+        }
+        else
+        {
+            if (CameraSplitter.Instance.playerDistance > CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace)
+            {
+                float distanceShift = CameraSplitter.Instance.playerDistance - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
+                float splitShift = CameraSplitter.Instance.splitterDistanceInWorldSpace - CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace;
+                dampTime = (1.0f - Mathf.Clamp((distanceShift / splitShift), 0.0f, 1.0f)) * dampingMultiplyer;
+            }
+            else
+            {
+                dampTime = dampingMultiplyer;
+            }
+        }
+
+        transform.position = Vector3.SmoothDamp(transform.position, mainTargetPosition, ref velocity, dampTime);
+
+
+    }
     private void FadeSplitScreenLine()
     {
         if (CameraSplitter.Instance.playerDistance > CameraSplitter.Instance.splitLineFadeDistanceInWorldSpace) {
