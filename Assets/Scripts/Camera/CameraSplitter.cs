@@ -25,7 +25,7 @@ public class CameraSplitter : MonoBehaviour {
     //[HideInInspector]
     public bool followPlayers = true;
 
-    [HideInInspector]
+    //[HideInInspector]
 	public bool split = false;
 	private bool wasSplit = false;
 
@@ -36,6 +36,10 @@ public class CameraSplitter : MonoBehaviour {
     public float splitterDistanceInWorldSpace = 0.0f;
     
     public float splitLineFadeDistance = .5f;
+
+    public float cameraDampDistance = .5f;
+    [HideInInspector]
+    public float cameraDampDistanceInWorldSpace = 0.0f;
 
     [HideInInspector]
     public float splitLineFadeDistanceInWorldSpace = 0.0f;
@@ -146,9 +150,11 @@ public class CameraSplitter : MonoBehaviour {
         Vector3 viewportCornerPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, 0.0f, zViewPortDistance));
         Vector3 viewportSplitPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, splitterDistance, zViewPortDistance));
         Vector3 fadeLineWorldPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, splitLineFadeDistance, zViewPortDistance));
+        Vector3 cameraDampWorldPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, cameraDampDistance, zViewPortDistance));
 
         splitterDistanceInWorldSpace = (Mathf.Abs(viewportSplitPoint.y - viewportCornerPoint.y));
         splitLineFadeDistanceInWorldSpace = (Mathf.Abs(fadeLineWorldPoint.y - viewportCornerPoint.y));
+        cameraDampDistanceInWorldSpace = (Mathf.Abs(cameraDampWorldPoint.y - viewportCornerPoint.y));
     }
 
     private void SetzViewPortDistance()
@@ -161,7 +167,12 @@ public class CameraSplitter : MonoBehaviour {
         SetzViewPortDistance();
         SetSplitDistanceInWorldSpace();
         playerDistance = Vector3.Distance(player1.transform.position, player2.transform.position);
-        split = playerDistance > splitterDistanceInWorldSpace;
+
+        
+            split = playerDistance > splitterDistanceInWorldSpace;
+        
+
+        
 
         if(onStart)
         {
@@ -238,8 +249,14 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 newCenterPos = ((player1.transform.position + player2.transform.position) / 2);
 		newCenterPos.z = startPos.z;
 
-		if(moveCamera)
-		transform.position = newCenterPos;
+        if (moveCamera)
+        {
+            Vector3 splitCamera1Pos = mainCameraFollow.transform.position;
+            Vector3 splitCamera2Pos = splitCameraFollow.transform.position;
+            transform.position = newCenterPos;
+            mainCameraFollow.transform.position = splitCamera1Pos;
+            splitCameraFollow.transform.position = splitCamera2Pos;
+        }
 
         startPos = newCenterPos;
 	}

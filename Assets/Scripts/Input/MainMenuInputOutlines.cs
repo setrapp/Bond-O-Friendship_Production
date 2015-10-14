@@ -27,8 +27,6 @@ public class MainMenuInputOutlines : MonoBehaviour {
 
 	public bool forceCheck = false;
 
-	public Camera testCam;
-
 	// Use this for initialization
 	void Start () 
 	{
@@ -53,18 +51,7 @@ public class MainMenuInputOutlines : MonoBehaviour {
 			ToggleInputOutlines();	
 	}
 
-    /*private void PositionOutlines()
-    {
-        float zDistance = Mathf.Abs(testCam.transform.position.z - controlsPlayer1.transform.position.z);
-
-        Vector3 player1ControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.06f, 0.91f, zDistance));
-        Vector3 player2ControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.94f, 0.91f, zDistance));
-        Vector3 sharedControllerPosition = testCam.ViewportToWorldPoint(new Vector3(0.5f, 0.91f, zDistance));
-
-        controlsPlayer1.transform.position = player1ControllerPosition;
-        controlsPlayer2.transform.position = player2ControllerPosition;
-        controlsShared.transform.position = sharedControllerPosition;
-    }*/
+    
 
 	private bool CheckInputChange()
 	{
