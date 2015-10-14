@@ -10,6 +10,7 @@ public class PauseMenuControl : MonoBehaviour {
 
     public InputFill inputFill;
 
+    public GameObject gameControls;
 
 	public GameObject mainMenu;
 
@@ -49,6 +50,8 @@ public class PauseMenuControl : MonoBehaviour {
                     options.SetActive(true);
                 if (!inputSelect.activeInHierarchy)
                     inputSelect.SetActive(true);
+                if (!gameControls.activeInHierarchy)
+                    gameControls.SetActive(true);
 
 				//if(fMainMenu.f != 1)
 					//fMainMenu.FadeIn();
@@ -100,6 +103,8 @@ public class PauseMenuControl : MonoBehaviour {
                     options.SetActive(false);
                 if (inputSelect.activeInHierarchy)
                     inputSelect.SetActive(false);
+                if (gameControls.activeInHierarchy)
+                    gameControls.SetActive(false);
 			}
 					
 

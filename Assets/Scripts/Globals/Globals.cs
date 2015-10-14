@@ -234,7 +234,7 @@ public class Globals : MonoBehaviour {
 			CameraSplitter.Instance.SetPlayers();
 		}
 
-        if(Input.GetKeyDown(KeyCode.Escape) && !inMainMenu)
+        if((Input.GetKeyDown(KeyCode.Escape) || InputManager.ActiveDevice.MenuWasPressed) && !inMainMenu)
 		{
 			if(gameState == GameState.Unpaused)
 			{
@@ -339,8 +339,8 @@ public class Globals : MonoBehaviour {
 	{
 		player1PositionBeforePause = Player1.transform.position;
 		player2PositionBeforePause = Player2.transform.position;
-		camera1PositionBeforePause = CameraSplitter.Instance.splitCamera1.transform.position;
-		camera2PositionBeforePause = CameraSplitter.Instance.splitCamera2.transform.position;
+		camera1PositionBeforePause = CameraSplitter.Instance.mainCameraFollow.transform.position;
+		camera2PositionBeforePause = CameraSplitter.Instance.splitCameraFollow.transform.position;
 	}
 
 
@@ -572,11 +572,11 @@ public class Globals : MonoBehaviour {
         leftControllerInputDevice = null;
         rightControllerInputDevice = null;
 
-       // if(gameState == GameState.Unpaused && !inMainMenu)
-       // {
-        //    gameState = GameState.Pausing;
-        //    OnPause();
-       // }
+        if(gameState == GameState.Unpaused && !inMainMenu)
+        {
+            gameState = GameState.Pausing;
+            OnPause();
+        }
 
         configureControls = true;
 
