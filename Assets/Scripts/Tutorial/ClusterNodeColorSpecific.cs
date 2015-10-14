@@ -10,10 +10,10 @@ public class ClusterNodeColorSpecific : ClusterNode {
 	{
 		base.Start();
 
-		CharacterComponents neededCharacter = Globals.Instance.player1.character;
+		CharacterComponents neededCharacter = Globals.Instance.Player1.character;
 		if (neededPlayer == PlayerInput.Player.Player2)
 		{
-			neededCharacter = Globals.Instance.player2.character;
+			neededCharacter = Globals.Instance.Player2.character;
 		}
 		neededCollider = neededCharacter.GetComponent<Collider>();
 

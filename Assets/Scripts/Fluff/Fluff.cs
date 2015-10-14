@@ -355,8 +355,8 @@ public class Fluff : MonoBehaviour {
 
 		if (attachingCharacter == null)
 		{
-			Vector3 fromPlayer1 = transform.position - Globals.Instance.player1.transform.position;
-			Vector3 fromPlayer2 = transform.position - Globals.Instance.player2.transform.position;
+			Vector3 fromPlayer1 = transform.position - Globals.Instance.Player1.transform.position;
+			Vector3 fromPlayer2 = transform.position - Globals.Instance.Player2.transform.position;
 			fromNearPlayer = fromPlayer1;
 			if (fromPlayer2.sqrMagnitude < fromPlayer1.sqrMagnitude)
 			{

@@ -6,6 +6,7 @@ public class ConstrainOnDirection : MonoBehaviour {
 	public Vector3 constrainToDirection = new Vector3(0, 0, 1);
 	public Space directionSpace = Space.Self;
 	private Vector3 oldPosition;
+	private Vector3 oldLocalPosition;
 	public Rigidbody body;
 
 	void Start()
@@ -14,7 +15,9 @@ public class ConstrainOnDirection : MonoBehaviour {
 		{
 			body = GetComponent<Rigidbody>();
 		}
+
 		oldPosition = transform.position;
+		oldLocalPosition = transform.localPosition;
 	}
 
 	void FixedUpdate()
@@ -25,6 +28,7 @@ public class ConstrainOnDirection : MonoBehaviour {
 			if (directionSpace == Space.Self)
 			{
 				usableDirection = transform.TransformDirection(constrainToDirection);
+				oldPosition = transform.parent.TransformPoint(oldLocalPosition);
 			}
 
 			if (body != null && body.velocity.sqrMagnitude > 0 && !body.isKinematic)
@@ -37,6 +41,13 @@ public class ConstrainOnDirection : MonoBehaviour {
 				transform.position = oldPosition + Helper.ProjectVector(usableDirection, transform.position - oldPosition);
 			}
 		}
+	}
+
+	public void ResetWithDirection(Vector3 newDirection)
+	{
+		constrainToDirection = newDirection;
+		oldPosition = transform.position;
+		oldLocalPosition = transform.localPosition;
 	}
 
 	void OnDrawGizmos()

@@ -8,6 +8,9 @@ public class DestroyInSpace : MonoBehaviour {
 	private bool falling;
 	public SpawnBud spawner;
 	public Renderer spawnRenderer;
+	public Rigidbody body;
+	public Collider blossomCollider;
+	public bool disableAllCollidersOnFall = true;
 	public float checkRadius = 1;
 
 	// Use this for initialization
@@ -23,9 +26,31 @@ public class DestroyInSpace : MonoBehaviour {
 			if (!wasFloating && !Physics.CheckSphere(transform.position, checkRadius, ~ignoreLayers))
 			{
 				wasFloating = true;
-				spawnRenderer.material.color = spawner.parentColor;
-				spawner.spawned = false;
+				if (spawner != null)
+				{
+					if (spawnRenderer != null)
+					{
+						spawnRenderer.material.color = spawner.parentColor;
+					}
+					spawner.spawned = false;
+				}
 				falling = true;
+				if (body != null && !body.isKinematic)
+				{
+					body.velocity = Vector3.zero;
+				}
+				if (blossomCollider != null)
+				{
+					blossomCollider.enabled = false;
+				}
+				if (disableAllCollidersOnFall)
+				{
+					Collider[] colliders = GetComponentsInChildren<Collider>();
+					for (int i = 0; i < colliders.Length; i++)
+					{
+						colliders[i].enabled = false;
+					}
+				}
 			}
 		}
 		if(falling)

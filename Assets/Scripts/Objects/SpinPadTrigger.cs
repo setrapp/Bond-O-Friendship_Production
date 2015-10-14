@@ -9,11 +9,11 @@ public class SpinPadTrigger : MonoBehaviour {
 		GameObject targetObject;
 		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1)
 		{
-			targetObject = Globals.Instance.player1.gameObject;
+			targetObject = Globals.Instance.Player1.gameObject;
 		}
 		else
 		{
-			targetObject = Globals.Instance.player2.gameObject;
+			targetObject = Globals.Instance.Player2.gameObject;
 		}
 
 		if (col.gameObject == targetObject)
@@ -27,11 +27,11 @@ public class SpinPadTrigger : MonoBehaviour {
 		GameObject targetObject;
 		if (targetSidePad.targetPlayer == PlayerInput.Player.Player1)
 		{
-			targetObject = Globals.Instance.player1.gameObject;
+			targetObject = Globals.Instance.Player1.gameObject;
 		}
 		else
 		{
-			targetObject = Globals.Instance.player2.gameObject;
+			targetObject = Globals.Instance.Player2.gameObject;
 		}
 
 		if (col.gameObject == targetObject)

@@ -22,7 +22,7 @@ public class SeasonThreaderReaction : SeasonReaction {
 
 		if (season == SeasonManager.ActiveSeason.WET)
 		{
-			targetThreadParent.minBondFluffCount = Globals.Instance.player1.character.bondAttachable.bondOverrideStats.stats.maxFluffCapacity;
+			targetThreadParent.minBondFluffCount = Globals.Instance.Player1.character.bondAttachable.bondOverrideStats.stats.maxFluffCapacity;
 		}
 		else
 		{

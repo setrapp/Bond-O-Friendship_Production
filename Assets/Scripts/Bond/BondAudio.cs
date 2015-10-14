@@ -3,7 +3,6 @@ using System.Collections;
 
 public class BondAudio : MonoBehaviour {
 
-    public GameObject Globals;
     public bool wasbonded;
     public AudioSource bondOn;
     public AudioSource bondOff;
@@ -26,14 +25,14 @@ public class BondAudio : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (Globals.GetComponent<Globals>().playersBonded == true)
+        if (Globals.Instance.playersBonded == true)
         {
             bonded = true;
             unbonded = false;
             wasbonded = true;
             //print("bonded");
         }
-        else if (Globals.GetComponent<Globals>().playersBonded == false)
+        else if (Globals.Instance.playersBonded == false)
         {
             bonded = false;
             unbonded = true;

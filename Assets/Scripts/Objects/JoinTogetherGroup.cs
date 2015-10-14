@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class JoinTogetherGroup : MonoBehaviour {
 
 	public bool allChildJoins = true;
+	public bool includePairs = true;
 	[SerializeField]
 	public List<JoinTogether> joins;
 	public JoinTogetherPair groupJoinTarget;
@@ -41,6 +42,18 @@ public class JoinTogetherGroup : MonoBehaviour {
 			}
 			joins[i].EstablishConstraints();
 		}
+
+		// If not using paired objects, hide them.
+		if (!includePairs) {
+			if (groupJoinTarget.pairedObject != null)
+			{
+				groupJoinTarget.pairedObject.gameObject.SetActive(false);
+			}
+			for (int i = 0; i < joins.Count; i++)
+			{
+				joins[i].HidePaired();
+			}
+		}
 	}
 
 	void Update()
@@ -76,7 +89,10 @@ public class JoinTogetherGroup : MonoBehaviour {
 
 				solved = true;
 				Helper.FirePulse(groupJoinTarget.baseObject.transform.position, basePulseStats);
-				Helper.FirePulse(groupJoinTarget.pairedObject.transform.position, pairedPulseStats);
+				if (includePairs)
+				{
+					Helper.FirePulse(groupJoinTarget.pairedObject.transform.position, pairedPulseStats);
+				}
 			}
 		}
 	}

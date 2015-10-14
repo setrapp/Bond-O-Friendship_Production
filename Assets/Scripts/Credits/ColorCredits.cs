@@ -12,8 +12,8 @@ public class ColorCredits : MonoBehaviour {
 	public static Color[] letterColors;
 	
 	void Start () {
-		player1Material = Globals.Instance.player1.character.fluffHandler.fluffMaterial;
-		player2Material = Globals.Instance.player2.character.fluffHandler.fluffMaterial;
+		player1Material = Globals.Instance.Player1.character.fluffHandler.fluffMaterial;
+		player2Material = Globals.Instance.Player2.character.fluffHandler.fluffMaterial;
 		letterColors = new Color[transform.parent.childCount];
 	}
 
