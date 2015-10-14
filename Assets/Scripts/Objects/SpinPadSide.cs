@@ -14,8 +14,8 @@ public class SpinPadSide : MonoBehaviour {
 			if (!playerDependent) { return null; }
 			else
 			{
-				if (targetPlayer == PlayerInput.Player.Player1) { return Globals.Instance.player1.character; }
-				else { return Globals.Instance.player2.character; }
+				if (targetPlayer == PlayerInput.Player.Player1) { return Globals.Instance.Player1.character; }
+				else { return Globals.Instance.Player2.character; }
 			}
 		}
 		
@@ -38,10 +38,10 @@ public class SpinPadSide : MonoBehaviour {
 
 		if (playerDependent)
 		{
-			playerColor = Globals.Instance.player1.character.colors.baseColor;
+			playerColor = Globals.Instance.Player1.character.colors.baseColor;
 			if (targetPlayer == PlayerInput.Player.Player2)
 			{
-				playerColor = Globals.Instance.player2.character.colors.baseColor;
+				playerColor = Globals.Instance.Player2.character.colors.baseColor;
 			}
 		}
 		else

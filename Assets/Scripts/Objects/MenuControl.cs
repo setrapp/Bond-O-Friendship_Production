@@ -16,6 +16,8 @@ public class MenuControl : MonoBehaviour {
 
 	public GameObject mainMenu;
 
+    public GameObject logo;
+
     public GameObject begin;
 
     public GameObject inputSelect;
@@ -24,7 +26,9 @@ public class MenuControl : MonoBehaviour {
 
 	public GameObject exitGameConfirm;
 
-	public enum MenuState{TitleScreen, MainMenu, Options, InputSelect, QuitGame, StartGame};
+    public GameObject continueGame;
+
+	public enum MenuState{TitleScreen, MainMenu, StartGame, ContinueGame};
 
 	public MenuState menuState = MenuState.TitleScreen;
 
@@ -51,7 +55,7 @@ public class MenuControl : MonoBehaviour {
     private bool inputSelected = false;
 
     private float f = 0f;
-    private float t = 1f;
+    private float t = 0f;
     public float duration = 3.0f;
 
     public float fadeInDuration = 1.5f;
@@ -61,22 +65,16 @@ public class MenuControl : MonoBehaviour {
     private Color startColor;
     private Color fadeColor;
 
-	public ClusterNodePuzzle optionsNodePuzzle;
-	public ClusterNodePuzzle exitGameNodePuzzle;
-
-	public ClusterNodePuzzle optionsBackNodePuzzle;
-	public ClusterNodePuzzle optionsInputSelectNodePuzzle;
-
-	public ClusterNodePuzzle inputSelectBackNodePuzzle;
-
+    public ClusterNodePuzzle continueGameNodePuzzle;
 	public ClusterNodePuzzle confirmQuitNodePuzzle;
-	public ClusterNodePuzzle cancelQuitNodePuzzle;
 
     private bool startLevelLoaded = false;
 
     private bool startPanelFade = false;
     private bool zoom = true;
 	private bool startZoom = false;
+
+    private bool fadeStartScreen = false;
 
 	// Use this for initialization
 	void Awake () 
@@ -120,18 +118,7 @@ public class MenuControl : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-		if (menuState == MenuState.TitleScreen) 
-		{
-			if(mainMenu.activeInHierarchy)
-			mainMenu.SetActive(false);
-			if(inputSelect.activeInHierarchy)
-			inputSelect.SetActive(false);
-			if(exitGameConfirm.activeInHierarchy)
-				exitGameConfirm.SetActive(false);
-			if(options.activeInHierarchy)
-				options.SetActive(false);
-		}
-        if (obscureMenuPanel.activeSelf && startPanelFade)
+        if (!fadeStartScreen && startPanelFade)
         {
             FadeInFadeOut();
         }
@@ -164,29 +151,33 @@ public class MenuControl : MonoBehaviour {
 
 
 			if(!inputSelect.activeInHierarchy)
-			inputSelect.SetActive(true);
-
-            if (fInputSelect.f != 1)
-                fInputSelect.FadeIn();
+			inputSelect.SetActive(true);           
 
 			if(!exitGameConfirm.activeInHierarchy)
 				exitGameConfirm.SetActive(true);
 
-            if (fQuitGame.f != 1)
-                fQuitGame.FadeIn();
-
 			if(!options.activeInHierarchy)
 				options.SetActive(true);
 
-            if (fOptions.f != 1)
-                fOptions.FadeIn();
+           
 
 				if (newGameNodePuzzle != null && newGameNodePuzzle.solved)
 				{
+                    //CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
+                    //CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
 					newGameNodePuzzle.solved = false;
 				    Globals.Instance.allowInput = false;
 					menuState = MenuState.StartGame;      
 				}
+
+                if (continueGameNodePuzzle != null && continueGameNodePuzzle.solved)
+                {
+                    //CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
+                    //CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
+                    continueGameNodePuzzle.solved = false;
+                    Globals.Instance.allowInput = false;
+                    menuState = MenuState.ContinueGame;
+                }
 
                 if (fOptions.f == 1)
                 {
@@ -206,21 +197,9 @@ public class MenuControl : MonoBehaviour {
 
                 //options.GetComponent<OptionsMenu>().soundChecked = false;
                     break;
-	//Options   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			case MenuState.Options:				
-				break;
-	//Input Select/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				case MenuState.InputSelect:					
-					break;
-	//Quit Game Confirm////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				case MenuState.QuitGame:
-				
-					break;
+	
 			case MenuState.StartGame:
 				ToggleFadeMainMenu();
-				ToggleFadeOptionsMenu();
-				ToggleFadeInputSelectMenu();
-				ToggleFadeExitGameConfirm();
 
 
 					if (!toggled)
@@ -234,14 +213,41 @@ public class MenuControl : MonoBehaviour {
                     if (startGame)
                     {
                         
-                         //CameraSplitter.Instance.followPlayers = false;
+                         
+                        Globals.Instance.fromContinue = false;
                          CameraSplitter.Instance.movePlayers = true;
                         
                         FadeControls();
                     }
 
 				break;
+
+            case MenuState.ContinueGame:
+                ToggleFadeMainMenu();
+
+
+                if (!toggled)
+                {
+                    StartGame();
+                    CameraSplitter.Instance.JumpToPlayers();
+
+                    toggled = true;
+                }
+
+                if (startGame)
+                {
+
+                   
+                    Globals.Instance.fromContinue = true;
+                    CameraSplitter.Instance.movePlayers = true;
+
+                    FadeControls();
+                }
+
+                break;
+
 			}
+
 
 			if(startZoom)
 			{
@@ -282,43 +288,7 @@ public class MenuControl : MonoBehaviour {
 			fMainMenu.FadeOut();
 		}
 	}
-	private void ToggleFadeOptionsMenu()
-	{
-		if(fOptions.f == 0)
-		{
-			if(options.activeInHierarchy)
-				options.SetActive(false);
-		}
-		else
-		{
-			fOptions.FadeOut();
-		}
-	}
-
-	private void ToggleFadeInputSelectMenu()
-	{
-		if(fInputSelect.f == 0)
-		{
-			if(inputSelect.activeInHierarchy)
-				inputSelect.SetActive(false);
-		}
-		else
-		{
-			fInputSelect.FadeOut();
-		}
-	}
-	private void ToggleFadeExitGameConfirm()
-	{
-		if(fQuitGame.f == 0)
-		{
-			if(exitGameConfirm.activeInHierarchy)
-				exitGameConfirm.SetActive(false);
-		}
-		else
-		{
-			fQuitGame.FadeOut();
-		}
-	}
+	
 	
 	private void StartGame()
     {
@@ -329,7 +299,7 @@ public class MenuControl : MonoBehaviour {
     {
         if (startMenu.GetComponent<CanvasGroup>().alpha != 0.0f)
         {
-            t = Mathf.Clamp(t - Time.deltaTime/1.0f, 0.0f, 1.0f);
+            t = Mathf.Clamp(t - Time.deltaTime/2.0f, 0.0f, 1.0f);
             startMenu.GetComponent<CanvasGroup>().alpha = t;            
         }
         else
@@ -355,7 +325,7 @@ public class MenuControl : MonoBehaviour {
 			if (!Application.isEditor || Globals.Instance.zoomIntroInEditor) 
 			{
 
-				Invoke ("ZoomCamera", 0.25f);
+                ZoomCamera();
 			} 
 			else 
 			{
@@ -375,14 +345,21 @@ public class MenuControl : MonoBehaviour {
 
     private void FadeInFadeOut()
     {
-        
-            if (t != 0)
-            {
-                t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
-                obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
-            }
-            else
-            {
+        if (logo.GetComponent<CanvasGroup>().alpha != 1.0f)
+        {
+            t = Mathf.Clamp(t + Time.deltaTime / 5.0f, 0.0f, 1.0f);
+            logo.GetComponent<CanvasGroup>().alpha = t;
+        }
+        else
+        {
+
+            //if (t != 0)
+           // {
+            //    t = Mathf.Clamp(t - Time.deltaTime / fadeInDuration, 0.0f, 1.0f);
+            //    obscureMenuPanel.GetComponent<CanvasGroup>().alpha = t;
+            //}
+            //else
+           // {
 
                 if (f != 1)
                 {
@@ -393,19 +370,23 @@ public class MenuControl : MonoBehaviour {
                 {
                     t = 1;
                     f = 0;
-                    obscureMenuPanel.SetActive(false);
+                    fadeStartScreen = true;
+                    //obscureMenuPanel.SetActive(false);
                 }
-                
-            }
+
+            //}
+        }
         
 	}
 
     public void ZoomCamera()
     {
 
-        CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
-        CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
+        CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.Player1.transform.position;
+        CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.Player2.transform.position;
 		CameraSplitter.Instance.SetZoomTarget(false);
+        Globals.Instance.camera1PositionBeforePause = CameraSplitter.Instance.startPos;
+        Globals.Instance.camera2PositionBeforePause = CameraSplitter.Instance.startPos;
 		startZoom = true;
     }
 

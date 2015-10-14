@@ -18,8 +18,8 @@ public class SeasonManager : MonoBehaviour {
 
 	void Start()
 	{
-		SeasonPlayerReaction player1Reaction = Globals.Instance.player1.GetComponent<SeasonPlayerReaction>();
-		SeasonPlayerReaction player2Reaction = Globals.Instance.player2.GetComponent<SeasonPlayerReaction>();
+		SeasonPlayerReaction player1Reaction = Globals.Instance.Player1.GetComponent<SeasonPlayerReaction>();
+		SeasonPlayerReaction player2Reaction = Globals.Instance.Player2.GetComponent<SeasonPlayerReaction>();
 
 		if (player1Reaction != null)
 		{

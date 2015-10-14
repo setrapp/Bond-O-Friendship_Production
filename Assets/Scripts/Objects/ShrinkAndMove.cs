@@ -63,9 +63,9 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
         //transparentColor = new Color(fullColor.a, fullColor.b, fullColor.g, 0.25f);
 
         if (isPlayer1)
-            player = Globals.Instance.player1.gameObject;
+            player = Globals.Instance.Player1.gameObject;
         else
-            player = Globals.Instance.player2.gameObject;
+            player = Globals.Instance.Player2.gameObject;
 	}
 	
 	// Update is called once per frame
@@ -78,9 +78,9 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
         if(player == null)
         {
             if (isPlayer1)
-                player = Globals.Instance.player1.gameObject;
+                player = Globals.Instance.Player1.gameObject;
             else
-                player = Globals.Instance.player2.gameObject;
+                player = Globals.Instance.Player2.gameObject;
         }
 
         playerPosNoZ = new Vector3(player.transform.position.x, player.transform.position.y, 0.0f);
@@ -151,7 +151,7 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 			//TODO scale while atTarget
 			if (t >= 1 || (!Globals.Instance.playersBonded && transform.localScale.sqrMagnitude < centerStartScale.sqrMagnitude))
 			{
-				Vector3 betweenPlayers = Globals.Instance.player1.transform.position - Globals.Instance.player2.transform.position;
+				Vector3 betweenPlayers = Globals.Instance.Player1.transform.position - Globals.Instance.Player2.transform.position;
 				betweenPlayers.z = 0;
 				float centerScaleProgress = Mathf.Clamp01(1 - ((betweenPlayers.magnitude - centerMinRadius) / (centerMaxRadius - centerMinRadius)));
 				transform.localScale = (1 - centerScaleProgress) * centerStartScale;

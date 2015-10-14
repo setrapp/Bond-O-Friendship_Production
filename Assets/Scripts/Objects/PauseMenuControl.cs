@@ -10,6 +10,7 @@ public class PauseMenuControl : MonoBehaviour {
 
     public InputFill inputFill;
 
+    public GameObject gameControls;
 
 	public GameObject mainMenu;
 
@@ -49,28 +50,30 @@ public class PauseMenuControl : MonoBehaviour {
                     options.SetActive(true);
                 if (!inputSelect.activeInHierarchy)
                     inputSelect.SetActive(true);
+                if (!gameControls.activeInHierarchy)
+                    gameControls.SetActive(true);
 
-				if(fMainMenu.f != 1)
-					fMainMenu.FadeIn();
+				//if(fMainMenu.f != 1)
+					//fMainMenu.FadeIn();
 
                 
-                if (fQuitGame.f != 1)
-                    fQuitGame.FadeIn();
+               // if (fQuitGame.f != 1)
+                   // fQuitGame.FadeIn();
 
                
-                if (fOptions.f != 1)
-                    fOptions.FadeIn();
+                //if (fOptions.f != 1)
+                    //fOptions.FadeIn();
 
 
-                if (fInputSelect.f != 1)
-                    fInputSelect.FadeIn();
+              //  if (fInputSelect.f != 1)
+                   // fInputSelect.FadeIn();
                 
 
 				if (resumeGameNodePuzzle != null && resumeGameNodePuzzle.solved)
 				{
 					resumeGameNodePuzzle.solved = false;
-                    CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
-                    CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
+                    CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.Player1.transform.position;
+                    CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.Player2.transform.position;
 					Globals.Instance.gameState = Globals.GameState.Unpausing;
 				}
 
@@ -92,10 +95,16 @@ public class PauseMenuControl : MonoBehaviour {
 			}
 			else
 			{
-				ToggleFadeMainMenu();
-				ToggleFadeInputSelectMenu();
-				ToggleFadeExitGameConfirm();
-				ToggleFadeOptionsMenu();
+                if (mainMenu.activeInHierarchy)
+                    mainMenu.SetActive(false);
+                if (exitGameConfirm.activeInHierarchy)
+                    exitGameConfirm.SetActive(false);
+                if (options.activeInHierarchy)
+                    options.SetActive(false);
+                if (inputSelect.activeInHierarchy)
+                    inputSelect.SetActive(false);
+                if (gameControls.activeInHierarchy)
+                    gameControls.SetActive(false);
 			}
 					
 
@@ -108,52 +117,52 @@ public class PauseMenuControl : MonoBehaviour {
 
 	private void ToggleFadeMainMenu ()
 	{
-		if(fMainMenu.f == 0)
-		{
-			if(mainMenu.activeInHierarchy && fMainMenu.colorsSet)
-				mainMenu.SetActive(false);
-		}
-		else
-		{
-			fMainMenu.FadeOut();
-		}
+		//if(fMainMenu.f == 0)
+		//{
+		//	if(mainMenu.activeInHierarchy && fMainMenu.colorsSet)
+		//		mainMenu.SetActive(false);
+		//}
+		//else
+		//{
+		//	fMainMenu.FadeOut();
+		//}
 	}
 	private void ToggleFadeOptionsMenu()
 	{
-		if(fOptions.f == 0)
-		{
-			if(options.activeInHierarchy && fOptions.colorsSet)
-				options.SetActive(false);
-		}
-		else
-		{
-			fOptions.FadeOut();
-		}
+		//if(fOptions.f == 0)
+		//{
+		//	if(options.activeInHierarchy && fOptions.colorsSet)
+		//		options.SetActive(false);
+		//}
+		//else
+		//{
+		//	fOptions.FadeOut();
+		//}
 	}
 
 	private void ToggleFadeInputSelectMenu()
 	{
-		if(fInputSelect.f == 0)
-		{
-			if(inputSelect.activeInHierarchy)
-				inputSelect.SetActive(false);
-		}
-		else
-		{
-			fInputSelect.FadeOut();
-		}
+		//if(fInputSelect.f == 0)
+		//{
+		//	if(inputSelect.activeInHierarchy)
+		//		inputSelect.SetActive(false);
+		//}
+		//else
+		//{
+		//	fInputSelect.FadeOut();
+		//}
 	}
 	private void ToggleFadeExitGameConfirm()
 	{
-		if(fQuitGame.f == 0)
-		{
-			if(exitGameConfirm.activeInHierarchy)
-				exitGameConfirm.SetActive(false);
-		}
-		else
-		{
-			fQuitGame.FadeOut();
-		}
+		//if(fQuitGame.f == 0)
+		//{
+		//	if(exitGameConfirm.activeInHierarchy)
+		//		exitGameConfirm.SetActive(false);
+		//}
+		//else
+		//{
+		//	fQuitGame.FadeOut();
+		//}
 	}   
 
 }

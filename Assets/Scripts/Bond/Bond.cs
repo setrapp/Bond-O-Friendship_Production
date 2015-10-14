@@ -793,8 +793,8 @@ public class Bond : MonoBehaviour {
 			return 1;
 		}
 
-		GameObject player1 = Globals.Instance.player1.gameObject;
-		GameObject player2 = Globals.Instance.player2.gameObject;
+		GameObject player1 = Globals.Instance.Player1.gameObject;
+		GameObject player2 = Globals.Instance.Player2.gameObject;
 		float player1Dist = (NearestPoint(player1.transform.position) - player1.transform.position).magnitude;
 		float player2Dist = (NearestPoint(player2.transform.position) - player2.transform.position).magnitude;
 		float nearestDist = (player1Dist < player2Dist) ? player1Dist : player2Dist;

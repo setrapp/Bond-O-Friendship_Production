@@ -7,12 +7,13 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		get
 		{
- 			if (instance == null)
+			if (instance == null)
 			{
 				instance = GameObject.FindGameObjectWithTag("CameraSystem").GetComponent<CameraSplitter>();
 			}
 			return instance;
 		}
+		set { instance = value; }
 	}
 
 	public enum ZoomState{ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut};
@@ -24,7 +25,7 @@ public class CameraSplitter : MonoBehaviour {
     //[HideInInspector]
     public bool followPlayers = true;
 
-    [HideInInspector]
+    //[HideInInspector]
 	public bool split = false;
 	private bool wasSplit = false;
 
@@ -35,6 +36,10 @@ public class CameraSplitter : MonoBehaviour {
     public float splitterDistanceInWorldSpace = 0.0f;
     
     public float splitLineFadeDistance = .5f;
+
+    public float cameraDampDistance = .5f;
+    [HideInInspector]
+    public float cameraDampDistanceInWorldSpace = 0.0f;
 
     [HideInInspector]
     public float splitLineFadeDistanceInWorldSpace = 0.0f;
@@ -68,10 +73,10 @@ public class CameraSplitter : MonoBehaviour {
 
    // [HideInInspector]
     public float duration = 10f;
-    [HideInInspector]
-    private float t = 1.0f;
+    //[HideInInspector]
+    public float t = 1.0f;
 
-	private float f = 1.0f;
+	public float f = 1.0f;
 
 	public bool zoomOutToggle = false;
 	public bool zoomInToggle = false;
@@ -96,11 +101,7 @@ public class CameraSplitter : MonoBehaviour {
 	{
 		if (Globals.Instance != null)
 		{
-			player1 = Globals.Instance.player1.gameObject;
-			player2 = Globals.Instance.player2.gameObject;
-
-            mainCameraFollow.player1 = splitCameraFollow.player2 = player1.transform;
-            mainCameraFollow.player2 = splitCameraFollow.player1 = player2.transform;
+			SetPlayers();
 
 			splitCamera1 = mainCameraFollow.GetComponentInChildren<Camera>();
 			splitCamera2 = splitCameraFollow.GetComponentInChildren<Camera>();
@@ -124,12 +125,24 @@ public class CameraSplitter : MonoBehaviour {
 		if (splittable)
 			CheckSplit(false);	
 
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            //Debug.Log(transform.position);
-        }
+		if (audioListener == null)
+		{
+			audioListener = GetComponentInChildren<AudioListener>();
+		}
 
 		audioListener.transform.position = (player1.transform.position + player2.transform.position) / 2;
+	}
+
+	public void SetPlayers()
+	{
+		if (Globals.Instance != null)
+		{
+			player1 = Globals.Instance.Player1.gameObject;
+			player2 = Globals.Instance.Player2.gameObject;
+
+			mainCameraFollow.player1 = splitCameraFollow.player2 = player1.transform;
+			mainCameraFollow.player2 = splitCameraFollow.player1 = player2.transform;
+		}
 	}
 
     void SetSplitDistanceInWorldSpace()
@@ -137,9 +150,11 @@ public class CameraSplitter : MonoBehaviour {
         Vector3 viewportCornerPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, 0.0f, zViewPortDistance));
         Vector3 viewportSplitPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, splitterDistance, zViewPortDistance));
         Vector3 fadeLineWorldPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, splitLineFadeDistance, zViewPortDistance));
+        Vector3 cameraDampWorldPoint = mainCameraFollow.childMainCamera.ViewportToWorldPoint(new Vector3(0.0f, cameraDampDistance, zViewPortDistance));
 
         splitterDistanceInWorldSpace = (Mathf.Abs(viewportSplitPoint.y - viewportCornerPoint.y));
         splitLineFadeDistanceInWorldSpace = (Mathf.Abs(fadeLineWorldPoint.y - viewportCornerPoint.y));
+        cameraDampDistanceInWorldSpace = (Mathf.Abs(cameraDampWorldPoint.y - viewportCornerPoint.y));
     }
 
     private void SetzViewPortDistance()
@@ -152,7 +167,12 @@ public class CameraSplitter : MonoBehaviour {
         SetzViewPortDistance();
         SetSplitDistanceInWorldSpace();
         playerDistance = Vector3.Distance(player1.transform.position, player2.transform.position);
-        split = playerDistance > splitterDistanceInWorldSpace;
+
+        
+            split = playerDistance > splitterDistanceInWorldSpace;
+        
+
+        
 
         if(onStart)
         {
@@ -183,11 +203,15 @@ public class CameraSplitter : MonoBehaviour {
 
 	public void JumpToPlayers()
 	{
-		if (Globals.Instance != null && Globals.Instance.player1 != null && Globals.Instance.player2 != null)
+		if (Globals.Instance != null && Globals.Instance.Player1 != null && Globals.Instance.Player2 != null)
 		{
 			Vector3 oldCamPos = transform.position;
+            Vector3 splitCamera1Pos = mainCameraFollow.transform.position;
+            Vector3 splitCamera2Pos = splitCameraFollow.transform.position;
 			Vector3 newCamPos = ((player1.transform.position + player2.transform.position) / 2);
 			CameraSplitter.Instance.transform.position = new Vector3(newCamPos.x, newCamPos.y, oldCamPos.z);
+            mainCameraFollow.transform.position = splitCamera1Pos;
+            splitCameraFollow.transform.position = splitCamera2Pos;
 		}
 	}
 
@@ -205,6 +229,11 @@ public class CameraSplitter : MonoBehaviour {
 		}
 		else
 		{
+            if(f == 1.0f)
+            {
+                player1Target.transform.position = player1.transform.position;
+                player2Target.transform.position = player2.transform.position;
+            }
 			if (f > 0) 
 			{
 				f = Mathf.Clamp (f - Time.deltaTime / duration, 0.0f, 1.0f);
@@ -220,14 +249,16 @@ public class CameraSplitter : MonoBehaviour {
 		Vector3 newCenterPos = ((player1.transform.position + player2.transform.position) / 2);
 		newCenterPos.z = startPos.z;
 
-		if(moveCamera)
-		transform.position = newCenterPos;
+        if (moveCamera)
+        {
+            Vector3 splitCamera1Pos = mainCameraFollow.transform.position;
+            Vector3 splitCamera2Pos = splitCameraFollow.transform.position;
+            transform.position = newCenterPos;
+            mainCameraFollow.transform.position = splitCamera1Pos;
+            splitCameraFollow.transform.position = splitCamera2Pos;
+        }
 
         startPos = newCenterPos;
-		
-        if(!moveCamera)
-        zoomPos = transform.position;
-		//zoomPos.z = -200f;
 	}
 
 	public void Zoom(bool zoomingOut, bool isNewGameZoom = false)
