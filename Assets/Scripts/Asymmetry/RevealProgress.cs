@@ -8,6 +8,7 @@ public class RevealProgress : MonoBehaviour {
 	private int arrayLength = 0;
 	private GameObject[] nodes;
 	private float revealedProgress;
+    private int arrayCounter = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,8 +20,11 @@ public class RevealProgress : MonoBehaviour {
 		nodes = new GameObject[arrayLength];
 		for(int i = 0; i < pairedPuzzle.transform.childCount; i++)
 		{
-			if(pairedPuzzle.transform.GetChild(i).gameObject.name == "Node1" || pairedPuzzle.transform.GetChild(i).gameObject.name == "Node2")
-				nodes[i] = pairedPuzzle.transform.GetChild(i).gameObject;
+            if (pairedPuzzle.transform.GetChild(i).gameObject.name == "Node1" || pairedPuzzle.transform.GetChild(i).gameObject.name == "Node2")
+            {
+                nodes[arrayCounter] = pairedPuzzle.transform.GetChild(i).gameObject;
+                arrayCounter++;
+            }
 		}
 	}
 	
