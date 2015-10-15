@@ -144,6 +144,7 @@ GameObject:
   - 33: {fileID: 3310386}
   - 23: {fileID: 2357018}
   - 114: {fileID: 11459028}
+  - 114: {fileID: 11402606}
   m_Layer: 0
   m_Name: Shell Back Fill
   m_TagString: Untagged
@@ -163,6 +164,7 @@ GameObject:
   - 23: {fileID: 2317424}
   - 114: {fileID: 11453240}
   - 114: {fileID: 11429676}
+  - 114: {fileID: 11404134}
   m_Layer: 0
   m_Name: Shell Fill
   m_TagString: Untagged
@@ -230,7 +232,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.48415756, y: 154.450653, z: -2.29999995}
+  m_LocalPosition: {x: -5.42715454, y: 212.323349, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -677,7 +679,7 @@ MonoBehaviour:
   wallIsCentered: 1
   baseOnPosts: 0
   membraneDirection: {x: 1, y: 0, z: 0}
-  membraneLength: 25
+  membraneLength: 20
   showPosts: 0
   disableAtFar: 0
   startPost: {fileID: 100010}
@@ -701,12 +703,12 @@ MonoBehaviour:
     position: {x: .100000001, y: .75}
     shapingForce: -1
   shapingIndices: 0000000003000000020000000400000001000000
-  requiredPlayersToBreak: 0
+  requiredPlayersToBreak: 2
   specialBreakerTag: 
   requiredSpecialsToBreak: 0
-  insufficientDifficulty: 1
-  relativeMaxDistance: 1.01499999
-  relativeRequiredAdd: -1
+  insufficientDifficulty: 5
+  relativeMaxDistance: 1.01999998
+  relativeRequiredAdd: .300000012
   currentLength: 0
   relativeActualDistance: 0
 --- !u!114 &11400016
@@ -759,7 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    defaultShapingForce: .25
+    defaultShapingForce: 5
     bondOnContact: 1
     bondOnFluff: 1
     ignoreBondingLayers:
@@ -782,6 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyWhenBroken: 0
+  disblePlayerWhenBroken: 1
   createdWalls: []
   membraneWallOriginal: {fileID: 100002}
   createOnStart: 1
@@ -801,14 +804,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     attachSpring1: 100
-    attachSpring2: 50
+    attachSpring2: 0
     linkMass: -1
     linkDrag: -1
     pullApartMaxFactor: 0
     maxDistance: 5
     relativeWarningDistance: .5
-    endsWidth: .5
-    midWidth: .400000006
+    endsWidth: 0
+    midWidth: 0
     addLinkDistance: .5
     removeLinkDistance: .300000012
     springForce: 5000
@@ -902,6 +905,36 @@ MonoBehaviour:
     fullDetailDistance: -1
     sparseDetailDistance: -1
     sparseDetailFactor: -1
+--- !u!114 &11402606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 3000
+  renderOffset: 400
+  forceRendererOn: 0
+--- !u!114 &11404134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 3000
+  renderOffset: 400
+  forceRendererOn: 0
 --- !u!114 &11429676
 MonoBehaviour:
   m_ObjectHideFlags: 1
