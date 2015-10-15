@@ -48,8 +48,6 @@ public class DestroyInSpace : MonoBehaviour {
 					}
 				}
 			}
-		} else {
-			Debug.Log(hit.collider);
 		}
 		if(falling)
 		{

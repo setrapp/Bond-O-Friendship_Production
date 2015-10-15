@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MembraneShell : MonoBehaviour {
 	public bool destroyWhenBroken = true;
+	public bool disblePlayerWhenBroken = false;
 	[SerializeField]
 	public List<MembraneWall> createdWalls;
 	public GameObject membraneWallOriginal;
@@ -139,6 +140,10 @@ public class MembraneShell : MonoBehaviour {
 		if (transform.parent != null)
 		{
 			transform.parent.SendMessage("MembraneShellBroken", this, SendMessageOptions.DontRequireReceiver);
+		}
+		if (disblePlayerWhenBroken && Globals.Instance != null)
+		{
+			Globals.Instance.allowInput = false;
 		}
 		if (destroyWhenBroken)
 		{
