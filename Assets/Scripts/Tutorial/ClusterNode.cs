@@ -106,7 +106,7 @@ public class ClusterNode : MonoBehaviour {
 					lit = false;
                     if (targetPuzzle.individualBlockerFade == true)
                         shrinking = false;
-                    else if (controlColor)
+                    if (controlColor)
 					{
 						for (int i = 0; i < nodeRenderers.Length; i++)
 						{
@@ -118,14 +118,14 @@ public class ClusterNode : MonoBehaviour {
 			}
             if (pairedWall != null && shrinking && pairedWall.transform.localScale.x > 0.05f)
             {
-                pairedWall.transform.localScale -= pairedWall.transform.localScale * shrinkSpeed * Time.deltaTime;
+                pairedWall.transform.localScale -= new Vector3(1, 1, 1) * shrinkSpeed * Time.deltaTime;
                 if (pairedWall.transform.localScale.x <= 0.1f)
                     pairedWall.GetComponent<Collider>().enabled = false;
             }
         }
         if (pairedWall != null && !shrinking && pairedWall.transform.localScale.x < pairedWallStartingSize.x && targetPuzzle.individualBlockerFade == true)
         {
-            pairedWall.transform.localScale += pairedWall.transform.localScale * growSpeed * Time.deltaTime;
+            pairedWall.transform.localScale += new Vector3(1, 1, 1) * growSpeed * Time.deltaTime;
             if (pairedWall.transform.localScale.x >= 0.01f)
                 pairedWall.GetComponent<Collider>().enabled = true;
             if (pairedWall.transform.localScale.x > pairedWallStartingSize.x)
