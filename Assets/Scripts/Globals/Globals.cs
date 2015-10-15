@@ -463,6 +463,9 @@ public class Globals : MonoBehaviour {
 			Globals.Instance.bgm.volume = 1;
 			Globals.Instance.bgm.Play();
 
+			// Ensure that no empty levels are still considered loaded.
+			LevelHandler.Instance.loadedIslands = new List<Island>();
+
 			// Destoy this globals and allow the existing one to continue.
 			Destroy(gameObject);
 			return true;

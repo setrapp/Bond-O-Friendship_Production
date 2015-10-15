@@ -53,8 +53,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 					backFillRenderer.material.color = color;
 					if (backFillRenderer.material.color.r <= 0 && backFillRenderer.material.color.g <= 0 && backFillRenderer.material.color.b <= 0)
 					{
-						//Globals.Instance.ResetOrExit();
-						Application.Quit();
+						Globals.Instance.ResetOrExit();
 					}
 				}
 			}
