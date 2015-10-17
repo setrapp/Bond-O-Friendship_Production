@@ -275,16 +275,16 @@ public class Globals : MonoBehaviour {
 
 		if (gameState == GameState.Paused) 
 		{
-			if(!pauseMenu.activeInHierarchy)
-				pauseMenu.SetActive(true);
+			//if(!pauseMenu.activeInHierarchy)
+				//pauseMenu.SetActive(true);
 			//CameraSplitter.Instance.splittable = false;
 			allowInput = true;
 		}
 
 		if (gameState == GameState.Unpausing) 
 		{
-			if(pauseMenu.activeInHierarchy)
-				pauseMenu.SetActive(false);
+			//if(pauseMenu.activeInHierarchy)
+				//pauseMenu.SetActive(false);
 			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
 			{
 				CameraSplitter.Instance.Zoom(false);
@@ -447,6 +447,13 @@ public class Globals : MonoBehaviour {
 			Destroy(CameraSplitter.Instance.gameObject);
 			newCameraSystem.gameObject.SetActive(true);
 			CameraSplitter.Instance = newCameraSystem;
+
+			// Move new pause menu controls into existing globals and destroy old controls UI.
+			GameObject newControls = pauseMenu.GetComponent<PauseMenuControl>().gameControls;
+			PauseMenuControl existingPause = Globals.instance.pauseMenu.GetComponent<PauseMenuControl>();
+			newControls.transform.parent = existingPause.gameControls.transform.parent;
+			Destroy(existingPause.gameControls.gameObject);
+			existingPause.gameControls = newControls;
 
 			// Ensure that all background music is at the correct volume.
 			for (int i = 0; i < Globals.Instance.levelsBackgroundAudio.Length; i++)
