@@ -216,6 +216,7 @@ public class MenuControl : MonoBehaviour {
 						
 						 
 						Globals.Instance.fromContinue = false;
+						Globals.Instance.ResetLevels();
 						 CameraSplitter.Instance.movePlayers = true;
 						
 						FadeControls();

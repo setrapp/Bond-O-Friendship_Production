@@ -204,7 +204,7 @@ public class Globals : MonoBehaviour {
 			bondAllowed = true;
 		}
 
-		ResetLevels();
+		//ResetLevels();
 
 		startingPerspectiveFOV = perspectiveFOV;
 		startingOrthographicSize = orthographicSize;
