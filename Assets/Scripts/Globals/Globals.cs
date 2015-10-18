@@ -308,16 +308,17 @@ public class Globals : MonoBehaviour {
 		CheckCameraPerspective();
 		CheckVolume();
 
-	   /* if(Input.GetKeyDown(KeyCode.Z))
-		{
-			Debug.Log("Left Controller Index: " + leftControllerIndex);
-			Debug.Log("Previous Left: " + leftControllerPreviousIndex);
-			Debug.Log("Right Controller Index: " + rightContollerIndex);
-			Debug.Log("Previous Right: " + rightControllerPreviousIndex);
-		}*/
+		/* if(Input.GetKeyDown(KeyCode.Z))
+		 {
+			 Debug.Log("Left Controller Index: " + leftControllerIndex);
+			 Debug.Log("Previous Left: " + leftControllerPreviousIndex);
+			 Debug.Log("Right Controller Index: " + rightContollerIndex);
+			 Debug.Log("Previous Right: " + rightControllerPreviousIndex);
+		 }*/
 
-		
-	}
+		// Ensure that tutorial is always considered complete if any other level is completed (this should only affect testing).
+		levelsCompleted[1] = levelsCompleted[1] || levelsCompleted[2] || levelsCompleted[3] || levelsCompleted[4];
+    }
 
 	public void ResetLevels()
 	{
