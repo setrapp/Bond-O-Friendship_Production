@@ -36,6 +36,7 @@ public class Globals : MonoBehaviour {
 
 
 	public bool allowInput = true;
+	public bool titleScreenFaded = false;
 
 	public float audioVolume = -1;
 	public bool mute = false;
@@ -346,6 +347,7 @@ public class Globals : MonoBehaviour {
 
     public void ResetOrExit()
     {
+		titleScreenFaded = false;
         if (inMainMenu)
         {
            // if (Application.isEditor)
