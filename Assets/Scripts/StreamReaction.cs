@@ -47,7 +47,7 @@ public class StreamReaction : MonoBehaviour {
 			reactable = true;
 			for (int i = 0; i < superiors.Count; i++)
 			{
-				if (superiors[i] != null && superiors[i].reactionProgress < 1)
+				if (superiors[i] != null && superiors[i].isActiveAndEnabled && superiors[i].reactionProgress < 1)
 				{
 					reactable = false;
 				}

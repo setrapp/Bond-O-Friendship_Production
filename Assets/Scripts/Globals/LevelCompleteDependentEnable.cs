@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ContinueDependentEnable : MonoBehaviour {
+public class LevelCompleteDependentEnable : MonoBehaviour {
 
 	public List<GameObject> enableTargets;
-	public bool enableOnContinue = true;
+	public bool[] requiredLevels;
+	public bool enableWhenComplete = true;
 	private bool wasContinue = false;
 
 	void Awake()
@@ -22,17 +23,24 @@ public class ContinueDependentEnable : MonoBehaviour {
 		{
 			if (wasContinue != Globals.Instance.fromContinue)
 			{
+				bool reqsMet = enableWhenComplete;
+				for (int i = 0; i < requiredLevels.Length && i < Globals.Instance.levelsCompleted.Length; i++)
+				{
+					if (requiredLevels[i] && !Globals.Instance.levelsCompleted[i])
+					{
+						reqsMet = !enableWhenComplete;
+					}
+				}
+
 				for (int i = 0; i < enableTargets.Count; i++)
 				{
 					if (enableTargets[i] != null)
 					{
-						enableTargets[i].SetActive(enableOnContinue == Globals.Instance.fromContinue);
+						enableTargets[i].SetActive(reqsMet);
 					}
 				}
 			}
 			wasContinue = Globals.Instance.fromContinue;
 		}
-		
 	}
-
 }
