@@ -14,6 +14,7 @@ public class SpawnBud : MonoBehaviour {
 	private Color playerColor;
 	private GameObject newBud;
 	private bool scaling;
+	private bool fullScaled = false;
     public AudioSource spawnBud;
 
 	// Use this for initialization
@@ -26,8 +27,10 @@ public class SpawnBud : MonoBehaviour {
 		if(fading == true)
 		{
 			fadeTimer -= Time.deltaTime;
-			if(!scaling)
-				newBud.transform.localScale = new Vector3(2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f, 2.0f - fadeTimer*2.0f);
+			if (!scaling)
+			{
+				newBud.transform.localScale = new Vector3(2.0f - fadeTimer * 2.0f, 2.0f - fadeTimer * 2.0f, 2.0f - fadeTimer * 2.0f);
+			}
 			transform.parent.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.6f*fadeTimer);
 
 			if(fadeTimer <= 0)
@@ -50,11 +53,23 @@ public class SpawnBud : MonoBehaviour {
 				{
 					seasonReaction.enabled = true;
 				}
+
 				fadeTimer = 1.0f;
+				Debug.Log("hi");
 			}
 			//	Destroy(gameObject);
 
 		}
+		/*TODO figure out how to make this work without making the fluff freak out, maybe just include a fluff with no placeholder*/
+		/*else if (!fullScaled)
+		{
+			FluffPlaceholder[] fluffPlaceholders = newBud.GetComponentsInChildren<FluffPlaceholder>();
+			for (int i = 0; i < fluffPlaceholders.Length; i++)
+			{
+				fluffPlaceholders[i].enabled = true;
+			}
+			fullScaled = true;
+		*/
 	}
 
 	void OnTriggerEnter (Collider col) {

@@ -7,6 +7,7 @@ public class FluffStick : MonoBehaviour {
 	public Fluff stuckFluff;
 	public Vector3 stickOffset = Vector3.zero;
 	public Vector3 stickDirection = Vector3.forward;
+	public bool moveToCollision;
 
 	public void AddPullForce(Vector3 pullForce, Vector3 position)
 	{
