@@ -55,21 +55,20 @@ public class SpawnBud : MonoBehaviour {
 				}
 
 				fadeTimer = 1.0f;
-				Debug.Log("hi");
 			}
 			//	Destroy(gameObject);
 
 		}
-		/*TODO figure out how to make this work without making the fluff freak out, maybe just include a fluff with no placeholder*/
-		/*else if (!fullScaled)
+		else if (!fullScaled && newBud != null)
 		{
+			// Allow fluffs to spawn on fully completed blossom to afford pulling (otherwise blossom can get stuck in corners).
 			FluffPlaceholder[] fluffPlaceholders = newBud.GetComponentsInChildren<FluffPlaceholder>();
 			for (int i = 0; i < fluffPlaceholders.Length; i++)
 			{
 				fluffPlaceholders[i].enabled = true;
 			}
 			fullScaled = true;
-		*/
+		}
 	}
 
 	void OnTriggerEnter (Collider col) {
