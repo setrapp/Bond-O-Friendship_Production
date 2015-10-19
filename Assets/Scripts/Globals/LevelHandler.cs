@@ -19,7 +19,7 @@ public class LevelHandler : MonoBehaviour {
 			return instance;
 		}
 	}
-	private List<Island> loadedIslands;
+	public List<Island> loadedIslands;
 	public bool ignoreAtmosphereBreaks = false;
 	//private float progressMagicNumber = 0.9f;
 

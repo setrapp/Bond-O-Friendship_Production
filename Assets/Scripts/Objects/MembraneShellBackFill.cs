@@ -9,6 +9,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 	public Renderer backFillRenderer;
 	public float fadeSpeed = 1;
 	public bool resetOnBlack = true;
+	public Island completedLevel;
 
 	void Start()
 	{
@@ -53,6 +54,11 @@ public class MembraneShellBackFill : MonoBehaviour {
 					backFillRenderer.material.color = color;
 					if (backFillRenderer.material.color.r <= 0 && backFillRenderer.material.color.g <= 0 && backFillRenderer.material.color.b <= 0)
 					{
+						if (completedLevel != null && Globals.Instance != null && Globals.Instance.levelsCompleted != null)
+						{
+							Globals.Instance.levelsCompleted[(int)completedLevel.islandId] = true;
+						}
+						Globals.Instance.fromContinue = true;
 						Globals.Instance.ResetOrExit();
 					}
 				}

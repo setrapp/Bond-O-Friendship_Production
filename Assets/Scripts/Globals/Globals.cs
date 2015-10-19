@@ -36,6 +36,7 @@ public class Globals : MonoBehaviour {
 
 
 	public bool allowInput = true;
+	public bool titleScreenFaded = false;
 
 	public float audioVolume = -1;
 	public bool mute = false;
@@ -204,7 +205,7 @@ public class Globals : MonoBehaviour {
 			bondAllowed = true;
 		}
 
-		ResetLevels();
+		//ResetLevels();
 
 		startingPerspectiveFOV = perspectiveFOV;
 		startingOrthographicSize = orthographicSize;
@@ -275,16 +276,16 @@ public class Globals : MonoBehaviour {
 
 		if (gameState == GameState.Paused) 
 		{
-			if(!pauseMenu.activeInHierarchy)
-				pauseMenu.SetActive(true);
+			//if(!pauseMenu.activeInHierarchy)
+				//pauseMenu.SetActive(true);
 			//CameraSplitter.Instance.splittable = false;
 			allowInput = true;
 		}
 
 		if (gameState == GameState.Unpausing) 
 		{
-			if(pauseMenu.activeInHierarchy)
-				pauseMenu.SetActive(false);
+			//if(pauseMenu.activeInHierarchy)
+				//pauseMenu.SetActive(false);
 			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
 			{
 				CameraSplitter.Instance.Zoom(false);
@@ -307,16 +308,17 @@ public class Globals : MonoBehaviour {
 		CheckCameraPerspective();
 		CheckVolume();
 
-	   /* if(Input.GetKeyDown(KeyCode.Z))
-		{
-			Debug.Log("Left Controller Index: " + leftControllerIndex);
-			Debug.Log("Previous Left: " + leftControllerPreviousIndex);
-			Debug.Log("Right Controller Index: " + rightContollerIndex);
-			Debug.Log("Previous Right: " + rightControllerPreviousIndex);
-		}*/
+		/* if(Input.GetKeyDown(KeyCode.Z))
+		 {
+			 Debug.Log("Left Controller Index: " + leftControllerIndex);
+			 Debug.Log("Previous Left: " + leftControllerPreviousIndex);
+			 Debug.Log("Right Controller Index: " + rightContollerIndex);
+			 Debug.Log("Previous Right: " + rightControllerPreviousIndex);
+		 }*/
 
-		
-	}
+		// Ensure that tutorial is always considered complete if any other level is completed (this should only affect testing).
+		levelsCompleted[1] = levelsCompleted[1] || levelsCompleted[2] || levelsCompleted[3] || levelsCompleted[4];
+    }
 
 	public void ResetLevels()
 	{
@@ -346,6 +348,7 @@ public class Globals : MonoBehaviour {
 
     public void ResetOrExit()
     {
+		titleScreenFaded = false;
         if (inMainMenu)
         {
            // if (Application.isEditor)
@@ -448,6 +451,13 @@ public class Globals : MonoBehaviour {
 			newCameraSystem.gameObject.SetActive(true);
 			CameraSplitter.Instance = newCameraSystem;
 
+			// Move new pause menu controls into existing globals and destroy old controls UI.
+			GameObject newControls = pauseMenu.GetComponent<PauseMenuControl>().gameControls;
+			PauseMenuControl existingPause = Globals.instance.pauseMenu.GetComponent<PauseMenuControl>();
+			newControls.transform.parent = existingPause.gameControls.transform.parent;
+			Destroy(existingPause.gameControls.gameObject);
+			existingPause.gameControls = newControls;
+
 			// Ensure that all background music is at the correct volume.
 			for (int i = 0; i < Globals.Instance.levelsBackgroundAudio.Length; i++)
 			{
@@ -455,6 +465,9 @@ public class Globals : MonoBehaviour {
 			}
 			Globals.Instance.bgm.volume = 1;
 			Globals.Instance.bgm.Play();
+
+			// Ensure that no empty levels are still considered loaded.
+			LevelHandler.Instance.loadedIslands = new List<Island>();
 
 			// Destoy this globals and allow the existing one to continue.
 			Destroy(gameObject);
