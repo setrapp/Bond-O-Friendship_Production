@@ -59,6 +59,15 @@ public class ClusterNodePuzzle : MonoBehaviour {
             NodeColored();
         }
     }
+
+    public void UnlightNodes()
+    {
+        for(int i = 0; i < nodes.Count; i++)
+        {
+            if (nodes[i].lit)
+                nodes[i].ResetNode();
+        }
+    }
 	
 	public void NodeColored()
 	{

@@ -17,6 +17,19 @@ public class FadeQuitGame : MonoBehaviour {
 
 	private bool colorsSet = false;
 
+    private Vector3 posNoZ;
+    private Vector3 player1NoZ;
+    private Vector3 player2NoZ;
+
+    public float distance = 2.0f;
+    private float distancePow = 0.0f;
+
+    private float disToPlayer1;
+    private float disToPlayer2;
+
+    public bool player1Toggled = false;
+    public bool player2Toggled = false;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -30,6 +43,8 @@ public class FadeQuitGame : MonoBehaviour {
 			textColorsEmpty.Add (renderer.material.color);
 			textColorsFull.Add (new Color (renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
 		}
+
+        distancePow = Mathf.Pow(distance, 2);
 	}
 
 	public void FadeIn()
@@ -64,6 +79,37 @@ public class FadeQuitGame : MonoBehaviour {
 
 		}
 	}
+
+    void Update()
+    {
+        posNoZ = new Vector3(transform.position.x, transform.position.y, 0.0f);
+
+
+        if (Player1InRange() || Player2InRange())
+        {
+            FadeIn();
+        }
+        else
+        {
+            FadeOut();
+        }
+    }
+
+    private bool Player1InRange()
+    {
+        player1NoZ = new Vector3(Globals.Instance.Player1.transform.position.x, Globals.Instance.Player1.transform.position.y, 0.0f);
+        disToPlayer1 = Vector3.SqrMagnitude(player1NoZ - posNoZ);
+        player1Toggled = disToPlayer1 < distancePow;
+        return player1Toggled;
+    }
+
+    private bool Player2InRange()
+    {
+        player2NoZ = new Vector3(Globals.Instance.Player2.transform.position.x, Globals.Instance.Player2.transform.position.y, 0.0f);
+        disToPlayer2 = Vector3.SqrMagnitude(player2NoZ - posNoZ);
+        player2Toggled = disToPlayer2 < distancePow;
+        return player2Toggled;
+    }
 
 
 

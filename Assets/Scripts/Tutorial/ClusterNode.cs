@@ -103,16 +103,7 @@ public class ClusterNode : MonoBehaviour {
 				timer -= Time.deltaTime;
 				if (timer <= 0)
 				{
-					lit = false;
-                    if (targetPuzzle.individualBlockerFade == true)
-                        shrinking = false;
-                    if (controlColor)
-					{
-						for (int i = 0; i < nodeRenderers.Length; i++)
-						{
-							nodeRenderers[i].material.color = startingcolor;
-						}
-					}
+                    ResetNode();
 				}
 				
 			}
@@ -163,6 +154,19 @@ public class ClusterNode : MonoBehaviour {
 		}
 	}
 
+    public void ResetNode()
+    {
+        lit = false;
+        if (targetPuzzle.individualBlockerFade == true)
+            shrinking = false;
+        if (controlColor)
+        {
+            for (int i = 0; i < nodeRenderers.Length; i++)
+            {
+                nodeRenderers[i].material.color = startingcolor;
+            }
+        }
+    }
    
 
 	virtual protected void OnCollisionEnter(Collision col)

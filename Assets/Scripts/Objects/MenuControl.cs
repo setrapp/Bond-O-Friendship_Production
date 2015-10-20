@@ -167,6 +167,7 @@ public class MenuControl : MonoBehaviour {
 					//CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
 					//CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
 					newGameNodePuzzle.solved = false;
+                    newGameNodePuzzle.UnlightNodes();
 					Globals.Instance.allowInput = false;
 					menuState = MenuState.StartGame;      
 				}
@@ -176,6 +177,7 @@ public class MenuControl : MonoBehaviour {
 					//CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.player1.transform.position;
 					//CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.player2.transform.position;
 					continueGameNodePuzzle.solved = false;
+                    continueGameNodePuzzle.UnlightNodes();
 					Globals.Instance.allowInput = false;
 					menuState = MenuState.ContinueGame;
 				}
@@ -193,6 +195,7 @@ public class MenuControl : MonoBehaviour {
 					if (confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
 					{
 						confirmQuitNodePuzzle.solved = false;
+                        confirmQuitNodePuzzle.UnlightNodes();
 						Application.Quit();
 					}
 

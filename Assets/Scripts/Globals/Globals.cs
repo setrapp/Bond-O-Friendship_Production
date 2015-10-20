@@ -169,6 +169,7 @@ public class Globals : MonoBehaviour {
 	public float defaultPlayerLuminIntensity = 1;
 
     public bool configureControls = false;
+    public bool notifyControlsChangeOnDisconnect = false;
 
 	// Flags from completed levels [None, Tutorial, Harmony, Intimacy, Asymmetry]
 	public bool[] levelsCompleted = new bool[5];
@@ -591,6 +592,7 @@ public class Globals : MonoBehaviour {
             OnPause();
         }
 
+        notifyControlsChangeOnDisconnect = true;
         configureControls = true;
 
         //player1Controls.inputNameSelected = InputNameSelected.Keyboard;
