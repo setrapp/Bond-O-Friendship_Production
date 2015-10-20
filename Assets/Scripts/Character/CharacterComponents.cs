@@ -60,7 +60,7 @@ public class CharacterComponents : MonoBehaviour {
 		//bodyCollider.radius = Mathf.Min(geometryContainer.transform.localScale.x, geometryContainer.transform.localScale.z) / 2;
 
 		// Don't show mid-tail if a player bond is formed or cannot be formed.
-		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || Globals.Instance.playersBonded)
+		if (bondAttachable.bondOverrideStats.stats.maxDistance <= 0 || !bondAttachable.enabled || Globals.Instance.playersBonded)
 		{
 			if (midTrail.gameObject.activeSelf)
 			{

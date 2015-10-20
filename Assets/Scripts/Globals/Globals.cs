@@ -272,6 +272,8 @@ public class Globals : MonoBehaviour {
 			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedOut)
 			{
 				gameState = GameState.Paused;
+				if (player1 != null) { player1.character.bondAttachable.enabled = false; }
+				if (player2 != null) { player2.character.bondAttachable.enabled = false; }
 			}
 		}
 
@@ -297,6 +299,8 @@ public class Globals : MonoBehaviour {
 				gameState = GameState.Unpaused;
                 CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
                 CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
+				if (player1 != null) { player1.character.bondAttachable.enabled = true; }
+				if (player2 != null) { player2.character.bondAttachable.enabled = true; }
 				allowInput = true;
 			}
 		}
