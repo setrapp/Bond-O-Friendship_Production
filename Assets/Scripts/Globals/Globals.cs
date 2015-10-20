@@ -169,6 +169,7 @@ public class Globals : MonoBehaviour {
 	public float defaultPlayerLuminIntensity = 1;
 
     public bool configureControls = false;
+    public bool notifyControlsChangeOnDisconnect = false;
 
 	// Flags from completed levels [None, Tutorial, Harmony, Intimacy, Asymmetry]
 	public bool[] levelsCompleted = new bool[5];
@@ -271,6 +272,8 @@ public class Globals : MonoBehaviour {
 			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedOut)
 			{
 				gameState = GameState.Paused;
+				if (player1 != null) { player1.character.bondAttachable.enabled = false; }
+				if (player2 != null) { player2.character.bondAttachable.enabled = false; }
 			}
 		}
 
@@ -296,6 +299,8 @@ public class Globals : MonoBehaviour {
 				gameState = GameState.Unpaused;
                 CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
                 CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
+				if (player1 != null) { player1.character.bondAttachable.enabled = true; }
+				if (player2 != null) { player2.character.bondAttachable.enabled = true; }
 				allowInput = true;
 			}
 		}
@@ -591,6 +596,7 @@ public class Globals : MonoBehaviour {
             OnPause();
         }
 
+        notifyControlsChangeOnDisconnect = true;
         configureControls = true;
 
         //player1Controls.inputNameSelected = InputNameSelected.Keyboard;
