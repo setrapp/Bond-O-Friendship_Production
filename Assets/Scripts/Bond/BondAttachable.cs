@@ -38,7 +38,7 @@ public class BondAttachable : MonoBehaviour {
 
 	public Bond AttemptBond(BondAttachable bondPartner, Vector3 contactPosition, bool forceBond = false)
 	{
-		if (bondOverrideStats.stats.maxDistance <= 0)
+		if (!enabled || bondOverrideStats.stats.maxDistance <= 0)
 		{
 			return null;
 		}
