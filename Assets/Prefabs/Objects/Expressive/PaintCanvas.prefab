@@ -300,7 +300,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
@@ -490,10 +490,14 @@ MonoBehaviour:
   player1: {fileID: 0}
   player2: {fileID: 0}
   pairedPlayer: {fileID: 0}
+  canvasBGLight: {fileID: 0}
+  lightParticle: {fileID: 0}
   changeColor: 1
   maxCheckDistance: 2
   minPaintRadius: 1
   maxPaintRadius: 3.5
+  lightActive: 0
+  canvasBGLightGlowSpeed: .0399999991
   canvasCollider: {fileID: 0}
   pal1: {fileID: 100010}
   pal2: {fileID: 100006}
@@ -656,7 +660,7 @@ SphereCollider:
   m_GameObject: {fileID: 100008}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: .500000119
   m_Center: {x: 5.96046448e-08, y: 0, z: -8.94069672e-08}
@@ -699,6 +703,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: minPaintRadius
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
