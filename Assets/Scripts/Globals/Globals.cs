@@ -479,9 +479,20 @@ public class Globals : MonoBehaviour {
 			if (Globals.Instance.earlyBondInEditor && Application.isEditor)
 			{
 				Globals.Instance.bondAllowed = false;
-				Globals.Instance.Player1.character.bondAttachable.enabled = false;
-				Globals.Instance.Player2.character.bondAttachable.enabled = false;
+				if (Globals.Instance.Player1 != null && Globals.Instance.Player2 != null)
+				{
+					Globals.Instance.Player1.character.bondAttachable.enabled = false;
+					Globals.Instance.Player2.character.bondAttachable.enabled = false;
+				}
 				Globals.Instance.bondSoundPlayable = true;
+			}
+
+			// Reset player placement info
+			Globals.Instance.updatePlayersOnLoad = true;
+			if (Globals.Instance.Player1 != null && Globals.Instance.Player2 != null && Globals.Instance.initialPlayerHolder != null)
+			{
+				Globals.Instance.Player1.transform.parent = Globals.instance.initialPlayerHolder.transform;
+				Globals.Instance.Player2.transform.parent = Globals.instance.initialPlayerHolder.transform;
 			}
 
 			// Destoy this globals and allow the existing one to continue.
