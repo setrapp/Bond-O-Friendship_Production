@@ -137,7 +137,10 @@ public class ClusterNodePuzzle : MonoBehaviour {
 				Destroy(streamBlocker2);
 			for (int i = 0; i < listeners.Count; i++)
 			{
-				listeners[i].SendMessage("ClusterNodesSolved", this, SendMessageOptions.DontRequireReceiver);
+				if (listeners[i] != null)
+				{
+					listeners[i].SendMessage("ClusterNodesSolved", this, SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 	}

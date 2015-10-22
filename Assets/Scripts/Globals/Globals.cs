@@ -159,6 +159,7 @@ public class Globals : MonoBehaviour {
 	public EtherRing existingEther = null;
 
 	public bool bondAllowed = false;
+	public bool bondSoundPlayable = true;
 	public bool playersBonded = false;
 
 
@@ -473,6 +474,15 @@ public class Globals : MonoBehaviour {
 
 			// Ensure that no empty levels are still considered loaded.
 			LevelHandler.Instance.loadedIslands = new List<Island>();
+
+			// Disallow bond making.
+			if (Globals.Instance.earlyBondInEditor && Application.isEditor)
+			{
+				Globals.Instance.bondAllowed = false;
+				Globals.Instance.Player1.character.bondAttachable.enabled = false;
+				Globals.Instance.Player2.character.bondAttachable.enabled = false;
+				Globals.Instance.bondSoundPlayable = true;
+			}
 
 			// Destoy this globals and allow the existing one to continue.
 			Destroy(gameObject);

@@ -41,7 +41,10 @@ public class BondAudio : MonoBehaviour {
 
         if (bonded == true && onwasPlayed == false)
         {
-            bondOn.Play();
+			if (Globals.Instance.bondSoundPlayable)
+			{
+				bondOn.Play();
+			}
             onwasPlayed = true;
             if(offwasPlayed == true)
             {
@@ -52,7 +55,10 @@ public class BondAudio : MonoBehaviour {
 
         if (unbonded == true && wasbonded == true && offwasPlayed == false)
         {
-            bondOff.Play();
+			if (Globals.Instance.bondSoundPlayable)
+			{
+				bondOff.Play();
+			}
             offwasPlayed = true;
             if (onwasPlayed == true)
             {

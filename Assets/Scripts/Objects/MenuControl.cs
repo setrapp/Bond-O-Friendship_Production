@@ -241,9 +241,9 @@ public class MenuControl : MonoBehaviour {
 
 				if (startGame)
 				{
-
-				   
 					Globals.Instance.fromContinue = true;
+					Globals.Instance.Player1.character.bondAttachable.enabled = true;
+					Globals.Instance.Player2.character.bondAttachable.enabled = true;
 					CameraSplitter.Instance.movePlayers = true;
 
 					FadeControls();

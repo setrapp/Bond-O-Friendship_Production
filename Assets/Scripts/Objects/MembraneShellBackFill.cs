@@ -8,6 +8,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 	private bool filling = false;
 	public Renderer backFillRenderer;
 	public float fadeSpeed = 1;
+	public float playerCenterRate = 0.5f;
 	public bool resetOnBlack = true;
 	public Island completedLevel;
 
@@ -23,6 +24,14 @@ public class MembraneShellBackFill : MonoBehaviour {
 
 	void Update()
 	{
+		if (triggerFill != null && !triggerFill.atMaxBurst && triggerFill.membraneShell != null && triggerFill.membraneShell.breaking)
+		{
+			if (resetOnBlack)
+			{
+				Globals.Instance.bondSoundPlayable = false;
+			}
+		}
+
 		if (triggerFill != null && triggerFill.atMaxBurst)
 		{
 			transform.localScale = triggerFill.transform.localScale;
@@ -50,6 +59,17 @@ public class MembraneShellBackFill : MonoBehaviour {
 					if (color.r < 0) { color.r = 0; }
 					if (color.g < 0) { color.g = 0; }
 					if (color.b < 0) { color.b = 0; }
+
+					if (resetOnBlack && playerCenterRate != 0)
+					{
+						PlayerInput player1 = Globals.Instance.Player1;
+						PlayerInput player2 = Globals.Instance.Player2;
+						player1.character.bondAttachable.enabled = false;
+						player2.character.bondAttachable.enabled = false;
+						Vector3 playerCenter = (player1.transform.position + player2.transform.position) / 2;
+						player1.transform.position += (playerCenter - player1.transform.position) * playerCenterRate;
+						player2.transform.position += (playerCenter - player2.transform.position) * playerCenterRate;
+					}
 
 					backFillRenderer.material.color = color;
 					if (backFillRenderer.material.color.r <= 0 && backFillRenderer.material.color.g <= 0 && backFillRenderer.material.color.b <= 0)
