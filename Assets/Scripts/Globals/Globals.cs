@@ -364,7 +364,8 @@ public class Globals : MonoBehaviour {
         }
         else
         {
-            Application.LoadLevel(0);
+			Globals.Instance.gameState = Globals.GameState.Unpaused;
+			Application.LoadLevel(0);
         }
     }
 
