@@ -220,6 +220,7 @@ GameObject:
   - 223: {fileID: 22315240}
   - 114: {fileID: 11476606}
   - 114: {fileID: 11449270}
+  - 114: {fileID: 11445102}
   m_Layer: 5
   m_Name: Game Controls
   m_TagString: Untagged
@@ -922,6 +923,7 @@ GameObject:
   - 4: {fileID: 449122}
   - 33: {fileID: 3349144}
   - 23: {fileID: 2349144}
+  - 114: {fileID: 11451804}
   m_Layer: 12
   m_Name: Line
   m_TagString: Untagged
@@ -1126,6 +1128,7 @@ GameObject:
   - 4: {fileID: 449146}
   - 33: {fileID: 3349150}
   - 23: {fileID: 2349150}
+  - 114: {fileID: 11445976}
   m_Layer: 11
   m_Name: Line
   m_TagString: Untagged
@@ -7999,8 +8002,6 @@ MonoBehaviour:
   luminusArray: []
   l1: {fileID: 0}
   l2: {fileID: 0}
-  p1: {fileID: 0}
-  p2: {fileID: 0}
   darkMaskScript: {fileID: 0}
   l1p1_sqMag: 0
   l2p2_sqMag: 0
@@ -8713,6 +8714,41 @@ MonoBehaviour:
   wasWilin: 0
   firstWil: 1
   valuesToUse: {fileID: 0}
+--- !u!114 &11445102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3011040016080e40a9e00d19ecab1eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboardPlayer1: {fileID: 22416460}
+  gamepadPlayer1: {fileID: 22461610}
+  gamepadPlayer2: {fileID: 22450752}
+  keyboardPlayer2: {fileID: 22493438}
+  gamepadSharedPlayer1Left: {fileID: 22447860}
+  gamepadSharedPlayer2Left: {fileID: 22466800}
+  keyboardSharedPlayer1Left: {fileID: 22447006}
+  keyboardSharedPlayer2Left: {fileID: 22450460}
+  f: 1
+--- !u!114 &11445976
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 3000
+  renderOffset: 401
+  forceRendererOn: 0
 --- !u!114 &11447556
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8748,6 +8784,7 @@ MonoBehaviour:
   centerOffset: {x: 0, y: 0, z: 0}
   childMainCamera: {fileID: 2049148}
   pivot: {fileID: 149124}
+  line: {fileID: 0}
   dampTime: .150000006
   dampingMultiplyer: .150000006
 --- !u!114 &11449122
@@ -8999,13 +9036,13 @@ MonoBehaviour:
   orthographicSize: 20
   startingOrthographicSize: 0
   zoomIntroInEditor: 1
-  earlyBondInEditor: 1
+  earlyBondInEditor: 0
   editorFakeStreamRate: 0
   editorIgnoreSpecialStart: 0
   allowInput: 1
   titleScreenFaded: 0
   audioVolume: -1
-  mute: 1
+  mute: 0
   bgm: {fileID: 8294998}
   levelsBackgroundAudio:
   - {fileID: 8294998}
@@ -9056,12 +9093,14 @@ MonoBehaviour:
   updatePlayersOnLoad: 1
   existingEther: {fileID: 0}
   bondAllowed: 0
+  bondSoundPlayable: 1
   playersBonded: 0
   pauseMenu: {fileID: 109214}
   darknessMask: {fileID: 11416216}
   playerLuminIntensity: .600000024
   defaultPlayerLuminIntensity: .600000024
   configureControls: 0
+  notifyControlsChangeOnDisconnect: 0
   levelsCompleted: 0000000000
   startSpawnLocation: {fileID: 0}
   continueSpawnLocation: {fileID: 0}
@@ -9083,6 +9122,7 @@ MonoBehaviour:
   centerOffset: {x: 0, y: 0, z: 0}
   childMainCamera: {fileID: 2049150}
   pivot: {fileID: 149138}
+  line: {fileID: 0}
   dampTime: .150000006
   dampingMultiplyer: .150000006
 --- !u!114 &11449140
@@ -9214,6 +9254,21 @@ MonoBehaviour:
   shrinking: 0
   shrinkSpeed: 3
   growSpeed: 3
+--- !u!114 &11451804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 0}
+  renderBase: 3000
+  renderOffset: 401
+  forceRendererOn: 0
 --- !u!114 &11451938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9663,6 +9718,9 @@ MonoBehaviour:
   - {fileID: 2316764}
   f: 0
   duration: 1
+  distance: 30
+  player1Toggled: 0
+  player2Toggled: 0
 --- !u!114 &11474012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10524,7 +10582,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: earlyBondInEditor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: zoomIntroInEditor
@@ -10532,7 +10590,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: mute
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: fadeIn

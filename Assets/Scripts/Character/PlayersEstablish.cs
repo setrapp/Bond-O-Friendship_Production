@@ -147,7 +147,7 @@ public class PlayersEstablish : MonoBehaviour {
 					//CameraSplitter.Instance.JumpToPlayers();                    
 				}
                 
-				Destroy(Globals.Instance.initialPlayerHolder);
+				//Destroy(Globals.Instance.initialPlayerHolder);
 			}
 
 			// After the players have been spawned in one level, don't change them when new levels load.

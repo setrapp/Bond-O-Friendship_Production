@@ -2105,6 +2105,79 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 263320096}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &306369977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 306369978}
+  - 33: {fileID: 306369981}
+  - 65: {fileID: 306369980}
+  - 23: {fileID: 306369979}
+  m_Layer: 0
+  m_Name: Wall Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &306369978
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 306369977}
+  m_LocalRotation: {x: -1.25121673e-07, y: -1.27618534e-07, z: -.299206495, w: .954188406}
+  m_LocalPosition: {x: 1.38399994, y: .874000013, z: -0}
+  m_LocalScale: {x: .00687600486, y: .132116631, z: .057827305}
+  m_Children: []
+  m_Father: {fileID: 1136206887}
+  m_RootOrder: 8
+--- !u!23 &306369979
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 306369977}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 678a1f934ab361f47b4c945fbebee060, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &306369980
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 306369977}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &306369981
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 306369977}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &311156440 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: ca447a67a0a96c44fbf014bea97ad0b2, type: 2}
@@ -12186,6 +12259,7 @@ Transform:
   - {fileID: 368239163}
   - {fileID: 1384547815}
   - {fileID: 567066170}
+  - {fileID: 306369978}
   m_Father: {fileID: 784857000}
   m_RootOrder: 1
 --- !u!1 &1138089471
@@ -13941,6 +14015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a38d45bc519f448837406257d75c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadedIslands: []
   ignoreAtmosphereBreaks: 0
 --- !u!4 &1270691310
 Transform:

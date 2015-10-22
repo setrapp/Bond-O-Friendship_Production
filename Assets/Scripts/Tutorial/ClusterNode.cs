@@ -19,7 +19,7 @@ public class ClusterNode : MonoBehaviour {
 	protected Color fadeColor;
 	protected float colorCheck;
 	protected Color startingcolor;
-	protected Collider lighter = null;
+	protected List<Collider> lighters = new List<Collider>();
 	public Color bondColor;
 	public bool particlesAtCollision = false;
 
@@ -98,7 +98,7 @@ public class ClusterNode : MonoBehaviour {
 			}
 			
 
-			if (!targetPuzzle.solved && cooldownTime > 0 && lighter == null)
+			if (!targetPuzzle.solved && cooldownTime > 0 && lighters.Count < 1)
 			{
 				timer -= Time.deltaTime;
 				if (timer <= 0)
@@ -222,7 +222,7 @@ public class ClusterNode : MonoBehaviour {
 			Destroy(part.gameObject, 2.0f);
 		}
 
-		lighter = col;
+		lighters.Add(col);
 		timer = cooldownTime;
 		if (!lit)
 		{
@@ -238,17 +238,26 @@ public class ClusterNode : MonoBehaviour {
 
 	void OnColliderExit(Collision col)
 	{
-		if (col.collider == lighter)
+		for (int i = 0; i < lighters.Count; i++)
 		{
-			lighter = null;
+			if (lighters[i] == col.collider || lighters[i] == null)
+			{
+				lighters.Remove(lighters[i]);
+				i--;
+			}
 		}
+		
 	}
 
 	void OnTriggerExit(Collider col)
 	{
-		if (col == lighter)
+		for (int i = 0; i < lighters.Count; i++)
 		{
-			lighter = null;
+			if (lighters[i] == col || lighters[i] == null)
+			{
+				lighters.Remove(lighters[i]);
+				i--;
+			}
 		}
 	}
 }

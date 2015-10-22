@@ -12067,7 +12067,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 220474262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 95.1999969, y: 77.9000015, z: -1}
+  m_LocalPosition: {x: 87.6800003, y: 77.9000015, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1518833874}
@@ -28083,7 +28083,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
       propertyPath: m_RootOrder
@@ -28182,6 +28182,22 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300026, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300022, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300024, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: 336a2a7989d86504ea362fabbb974e90, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -50810,7 +50826,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 883715711}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a466ff4ef327da6418526d420359b379, type: 3}
   m_Name: 
@@ -64881,7 +64897,7 @@ Transform:
   - {fileID: 953161303}
   - {fileID: 1375249578}
   m_Father: {fileID: 456765992}
-  m_RootOrder: 8
+  m_RootOrder: 9
 --- !u!1 &1177437854
 GameObject:
   m_ObjectHideFlags: 0
@@ -82677,7 +82693,6 @@ GameObject:
   - 4: {fileID: 1518833874}
   - 114: {fileID: 1518833875}
   - 114: {fileID: 1518833877}
-  - 114: {fileID: 1518833876}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Island
@@ -82729,25 +82744,6 @@ MonoBehaviour:
   backgroundContainer: {fileID: 1626615703}
   fadeBackgroundColor: 1
   backgroundColor: {r: .143382356, g: .75, b: .498985827, a: .0196078438}
---- !u!114 &1518833876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1518833873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 673078465ae9ec54795c572c0275f22f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerPad: {fileID: 0}
-  triggerNodeGroup: {fileID: 0}
-  triggerMembraneWall: {fileID: 0}
-  startingBondLength: 0
-  makeBond: 0
-  autoCheck: 1
-  destroyOnUse: 1
-  editorDisablable: 1
 --- !u!114 &1518833877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83422,10 +83418,10 @@ MonoBehaviour:
   triggerPad: {fileID: 0}
   triggerNodeGroup: {fileID: 0}
   triggerMembraneWall: {fileID: 0}
-  startingBondLength: 0
+  allowBond: 0
   makeBond: 0
-  autoCheck: 1
-  destroyOnUse: 1
+  autoCheck: 0
+  destroyOnUse: 0
   editorDisablable: 1
 --- !u!114 &1531550613
 MonoBehaviour:
@@ -83441,10 +83437,10 @@ MonoBehaviour:
   triggerPad: {fileID: 0}
   triggerNodeGroup: {fileID: 1531550614}
   triggerMembraneWall: {fileID: 0}
-  startingBondLength: 24
+  allowBond: 1
   makeBond: 0
   autoCheck: 0
-  destroyOnUse: 1
+  destroyOnUse: 0
   editorDisablable: 0
 --- !u!114 &1531550614
 MonoBehaviour:
@@ -103575,7 +103571,7 @@ Transform:
   - {fileID: 1612685796}
   - {fileID: 1933048277}
   m_Father: {fileID: 456765992}
-  m_RootOrder: 9
+  m_RootOrder: 10
 --- !u!1 &1944041740
 GameObject:
   m_ObjectHideFlags: 0
