@@ -31,6 +31,10 @@ public class PauseMenuControl : MonoBehaviour {
 
 
 	public ClusterNodePuzzle confirmQuitNodePuzzle;
+
+    private float s = 1.0f;
+    private bool toggleFadeOutControls = false;
+    private bool toggleInvoke = true;
 	
 	// Update is called once per frame
     void Update()
@@ -51,8 +55,22 @@ public class PauseMenuControl : MonoBehaviour {
                 if (!inputSelect.activeInHierarchy)
                     inputSelect.SetActive(true);
                 if (!gameControls.activeInHierarchy)
+                {
+                    toggleFadeOutControls = false;
+                    toggleInvoke = true;
+                    gameControls.GetComponent<CanvasGroup>().alpha = 1.0f;
+                    s = 1.0f;
                     gameControls.SetActive(true);
+                }
 
+                if (toggleInvoke)
+                {
+                    Invoke("ToggleControlsFadeInvoke", 5.0f);
+                }
+                if (toggleFadeOutControls)
+                {
+                    FadeOutControls();
+                }
 				//if(fMainMenu.f != 1)
 					//fMainMenu.FadeIn();
 
@@ -119,9 +137,28 @@ public class PauseMenuControl : MonoBehaviour {
 
         
 
-    }	
+    }
 
-  
+    private void ToggleControlsFadeInvoke()
+    {
+        toggleFadeOutControls = true;
+        toggleInvoke = false;
+    }
+
+    private void FadeOutControls()
+    {
+        if (gameControls.GetComponent<CanvasGroup>().alpha != 0.0f)
+        {
+            s = Mathf.Clamp(s - Time.deltaTime / 2.0f, 0.0f, 1.0f);
+            gameControls.GetComponent<CanvasGroup>().alpha = s;
+
+
+        }
+        else
+        {
+            toggleFadeOutControls = false;
+        }
+    }
 
 	private void ToggleFadeMainMenu ()
 	{

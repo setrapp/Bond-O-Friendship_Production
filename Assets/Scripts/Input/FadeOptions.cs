@@ -4,9 +4,15 @@ using System.Collections.Generic;
 
 public class FadeOptions: MonoBehaviour {
 
-	public List<Renderer> optionsRenderers;
+	public List<Renderer> soundOffRenderers;
+    public List<Renderer> soundOnRenderers;
 	private List<Color> optionsColorsEmpty = new List<Color>();
 	private List<Color> optionsColorsFull = new List<Color>();
+
+    private Color solvedColorFull;
+    private Color solvedColorEmpty;
+    private Color unsolvedColorFull;
+    private Color unsolvedColorEmpty;
 
     public bool colorsSet = false;
 
@@ -38,28 +44,76 @@ public class FadeOptions: MonoBehaviour {
 			optionsColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
 		}*/
 
+        solvedColorFull = soundOnRenderers[0].GetComponent<ClusterNode>().bondColor;
+        solvedColorEmpty = new Color(solvedColorFull.r, solvedColorFull.g, solvedColorFull.b, 0.0f);
+        unsolvedColorFull = Color.white;
+        unsolvedColorEmpty = new Color(unsolvedColorFull.r, unsolvedColorFull.g, unsolvedColorFull.b, 0.0f);
+
         distancePow = Mathf.Pow(distance, 2);
 	}
 	
 	public void FadeIn()
-	{	if (f != 1) 
-	{
-			f = Mathf.Clamp (f + Time.deltaTime / duration, 0.0f, 1.0f);
-			for (int i = 0; i < optionsRenderers.Count; i++) 
-            {		
-				optionsRenderers [i].material.color = Color.Lerp (optionsColorsEmpty [i], optionsColorsFull [i], f);
-			}
-			
-		}
+    {
+        if (f != 1)
+        {
+            f = Mathf.Clamp(f + Time.deltaTime / duration, 0.0f, 1.0f);
+
+            if (Globals.Instance.mute)
+            {
+                for (int i = 0; i < soundOffRenderers.Count; i++)
+                {
+                    soundOffRenderers[i].material.color = Color.Lerp(solvedColorEmpty, solvedColorFull, f);
+                }
+
+                for (int i = 0; i < soundOnRenderers.Count; i++)
+                {
+                    soundOnRenderers[i].material.color = Color.Lerp(unsolvedColorEmpty, unsolvedColorFull, f);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < soundOffRenderers.Count; i++)
+                {
+                    soundOffRenderers[i].material.color = Color.Lerp(unsolvedColorEmpty, unsolvedColorFull, f);
+                }
+
+                for (int i = 0; i < soundOnRenderers.Count; i++)
+                {
+                    soundOnRenderers[i].material.color = Color.Lerp(solvedColorEmpty, solvedColorFull, f);
+                }
+            }
+
+        }
 	}
 	
 	public void FadeOut()
 	{
 		if (f != 0) {
 			f = Mathf.Clamp (f - Time.deltaTime / duration, 0.0f, 1.0f);
-			for (int i = 0; i < optionsRenderers.Count; i++) {				
-				optionsRenderers [i].material.color = Color.Lerp (optionsColorsEmpty [i], optionsColorsFull [i], f);
-			}
+            if (Globals.Instance.mute)
+            {
+                for (int i = 0; i < soundOffRenderers.Count; i++)
+                {
+                    soundOffRenderers[i].material.color = Color.Lerp(solvedColorEmpty, solvedColorFull, f);
+                }
+
+                for (int i = 0; i < soundOnRenderers.Count; i++)
+                {
+                    soundOnRenderers[i].material.color = Color.Lerp(unsolvedColorEmpty, unsolvedColorFull, f);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < soundOffRenderers.Count; i++)
+                {
+                    soundOffRenderers[i].material.color = Color.Lerp(unsolvedColorEmpty, unsolvedColorFull, f);
+                }
+
+                for (int i = 0; i < soundOnRenderers.Count; i++)
+                {
+                    soundOnRenderers[i].material.color = Color.Lerp(solvedColorEmpty, solvedColorFull, f);
+                }
+            }
 			
 		} 
 	}
@@ -102,7 +156,7 @@ public class FadeOptions: MonoBehaviour {
     {
         int colorSetCount = 0;
 
-        foreach (Renderer renderer in optionsRenderers)
+        foreach (Renderer renderer in soundOnRenderers)
         {
             if (renderer.GetComponent<ClusterNode>().colorSet)
             {
@@ -113,7 +167,19 @@ public class FadeOptions: MonoBehaviour {
             }
         }
 
-        if (colorSetCount == optionsRenderers.Count)
+        foreach (Renderer renderer in soundOffRenderers)
+        {
+            if (renderer.GetComponent<ClusterNode>().colorSet)
+            {
+                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.0f);
+                optionsColorsEmpty.Add(renderer.material.color);
+                optionsColorsFull.Add(new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 1.0f));
+                colorSetCount++;
+            }
+        }
+        var optionRenderersCount = soundOnRenderers.Count + soundOffRenderers.Count;
+
+        if (colorSetCount == optionRenderersCount)
             colorsSet = true;
 
 
