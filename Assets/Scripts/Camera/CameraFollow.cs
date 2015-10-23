@@ -19,7 +19,8 @@ public class CameraFollow : MonoBehaviour {
 	public Camera childMainCamera;
 
 	public GameObject pivot;
-    private GameObject line;
+	[HideInInspector]
+    public GameObject line;
     private GameObject camMask;
 	private float lineWidth = 0.0f;
     

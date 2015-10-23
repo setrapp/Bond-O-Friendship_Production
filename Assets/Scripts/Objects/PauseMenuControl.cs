@@ -67,11 +67,17 @@ public class PauseMenuControl : MonoBehaviour {
 
               //  if (fInputSelect.f != 1)
                    // fInputSelect.FadeIn();
+
+                //i//f(Globals.Instance.notifyControlsChangeOnDisconnect)
+               // {
+
+               // }
                 
 
 				if (resumeGameNodePuzzle != null && resumeGameNodePuzzle.solved)
 				{
 					resumeGameNodePuzzle.solved = false;
+                    resumeGameNodePuzzle.UnlightNodes();
                     CameraSplitter.Instance.player1Target.transform.position = Globals.Instance.Player1.transform.position;
                     CameraSplitter.Instance.player2Target.transform.position = Globals.Instance.Player2.transform.position;
 					Globals.Instance.gameState = Globals.GameState.Unpausing;
@@ -114,6 +120,8 @@ public class PauseMenuControl : MonoBehaviour {
         
 
     }	
+
+  
 
 	private void ToggleFadeMainMenu ()
 	{

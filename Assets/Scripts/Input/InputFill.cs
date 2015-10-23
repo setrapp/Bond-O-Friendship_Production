@@ -336,6 +336,7 @@ public class InputFill : MonoBehaviour
             Helper.FirePulse(Globals.Instance.Player1.transform.position, Globals.Instance.defaultPulseStats);
             Helper.FirePulse(Globals.Instance.Player2.transform.position, Globals.Instance.defaultPulseStats);
             Globals.Instance.allowInput = true;
+			Globals.Instance.titleScreenFaded = true;
             duration = 2.0f;
         }
     }

@@ -161,8 +161,9 @@ public class ShrinkAndMove : ClusterNodeColorSpecific
 			{
 				bondAllow.AllowBond();
 			}
-			else if (!Globals.Instance.playersBonded)
+			else if (!Globals.Instance.playersBonded && Globals.Instance.bondAllowed)
 			{
+				Globals.Instance.bondAllowed = false;
 				bondDisallow.AllowBond();
 			}
 
