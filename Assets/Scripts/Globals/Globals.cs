@@ -179,6 +179,8 @@ public class Globals : MonoBehaviour {
     public GameObject continueSpawnLocation = null;
     public bool fromContinue = false;
 
+
+    public bool quickFade = false;
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;

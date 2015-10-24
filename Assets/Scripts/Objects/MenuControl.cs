@@ -77,6 +77,24 @@ public class MenuControl : MonoBehaviour {
 
 	private bool fadeStartScreen = false;
 
+    public GameObject gameControls;
+    private float s = 1.0f;
+    private bool toggleFadeOutControls = false;
+    private bool toggleInvoke = true;
+
+    private Vector3 posNoZ;
+    private Vector3 player1NoZ;
+    private Vector3 player2NoZ;
+
+    public float distance = 2.0f;
+    private float distancePow = 0.0f;
+
+    public float disToPlayer1;
+    public float disToPlayer2;
+
+    public bool player1Toggled = false;
+    public bool player2Toggled = false;
+
 	// Use this for initialization
 	void Awake () 
 	{
@@ -87,7 +105,7 @@ public class MenuControl : MonoBehaviour {
 		//mainMenu.SetActive (false);
 		//inputSelect.SetActive (false);
 
-		if (Application.isEditor && !Globals.Instance.zoomIntroInEditor)
+		if (Application.isEditor && Globals.Instance.quickFade)
 		{
 			fadeInDuration = .1f;
 		}
@@ -113,6 +131,7 @@ public class MenuControl : MonoBehaviour {
 			StartCoroutine(MainMenuLoadLevel());
 
 		Globals.Instance.inMainMenu = true;
+        distancePow = Mathf.Pow(distance, 2);
 	}
 
 
@@ -143,6 +162,21 @@ public class MenuControl : MonoBehaviour {
 	//Main Menu/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case MenuState.MainMenu:
 
+                    if(toggleInvoke)
+                    {
+                        posNoZ = new Vector3(transform.position.x, transform.position.y, 0.0f);
+
+
+                        if (!Player1InRange() || !Player2InRange())
+                        {
+                            ToggleControlsFadeInvoke();
+                        }
+                        
+                    }
+                    if(toggleFadeOutControls)
+                    {
+                        FadeOutControls();
+                    }
 				
 				if(!mainMenu.activeInHierarchy)
 						mainMenu.SetActive(true);
@@ -293,8 +327,45 @@ public class MenuControl : MonoBehaviour {
 			fMainMenu.FadeOut();
 		}
 	}
-	
-	
+
+    private void ToggleControlsFadeInvoke()
+    {
+        toggleFadeOutControls = true;
+        toggleInvoke = false;
+    }
+
+    private void FadeOutControls()
+    {
+        if(gameControls.GetComponent<CanvasGroup>().alpha != 0.0f)
+        {
+            s = Mathf.Clamp(s - Time.deltaTime / 2.0f, 0.0f, 1.0f);
+            gameControls.GetComponent<CanvasGroup>().alpha = s;
+
+            
+        }
+        else
+        {
+            toggleFadeOutControls = false;
+        }
+    }
+
+
+    private bool Player1InRange()
+    {
+        player1NoZ = new Vector3(Globals.Instance.Player1.transform.position.x, Globals.Instance.Player1.transform.position.y, 0.0f);
+        disToPlayer1 = Vector3.SqrMagnitude(player1NoZ - posNoZ);
+        player1Toggled = disToPlayer1 < distancePow;
+        return player1Toggled;
+    }
+
+    private bool Player2InRange()
+    {
+        player2NoZ = new Vector3(Globals.Instance.Player2.transform.position.x, Globals.Instance.Player2.transform.position.y, 0.0f);
+        disToPlayer2 = Vector3.SqrMagnitude(player2NoZ - posNoZ);
+        player2Toggled = disToPlayer2 < distancePow;
+        return player2Toggled;
+    }
+
 	private void StartGame()
 	{
 		startGame = true;
@@ -352,7 +423,7 @@ public class MenuControl : MonoBehaviour {
 	{
 		if (logo.GetComponent<CanvasGroup>().alpha != 1.0f)
 		{
-			t = Mathf.Clamp(t + Time.deltaTime / 5.0f, 0.0f, 1.0f);
+            t = Globals.Instance.quickFade ? Mathf.Clamp(t + Time.deltaTime / fadeInDuration, 0.0f, 1.0f) : Mathf.Clamp(t + Time.deltaTime / 5.0f, 0.0f, 1.0f);
 			logo.GetComponent<CanvasGroup>().alpha = t;
 		}
 		else
