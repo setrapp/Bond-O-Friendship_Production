@@ -164,6 +164,7 @@ public class Globals : MonoBehaviour {
 
 
 	public GameObject pauseMenu;
+    public GameObject pauseMenuFloors;
 
 	public SetShaderData_DarkAlphaMasker darknessMask = null;
 	public float playerLuminIntensity = 1;
@@ -179,6 +180,8 @@ public class Globals : MonoBehaviour {
     public GameObject continueSpawnLocation = null;
     public bool fromContinue = false;
 
+
+    public bool quickFade = false;
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
@@ -340,6 +343,7 @@ public class Globals : MonoBehaviour {
 	{
 		SetPauseLocations ();
 		CameraSplitter.Instance.SetZoomTarget ();
+        pauseMenuFloors.transform.position = new Vector3(CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, pauseMenuFloors.transform.position.z);
 		allowInput = false;
 	}
 
