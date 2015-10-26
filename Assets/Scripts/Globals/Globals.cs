@@ -247,7 +247,7 @@ public class Globals : MonoBehaviour {
 				gameState = GameState.Pausing;
 				OnPause();
 			}
-			if(gameState == GameState.Paused && !zoomIntroInEditor && Application.isEditor)
+			if(gameState == GameState.Paused && Application.isEditor)
 			{
 				allowInput = false;
 				CameraSplitter.Instance.splittable = true;
@@ -300,6 +300,7 @@ public class Globals : MonoBehaviour {
 			}
 			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedIn)
 			{
+				pauseMenuFloors.SetActive(false);
 				gameState = GameState.Unpaused;
                 CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
                 CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
@@ -343,6 +344,7 @@ public class Globals : MonoBehaviour {
 	{
 		SetPauseLocations ();
 		CameraSplitter.Instance.SetZoomTarget ();
+		pauseMenuFloors.SetActive (true);
         pauseMenuFloors.transform.position = new Vector3(CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, pauseMenuFloors.transform.position.z);
 		allowInput = false;
 	}

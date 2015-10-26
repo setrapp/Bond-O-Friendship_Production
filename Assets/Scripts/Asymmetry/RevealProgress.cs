@@ -6,33 +6,34 @@ public class RevealProgress : MonoBehaviour {
 	public  GameObject pairedPuzzle;
 	private Vector3 targetScale;
 	private int arrayLength = 0;
-	private GameObject[] nodes;
+	private MirroringClusterNode[] nodes;
 	private float revealedProgress;
     private int arrayCounter = 0;
 	
 	// Use this for initialization
 	void Start () {
-		for(int i = 0; i < pairedPuzzle.transform.childCount; i++)
+		nodes = pairedPuzzle.GetComponentsInChildren<MirroringClusterNode>();
+		/*for(int i = 0; i < pairedPuzzle.transform.childCount; i++)
 		{
 			if(pairedPuzzle.transform.GetChild(i).gameObject.name == "Node1" || pairedPuzzle.transform.GetChild(i).gameObject.name == "Node2")
 				arrayLength++;
 		}
-		nodes = new GameObject[arrayLength];
+		nodes = new MirroringClusterNode[arrayLength];
 		for(int i = 0; i < pairedPuzzle.transform.childCount; i++)
 		{
             if (pairedPuzzle.transform.GetChild(i).gameObject.name == "Node1" || pairedPuzzle.transform.GetChild(i).gameObject.name == "Node2")
             {
-                nodes[arrayCounter] = pairedPuzzle.transform.GetChild(i).gameObject;
+                nodes[arrayCounter] = pairedPuzzle.transform.GetChild(i).GetComp;
                 arrayCounter++;
             }
-		}
+		}*/
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		for(int i = 0; i < nodes.Length; i++)
 		{
-			if(nodes[i].GetComponent<MirroringClusterNode>() != null && nodes[i].GetComponent<MirroringClusterNode>().revealed == true)
+			if(nodes[i] != null && nodes[i].revealed == true)
 			{
 				//Debug.Log(1/nodes.Length);
 				revealedProgress += 1.0f/nodes.Length;

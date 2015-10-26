@@ -19,7 +19,8 @@ public class SpinPad : WaitPad {
 	private float oldRotateeRotation;
 	public bool completeOnIn = false;
 	public bool completeOnOut = false;
-	private bool wasCompleted = false;
+	[HideInInspector]
+	public bool wasCompleted = false;
 	public float inRadius = 5.5f;
 	public float outRadius = 5.5f;
 	public float currentRadius = 5.5f;
@@ -41,6 +42,7 @@ public class SpinPad : WaitPad {
 	public Color lineNotCompletedColor = new Color(0.75f, 0.75f, 0.75f, 0.5f);
 	public Color lineCompletedColor = new Color(1.0f, 1.0f, 1.0f, 0.8f);
 	public static float nonCompleteThreshold = 0.95f;
+	public bool forceComplete = false;
 
 	void Start()
 	{
@@ -121,7 +123,7 @@ public class SpinPad : WaitPad {
 			float progress = (rotationProgress / 2) + 0.5f;
 			currentRadius = (outRadius * (1 - progress)) + (inRadius * progress);
 
-			if ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END)))
+			if ((completeOnIn && IsAtLimit(SpinLimit.PULL_END)) || (completeOnOut && IsAtLimit(SpinLimit.PUSH_END)) || forceComplete)
 			{
 				if (!wasCompleted)
 				{
@@ -154,6 +156,7 @@ public class SpinPad : WaitPad {
 						}
 					}
 				}
+				forceComplete = false;
 			}
 			else if (wasCompleted && Mathf.Abs(rotationProgress) < nonCompleteThreshold)
 			{
