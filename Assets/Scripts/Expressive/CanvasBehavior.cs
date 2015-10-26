@@ -17,7 +17,10 @@ public class CanvasBehavior : MonoBehaviour {
 	public float minPaintRadius = 1;
 	public float maxPaintRadius = 5;
     public bool lightActive;
+    public GameObject optionalSecondPairedCanvas;
     public float canvasBGLightGlowSpeed = 0.04f;
+    private bool p1OnCanvas;
+    private bool p2OnCanvas;
 	[HideInInspector]
 	public CapsuleCollider canvasCollider;
 
@@ -118,12 +121,12 @@ public class CanvasBehavior : MonoBehaviour {
 		}
         if (canvasBGLight != null)
         {
-            if (lightActive && canvasBGLight.GetComponent<Renderer>().material.color.a < 1)
+            if (lightActive && canvasBGLight.GetComponent<Renderer>().material.color.a < 1 && (p1OnCanvas || p2OnCanvas))
             {
                 canvasBGLight.GetComponent<Renderer>().material.color += new Color(0, 0, 0, canvasBGLightGlowSpeed);
                 lightParticle.Play();
             }
-            else if(!lightActive && canvasBGLight.GetComponent<Renderer>().material.color.a > 0)
+            else if(!lightActive && canvasBGLight.GetComponent<Renderer>().material.color.a > 0 && (!p1OnCanvas && !p2OnCanvas))
             {
                 canvasBGLight.GetComponent<Renderer>().material.color -= new Color(0, 0, 0, canvasBGLightGlowSpeed);
                 lightParticle.Stop();
@@ -135,8 +138,23 @@ public class CanvasBehavior : MonoBehaviour {
 	{
         if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
         {
+            if (collide.gameObject.name == "Player 1")
+            {
+                p1OnCanvas = true;
+                pairedCanvas.GetComponent<CanvasBehavior>().p1OnCanvas = true;
+            }
+            if (collide.gameObject.name == "Player 2")
+            {
+                p2OnCanvas = true;
+                pairedCanvas.GetComponent<CanvasBehavior>().p2OnCanvas = true;
+            }
             lightActive = true;
             pairedCanvas.GetComponent<CanvasBehavior>().lightActive = true;
+            if(optionalSecondPairedCanvas != null)
+            {
+                optionalSecondPairedCanvas.GetComponent<CanvasBehavior>().lightActive = true;
+                optionalSecondPairedCanvas.GetComponent<CanvasBehavior>().pairedCanvas.GetComponent<CanvasBehavior>().lightActive = true;
+            }
         }
         if (paintCopier == null)
 		{
@@ -178,8 +196,23 @@ public class CanvasBehavior : MonoBehaviour {
 	{
         if (collide.gameObject.name == "Player 1" || collide.gameObject.name == "Player 2")
         {
+            if (collide.gameObject.name == "Player 1")
+            {
+                p1OnCanvas = false;
+                pairedCanvas.GetComponent<CanvasBehavior>().p1OnCanvas = false;
+            }
+            if (collide.gameObject.name == "Player 2")
+            {
+                p2OnCanvas = false;
+                pairedCanvas.GetComponent<CanvasBehavior>().p2OnCanvas = false;
+            }
             lightActive = false;
             pairedCanvas.GetComponent<CanvasBehavior>().lightActive = false;
+            if (optionalSecondPairedCanvas != null)
+            {
+                optionalSecondPairedCanvas.GetComponent<CanvasBehavior>().lightActive = false;
+                optionalSecondPairedCanvas.GetComponent<CanvasBehavior>().pairedCanvas.GetComponent<CanvasBehavior>().lightActive = false;
+            }
         }
         if (paintCopier == null)
 		{
