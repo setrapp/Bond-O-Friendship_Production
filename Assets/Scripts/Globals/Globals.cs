@@ -287,6 +287,10 @@ public class Globals : MonoBehaviour {
 				//pauseMenu.SetActive(true);
 			//CameraSplitter.Instance.splittable = false;
 			allowInput = true;
+			if (darknessMask != null && darknessMask.gameObject.activeSelf)
+			{
+				darknessMask.gameObject.SetActive(false);
+			}
 		}
 
 		if (gameState == GameState.Unpausing) 
@@ -295,6 +299,10 @@ public class Globals : MonoBehaviour {
 				//pauseMenu.SetActive(false);
 			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
 			{
+				if (darknessMask != null && !darknessMask.gameObject.activeSelf)
+				{
+					darknessMask.gameObject.SetActive(true);
+				}
 				CameraSplitter.Instance.Zoom(false);
 				CameraSplitter.Instance.MovePlayers(player1PositionBeforePause, player2PositionBeforePause, false);
 			}
@@ -304,8 +312,11 @@ public class Globals : MonoBehaviour {
 				gameState = GameState.Unpaused;
                 CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
                 CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
-				if (player1 != null) { player1.character.bondAttachable.enabled = true; }
-				if (player2 != null) { player2.character.bondAttachable.enabled = true; }
+				if (bondAllowed)
+				{
+					if (player1 != null) { player1.character.bondAttachable.enabled = true; }
+					if (player2 != null) { player2.character.bondAttachable.enabled = true; }
+				}
 				allowInput = true;
 			}
 		}
