@@ -112,8 +112,10 @@ public class CameraSplitter : MonoBehaviour {
 		wasSplit = split;
 		CheckSplit(true);
 
-        player1Target.transform.position = player1.transform.position;
-        player2Target.transform.position = player2.transform.position;
+        float yOffset = player1.transform.position.y - 19.0f;
+
+        player1Target.transform.position = new Vector3(player1.transform.position.x, yOffset, player1.transform.position.z);
+        player2Target.transform.position = new Vector3(player2.transform.position.x, yOffset, player2.transform.position.z);
 
         player1TargetStartPosition = player1Target.transform.localPosition;
         player2TargetStartPosition = player2Target.transform.localPosition;

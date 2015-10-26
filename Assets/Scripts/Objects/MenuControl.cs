@@ -95,13 +95,17 @@ public class MenuControl : MonoBehaviour {
     public bool player1Toggled = false;
     public bool player2Toggled = false;
 
+    public bool moveCameraOffset = false;
+    public Vector3 cameraOffset = new Vector3(0.0f, -12.0f, 0.0f);
+    private float x = 1.0f;
+
 	// Use this for initialization
 	void Awake () 
 	{
 		//startColor = levelCover.renderer.material.color;
 	   // fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f);
 		//inputSelectRenderers = inputSelect.GetComponentsInChildren<Renderer>();   
-	   // Globals.Instance.allowInput = false;
+	    Globals.Instance.allowInput = false;
 		//mainMenu.SetActive (false);
 		//inputSelect.SetActive (false);
 
@@ -155,6 +159,10 @@ public class MenuControl : MonoBehaviour {
 					FadeStartMenu();
 			}
 
+            if(moveCameraOffset)
+            {
+                AdjustCameraOffset();
+            }
 
 			switch(menuState)
 			{
@@ -307,6 +315,7 @@ public class MenuControl : MonoBehaviour {
 					CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
 					Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
 					Globals.Instance.inMainMenu = false;
+                    Globals.Instance.pauseMenuFloors.SetActive(true);
 
 					startZoom = false;
 				}
@@ -380,18 +389,35 @@ public class MenuControl : MonoBehaviour {
 		}
 		else
 		{
-			if (f != 1)
-			{
+			//if (f != 1)
+			//{
 			   
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				inputFill.allowFill = true;
 				startMenu.SetActive(false);
 				t = 1.0f;
-			}
+                moveCameraOffset = true;
+			//}
 		}
 	}
+
+    private void AdjustCameraOffset()
+    {
+        if(x != 0)
+        {
+            x = Mathf.Clamp(x - Time.deltaTime / 2.0f, 0.0f, 1.0f);
+            CameraSplitter.Instance.mainCameraFollow.centerOffset = Vector3.Lerp(Vector3.zero, cameraOffset, x);
+        }
+        else
+        {
+            moveCameraOffset = false;
+            Helper.FirePulse(Globals.Instance.Player1.transform.position, Globals.Instance.defaultPulseStats);
+            Helper.FirePulse(Globals.Instance.Player2.transform.position, Globals.Instance.defaultPulseStats);
+            Globals.Instance.allowInput = true;
+        }
+    }
 
 	private void FadeControls()
 	{            
@@ -410,6 +436,7 @@ public class MenuControl : MonoBehaviour {
 				CameraSplitter.Instance.followPlayers = true;
 				Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
 				Globals.Instance.inMainMenu = false;
+                Globals.Instance.pauseMenuFloors.SetActive(true);
 				Globals.Instance.allowInput = true;
 			}
 
