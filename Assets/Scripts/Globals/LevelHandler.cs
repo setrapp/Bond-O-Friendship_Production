@@ -44,6 +44,7 @@ public class LevelHandler : MonoBehaviour {
 					islandContainer.SendMessage("IslandLoaded", checkIsland);
 					loadedIslands.Add(checkIsland);
 
+					//Debug.Log(CameraColorFade.Instance.gameObject);
 					CameraColorFade.Instance.FadeToColor(checkIsland.backgroundColor);
 					AudioSource backgroundAudio = Globals.Instance.levelsBackgroundAudio[(int)checkIsland.backgroundAudioId];
 					if (backgroundAudio != Globals.Instance.bgm)

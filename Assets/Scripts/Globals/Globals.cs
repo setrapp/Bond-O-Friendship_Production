@@ -513,6 +513,12 @@ public class Globals : MonoBehaviour {
 				Globals.Instance.Player2.transform.parent = Globals.instance.initialPlayerHolder.transform;
 			}
 
+			if (darknessMask != null)
+			{
+				Globals.Instance.darknessMask.fadeIn = false;
+				Globals.Instance.darknessMask.gameObject.SetActive(true);
+			}
+
 			// Destoy this globals and allow the existing one to continue.
 			Destroy(gameObject);
 			return true;
