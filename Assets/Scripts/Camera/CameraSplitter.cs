@@ -257,7 +257,9 @@ public class CameraSplitter : MonoBehaviour {
             Vector3 splitCamera2Pos = splitCameraFollow.transform.position;
             transform.position = newCenterPos;
             mainCameraFollow.transform.position = splitCamera1Pos;
+            mainCameraFollow.transform.localPosition = new Vector3(mainCameraFollow.transform.localPosition.x, mainCameraFollow.transform.localPosition.y, 0.0f);
             splitCameraFollow.transform.position = splitCamera2Pos;
+            splitCameraFollow.transform.localPosition = new Vector3(splitCameraFollow.transform.localPosition.x, splitCameraFollow.transform.localPosition.y, 0.0f);
         }
 
         startPos = newCenterPos;
