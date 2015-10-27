@@ -6,6 +6,7 @@ public class StreamChannelSeries : MonoBehaviour {
 	public bool renderBeds = true;
 	//public bool renderBanks = true;
 	public bool maskBeds = true;
+	public float bedRenderWidth = 0.5f;
 	public Material overlayMaterial;
 	public Material maskMaterial;
 	public int maskRenderOffset = -1;
@@ -54,6 +55,8 @@ public class StreamChannelSeries : MonoBehaviour {
 
 						bedOverlay.transform.parent = channels[i].bed.transform;
 						bedMask.transform.parent = channels[i].bed.transform;
+						bedOverlayRenderer.transform.localScale = new Vector3(bedRenderWidth, 1, 1);
+						bedMaskRenderer.transform.localScale = new Vector3(bedRenderWidth, 1, 1);
 					}
 				}
 				/*if (channels[i].bank1 != null)
