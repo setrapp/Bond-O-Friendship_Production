@@ -19,7 +19,7 @@ public class AudioTrigger : MonoBehaviour {
 
 	private void PlayAudio(Vector3 position)
 	{
-		if (audioToPlay != null && audioToPlay.gameObject.activeInHierarchy && (!audioToPlay.isPlaying || playMultiple))
+		if (audioToPlay != null && audioToPlay.isActiveAndEnabled && (!audioToPlay.isPlaying || playMultiple))
 		{
 			if (moveToCollsion && audioMover != null)
 			{

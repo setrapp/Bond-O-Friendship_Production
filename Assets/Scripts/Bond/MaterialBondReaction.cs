@@ -20,12 +20,12 @@ public class MaterialBondReaction : MonoBehaviour {
 
 		mainColor = targetRenderer.material.GetColor("_Color");
 
-		ReactToPlayerBond(true, false);
+		//ReactToPlayerBond(true, false);
 	}
 
 	void Update()
 	{
-		ReactToPlayerBond(false);
+		//ReactToPlayerBond(false);
 	}
 
 	private void ReactToPlayerBond(bool forceReact, bool forcedReaction = false)
