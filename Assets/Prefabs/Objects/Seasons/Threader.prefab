@@ -65,7 +65,7 @@ Transform:
   m_Father: {fileID: 466324}
   m_RootOrder: 0
 --- !u!23 &2366324
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -73,19 +73,23 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 1c3a82c683edb084982382d76ce2e4f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!23 &2366326
-Renderer:
+MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -93,15 +97,19 @@ Renderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: e8cc063445594f848b1aca54d22d6690, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3366324
@@ -156,13 +164,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf3bb2ed061e974d8d63debf1a5dc00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threaderRenderer: {fileID: 0}
   activated: 0
   r: 0
   bondCount: 0
   bondLinks: []
+  players: []
   threadedbond: {fileID: 0}
+  waitingOnFull: 0
   smallripplePrefab: {fileID: 100000, guid: 609ee96a62392c54ba8f0ff80dfc5b20, type: 2}
   rippleShot: 0
+  nonActiveRotateSpeed: 25
+  activeRotateSpeed: -60
 --- !u!135 &13566324
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -193,9 +206,12 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: activeRotateSpeed
+      value: -60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 166324}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
