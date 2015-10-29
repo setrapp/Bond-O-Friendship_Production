@@ -164,6 +164,7 @@ public class Globals : MonoBehaviour {
 
 
 	public GameObject pauseMenu;
+    public GameObject pauseMenuFloors;
 
 	public SetShaderData_DarkAlphaMasker darknessMask = null;
 	public float playerLuminIntensity = 1;
@@ -246,7 +247,7 @@ public class Globals : MonoBehaviour {
 				gameState = GameState.Pausing;
 				OnPause();
 			}
-			if(gameState == GameState.Paused && !zoomIntroInEditor && Application.isEditor)
+			if(gameState == GameState.Paused && Application.isEditor)
 			{
 				allowInput = false;
 				CameraSplitter.Instance.splittable = true;
@@ -286,6 +287,10 @@ public class Globals : MonoBehaviour {
 				//pauseMenu.SetActive(true);
 			//CameraSplitter.Instance.splittable = false;
 			allowInput = true;
+			if (darknessMask != null && darknessMask.gameObject.activeSelf)
+			{
+				darknessMask.gameObject.SetActive(false);
+			}
 		}
 
 		if (gameState == GameState.Unpausing) 
@@ -294,16 +299,24 @@ public class Globals : MonoBehaviour {
 				//pauseMenu.SetActive(false);
 			if(CameraSplitter.Instance.zoomState != CameraSplitter.ZoomState.ZoomedIn)
 			{
+				if (darknessMask != null && !darknessMask.gameObject.activeSelf)
+				{
+					darknessMask.gameObject.SetActive(true);
+				}
 				CameraSplitter.Instance.Zoom(false);
 				CameraSplitter.Instance.MovePlayers(player1PositionBeforePause, player2PositionBeforePause, false);
 			}
 			if(CameraSplitter.Instance.zoomState == CameraSplitter.ZoomState.ZoomedIn)
 			{
+				pauseMenuFloors.SetActive(false);
 				gameState = GameState.Unpaused;
                 CameraSplitter.Instance.player1Target.transform.localPosition = CameraSplitter.Instance.player1TargetStartPosition;
                 CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
-				if (player1 != null) { player1.character.bondAttachable.enabled = true; }
-				if (player2 != null) { player2.character.bondAttachable.enabled = true; }
+				if (bondAllowed)
+				{
+					if (player1 != null) { player1.character.bondAttachable.enabled = true; }
+					if (player2 != null) { player2.character.bondAttachable.enabled = true; }
+				}
 				allowInput = true;
 			}
 		}
@@ -342,6 +355,8 @@ public class Globals : MonoBehaviour {
 	{
 		SetPauseLocations ();
 		CameraSplitter.Instance.SetZoomTarget ();
+		pauseMenuFloors.SetActive (true);
+        pauseMenuFloors.transform.position = new Vector3(CameraSplitter.Instance.transform.position.x, CameraSplitter.Instance.transform.position.y, pauseMenuFloors.transform.position.z);
 		allowInput = false;
 	}
 
@@ -496,6 +511,12 @@ public class Globals : MonoBehaviour {
 			{
 				Globals.Instance.Player1.transform.parent = Globals.instance.initialPlayerHolder.transform;
 				Globals.Instance.Player2.transform.parent = Globals.instance.initialPlayerHolder.transform;
+			}
+
+			if (darknessMask != null)
+			{
+				Globals.Instance.darknessMask.fadeIn = false;
+				Globals.Instance.darknessMask.gameObject.SetActive(true);
 			}
 
 			// Destoy this globals and allow the existing one to continue.

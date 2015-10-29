@@ -112,8 +112,10 @@ public class CameraSplitter : MonoBehaviour {
 		wasSplit = split;
 		CheckSplit(true);
 
-        player1Target.transform.position = player1.transform.position;
-        player2Target.transform.position = player2.transform.position;
+        float yOffset = player1.transform.position.y - 19.0f;
+
+        player1Target.transform.position = new Vector3(player1.transform.position.x, yOffset, player1.transform.position.z);
+        player2Target.transform.position = new Vector3(player2.transform.position.x, yOffset, player2.transform.position.z);
 
         player1TargetStartPosition = player1Target.transform.localPosition;
         player2TargetStartPosition = player2Target.transform.localPosition;
@@ -255,7 +257,9 @@ public class CameraSplitter : MonoBehaviour {
             Vector3 splitCamera2Pos = splitCameraFollow.transform.position;
             transform.position = newCenterPos;
             mainCameraFollow.transform.position = splitCamera1Pos;
+            mainCameraFollow.transform.localPosition = new Vector3(mainCameraFollow.transform.localPosition.x, mainCameraFollow.transform.localPosition.y, 0.0f);
             splitCameraFollow.transform.position = splitCamera2Pos;
+            splitCameraFollow.transform.localPosition = new Vector3(splitCameraFollow.transform.localPosition.x, splitCameraFollow.transform.localPosition.y, 0.0f);
         }
 
         startPos = newCenterPos;

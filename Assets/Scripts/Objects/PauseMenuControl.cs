@@ -104,7 +104,9 @@ public class PauseMenuControl : MonoBehaviour {
                 if (confirmQuitNodePuzzle != null && confirmQuitNodePuzzle.solved)
                 {
                     confirmQuitNodePuzzle.solved = false;
+                    Globals.Instance.pauseMenuFloors.SetActive(false);
                     Globals.Instance.ResetOrExit();
+                    
                 }
 
                 if (fOptions.f == 1)

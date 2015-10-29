@@ -11,6 +11,10 @@ public class EnableOnPadComplete : MonoBehaviour {
 	
 	void Awake()
 	{
+		if (triggerPad == null)
+		{
+			triggerPad = GetComponent<WaitPad>();
+		}
 		if (targetObject != null && startOpposite)
 		{
 			targetObject.SetActive(!toEnabled);
