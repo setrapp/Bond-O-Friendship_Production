@@ -599,15 +599,18 @@ public class Bond : MonoBehaviour {
 			int endIndex = links.Count - 1;
 			for (int i = startIndex; i <= endIndex; i++)
 			{
-				if (i < links.Count / 2)
+				if (links[i].jointToAttachment != null)
 				{
-					links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
+					if (i < links.Count / 2)
+					{
+						links[i].jointToAttachment.connectedBody = attachment1.attachee.body;
+					}
+					else
+					{
+						links[i].jointToAttachment.connectedBody = attachment2.attachee.body;
+					}
+					links[i].jointToAttachment.spring = 0;
 				}
-				else
-				{
-					links[i].jointToAttachment.connectedBody = attachment2.attachee.body;
-				}
-				links[i].jointToAttachment.spring = 0;
 
 				if (links[i].jointToNeighbor != null)
 				{
@@ -641,8 +644,25 @@ public class Bond : MonoBehaviour {
 			}
 			else
 			{
-				links[1].jointToAttachment.spring = stats.attachSpring1;
-				links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+				if (stats.attachSpring1 > 0) { links[1].AddJointToAttachment(); }
+				if (stats.attachSpring2 > 0) { links[links.Count - 2].AddJointToAttachment(); }
+				if (links[1].jointToAttachment != null)
+				{
+					links[1].jointToAttachment.spring = stats.attachSpring1;
+				}
+				if (links[links.Count - 2].jointToAttachment != null )
+				{
+					links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2;
+				}
+			}
+
+			// Remove all spring joints with no spring force to apply to attachment ... prevent ghost springs from rounding errors.
+			for (int i = 0; i < links.Count; i++)
+			{
+				if (links[i].jointToAttachment != null && links[i].jointToAttachment.spring <= 0)
+				{
+					links[i].RemoveJointToAttachment();
+				}
 			}
 		}
 	}
@@ -829,8 +849,14 @@ public class Bond : MonoBehaviour {
 		}
 		else
 		{
-			links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
-			links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+			if (links[1].jointToAttachment != null)
+			{
+				links[1].jointToAttachment.spring = stats.attachSpring1 * detailFraction;
+			}
+			if (links[links.Count - 2].jointToAttachment != null)
+			{
+				links[links.Count - 2].jointToAttachment.spring = stats.attachSpring2 * detailFraction;
+			}
 		}
 	}
 
