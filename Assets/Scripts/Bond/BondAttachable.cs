@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BondAttachable : MonoBehaviour {
+	public bool findBody = true;
 	public Rigidbody body;
 	public bool handleFluffAttachment = true;
 	public bool bondAtContactPoint = true;
@@ -17,7 +18,7 @@ public class BondAttachable : MonoBehaviour {
 
 	void Awake()
 	{
-		if (body == null)
+		if (body == null && findBody)
 		{
 			body = GetComponent<Rigidbody>();
 		}

@@ -523,6 +523,8 @@ public class Bond : MonoBehaviour {
 
 	private void RemoveLink(int index, bool weightJoints = true)
 	{
+		return;
+
 		// Remove link in bond at the given index, or default to center.
 		if (index < 0)
 		{

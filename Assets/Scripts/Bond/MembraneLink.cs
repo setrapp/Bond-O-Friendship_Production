@@ -99,4 +99,6 @@ public class MembraneLink : BondLink {
 			bond.forceFullDetail = false;
 		}
 	}
+
+	public override void RemoveJointToAttachment(){}
 }

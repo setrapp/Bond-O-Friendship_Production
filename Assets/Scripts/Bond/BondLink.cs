@@ -13,7 +13,7 @@ public class BondLink : MonoBehaviour {
 	public int orderLevel = 0;
 	public bool broken = false;
 
-	public void AddJointToAttachment()
+	public virtual void AddJointToAttachment()
 	{
 		if (jointToAttachment == null)
 		{
@@ -26,7 +26,7 @@ public class BondLink : MonoBehaviour {
 		}
 	}
 
-	public void RemoveJointToAttachment()
+	public virtual void RemoveJointToAttachment()
 	{
 		if (jointToAttachment != null)
 		{
