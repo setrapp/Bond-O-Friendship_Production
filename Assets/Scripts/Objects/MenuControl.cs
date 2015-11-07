@@ -315,7 +315,7 @@ public class MenuControl : MonoBehaviour {
 					CameraSplitter.Instance.player2Target.transform.localPosition = CameraSplitter.Instance.player2TargetStartPosition;
 					Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
 					Globals.Instance.inMainMenu = false;
-                    Globals.Instance.pauseMenuFloors.SetActive(true);
+                    //Globals.Instance.pauseMenuFloors.SetActive(true);
 
 					startZoom = false;
 				}
@@ -436,7 +436,7 @@ public class MenuControl : MonoBehaviour {
 				CameraSplitter.Instance.followPlayers = true;
 				Destroy(GameObject.FindGameObjectWithTag("Main Menu"));
 				Globals.Instance.inMainMenu = false;
-                Globals.Instance.pauseMenuFloors.SetActive(true);
+                //Globals.Instance.pauseMenuFloors.SetActive(true);
 				Globals.Instance.allowInput = true;
 			}
 
