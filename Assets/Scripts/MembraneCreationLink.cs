@@ -14,6 +14,7 @@ public class MembraneCreationLink : MonoBehaviour {
 		if (brokenMembrane != null && brokenMembrane == membraneWallTrigger && createLinkedOnBreak)
 		{
 			CreateMembranes();
+			Debug.Log ("HI");
 		}
 	}
 

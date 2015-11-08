@@ -135,7 +135,7 @@ public class IslandContainer : MonoBehaviour {
 					IslandContainer connectedIslandContainer = membraneConnection.linkedIslandContainer;
 					if (connectedIslandContainer != null)
 					{
-						if (!connectedIslandContainer.islandLoading)
+						if (!connectedIslandContainer.islandLoading && connectedIslandContainer.island == null)
 						{
 							// Make atmosphere into new level unbreakable until the level is loaded.
 							for (int i = 0; i < connectedIslandContainer.atmosphere.Count; i++)
