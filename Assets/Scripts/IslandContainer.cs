@@ -114,12 +114,12 @@ public class IslandContainer : MonoBehaviour {
 				if (!islandLoading)
 				{
 					// Unload other islands and generate atmospheres.
-					LevelHandler.Instance.UnloadIslands();
+					LevelHandler.Instance.UnloadIslands(island);
 					//LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
 
 					// Load the target island.
-					StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
-					islandLoading = true;
+					//StartCoroutine(LevelHandler.Instance.LoadIsland(islandSceneName, this));
+					//islandLoading = true;
 
 					// TODO disable atmosphere of previous level
 					
@@ -128,6 +128,30 @@ public class IslandContainer : MonoBehaviour {
 			//Exiting Level
 			else
 			{
+				// Load the target island.
+				MembraneCreationLink membraneConnection = breakingMembrane.GetComponent<MembraneCreationLink>();
+				if (membraneConnection != null)
+				{
+					IslandContainer connectedIslandContainer = membraneConnection.linkedIslandContainer;
+					if (connectedIslandContainer != null)
+					{
+						if (!connectedIslandContainer.islandLoading && connectedIslandContainer.island == null)
+						{
+							// Make atmosphere into new level unbreakable until the level is loaded.
+							for (int i = 0; i < connectedIslandContainer.atmosphere.Count; i++)
+							{
+								if (connectedIslandContainer.atmosphere[i] != null)
+								{
+									connectedIslandContainer.atmosphere[i].requiredPlayersToBreak = 3;
+								}
+							}
+
+							StartCoroutine(LevelHandler.Instance.LoadIsland(connectedIslandContainer.islandSceneName, connectedIslandContainer));
+							connectedIslandContainer.islandLoading = true;
+						}
+					}
+				}
+
 				// TODO disable membranes linked to other membranes in atmosphere
 				//DestroyLinkedMembranes(breakingMembrane);
 
@@ -201,6 +225,15 @@ public class IslandContainer : MonoBehaviour {
 			island = createdIsland;
 			createdIsland.container = this;
 			islandLoading = false;
+
+			// When level is fully loaded, allow the atmosphere to break.
+			for (int i = 0; i < atmosphere.Count; i++)
+			{
+				if (atmosphere[i] != null)
+				{
+					atmosphere[i].requiredPlayersToBreak = 2;
+				}
+			}
 			
 			/*PlayersEstablish playersEstablish = createdIsland.GetComponentInChildren<PlayersEstablish>();
 			if (playersEstablish != null)

@@ -13,6 +13,28 @@ public class BondLink : MonoBehaviour {
 	public int orderLevel = 0;
 	public bool broken = false;
 
+	public virtual void AddJointToAttachment()
+	{
+		if (jointToAttachment == null)
+		{
+			jointToAttachment = gameObject.AddComponent<SpringJoint> ();
+			jointToAttachment.autoConfigureConnectedAnchor = false;
+			jointToAttachment.anchor = Vector3.zero;
+			jointToAttachment.connectedAnchor = Vector3.zero;
+			jointToAttachment.spring = 0;
+			jointToAttachment.damper = 0;
+		}
+	}
+
+	public virtual void RemoveJointToAttachment()
+	{
+		if (jointToAttachment != null)
+		{
+			Destroy(jointToAttachment);
+			jointToAttachment = null;
+		}
+	}
+
 	void OnDestroy()
 	{
 		broken = true;

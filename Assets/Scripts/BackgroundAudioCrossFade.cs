@@ -74,6 +74,30 @@ public class BackgroundAudioCrossFade : MonoBehaviour {
         }
 
 		Globals.Instance.bgm = newAudio;
+		fading = false;
         
     }
+
+	public IEnumerator FadeOut()
+	{
+		AudioSource oldAudio = Globals.Instance.bgm;
+		
+		fading = true;
+		//Calculate rates of change
+		float oldVolumeRate = oldAudio.volume / fadeTime;
+		
+		float startOldVolume = oldAudio.volume;
+		float oldAudioProgress = 0;
+		float newAudioProgress = 0;
+		
+		while (oldAudio.volume > 0)
+		{
+			//lerp old audio volume to 0
+			oldAudioProgress += oldVolumeRate * Time.deltaTime;
+			oldAudio.volume = Mathf.Lerp(startOldVolume, 0.0f, oldAudioProgress);
+			yield return null;
+		}
+		
+		oldAudio.Stop();		
+	}
 }

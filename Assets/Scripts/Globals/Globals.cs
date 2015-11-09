@@ -481,6 +481,7 @@ public class Globals : MonoBehaviour {
 			newControls.transform.parent = existingPause.gameControls.transform.parent;
 			Destroy(existingPause.gameControls.gameObject);
 			existingPause.gameControls = newControls;
+			existingPause.gameObject.SetActive(false);
 
 			// Ensure that all background music is at the correct volume.
 			for (int i = 0; i < Globals.Instance.levelsBackgroundAudio.Length; i++)
