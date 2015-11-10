@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class IslandContainer : MonoBehaviour {
 	public IslandID islandId;
 	public Island island;
+	public Island tempIsland;
 	[HideInInspector]
 	public bool islandLoading = false;
 	public string islandSceneName;
@@ -114,6 +115,11 @@ public class IslandContainer : MonoBehaviour {
 				if (!islandLoading)
 				{
 					// Unload other islands and generate atmospheres.
+					if (tempIsland != null)
+					{
+						island = tempIsland;
+						tempIsland = null;
+					}
 					LevelHandler.Instance.UnloadIslands(island);
 					//LevelHandler.Instance.GenerateIslandAtmospheres(parentRing, this);
 
@@ -145,6 +151,8 @@ public class IslandContainer : MonoBehaviour {
 									connectedIslandContainer.atmosphere[i].requiredPlayersToBreak = 3;
 								}
 							}
+
+							LevelHandler.Instance.UnloadIslands(island);
 
 							StartCoroutine(LevelHandler.Instance.LoadIsland(connectedIslandContainer.islandSceneName, connectedIslandContainer));
 							connectedIslandContainer.islandLoading = true;
@@ -222,7 +230,8 @@ public class IslandContainer : MonoBehaviour {
 			}
 			createdIsland.transform.localPosition += spawnOffset;
 			createdIsland.transform.localRotation = Quaternion.Euler(spawnRotation);
-			island = createdIsland;
+			if (spawnOnStart) { island = createdIsland; }
+			else { tempIsland = createdIsland; }
 			createdIsland.container = this;
 			islandLoading = false;
 
