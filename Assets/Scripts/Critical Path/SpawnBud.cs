@@ -98,6 +98,7 @@ public class SpawnBud : MonoBehaviour {
             //newBud.GetComponent<Renderer>().material.color = BudColor;
 			fading = true;
 			spawned = true;
+			fullScaled = false;
 		}
 	}
 }

@@ -26,7 +26,7 @@ public class StreamPulseReaction : StreamReaction {
 					pulseStats = Globals.Instance.defaultPulseStats;
 				}
                 createdPulse = Helper.FirePulse(transform.TransformPoint(pulsePositionOffset), pulseStats, optionalPulsePrefab);
-                if (fillSound != null)
+                if (fillSound != null && fillSound.isActiveAndEnabled)
                 {
                     fillSound.Play();
                 }

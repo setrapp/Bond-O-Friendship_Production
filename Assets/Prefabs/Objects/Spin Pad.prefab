@@ -1603,6 +1603,7 @@ MonoBehaviour:
     smallRing: 0
     pauseInterval: -1
     retractInterval: -1
+  fillSound: {fileID: 0}
 --- !u!114 &11415436
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1633,6 +1634,7 @@ MonoBehaviour:
     smallRing: 0
     pauseInterval: -1
     retractInterval: -1
+  fillSound: {fileID: 0}
 --- !u!114 &11455970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1706,8 +1708,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 0
-    attachSpring2: 500
+    attachSpring1: 100
+    attachSpring2: 5000
     linkMass: .5
     linkDrag: .5
     pullApartMaxFactor: 0
@@ -1775,6 +1777,7 @@ MonoBehaviour:
   space: 1
   destroyWhenBroken: 0
   wallIsCentered: 0
+  baseOnPosts: 0
   membraneDirection: {x: -1, y: 0, z: 0}
   membraneLength: 5.5
   showPosts: 0
@@ -1961,6 +1964,7 @@ MonoBehaviour:
   helmet2: {fileID: 11455994}
   completeOnIn: 0
   completeOnOut: 0
+  wasCompleted: 0
   inRadius: 5.5
   outRadius: 8
   currentRadius: 5.5
@@ -1972,11 +1976,13 @@ MonoBehaviour:
   dragIncreaseSpeed: 50
   membraneAttachmentSpring: 20
   spinInhibitors: 0
+  spinBackInhibitors: 0
   innerLine: {fileID: 12021736}
   outerLine: {fileID: 12021738}
   lineInactiveColor: {r: .5, g: .5, b: .5, a: .392156869}
   lineNotCompletedColor: {r: .75, g: .75, b: .75, a: .501960814}
   lineCompletedColor: {r: 1, g: 1, b: 1, a: .784313738}
+  forceComplete: 0
 --- !u!114 &11455994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2436,8 +2442,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    attachSpring1: 0
-    attachSpring2: 500
+    attachSpring1: 100
+    attachSpring2: 5000
     linkMass: .5
     linkDrag: .5
     pullApartMaxFactor: 0
@@ -2505,6 +2511,7 @@ MonoBehaviour:
   space: 1
   destroyWhenBroken: 0
   wallIsCentered: 0
+  baseOnPosts: 0
   membraneDirection: {x: 1, y: 0, z: 0}
   membraneLength: 5.5
   showPosts: 0
@@ -3046,6 +3053,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: reactionProgress
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: stats.attachSpring1
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: stats.attachSpring2
+      value: 5000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

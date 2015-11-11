@@ -7,12 +7,14 @@ public class MembraneCreationLink : MonoBehaviour {
 	public MembraneWall membraneWallTrigger;
 	public List<MembraneWall> linkedMembranes;
 	public bool createLinkedOnBreak = true;
+	public IslandContainer linkedIslandContainer;
 
 	private void MembraneWallBreaking(MembraneWall brokenMembrane)
 	{
 		if (brokenMembrane != null && brokenMembrane == membraneWallTrigger && createLinkedOnBreak)
 		{
 			CreateMembranes();
+			Debug.Log ("HI");
 		}
 	}
 

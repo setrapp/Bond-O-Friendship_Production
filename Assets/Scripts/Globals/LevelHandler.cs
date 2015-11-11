@@ -44,6 +44,7 @@ public class LevelHandler : MonoBehaviour {
 					islandContainer.SendMessage("IslandLoaded", checkIsland);
 					loadedIslands.Add(checkIsland);
 
+					//Debug.Log(CameraColorFade.Instance.gameObject);
 					CameraColorFade.Instance.FadeToColor(checkIsland.backgroundColor);
 					AudioSource backgroundAudio = Globals.Instance.levelsBackgroundAudio[(int)checkIsland.backgroundAudioId];
 					if (backgroundAudio != Globals.Instance.bgm)
@@ -58,20 +59,27 @@ public class LevelHandler : MonoBehaviour {
 		}
 	}
 
-	public void UnloadIslands()
+	public void UnloadIslands(Island ignoreIsland)
 	{
-		for (int i = 0; i < loadedIslands.Count; )
+		for (int i = 0; i < loadedIslands.Count;)
 		{
 			Island removeIsland = loadedIslands[i];
-			loadedIslands.RemoveAt(i);
-			if (removeIsland.container != null)
+			if (removeIsland != ignoreIsland)
 			{
-				//removeIsland.container.GenerateAtmosphere();
+				loadedIslands.RemoveAt(i);
+				if (removeIsland.container != null)
+				{
+					//removeIsland.container.GenerateAtmosphere();
 
-				removeIsland.container.island = null;
-				removeIsland.container = null;
+					removeIsland.container.island = null;
+					removeIsland.container = null;
+				}
+				Destroy(removeIsland.gameObject);
 			}
-			Destroy(removeIsland.gameObject);
+			else
+			{
+				i++;
+			}
 		}
 	}
 

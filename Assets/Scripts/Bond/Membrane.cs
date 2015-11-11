@@ -214,7 +214,7 @@ public class Membrane : Bond {
 		{
 			breakLinks.Add(links[0] as MembraneLink);
 		}
-		if (brokenNeighbor == membraneNext)
+		if (brokenNeighbor == membraneNext && breakLinks != null && links[links.Count - 1] != null)
 		{
 			breakLinks.Add(links[links.Count - 1] as MembraneLink);
 		}

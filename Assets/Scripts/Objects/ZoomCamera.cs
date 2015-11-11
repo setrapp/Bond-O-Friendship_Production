@@ -59,6 +59,11 @@ public class ZoomCamera : MonoBehaviour {
 			}
 		}*/
 
+		if (Globals.Instance.gameState != Globals.GameState.Unpaused)
+		{
+			return;
+		}
+
 		if (endZoomPortion <= 0)
 		{
 			return;

@@ -34,6 +34,11 @@ public class MembraneShellBackFill : MonoBehaviour {
 
 		if (triggerFill != null && triggerFill.atMaxBurst)
 		{
+			if (BackgroundAudioCrossFade.Instance != null && !BackgroundAudioCrossFade.Instance.fading)
+			{
+				StartCoroutine(BackgroundAudioCrossFade.Instance.FadeOut());
+			}
+
 			transform.localScale = triggerFill.transform.localScale;
 			if (backFillRenderer != null)
 			{
