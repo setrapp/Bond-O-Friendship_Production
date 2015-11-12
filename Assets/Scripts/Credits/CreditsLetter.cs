@@ -45,7 +45,7 @@ public class CreditsLetter : MonoBehaviour {
 	private void CheckForAttachment()
 	{
 		List<LetterReceiver> possibleReceivers = LetterManager.Instance.letterReceiverLists[(int)letterValue].receivers;
-		Transform receiver = null;
+		LetterReceiver receiver = null;
 		float minDistance = -1;
 		for(int i = 0; i < possibleReceivers.Count; i++)
 		{
@@ -55,7 +55,7 @@ public class CreditsLetter : MonoBehaviour {
 				if (minDistance > tempDistance || minDistance < 0)
 				{
 					minDistance = tempDistance;
-					receiver = possibleReceivers[i].transform;
+					receiver = possibleReceivers[i];
 				}
 			}
 		}
@@ -73,11 +73,12 @@ public class CreditsLetter : MonoBehaviour {
 			}
 			if (minDistance < attachDistance)
 			{
-				transform.position = receiver.position + new Vector3(0, 0, -1);
+				transform.position = receiver.transform.position + new Vector3(0, 0, -1);
 				Destroy(gameObject.GetComponent<Collider>());
 				Destroy(gameObject.GetComponent<Rigidbody>());
 				receiver.GetComponentInChildren<ParticleSystem>().Play();
 				attachedToReceiver = true;
+				possibleReceivers.Remove(receiver);
 				backgroundRenderer.material.color = endColor;
 			}
 		}
