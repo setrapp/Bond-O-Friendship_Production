@@ -13,6 +13,8 @@ public class LetterManager : MonoBehaviour {
 	public List<LetterReceiverList> letterReceiverLists;
 	public Material[] letterMaterials;
 	public Color letterEndColor;
+	public float attachmentOffset = -0.2f;
+	public float attachmentScale = 4;
 
 	void Awake()
 	{

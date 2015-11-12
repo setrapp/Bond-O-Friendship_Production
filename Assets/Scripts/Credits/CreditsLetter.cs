@@ -60,12 +60,10 @@ public class CreditsLetter : MonoBehaviour {
 			}
 		}
 		if(receiver != null)
-		{
-			Color endColor = LetterManager.Instance.letterEndColor;
-			
+		{			
 			if (minDistance < colorChangeRange)
 			{
-				backgroundRenderer.material.color = Color.Lerp(startColor, endColor, 1 - minDistance / (colorChangeRange - attachDistance));
+				backgroundRenderer.material.color = Color.Lerp(startColor, LetterManager.Instance.letterEndColor, 1 - minDistance / (colorChangeRange - attachDistance));
 			}
 			else
 			{
@@ -73,14 +71,20 @@ public class CreditsLetter : MonoBehaviour {
 			}
 			if (minDistance < attachDistance)
 			{
-				transform.position = receiver.transform.position + new Vector3(0, 0, -1);
-				Destroy(gameObject.GetComponent<Collider>());
-				Destroy(gameObject.GetComponent<Rigidbody>());
-				receiver.GetComponentInChildren<ParticleSystem>().Play();
-				attachedToReceiver = true;
+				AttachToReceiver(receiver);
 				possibleReceivers.Remove(receiver);
-				backgroundRenderer.material.color = endColor;
 			}
 		}
+	}
+
+	private void AttachToReceiver(LetterReceiver receiver)
+	{
+		transform.position = receiver.transform.position + new Vector3(0, 0, LetterManager.Instance.attachmentOffset);
+		transform.localScale = new Vector3(LetterManager.Instance.attachmentScale, transform.localScale.y, LetterManager.Instance.attachmentScale);
+		Destroy(gameObject.GetComponent<Collider>());
+		Destroy(gameObject.GetComponent<Rigidbody>());
+		receiver.GetComponentInChildren<ParticleSystem>().Play();
+		attachedToReceiver = true;
+		backgroundRenderer.material.color = LetterManager.Instance.letterEndColor;
 	}
 }
