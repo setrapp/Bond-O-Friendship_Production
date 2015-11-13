@@ -10,18 +10,27 @@ public class CreditsLetter : MonoBehaviour {
 	public float attachDistance;
 	public bool attachedToReceiver;
 	public float colorChangeRange;
+	public float attractRange;
 
 	private float tempDistance;
 	private Color startColor;
+	private float startScale;
+	private Rigidbody body;
 	private Vector3 oldPosition;
+	private LetterReceiver receiver;
 	
 	void Start () {
 		if (backgroundRenderer == null)
 		{
 			backgroundRenderer =  GetComponent<Renderer>();
 		}
+		if (body == null)
+		{
+			body = GetComponent<Rigidbody>();
+		}
 
 		startColor = backgroundRenderer.material.color;
+		startScale = transform.localScale.x;
 
 		if (letterValue != Letter.NONE && letterRenderer != null)
 		{
@@ -45,7 +54,7 @@ public class CreditsLetter : MonoBehaviour {
 	private void CheckForAttachment()
 	{
 		List<LetterReceiver> possibleReceivers = LetterManager.Instance.letterReceiverLists[(int)letterValue].receivers;
-		LetterReceiver receiver = null;
+		LetterReceiver foundReceiver = null;
 		float minDistance = -1;
 		for(int i = 0; i < possibleReceivers.Count; i++)
 		{
@@ -55,20 +64,44 @@ public class CreditsLetter : MonoBehaviour {
 				if (minDistance > tempDistance || minDistance < 0)
 				{
 					minDistance = tempDistance;
-					receiver = possibleReceivers[i];
+					foundReceiver = possibleReceivers[i];
 				}
 			}
 		}
-		if(receiver != null)
-		{			
+		if(foundReceiver != null)
+		{	
+			if (receiver != null)
+			{
+				receiver.nearestToLetter = false;
+			}
+			foundReceiver.nearestToLetter = true;
+			receiver = foundReceiver;
+
 			if (minDistance < colorChangeRange)
 			{
-				backgroundRenderer.material.color = Color.Lerp(startColor, LetterManager.Instance.letterEndColor, 1 - minDistance / (colorChangeRange - attachDistance));
+				Color lerpEndColor = startColor + ((LetterManager.Instance.attachmentColor - startColor) * LetterManager.Instance.lerpEndPortion);
+				float lerpEndScale = startScale + ((LetterManager.Instance.attachmentScale - startScale) * LetterManager.Instance.lerpEndPortion);
+				float lerpProgress = 1 - (minDistance / colorChangeRange);
+
+				backgroundRenderer.material.color = Color.Lerp(startColor, lerpEndColor, lerpProgress);
+				receiver.attachRenderer.material.color = Color.Lerp(receiver.startColor, lerpEndColor, lerpProgress);
+
+				float lerpScale = Mathf.Lerp(startScale, lerpEndScale, lerpProgress);
+				transform.localScale = new Vector3(lerpScale, transform.localScale.y, lerpScale);
 			}
 			else
 			{
 				backgroundRenderer.material.color = startColor;
+				transform.localScale = new Vector3(startScale, transform.localScale.y, startScale);
 			}
+
+			if (minDistance < attractRange && body != null)
+			{
+				float lerpProgress = 1 - (minDistance / attractRange);
+				Vector3 attractForce = (receiver.transform.position - transform.position).normalized * LetterManager.Instance.nearbyAttractForce * lerpProgress;
+				body.AddForce(attractForce);
+			}
+
 			if (minDistance < attachDistance)
 			{
 				AttachToReceiver(receiver);
@@ -82,9 +115,9 @@ public class CreditsLetter : MonoBehaviour {
 		transform.position = receiver.transform.position + new Vector3(0, 0, LetterManager.Instance.attachmentOffset);
 		transform.localScale = new Vector3(LetterManager.Instance.attachmentScale, transform.localScale.y, LetterManager.Instance.attachmentScale);
 		Destroy(gameObject.GetComponent<Collider>());
-		Destroy(gameObject.GetComponent<Rigidbody>());
+		Destroy(body);
 		receiver.GetComponentInChildren<ParticleSystem>().Play();
 		attachedToReceiver = true;
-		backgroundRenderer.material.color = LetterManager.Instance.letterEndColor;
+		backgroundRenderer.material.color = LetterManager.Instance.attachmentColor;
 	}
 }
