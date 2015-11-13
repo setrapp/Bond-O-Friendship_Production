@@ -5,6 +5,7 @@ public class LetterReceiver : MonoBehaviour {
 
     public Letter receiveLetter;
 	public Renderer attachRenderer;
+	public CreditsLetter attachedLetter;
 	[HideInInspector]
 	public Color startColor;
 	[HideInInspector]

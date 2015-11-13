@@ -44,7 +44,7 @@ public class CreditsLetter : MonoBehaviour {
 
 	void Update () {
 		
-		if(!attachedToReceiver && oldPosition != transform.position)
+		if(!attachedToReceiver && (oldPosition != transform.position || (receiver != null && receiver.attachedLetter != null && receiver.attachedLetter != this)))
 		{
 			CheckForAttachment();
 		}
@@ -117,6 +117,8 @@ public class CreditsLetter : MonoBehaviour {
 		Destroy(gameObject.GetComponent<Collider>());
 		Destroy(body);
 		receiver.GetComponentInChildren<ParticleSystem>().Play();
+		Destroy(receiver.GetComponentInChildren<ParticleSystem>(), 5);
+		receiver.attachedLetter = this;
 		attachedToReceiver = true;
 		backgroundRenderer.material.color = LetterManager.Instance.attachmentColor;
 	}
