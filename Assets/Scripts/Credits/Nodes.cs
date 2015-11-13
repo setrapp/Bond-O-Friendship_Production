@@ -69,45 +69,45 @@ public class Nodes : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (activated == true)
-		{
-			GetComponent<Renderer>().material.color = myColor;
-			gameObject.GetComponent<Collider>().enabled = false;
-			a += Time.deltaTime*2.0f;
-			myColor = new Color (r,g,b,a);
-			if(a >= 1.0f)
-			{
-				transform.parent.GetComponent<NodeParent>().activeChildren++;
-				activated = false;
-			}
-		}
+		//if (activated == true)
+		//{
+		//	GetComponent<Renderer>().material.color = myColor;
+		//	gameObject.GetComponent<Collider>().enabled = false;
+		//	a += Time.deltaTime*2.0f;
+		//	myColor = new Color (r,g,b,a);
+		//	if(a >= 1.0f)
+		//	{
+		//		transform.parent.GetComponent<NodeParent>().activeChildren++;
+		//		activated = false;
+		//	}
+		//}
 	}
 	
 	
 	void OnTriggerEnter(Collider collide)
 	{
 		//print ("General");
-		if(collide.gameObject.name == "Player 1")
-		{
-			FirePulse(scalerate,lifetime,alpha,alphafade,collide.transform.position);
-			activated = true;
-		}
-		if(collide.gameObject.name == "Player 2")
-		{
-			FirePulse(scalerate,lifetime,alpha,alphafade,collide.transform.position);
-			activated = true;
-		}
-		if(collide.gameObject.tag == "Pulse")
-		{
-			//print ("HIT");
-			MiniFire(collide.transform.position);
-			activated = true;
-		}
-		if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
-		{
-			FirePulse(11.0f,5.0f,1.0f,0.2f, collide.transform.position);
-			activated = true;
-		}
+		//if(collide.gameObject.name == "Player 1")
+		//{
+		//	FirePulse(scalerate,lifetime,alpha,alphafade,collide.transform.position);
+		//	activated = true;
+		//}
+		//if(collide.gameObject.name == "Player 2")
+		//{
+		//	FirePulse(scalerate,lifetime,alpha,alphafade,collide.transform.position);
+		//	activated = true;
+		//}
+		//if(collide.gameObject.tag == "Pulse")
+		//{
+		//	//print ("HIT");
+		//	MiniFire(collide.transform.position);
+		//	activated = true;
+		//}
+		//if(LayerMask.LayerToName(collide.gameObject.layer) == "Bond" )
+		//{
+		//	FirePulse(11.0f,5.0f,1.0f,0.2f, collide.transform.position);
+		//	activated = true;
+		//}
 		
 		
 	}

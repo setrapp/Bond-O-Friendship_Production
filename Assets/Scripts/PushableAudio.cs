@@ -8,19 +8,21 @@ public class PushableAudio : MonoBehaviour {
     public bool wasDry;
     public AudioSource drySound;
     public AudioSource fullSound;
+	private StreamReactionList reactionList;
 
 	// Use this for initialization
 	void Start () {
+		reactionList = Pushable.GetComponent<StreamReactionList> ();
         wasDry = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if(Pushable.GetComponent<StreamReactionList>().streamsTouched == 0)
+		if(reactionList.streamsTouched == 0)
         {
             isDry = true;
         }
-        else if(Pushable.GetComponent<StreamReactionList>().streamsTouched > 0)
+		else if(reactionList.streamsTouched > 0)
         {
             isDry = false;
             wasDry = true;
