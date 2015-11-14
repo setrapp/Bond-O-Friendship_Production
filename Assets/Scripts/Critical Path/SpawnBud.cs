@@ -83,22 +83,27 @@ public class SpawnBud : MonoBehaviour {
 			{
 				playerColor = Globals.Instance.Player2.character.colors.baseColor;
 			}
-            spawnBud.Play();
-            ParticleSystem nodePart = (ParticleSystem)Instantiate(part);
-			nodePart.startColor = playerColor;
-			nodePart.transform.position = transform.position;
-			nodePart.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
-			//part.transform.parent = transform;
-			//part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-			Destroy(nodePart.gameObject, 2.0f);
-			newBud = (GameObject)Instantiate(bud);
-			newBud.transform.position = transform.position;
-			newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-            //newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
-            //newBud.GetComponent<Renderer>().material.color = BudColor;
-			fading = true;
-			spawned = true;
-			fullScaled = false;
+			SpawnOrb();
 		}
+	}
+
+	public void SpawnOrb()
+	{
+		spawnBud.Play();
+		ParticleSystem nodePart = (ParticleSystem)Instantiate(part);
+		nodePart.startColor = playerColor;
+		nodePart.transform.position = transform.position;
+		nodePart.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
+		//part.transform.parent = transform;
+		//part.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+		Destroy(nodePart.gameObject, 2.0f);
+		newBud = (GameObject)Instantiate(bud);
+		newBud.transform.position = transform.position;
+		newBud.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+		//newBud.GetComponent<Renderer>().material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.6f);
+		//newBud.GetComponent<Renderer>().material.color = BudColor;
+		fading = true;
+		spawned = true;
+		fullScaled = false;
 	}
 }
