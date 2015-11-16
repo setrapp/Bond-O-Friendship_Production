@@ -679,7 +679,8 @@ public class Globals : MonoBehaviour {
 		TUTORIAL = 0,
 		HARMONY,
 		INTIMACY,
-		ASYMMETRY
+		ASYMMETRY,
+		CREDITS
 	}
 }
 
