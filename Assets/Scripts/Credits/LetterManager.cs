@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Letter {NONE = -1, A = 0, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z};
+public enum Letter {NONE = -1, A = 0, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, exc};
 
 public class LetterManager : MonoBehaviour {
 
@@ -25,7 +25,7 @@ public class LetterManager : MonoBehaviour {
 
 		// Create a list of each letter of letter receivers.
 		letterReceiverLists = new List<LetterReceiverList>();
-		for (int i = 0; i < 26; i++)
+		for (int i = 0; i < letterMaterials.Length; i++)
 		{
 			LetterReceiverList letterList = new LetterReceiverList();
 			letterList.letter = (char)((int)'a' + i);
