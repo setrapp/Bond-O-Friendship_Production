@@ -22,6 +22,8 @@ public class Stream : StreamBody {
 	public float blockingTime = 0;
 	public bool drawEditorStreamLine = true;
 	private bool endLineNextChannel = false;
+	public ParticleSystem particles;
+	private float particlesLifetime;
 
 	/*TODO handle streams merging back together*/
 
@@ -40,6 +42,15 @@ public class Stream : StreamBody {
 		if (streamRenderer == null)
 		{
 			streamRenderer = GetComponent<Renderer>();
+		}
+
+		if (particles == null)
+		{
+			particles = GetComponent<ParticleSystem>();
+		}
+		if (particles != null)
+		{
+			particlesLifetime = particles.startLifetime;
 		}
 	}
 
@@ -69,6 +80,11 @@ public class Stream : StreamBody {
 	{
 		if (streamBlockers <= 0)
 		{
+			if (particles != null && particles.startLifetime <= 0)
+			{
+				particles.startLifetime = particlesLifetime;
+			}
+
 			if (!ending && targetChannel != null && oldChannel != null)
 			{
 				if (diffusionParticles != null && diffusionParticles.gameObject.activeSelf)
@@ -105,6 +121,10 @@ public class Stream : StreamBody {
 			}
 			else
 			{
+				if (particles != null && particles.startLifetime > 0)
+				{
+					particles.startLifetime = 0;
+				}
 				PrepareForDestroy();
 				SeekNextChannel();
 				//Destroy(gameObject);
@@ -126,6 +146,10 @@ public class Stream : StreamBody {
 		else
 		{
 			PrepareForDestroy();
+			if (particles != null && particles.startLifetime > 0)
+			{
+				particles.startLifetime = 0;
+			}
 		}
 
 		if (tracer != null && tracer.enabled && (!Application.isEditor || drawEditorStreamLine))
