@@ -246,7 +246,7 @@ public class MenuControl : MonoBehaviour {
 	
 			case MenuState.StartGame:
 				ToggleFadeMainMenu();
-
+				AttemptLevelUnload();
 
 					if (!toggled)
 					{
@@ -271,7 +271,7 @@ public class MenuControl : MonoBehaviour {
 
 			case MenuState.ContinueGame:
 				ToggleFadeMainMenu();
-
+				AttemptLevelUnload();
 
 				if (!toggled)
 				{
@@ -323,6 +323,33 @@ public class MenuControl : MonoBehaviour {
 		}
 
 	}	
+
+	private void AttemptLevelUnload()
+	{
+		Island realIsland = null;
+		for (int i = 0; i < LevelHandler.Instance.loadedIslands.Count && realIsland == null; i++)
+		{
+			if (LevelHandler.Instance.loadedIslands[i] != null && LevelHandler.Instance.loadedIslands[i].islandId != IslandID.CREDITS)
+			{
+				realIsland = LevelHandler.Instance.loadedIslands[i];
+			}
+		}
+		if (realIsland != null)
+		{
+			Globals.Instance.Player1.transform.parent = Globals.Instance.Player2.transform.parent = realIsland.transform;
+			StartCoroutine(WaitToAttemptUnload(realIsland));
+		}
+	}
+
+	private IEnumerator WaitToAttemptUnload(Island desiredParentIsland)
+	{
+		yield return new WaitForSeconds(1);
+		while (Globals.Instance.Player1.transform.parent != desiredParentIsland.transform)
+		{
+			yield return new WaitForSeconds(1);
+		}
+		LevelHandler.Instance.UnloadIslands(desiredParentIsland);
+	}
 
 	private void ToggleFadeMainMenu ()
 	{
