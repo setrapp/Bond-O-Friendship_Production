@@ -9,6 +9,7 @@ public class PlayersEstablish : MonoBehaviour {
 	private bool setPlayer1Fluff = false;
 	private bool setPlayer2Fluff = false;
 	public bool placeOnAwake = true;
+	public bool makeIslandPlayerParent = true;
 	public Transform defaultPlayerParent;
 
 
