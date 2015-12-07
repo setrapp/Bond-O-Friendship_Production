@@ -10,8 +10,10 @@ public class LetterManager : MonoBehaviour {
 	public static LetterManager Instance { get { return instance; } }
 
 	public bool editorRandomReceivers = false;
+	public LetterRegion[] letterRegions;
 	[SerializeField]
 	public List<LetterReceiverList> letterReceiverLists;
+	public int nearRegionCount = 3;
 	public Material[] letterMaterials;
 	public float nearbyAttractForce;
 	public float lerpEndPortion = 0.5f;
@@ -73,37 +75,15 @@ public class LetterManager : MonoBehaviour {
 			}
 		}
 
+
+
 		// Ensure that every letter receiver has at least one corresponding letter.
 		for (int i = 0; i < letterReceiverLists.Count; i++)
 		{
 			LetterReceiverList receiverList = letterReceiverLists[i];
 			for (int j = 0; j < receiverList.receivers.Count; j++)
 			{
-				// First, check if any predetermined letters will fit.
-				bool readyLetterFound = false;
-				for (int k = 0; k < predeterminedLetters.Count && !readyLetterFound; k++)
-				{
-					if (predeterminedLetters[k].letterValue == receiverList.receivers[j].receiveLetter)
-					{
-						predeterminedLetters.RemoveAt(k);
-						readyLetterFound = true;
-					}
-				}
-
-				// If one does not already exist, attempt to assign a letter to the needed value.
-				if (!readyLetterFound)
-				{
-					if (availableLetters.Count > 0)
-					{
-						int letterIndex = Random.Range(0, availableLetters.Count);
-						availableLetters[letterIndex].letterValue = receiverList.receivers[j].receiveLetter;
-						availableLetters.RemoveAt(letterIndex);
-					}
-					else
-					{
-						Debug.LogError("Not enough letters exist to ensure that each reciever has a letter");
-					}
-				}
+				//Todo check letter regions
 			}
 		}
 
@@ -111,6 +91,28 @@ public class LetterManager : MonoBehaviour {
 		for (int i = 0; i < availableLetters.Count; i++)
 		{
 			availableLetters[i].letterValue = (Letter)Random.Range((int)Letter.A, (int)Letter.Z);
+		}
+	}
+
+	private LetterRegion[] FindNearbyLetterRegions(LetterReceiver receiver)
+	{
+		LetterRegion[] nearRegions = new LetterRegion[nearRegionCount];
+		float[] regionSqrDists = new float[nearRegionCount];
+		for (int i = 0; i < letterRegions.Length; i++)
+		{
+			bool placed = false;
+			for (int j = 0; j < nearRegions.Length && !placed; j++)
+			{
+				float sqrDist = letterRegions[i].transform.position - receiver.transform.position;
+				if (sqrDist < regionSqrDists[j])
+				{
+
+					for (int k = j + 1; k < regionSqrDists.Length; k++)
+					{
+						regionSqrDists[k] = regionSqrDists[k-1];
+					}
+				}
+			}
 		}
 	}
 }
