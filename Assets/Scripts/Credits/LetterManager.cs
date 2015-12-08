@@ -83,7 +83,19 @@ public class LetterManager : MonoBehaviour {
 			LetterReceiverList receiverList = letterReceiverLists[i];
 			for (int j = 0; j < receiverList.receivers.Count; j++)
 			{
-				//Todo check letter regions
+				LetterReceiver receiver = receiverList.receivers[j];
+				receiverList.receivers[j].nearbyRegions = FindNearbyLetterRegions();
+				bool letterAssigned = false;
+				for (int k = 0; k < receiverList.receivers[j].nearbyRegions.Length && !letterAssigned; k++)
+				{
+					letterAssigned = receiverList.receivers[j].nearbyRegions[k].AssignLetter(receiverList.receivers[j]);
+				}
+
+				if (!letterAssigned)
+				{
+					Debug.LogError("No letters could be assigned nearby the receiver " + receiverList.receivers[j].gameObject.name + ". Please add letters to a nearby region");
+					receiverList.receivers[j].gameObject.name = "[Error] " + receiverList.receivers[j].gameObject.name;
+				}
 			}
 		}
 
@@ -106,11 +118,14 @@ public class LetterManager : MonoBehaviour {
 				float sqrDist = letterRegions[i].transform.position - receiver.transform.position;
 				if (sqrDist < regionSqrDists[j])
 				{
-
 					for (int k = j + 1; k < regionSqrDists.Length; k++)
 					{
 						regionSqrDists[k] = regionSqrDists[k-1];
+						nearRegions[k] = nearRegions[k-1];
 					}
+					regionSqrDists[j] = sqrDist;
+					nearRegions[j] = letterRegions[i];
+					placed = true;
 				}
 			}
 		}
