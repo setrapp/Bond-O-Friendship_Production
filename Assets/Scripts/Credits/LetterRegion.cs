@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,29 +8,35 @@ public class LetterRegion : MonoBehaviour {
 	public List<CreditsLetter> availableLetters;
 	[HideInInspector]
 	public List<CreditsLetter> predeterminedLetters;
+	[HideInInspector]
+	public List<CreditsLetter> randomizableLetters;
+	public Vector3 centroid;
 
 	// Find all existing letters in preparation for assignment.
 	public void FindLetters()
 	{
-		GameObject[] allLetters = gameObject.GetComponentsInChildren<CreditsLetter>();
+		CreditsLetter[] allLetters = gameObject.GetComponentsInChildren<CreditsLetter>();
 		availableLetters = new List<CreditsLetter>();
 		predeterminedLetters = new List<CreditsLetter>();
+		centroid = Vector3.zero;
 		for (int i = 0; i < allLetters.Length; i++)
 		{
-			CreditsLetter letter = allLetters[i].GetComponent<CreditsLetter>();
-			if (letter != null)
+			CreditsLetter letter = allLetters[i];
+			centroid += letter.transform.position;
+
+			// Separate letters between available to be set and predetermined.
+			if (letter.letterValue == Letter.NONE)
 			{
-				// Separate letters between available to be set and predetermined.
-				if (letter.letterValue == Letter.NONE)
-				{
-					availableLetters.Add(letter);
-				}
-				else
-				{
-					predeterminedLetters.Add(letter);
-				}
+				availableLetters.Add(letter);
+			}
+			else
+			{
+				predeterminedLetters.Add(letter);
 			}
 		}
+
+		// Place centroid of contained letters.
+		centroid /= allLetters.Length;
 	}
 
 	// Attempt to assign a letter that is able to fill the given receiver.
@@ -42,6 +48,7 @@ public class LetterRegion : MonoBehaviour {
 		{
 			if (predeterminedLetters[k].letterValue == receiver.receiveLetter)
 			{
+				randomizableLetters.Add(predeterminedLetters[k]);
 				predeterminedLetters.RemoveAt(k);
 				readyLetterFound = true;
 			}
@@ -54,6 +61,7 @@ public class LetterRegion : MonoBehaviour {
 			{
 				int letterIndex = Random.Range(0, availableLetters.Count);
 				availableLetters[letterIndex].letterValue = receiver.receiveLetter;
+				randomizableLetters.Add(availableLetters[letterIndex]);
 				availableLetters.RemoveAt(letterIndex);
 			}
 			else
@@ -65,5 +73,17 @@ public class LetterRegion : MonoBehaviour {
 		return true;
 	}
 
+	// Radomize all remaining letters by repeating values needed by recievers.
+	public void RadomizeLetters()
+	{
+		for (int i = 0; i < availableLetters.Count; i++)
+		{
+			if (randomizableLetters.Count > 0)
+			{
+				int randomIndex = Random.Range(0, randomizableLetters.Count);
+				availableLetters[i].letterValue = randomizableLetters[randomIndex].letterValue;
+			}
+		}
+	}
 
 }

@@ -38,12 +38,20 @@ public class CreditsLetter : MonoBehaviour {
 			gameObject.name = "Letter " + (char)((int)'a' + (int)letterValue);
 		}
 
-		CheckForAttachment();
+		if (letterValue >= Letter.A)
+		{
+			CheckForAttachment();
+		}
 		oldPosition = transform.position;
 	}
 
-	void Update () {
-		
+	void Update () 
+	{
+		if (letterValue < 0)
+		{
+			gameObject.SetActive(false);
+		}
+
 		if(!attachedToReceiver && (oldPosition != transform.position || (receiver != null && receiver.attachedLetter != null && receiver.attachedLetter != this)))
 		{
 			CheckForAttachment();
