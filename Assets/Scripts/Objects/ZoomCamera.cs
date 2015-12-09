@@ -8,6 +8,7 @@ public class ZoomCamera : MonoBehaviour {
 	private Camera splitCamera;
 	//public float startZoom;
 	public GameObject zoomTarget;
+	public bool centerOnTarget = true;
 	public float startZoomPortion = 0;
 	public float endZoomPortion = 1;
 	public float oldPortionComplete;
@@ -24,6 +25,7 @@ public class ZoomCamera : MonoBehaviour {
 	[Header("Starting Zoom Only")]
 	//public bool zoomToStartingSize = false;
 	private bool foundStartingZoom = false;
+
 
 	void Start()
 	{
@@ -108,7 +110,7 @@ public class ZoomCamera : MonoBehaviour {
 		}
 
 		// Interpolate xy positions of cameras between player center and target focal point.
-		if (alterPortionComplete > 0)
+		if (alterPortionComplete > 0 && centerOnTarget)
 		{
 			Vector3 focusOffset = zoomTarget.transform.position - ((Globals.Instance.Player1.transform.position + Globals.Instance.Player2.transform.position) / 2);
 			CameraSplitter.Instance.mainCameraFollow.centerOffset = ((focusOffset * alterPortionComplete) + CameraSplitter.Instance.mainCameraFollow.centerOffset) / 2;
