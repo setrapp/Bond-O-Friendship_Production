@@ -11,6 +11,7 @@ public class LetterReceiver : MonoBehaviour {
 	[HideInInspector]
 	public bool nearestToLetter = false;
 	public float fadeRate = 1;
+	public LetterRegion[] nearbyRegions;
 
 	void Awake()
 	{

@@ -10,8 +10,10 @@ public class LetterManager : MonoBehaviour {
 	public static LetterManager Instance { get { return instance; } }
 
 	public bool editorRandomReceivers = false;
+	public LetterRegion[] letterRegions;
 	[SerializeField]
 	public List<LetterReceiverList> letterReceiverLists;
+	public int nearRegionCount = 3;
 	public Material[] letterMaterials;
 	public float nearbyAttractForce;
 	public float lerpEndPortion = 0.5f;
@@ -24,17 +26,20 @@ public class LetterManager : MonoBehaviour {
 		instance = this;
 
 		// Create a list of each letter of letter receivers.
-		letterReceiverLists = new List<LetterReceiverList>();
+		letterReceiverLists = new List<LetterReceiverList> ();
 		for (int i = 0; i < letterMaterials.Length; i++)
 		{
-			LetterReceiverList letterList = new LetterReceiverList();
+			LetterReceiverList letterList = new LetterReceiverList ();
 			letterList.letter = (char)((int)'a' + i);
-			letterList.receivers = new List<LetterReceiver>();
-			letterReceiverLists.Add(letterList);
+			letterList.receivers = new List<LetterReceiver> ();
+			letterReceiverLists.Add (letterList);
 		}
 
 		// Find all letter receivers.
-		GameObject[] allReceivers = GameObject.FindGameObjectsWithTag ("Letter Receiver");
+		GameObject[] allReceivers = GameObject.FindGameObjectsWithTag("Letter Receiver");
+
+		// Find all letter regions.
+		letterRegions = gameObject.GetComponentsInChildren<LetterRegion>();
 
 		// Randomize receiver letters in editor.
 		if (Application.isEditor && editorRandomReceivers)
@@ -52,25 +57,10 @@ public class LetterManager : MonoBehaviour {
 			letterReceiverLists[(int)receiver.receiveLetter].receivers.Add(receiver);
 		}
 
-		// Find all existing letters and prepare for assignment.
-		GameObject[] allLetters = GameObject.FindGameObjectsWithTag ("Letter");
-		List<CreditsLetter> availableLetters = new List<CreditsLetter>();
-		List<CreditsLetter> predeterminedLetters = new List<CreditsLetter>();
-		for (int i = 0; i < allLetters.Length; i++)
+		// Find existing letters in each region
+		for (int i = 0; i < letterRegions.Length; i++)
 		{
-			CreditsLetter letter = allLetters[i].GetComponent<CreditsLetter>();
-			if (letter != null)
-			{
-				// Separate letters between available to be set and predetermined.
-				if (letter.letterValue == Letter.NONE)
-				{
-					availableLetters.Add(letter);
-				}
-				else
-				{
-					predeterminedLetters.Add(letter);
-				}
-			}
+			letterRegions[i].FindLetters();
 		}
 
 		// Ensure that every letter receiver has at least one corresponding letter.
@@ -79,39 +69,52 @@ public class LetterManager : MonoBehaviour {
 			LetterReceiverList receiverList = letterReceiverLists[i];
 			for (int j = 0; j < receiverList.receivers.Count; j++)
 			{
-				// First, check if any predetermined letters will fit.
-				bool readyLetterFound = false;
-				for (int k = 0; k < predeterminedLetters.Count && !readyLetterFound; k++)
+				LetterReceiver receiver = receiverList.receivers[j];
+				receiver.nearbyRegions = FindNearbyLetterRegions(receiver);
+				bool letterAssigned = false;
+				for (int k = 0; k < receiver.nearbyRegions.Length && !letterAssigned; k++)
 				{
-					if (predeterminedLetters[k].letterValue == receiverList.receivers[j].receiveLetter)
-					{
-						predeterminedLetters.RemoveAt(k);
-						readyLetterFound = true;
-					}
+					letterAssigned = receiver.nearbyRegions[k].AssignLetter(receiver);
 				}
 
-				// If one does not already exist, attempt to assign a letter to the needed value.
-				if (!readyLetterFound)
+				if (!letterAssigned)
 				{
-					if (availableLetters.Count > 0)
-					{
-						int letterIndex = Random.Range(0, availableLetters.Count);
-						availableLetters[letterIndex].letterValue = receiverList.receivers[j].receiveLetter;
-						availableLetters.RemoveAt(letterIndex);
-					}
-					else
-					{
-						Debug.LogError("Not enough letters exist to ensure that each reciever has a letter");
-					}
+					Debug.LogError("No letters could be assigned nearby the receiver " + receiver.gameObject.name + " of " + receiver.transform.parent.gameObject.name + ". Please add letters to a nearby region");
 				}
 			}
 		}
 
 		// Give random letter values to the letters that have not yet been set.
-		for (int i = 0; i < availableLetters.Count; i++)
+		for (int i = 0; i < letterRegions.Length; i++)
 		{
-			availableLetters[i].letterValue = (Letter)Random.Range((int)Letter.A, (int)Letter.Z);
+			letterRegions[i].RadomizeLetters();
 		}
+	}
+
+	private LetterRegion[] FindNearbyLetterRegions(LetterReceiver receiver)
+	{
+		LetterRegion[] nearRegions = new LetterRegion[nearRegionCount];
+		float[] regionSqrDists = new float[nearRegionCount];
+		for (int i = 0; i < letterRegions.Length; i++)
+		{
+			bool placed = false;
+			for (int j = 0; j < nearRegions.Length && !placed; j++)
+			{
+				float sqrDist = (letterRegions[i].centroid - receiver.transform.position).sqrMagnitude;
+				if (nearRegions[j] == null || sqrDist < regionSqrDists[j])
+				{
+					for (int k = regionSqrDists.Length - 1; k > j; k--)
+					{
+						regionSqrDists[k] = regionSqrDists[k-1];
+						nearRegions[k] = nearRegions[k-1];
+					}
+					regionSqrDists[j] = sqrDist;
+					nearRegions[j] = letterRegions[i];
+					placed = true;
+				}
+			}
+		}
+		return nearRegions;
 	}
 }
 
