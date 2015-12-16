@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +6,7 @@ public class Threader : MonoBehaviour {
 
 	public Renderer threaderRenderer;
 	public bool activated;
+	private bool wasActivated;
 	private Color myColor;
 	public float r;
 	private float g;
@@ -32,6 +33,7 @@ public class Threader : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		wasActivated = activated;
 
 		if (threaderRenderer == null)
 		{
@@ -74,10 +76,18 @@ public class Threader : MonoBehaviour {
 		{
 			activated = false;
 			threadedbond = null;
+			if (wasActivated)
+			{
+				SendMessage("UnplayNote", SendMessageOptions.DontRequireReceiver);
+			}
 		}
 		else
 		{
 			activated = true;
+			if (!wasActivated)
+			{
+				SendMessage("PlayNote", SendMessageOptions.DontRequireReceiver);
+			}
 		}
 
 		if (activated)
@@ -91,38 +101,7 @@ public class Threader : MonoBehaviour {
 
 		transform.Rotate (0, 0, rotateSpeed * Time.deltaTime);
 
-		/*myColor = new Color(r,g,b);
-		if(threadParent.solved == false && threaderRenderer != null)
-		{
-			threaderRenderer.material.color = myColor;
-		}
-
-		if(activated == true)
-		{
-			if(r<0.9)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
-			if(g<0.6)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
-
-		}
-		else if(activated == false)
-		{
-			if(r>0.5)
-			{
-				r -= Time.deltaTime;
-			}
-			if(g>0.5)
-			{
-				r += Time.deltaTime;
-				//print ("activated");
-			}
-		}*/
+		wasActivated = activated;
 	}
 	void OnTriggerEnter(Collider collide)
 	{
