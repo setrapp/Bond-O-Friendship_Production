@@ -530,7 +530,8 @@ MonoBehaviour:
   optionalGate: {fileID: 0}
   gateCloseTime: 3
   requirePlayers: 0
-  complete: {fileID: 8296154}
+  orbAttached: {fileID: 8296154}
+  completed: {fileID: 0}
 --- !u!114 &11408770
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -562,7 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerPad: {fileID: 11400000}
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 176124}
   toEnabled: 1
   startOpposite: 1
 --- !u!136 &13600000
@@ -597,7 +598,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: targetObject
+      value: 
+      objectReference: {fileID: 176124}
+    - target: {fileID: 0}
+      propertyPath: orbAttached
+      value: 
+      objectReference: {fileID: 8296154}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100010}
