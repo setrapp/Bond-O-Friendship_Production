@@ -143,7 +143,7 @@ public class Paint : MonoBehaviour {
 				nearestDist = nearestPairDist;
 			}
 
-			if (nearestDist >= 0)
+			if (nearestDist >= 0 &&  paintCanvas != null)
 			{
 				float radiusFactor = Mathf.Clamp01(nearestDist / paintCanvas.maxPaintRadius);
 				baseRadius = ((1 - radiusFactor) * paintCanvas.maxPaintRadius) + (radiusFactor * paintCanvas.minPaintRadius);
@@ -175,12 +175,12 @@ public class Paint : MonoBehaviour {
 			paintCircle.rSizemin = baseRadius;
 		}
 
-		if (paintCanvas.pairedCanvas != null && paintCanvas.paintCopier == null && paintCanvas.pairedCanvas.paintCopier != null)
+		if (paintCanvas != null && paintCanvas.pairedCanvas != null && paintCanvas.paintCopier == null && paintCanvas.pairedCanvas.paintCopier != null)
 		{
 			paintCanvas.pairedCanvas.paintCopier.GetComponent<Paint>().blot(true, baseRadius);
 		}
 
-		if (inMirror)
+		if (inMirror && paintCanvas != null)
 			paintCanvas.gameObject.GetComponent<PaintAndNodeCollisionTest>().CheckPaintAndNodeCollision(paintCircle.GetComponent<PaintCircle>());
 	}
 

@@ -27,7 +27,6 @@ GameObject:
   - 4: {fileID: 447108}
   - 33: {fileID: 3347108}
   - 135: {fileID: 13547108}
-  - 23: {fileID: 2347108}
   - 114: {fileID: 11447108}
   - 114: {fileID: 11447104}
   - 114: {fileID: 11447106}
@@ -60,36 +59,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 147108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -46.3653526, y: -31.1253929, z: -20.2119522}
+  m_LocalPosition: {x: 165.767456, y: 186.351501, z: -20.2119522}
   m_LocalScale: {x: 4, y: 4, z: .0500000007}
   m_Children:
   - {fileID: 419194}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2347108
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147108}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: e1bd0d8627cb7fc4f939bc1665db7381, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!33 &3347108
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -115,7 +90,7 @@ MonoBehaviour:
   spawner: {fileID: 0}
   targetChannel: {fileID: 0}
   mover: {fileID: 11447106}
-  streamRenderer: {fileID: 2347108}
+  streamRenderer: {fileID: 0}
   tracer: {fileID: 11447108}
   startAtTarget: 1
   showTarget: 0
@@ -180,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1fc031b1de682438f7c3c3dedbcc7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRenderer: {fileID: 2347108}
+  targetRenderer: {fileID: 0}
   renderBase: 3000
   renderOffset: -2
   forceRendererOn: 0
@@ -213,7 +188,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 2
+      scalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -434,7 +409,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 4
+    type: 0
     radius: 1
     angle: 45.6905098
     length: 5
@@ -449,7 +424,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 10
+      scalar: 100
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1482,7 +1457,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 2
     enabled: 1
-    type: 1
+    type: 11
     radius: .00999999978
     angle: 25
     length: 5

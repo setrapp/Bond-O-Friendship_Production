@@ -12,6 +12,7 @@ public class DripPaint : MonoBehaviour {
 	
 	private float paintJitter = 0.5f;
 	private float colorJitter = 0.05f;
+	public float paintDepthOffset = 1;
 	
     public Color referenceColor;
     private Color paintColor;
@@ -27,7 +28,7 @@ public class DripPaint : MonoBehaviour {
             colorJitter = Random.Range(-0.05F, 0.05F);
 
             paintColor = new Color(referenceColor.r + colorJitter, referenceColor.g + colorJitter, referenceColor.b + colorJitter, referenceColor.a);
-            paintPos = new Vector3(transform.position.x + paintJitter, transform.position.y + paintJitter, transform.position.z + 0.5f);
+            paintPos = new Vector3(transform.position.x + paintJitter, transform.position.y + paintJitter, transform.position.z + paintDepthOffset);
         }
 
         if (isPainting != isPaintingPrevious)

@@ -16,7 +16,8 @@ public class OrbWaitPad : WaitPad {
 	public float gateCloseTime = 20;
 	private int sphereCount;
 	public bool requirePlayers = true;
-    public AudioSource complete;
+    public AudioSource orbAttached;
+	public AudioSource completed;
 
 	override protected void Start () {
         red = 0.8f;
@@ -60,6 +61,7 @@ public class OrbWaitPad : WaitPad {
 		if (fullyLit && (red >= 1 || !requirePlayers))
 		{
 			activated = true;
+
 		}
 		if(activated)
 		{
@@ -91,9 +93,9 @@ public class OrbWaitPad : WaitPad {
 					}
 
 					Destroy(collide.gameObject);
-					if(complete != null)
+					if(orbAttached != null && orbAttached.clip != null)
 					{
-						complete.Play();
+						orbAttached.Play();
 					}
 					activationSpheres[i].GetComponent<Renderer>().material = activatedSphereColor;
 					ParticleSystem tempParticle = (ParticleSystem)Instantiate(activatedParticle);
@@ -107,8 +109,14 @@ public class OrbWaitPad : WaitPad {
 				}
 			}
 			triggersLit++;
-			if(triggersLit >= maxTriggers)
+			if(triggersLit >= maxTriggers && !fullyLit)
+			{
 				fullyLit = true;
+				if(completed != null && completed.clip != null)
+				{
+					completed.Play();
+				}
+			}
 		}
 		if(collide.gameObject.name == "Player 1")
 		{
