@@ -11,7 +11,8 @@ public class WaitPad : MonoBehaviour {
 	public bool neverActivate = false;
 	public bool activated = false;
 	public float portionComplete;
-	private Renderer renderer;
+	[HideInInspector]
+	public Renderer renderer;
 
 	// Use this for initialization
 	virtual protected void Start()

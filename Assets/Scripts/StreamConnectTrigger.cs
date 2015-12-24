@@ -7,6 +7,7 @@ public class StreamConnectTrigger : MonoBehaviour {
 	public float connectionDistance = 0.2f;
 	public StreamChannelChange channelChange;
 	public float waitTime = 0;
+	public ZoomCamera zoomToDisable;
 	private bool connected;
 
 	void Update()
@@ -14,6 +15,10 @@ public class StreamConnectTrigger : MonoBehaviour {
 		if (connectionPartner != null && (connectionPartner.transform.position - transform.position).sqrMagnitude <= Mathf.Pow(connectionDistance, 2) && ! connected)
 		{
 			StartCoroutine(ConnectStreamChannels());
+			if (zoomToDisable != null)
+			{
+				zoomToDisable.FadeOff();
+			}
 		}
 	}
 

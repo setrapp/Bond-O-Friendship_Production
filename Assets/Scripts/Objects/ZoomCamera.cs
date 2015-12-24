@@ -118,7 +118,7 @@ public class ZoomCamera : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator ResetToStart()
+	public IEnumerator ResetToStart(bool disableWhenDone = false)
 	{
 		resetting = true;
 		yield return new WaitForSeconds(resetDelay);
@@ -146,5 +146,17 @@ public class ZoomCamera : MonoBehaviour {
 			yield return null;
 		}
 		resetting = false;
+	}
+
+	public void FadeOff()
+	{
+		if (triggerPad != null)
+		{
+			/*triggerPad.activated = true;
+			triggerPad.neverActivate = false;
+			triggerPad.enabled = false;
+			StartCoroutine(ResetToStart(true));//nothing happens might not want to disable waitpad, maybe just disable it after the players leave
+			*/
+		}
 	}
 }
