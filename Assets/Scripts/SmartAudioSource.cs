@@ -34,7 +34,7 @@ public class SmartAudioSource : MonoBehaviour {
 	void Update()
 	{
 		CameraSplitter cameraController = CameraSplitter.Instance;
-		if (worldSource != null && cameraController != null)
+		if (worldSource != null && cameraController != null && cameraController.audioListener != null)
 		{
 			// Calculate the vector from the nearest player to the audio source in the world.
 

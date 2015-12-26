@@ -12,7 +12,9 @@ public class StreamConnectTrigger : MonoBehaviour {
 
 	void Update()
 	{
-		if (connectionPartner != null && (connectionPartner.transform.position - transform.position).sqrMagnitude <= Mathf.Pow(connectionDistance, 2) && ! connected)
+		Vector3 toConnection = connectionPartner.transform.position - transform.position;
+		toConnection.z = 0;
+		if (connectionPartner != null && toConnection.sqrMagnitude <= Mathf.Pow(connectionDistance, 2) && ! connected)
 		{
 			StartCoroutine(ConnectStreamChannels());
 			if (zoomToDisable != null)
