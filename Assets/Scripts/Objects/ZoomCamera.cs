@@ -22,6 +22,7 @@ public class ZoomCamera : MonoBehaviour {
 	public float resetMaxSpeed = 5;
 	public float resetSpeed = 0f;
 	private bool resetting = false;
+	public bool disableOnReset = false;
 	[Header("Starting Zoom Only")]
 	//public bool zoomToStartingSize = false;
 	private bool foundStartingZoom = false;
@@ -60,6 +61,16 @@ public class ZoomCamera : MonoBehaviour {
 				foundStartingZoom = true;
 			}
 		}*/
+
+		if (disableOnReset && oldPortionComplete <= 0)
+		{
+			if (triggerPad != null && !triggerPad.activated)
+			{
+				triggerPad.activated = true;
+				triggerPad.neverActivate = false;
+				triggerPad.enabled = false;
+			}
+		}
 
 		if (Globals.Instance.gameState != Globals.GameState.Unpaused)
 		{
@@ -118,7 +129,7 @@ public class ZoomCamera : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator ResetToStart(bool disableWhenDone = false)
+	public IEnumerator ResetToStart()
 	{
 		resetting = true;
 		yield return new WaitForSeconds(resetDelay);

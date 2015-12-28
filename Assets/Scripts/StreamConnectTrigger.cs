@@ -8,6 +8,7 @@ public class StreamConnectTrigger : MonoBehaviour {
 	public StreamChannelChange channelChange;
 	public float waitTime = 0;
 	public ZoomCamera zoomToDisable;
+	public SpinPad spinToDisable;
 	private bool connected;
 
 	void Update()
@@ -19,7 +20,11 @@ public class StreamConnectTrigger : MonoBehaviour {
 			StartCoroutine(ConnectStreamChannels());
 			if (zoomToDisable != null)
 			{
-				zoomToDisable.FadeOff();
+				zoomToDisable.disableOnReset = true;
+			}
+			if (spinToDisable != null)
+			{
+				spinToDisable.forceComplete = true;
 			}
 		}
 	}
