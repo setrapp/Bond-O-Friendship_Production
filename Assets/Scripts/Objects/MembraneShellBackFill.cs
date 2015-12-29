@@ -82,6 +82,10 @@ public class MembraneShellBackFill : MonoBehaviour {
 						if (completedLevel != null && Globals.Instance != null && Globals.Instance.levelsCompleted != null)
 						{
 							Globals.Instance.levelsCompleted[(int)completedLevel.islandId] = true;
+							if (Globals.Instance.saverLoader != null)
+							{
+								Globals.Instance.saverLoader.SaveGame();
+							}
 						}
 						Globals.Instance.fromContinue = true;
 						Globals.Instance.ResetOrExit();

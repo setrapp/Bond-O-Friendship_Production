@@ -16,6 +16,10 @@ public class StreamEndingReaction : StreamReaction {
 				if (Globals.Instance != null && Globals.Instance.levelsCompleted != null)
 				{
 					Globals.Instance.levelsCompleted[(int)completedLevel.islandId] = true;
+					if (Globals.Instance.saverLoader != null)
+					{
+						Globals.Instance.saverLoader.SaveGame();
+					}
 				}
 			}
 		}

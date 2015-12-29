@@ -42,6 +42,7 @@ public class Globals : MonoBehaviour {
 	public bool mute = false;
 	public AudioSource bgm;
 	public AudioSource[] levelsBackgroundAudio;
+	public SaveLoad saverLoader;
 
 	public RingPulse defaultPulsePrefab;
 	public PulseStats defaultPulseStats;
@@ -199,6 +200,11 @@ public class Globals : MonoBehaviour {
 			return;
 		}
 
+		if (saverLoader != null)
+		{
+			saverLoader.LoadGame();
+		}
+
 		if (!Application.isEditor)
 		{
 			Cursor.visible = false;
@@ -349,6 +355,11 @@ public class Globals : MonoBehaviour {
 		}
 		// The first element is garbage data.
 		levelsCompleted[0] = true;
+
+		if (saverLoader != null)
+		{
+			saverLoader.SaveGame();
+		}
 	}
 
 	public void OnPause()
