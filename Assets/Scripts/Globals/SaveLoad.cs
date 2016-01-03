@@ -5,26 +5,15 @@ using System.IO;
 public class SaveLoad : MonoBehaviour {
 
 	public string savePath = "/save";
-	public bool save = false;
-	public bool load = false;
-
-
-	void Update()
-	{
-		if (save)
-		{
-			save = false;
-			SaveGame();
-		}
-		if (load)
-		{
-			load = false;
-			LoadGame();
-		}
-	}
+	public bool ignoreSaveInEditor = false;
 
 	public void SaveGame()
 	{
+		if (Application.isEditor && ignoreSaveInEditor)
+		{
+			return;
+		}
+
 		if (string.IsNullOrEmpty(Application.dataPath + savePath) || Globals.Instance == null)
 		{
 			return;
@@ -55,6 +44,11 @@ public class SaveLoad : MonoBehaviour {
 
 	public void LoadGame()
 	{
+		if (Application.isEditor && ignoreSaveInEditor)
+		{
+			return;
+		}
+
 		if (string.IsNullOrEmpty(savePath) || !File.Exists(Application.dataPath + savePath) || Globals.Instance == null)
 		{
 			return;
