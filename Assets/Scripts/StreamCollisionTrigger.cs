@@ -14,6 +14,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	public List<StreamBody> streamsTouched;
 	public bool warnForBody = true;
 	public Collider ignoreCollider;
+	public bool fakeStreamEnd = false;
 	
 	//public bool debug = false;
 
@@ -159,6 +160,16 @@ public class StreamCollisionTrigger : MonoBehaviour {
 			}
 			streamsTouched.Add(stream);
 			SetReactionsStreamTouches();
+
+			// Hide stream particles, this should only be used if this collider will never let the stream pass.
+			if (fakeStreamEnd)
+			{
+				Stream mobileStream = stream as Stream;
+				if (mobileStream != null && mobileStream.particles != null)
+				{
+					mobileStream.particles.startLifetime = 0;
+				}
+			}
 		}
 	}
 

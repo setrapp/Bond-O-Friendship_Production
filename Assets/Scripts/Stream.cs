@@ -146,10 +146,10 @@ public class Stream : StreamBody {
 		else
 		{
 			PrepareForDestroy();
-			if (particles != null && particles.startLifetime > 0)
+			/*if (particles != null && particles.startLifetime > 0)
 			{
 				particles.startLifetime = 0;
-			}
+			}*/
 		}
 
 		if (tracer != null && tracer.enabled && (!Application.isEditor || drawEditorStreamLine))

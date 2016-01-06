@@ -300,6 +300,7 @@ MonoBehaviour:
   streamsTouched: []
   warnForBody: 1
   ignoreCollider: {fileID: 6400002}
+  fakeStreamEnd: 1
 --- !u!114 &11470016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -345,6 +346,7 @@ MonoBehaviour:
   streamReactions: []
   trackObjectReactions: 1
   trackChildReactions: 1
+  editorFakeStreamRate: 0
 --- !u!114 &11498976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -377,8 +379,28 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: superiors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reactionColliders.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: -.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: reactionColliders.Array.data[0]
+      value: 
+      objectReference: {fileID: 11470014}
+    - target: {fileID: 0}
+      propertyPath: reactionRate
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: fakeStreamEnd
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
