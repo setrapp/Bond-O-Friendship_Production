@@ -56,12 +56,12 @@ public class JoinTogether : MonoBehaviour {
 
 				// If the base body is beyond the most separated point, place it at that point.
 				if (progressDirection < 0) {
-					if (baseBody != null) {
+					/*if (baseBody != null) {
 						if (!baseBody.isKinematic) {
 							baseBody.velocity = Vector3.zero;
 						}
 					}
-					moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;
+					moveable.baseObject.transform.position = separationTarget.baseObject.transform.position;*/
 					progress = 0;
 				}
 				// Else if the base body is close enough to the join goal, but not beyond, flag it as ready to join.
