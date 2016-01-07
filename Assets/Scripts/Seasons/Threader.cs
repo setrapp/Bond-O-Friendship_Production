@@ -28,7 +28,7 @@ public class Threader : MonoBehaviour {
 
 	public bool rippleShot;
 	private float rotateSpeed = 0;
-	public float nonActiveRotateSpeed = 25;
+	public float nonActiveRotateSpeed = -25;
 	public float activeRotateSpeed = 60;
 
 	// Use this for initialization
