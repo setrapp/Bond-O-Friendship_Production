@@ -3,6 +3,7 @@ using System.Collections;
 
 public class JoinTogether : MonoBehaviour {
 
+	public JoinTogetherGroup parentGroup = null;
 	public bool includePairs = true;
 	public Rigidbody baseBody = null;
 	public ConstrainOnDirection movementConstraint;
@@ -97,13 +98,6 @@ public class JoinTogether : MonoBehaviour {
 
 	public void JumpToJoinGoal()
 	{
-		if (baseBody != null)
-		{
-			if (!baseBody.isKinematic)
-			{
-				baseBody.velocity = Vector3.zero;
-			}
-		}
 		moveable.baseObject.transform.position = joinTarget.baseObject.transform.position;
 	}
 
