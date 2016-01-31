@@ -91,7 +91,10 @@ public class ClusterNodePuzzle : MonoBehaviour {
 				{
 					Color blockerColor = blockerRenderers[i].material.color;
 					blockerColor.a = (1 - progress) + 0.2f;
-					blockerRenderers[i].material.color = blockerColor;
+					if (blockerRenderers[i].material.color.a > blockerColor.a)
+					{
+						blockerRenderers[i].material.color = blockerColor;
+					}
 				}
 			}
 		}
@@ -104,7 +107,10 @@ public class ClusterNodePuzzle : MonoBehaviour {
 				{
 					Color blockerColor = blockerRenderers[i].material.color;
 					blockerColor.a = (1 - progress) + 0.2f;
-					blockerRenderers[i].material.color = blockerColor;
+					if (blockerRenderers[i].material.color.a > blockerColor.a)
+					{
+						blockerRenderers[i].material.color = blockerColor;
+					}
 				}
 			}
 		}
