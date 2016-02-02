@@ -17,6 +17,11 @@ public class IslandContainer : MonoBehaviour {
 	private GameObject landedPlayer = null;
 	//private bool playersLanded = false;
 	private bool waitingToIsolate = false;
+	public AsyncOperation loadingOperation;
+	public float minProgress = 0.01f;
+	public float maxProgress = 0.035f;
+	public float maxMidWidth = 0.6f;
+	public float minMidWidth = 0.2f;
 
 	void Start()
 	{
@@ -29,6 +34,47 @@ public class IslandContainer : MonoBehaviour {
 		if (editorPlaceholder != null)
 		{
 			editorPlaceholder.gameObject.SetActive(false);
+		}
+
+		for (int i = 0; i < atmosphere.Count; i++)
+		{
+			if (atmosphere[i] != null && atmosphere[i].membraneCreator != null && atmosphere[i].membraneCreator.createdBond)
+			{
+				maxMidWidth = atmosphere[i].membraneCreator.createdBond.stats.midWidth;
+			}
+		}
+	}
+
+	void Update()
+	{
+		if (loadingOperation != null)
+		{
+
+			if (loadingOperation.progress < 1)
+			{
+				for (int i = 0; i < atmosphere.Count; i++)
+				{
+					if (atmosphere[i] != null && atmosphere[i].membraneCreator != null && atmosphere[i].membraneCreator.createdBond != null)
+					{
+						// Loading progress does not progress evenly between 0 and 1, so account for that.
+						float adjustedProgress = Mathf.Clamp01(Mathf.Max(loadingOperation.progress - minProgress, 0) / (maxProgress - minProgress));
+						adjustedProgress = adjustedProgress * adjustedProgress;
+
+						float midWidth = ((1 - adjustedProgress) * maxMidWidth) + (adjustedProgress * minMidWidth);
+
+						if (i == 0)
+						{
+							Debug.Log(loadingOperation.progress + " " +adjustedProgress);
+						}
+
+						atmosphere[i].membraneCreator.createdBond.stats.midWidth = midWidth;
+					}
+				}
+			}
+			else
+			{
+				loadingOperation = null;
+			}
 		}
 	}
 

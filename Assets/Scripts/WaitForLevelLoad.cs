@@ -7,7 +7,7 @@ public class WaitForLevelLoad : MonoBehaviour {
 	
 	void Awake()
 	{
-		if (waitee != null)
+		if (waitee != null && !Application.isEditor)
 		{
 			Collider[] waitColliders = waitee.GetComponentsInChildren<Collider>();
 			for (int i = 0; i < waitColliders.Length; i++)
@@ -19,7 +19,7 @@ public class WaitForLevelLoad : MonoBehaviour {
 	
 	void Update()
 	{
-		if (LevelHandler.Instance != null)
+		if (LevelHandler.Instance != null && !Application.isEditor)
 		{
 			bool levelFound = false;
 			for (int i = 0; i < LevelHandler.Instance.loadedIslands.Count && !levelFound; i++)
