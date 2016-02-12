@@ -21,7 +21,6 @@ public class OrbWaitPad : WaitPad {
 
 	override protected void Start () {
         red = 0.8f;
-		waitRate = 0.3f;
 		activationSpheres = new GameObject[maxTriggers];
 		for(int i = 0; i < transform.parent.childCount; i++)
 		{

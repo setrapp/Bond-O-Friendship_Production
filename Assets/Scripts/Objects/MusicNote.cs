@@ -14,11 +14,19 @@ public class MusicNote : MonoBehaviour {
 			return;
 		}
 
-		if (group.nextNote < group.audioClips.Length && group.audioClips[group.nextNote] != null)
+		if (group.nextNote >= 0 && group.nextNote < group.audioClips.Length && group.audioClips[group.nextNote] != null)
 		{
 			if (!played)
 			{
-				audio.clip = group.audioClips[group.nextNote++];
+				audio.clip = group.audioClips[group.nextNote];
+
+				if ((group.nextNote == 0 && group.noteDirection < 0) || (group.nextNote == group.audioClips.Length - 1  && group.noteDirection > 0))
+				{
+					group.noteDirection *= -1;
+				}
+
+				group.nextNote += group.noteDirection;
+
 				if (audio.clip != null)
 				{
 					audio.Play();
@@ -37,7 +45,7 @@ public class MusicNote : MonoBehaviour {
 	{
 		if (played && group != null)
 		{
-			group.nextNote = Mathf.Max(0, group.nextNote - 1);
+			group.nextNote = Mathf.Max(0, group.nextNote - group.noteDirection);
 			played = false;
 		}
 	}
