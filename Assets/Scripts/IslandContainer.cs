@@ -62,11 +62,6 @@ public class IslandContainer : MonoBehaviour {
 
 						float midWidth = ((1 - adjustedProgress) * maxMidWidth) + (adjustedProgress * minMidWidth);
 
-						if (i == 0)
-						{
-							Debug.Log(loadingOperation.progress + " " +adjustedProgress);
-						}
-
 						atmosphere[i].membraneCreator.createdBond.stats.midWidth = midWidth;
 					}
 				}
