@@ -77,15 +77,8 @@ public class Fluff : MonoBehaviour {
 		fluffFill = maxFill;
 	}
 
-	// Update is called once per frame
-	void Update() 
+	void FixedUpdate()
 	{
-		if(forgetCreator)
-		{
-			creator = null;
-			forgetCreator = false;
-		}
-
 		if (pullForce.sqrMagnitude > 0)
 		{
 			ApplyPullForce();
@@ -98,6 +91,15 @@ public class Fluff : MonoBehaviour {
 			{
 				lineToAttractor.SetVertexCount(0);
 			}
+		}
+	}
+
+	void Update() 
+	{
+		if(forgetCreator)
+		{
+			creator = null;
+			forgetCreator = false;
 		}
 
 		if (!attractable && nonAttractTime <= 0)
