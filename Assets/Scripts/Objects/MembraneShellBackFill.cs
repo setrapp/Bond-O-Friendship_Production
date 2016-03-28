@@ -79,7 +79,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 					backFillRenderer.material.color = color;
 					if (backFillRenderer.material.color.r <= 0 && backFillRenderer.material.color.g <= 0 && backFillRenderer.material.color.b <= 0)
 					{
-						if (completedLevel != null && Globals.Instance != null && Globals.Instance.levelsCompleted != null)
+						if (completedLevel != null && Globals.Instance != null && Globals.Instance.levelsCompleted != null && ((int)completedLevel.islandId >= 0 && (int)completedLevel.islandId < Globals.Instance.levelsCompleted.Length))
 						{
 							Globals.Instance.levelsCompleted[(int)completedLevel.islandId] = true;
 							if (Globals.Instance.saverLoader != null)
@@ -87,6 +87,7 @@ public class MembraneShellBackFill : MonoBehaviour {
 								Globals.Instance.saverLoader.SaveGame();
 							}
 						}
+						Globals.Instance.inMainMenu = false;
 						Globals.Instance.fromContinue = true;
 						Globals.Instance.ResetOrExit();
 					}
