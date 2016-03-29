@@ -15,6 +15,7 @@ public class StreamCollisionTrigger : MonoBehaviour {
 	public bool warnForBody = true;
 	public Collider ignoreCollider;
 	public bool fakeStreamEnd = false;
+	public bool showUnblocking = false;
 	
 	//public bool debug = false;
 
@@ -201,6 +202,10 @@ public class StreamCollisionTrigger : MonoBehaviour {
 		if (stream != null)
 		{
 			stream.streamBlockers--;
+			if (showUnblocking)
+			{
+				Helper.FirePulse(new Vector3(stream.transform.position.x, stream.transform.position.y, Globals.Instance.Player1.transform.position.z), Globals.Instance.defaultPulseStats);
+			}
 		}
 	}
 
@@ -213,6 +218,12 @@ public class StreamCollisionTrigger : MonoBehaviour {
 				reactions[i].SetTouchedStreams(streamsTouched.Count);
 			}
 		}
+	}
+
+	void OnApplicationQuit()
+	{
+		// Do not attempt to spawn unblocking feedback if the game is quiting.
+		showUnblocking = false;
 	}
 
 	void CallStreamAction(StreamBody stream)

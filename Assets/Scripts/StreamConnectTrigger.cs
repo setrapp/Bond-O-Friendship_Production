@@ -37,7 +37,7 @@ public class StreamConnectTrigger : MonoBehaviour {
 			yield return new WaitForSeconds(waitTime);
 
 			channelChange.preChangeChannel.parentSeries.streamChanges.Add(channelChange);
-			
+			Helper.FirePulse(new Vector3(channelChange.preChangeChannel.transform.position.x, channelChange.preChangeChannel.transform.position.y, Globals.Instance.Player1.transform.position.z), Globals.Instance.defaultPulseStats);
 		}
 	}
 }
