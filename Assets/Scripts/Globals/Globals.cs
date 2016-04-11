@@ -183,6 +183,8 @@ public class Globals : MonoBehaviour {
 
 
     public bool quickFade = false;
+
+    public string prePlayScene = "SplashScreen";
     void OnEnable()
     {
         InputManager.OnDeviceDetached += OnDeviceDetached;
@@ -195,7 +197,7 @@ public class Globals : MonoBehaviour {
 
 	void Awake()
 	{
-		if (CheckExistingGlobals())
+       	if (CheckExistingGlobals())
 		{
 			return;
 		}
@@ -241,7 +243,7 @@ public class Globals : MonoBehaviour {
 
 	void Update()
 	{
-		if (Player1 == null || Player2 == null)
+        if (Player1 == null || Player2 == null)
 		{
 			CameraSplitter.Instance.SetPlayers();
 		}
